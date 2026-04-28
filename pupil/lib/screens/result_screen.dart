@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:screenshot/screenshot.dart';
+import '../l10n/app_localizations.dart';
+import '../services/ad_service.dart';
 import '../services/lie_detector.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
@@ -24,6 +26,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _sfx.play(widget.score >= 5 ? PupilSfx.lieDetected : PupilSfx.truthConfirmed);
+      AdService().maybeShowResultInterstitial();
     });
   }
 
@@ -35,6 +38,7 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final ls = LieDetector.compute(
       blinkCount: (widget.score * 0.6).round(),
       headRotationDelta: widget.score * 3,
@@ -64,7 +68,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: Column(
                     children: [
                       Text(
-                        'QUESTION',
+                        l.questionLabel,
                         style: GoogleFonts.inter(
                             fontSize: 11,
                             letterSpacing: 2,
@@ -81,7 +85,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       ),
                       const SizedBox(height: 32),
                       Text(
-                        'PUPIL TREMOR MAGNITUDE',
+                        l.magnitudeLabel,
                         style: GoogleFonts.inter(
                             fontSize: 11,
                             letterSpacing: 4,
@@ -101,7 +105,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '진도 ${ls.magnitude.toStringAsFixed(1)} / 10.0',
+                        l.magnitudeUnit(ls.magnitude.toStringAsFixed(1)),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.notoSansKr(
                             color: Colors.white60, fontSize: 13),
@@ -143,7 +147,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         side: const BorderSide(color: Colors.white24),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('저장'),
+                      child: Text(l.save),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -158,7 +162,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         backgroundColor: const Color(0xFFFF3D5A),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('공유'),
+                      child: Text(l.share),
                     ),
                   ),
                 ],
@@ -171,7 +175,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
                 child: Text(
-                  '다시 측정',
+                  l.scanAgain,
                   style: GoogleFonts.notoSansKr(
                       fontSize: 14, fontWeight: FontWeight.w700),
                 ),

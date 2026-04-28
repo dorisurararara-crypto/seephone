@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/theme_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -28,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(currentThemeProvider);
+    final l = AppLocalizations.of(context);
 
     return Scaffold(
       body: Container(
@@ -63,19 +65,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ],
                 ),
                 const Spacer(),
-                theme.buildInputLabel('— 고민을 적으시오 —'),
+                theme.buildInputLabel(l.homeInputLabel),
                 const SizedBox(height: 12),
                 theme.buildInputBox(
                   controller: _controller,
-                  hint: '예: 전 남친한테 카톡할까?',
+                  hint: l.homeInputHint,
                 ),
                 const Spacer(),
                 theme.buildCta(
-                  label: '폰을 흔들어 점치기',
+                  label: l.homeCta,
                   onPressed: _goToRitual,
                 ),
                 const SizedBox(height: 10),
-                theme.buildShakeHint('위아래로 3번 흔드시오'),
+                theme.buildShakeHint(l.homeShakeHint),
               ],
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vibration/vibration.dart';
+import '../l10n/app_localizations.dart';
 import '../services/anger_calc.dart';
 import '../services/sound_service.dart';
 
@@ -101,6 +102,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final intensity = (_instantMagnitude / 30).clamp(0.0, 1.0);
     final secondsLeft = (_remainingMs / 1000).ceil();
 
@@ -137,7 +139,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        '흔들어 두드려',
+                        l.shakeAndTap,
                         style: GoogleFonts.blackHanSans(
                           fontSize: 32,
                           color: const Color(0xFFFFB800),
@@ -153,7 +155,13 @@ class _MeasureScreenState extends State<MeasureScreen> {
                   child: Column(
                     children: [
                       Text(
-                        '실시간 ${(_instantMagnitude * 5).toStringAsFixed(0)}W · 누적 ${(AngerCalc.computeWatts(accelMagnitudeSum: _accelSum, touchCount: _touchCount)).toStringAsFixed(0)}W',
+                        l.instantTotal(
+                          (_instantMagnitude * 5).toStringAsFixed(0),
+                          AngerCalc.computeWatts(
+                                  accelMagnitudeSum: _accelSum,
+                                  touchCount: _touchCount)
+                              .toStringAsFixed(0),
+                        ),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.notoSansKr(
                           color: Colors.white60,
@@ -163,7 +171,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        '두드림 $_touchCount',
+                        l.tapCount(_touchCount),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.notoSansKr(
                           color: Colors.white38,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:screenshot/screenshot.dart';
+import '../l10n/app_localizations.dart';
+import '../services/ad_service.dart';
 import '../services/anger_calc.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
@@ -23,6 +25,7 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _sfx.play(AngerSfx.buzzer);
+      AdService().maybeShowResultInterstitial();
     });
   }
 
@@ -35,6 +38,7 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final v = AngerCalc.verdict(widget.watts);
+    final l = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -52,7 +56,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: Column(
                     children: [
                       Text(
-                        'YOUR ANGER',
+                        l.yourAnger,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.notoSansKr(
                           fontSize: 12,
@@ -108,7 +112,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        '— 분노 발전소 —',
+                        l.factory,
                         style: GoogleFonts.notoSansKr(
                           color: Colors.white30,
                           fontSize: 11,
@@ -133,7 +137,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         side: const BorderSide(color: Colors.white24),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('저장'),
+                      child: Text(l.save),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -148,7 +152,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('공유'),
+                      child: Text(l.share),
                     ),
                   ),
                 ],
@@ -161,7 +165,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: Text(
-                  '한 번 더',
+                  l.again,
                   style: GoogleFonts.blackHanSans(fontSize: 18),
                 ),
               ),
@@ -169,7 +173,7 @@ class _ResultScreenState extends State<ResultScreen> {
               TextButton(
                 onPressed: () => context.go('/'),
                 child: Text(
-                  '홈으로',
+                  l.home,
                   style: GoogleFonts.notoSansKr(
                     color: Colors.white54,
                     fontWeight: FontWeight.w600,

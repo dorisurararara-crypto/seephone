@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
+import '../services/locale_service.dart';
 import '../services/purchase_service.dart';
 import '../theme/theme_provider.dart';
 import '../theme/theme_registry.dart';
@@ -11,9 +13,11 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final theme = ref.watch(currentThemeProvider);
     final currentId = ref.watch(themeIdProvider);
     final isPro = ref.watch(proStatusProvider);
+    final currentLocale = ref.watch(localeProvider);
 
     return Scaffold(
       body: Container(
@@ -22,16 +26,17 @@ class SettingsScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _AppBar(theme: theme),
+              _AppBar(theme: theme, title: l.settings),
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
                   children: [
-                    _SectionLabel(theme: theme, label: '테마'),
+                    _SectionLabel(theme: theme, label: l.themeLabel),
                     const SizedBox(height: 12),
                     if (!isPro)
                       _ProBanner(
                         theme: theme,
+                        text: l.proBannerText,
                         onTap: () =>
                             _showProSheet(context, ref, theme.previewColor),
                       ),
@@ -55,16 +60,39 @@ class SettingsScreen extends ConsumerWidget {
                         },
                       );
                     }),
+                    const SizedBox(height: 32),
+                    _SectionLabel(theme: theme, label: l.language),
+                    const SizedBox(height: 8),
+                    _LangTile(
+                      label: l.languageAuto,
+                      selected: currentLocale == null,
+                      accent: theme.previewColor,
+                      onTap: () =>
+                          ref.read(localeProvider.notifier).setLocale(null),
+                    ),
+                    _LangTile(
+                      label: l.languageKorean,
+                      selected: currentLocale?.languageCode == 'ko',
+                      accent: theme.previewColor,
+                      onTap: () => ref
+                          .read(localeProvider.notifier)
+                          .setLocale(const Locale('ko')),
+                    ),
+                    _LangTile(
+                      label: l.languageEnglish,
+                      selected: currentLocale?.languageCode == 'en',
+                      accent: theme.previewColor,
+                      onTap: () => ref
+                          .read(localeProvider.notifier)
+                          .setLocale(const Locale('en')),
+                    ),
                     const SizedBox(height: 24),
-                    // 개발용 Pro 토글 — long press
                     GestureDetector(
                       onLongPress: () => ref
                           .read(proStatusProvider.notifier)
                           .toggleForDev(),
                       child: Text(
-                        isPro
-                            ? '✓ Pro 활성화됨 (장기누름: 해제)'
-                            : '⚙ Pro 비활성 (장기누름: 개발용 토글)',
+                        isPro ? l.proActivatedDevHint : l.proInactiveDevHint,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 11,
@@ -83,7 +111,43 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
+class _LangTile extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final Color accent;
+  final VoidCallback onTap;
+  const _LangTile({
+    required this.label,
+    required this.selected,
+    required this.accent,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+        child: Row(
+          children: [
+            Icon(
+              selected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: selected ? accent : Colors.white38,
+              size: 20,
+            ),
+            const SizedBox(width: 12),
+            Text(label,
+                style: const TextStyle(color: Colors.white, fontSize: 15)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 void _showProSheet(BuildContext context, WidgetRef ref, Color accent) {
+  final l = AppLocalizations.of(context);
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.black,
@@ -95,7 +159,7 @@ void _showProSheet(BuildContext context, WidgetRef ref, Color accent) {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            '빡신 PRO',
+            l.proSheetTitle,
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w900,
@@ -103,31 +167,42 @@ void _showProSheet(BuildContext context, WidgetRef ref, Color accent) {
             ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            '5가지 테마 자유 전환 · 광고 제거 · 부적 무제한',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+          Text(
+            l.proSheetSubtitle,
+            style: const TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              l.betaFreeNotice,
+              style: const TextStyle(
+                  color: Colors.white60, fontSize: 12, height: 1.4),
+            ),
           ),
           const SizedBox(height: 24),
           FilledButton(
             onPressed: () {
-              // TODO: in_app_purchase 실제 구매 플로우.
-              // 임시로 Pro 활성화.
-              ref.read(proStatusProvider.notifier).setPro(true);
+              ref.read(proStatusProvider.notifier).unlockThemePack();
               Navigator.of(ctx).pop();
             },
             style: FilledButton.styleFrom(
               backgroundColor: accent,
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: const Text('월 2,900원으로 시작',
-                style:
-                    TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            child: Text(l.activateThemePack,
+                style: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w700)),
           ),
           const SizedBox(height: 8),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('나중에',
-                style: TextStyle(color: Colors.white54)),
+            child: Text(l.later,
+                style: const TextStyle(color: Colors.white54)),
           ),
         ],
       ),
@@ -137,7 +212,8 @@ void _showProSheet(BuildContext context, WidgetRef ref, Color accent) {
 
 class _AppBar extends StatelessWidget {
   final BbaksinThemeStyle theme;
-  const _AppBar({required this.theme});
+  final String title;
+  const _AppBar({required this.theme, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -150,9 +226,9 @@ class _AppBar extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
           const SizedBox(width: 4),
-          const Text(
-            '설정',
-            style: TextStyle(
+          Text(
+            title,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -266,8 +342,13 @@ class _ThemeTile extends StatelessWidget {
 
 class _ProBanner extends StatelessWidget {
   final BbaksinThemeStyle theme;
+  final String text;
   final VoidCallback onTap;
-  const _ProBanner({required this.theme, required this.onTap});
+  const _ProBanner({
+    required this.theme,
+    required this.text,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -290,10 +371,10 @@ class _ProBanner extends StatelessWidget {
           children: [
             Icon(Icons.star, color: theme.previewColor, size: 22),
             const SizedBox(width: 10),
-            const Expanded(
+            Expanded(
               child: Text(
-                'PRO 구독으로 5개 테마 자유 전환',
-                style: TextStyle(
+                text,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,

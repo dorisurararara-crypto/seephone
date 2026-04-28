@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'l10n/app_localizations.dart';
 import 'router.dart';
+import 'services/locale_service.dart';
 import 'theme/theme_provider.dart';
 
 class BbaksinApp extends ConsumerWidget {
@@ -10,6 +12,7 @@ class BbaksinApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(currentThemeProvider);
+    final locale = ref.watch(localeProvider);
 
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
@@ -21,8 +24,11 @@ class BbaksinApp extends ConsumerWidget {
     );
 
     return MaterialApp.router(
-      title: '빡신',
+      onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
       debugShowCheckedModeBanner: false,
+      locale: locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: theme.buildMaterialTheme(),
       routerConfig: appRouter,
     );

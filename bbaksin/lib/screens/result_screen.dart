@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
+import '../services/ad_service.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
 import '../state/message_repo.dart';
@@ -65,6 +67,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                 _played = true;
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   _sfx.play(BbaksinSfx.reveal);
+                  AdService().maybeShowResultInterstitial();
                 });
               }
               final msg = _message!;
@@ -102,7 +105,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                     TextButton(
                       onPressed: () => context.go('/'),
                       child: Text(
-                        '처음으로',
+                        AppLocalizations.of(context).home,
                         style: TextStyle(
                           color:
                               theme.statusBarBrightness == Brightness.light

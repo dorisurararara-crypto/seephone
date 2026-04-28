@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../l10n/app_localizations.dart';
 import '../services/lie_detector.dart';
 import '../services/sound_service.dart';
 
@@ -176,7 +177,7 @@ class _ScanScreenState extends State<ScanScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'SCANNING',
+              AppLocalizations.of(context).scanning,
               style: GoogleFonts.inter(
                 color: Colors.white60,
                 fontSize: 12,
