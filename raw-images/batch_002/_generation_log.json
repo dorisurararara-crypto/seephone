@@ -1,0 +1,97 @@
+{
+  "batch_id": "002",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "v2_doki_001",
+      "file": "raw-images/batch_002/v2_doki_001.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 17.5
+    },
+    {
+      "id": "v2_doki_002",
+      "file": "raw-images/batch_002/v2_doki_002.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    },
+    {
+      "id": "v2_doki_003",
+      "file": "raw-images/batch_002/v2_doki_003.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    },
+    {
+      "id": "v2_doki_004",
+      "file": "raw-images/batch_002/v2_doki_004.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    },
+    {
+      "id": "v5_mystic_001",
+      "file": "raw-images/batch_002/v5_mystic_001.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    },
+    {
+      "id": "v5_mystic_002",
+      "file": "raw-images/batch_002/v5_mystic_002.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    },
+    {
+      "id": "v5_mystic_003",
+      "file": "raw-images/batch_002/v5_mystic_003.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.8
+    },
+    {
+      "id": "v5_mystic_004",
+      "file": "raw-images/batch_002/v5_mystic_004.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.8
+    },
+    {
+      "id": "pupil_icon_a",
+      "file": "raw-images/batch_002/pupil_icon_a.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.5
+    },
+    {
+      "id": "pupil_icon_b",
+      "file": "raw-images/batch_002/pupil_icon_b.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.5
+    },
+    {
+      "id": "anger_icon_a",
+      "file": "raw-images/batch_002/anger_icon_a.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.5
+    },
+    {
+      "id": "anger_icon_b",
+      "file": "raw-images/batch_002/anger_icon_b.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.4
+    }
+  ]
+}
