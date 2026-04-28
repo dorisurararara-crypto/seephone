@@ -1,0 +1,55 @@
+{
+  "batch_id": "006",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "bbaksin_pro_char_friendly",
+      "file": "raw-images/batch_006/bbaksin_pro_char_friendly.png",
+      "size": "1280x720",
+      "gen_size": "1280x720",
+      "seconds": 6.9
+    },
+    {
+      "id": "bbaksin_pro_char_celebrate",
+      "file": "raw-images/batch_006/bbaksin_pro_char_celebrate.png",
+      "size": "1280x720",
+      "gen_size": "1280x720",
+      "seconds": 6.5
+    },
+    {
+      "id": "reward_card_scroll",
+      "file": "raw-images/batch_006/reward_card_scroll.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.1
+    },
+    {
+      "id": "reward_card_coins",
+      "file": "raw-images/batch_006/reward_card_coins.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.1
+    },
+    {
+      "id": "reward_card_amulet",
+      "file": "raw-images/batch_006/reward_card_amulet.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.1
+    },
+    {
+      "id": "v5_ritual_invocation",
+      "file": "raw-images/batch_006/v5_ritual_invocation.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 20.6
+    }
+  ]
+}
