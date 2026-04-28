@@ -56,4 +56,5 @@ flutter:
   assets:
     - assets/icon/
     - assets/backgrounds/
+    - assets/effects/
     - assets/data/

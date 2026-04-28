@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../services/share_service.dart';
@@ -24,10 +25,24 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     final repoAsync = ref.watch(messageRepoProvider);
 
     return Scaffold(
-      body: Container(
-        decoration: theme.buildScreenBackground(),
-        child: SafeArea(
-          child: repoAsync.when(
+      body: Stack(
+        children: [
+          Container(decoration: theme.buildScreenBackground()),
+          // 굿판 ambient (V5 미스틱·V1 클래식 톤에서 잘 어울림). 다른 테마에서도 은은하게.
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.15,
+              child: Image.asset(
+                'assets/effects/v5_fx_smoke.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
+              .animate()
+              .fadeIn(duration: 800.ms, curve: Curves.easeOut),
+          Positioned.fill(
+            child: SafeArea(
+              child: repoAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Center(
               child: Text(
@@ -81,6 +96,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             },
           ),
         ),
+      ),
+        ],
       ),
     );
   }
