@@ -39,6 +39,12 @@
    - `PRIVACY_POLICY_TEMPLATE.md` 내용 → GitHub Pages 또는 Notion 공개 페이지
    - URL 을 ASC 각 앱 메타데이터에 등록
 
+5. **앱스토어 스크린샷 1번 슬롯 업로드**
+   - `marketing/bbaksin_marketing_cut.png` — 빡신 ASC/Play 1번 슬롯
+   - `marketing/pupil_marketing_cut.png` — pupil ASC/Play 1번 슬롯
+   - `marketing/anger_marketing_cut.png` — anger ASC/Play 1번 슬롯
+   - 1080×1920, AI 생성, 캐릭터 임팩트 컷 (텍스트 overlay는 없음 — ASC에서 별도 카피 추가하거나 그대로 사용 가능)
+
 **순서 근거**: 코드 가장 단순 → 가장 빠른 첫 출시 → 광고 SDK·앱스토어 운영 노하우 확보 후 다음 앱으로 재활용.
 
 ---
