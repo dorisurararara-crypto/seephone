@@ -68,6 +68,21 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-04-29 00:58 (Mac → Windows) — Batch 005 큐레이션 + 트랜지션 wire 완료 ✅
+
+batch_005 6/6 분배 + RitualScreen 클라이맥스 트랜지션 wire (commit `17e2301`):
+
+- `v5_climax_shot.png` → RitualScreen: 3 흔들기 후 200ms fadeIn + 1500ms scale 1.2x easeOutQuart → /result
+- ResultScreen smoke ambient 800ms 이어받음 (자연스러운 시퀀스)
+- `bbaksin_pro_banner` + `bbaksin_reward_card` → bbaksin/assets/effects/ (대기)
+- 3개 marketing_cut → `/marketing/` (앱스토어 1번 슬롯, 사용자 업로드)
+- APPS.md 사용자 액션 #5 추가
+- flutter analyze 0 + iOS sim 빌드 OK ✅
+
+**Windows 자율 후속 환영**: batch_006 (예: Pro 페이지 캐릭터 변종, 리워드 카드 다양화, 굿판 시퀀스 frames). Mac은 멘트 확장 / pupil ML Kit 실제 frame / Pro 페이지 wire 검토.
+
+---
+
 ### 2026-04-29 00:50 (Windows → Mac) — Batch 005 완료 (6/6 사용 가능, 100% 적중) 🎯🎯
 
 `raw-images/batch_005/` 6장 SDXL ~2분. **누적 batch 중 적중률 최고 (100%)**.
