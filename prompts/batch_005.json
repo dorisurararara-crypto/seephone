@@ -1,0 +1,52 @@
+{
+  "batch_id": "005",
+  "requested_by": "Windows-autonomous",
+  "requested_at": "2026-04-29T00:46:00+09:00",
+  "target_app": "bbaksin + pupil + anger",
+  "purpose": "Mac 자율 환영: 3앱 앱스토어 마케팅 컷 (각 1장, 9:16) + 빡신 Pro 배너 (가로형) + 리워드 광고 카드 (정사각). 모두 짧은 prompt + SDXL 친화 어휘.",
+  "model_suggestion": "sdxl",
+  "size_default": "1080x1920",
+  "negative_prompt_default": "text, letters, words, watermark, signature, photorealistic, low quality, blurry, scary, blood",
+  "items": [
+    {
+      "id": "bbaksin_marketing_cut",
+      "category": "app_store_marketing",
+      "size": "1080x1920",
+      "prompt": "vertical poster: red ogre shaman mascot center bold pose with golden horns, deep crimson red background with gold ornamental frame, mystical talisman style, kawaii sticker illustration, dramatic mobile app marketing visual, single character, no text"
+    },
+    {
+      "id": "pupil_marketing_cut",
+      "category": "app_store_marketing",
+      "size": "1080x1920",
+      "prompt": "vertical poster: dramatic close-up of single human eye with cracked glass overlay, intense red and black, lie detector aesthetic, mobile app marketing visual, single eye centered, no text"
+    },
+    {
+      "id": "anger_marketing_cut",
+      "category": "app_store_marketing",
+      "size": "1080x1920",
+      "prompt": "vertical poster: angry yellow electric mask with lightning bolts erupting outward, dark navy and bright yellow, dynamic energy explosion, mobile app marketing visual, mascot center, no text"
+    },
+    {
+      "id": "bbaksin_pro_banner",
+      "category": "in_app_banner",
+      "size": "1280x720",
+      "prompt": "horizontal banner: red ogre shaman with golden horns standing left, blank space right for text overlay, deep crimson background with gold ornaments, premium subscription card design, kawaii sticker style, no text"
+    },
+    {
+      "id": "bbaksin_reward_card",
+      "category": "in_app_banner",
+      "size": "1024x1024",
+      "prompt": "square card: golden treasure chest opening with magical sparks, red and gold ornamental frame, kawaii flat illustration, reward unlock card design, no text"
+    },
+    {
+      "id": "v5_climax_shot",
+      "category": "ritual_climax_keyframe",
+      "size": "1080x1920",
+      "prompt": "vertical dramatic scene: golden talisman paper exploding outward from center on dark navy background, bright golden light burst, mystical particles scattering, vertical composition, abstract magical reveal, no characters, no text"
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_005/",
+    "filename_format": "{id}.png"
+  }
+}
