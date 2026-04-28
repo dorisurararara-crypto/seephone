@@ -5,7 +5,7 @@
 
 require_relative '_helpers'
 
-EXTERNAL_GROUP_ID = '24a71662-f507-4276-8774-8c0a506006ce' # ganzitester (external)
+EXTERNAL_GROUP_ID = 'dd8969b7-4b66-48b4-8ea2-91781e374fe3' # anger ganzitester
 
 # 빌드 번호 결정
 target_version = ARGV[0]

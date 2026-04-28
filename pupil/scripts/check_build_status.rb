@@ -7,7 +7,7 @@ require 'openssl'; require 'base64'; require 'json'; require 'net/http'; require
 
 KEY_ID='JSGU6J4JN4'
 ISSUER_ID='5269abe3-03f1-46a9-a37c-35d950758714'
-APP_ID='6762060466'
+APP_ID='6764363706' # 동공 지진 탐지기
 KEY_PATH = File.expand_path("~/.appstoreconnect/private_keys/AuthKey_#{KEY_ID}.p8")
 
 private_key = OpenSSL::PKey::EC.new(File.read(KEY_PATH))
