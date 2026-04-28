@@ -1,0 +1,73 @@
+{
+  "batch_id": "001",
+  "requested_by": "Mac",
+  "requested_at": "2026-04-28T23:15:00+09:00",
+  "target_app": "bbaksin",
+  "purpose": "(1) 앱 아이콘 후보 3안 (2) V1 Classic 테마용 부적 배경 5장",
+  "model_suggestion": "flux-dev 또는 SDXL — 본인 환경에 맞게 선택",
+  "size_default": "1080x1920",
+  "negative_prompt_default": "text, letters, hangul, korean characters, words, watermark, signature, modern digital UI, photorealistic, horror, scary, blood, low quality, blurry, jpeg artifacts",
+  "items": [
+    {
+      "id": "icon_a",
+      "category": "app_icon",
+      "size": "1024x1024",
+      "prompt": "Korean traditional buddhist talisman icon, square composition, 부적 paper texture deep crimson red background with gold yellow ornamental border, single bold black ink character 神 in center, kitsch B-tier illustration style mixed with Korean folk art, clean iconic shape suitable for mobile app icon, no text other than the character 神",
+      "note": "심플한 神 캐릭터형. 가장 안전한 후보."
+    },
+    {
+      "id": "icon_b",
+      "category": "app_icon",
+      "size": "1024x1024",
+      "prompt": "Cute angry dokkaebi (도깨비) face mascot with tiny lightning bolt, square composition, deep red background with yellow ornamental corners, kitsch B-tier illustration, Korean MZ aesthetic, bold simple shapes, suitable for mobile app icon, no text",
+      "note": "도깨비 캐릭터형. B급 키치 톤. 바이럴 잠재력."
+    },
+    {
+      "id": "icon_c",
+      "category": "app_icon",
+      "size": "1024x1024",
+      "prompt": "Minimal modern Korean talisman icon, square, deep red background, single thin gold line ornament forming abstract 神 character silhouette, premium minimalist composition, suitable for mobile app icon, no text",
+      "note": "미니멀 프리미엄형. V3 모던 톤과 잘 맞음."
+    },
+    {
+      "id": "v1_bg_001",
+      "category": "v1_classic_background",
+      "size": "1080x1920",
+      "prompt": "Korean traditional buddhist talisman (부적), aged hanji paper texture, deep crimson red background with faded yellow accents, ornamental black ink brush borders top and bottom, central rectangular blank area reserved for text overlay (60% of vertical space empty in center), kitsch B-tier illustration style mixed with Korean folk art, slightly worn vintage texture, vertical 9:16 poster composition, ultra-detailed ornamental edges only, single ornamental 神 character at top corner, no text in center",
+      "note": "기본 부적 톤. 중앙은 비워둠 (Flutter에서 텍스트 합성)."
+    },
+    {
+      "id": "v1_bg_002",
+      "category": "v1_classic_background",
+      "size": "1080x1920",
+      "prompt": "Korean traditional talisman with tiger dokkaebi motif at top, aged hanji paper, deep crimson red with yellow ornament, central blank area for text overlay (60% empty in center), traditional Korean folk art style, vintage worn texture, vertical 9:16, no text in center",
+      "note": "호랑이 도깨비 모티프 (호환)."
+    },
+    {
+      "id": "v1_bg_003",
+      "category": "v1_classic_background",
+      "size": "1080x1920",
+      "prompt": "Korean traditional talisman with peony flower motif, aged hanji paper, deep crimson red with gold yellow accents, ornate black ink corners, central blank area for text overlay (60% empty in center), Korean folk art style, vertical 9:16, no text",
+      "note": "모란 모티프 (재물·연애 운)."
+    },
+    {
+      "id": "v1_bg_004",
+      "category": "v1_classic_background",
+      "size": "1080x1920",
+      "prompt": "Korean traditional talisman with ancient coin (엽전) and rope motif, aged hanji paper, deep crimson red with gold yellow, central blank area for text overlay (60% empty in center), kitsch Korean folk art, vertical 9:16, no text",
+      "note": "엽전 모티프 (돈 카테고리)."
+    },
+    {
+      "id": "v1_bg_005",
+      "category": "v1_classic_background",
+      "size": "1080x1920",
+      "prompt": "Korean traditional talisman with crescent moon and star motif, aged hanji paper, deep crimson red with gold yellow accents, mystical decorative borders, central blank area for text overlay (60% empty in center), Korean folk art mystical style, vertical 9:16, no text",
+      "note": "달·별 모티프 (결정장애·미래 운)."
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_001/",
+    "filename_format": "{id}.png",
+    "report_format": "HANDOFF.md '## 최신' 에 (Windows → Mac) 메시지로 완료 보고. 각 item ID 별 결과 파일명 + 간단한 코멘트 (예: '약간 어두움', 'icon_b는 도깨비 표정 더 화나게 재생성 가능')."
+  }
+}

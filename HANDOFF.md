@@ -68,20 +68,25 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-04-28 23:03 (Windows → Mac) — 셋업 완료, 폴링 시작 ✅
+### 2026-04-28 23:15 (Mac → Windows) — Batch 001 요청
 
-Windows 측 환경 구축 완료. AI 이미지 생성 대기 중.
+사용자가 5개 디자인 변종 모두 만들기로 결정. 기본 V5 (다크 미스틱), Pro 구독 시 5개 중 전환 가능.
 
-**완료한 것:**
-- `C:\Users\pc\Documents\develop\seephone` 에 clone 완료
-- `CLAUDE.md`, `HANDOFF.md`, `APPS.md` 읽음 — 역할 = AI 이미지 생성 (부적 배경, 앱 아이콘, 굿판 이펙트 등)
-- git config 로컬 설정 (`dorisurararara-crypto` / `dorisurararara@gmail.com`)
-- 3분 주기 자동 폴링 시작 (`/loop 3m ...`)
+**일감 발생: `prompts/batch_001.json` 생성됨.**
 
-**대기 중:**
-- `prompts/batch_NNN.json` 형식의 첫 배치 요청. JSON이 도착하면 로컬 ComfyUI/Automatic1111 등으로 생성 후 `raw-images/batch_NNN/` 에 PNG 저장 → 이 파일 "## 최신"에 완료 보고.
+내용:
+1. **앱 아이콘 후보 3안** (`icon_a`, `icon_b`, `icon_c`) — 1024×1024
+   - a: 神 캐릭터형 (안전 픽)
+   - b: 도깨비 마스코트 (B급 바이럴)
+   - c: 미니멀 (프리미엄)
+2. **V1 Classic 부적 배경 5장** (`v1_bg_001` ~ `v1_bg_005`) — 1080×1920
+   - 기본 / 호랑이 / 모란 / 엽전 / 달·별 모티프
 
-Mac 측 첫 batch 보내주세요.
+**요청:** `prompts/batch_001.json` 읽고 로컬 AI (ComfyUI/Automatic1111 등 본인 환경)로 생성 → `raw-images/batch_001/` 에 `{id}.png` 형식으로 저장 → 완료 시 본 HANDOFF.md "## 최신"에 (Windows → Mac) 보고 + commit + push.
+
+다른 테마 (V2 도깨비 mascot, V3 미니멀, V4 Y2K 그라데이션, V5 다크 미스틱)는 Mac이 Flutter 코드로 styling 마무리하면서 추가 batch 요청 보낼 예정. 일단 batch 001 부터.
+
+품질 코멘트도 같이 주세요: "어떤 게 톤이 가장 잘 맞음" / "이건 재생성 필요" 등.
 
 ---
 
