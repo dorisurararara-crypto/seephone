@@ -22,10 +22,9 @@
 
 ## 사용자 액션 필요 항목 (자율 모드 외)
 
-1. **App Store Connect 웹 UI에서 3개 앱 생성** (API 미지원)
-   - https://appstoreconnect.apple.com/apps → "+" → 각 Bundle ID 선택
-   - 등록된 Bundle ID: 빡신 `5WXF835WY8`, pupil `43C6XTMC86`, anger `8D9M2MU4V2`
-   - 생성 시 SKU, primary language(ko) 입력. 이후 ASC API로 모든 메타데이터 자동 관리 가능.
+1. ~~**App Store Connect 웹 UI에서 3개 앱 생성**~~ ✅ 완료 (사용자가 2026-04-29 처리)
+   - 빡신 App ID: `6764363757` / pupil: `6764363706` / anger: `6764363954`
+   - 각 앱 `scripts/_helpers.rb` 에 자동 wire됨 → TestFlight 자동화 즉시 사용 가능
 
 2. **AdMob 콘솔에서 3개 앱 생성** (현재 Google 공식 테스트 ID 사용 중)
    - https://apps.admob.com/v2/apps/list
