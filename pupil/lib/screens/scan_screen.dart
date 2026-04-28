@@ -3,7 +3,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../services/lie_detector.dart';
 import '../services/sound_service.dart';
 
@@ -33,20 +32,12 @@ class _ScanScreenState extends State<ScanScreen> {
   final double _smileSum = 0;
   final int _smileSamples = 0;
 
-  late final FaceDetector _faceDetector;
   bool _isScanning = false;
   final _sfx = SoundService();
 
   @override
   void initState() {
     super.initState();
-    _faceDetector = FaceDetector(
-      options: FaceDetectorOptions(
-        enableClassification: true, // 웃음 detection
-        enableLandmarks: true,
-        enableTracking: true,
-      ),
-    );
     _initCamera();
   }
 
@@ -112,7 +103,6 @@ class _ScanScreenState extends State<ScanScreen> {
   void dispose() {
     _countdownTimer?.cancel();
     _camera?.dispose();
-    _faceDetector.close();
     _sfx.dispose();
     super.dispose();
   }
