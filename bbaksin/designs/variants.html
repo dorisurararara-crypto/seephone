@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>빡신 — 5 Design Variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Gaegu:wght@400;700&family=Gowun+Batang:wght@400;700&family=Inter:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #0a0a0a; color: #eaeaea; font-family: 'Pretendard', sans-serif; }
+  body { padding: 60px 24px 120px; min-height: 100vh; }
+
+  .page-header { max-width: 1100px; margin: 0 auto 48px; text-align: center; }
+  .page-header h1 { font-size: 48px; font-weight: 900; letter-spacing: -0.03em; }
+  .page-header h1 em { font-style: italic; color: #ff4d6d; font-weight: 400; }
+  .page-header .sub { color: #8a8a91; font-size: 15px; line-height: 1.6; margin-top: 12px; max-width: 720px; margin-left: auto; margin-right: auto; }
+  .page-header .pick-hint { display: inline-block; margin-top: 18px; padding: 8px 16px; background: #1a1a1a; border: 1px solid #333; border-radius: 999px; font-size: 13px; color: #aaa; }
+
+  .variant { max-width: 1200px; margin: 0 auto 80px; padding-bottom: 60px; border-bottom: 1px dashed #2a2a2a; }
+  .variant:last-child { border-bottom: none; }
+
+  .variant-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .variant-num { font-size: 44px; font-weight: 900; color: #444; letter-spacing: -0.02em; font-family: 'Inter', sans-serif; }
+  .variant-name { font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+  .variant-tag { font-size: 12px; color: #888; padding: 4px 10px; background: #1a1a1a; border-radius: 4px; }
+  .variant-desc { color: #b0b0b0; font-size: 14px; line-height: 1.7; max-width: 760px; margin-bottom: 20px; }
+
+  .variant-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; font-size: 12px; color: #777; }
+  .variant-meta b { color: #ddd; font-weight: 600; }
+  .swatches { display: inline-flex; gap: 4px; vertical-align: middle; margin-left: 6px; }
+  .swatch { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #2a2a2a; }
+
+  .phones-row { display: flex; gap: 28px; flex-wrap: wrap; }
+  .phone-card { display: flex; flex-direction: column; gap: 12px; }
+  .phone-label { font-size: 12px; color: #888; text-align: center; }
+
+  .phone {
+    width: 300px; height: 640px;
+    border-radius: 38px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 0 7px #1a1a1a, 0 0 0 8px #2c2c30;
+  }
+  .notch {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 24px; background: #000; border-radius: 18px; z-index: 100;
+  }
+  .screen { width: 100%; height: 100%; position: relative; overflow: hidden; }
+  .statusbar {
+    position: absolute; top: 0; left: 0; right: 0; height: 44px;
+    padding: 12px 22px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 600; z-index: 50;
+  }
+
+  /* ================================================
+     V1 — Pure 한국 전통 (Classic)
+     ================================================ */
+  .v1 .screen { background: #F4E4BC; color: #1A1A1A; font-family: 'Gowun Batang', serif; }
+  .v1 .statusbar { color: #1A1A1A; }
+  .v1 .home { padding: 70px 28px 24px; height: 100%; display: flex; flex-direction: column; }
+  .v1 .brand { font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 38px; color: #C8102E; letter-spacing: -0.02em; line-height: 1; }
+  .v1 .brand-sub { font-size: 12px; color: #888; margin-top: 8px; letter-spacing: 0.1em; }
+  .v1 .input-label { margin-top: 80px; font-size: 13px; color: #555; }
+  .v1 .input-box {
+    margin-top: 12px; padding: 18px 16px; background: #fff; border: 1.5px solid #C8102E;
+    border-radius: 4px; font-size: 16px; color: #555; min-height: 80px; line-height: 1.6;
+  }
+  .v1 .shake-cta {
+    margin-top: auto; padding: 18px; background: #C8102E; color: #F4E4BC;
+    text-align: center; font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 18px;
+    border-radius: 4px; letter-spacing: 0.05em;
+  }
+  .v1 .shake-hint { font-size: 11px; color: #888; text-align: center; margin-top: 8px; }
+
+  .v1 .result { padding: 70px 24px 24px; height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .v1 .talisman {
+    width: 100%; aspect-ratio: 9/15; background: #C8102E; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 18px;
+    border: 3px solid #1A1A1A; box-shadow: inset 0 0 0 8px #F4D35E, inset 0 0 0 9px #C8102E;
+  }
+  .v1 .talisman::before, .v1 .talisman::after {
+    content: '神'; position: absolute; color: #F4D35E; font-family: 'Nanum Myeongjo', serif;
+    font-size: 22px; font-weight: 800;
+  }
+  .v1 .talisman::before { top: 18px; left: 22px; }
+  .v1 .talisman::after { bottom: 18px; right: 22px; }
+  .v1 .talisman-text {
+    color: #F4E4BC; font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 20px;
+    line-height: 1.6; text-align: center; letter-spacing: 0.02em;
+  }
+  .v1 .talisman-mark { color: #F4D35E; font-size: 32px; margin-bottom: 12px; font-weight: 800; }
+  .v1 .save-row { margin-top: 18px; display: flex; gap: 8px; width: 100%; }
+  .v1 .save-row > * { flex: 1; padding: 12px; text-align: center; font-size: 13px; border: 1.5px solid #1A1A1A; border-radius: 4px; background: transparent; color: #1A1A1A; font-family: 'Gowun Batang', serif; font-weight: 700; }
+  .v1 .save-row > .primary { background: #1A1A1A; color: #F4E4BC; }
+  .v1 .watermark { font-size: 10px; color: #888; margin-top: 8px; }
+
+  /* ================================================
+     V2 — B급 키치 (최고심 톤)
+     ================================================ */
+  .v2 .screen { background: #FFE5A0; color: #2C2C2C; font-family: 'Gaegu', cursive; }
+  .v2 .statusbar { color: #2C2C2C; }
+  .v2 .home { padding: 70px 24px 24px; height: 100%; display: flex; flex-direction: column; }
+  .v2 .brand { font-family: 'Black Han Sans', sans-serif; font-size: 44px; color: #FF4D4D; letter-spacing: -0.01em; line-height: 1; transform: rotate(-2deg); }
+  .v2 .doodle {
+    margin-top: 8px; font-size: 36px; transform: rotate(8deg); display: inline-block;
+  }
+  .v2 .brand-sub { font-size: 14px; color: #2C2C2C; margin-top: 4px; font-weight: 700; }
+  .v2 .input-label { margin-top: 60px; font-size: 16px; font-weight: 700; }
+  .v2 .input-box {
+    margin-top: 12px; padding: 18px; background: #fff; border: 3px solid #2C2C2C;
+    border-radius: 16px; font-size: 18px; color: #888; min-height: 100px; line-height: 1.5;
+    box-shadow: 4px 4px 0 #2C2C2C;
+  }
+  .v2 .shake-cta {
+    margin-top: auto; padding: 20px; background: #FF4D4D; color: #fff;
+    text-align: center; font-family: 'Black Han Sans', sans-serif; font-size: 22px;
+    border-radius: 16px; border: 3px solid #2C2C2C; box-shadow: 4px 4px 0 #2C2C2C;
+    transform: rotate(-1deg);
+  }
+  .v2 .shake-hint { font-size: 14px; text-align: center; margin-top: 12px; font-weight: 700; }
+
+  .v2 .result { padding: 70px 22px 24px; height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .v2 .talisman {
+    width: 100%; aspect-ratio: 9/14; background: #FFB3D9; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px;
+    border: 4px solid #2C2C2C; border-radius: 24px; box-shadow: 6px 6px 0 #2C2C2C;
+    transform: rotate(-1.5deg);
+  }
+  .v2 .talisman .doki { font-size: 56px; line-height: 1; margin-bottom: 8px; }
+  .v2 .talisman-text {
+    color: #2C2C2C; font-family: 'Gaegu', cursive; font-weight: 700; font-size: 22px;
+    line-height: 1.4; text-align: center;
+  }
+  .v2 .stars { position: absolute; font-size: 18px; }
+  .v2 .stars.tl { top: 12px; left: 12px; }
+  .v2 .stars.br { bottom: 12px; right: 12px; }
+  .v2 .save-row { margin-top: 20px; display: flex; gap: 10px; width: 100%; }
+  .v2 .save-row > * { flex: 1; padding: 14px; text-align: center; font-size: 16px; font-weight: 700; border: 3px solid #2C2C2C; border-radius: 12px; background: #fff; color: #2C2C2C; box-shadow: 3px 3px 0 #2C2C2C; font-family: 'Gaegu', cursive; }
+  .v2 .save-row > .primary { background: #2C2C2C; color: #FFE5A0; }
+  .v2 .watermark { font-size: 11px; color: #888; margin-top: 10px; font-weight: 700; }
+
+  /* ================================================
+     V3 — 모던 다크 미니멀 (Apple-like)
+     ================================================ */
+  .v3 .screen { background: #0A0A0A; color: #fff; font-family: 'Pretendard', sans-serif; }
+  .v3 .statusbar { color: #fff; }
+  .v3 .home { padding: 70px 28px 28px; height: 100%; display: flex; flex-direction: column; }
+  .v3 .brand { font-family: 'Pretendard', sans-serif; font-weight: 900; font-size: 36px; letter-spacing: -0.04em; }
+  .v3 .brand .accent { color: #E63946; }
+  .v3 .brand-sub { font-size: 12px; color: #777; margin-top: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .v3 .input-label { margin-top: 90px; font-size: 12px; color: #888; letter-spacing: 0.05em; text-transform: uppercase; }
+  .v3 .input-box {
+    margin-top: 10px; padding: 18px 0; border-bottom: 1px solid #333;
+    font-size: 17px; color: #888; min-height: 70px; line-height: 1.5; font-weight: 300;
+  }
+  .v3 .shake-cta {
+    margin-top: auto; padding: 18px; background: #E63946; color: #fff;
+    text-align: center; font-weight: 700; font-size: 15px; border-radius: 12px;
+    letter-spacing: 0.02em;
+  }
+  .v3 .shake-hint { font-size: 11px; color: #555; text-align: center; margin-top: 10px; letter-spacing: 0.05em; }
+
+  .v3 .result { padding: 60px 24px 24px; height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .v3 .talisman {
+    width: 100%; aspect-ratio: 9/15; background: linear-gradient(180deg, #1a0a0c 0%, #0a0a0a 100%);
+    border: 1px solid #E63946; border-radius: 8px; padding: 28px 22px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .v3 .talisman::before {
+    content: ''; position: absolute; inset: 12px;
+    border: 1px solid rgba(230, 57, 70, 0.3); border-radius: 4px; pointer-events: none;
+  }
+  .v3 .talisman-mark { color: #E63946; font-size: 13px; letter-spacing: 0.3em; margin-bottom: 24px; font-weight: 700; }
+  .v3 .talisman-text {
+    color: #fff; font-family: 'Pretendard', sans-serif; font-weight: 800; font-size: 19px;
+    line-height: 1.55; text-align: center; letter-spacing: -0.02em;
+  }
+  .v3 .talisman-num { color: #555; font-size: 11px; margin-top: 28px; letter-spacing: 0.1em; font-family: 'Inter', monospace; }
+  .v3 .save-row { margin-top: 20px; display: flex; gap: 8px; width: 100%; }
+  .v3 .save-row > * { flex: 1; padding: 13px; text-align: center; font-size: 13px; border: 1px solid #333; border-radius: 8px; background: transparent; color: #fff; font-weight: 600; }
+  .v3 .save-row > .primary { background: #E63946; border-color: #E63946; }
+  .v3 .watermark { font-size: 10px; color: #444; margin-top: 10px; letter-spacing: 0.1em; }
+
+  /* ================================================
+     V4 — Y2K / MZ 그라데이션 (Instagram-friendly)
+     ================================================ */
+  .v4 .screen { background: linear-gradient(135deg, #FF6B9D 0%, #C44ED4 50%, #4D9BFF 100%); color: #fff; font-family: 'Pretendard', sans-serif; }
+  .v4 .statusbar { color: #fff; }
+  .v4 .home { padding: 70px 24px 24px; height: 100%; display: flex; flex-direction: column; }
+  .v4 .brand {
+    font-family: 'Black Han Sans', sans-serif; font-size: 56px; letter-spacing: -0.02em; line-height: 0.95;
+    background: linear-gradient(180deg, #fff, #ffd6e8); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(255,255,255,0.4);
+  }
+  .v4 .brand-sub { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 6px; font-weight: 700; }
+  .v4 .input-label { margin-top: 50px; font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 600; }
+  .v4 .input-box {
+    margin-top: 10px; padding: 18px; background: rgba(255,255,255,0.15); backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(255,255,255,0.4); border-radius: 20px;
+    font-size: 16px; color: rgba(255,255,255,0.85); min-height: 90px; line-height: 1.5;
+  }
+  .v4 .shake-cta {
+    margin-top: auto; padding: 18px; background: rgba(255,255,255,0.95); color: #C44ED4;
+    text-align: center; font-family: 'Black Han Sans', sans-serif; font-size: 22px;
+    border-radius: 999px; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .v4 .shake-hint { font-size: 12px; color: rgba(255,255,255,0.7); text-align: center; margin-top: 10px; font-weight: 600; }
+
+  .v4 .result { padding: 60px 24px 24px; height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .v4 .talisman {
+    width: 100%; aspect-ratio: 9/15; padding: 28px 22px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
+    backdrop-filter: blur(30px);
+    border: 1.5px solid rgba(255,255,255,0.5); border-radius: 28px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .v4 .talisman .sparkle { position: absolute; font-size: 20px; }
+  .v4 .talisman .sparkle.tl { top: 14px; left: 14px; }
+  .v4 .talisman .sparkle.tr { top: 14px; right: 14px; }
+  .v4 .talisman .sparkle.br { bottom: 14px; right: 14px; }
+  .v4 .talisman-mark { color: #fff; font-size: 14px; letter-spacing: 0.2em; margin-bottom: 18px; font-weight: 800; opacity: 0.9; }
+  .v4 .talisman-text {
+    color: #fff; font-family: 'Black Han Sans', sans-serif; font-size: 24px;
+    line-height: 1.4; text-align: center; letter-spacing: -0.01em;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .v4 .save-row { margin-top: 20px; display: flex; gap: 10px; width: 100%; }
+  .v4 .save-row > * { flex: 1; padding: 14px; text-align: center; font-size: 13px; font-weight: 700; border: 1.5px solid rgba(255,255,255,0.5); border-radius: 999px; background: rgba(255,255,255,0.15); color: #fff; backdrop-filter: blur(10px); }
+  .v4 .save-row > .primary { background: rgba(255,255,255,0.95); color: #C44ED4; border-color: transparent; }
+  .v4 .watermark { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 10px; font-weight: 600; }
+
+  /* ================================================
+     V5 — 다크 미스틱 (진짜 점집 느낌)
+     ================================================ */
+  .v5 .screen {
+    background: radial-gradient(ellipse at top, #2A1438 0%, #0F0813 70%);
+    color: #E0D5E5; font-family: 'Noto Serif KR', serif;
+  }
+  .v5 .statusbar { color: #E0D5E5; }
+  .v5 .home { padding: 70px 28px 28px; height: 100%; display: flex; flex-direction: column; }
+  .v5 .brand {
+    font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 38px; letter-spacing: -0.02em;
+    color: #D4A437; line-height: 1;
+  }
+  .v5 .brand .latin { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400; font-size: 18px; color: #E0D5E5; opacity: 0.6; display: block; margin-top: 6px; }
+  .v5 .brand-sub { font-size: 11px; color: #A89DB5; margin-top: 12px; letter-spacing: 0.3em; text-transform: uppercase; }
+  .v5 .input-label {
+    margin-top: 70px; font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 16px; color: #A89DB5;
+  }
+  .v5 .input-box {
+    margin-top: 12px; padding: 18px 0; border-top: 1px solid rgba(212,164,55,0.3);
+    border-bottom: 1px solid rgba(212,164,55,0.3);
+    font-size: 17px; color: #A89DB5; min-height: 80px; line-height: 1.6; font-style: italic;
+  }
+  .v5 .shake-cta {
+    margin-top: auto; padding: 18px; background: transparent; color: #D4A437;
+    text-align: center; font-family: 'Noto Serif KR', serif; font-weight: 700; font-size: 15px;
+    border: 1px solid #D4A437; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .v5 .shake-hint {
+    font-size: 11px; color: #6E5B7A; text-align: center; margin-top: 12px; letter-spacing: 0.1em;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+  }
+
+  .v5 .result { padding: 60px 24px 24px; height: 100%; display: flex; flex-direction: column; align-items: center; }
+  .v5 .talisman {
+    width: 100%; aspect-ratio: 9/15; padding: 30px 22px;
+    background: radial-gradient(ellipse at center, #1F1029 0%, #0F0813 100%);
+    border: 1px solid #D4A437; position: relative;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+  }
+  .v5 .talisman::before, .v5 .talisman::after {
+    content: '✦'; position: absolute; color: #D4A437; font-size: 14px;
+  }
+  .v5 .talisman::before { top: 14px; left: 14px; }
+  .v5 .talisman::after { bottom: 14px; right: 14px; }
+  .v5 .talisman-mark {
+    color: #D4A437; font-size: 11px; letter-spacing: 0.4em; margin-bottom: 24px;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+  }
+  .v5 .talisman-text {
+    color: #E0D5E5; font-family: 'Noto Serif KR', serif; font-weight: 700; font-size: 19px;
+    line-height: 1.6; text-align: center;
+  }
+  .v5 .talisman-sig {
+    color: #D4A437; font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 13px; margin-top: 24px; opacity: 0.8;
+  }
+  .v5 .save-row { margin-top: 22px; display: flex; gap: 10px; width: 100%; }
+  .v5 .save-row > * { flex: 1; padding: 13px; text-align: center; font-size: 12px; border: 1px solid #4A1F5C; background: transparent; color: #E0D5E5; letter-spacing: 0.15em; text-transform: uppercase; font-family: 'Noto Serif KR', serif; font-weight: 700; }
+  .v5 .save-row > .primary { background: #D4A437; color: #0F0813; border-color: #D4A437; }
+  .v5 .watermark { font-size: 10px; color: #6E5B7A; margin-top: 12px; letter-spacing: 0.2em; font-family: 'Cormorant Garamond', serif; font-style: italic; }
+
+  /* recommendation footer */
+  .footer {
+    max-width: 900px; margin: 80px auto 0; padding: 28px; background: #141416;
+    border: 1px solid #2a2a2a; border-radius: 12px;
+  }
+  .footer h3 { font-size: 16px; margin-bottom: 16px; color: #ddd; }
+  .footer ul { list-style: none; }
+  .footer li { padding: 10px 0; color: #aaa; font-size: 13px; line-height: 1.6; border-bottom: 1px solid #232323; }
+  .footer li:last-child { border-bottom: none; }
+  .footer li b { color: #fff; margin-right: 6px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>빡신 — <em>5가지 디자인</em> 변종</h1>
+  <p class="sub">고민 적고 폰 흔들면, 욕쟁이 무당이 부적으로 팩폭 날린다.<br>
+  전 변종에서 같은 콘텐츠 (고민: "전 남친한테 카톡할까?", 부적 멘트: "야 이놈아, 자니 치는 손가락부터 부러뜨려라.")로 비교 가능합니다.</p>
+  <span class="pick-hint">씻고 와서 1~5번 중 하나 골라주세요</span>
+</div>
+
+<!-- ============== V1 Pure 한국 전통 ============== -->
+<section class="variant v1">
+  <div class="variant-head">
+    <span class="variant-num">01</span>
+    <span class="variant-name">Pure 한국 전통</span>
+    <span class="variant-tag">CLASSIC</span>
+  </div>
+  <p class="variant-desc">진짜 절·점집에서 받은 부적 같은 클래식한 인상. 신뢰감과 전통미. "장난 같지만 진짜 들어맞을 것 같은" 느낌. 30대 이상 타깃에도 무난.</p>
+  <div class="variant-meta">
+    <span><b>컬러</b><span class="swatches"><span class="swatch" style="background:#F4E4BC"></span><span class="swatch" style="background:#C8102E"></span><span class="swatch" style="background:#1A1A1A"></span><span class="swatch" style="background:#F4D35E"></span></span></span>
+    <span><b>폰트</b> Nanum Myeongjo / Gowun Batang</span>
+    <span><b>강점</b> 신뢰감, 진짜 부적 느낌</span>
+    <span><b>약점</b> MZ 바이럴엔 약할 수도</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="home">
+          <div class="brand">빡神</div>
+          <div class="brand-sub">디지털 점집 · 매운맛 부적</div>
+          <div class="input-label">— 고민을 적으시오 —</div>
+          <div class="input-box">전 남친한테 카톡할까?</div>
+          <div class="shake-cta">폰을 흔들어 점치기</div>
+          <div class="shake-hint">위아래로 3번 흔드시오</div>
+        </div>
+      </div></div>
+      <div class="phone-label">홈 (고민 입력)</div>
+    </div>
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="result">
+          <div class="talisman">
+            <div class="talisman-mark">符</div>
+            <div class="talisman-text">야 이놈아,<br>자니 치는 손가락부터<br>부러뜨려라.</div>
+          </div>
+          <div class="save-row"><span>저장</span><span class="primary">공유</span></div>
+          <div class="watermark">— 빡神 — bbaksin.app</div>
+        </div>
+      </div></div>
+      <div class="phone-label">결과 (부적)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== V2 B급 키치 ============== -->
+<section class="variant v2">
+  <div class="variant-head">
+    <span class="variant-num">02</span>
+    <span class="variant-name">B급 키치 (최고심 톤)</span>
+    <span class="variant-tag">CUTE / MZ</span>
+  </div>
+  <p class="variant-desc">최고심·키크니 같은 손그림 일러스트 톤. 친근하고 귀엽지만 텍스트가 팩폭이라 갭에서 웃김. 인스타·카톡 프사 공유 가능성 가장 높음.</p>
+  <div class="variant-meta">
+    <span><b>컬러</b><span class="swatches"><span class="swatch" style="background:#FFE5A0"></span><span class="swatch" style="background:#FF4D4D"></span><span class="swatch" style="background:#FFB3D9"></span><span class="swatch" style="background:#2C2C2C"></span></span></span>
+    <span><b>폰트</b> Black Han Sans / Gaegu</span>
+    <span><b>강점</b> 압도적 바이럴 잠재력, 친근함</span>
+    <span><b>약점</b> 진지한 톤 원하는 유저엔 가벼워 보임</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="home">
+          <div class="brand">빡신!</div>
+          <span class="doodle">⚡</span>
+          <div class="brand-sub">욕쟁이 무당의 부적 점집</div>
+          <div class="input-label">고민이 뭐임?</div>
+          <div class="input-box">전 남친한테 카톡할까?</div>
+          <div class="shake-cta">흔들어!!! 🌀</div>
+          <div class="shake-hint">3번 흔들면 됨 ㅇㅇ</div>
+        </div>
+      </div></div>
+      <div class="phone-label">홈 (고민 입력)</div>
+    </div>
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="result">
+          <div class="talisman">
+            <span class="stars tl">✦</span>
+            <span class="stars br">✦</span>
+            <div class="doki">😤</div>
+            <div class="talisman-text">야 이놈아!!<br>자니 치는 손가락부터<br>부러뜨려라 ㅇㅇ</div>
+          </div>
+          <div class="save-row"><span>저장</span><span class="primary">공유 💌</span></div>
+          <div class="watermark">빡신 · bbaksin.app</div>
+        </div>
+      </div></div>
+      <div class="phone-label">결과 (부적)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== V3 모던 다크 미니멀 ============== -->
+<section class="variant v3">
+  <div class="variant-head">
+    <span class="variant-num">03</span>
+    <span class="variant-name">모던 다크 미니멀</span>
+    <span class="variant-tag">PREMIUM</span>
+  </div>
+  <p class="variant-desc">Apple 앱 같은 깔끔하고 세련된 룩. 검정 배경 + 빨강 액센트. 진지하고 프리미엄해 보여서 IAP 결제율 가장 높을 가능성. 다만 키치 바이럴엔 약함.</p>
+  <div class="variant-meta">
+    <span><b>컬러</b><span class="swatches"><span class="swatch" style="background:#0A0A0A"></span><span class="swatch" style="background:#E63946"></span><span class="swatch" style="background:#fff"></span><span class="swatch" style="background:#F1FAEE"></span></span></span>
+    <span><b>폰트</b> Pretendard / Inter</span>
+    <span><b>강점</b> 세련됨, 결제 전환율 ↑</span>
+    <span><b>약점</b> 한국식 부적 정체성 약함</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="home">
+          <div class="brand">빡<span class="accent">神</span></div>
+          <div class="brand-sub">DIGITAL FORTUNE — RAW EDITION</div>
+          <div class="input-label">YOUR QUESTION</div>
+          <div class="input-box">전 남친한테 카톡할까?</div>
+          <div class="shake-cta">흔들어서 점치기</div>
+          <div class="shake-hint">SHAKE 3 TIMES</div>
+        </div>
+      </div></div>
+      <div class="phone-label">홈 (고민 입력)</div>
+    </div>
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="result">
+          <div class="talisman">
+            <div class="talisman-mark">符 · TALISMAN</div>
+            <div class="talisman-text">야 이놈아,<br>자니 치는 손가락부터<br>부러뜨려라.</div>
+            <div class="talisman-num">№ 0042 / 1000</div>
+          </div>
+          <div class="save-row"><span>SAVE</span><span class="primary">SHARE</span></div>
+          <div class="watermark">빡神 · BBAKSIN.APP</div>
+        </div>
+      </div></div>
+      <div class="phone-label">결과 (부적)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== V4 Y2K 그라데이션 ============== -->
+<section class="variant v4">
+  <div class="variant-head">
+    <span class="variant-num">04</span>
+    <span class="variant-name">Y2K 그라데이션 (MZ Insta)</span>
+    <span class="variant-tag">VIRAL</span>
+  </div>
+  <p class="variant-desc">홀로그램·블러·그라데이션. 인스타 스토리 캡처용으로 가장 예쁘게 나옴. 10대~20대 초반 타깃 강함. 단점: 한국적 정체성 거의 없어서 "디지털 무당" 컨셉이 흐려짐.</p>
+  <div class="variant-meta">
+    <span><b>컬러</b><span class="swatches"><span class="swatch" style="background:#FF6B9D"></span><span class="swatch" style="background:#C44ED4"></span><span class="swatch" style="background:#4D9BFF"></span><span class="swatch" style="background:#fff"></span></span></span>
+    <span><b>폰트</b> Black Han Sans / Space Grotesk</span>
+    <span><b>강점</b> 인스타 친화, MZ 임팩트</span>
+    <span><b>약점</b> 부적 컨셉 약화, 진지함 없음</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="home">
+          <div class="brand">빡신</div>
+          <div class="brand-sub">✨ 매운맛 디지털 점집 ✨</div>
+          <div class="input-label">고민 한 줄 적어줘</div>
+          <div class="input-box">전 남친한테 카톡할까?</div>
+          <div class="shake-cta">흔들어! ✦</div>
+          <div class="shake-hint">위아래로 3번</div>
+        </div>
+      </div></div>
+      <div class="phone-label">홈 (고민 입력)</div>
+    </div>
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="result">
+          <div class="talisman">
+            <span class="sparkle tl">✦</span>
+            <span class="sparkle tr">✧</span>
+            <span class="sparkle br">✦</span>
+            <div class="talisman-mark">✦ 부적 ✦</div>
+            <div class="talisman-text">야 이놈아,<br>자니 치는<br>손가락부터<br>부러뜨려라</div>
+          </div>
+          <div class="save-row"><span>저장</span><span class="primary">공유 →</span></div>
+          <div class="watermark">@bbaksin.app</div>
+        </div>
+      </div></div>
+      <div class="phone-label">결과 (부적)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== V5 다크 미스틱 ============== -->
+<section class="variant v5">
+  <div class="variant-head">
+    <span class="variant-num">05</span>
+    <span class="variant-name">다크 미스틱 (진짜 점집)</span>
+    <span class="variant-tag">PREMIUM / SERIOUS</span>
+  </div>
+  <p class="variant-desc">진짜 신끼 있는 점집 같은 신비로운 무드. 검정 + 보라 + 골드. 호러 아니고 고급스러움. 컨셉 일관성 가장 높음. 다만 B급 팩폭 콘텐츠와 톤 갭이 있음.</p>
+  <div class="variant-meta">
+    <span><b>컬러</b><span class="swatches"><span class="swatch" style="background:#0F0813"></span><span class="swatch" style="background:#2A1438"></span><span class="swatch" style="background:#D4A437"></span><span class="swatch" style="background:#E0D5E5"></span></span></span>
+    <span><b>폰트</b> Noto Serif KR / Cormorant Garamond</span>
+    <span><b>강점</b> 컨셉 일관성, 프리미엄 무드</span>
+    <span><b>약점</b> B급 팩폭과 톤 충돌 가능</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="home">
+          <div class="brand">빡神<span class="latin">— bbaksin —</span></div>
+          <div class="brand-sub">디지털 점집</div>
+          <div class="input-label">— what troubles you —</div>
+          <div class="input-box">전 남친한테 카톡할까?</div>
+          <div class="shake-cta">SHAKE TO DIVINE</div>
+          <div class="shake-hint">— three times, slowly —</div>
+        </div>
+      </div></div>
+      <div class="phone-label">홈 (고민 입력)</div>
+    </div>
+    <div class="phone-card">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>●●●● 100%</span></div>
+        <div class="result">
+          <div class="talisman">
+            <div class="talisman-mark">— TALISMAN —</div>
+            <div class="talisman-text">야 이놈아,<br>자니 치는 손가락부터<br>부러뜨려라.</div>
+            <div class="talisman-sig">— 신령님 —</div>
+          </div>
+          <div class="save-row"><span>SAVE</span><span class="primary">SHARE</span></div>
+          <div class="watermark">— bbaksin —</div>
+        </div>
+      </div></div>
+      <div class="phone-label">결과 (부적)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Footer Recommendation ============== -->
+<div class="footer">
+  <h3>📌 제 추천 (결정에 도움 되라고)</h3>
+  <ul>
+    <li><b>가장 안전한 픽:</b> <b>02 B급 키치</b> — 바이럴 잠재력이 가장 큼. 부적 이미지가 인스타 스토리·카톡 프사로 공유될 확률 최대. 빡신의 "팩폭" 컨셉과 톤이 가장 잘 맞음.</li>
+    <li><b>가장 차별화되는 픽:</b> <b>01 Pure 한국 전통</b> — 한국 앱스토어에 진짜 부적 톤 앱이 거의 없음. 30대 이상도 받아들임. 다만 MZ 임팩트는 02보다 약함.</li>
+    <li><b>결제 전환율 노린다면:</b> <b>03 모던 다크 미니멀</b> — 프리미엄해 보여서 IAP 결제 (구독·해금) 잘 팔림. 다만 "한국 부적"이라는 정체성이 흐려짐.</li>
+    <li><b>인스타 영상·릴스 노린다면:</b> <b>04 Y2K 그라데이션</b> — 화려하지만 한국 부적 컨셉이 거의 사라짐.</li>
+    <li><b>장기적 컨셉 일관성:</b> <b>05 다크 미스틱</b> — 가장 일관된 세계관. 단, B급 팩폭 멘트와 톤이 따로 놀 수도.</li>
+    <li style="margin-top:14px;color:#fff;"><b>결론:</b> 1번이나 2번 중에 고르시는 걸 추천. 1번은 "진짜 같음", 2번은 "공유 폭발". 본인 미적 취향과 타깃에 따라 선택.</li>
+  </ul>
+</div>
+
+</body>
+</html>
