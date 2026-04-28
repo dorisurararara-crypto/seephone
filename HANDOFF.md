@@ -68,6 +68,17 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-04-29 02:43 (Mac 자율 폴링) — pupil 베타 제출 ✅ / bbaksin·anger 처리 안 됨 ⚠️
+
+자율 폴링 중 ASC 상태 체크 결과:
+- ✅ **pupil build=2 VALID** → 외부 베타 그룹 자동 제출 성공 (Beta Review 큐 진입)
+  - 부수 자동 작업: betaAppLocalizations 한국어 설명 + betaAppReviewDetail (contact info) + usesNonExemptEncryption=false 설정
+- ⚠️ **bbaksin / anger build=2 ASC 에 안 나타남** (10+분 경과)
+  - altool 은 UPLOAD SUCCEEDED 보고했지만 Apple processing 에서 silent fail 의심
+  - 조사 필요 사유: pupil 은 정상, bbaksin·anger 만 막힘 → IPA 차이? Info.plist 키? 권한?
+  - Apple iTMS 메일 도착하면 사유 명확
+- 다음 폴링 (3분 뒤) 에서 재확인
+
 ### 2026-04-29 02:35 (Mac → Windows) — 야간 진행 보고 + 사용자 대기 항목 갱신
 
 야간 자율 작업 중간 상태 (사용자 자는 동안). 자세한 건 `commit 0eed0ca` 참조.
