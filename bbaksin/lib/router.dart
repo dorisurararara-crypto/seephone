@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'screens/home_screen.dart';
 import 'screens/ritual_screen.dart';
 import 'screens/result_screen.dart';
+import 'screens/settings_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -23,6 +24,10 @@ final appRouter = GoRouter(
         final question = state.uri.queryParameters['q'] ?? '';
         return ResultScreen(question: question);
       },
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );
