@@ -1,0 +1,59 @@
+name: bbaksin
+description: "빡신 — 욕쟁이 무당이 부적으로 팩폭 날리는 디지털 점집"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # 핵심 인프라 (shadowrun에서 검증됨)
+  flutter_riverpod: ^3.3.1       # 상태관리
+  go_router: ^17.2.0             # 라우팅
+  shared_preferences: ^2.3.4     # 로컬 저장 (히스토리, 설정)
+  intl: ^0.20.2                  # 시간/포맷팅
+  google_fonts: ^6.2.1           # 한글 폰트 동적 로딩
+
+  # 광고 / 수익화
+  google_mobile_ads: ^5.3.0      # AdMob (전면 + 보상형)
+
+  # 공유 / 권한
+  share_plus: ^10.1.4            # 부적 이미지 SNS 공유
+  permission_handler: ^11.4.0    # 갤러리 저장 권한
+  path_provider: ^2.1.4          # 파일 경로
+
+  # 이펙트
+  vibration: ^2.0.1              # 굿판 진동
+
+  # 빡신 전용
+  sensors_plus: ^6.0.0           # 폰 흔들기 감지 (점치는 행위)
+  gal: ^2.3.0                    # 갤러리 저장 (iOS/Android 통합)
+  screenshot: ^3.0.0             # 부적 위젯 → 이미지 캡처
+  flutter_animate: ^4.5.0        # 굿판 애니메이션
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  adaptive_icon_background: "#C8102E"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icon/
+    - assets/backgrounds/
+    - assets/data/

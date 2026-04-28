@@ -1,0 +1,23 @@
+{
+  "_comment": "이미지 생성 배치 요청 템플릿. 새 배치 만들 때 batch_001.json, batch_002.json 식으로 복사해서 작성.",
+  "batch_id": "000",
+  "requested_by": "Mac",
+  "requested_at": "YYYY-MM-DDTHH:MM:SS+09:00",
+  "target_app": "bbaksin",
+  "purpose": "한 줄 설명 (예: 부적 배경 love 카테고리 5장)",
+  "model": "flux-dev",
+  "size": "1080x1920",
+  "negative_prompt": "text, letters, korean characters, hangul, watermark, signature, modern digital UI, photorealistic, horror, scary, blood, low quality, blurry",
+  "items": [
+    {
+      "id": "love_001",
+      "category": "love",
+      "prompt": "Korean traditional buddhist talisman (부적), aged hanji paper texture, deep crimson red background with faded yellow accents, ornamental black ink brush borders, central rectangular blank area reserved for text overlay, cute pink dokkaebi cupid in corner, heart motifs, peach pink accents, kitsch B-tier illustration style mixed with Korean folk art, slightly worn vintage texture, vertical poster composition, ultra-detailed ornamental edges, Korean MZ aesthetic"
+    },
+    {
+      "id": "money_001",
+      "category": "money",
+      "prompt": "Korean traditional buddhist talisman (부적), aged hanji paper texture, deep crimson red with gold accents, ornamental black ink brush borders, traditional korean coin (엽전) motifs, lucky cat dokkaebi mascot, central blank area for text overlay, kitsch B-tier illustration style, vertical 9:16 composition, Korean MZ aesthetic"
+    }
+  ]
+}

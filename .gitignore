@@ -1,0 +1,49 @@
+# Secrets
+.env
+*.env
+*.p8
+*.p12
+*.keystore
+
+# Flutter / Dart
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.metadata
+**/.pub-cache/
+**/.pub/
+**/build/
+
+# iOS
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Runner.xcworkspace/xcuserdata/
+**/ios/Runner.xcodeproj/xcuserdata/
+
+# Android
+**/android/.gradle/
+**/android/local.properties
+**/android/app/release/
+**/android/captures/
+**/android/.idea/
+**/android/key.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Local scratch / large temporaries
+tmp/
+*.log
+*.swp
+
+# Image generation rejected drafts (keep curated only)
+raw-images/**/.rejected/
