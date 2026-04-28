@@ -30,9 +30,11 @@
    - https://apps.admob.com/v2/apps/list
    - 각 앱 등록 후 받은 App ID 를 Info.plist + AndroidManifest.xml 에 교체
 
-3. **외부 테스트 그룹 생성** (TestFlight 외부 배포용)
-   - 각 앱마다 ASC 에서 외부 그룹 (예: `bbaksintester`) 생성 + Beta App Review 첫 제출
-   - 첫 통과 후엔 자동 (`scripts/asc/submit_external_beta.rb` 호환)
+3. ~~**외부 테스트 그룹 생성**~~ ✅ 완료 (자동 처리)
+   - 빡신 ganzitester: `https://testflight.apple.com/join/D3PtAHgE` (id=`268c5bab-6896-4bf6-96f6-686940a383fe`)
+   - 동공지진탐지기 ganzitester: `https://testflight.apple.com/join/qKFk74FH` (id=`b33fe663-031d-4e35-85de-af2f2e826c15`)
+   - 분노발전소 ganzitester: `https://testflight.apple.com/join/vuXTFFV9` (id=`dd8969b7-4b66-48b4-8ea2-91781e374fe3`)
+   - 첫 빌드 업로드 후 Beta App Review 자동 제출 가능 (`submit_external_beta.rb`)
 
 4. ~~**개인정보 처리방침 페이지 호스팅**~~ ✅ 완료 (자동 처리)
    - URL: `https://gist.github.com/dorisurararara-crypto/1939b5ec8fb8f54693ac8f72345ca53f`
