@@ -1,0 +1,69 @@
+{
+  "batch_id": "001",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "icon_a",
+      "file": "raw-images/batch_001/icon_a.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.4
+    },
+    {
+      "id": "icon_b",
+      "file": "raw-images/batch_001/icon_b.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.1
+    },
+    {
+      "id": "icon_c",
+      "file": "raw-images/batch_001/icon_c.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.1
+    },
+    {
+      "id": "v1_bg_001",
+      "file": "raw-images/batch_001/v1_bg_001.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 18.3
+    },
+    {
+      "id": "v1_bg_002",
+      "file": "raw-images/batch_001/v1_bg_002.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 18.8
+    },
+    {
+      "id": "v1_bg_003",
+      "file": "raw-images/batch_001/v1_bg_003.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 18.8
+    },
+    {
+      "id": "v1_bg_004",
+      "file": "raw-images/batch_001/v1_bg_004.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 18.8
+    },
+    {
+      "id": "v1_bg_005",
+      "file": "raw-images/batch_001/v1_bg_005.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 18.8
+    }
+  ]
+}
