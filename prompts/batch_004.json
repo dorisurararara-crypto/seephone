@@ -1,0 +1,64 @@
+{
+  "batch_id": "004",
+  "requested_by": "Windows-autonomous",
+  "requested_at": "2026-04-29T00:33:00+09:00",
+  "target_app": "bbaksin + pupil + anger",
+  "purpose": "Mac 환영 후속: (1) v2_doki_002b 호환 빨간 도깨비 4가지 포즈/표정 (광고·스플래시·앱스토어 워터마크용) (2) 굿판 이펙트 시퀀스 4종 (폭발·번개·연기·spark) — 다 짧은 prompt + SDXL 친화 어휘",
+  "model_suggestion": "sdxl",
+  "size_default": "1080x1920",
+  "negative_prompt_default": "text, letters, watermark, signature, photorealistic, low quality, blurry, multiple characters, group, crowd, scary, blood",
+  "items": [
+    {
+      "id": "v2_doki_pose_angry",
+      "category": "v2_dokkaebi_variant",
+      "size": "1080x1920",
+      "prompt": "kawaii red angry ogre mascot character with golden horns, single character centered, fists clenched aggressive pose, flat sticker illustration, deep red background, bold black outlines, sharp fangs, mobile sticker style"
+    },
+    {
+      "id": "v2_doki_pose_laugh",
+      "category": "v2_dokkaebi_variant",
+      "size": "1080x1920",
+      "prompt": "kawaii red laughing ogre mascot character with golden horns, single character centered, big open mouth laughing, flat sticker illustration, deep red background, bold black outlines, mischievous, mobile sticker style"
+    },
+    {
+      "id": "v2_doki_pose_point",
+      "category": "v2_dokkaebi_variant",
+      "size": "1080x1920",
+      "prompt": "kawaii red ogre mascot character with golden horns, single character centered, pointing finger forward dramatically, flat sticker illustration, deep red background, bold black outlines, fortune teller pose, mobile sticker"
+    },
+    {
+      "id": "v2_doki_pose_lightning",
+      "category": "v2_dokkaebi_variant",
+      "size": "1080x1920",
+      "prompt": "kawaii red ogre mascot character with golden horns, single character centered, holding glowing lightning bolt overhead, flat sticker illustration, deep red background with yellow spark accents, bold black outlines"
+    },
+    {
+      "id": "v5_fx_explosion",
+      "category": "v5_effect",
+      "size": "1080x1920",
+      "prompt": "dramatic golden energy explosion burst on dark navy background, abstract magical effect, swirling sparks, mystical glow, vertical poster, no characters, no text, isolated effect"
+    },
+    {
+      "id": "v5_fx_lightning",
+      "category": "v5_effect",
+      "size": "1080x1920",
+      "prompt": "dramatic golden lightning bolt strike on dark navy background, electric arcs, mystical aura, vertical poster, no characters, no text, isolated effect"
+    },
+    {
+      "id": "v5_fx_smoke",
+      "category": "v5_effect",
+      "size": "1080x1920",
+      "prompt": "mystical golden smoke swirl on dark navy background, ethereal glow, magic ritual atmosphere, vertical poster, no characters, no text, abstract isolated effect"
+    },
+    {
+      "id": "v5_fx_sparks",
+      "category": "v5_effect",
+      "size": "1080x1920",
+      "prompt": "scattered golden sparks burst on dark navy background, magical particles, mystical effect, vertical poster, no characters, no text, abstract isolated"
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_004/",
+    "filename_format": "{id}.png"
+  }
+}
