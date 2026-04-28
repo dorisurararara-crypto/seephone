@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../services/share_service.dart';
+import '../services/sound_service.dart';
 import '../state/message_repo.dart';
 import '../theme/theme_provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -17,7 +18,15 @@ class ResultScreen extends ConsumerStatefulWidget {
 
 class _ResultScreenState extends ConsumerState<ResultScreen> {
   final _shotController = ScreenshotController();
+  final _sfx = SoundService();
   Message? _message;
+  bool _played = false;
+
+  @override
+  void dispose() {
+    _sfx.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +61,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             ),
             data: (repo) {
               _message ??= repo.pickFor(widget.question);
+              if (!_played) {
+                _played = true;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _sfx.play(BbaksinSfx.reveal);
+                });
+              }
               final msg = _message!;
               return Padding(
                 padding: const EdgeInsets.all(24),
@@ -67,14 +82,20 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                     ),
                     const SizedBox(height: 16),
                     theme.buildActionButtons(
-                      onSave: () => ShareService.saveTalisman(
-                        controller: _shotController,
-                        context: context,
-                      ),
-                      onShare: () => ShareService.shareTalisman(
-                        controller: _shotController,
-                        question: widget.question,
-                      ),
+                      onSave: () {
+                        _sfx.play(BbaksinSfx.success);
+                        ShareService.saveTalisman(
+                          controller: _shotController,
+                          context: context,
+                        );
+                      },
+                      onShare: () {
+                        _sfx.play(BbaksinSfx.share);
+                        ShareService.shareTalisman(
+                          controller: _shotController,
+                          question: widget.question,
+                        );
+                      },
                     ),
                     theme.buildWatermark(),
                     const SizedBox(height: 6),

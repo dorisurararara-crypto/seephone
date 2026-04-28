@@ -34,6 +34,7 @@ dependencies:
   gal: ^2.3.0                    # 갤러리 저장 (iOS/Android 통합)
   screenshot: ^3.0.0             # 부적 위젯 → 이미지 캡처
   flutter_animate: ^4.5.0        # 굿판 애니메이션
+  audioplayers: ^6.1.0           # SFX 재생 (sfx-shared 라이브러리)
 
 dev_dependencies:
   flutter_test:
@@ -57,4 +58,5 @@ flutter:
     - assets/icon/
     - assets/backgrounds/
     - assets/effects/
+    - assets/sfx/
     - assets/data/

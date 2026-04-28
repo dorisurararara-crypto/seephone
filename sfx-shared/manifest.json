@@ -1,0 +1,59 @@
+{
+  "library": [
+    "ui_tap",
+    "ui_success",
+    "ui_share",
+    "ui_error",
+    "ui_swoosh",
+    "kr_bell_short",
+    "kr_bell_long",
+    "kr_drum_buk",
+    "kr_daegeum",
+    "magic_burst",
+    "magic_chime",
+    "magic_drone",
+    "magic_reveal",
+    "tech_scan_beep",
+    "tech_scan_done",
+    "tech_tick",
+    "tech_confirm",
+    "alert_siren",
+    "drama_buzzer",
+    "drama_stinger",
+    "elec_surge",
+    "elec_buzz_low",
+    "elec_buzz_high",
+    "elec_zap"
+  ],
+  "usage": {
+    "bbaksin": [
+      "kr_bell_short",
+      "kr_drum_buk",
+      "magic_burst",
+      "magic_chime",
+      "magic_drone",
+      "ui_share",
+      "ui_success",
+      "ui_tap"
+    ],
+    "pupil": [
+      "tech_scan_beep",
+      "tech_tick",
+      "tech_scan_done",
+      "alert_siren",
+      "tech_confirm",
+      "drama_stinger",
+      "ui_share",
+      "ui_tap"
+    ],
+    "anger": [
+      "elec_surge",
+      "elec_buzz_low",
+      "elec_buzz_high",
+      "elec_zap",
+      "drama_buzzer",
+      "ui_share",
+      "ui_tap"
+    ]
+  }
+}

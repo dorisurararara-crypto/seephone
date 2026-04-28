@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:screenshot/screenshot.dart';
 import '../services/anger_calc.dart';
 import '../services/share_service.dart';
+import '../services/sound_service.dart';
 
 class ResultScreen extends StatefulWidget {
   final double watts;
@@ -15,6 +16,21 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   final _shotController = ScreenshotController();
+  final _sfx = SoundService();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _sfx.play(AngerSfx.buzzer);
+    });
+  }
+
+  @override
+  void dispose() {
+    _sfx.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

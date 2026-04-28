@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../services/lie_detector.dart';
+import '../services/sound_service.dart';
 
 /// 전면 카메라로 3초간 스캔.
 ///
@@ -34,6 +35,7 @@ class _ScanScreenState extends State<ScanScreen> {
 
   late final FaceDetector _faceDetector;
   bool _isScanning = false;
+  final _sfx = SoundService();
 
   @override
   void initState() {
@@ -72,10 +74,13 @@ class _ScanScreenState extends State<ScanScreen> {
 
   void _startCountdown() {
     setState(() => _isScanning = true);
+    _sfx.play(PupilSfx.scanStart);
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
       setState(() => _remaining--);
+      _sfx.play(PupilSfx.tick);
       if (_remaining <= 0) {
         t.cancel();
+        _sfx.play(PupilSfx.scanDone);
         _finishScan();
       }
     });
@@ -108,6 +113,7 @@ class _ScanScreenState extends State<ScanScreen> {
     _countdownTimer?.cancel();
     _camera?.dispose();
     _faceDetector.close();
+    _sfx.dispose();
     super.dispose();
   }
 

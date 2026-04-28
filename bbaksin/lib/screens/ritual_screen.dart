@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vibration/vibration.dart';
+import '../services/sound_service.dart';
 import '../theme/theme_provider.dart';
 
 class RitualScreen extends ConsumerStatefulWidget {
@@ -24,10 +25,12 @@ class _RitualScreenState extends ConsumerState<RitualScreen> {
   int _shakeCount = 0;
   DateTime _lastShakeAt = DateTime.fromMillisecondsSinceEpoch(0);
   bool _completing = false;
+  final _sfx = SoundService();
 
   @override
   void initState() {
     super.initState();
+    _sfx.play(BbaksinSfx.bellStart);
     _startListening();
   }
 
@@ -49,12 +52,13 @@ class _RitualScreenState extends ConsumerState<RitualScreen> {
     if (await Vibration.hasVibrator()) {
       Vibration.vibrate(duration: 50);
     }
+    _sfx.play(BbaksinSfx.drumShake);
     setState(() => _shakeCount++);
     if (_shakeCount >= _requiredShakes) {
       _sub?.cancel();
       if (!mounted) return;
-      // 굿판 클라이맥스 — 1500ms 후 결과 화면.
       setState(() => _completing = true);
+      _sfx.play(BbaksinSfx.climax);
       if (await Vibration.hasVibrator()) {
         Vibration.vibrate(pattern: [0, 100, 80, 200]);
       }
@@ -67,6 +71,7 @@ class _RitualScreenState extends ConsumerState<RitualScreen> {
   @override
   void dispose() {
     _sub?.cancel();
+    _sfx.dispose();
     super.dispose();
   }
 

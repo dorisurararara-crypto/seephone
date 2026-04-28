@@ -29,6 +29,7 @@ dependencies:
   google_mlkit_face_detection: ^0.13.1 # 얼굴 + 랜드마크 트래킹 (로컬, 무료)
   screenshot: ^3.0.0                   # 결과 캡처 (틱톡용)
   gal: ^2.3.0                          # 갤러리 저장
+  audioplayers: ^6.1.0                 # SFX 재생
 
 dev_dependencies:
   flutter_test:
@@ -47,3 +48,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/
+    - assets/sfx/

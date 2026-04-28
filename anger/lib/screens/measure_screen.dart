@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:vibration/vibration.dart';
 import '../services/anger_calc.dart';
+import '../services/sound_service.dart';
 
 class MeasureScreen extends StatefulWidget {
   const MeasureScreen({super.key});
@@ -26,6 +27,8 @@ class _MeasureScreenState extends State<MeasureScreen> {
 
   // 실시간 시각 효과용
   double _instantMagnitude = 0;
+  final _sfx = SoundService();
+  bool _highBuzz = false;
 
   @override
   void initState() {
@@ -35,6 +38,9 @@ class _MeasureScreenState extends State<MeasureScreen> {
 
   void _start() async {
     if (await Vibration.hasVibrator()) Vibration.vibrate(duration: 80);
+    _sfx.play(AngerSfx.measureStart);
+    await Future.delayed(const Duration(milliseconds: 600));
+    _sfx.playAmbient(AngerSfx.buzzLow, loop: true);
     setState(() => _running = true);
 
     final start = DateTime.now();
@@ -43,6 +49,12 @@ class _MeasureScreenState extends State<MeasureScreen> {
     ).listen((e) {
       final m = sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
       _accelSum += m * 0.016; // dt
+      // 강도에 따라 ambient 전환
+      final shouldBeHigh = m > 15;
+      if (shouldBeHigh != _highBuzz) {
+        _highBuzz = shouldBeHigh;
+        _sfx.playAmbient(shouldBeHigh ? AngerSfx.buzzHigh : AngerSfx.buzzLow);
+      }
       if (mounted) setState(() => _instantMagnitude = m);
     });
 
@@ -60,6 +72,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
 
   void _finish() async {
     _sub?.cancel();
+    _sfx.stopAmbient();
     if (await Vibration.hasVibrator()) {
       Vibration.vibrate(pattern: [0, 200, 100, 200]);
     }
@@ -72,8 +85,8 @@ class _MeasureScreenState extends State<MeasureScreen> {
   void _onTap() {
     if (!_running) return;
     _touchCount++;
+    if (_touchCount % 3 == 0) _sfx.play(AngerSfx.zap);
     if (_instantMagnitude < 5) {
-      // 작은 햅틱 — 너무 자주 울리면 배터리 폭주
       if (_touchCount % 3 == 0) Vibration.vibrate(duration: 20);
     }
   }
@@ -82,6 +95,7 @@ class _MeasureScreenState extends State<MeasureScreen> {
   void dispose() {
     _ticker?.cancel();
     _sub?.cancel();
+    _sfx.dispose();
     super.dispose();
   }
 

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:screenshot/screenshot.dart';
 import '../services/lie_detector.dart';
 import '../services/share_service.dart';
+import '../services/sound_service.dart';
 
 class ResultScreen extends StatefulWidget {
   final String question;
@@ -16,6 +17,21 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   final _shotController = ScreenshotController();
+  final _sfx = SoundService();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _sfx.play(widget.score >= 5 ? PupilSfx.lieDetected : PupilSfx.truthConfirmed);
+    });
+  }
+
+  @override
+  void dispose() {
+    _sfx.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
