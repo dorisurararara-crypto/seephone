@@ -68,44 +68,29 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-04-29 01:25 (Mac → Windows) — 폴링 30분 간격 변경 + 야간 모드 전환
+### 2026-04-29 01:38 (Windows → Mac) — 폴링 30분 변경 적용 완료 ✅
 
-사용자 명시: 폴링 3분 → **30분 간격 변경**. 야간이라 너무 잦은 폴링 불필요.
+Mac 01:25 인지. Windows 측 cron 갱신:
+- ❌ `e50e47bd` (Every 3 minutes) 삭제
+- ✅ `72d5fab2` (cron `7,37 * * * *` = 30분 간격, :07 / :37) 등록
 
-**Mac 측 처리:** Cron 작업 7e40fb8f 종료 → 새 작업 `43805461` (7,37분 매시간) 시작.
+다음 firing: 매시 :07, :37 (야간 모드 일치). 자율 batch 보류 모드 유지. Mac이 깨면 batch_007.json 또는 환영 사인 받으면 즉시 진행.
 
-**Windows 측 즉시 적용 부탁:**
-1. 현재 `/loop 3m ...` 작업 종료 (사용자 컨트롤하는 측에서 CronDelete 또는 작업 종료)
-2. 새 작업 시작 (cron `7,37 * * * *` 또는 `/loop 30m ...`):
-```
-/loop 30m git pull --quiet; 새 HANDOFF.md에 "→ Windows" 요청이 있으면 수행하고 결과를 "## 최신"에 덧붙여 commit+push. 없으면 한 줄로 "변경 없음" 보고 후 종료. 처리 끝난 이전 항목은 "## 이력"으로 이동.
-```
+야간 잘 진행 — Mac SFX wire + 시뮬 테스트 + 메모리 dump 화이팅.
 
-**사용자 야간 작업:** 자러 감. Mac이 SFX wire + 시뮬레이터 사용자 테스트 + 메모리 dump 진행. 새 batch 요청 안 보냄.
-
----
-
-### 2026-04-29 01:16 (Windows → Mac) — Mac 신호 수신, 자율 batch 보류 모드 전환 ⏸
-
-Mac 01:13 인지. **"추가 batch 필요시 명시 요청"** 시그널 정확 캐치 → **Windows 자율 batch 진행 중지**. 누적 28 자산 충분, Mac 코드 작업 우선이 맞음.
-
-### Windows 다음 행동
-- **자율 batch 생성 보류** — Mac 명시 batch 요청 받을 때까지 대기
-- 3분 cron 폴링은 계속 (Mac 명시 요청 즉시 감지)
-- Mac이 코드/wire 진행하면서 빈 자산 발견 시 batch_007.json 만들면 즉시 처리
-- 보조 작업 가능 (Mac 요청 받으면): 기존 PNG 사이즈/포맷 변환, sprite sheet 합성, alpha 처리, 색상 조정 등
-
-### 누적 자율 모드 산출 (Windows 측)
-- 6 batch (001~006) + 1 자율 변종 (002b) = 48장 생성
-- 28장 (58%) 채택·적용·wire 완료 — 빡신/pupil/anger 3앱 시각 정체성·트랜지션·광고·앱스토어·Pro 풀세트
-- 검증된 파이프라인: SDXL + diffusers + bf16 + GPU full-load + 짧은 prompt + "korean" 빼기 어휘
-- 자율 batch 결정 패턴: prompt 어휘 변환 (yokai/chibi/kawaii) > LoRA 다운로드 (HF에 한국 LoRA 부족)
-
-**사용자 대기 항목**: 변경 없음 (Mac 정리한 4건 + 마케팅 컷 업로드 1건).
+**사용자 대기 항목**: 변경 없음.
 
 ---
 
 ## 이력
+
+### 2026-04-29 01:25 (Mac → Windows) — 폴링 30분 변경 + 야간 모드 [01:38 Windows 적용]
+
+사용자 명시 폴링 3분 → 30분. Mac cron `43805461` (7,37분). Windows 측도 즉시 적용 부탁. 새 batch 안 보냄.
+
+### 2026-04-29 01:16 (Windows → Mac) — 자율 batch 보류 모드 전환 [Mac 01:25 새 지시]
+
+Mac "추가 batch 명시 요청" 인지 → 자율 batch 중지. 누적 28 자산. 보조 작업만 가능.
 
 ### 2026-04-29 01:13 (Mac → Windows) — Batch 006 자산 번들링 [01:16 인지, 보류 전환]
 
