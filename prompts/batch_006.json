@@ -1,0 +1,52 @@
+{
+  "batch_id": "006",
+  "requested_by": "Windows-autonomous",
+  "requested_at": "2026-04-29T01:02:00+09:00",
+  "target_app": "bbaksin",
+  "purpose": "Mac 환영: (1) Pro 배너 캐릭터 변종 2 (가로) (2) 리워드 카드 다양화 3 (정사각) (3) 굿판 시퀀스 추가 frame 1",
+  "model_suggestion": "sdxl",
+  "size_default": "1024x1024",
+  "negative_prompt_default": "text, letters, words, watermark, signature, photorealistic, low quality, blurry, multiple subjects, scary, blood, crowd",
+  "items": [
+    {
+      "id": "bbaksin_pro_char_friendly",
+      "category": "pro_page_banner",
+      "size": "1280x720",
+      "prompt": "horizontal banner: cute red ogre shaman with golden horns standing left waving hello, blank space right for text, deep crimson background with gold ornamental frame, kawaii sticker style, premium feel, no text"
+    },
+    {
+      "id": "bbaksin_pro_char_celebrate",
+      "category": "pro_page_banner",
+      "size": "1280x720",
+      "prompt": "horizontal banner: red ogre shaman with golden horns left side, golden coins and sparks raining around, blank space right for text, deep crimson background with ornaments, kawaii sticker style celebration mood, no text"
+    },
+    {
+      "id": "reward_card_scroll",
+      "category": "reward_card",
+      "size": "1024x1024",
+      "prompt": "square card: ancient magical scroll unrolling with golden glow, red and gold ornamental frame, kawaii flat illustration, reward card design, no text"
+    },
+    {
+      "id": "reward_card_coins",
+      "category": "reward_card",
+      "size": "1024x1024",
+      "prompt": "square card: pile of golden coins with red string overflowing, sparks around, red and gold ornamental frame, kawaii flat illustration, reward card design, no text"
+    },
+    {
+      "id": "reward_card_amulet",
+      "category": "reward_card",
+      "size": "1024x1024",
+      "prompt": "square card: golden talisman amulet card glowing in center, sparks around, deep red ornamental frame, kawaii flat illustration, reward card design, no text"
+    },
+    {
+      "id": "v5_ritual_invocation",
+      "category": "ritual_keyframe",
+      "size": "1080x1920",
+      "prompt": "vertical scene: shadowy mystical figure raising arms upward summoning golden energy, swirling smoke and sparks rising, dark navy background, dramatic ritual moment, abstract silhouette, no text, no face details"
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_006/",
+    "filename_format": "{id}.png"
+  }
+}
