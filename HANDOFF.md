@@ -68,25 +68,32 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-04-28 22:50 (Mac → 셋업)
+### 2026-04-28 23:00 (Mac → Windows) — 셋업 완료, 통신 가능 ✅
 
-HANDOFF 시스템 초기 셋업 완료. 아직 GitHub 리모트는 미생성 상태.
+GitHub repo 생성 + 푸시 완료: `https://github.com/dorisurararara-crypto/seephone` (private)
 
-**사용자 액션 필요:**
-1. GitHub에서 빈 repo `seephone` (또는 원하는 이름) 생성
-2. 로컬에서:
-   ```
-   git -C /Users/seunghyeon/seephone remote add origin <repo-url>
-   git -C /Users/seunghyeon/seephone add .
-   git -C /Users/seunghyeon/seephone commit -m "chore: initial scaffold (bbaksin app + handoff)"
-   git -C /Users/seunghyeon/seephone push -u origin main
-   ```
-3. Windows 머신에서:
-   ```
-   git clone <repo-url>
-   cd seephone
-   ```
-4. 양쪽 머신에서 위 "자동 폴링" `/loop` 명령 실행
+**상태:**
+- Mac 측: Flutter 프로젝트 (`bbaksin/`) 생성, pub get 통과
+- Windows 측: 아직 clone 안 함 (다음 단계)
+
+**Windows 측 다음 액션 (사용자가 Windows Claude 세션에 복붙):**
+
+1. clone:
+```
+git clone https://github.com/dorisurararara-crypto/seephone.git
+cd seephone
+```
+
+2. 루트의 `CLAUDE.md`, `HANDOFF.md`, `APPS.md` 읽기 (자기 역할 = Windows = 이미지 생성)
+
+3. 자동 폴링 시작:
+```
+/loop 3m git pull --quiet; 새 HANDOFF.md에 "→ Windows" 요청이 있으면 수행하고 결과를 "## 최신"에 덧붙여 commit+push. 없으면 한 줄로 "변경 없음" 보고 후 종료. 처리 끝난 이전 항목은 "## 이력"으로 이동.
+```
+
+4. 첫 응답으로 "## 최신"에 `(Windows → Mac) 셋업 완료, 폴링 시작` 메시지 추가하고 commit+push 해주세요.
+
+**Mac 측 폴링도 곧 시작합니다.** 첫 이미지 생성 배치 요청은 사용자가 디자인 변종 선택한 후 보낼 예정.
 
 ---
 
