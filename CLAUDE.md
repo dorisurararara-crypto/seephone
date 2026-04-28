@@ -82,10 +82,15 @@ shadowrun `scripts/asc/_helpers.rb` 의 `APP_ID` 상수를 빡신 등록 후 받
 
 **TODO**: 빡신을 ASC에 등록하면 새 APP_ID 발급. 그 시점에 shadowrun 스크립트를 `bbaksin/scripts/`로 복사하고 APP_ID만 교체.
 
-### Bundle ID 컨벤션
-- shadowrun: `com.ganziman.shadowrun`
-- 빡신: `com.ganziman.bbaksin` (이 프로젝트는 이미 `com.ganziman` org로 생성됨)
-- pupil/anger: `com.ganziman.pupil` / `com.ganziman.anger` (예정)
+### Bundle ID + ASC 등록 상태
+| 앱 | Bundle ID | ASC Bundle ID (등록됨) | ASC App ID |
+|---|---|---|---|
+| 빡신 | `com.ganziman.bbaksin` | `5WXF835WY8` | ⏳ (사용자 ASC 웹 UI에서 생성 필요) |
+| 동공 지진 탐지기 | `com.ganziman.pupil` | `43C6XTMC86` | ⏳ |
+| 분노 발전소 | `com.ganziman.anger` | `8D9M2MU4V2` | ⏳ |
+
+Bundle ID는 `scripts/register_bundle_ids.rb`로 자동 등록됨.
+ASC App 자체 등록은 API 미지원 (App Store Connect 웹에서 수동) — `사용자 액션 필요` 항목.
 
 ---
 

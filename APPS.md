@@ -10,13 +10,34 @@
 4. 자발적 바이럴 (스크린샷·영상으로 공유될 자산을 앱이 만들어 줌)
 5. 스마트폰 자체 하드웨어/센서 + 로컬 데이터만 활용
 
-## 개발 순서
+## 개발 순서 + 현재 상태 (2026-04-29)
 
-| 우선순위 | 앱 | 디렉토리 | 상태 |
-|---|---|---|---|
-| 1 | 빡신 (디지털 무당) | `bbaksin/` | 코드 골격 + 5 테마 + 멘트 + 캡처/공유 ✅ |
-| 2 | 동공 지진 탐지기 | `pupil/` | 코드 골격 + 카메라 + LieDetector + 결과 화면 ✅ |
-| 3 | 분노 발전소 | `anger/` | 코드 골격 + 가속도 측정 + AngerCalc + 결과 화면 ✅ |
+| 우선순위 | 앱 | 디렉토리 | iOS Sim | Android | 단계 |
+|---|---|---|---|---|---|
+| 1 | 빡신 (디지털 무당) | `bbaksin/` | ✅ 빌드+런 | ⏳ | 5 테마 + 멘트 120 + 캡처/공유 + 설정/Pro 게이트 |
+| 2 | 동공 지진 탐지기 | `pupil/` | ⚠️ ML Kit ARM64 sim 미지원 (실기기 OK) | ⏳ | 카메라 + LieDetector + 결과 캡처/공유 |
+| 3 | 분노 발전소 | `anger/` | ✅ 빌드+런 | ⏳ | 가속도 측정 + AngerCalc + 결과 캡처/공유 |
+
+**범례**: ✅ 검증됨, ⏳ Windows 측 검증 대기, ⚠️ 알려진 제약
+
+## 사용자 액션 필요 항목 (자율 모드 외)
+
+1. **App Store Connect 웹 UI에서 3개 앱 생성** (API 미지원)
+   - https://appstoreconnect.apple.com/apps → "+" → 각 Bundle ID 선택
+   - 등록된 Bundle ID: 빡신 `5WXF835WY8`, pupil `43C6XTMC86`, anger `8D9M2MU4V2`
+   - 생성 시 SKU, primary language(ko) 입력. 이후 ASC API로 모든 메타데이터 자동 관리 가능.
+
+2. **AdMob 콘솔에서 3개 앱 생성** (현재 Google 공식 테스트 ID 사용 중)
+   - https://apps.admob.com/v2/apps/list
+   - 각 앱 등록 후 받은 App ID 를 Info.plist + AndroidManifest.xml 에 교체
+
+3. **외부 테스트 그룹 생성** (TestFlight 외부 배포용)
+   - 각 앱마다 ASC 에서 외부 그룹 (예: `bbaksintester`) 생성 + Beta App Review 첫 제출
+   - 첫 통과 후엔 자동 (`scripts/asc/submit_external_beta.rb` 호환)
+
+4. **개인정보 처리방침 페이지 호스팅**
+   - `PRIVACY_POLICY_TEMPLATE.md` 내용 → GitHub Pages 또는 Notion 공개 페이지
+   - URL 을 ASC 각 앱 메타데이터에 등록
 
 **순서 근거**: 코드 가장 단순 → 가장 빠른 첫 출시 → 광고 SDK·앱스토어 운영 노하우 확보 후 다음 앱으로 재활용.
 
