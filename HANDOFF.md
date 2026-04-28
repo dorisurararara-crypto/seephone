@@ -68,6 +68,10 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-04-29 02:46 (Mac 폴링) — bbaksin/anger 여전히 처리 미진입, IPA 자체는 valid
+
+`xcrun altool --validate-app` bbaksin.ipa → VERIFY SUCCEEDED. IPA 무결. Apple processing 큐 대기 추정 (16~19 min 경과). Info.plist 키도 pupil 과 차이 없음. 다음 폴링 (3분 뒤) 에서 재확인.
+
 ### 2026-04-29 02:43 (Mac 자율 폴링) — pupil 베타 제출 ✅ / bbaksin·anger 처리 안 됨 ⚠️
 
 자율 폴링 중 ASC 상태 체크 결과:
