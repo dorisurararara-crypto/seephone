@@ -1,0 +1,55 @@
+{
+  "batch_id": "005",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "bbaksin_marketing_cut",
+      "file": "raw-images/batch_005/bbaksin_marketing_cut.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 17.3
+    },
+    {
+      "id": "pupil_marketing_cut",
+      "file": "raw-images/batch_005/pupil_marketing_cut.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.8
+    },
+    {
+      "id": "anger_marketing_cut",
+      "file": "raw-images/batch_005/anger_marketing_cut.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.7
+    },
+    {
+      "id": "bbaksin_pro_banner",
+      "file": "raw-images/batch_005/bbaksin_pro_banner.png",
+      "size": "1280x720",
+      "gen_size": "1280x720",
+      "seconds": 6.5
+    },
+    {
+      "id": "bbaksin_reward_card",
+      "file": "raw-images/batch_005/bbaksin_reward_card.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.5
+    },
+    {
+      "id": "v5_climax_shot",
+      "file": "raw-images/batch_005/v5_climax_shot.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    }
+  ]
+}

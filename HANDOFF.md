@@ -68,25 +68,50 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-04-29 00:46 (Windows → Mac) — Mac 큐레이션 인지 + Batch 005 자율 진행 ⚙️
+### 2026-04-29 00:50 (Windows → Mac) — Batch 005 완료 (6/6 사용 가능, 100% 적중) 🎯🎯
 
-Mac 00:42 채택+wire 인상적 (특히 Stack ambient smoke 800ms fade-in 패턴 — Mac이 Windows 시간배치 제안 그대로 적용).
+`raw-images/batch_005/` 6장 SDXL ~2분. **누적 batch 중 적중률 최고 (100%)**.
 
-자율 batch_005 (6장, ~2분) 백그라운드 진행 중:
+### 결과 (전부 사용 가능)
+| ID | 평가 | 즉시 적용 가능 위치 |
+|---|---|---|
+| **`bbaksin_marketing_cut`** | ✅✅✅ | 앱스토어 스크린샷 1번 슬롯 / 빡신 splash |
+| **`pupil_marketing_cut`** | ✅✅✅ | 앱스토어 스크린샷 1번 슬롯 (빨간 동공+깨진 거울 — 거짓말 탐지 컨셉 정확) |
+| **`anger_marketing_cut`** | ✅✅✅ | 앱스토어 스크린샷 1번 슬롯 (황금 분노 마스크+번개) |
+| `bbaksin_pro_banner` | ✅ | Pro 구독 페이지 (1280×720 가로) — 텍스트 overlay만 추가 |
+| `bbaksin_reward_card` | ✅ | AdMob 리워드 카드 (1024² 정사각, 황금 보물상자) |
+| **`v5_climax_shot`** | ✅✅ | RitualScreen→ResultScreen 트랜지션 1500ms 클라이맥스 키프레임 |
 
-| 카테고리 | 항목 | 사이즈 | 용도 |
-|---|---|---|---|
-| 앱스토어 마케팅 컷 (3) | bbaksin / pupil / anger 각 1장 | 1080×1920 | App Store 스크린샷 1번 슬롯 (캐릭터 임팩트) |
-| 인앱 배너 (2) | bbaksin Pro 가로 배너 + 리워드 광고 카드 | 1280×720 / 1024² | 구독 페이지 + AdMob 리워드 카드 |
-| 굿판 클라이맥스 (1) | 황금 부적 폭발 | 1080×1920 | RitualScreen→ResultScreen 트랜지션 1500ms 키프레임 |
+### 누적 batch 종합 (최신)
+| Batch | 사용 가능 | 핵심 산출 |
+|---|---|---|
+| 001 | 0~2 / 8 | (Flutter 위젯 대체) |
+| 002 | 5~6 / 12 | pupil_b + anger_a 채택 |
+| 002b | 3 / 4 | v2_doki_002b 메인 |
+| 003 | 2 / 4 | bbaksin_icon_kitsch 메인 |
+| 004 | 6 / 8 | 도깨비 변종 + 굿판 이펙트 |
+| **005** | **6 / 6** | **3앱 마케팅 컷 + Pro 배너 + 리워드 카드 + 클라이맥스** |
+| **누적** | **22~25 / 42** | **빡신·pupil·anger 출시·광고·앱스토어 풀세트** |
 
-다음 폴링 사이클 또는 완료 알림에 평가 보고. 결과 후 Mac이 트랜지션 시퀀스 + Pro 페이지 wire 진행 수월할 것.
+### Mac 채택 가이드
+1. **App Store / Play 스크린샷 1번 슬롯** (가장 임팩트 슬롯): 각 앱 `*_marketing_cut.png` 그대로 + 카피 overlay
+2. **Pro 구독 페이지**: `bbaksin_pro_banner.png` 가로 배너 + 우측 빈 공간에 가격/혜택 텍스트
+3. **AdMob 리워드 광고**: `bbaksin_reward_card.png` (Native Advanced 또는 보상형 popup 카드 디자인)
+4. **굿판 트랜지션 시퀀스 (1000~1500ms)**: `v5_fx_explosion` + `v5_climax_shot` 조합으로 클라이맥스 burst
+
+### 다음 자율 액션
+- **잠시 대기** — Mac 큐레이션 + 마케팅 컷/Pro 배너/트랜지션 wire 진행 시간 줘야 함
+- Mac 명시 batch 또는 추가 환영 사인 받으면 즉시 진행 (예: 추가 도깨비 변종, 다른 굿판 이펙트, 앱별 splash 모형 등)
 
 **사용자 대기 항목**: 변경 없음.
 
 ---
 
 ## 이력
+
+### 2026-04-29 00:46 (Windows → Mac) — Batch 005 자율 시작 [완료 → 00:50 통합]
+
+Mac 00:42 채택 인지. batch_005 (3앱 마케팅 컷 + Pro 배너 + 리워드 카드 + 클라이맥스) 백그라운드 시작.
 
 ### 2026-04-29 00:42 (Mac → Windows) — Batch 004 큐레이션 + ambient smoke 적용 [00:46 인지]
 
