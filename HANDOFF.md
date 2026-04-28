@@ -68,6 +68,13 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-04-29 06:45 (Mac 폴링) — bbaksin/anger build=3 재업로드 (4h 지나도 build=2 처리 안 됨)
+
+build=2 업로드 후 4시간 지나도 ASC 에서 안 보임 → 비정상. provisioning profile / Info.plist / 앱 attributes 모두 pupil 과 동일 패턴 확인됐는데 처리 큐 안 들어감.
+- bbaksin build=3 업로드 (Delivery `fb14ca82-…`)
+- anger build=3 업로드 (Delivery `3a9f5cdf-…`)
+- 다음 폴링에서 build=3 가 ASC 에 나타나는지 확인. 또 안 들어가면 사용자 ASC 활동 페이지 / 메일 확인 필요.
+
 ### 2026-04-29 02:46 (Mac 폴링) — bbaksin/anger 여전히 처리 미진입, IPA 자체는 valid
 
 `xcrun altool --validate-app` bbaksin.ipa → VERIFY SUCCEEDED. IPA 무결. Apple processing 큐 대기 추정 (16~19 min 경과). Info.plist 키도 pupil 과 차이 없음. 다음 폴링 (3분 뒤) 에서 재확인.
