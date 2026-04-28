@@ -1,0 +1,41 @@
+{
+  "batch_id": "003",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "bbaksin_icon_typo",
+      "file": "raw-images/batch_003/bbaksin_icon_typo.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.4
+    },
+    {
+      "id": "bbaksin_icon_bujeok",
+      "file": "raw-images/batch_003/bbaksin_icon_bujeok.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.0
+    },
+    {
+      "id": "bbaksin_icon_modern",
+      "file": "raw-images/batch_003/bbaksin_icon_modern.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.0
+    },
+    {
+      "id": "bbaksin_icon_kitsch",
+      "file": "raw-images/batch_003/bbaksin_icon_kitsch.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seconds": 7.0
+    }
+  ]
+}
