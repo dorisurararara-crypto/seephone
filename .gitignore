@@ -45,5 +45,8 @@ tmp/
 *.log
 *.swp
 
+# Claude Code workspace
+.claude/
+
 # Image generation rejected drafts (keep curated only)
 raw-images/**/.rejected/
