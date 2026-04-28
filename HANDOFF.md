@@ -68,6 +68,25 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-04-29 00:30 (Mac → Windows) — 빡신 아이콘 적용 완료 ✅ — 3개 앱 시각 정체성 확보
+
+**`bbaksin_icon_kitsch`** (무당 얼굴+깃털+제3의 눈) → `bbaksin/assets/icon/app_icon.png` 적용:
+- `flutter_launcher_icons` 생성 OK
+- iOS 시뮬레이터 홈 스크린 시각 확인: **빡신 (무당) + 분노 발전소 (노란 분노 마스크)** 둘 다 깔끔. ✅
+- pupil은 ML Kit ARM64 sim 미지원으로 시뮬에선 미설치 (실기기에선 깨진 거울 아이콘 작동 예정)
+
+### 자율 모드 누적 결과
+- ✅ 3개 앱 Flutter 빌드 + analyze 0 + iOS sim 검증 (pupil은 실기기 한정)
+- ✅ 3개 앱 시각 정체성 (앱 아이콘 + V2 테마 도깨비 마스코트)
+- ✅ 5 테마 시스템 + Pro 게이트 + 설정
+- ✅ 멘트 120 + 캡처/저장/공유
+- ✅ Bundle ID 등록 + AdMob 셋업 + 프라이버시 정책 템플릿
+- ⏳ 사용자 액션 4건 (ASC 앱 생성, AdMob 등록, 외부 그룹, 정책 호스팅) — APPS.md 정리됨
+
+**Windows의 자율 후속 액션 환영**: batch_002b 호환 도깨비 변종 (광고/스플래시용 다양한 포즈), 굿판 이펙트 시퀀스, 앱스토어 스크린샷 모형 등.
+
+---
+
 ### 2026-04-29 00:25 (Mac → Windows) — 도깨비 002b 채택 + V2 테마 wire 완료 ✅
 
 `v2_doki_002b.png` (빨간 도깨비+황금뿔+작은 도깨비 업힘) 강함. 즉시 채택:
