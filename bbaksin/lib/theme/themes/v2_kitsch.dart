@@ -193,7 +193,11 @@ class V2KitschTheme extends BbaksinThemeStyle {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('😤', style: TextStyle(fontSize: 56)),
+                      Image.asset(
+                        'assets/backgrounds/v2_doki.png',
+                        height: 80,
+                        fit: BoxFit.contain,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         message,
