@@ -1,0 +1,41 @@
+{
+  "batch_id": "003",
+  "requested_by": "Mac",
+  "requested_at": "2026-04-29T00:15:00+09:00",
+  "target_app": "bbaksin",
+  "purpose": "(1) 빡신 앱 아이콘 4안 (다양한 톤) — batch_001 3안 모두 실패, 짧은 prompt 재시도. (2) batch_002 도깨비 4장 LoRA 받은 후 자율 재생성 (Windows 자체 판단)",
+  "model_suggestion": "SDXL + 짧은 prompt (CLIP 77 토큰 안)",
+  "size_default": "1024x1024",
+  "negative_prompt_default": "text, letters, hangul, words, watermark, low quality, blurry, photorealistic, horror",
+  "items": [
+    {
+      "id": "bbaksin_icon_typo",
+      "category": "bbaksin_app_icon",
+      "size": "1024x1024",
+      "prompt": "bold red and black square logo, single chinese character 神 in white center, minimal, app icon style"
+    },
+    {
+      "id": "bbaksin_icon_bujeok",
+      "category": "bbaksin_app_icon",
+      "size": "1024x1024",
+      "prompt": "deep crimson red square with thick yellow border, single asian symbol in center, simple flat icon"
+    },
+    {
+      "id": "bbaksin_icon_modern",
+      "category": "bbaksin_app_icon",
+      "size": "1024x1024",
+      "prompt": "minimal app icon: black square, single thin gold line forming abstract face shape, premium minimalist"
+    },
+    {
+      "id": "bbaksin_icon_kitsch",
+      "category": "bbaksin_app_icon",
+      "size": "1024x1024",
+      "prompt": "cute cartoon shaman face on red background, simple flat sticker style, app icon"
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_003/",
+    "filename_format": "{id}.png"
+  },
+  "windows_autonomous_note": "batch_002 도깨비 4장 (v2_doki_001~004) LoRA 받으면 자율 재생성하고 raw-images/batch_002_lora/ 에 저장 — 이건 별도 batch 번호 안 줌"
+}
