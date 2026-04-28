@@ -1,0 +1,69 @@
+{
+  "batch_id": "004",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "v2_doki_pose_angry",
+      "file": "raw-images/batch_004/v2_doki_pose_angry.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 20.4
+    },
+    {
+      "id": "v2_doki_pose_laugh",
+      "file": "raw-images/batch_004/v2_doki_pose_laugh.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.2
+    },
+    {
+      "id": "v2_doki_pose_point",
+      "file": "raw-images/batch_004/v2_doki_pose_point.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.3
+    },
+    {
+      "id": "v2_doki_pose_lightning",
+      "file": "raw-images/batch_004/v2_doki_pose_lightning.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.2
+    },
+    {
+      "id": "v5_fx_explosion",
+      "file": "raw-images/batch_004/v5_fx_explosion.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.2
+    },
+    {
+      "id": "v5_fx_lightning",
+      "file": "raw-images/batch_004/v5_fx_lightning.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.3
+    },
+    {
+      "id": "v5_fx_smoke",
+      "file": "raw-images/batch_004/v5_fx_smoke.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.4
+    },
+    {
+      "id": "v5_fx_sparks",
+      "file": "raw-images/batch_004/v5_fx_sparks.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 19.2
+    }
+  ]
+}
