@@ -1,0 +1,51 @@
+name: anger
+description: "분노 발전소 — 빡침을 W로 측정하는 스트레스 해소 앱"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # 핵심 (shadowrun 검증)
+  flutter_riverpod: ^3.3.1
+  go_router: ^17.2.0
+  shared_preferences: ^2.3.4
+  google_fonts: ^6.2.1
+  intl: ^0.20.2
+  share_plus: ^10.1.4
+  path_provider: ^2.1.4
+
+  # 광고
+  google_mobile_ads: ^5.3.0
+
+  # 이펙트
+  vibration: ^2.0.1
+  flutter_animate: ^4.5.0
+
+  # anger 전용
+  sensors_plus: ^6.0.0       # 가속도 센서 (분노 측정)
+  audioplayers: ^6.1.0       # 타격 효과음
+  screenshot: ^3.0.0         # 결과 캡처 (공유용)
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icon/
