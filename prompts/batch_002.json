@@ -1,0 +1,89 @@
+{
+  "batch_id": "002",
+  "requested_by": "Mac",
+  "requested_at": "2026-04-28T23:45:00+09:00",
+  "target_app": "bbaksin",
+  "purpose": "(1) V2 Kitsch 도깨비 마스코트 4종 (2) V5 Mystic 굿판 이펙트 4종 (3) pupil/anger 앱 아이콘",
+  "model_suggestion": "FLUX.1-schnell (Apache 2.0, batch_001과 동일 톤 유지)",
+  "size_default": "1080x1920",
+  "negative_prompt_default": "text, letters, hangul, korean characters, words, watermark, signature, modern digital UI, photorealistic, horror, scary, blood, low quality, blurry, jpeg artifacts",
+  "items": [
+    {
+      "id": "v2_doki_001",
+      "category": "v2_kitsch_mascot",
+      "size": "1080x1920",
+      "prompt": "Cute angry dokkaebi (도깨비) mascot character on yellow hanji paper background, kitsch B-tier illustration mixed with Korean folk art, simple cartoon shapes, hot pink ornamental border, central blank area for text overlay (60% empty in center), vertical 9:16 composition, choigosim style"
+    },
+    {
+      "id": "v2_doki_002",
+      "category": "v2_kitsch_mascot",
+      "size": "1080x1920",
+      "prompt": "Cute crying dokkaebi mascot with sparkles, yellow hanji background, hot pink frame, B-tier kitsch illustration, central blank for text, vertical 9:16, Korean folk art kitsch tone"
+    },
+    {
+      "id": "v2_doki_003",
+      "category": "v2_kitsch_mascot",
+      "size": "1080x1920",
+      "prompt": "Tiny chubby dokkaebi giving a thumbs down, yellow background, B-tier kitsch illustration, hot pink ornamental corners, central blank for text, vertical 9:16"
+    },
+    {
+      "id": "v2_doki_004",
+      "category": "v2_kitsch_mascot",
+      "size": "1080x1920",
+      "prompt": "Multiple tiny dokkaebi heads peeking from corners with stars, yellow hanji background, hot pink frame, B-tier kitsch illustration, central blank for text, vertical 9:16, choigosim cute style"
+    },
+    {
+      "id": "v5_mystic_001",
+      "category": "v5_mystic_decor",
+      "size": "1080x1920",
+      "prompt": "Mystical Korean shamanic background, dark navy purple with gold accents, crescent moon and ornamental star constellation, ancient Korean folk mysticism, central blank area for text overlay (60% empty), vertical 9:16, premium serious tone, no horror"
+    },
+    {
+      "id": "v5_mystic_002",
+      "category": "v5_mystic_decor",
+      "size": "1080x1920",
+      "prompt": "Mystical incense smoke and traditional Korean drums silhouette, dark purple gradient background, gold ornaments, central blank area for text, vertical 9:16, premium shamanic tone"
+    },
+    {
+      "id": "v5_mystic_003",
+      "category": "v5_mystic_decor",
+      "size": "1080x1920",
+      "prompt": "Sacred Korean mountain spirit motif silhouette, dark purple background with gold rays, ornamental stars, central blank for text, vertical 9:16, premium serious mystical tone, no horror"
+    },
+    {
+      "id": "v5_mystic_004",
+      "category": "v5_mystic_decor",
+      "size": "1080x1920",
+      "prompt": "Traditional Korean shaman fan and ribbons silhouette, dark purple background with gold accents, ornamental flourishes, central blank for text, vertical 9:16, premium serious tone"
+    },
+    {
+      "id": "pupil_icon_a",
+      "category": "pupil_app_icon",
+      "size": "1024x1024",
+      "prompt": "Mobile app icon: stylized eye with seismograph wave inside the iris, red and black on white background, bold simple shapes, suitable for app icon, no text"
+    },
+    {
+      "id": "pupil_icon_b",
+      "category": "pupil_app_icon",
+      "size": "1024x1024",
+      "prompt": "Mobile app icon: cracked iris suggesting earthquake/lie, dramatic red on dark background, bold modern flat illustration, suitable for app icon, no text"
+    },
+    {
+      "id": "anger_icon_a",
+      "category": "anger_app_icon",
+      "size": "1024x1024",
+      "prompt": "Mobile app icon: angry electric face with lightning bolts coming out, yellow on dark background, bold cartoon flat illustration, suitable for app icon, kitsch B-tier style, no text"
+    },
+    {
+      "id": "anger_icon_b",
+      "category": "anger_app_icon",
+      "size": "1024x1024",
+      "prompt": "Mobile app icon: smartphone with cracks and electric sparks, yellow and orange on dark background, bold modern illustration, suitable for app icon, no text"
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_002/",
+    "filename_format": "{id}.png",
+    "report_format": "HANDOFF.md '## 최신' 에 (Windows → Mac) 메시지로 완료 보고."
+  }
+}

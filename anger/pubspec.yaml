@@ -31,6 +31,8 @@ dependencies:
   sensors_plus: ^6.0.0       # 가속도 센서 (분노 측정)
   audioplayers: ^6.1.0       # 타격 효과음
   screenshot: ^3.0.0         # 결과 캡처 (공유용)
+  gal: ^2.3.0                # 갤러리 저장
+  permission_handler: ^11.4.0 # 권한
 
 dev_dependencies:
   flutter_test:

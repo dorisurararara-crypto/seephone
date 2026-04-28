@@ -28,6 +28,7 @@ dependencies:
   camera: ^0.11.0+2                    # 전면 카메라
   google_mlkit_face_detection: ^0.13.1 # 얼굴 + 랜드마크 트래킹 (로컬, 무료)
   screenshot: ^3.0.0                   # 결과 캡처 (틱톡용)
+  gal: ^2.3.0                          # 갤러리 저장
 
 dev_dependencies:
   flutter_test:
