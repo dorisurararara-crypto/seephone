@@ -1,0 +1,45 @@
+{
+  "batch_id": "002b",
+  "requested_by": "Windows-autonomous",
+  "requested_at": "2026-04-29T00:12:00+09:00",
+  "target_app": "bbaksin",
+  "purpose": "V2 도깨비 마스코트 4장 재생성 — SDXL 친화적 어휘로 prompt 변환 (yokai/ogre/kawaii). HF에 적합한 한국 LoRA 없어 대안 진행.",
+  "model_suggestion": "sdxl",
+  "size_default": "1080x1920",
+  "negative_prompt_default": "text, letters, watermark, signature, photorealistic, scary, blood, low quality, blurry, multiple characters, group, crowd",
+  "items": [
+    {
+      "id": "v2_doki_001b",
+      "category": "v2_dokkaebi",
+      "size": "1080x1920",
+      "prompt": "cute chibi ogre mascot character, single character centered, kawaii flat sticker illustration, big round eyes, small horns, mischievous smile, vibrant yellow background, bold outlines, simple shapes, mobile app sticker style",
+      "note": "오기/도깨비 변환. 노란 배경."
+    },
+    {
+      "id": "v2_doki_002b",
+      "category": "v2_dokkaebi",
+      "size": "1080x1920",
+      "prompt": "kawaii red goblin mascot character, single character centered, flat sticker illustration, two tiny horns, cheerful pose, deep red background with gold accent, bold black outlines, simple flat colors",
+      "note": "빨강 도깨비 (빡신 컬러)."
+    },
+    {
+      "id": "v2_doki_003b",
+      "category": "v2_dokkaebi",
+      "size": "1080x1920",
+      "prompt": "chubby cute yokai monster mascot, single character centered, kawaii flat illustration style, big eyes wide grin, pink background, bold outlines, mobile sticker design, full body visible",
+      "note": "yokai 톤. 핑크 배경."
+    },
+    {
+      "id": "v2_doki_004b",
+      "category": "v2_dokkaebi",
+      "size": "1080x1920",
+      "prompt": "tiny cartoon demon mascot character, single character centered, kawaii sticker style, holding small lightning bolt, navy blue background with star accent, bold outlines, flat colors, isolated on background",
+      "note": "번개 든 미니 도깨비. 다크 톤."
+    }
+  ],
+  "delivery": {
+    "destination": "raw-images/batch_002b/",
+    "filename_format": "{id}.png",
+    "report_format": "Mac에 결과 보고 후 도깨비 채택 여부 결정"
+  }
+}

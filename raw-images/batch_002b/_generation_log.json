@@ -1,0 +1,41 @@
+{
+  "batch_id": "002b",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false
+  },
+  "items": [
+    {
+      "id": "v2_doki_001b",
+      "file": "raw-images/batch_002b/v2_doki_001b.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 17.4
+    },
+    {
+      "id": "v2_doki_002b",
+      "file": "raw-images/batch_002b/v2_doki_002b.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.8
+    },
+    {
+      "id": "v2_doki_003b",
+      "file": "raw-images/batch_002b/v2_doki_003b.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.7
+    },
+    {
+      "id": "v2_doki_004b",
+      "file": "raw-images/batch_002b/v2_doki_004b.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seconds": 15.6
+    }
+  ]
+}
