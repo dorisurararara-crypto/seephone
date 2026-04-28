@@ -50,3 +50,8 @@ tmp/
 
 # Image generation rejected drafts (keep curated only)
 raw-images/**/.rejected/
+
+# Python venv (Windows-side image generation env)
+scripts/.venv/
+**/__pycache__/
+*.pyc
