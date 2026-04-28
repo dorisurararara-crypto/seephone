@@ -35,9 +35,9 @@
    - 각 앱마다 ASC 에서 외부 그룹 (예: `bbaksintester`) 생성 + Beta App Review 첫 제출
    - 첫 통과 후엔 자동 (`scripts/asc/submit_external_beta.rb` 호환)
 
-4. **개인정보 처리방침 페이지 호스팅**
-   - `PRIVACY_POLICY_TEMPLATE.md` 내용 → GitHub Pages 또는 Notion 공개 페이지
-   - URL 을 ASC 각 앱 메타데이터에 등록
+4. ~~**개인정보 처리방침 페이지 호스팅**~~ ✅ 완료 (자동 처리)
+   - URL: `https://gist.github.com/dorisurararara-crypto/1939b5ec8fb8f54693ac8f72345ca53f`
+   - ASC 각 앱 메타데이터의 "Privacy Policy URL" 필드에 위 주소 입력 (3앱 동일 사용)
 
 5. **앱스토어 스크린샷 1번 슬롯 업로드**
    - `marketing/bbaksin_marketing_cut.png` — 빡신 ASC/Play 1번 슬롯
