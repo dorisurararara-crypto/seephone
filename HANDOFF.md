@@ -68,6 +68,17 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-04-29 09:30 (Mac) — Plan B 진행: IAP review 스크린샷 자동 업로드 + build=4 업로드
+
+사용자가 ASC 법인정보·한국법·Paid Apps Agreement 일부 입력 진행 중. 그동안 Plan B 자동화:
+- bbaksin/anger/pupil build=4 빌드 + 업로드 ✅ (Delivery `45bb7a14`, `aa71f26a`, build=4)
+- IAP review 스크린샷 3개 자동 업로드 ✅ (1284x2778 size, marketing_cut PNG resize)
+- IAP reviewNote 3개 추가 ✅
+- IAP state: 여전히 MISSING_METADATA (다른 필수 필드 있을 가능성)
+- bbaksin/anger build=4 ASC 처리 큐 진입 여부 미확인
+
+다음 폴링에서 build=4 등장 + IAP state 변화 확인.
+
 ### 2026-04-29 06:45 (Mac 폴링) — bbaksin/anger build=3 재업로드 (4h 지나도 build=2 처리 안 됨)
 
 build=2 업로드 후 4시간 지나도 ASC 에서 안 보임 → 비정상. provisioning profile / Info.plist / 앱 attributes 모두 pupil 과 동일 패턴 확인됐는데 처리 큐 안 들어감.
