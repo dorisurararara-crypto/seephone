@@ -4,14 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'l10n/app_localizations.dart';
 import 'router.dart';
 import 'services/locale_service.dart';
-import 'services/purchase_service.dart';
 
 class PupilApp extends ConsumerWidget {
   const PupilApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(adsRemovedProvider);
     final locale = ref.watch(localeProvider);
     return MaterialApp.router(
       onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,

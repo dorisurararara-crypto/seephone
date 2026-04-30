@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../l10n/app_localizations.dart';
 import '../services/locale_service.dart';
-import '../services/purchase_service.dart';
 import '../theme/theme_provider.dart';
 import '../theme/theme_registry.dart';
 import '../theme/theme_style.dart';
@@ -16,7 +15,6 @@ class SettingsScreen extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     final theme = ref.watch(currentThemeProvider);
     final currentId = ref.watch(themeIdProvider);
-    final isPro = ref.watch(proStatusProvider);
     final currentLocale = ref.watch(localeProvider);
 
     return Scaffold(
@@ -33,27 +31,13 @@ class SettingsScreen extends ConsumerWidget {
                   children: [
                     _SectionLabel(theme: theme, label: l.themeLabel),
                     const SizedBox(height: 12),
-                    if (!isPro)
-                      _ProBanner(
-                        theme: theme,
-                        text: l.proBannerText,
-                        onTap: () =>
-                            _showProSheet(context, ref, theme.previewColor),
-                      ),
-                    const SizedBox(height: 8),
                     ...kAllThemes.map((t) {
                       final isCurrent = t.id == currentId;
-                      final isLocked = !isPro && t.id != kDefaultThemeId;
                       return _ThemeTile(
                         themeStyle: t,
                         isCurrent: isCurrent,
-                        isLocked: isLocked,
+                        isLocked: false,
                         onTap: () {
-                          if (isLocked) {
-                            _showProSheet(
-                                context, ref, theme.previewColor);
-                            return;
-                          }
                           ref
                               .read(themeIdProvider.notifier)
                               .setTheme(t.id);
@@ -85,20 +69,6 @@ class SettingsScreen extends ConsumerWidget {
                       onTap: () => ref
                           .read(localeProvider.notifier)
                           .setLocale(const Locale('en')),
-                    ),
-                    const SizedBox(height: 24),
-                    GestureDetector(
-                      onLongPress: () => ref
-                          .read(proStatusProvider.notifier)
-                          .toggleForDev(),
-                      child: Text(
-                        isPro ? l.proActivatedDevHint : l.proInactiveDevHint,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.white38,
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -144,70 +114,6 @@ class _LangTile extends StatelessWidget {
       ),
     );
   }
-}
-
-void _showProSheet(BuildContext context, WidgetRef ref, Color accent) {
-  final l = AppLocalizations.of(context);
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: Colors.black,
-    showDragHandle: true,
-    builder: (ctx) => Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l.proSheetTitle,
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w900,
-              color: accent,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l.proSheetSubtitle,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              l.betaFreeNotice,
-              style: const TextStyle(
-                  color: Colors.white60, fontSize: 12, height: 1.4),
-            ),
-          ),
-          const SizedBox(height: 24),
-          FilledButton(
-            onPressed: () {
-              ref.read(proStatusProvider.notifier).unlockThemePack();
-              Navigator.of(ctx).pop();
-            },
-            style: FilledButton.styleFrom(
-              backgroundColor: accent,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: Text(l.activateThemePack,
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w700)),
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(l.later,
-                style: const TextStyle(color: Colors.white54)),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 class _AppBar extends StatelessWidget {
@@ -340,51 +246,3 @@ class _ThemeTile extends StatelessWidget {
   }
 }
 
-class _ProBanner extends StatelessWidget {
-  final BbaksinThemeStyle theme;
-  final String text;
-  final VoidCallback onTap;
-  const _ProBanner({
-    required this.theme,
-    required this.text,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              theme.previewColor.withValues(alpha: 0.4),
-              theme.previewColor.withValues(alpha: 0.1),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: theme.previewColor, width: 1.5),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.star, color: theme.previewColor, size: 22),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                text,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: Colors.white60),
-          ],
-        ),
-      ),
-    );
-  }
-}

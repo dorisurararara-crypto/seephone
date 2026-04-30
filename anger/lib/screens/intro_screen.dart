@@ -4,14 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../services/locale_service.dart';
-import '../services/purchase_service.dart';
 
 class IntroScreen extends ConsumerWidget {
   const IntroScreen({super.key});
 
   void _openSettings(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final adsRemoved = ref.read(adsRemovedProvider);
     final currentLocale = ref.read(localeProvider);
 
     showModalBottomSheet(
@@ -21,66 +19,11 @@ class IntroScreen extends ConsumerWidget {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (ctx, setSheetState) => Padding(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  adsRemoved ? l.adsRemovedLabel : l.removeAds,
-                  style: GoogleFonts.blackHanSans(
-                    color: const Color(0xFFFFB800),
-                    fontSize: 32,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  adsRemoved ? l.removeAdsThanks : l.removeAdsDescription,
-                  style: GoogleFonts.notoSansKr(
-                    color: Colors.white70,
-                    fontSize: 14,
-                    height: 1.5,
-                  ),
-                ),
-                if (!adsRemoved) ...[
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      l.betaFreeNotice,
-                      style: GoogleFonts.notoSansKr(
-                        color: Colors.white60,
-                        fontSize: 12,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  FilledButton(
-                    onPressed: () {
-                      ref.read(adsRemovedProvider.notifier).unlockAdRemoval();
-                      Navigator.of(ctx).pop();
-                    },
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFB800),
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: Text(
-                      l.activateRemoveAds,
-                      style: GoogleFonts.notoSansKr(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 24),
                 Text(
                   l.language.toUpperCase(),
                   style: GoogleFonts.inter(
@@ -123,7 +66,7 @@ class IntroScreen extends ConsumerWidget {
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(),
                   child: Text(
-                    adsRemoved ? l.close : l.later,
+                    l.close,
                     style: const TextStyle(color: Colors.white54),
                   ),
                 ),
