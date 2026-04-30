@@ -9,6 +9,7 @@ cd "$(dirname "$0")/.."
 
 KEY_ID='JSGU6J4JN4'
 ISSUER_ID='5269abe3-03f1-46a9-a37c-35d950758714'
+ASC_APP_ID='6764363706'
 IPA_PATH='build/ios/ipa/shadowrun.ipa'
 
 current=$(grep -E '^version:' pubspec.yaml | sed -E 's/version: ([0-9.]+)\+([0-9]+)/\1\+\2/')
@@ -85,7 +86,7 @@ xcrun altool --validate-app --type ios -f "$IPA_PATH" \
   --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
 
 echo "=== xcrun altool --upload-app ==="
-xcrun altool --upload-app --type ios -f "$IPA_PATH" \
+xcrun altool --upload-app --apple-id "$ASC_APP_ID" --type ios -f "$IPA_PATH" \
   --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
 
 upload_ts=$(date +%s)
