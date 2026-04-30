@@ -167,20 +167,62 @@ abstract class AppLocalizations {
   /// No description provided for @askNow.
   ///
   /// In ko, this message translates to:
-  /// **'질문하세요'**
+  /// **'이제 진짜 질문!'**
   String get askNow;
 
   /// No description provided for @askHint.
   ///
   /// In ko, this message translates to:
-  /// **'지금 친구에게 직접 물어보세요'**
+  /// **'거짓말이 의심되는 질문을 친구에게 하세요.\n친구가 답변 시작 직전에 아래 버튼을 누르세요.'**
   String get askHint;
+
+  /// No description provided for @tapToStart.
+  ///
+  /// In ko, this message translates to:
+  /// **'탭하면 측정 시작'**
+  String get tapToStart;
+
+  /// No description provided for @tapToStartHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'친구 답변 시작 직전에 누르세요'**
+  String get tapToStartHint;
+
+  /// No description provided for @baselineCalibration.
+  ///
+  /// In ko, this message translates to:
+  /// **'BASELINE CALIBRATION'**
+  String get baselineCalibration;
+
+  /// No description provided for @baselineAsk.
+  ///
+  /// In ko, this message translates to:
+  /// **'이름을 말해보세요'**
+  String get baselineAsk;
+
+  /// No description provided for @baselineHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'정확도를 위해 친구 평소 신호 측정.\n진실 답변으로 시작합니다.'**
+  String get baselineHint;
+
+  /// No description provided for @baselineHintShort.
+  ///
+  /// In ko, this message translates to:
+  /// **'평소 신호 측정 중'**
+  String get baselineHintShort;
 
   /// No description provided for @statusInit.
   ///
   /// In ko, this message translates to:
   /// **'INITIALIZING'**
   String get statusInit;
+
+  /// No description provided for @statusBaseline.
+  ///
+  /// In ko, this message translates to:
+  /// **'CALIBRATING'**
+  String get statusBaseline;
 
   /// No description provided for @statusAsk.
   ///

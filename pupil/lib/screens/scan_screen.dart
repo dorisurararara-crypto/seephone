@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../data/baseline_questions.dart';
 import '../l10n/app_localizations.dart';
 import '../services/face_tracker.dart';
 import '../services/lie_detector.dart';
@@ -39,6 +40,7 @@ class _ScanScreenState extends State<ScanScreen>
   _Phase _phase = _Phase.initializing;
   int _remaining = 8;
   BaselineSignals _baseline = BaselineSignals.empty;
+  String _baselineQuestion = '';
 
   bool _streaming = false;
   final _sfx = SoundService();
@@ -101,14 +103,16 @@ class _ScanScreenState extends State<ScanScreen>
     } catch (_) {}
   }
 
-  // === Phase 1: Baseline Ask (1.5초) ===
+  // === Phase 1: Baseline Ask (2.5초) ===
   void _startBaselineAskPhase() {
     setState(() {
       _phase = _Phase.baselineAsk;
       _remaining = 4;
+      _baselineQuestion = BaselineQuestions.pick(Localizations.localeOf(context));
     });
     _sfx.play(PupilSfx.scanStart);
-    _phaseTimer = Timer(const Duration(milliseconds: 1500), _startBaselinePhase);
+    // 2.5초 — 사용자가 질문 읽고 친구가 인지할 시간
+    _phaseTimer = Timer(const Duration(milliseconds: 2500), _startBaselinePhase);
   }
 
   // === Phase 2: Baseline 측정 (4초, 진실 신호) ===
@@ -147,12 +151,17 @@ class _ScanScreenState extends State<ScanScreen>
     _tracker?.reset();
   }
 
-  // === Phase 3: Ask (2초) ===
+  // === Phase 3: Ask (사용자 탭 대기 — 자동 진행 X) ===
   void _startAskPhase() {
     if (!mounted) return;
     setState(() => _phase = _Phase.ask);
     _sfx.play(PupilSfx.scanStart);
-    _phaseTimer = Timer(const Duration(milliseconds: 2000), _startAnalyzePhase);
+    // 자동 timer 없음. 사용자가 진짜 질문 만든 후 "탭하면 시작".
+  }
+
+  void _onUserTapStart() {
+    if (_phase != _Phase.ask) return;
+    _startAnalyzePhase();
   }
 
   // === Phase 4: Analyze (8초 본 측정) ===
@@ -291,16 +300,20 @@ class _ScanScreenState extends State<ScanScreen>
               child: _TopBar(phase: _phase),
             ),
 
-            // BASELINE_ASK phase: "이름 말해보세요" 안내
+            // BASELINE_ASK phase: 랜덤 진실 질문 표시
             if (_phase == _Phase.baselineAsk)
-              _BaselineAskOverlay(pulse: _pulse),
+              _BaselineAskOverlay(
+                pulse: _pulse,
+                question: _baselineQuestion,
+              ),
 
             // BASELINE phase: 카운트 + 진실 신호 측정 중
             if (_phase == _Phase.baseline)
               _BaselineMeasureOverlay(remaining: _remaining),
 
-            // ASK phase: 큰 "이제 진짜 질문하세요" 텍스트
-            if (_phase == _Phase.ask) _AskOverlay(pulse: _pulse),
+            // ASK phase: "이제 진짜 질문" + 탭하면 시작
+            if (_phase == _Phase.ask)
+              _AskOverlay(pulse: _pulse, onTap: _onUserTapStart),
 
             // ANALYZE phase: HUD 신호 게이지 + 카운트
             if (_phase == _Phase.analyze)
@@ -387,9 +400,12 @@ class _TopBar extends StatelessWidget {
 
 // ============ ASK overlay (질문하세요) ============
 
-class _AskOverlay extends StatelessWidget {
+// ============ BASELINE ASK overlay (랜덤 진실 질문) ============
+
+class _BaselineAskOverlay extends StatelessWidget {
   final AnimationController pulse;
-  const _AskOverlay({required this.pulse});
+  final String question;
+  const _BaselineAskOverlay({required this.pulse, required this.question});
 
   @override
   Widget build(BuildContext context) {
@@ -397,52 +413,228 @@ class _AskOverlay extends StatelessWidget {
     return Center(
       child: AnimatedBuilder(
         animation: pulse,
-        builder: (context, _) {
-          final scale = 1.0 + pulse.value * 0.05;
-          return Transform.scale(
-            scale: scale,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: const Color(0xFFFF3D5A),
-                  width: 2,
+        builder: (context, _) => Transform.scale(
+          scale: 1.0 + pulse.value * 0.04,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.78),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFF00E0FF), width: 2),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l.baselineCalibration,
+                  style: GoogleFonts.inter(
+                    color: const Color(0xFF00E0FF),
+                    fontSize: 11,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.mic,
-                    color: const Color(0xFFFF3D5A),
-                    size: 32 + pulse.value * 4,
+                const SizedBox(height: 14),
+                Text(
+                  question,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.notoSansKr(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    height: 1.3,
+                    letterSpacing: 0.5,
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    l.askNow,
-                    style: GoogleFonts.notoSansKr(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2,
-                    ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  l.baselineHint,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.notoSansKr(
+                    color: Colors.white60,
+                    fontSize: 12,
+                    height: 1.4,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    l.askHint,
-                    style: GoogleFonts.notoSansKr(
-                      color: Colors.white60,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ============ BASELINE MEASURE overlay (카운트) ============
+
+class _BaselineMeasureOverlay extends StatelessWidget {
+  final int remaining;
+  const _BaselineMeasureOverlay({required this.remaining});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return Stack(
+      children: [
+        // 가운데 큰 카운트
+        Center(
+          child: Container(
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.55),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: const Color(0xFF00E0FF).withValues(alpha: 0.7),
+                width: 2,
               ),
             ),
-          );
-        },
-      ),
+            child: Text(
+              '$remaining',
+              style: GoogleFonts.inter(
+                color: const Color(0xFF00E0FF),
+                fontSize: 80,
+                fontWeight: FontWeight.w900,
+                height: 1,
+              ),
+            ),
+          ),
+        ),
+        // 아래 라벨
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 60,
+          child: Column(
+            children: [
+              Text(
+                l.statusBaseline,
+                style: GoogleFonts.inter(
+                  color: const Color(0xFF00E0FF),
+                  fontSize: 11,
+                  letterSpacing: 6,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l.baselineHintShort,
+                style: GoogleFonts.notoSansKr(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AskOverlay extends StatelessWidget {
+  final AnimationController pulse;
+  final VoidCallback onTap;
+  const _AskOverlay({required this.pulse, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return Stack(
+      children: [
+        // 상단 안내문
+        Positioned(
+          top: 80,
+          left: 24,
+          right: 24,
+          child: Column(
+            children: [
+              Text(
+                l.askNow,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.notoSansKr(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1,
+                  shadows: [
+                    Shadow(
+                      color: const Color(0xFFFF3D5A).withValues(alpha: 0.6),
+                      blurRadius: 12,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                l.askHint,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.notoSansKr(
+                  color: Colors.white70,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // 하단 거대 시작 버튼 (펄스)
+        Positioned(
+          left: 24,
+          right: 24,
+          bottom: 50,
+          child: AnimatedBuilder(
+            animation: pulse,
+            builder: (context, _) {
+              final glow = 8 + pulse.value * 14;
+              return GestureDetector(
+                onTap: onTap,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 22),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF3D5A),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFF3D5A).withValues(alpha: 0.5),
+                        blurRadius: glow,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.touch_app,
+                        color: Colors.white,
+                        size: 28 + pulse.value * 4,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        l.tapToStart,
+                        style: GoogleFonts.notoSansKr(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                      Text(
+                        l.tapToStartHint,
+                        style: GoogleFonts.notoSansKr(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

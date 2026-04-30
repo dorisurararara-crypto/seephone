@@ -42,13 +42,34 @@ class AppLocalizationsKo extends AppLocalizations {
   String get scanning => 'SCANNING';
 
   @override
-  String get askNow => '질문하세요';
+  String get askNow => '이제 진짜 질문!';
 
   @override
-  String get askHint => '지금 친구에게 직접 물어보세요';
+  String get askHint => '거짓말이 의심되는 질문을 친구에게 하세요.\n친구가 답변 시작 직전에 아래 버튼을 누르세요.';
+
+  @override
+  String get tapToStart => '탭하면 측정 시작';
+
+  @override
+  String get tapToStartHint => '친구 답변 시작 직전에 누르세요';
+
+  @override
+  String get baselineCalibration => 'BASELINE CALIBRATION';
+
+  @override
+  String get baselineAsk => '이름을 말해보세요';
+
+  @override
+  String get baselineHint => '정확도를 위해 친구 평소 신호 측정.\n진실 답변으로 시작합니다.';
+
+  @override
+  String get baselineHintShort => '평소 신호 측정 중';
 
   @override
   String get statusInit => 'INITIALIZING';
+
+  @override
+  String get statusBaseline => 'CALIBRATING';
 
   @override
   String get statusAsk => 'AWAITING QUESTION';

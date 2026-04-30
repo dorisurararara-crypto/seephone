@@ -1,7 +1,7 @@
 name: pupil
 description: "동공 지진 탐지기 — 얼굴 인식 진실게임"
 publish_to: 'none'
-version: 1.0.0+6
+version: 1.0.0+7
 
 environment:
   sdk: ^3.11.0
@@ -32,6 +32,7 @@ dependencies:
   screenshot: ^3.0.0                   # 결과 캡처 (틱톡용)
   gal: ^2.3.0                          # 갤러리 저장
   audioplayers: ^6.1.0                 # SFX 재생
+  health: ^13.3.1                      # HealthKit / Health Connect — Apple Watch / AirPods Pro 3 / Galaxy Watch 심박 연동
 
 dev_dependencies:
   flutter_test:

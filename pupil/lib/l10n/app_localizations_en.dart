@@ -43,13 +43,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanning => 'SCANNING';
 
   @override
-  String get askNow => 'ASK NOW';
+  String get askNow => 'ASK THE REAL QUESTION';
 
   @override
-  String get askHint => 'Ask your friend directly, right now';
+  String get askHint =>
+      'Ask the suspicious question to your friend.\nTap the button right before they answer.';
+
+  @override
+  String get tapToStart => 'TAP TO START';
+
+  @override
+  String get tapToStartHint => 'Press right before they answer';
+
+  @override
+  String get baselineCalibration => 'BASELINE CALIBRATION';
+
+  @override
+  String get baselineAsk => 'Say your name';
+
+  @override
+  String get baselineHint =>
+      'Capturing your friend\'s normal signals\nfor accurate calibration.';
+
+  @override
+  String get baselineHintShort => 'Capturing baseline';
 
   @override
   String get statusInit => 'INITIALIZING';
+
+  @override
+  String get statusBaseline => 'CALIBRATING';
 
   @override
   String get statusAsk => 'AWAITING QUESTION';

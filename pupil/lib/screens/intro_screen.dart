@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
+import '../services/health_service.dart';
 import '../services/locale_service.dart';
 
 class IntroScreen extends ConsumerStatefulWidget {
@@ -13,6 +14,27 @@ class IntroScreen extends ConsumerStatefulWidget {
 }
 
 class _IntroScreenState extends ConsumerState<IntroScreen> {
+  HealthDeviceStatus? _health;
+  bool _probing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // 첫 진입 시 한 번만 probe — 권한 다이얼로그가 뜸
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshHealth());
+  }
+
+  Future<void> _refreshHealth() async {
+    if (_probing) return;
+    setState(() => _probing = true);
+    final status = await HealthService.instance.probe();
+    if (!mounted) return;
+    setState(() {
+      _health = status;
+      _probing = false;
+    });
+  }
+
   void _start() {
     context.push('/scan');
   }
@@ -117,6 +139,13 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                     ),
                   ),
                   const Spacer(),
+                  // 워치/에어팟 연동 배지
+                  _HealthBadge(
+                    status: _health,
+                    probing: _probing,
+                    onTap: _refreshHealth,
+                  ),
+                  const SizedBox(height: 16),
                   // 작동 흐름 안내
                   _StepRow(num: '1', text: l.stepStart),
                   const SizedBox(height: 12),
@@ -208,6 +237,105 @@ class _StepRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _HealthBadge extends StatelessWidget {
+  final HealthDeviceStatus? status;
+  final bool probing;
+  final VoidCallback onTap;
+  const _HealthBadge({
+    required this.status,
+    required this.probing,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final s = status;
+    final linked = s != null && s.authorized && s.bpm != null;
+
+    final color = probing
+        ? Colors.white24
+        : linked
+            ? const Color(0xFF00E0FF)
+            : Colors.white24;
+    final iconBg = probing
+        ? Colors.white12
+        : linked
+            ? const Color(0xFF00E0FF).withValues(alpha: 0.15)
+            : Colors.white10;
+
+    final mainLabel = probing
+        ? '디바이스 확인 중…'
+        : (s?.label ?? '연동 안 됨');
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: iconBg,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: color.withValues(alpha: 0.4), width: 1),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              linked ? Icons.favorite : Icons.favorite_border,
+              color: color,
+              size: 22,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    mainLabel,
+                    style: GoogleFonts.notoSansKr(
+                      color: linked ? Colors.white : Colors.white60,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  if (linked && s.bpm != null)
+                    Text(
+                      '최근 BPM ${s.bpm!.toStringAsFixed(0)}',
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFF00E0FF),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
+                  else if (!probing && (s == null || !s.authorized))
+                    Text(
+                      'Apple Watch · AirPods Pro 3 · Galaxy Watch',
+                      style: GoogleFonts.inter(
+                        color: Colors.white38,
+                        fontSize: 10,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            if (probing)
+              const SizedBox(
+                width: 14,
+                height: 14,
+                child: CircularProgressIndicator(strokeWidth: 1.5),
+              )
+            else
+              Icon(
+                linked ? Icons.check_circle : Icons.refresh,
+                color: color,
+                size: 18,
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
