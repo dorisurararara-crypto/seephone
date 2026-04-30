@@ -1,7 +1,7 @@
 name: pupil
 description: "동공 지진 탐지기 — 얼굴 인식 진실게임"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+4
 
 environment:
   sdk: ^3.11.0
@@ -28,7 +28,7 @@ dependencies:
 
   # pupil 전용
   camera: ^0.11.0+2                    # 전면 카메라
-  # google_mlkit_face_detection: ^0.13.1 # v1.1 추가 예정. 현재 LieDetector.fallback 만 사용 — ARM64 sim 미지원 회피
+  google_mlkit_face_detection: ^0.13.2 # 실시간 얼굴 트래킹 (깜빡임/회전/웃음/동공 흔들림)
   screenshot: ^3.0.0                   # 결과 캡처 (틱톡용)
   gal: ^2.3.0                          # 갤러리 저장
   audioplayers: ^6.1.0                 # SFX 재생

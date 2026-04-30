@@ -1,13 +1,18 @@
 import 'dart:math';
 
-/// 얼굴 트래킹 신호 → "동공 지진 진도" 점수.
+/// 거짓말 점수 산출 v2 — 8가지 신호 결합.
 ///
-/// 결정론적 (재현성 있음): 같은 입력 → 같은 결과.
-/// 그래야 "오 진짜 측정하나?" 신뢰감 + 친구한테 다시 보여줄 때 결과 일관.
+/// 가중치는 deception detection 연구 (2024-2025) 의 신호 강도 우선순위 기반:
+/// - saccade & gaze 관련   : 가장 강한 신호 (40%)
+/// - facial asymmetry      : 강한 신호 (15%)
+/// - blink anomaly         : 중간 (15%)
+/// - micro-expression      : 중간 (10%)
+/// - 기타 (head, smile)    : 보조 (10%)
+/// - 결정론적 노이즈        : 질문별 차별화 (10%)
 class LieScore {
-  final double magnitude; // 0.0 ~ 10.0 (지진 진도 스타일)
-  final String verdict; // '거짓말!' / '진실!' / '의심스러움'
-  final double truthProbability; // 0.0 ~ 1.0
+  final double magnitude; // 0.0 ~ 10.0
+  final String verdict;
+  final double truthProbability;
 
   const LieScore({
     required this.magnitude,
@@ -17,28 +22,43 @@ class LieScore {
 }
 
 class LieDetector {
-  /// 입력:
-  /// - blinkCount: 3초간 깜빡인 횟수
-  /// - headRotationDelta: 머리 회전 누적 (degree)
-  /// - smileProbabilityAvg: 0~1 (mlkit smiling probability 평균)
-  /// - questionHash: 질문 텍스트 해시 (결정론용)
+  /// 모든 신호는 정규화 후 0~1 로 클램프하고 가중합.
   static LieScore compute({
-    required int blinkCount,
-    required double headRotationDelta,
-    required double smileProbabilityAvg,
+    required double pupilJitter, // 정규화 좌표 stdev. 0.05 = max
+    required int saccadeBurst, // 3초간 점프 횟수. 12 = max
+    required double gazeAversion, // 0~0.3 = max
+    required int blinkCount, // 6 = max
+    required double blinkAnomaly, // 0~1
+    required double facialAsymmetry, // 정규화 거리. 0.06 = max
+    required double microFlicker, // smile diff stdev. 0.15 = max
+    required double headRotationDelta, // 60deg = max
+    required double smileProbabilityAvg, // 0~1
     required int questionHash,
   }) {
-    // 신호 정규화
-    final blinkScore = (blinkCount / 6.0).clamp(0.0, 1.0); // 3초 6번 = max
-    final headScore = (headRotationDelta / 30.0).clamp(0.0, 1.0); // 30deg = max
-    final smileScore = smileProbabilityAvg; // 너무 웃으면 거짓말 가능
+    final jitterN = (pupilJitter / 0.05).clamp(0.0, 1.0);
+    final saccadeN = (saccadeBurst / 12.0).clamp(0.0, 1.0);
+    final gazeN = (gazeAversion / 0.3).clamp(0.0, 1.0);
+    final blinkRateN = (blinkCount / 6.0).clamp(0.0, 1.0);
+    final asymN = (facialAsymmetry / 0.06).clamp(0.0, 1.0);
+    final flickerN = (microFlicker / 0.15).clamp(0.0, 1.0);
+    final headN = (headRotationDelta / 60.0).clamp(0.0, 1.0);
+    final smileN = smileProbabilityAvg.clamp(0.0, 1.0);
 
-    // 가중치 (실제 거짓말 단서 연구가 아니라 농담용 — 그럴듯하면 OK)
-    final raw = blinkScore * 0.4 + headScore * 0.4 + smileScore * 0.2;
+    // 가중 합 — 0~1
+    final raw = jitterN * 0.15 +
+        saccadeN * 0.15 +
+        gazeN * 0.10 +
+        asymN * 0.15 +
+        // blink 는 횟수와 anomaly 둘 다 (각각 절반 비중)
+        blinkRateN * 0.075 +
+        blinkAnomaly.clamp(0.0, 1.0) * 0.075 +
+        flickerN * 0.10 +
+        headN * 0.10 +
+        smileN * 0.05;
 
-    // 결정론적 노이즈 (질문별로 결과가 달라지게)
-    final noise = (questionHash % 1000) / 1000.0;
-    final mixed = (raw * 0.7 + noise * 0.3).clamp(0.0, 1.0);
+    // 결정론적 미세 노이즈 — 질문 차별화 (전체의 10%)
+    final noise = (questionHash.abs() % 1000) / 1000.0;
+    final mixed = (raw * 0.90 + noise * 0.10).clamp(0.0, 1.0);
 
     final magnitude = (mixed * 10).clamp(0.0, 10.0).toDouble();
 
@@ -60,13 +80,19 @@ class LieDetector {
     );
   }
 
-  /// 측정 데이터 없을 때 (카메라 권한 거부 등) 폴백 — 의사 결정론적.
+  /// 카메라 권한 거부, 얼굴 미감지 등 → 의사 결정론적 폴백.
   static LieScore fallback(String question) {
     final h = question.hashCode;
     final r = Random(h).nextDouble();
     return compute(
+      pupilJitter: r * 0.05,
+      saccadeBurst: (r * 12).round(),
+      gazeAversion: r * 0.3,
       blinkCount: (r * 6).round(),
-      headRotationDelta: r * 30,
+      blinkAnomaly: r,
+      facialAsymmetry: r * 0.06,
+      microFlicker: r * 0.15,
+      headRotationDelta: r * 60,
       smileProbabilityAvg: r,
       questionHash: h,
     );

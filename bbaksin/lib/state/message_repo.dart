@@ -31,7 +31,13 @@ class MessageRepository {
 
   Message pickRandom() => _messages[_rand.nextInt(_messages.length)];
 
-  Message pickFor(String question) {
+  Message pickFor(String question, {bool isRepeat = false}) {
+    if (isRepeat) {
+      final repeats = _messages.where((m) => m.category == 'repeat').toList();
+      if (repeats.isNotEmpty) {
+        return repeats[_rand.nextInt(repeats.length)];
+      }
+    }
     String? matchedCategory;
     for (final entry in _keywords.entries) {
       if (question.contains(entry.key)) {

@@ -7,6 +7,7 @@ import '../services/ad_service.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
 import '../state/message_repo.dart';
+import '../state/question_history.dart';
 import '../theme/theme_provider.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -23,6 +24,21 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   final _sfx = SoundService();
   Message? _message;
   bool _played = false;
+  bool? _isRepeat; // null = 검사 중, true/false = 검사 완료
+
+  @override
+  void initState() {
+    super.initState();
+    _checkRepeat();
+  }
+
+  Future<void> _checkRepeat() async {
+    final repeat = await QuestionHistory.isRepeat(widget.question);
+    if (!mounted) return;
+    setState(() => _isRepeat = repeat);
+    // 검사 끝난 후에 기록 (현재 질문이 미래 검사에서 매칭되도록)
+    await QuestionHistory.record(widget.question);
+  }
 
   @override
   void dispose() {
@@ -62,7 +78,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
               ),
             ),
             data: (repo) {
-              _message ??= repo.pickFor(widget.question);
+              // isRepeat 검사 끝나기 전엔 잠시 대기 (loading 으로 처리)
+              if (_isRepeat == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              _message ??=
+                  repo.pickFor(widget.question, isRepeat: _isRepeat!);
               if (!_played) {
                 _played = true;
                 WidgetsBinding.instance.addPostFrameCallback((_) {

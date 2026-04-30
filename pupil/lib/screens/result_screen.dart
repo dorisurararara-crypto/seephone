@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:screenshot/screenshot.dart';
 import '../l10n/app_localizations.dart';
 import '../services/ad_service.dart';
-import '../services/lie_detector.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
 
@@ -39,12 +38,15 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final ls = LieDetector.compute(
-      blinkCount: (widget.score * 0.6).round(),
-      headRotationDelta: widget.score * 3,
-      smileProbabilityAvg: widget.score / 10,
-      questionHash: widget.question.hashCode,
-    );
+    // ScanScreen 에서 이미 측정된 magnitude 가 들어옴 — verdict 는 magnitude 로만 판정
+    final magnitude = widget.score;
+    final verdict = magnitude >= 7.5
+        ? '🚨 새빨간 거짓말!'
+        : magnitude >= 5.0
+            ? '⚠️ 거짓말 의심'
+            : magnitude >= 2.5
+                ? '🤔 약간 수상함'
+                : '✅ 진실로 추정';
     final color = widget.score >= 7.5
         ? const Color(0xFFFF3D5A)
         : widget.score >= 5.0
@@ -94,7 +96,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        ls.magnitude.toStringAsFixed(1),
+                        magnitude.toStringAsFixed(1),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
                           fontSize: 120,
@@ -105,7 +107,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        l.magnitudeUnit(ls.magnitude.toStringAsFixed(1)),
+                        l.magnitudeUnit(magnitude.toStringAsFixed(1)),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.notoSansKr(
                             color: Colors.white60, fontSize: 13),
@@ -120,7 +122,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           border: Border.all(color: color, width: 2),
                         ),
                         child: Text(
-                          ls.verdict,
+                          verdict,
                           textAlign: TextAlign.center,
                           style: GoogleFonts.notoSansKr(
                             color: color,
@@ -156,7 +158,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       onPressed: () => ShareService.shareResult(
                         controller: _shotController,
                         question: widget.question,
-                        score: ls.magnitude,
+                        score: magnitude,
                       ),
                       style: FilledButton.styleFrom(
                         backgroundColor: const Color(0xFFFF3D5A),

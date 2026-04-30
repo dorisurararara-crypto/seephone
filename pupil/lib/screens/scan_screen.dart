@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
+import '../services/face_tracker.dart';
 import '../services/lie_detector.dart';
 import '../services/sound_service.dart';
 
-/// 전면 카메라로 3초간 스캔.
+/// 전면 카메라로 3초간 스캔 + ML Kit 얼굴 분석.
 ///
-/// MVP: ML Kit FaceDetector 로 매 프레임 얼굴 분석 → 깜빡임/회전/웃음 누적.
-/// 3초 후 LieDetector.compute() → 결과 화면.
-///
-/// TODO: ML Kit 카메라 stream image → InputImage 변환 (플랫폼별 처리).
-/// 현재는 카운트다운만 보여주고 fallback 점수 사용. 실 트래킹은 v1.1.
+/// 카메라 stream → FaceTracker.processFrame → 4 가지 신호 누적
+/// (깜빡임 / 머리 회전 / 웃음 / 동공 흔들림) → 3초 후 LieDetector.compute
 class ScanScreen extends StatefulWidget {
   final String question;
   const ScanScreen({super.key, required this.question});
@@ -24,16 +23,12 @@ class ScanScreen extends StatefulWidget {
 
 class _ScanScreenState extends State<ScanScreen> {
   CameraController? _camera;
+  FaceTracker? _tracker;
   Timer? _countdownTimer;
   int _remaining = 3;
 
-  // 누적 신호 (실제 트래킹 추가 시 채움)
-  final int _blinkCount = 0;
-  final double _headRotation = 0;
-  final double _smileSum = 0;
-  final int _smileSamples = 0;
-
   bool _isScanning = false;
+  bool _streaming = false;
   final _sfx = SoundService();
 
   @override
@@ -49,18 +44,35 @@ class _ScanScreenState extends State<ScanScreen> {
         (c) => c.lensDirection == CameraLensDirection.front,
         orElse: () => cameras.first,
       );
+      _tracker = FaceTracker(cameraDescription: front);
       _camera = CameraController(
         front,
         ResolutionPreset.medium,
         enableAudio: false,
+        imageFormatGroup: defaultTargetPlatform == TargetPlatform.iOS
+            ? ImageFormatGroup.bgra8888
+            : ImageFormatGroup.nv21,
       );
       await _camera!.initialize();
       if (!mounted) return;
       setState(() {});
+      await _startStream();
       _startCountdown();
     } catch (e) {
-      // 카메라 실패 → fallback 점수로 결과 화면
       _navigateWithFallback();
+    }
+  }
+
+  Future<void> _startStream() async {
+    if (_camera == null || _tracker == null) return;
+    try {
+      await _camera!.startImageStream((image) {
+        // tracker 가 busy 면 자체적으로 skip — backpressure 처리
+        _tracker!.processFrame(image);
+      });
+      _streaming = true;
+    } catch (_) {
+      // 스트림 실패해도 fallback 점수로 계속 진행
     }
   }
 
@@ -78,15 +90,35 @@ class _ScanScreenState extends State<ScanScreen> {
     });
   }
 
-  void _finishScan() {
+  Future<void> _finishScan() async {
     if (!mounted) return;
-    final smileAvg = _smileSamples > 0 ? _smileSum / _smileSamples : 0.5;
-    final score = LieDetector.compute(
-      blinkCount: _blinkCount,
-      headRotationDelta: _headRotation,
-      smileProbabilityAvg: smileAvg,
-      questionHash: widget.question.hashCode,
-    );
+    // 스트림 멈추고 마지막 in-flight 프레임이 끝나길 살짝 기다림
+    if (_streaming) {
+      try {
+        await _camera?.stopImageStream();
+      } catch (_) {}
+      _streaming = false;
+    }
+
+    final result = _tracker?.snapshot();
+    final LieScore score;
+    if (result != null && result.hasData) {
+      score = LieDetector.compute(
+        pupilJitter: result.pupilJitter,
+        saccadeBurst: result.saccadeBurst,
+        gazeAversion: result.gazeAversion,
+        blinkCount: result.blinkCount,
+        blinkAnomaly: result.blinkAnomaly,
+        facialAsymmetry: result.facialAsymmetry,
+        microFlicker: result.microFlicker,
+        headRotationDelta: result.headRotationSum,
+        smileProbabilityAvg: result.smileAvg,
+        questionHash: widget.question.hashCode,
+      );
+    } else {
+      score = LieDetector.fallback(widget.question);
+    }
+    if (!mounted) return;
     context.go(
       '/result?q=${Uri.encodeComponent(widget.question)}&score=${score.magnitude}',
     );
@@ -103,7 +135,11 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   void dispose() {
     _countdownTimer?.cancel();
+    if (_streaming) {
+      _camera?.stopImageStream().catchError((_) {});
+    }
     _camera?.dispose();
+    _tracker?.dispose();
     _sfx.dispose();
     super.dispose();
   }

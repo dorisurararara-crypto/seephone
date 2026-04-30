@@ -19,7 +19,7 @@ cur_build=$(echo "$current" | cut -d+ -f2)
 # ASC 에 이미 올라간 최대 빌드 번호 조회 (v19 같은 버전 충돌 방어).
 # Apple 은 같은 버전 번호 재업로드 거부 → 로컬 pubspec 과 무관하게 ASC 최대 +1 보장.
 SCRIPT_DIR="$(dirname "$0")"
-asc_max=$("${SCRIPT_DIR}/asc/check_build_status.rb" 2>/dev/null | awk 'NR==2 {print $1}')
+asc_max=$("${SCRIPT_DIR}/check_build_status.rb" 2>/dev/null | awk 'NR==2 {print $1}')
 if [ -n "$asc_max" ] && [ "$asc_max" -eq "$asc_max" ] 2>/dev/null; then
   safe_build=$((asc_max + 1))
   next_default=$((cur_build + 1))
@@ -32,7 +32,7 @@ new_build="${1:-$next_default}"
 # 명시 지정된 번호도 ASC 에 이미 있으면 abort.
 if [ -n "$asc_max" ] && [ "$new_build" -le "$asc_max" ]; then
   # 해당 번호가 실제로 ASC 에 존재하는지 검증 (missing number 일 수도)
-  existing=$("${SCRIPT_DIR}/asc/check_build_status.rb" "$new_build" 2>/dev/null | awk -v b="$new_build" '$1==b {print; exit}')
+  existing=$("${SCRIPT_DIR}/check_build_status.rb" "$new_build" 2>/dev/null | awk -v b="$new_build" '$1==b {print; exit}')
   if [ -n "$existing" ]; then
     echo "❌ 빌드 번호 ${new_build} 은 이미 ASC 에 존재: ${existing}"
     echo "   ASC 최대 빌드: ${asc_max}. 최소 $((asc_max + 1)) 이상 써야 함."
@@ -98,7 +98,7 @@ echo "✓ 업로드 완료. Apple 처리 대기 중… (최대 20분)"
 # 있었다면 기존 빌드의 VALID 를 오인할 위험이 있어 uploadedDate 를 함께 검증한다.
 for attempt in $(seq 1 40); do
   sleep 30
-  row=$("${SCRIPT_DIR}/asc/check_build_status.rb" "${new_build}" 2>/dev/null | awk -v b="${new_build}" '$1==b {print; exit}')
+  row=$("${SCRIPT_DIR}/check_build_status.rb" "${new_build}" 2>/dev/null | awk -v b="${new_build}" '$1==b {print; exit}')
   state=$(echo "$row" | awk '{print $2}')
   uploaded=$(echo "$row" | awk '{print $4}')
   # uploadedDate 가 upload 시각보다 10분 이상 이전이면 기존 빌드 오인 → abort
@@ -112,7 +112,7 @@ for attempt in $(seq 1 40); do
   fi
   if [ "$state" = "VALID" ]; then
     echo "✓ 빌드 ${new_build} VALID (uploaded=$uploaded) — 외부 그룹 자동 제출"
-    "${SCRIPT_DIR}/asc/submit_external_beta.rb" "${new_build}"
+    "${SCRIPT_DIR}/submit_external_beta.rb" "${new_build}"
     echo ""
     echo "✓ 외부 테스터 배포 완료 (Beta Review 통과된 그룹이라 대부분 즉시 반영)"
     exit 0
@@ -121,5 +121,5 @@ for attempt in $(seq 1 40); do
 done
 
 echo "⚠️ 20분 지나도 VALID 안 됨. 나중에 수동으로:"
-echo "  ${SCRIPT_DIR}/asc/submit_external_beta.rb ${new_build}"
+echo "  ${SCRIPT_DIR}/submit_external_beta.rb ${new_build}"
 exit 1
