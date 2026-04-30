@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' show Size;
 
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 /// 실시간 얼굴 트래킹 v2 — 거짓말 단서 8가지 누적.
@@ -43,10 +43,34 @@ class FaceTrackingResult {
   bool get hasData => sampleCount > 0;
 }
 
+/// 매 프레임 노출하는 실시간 트래킹 상태 (HUD 시각화용).
+///
+/// 좌표는 face boundingBox 기준 normalized (0~1).
+class LiveFaceFrame {
+  final Point<double>? leftEye; // 정규화 좌표 (face box 기준)
+  final Point<double>? rightEye;
+  final bool eyesClosed;
+  final double smileProbability;
+  final bool faceLocked;
+
+  const LiveFaceFrame({
+    this.leftEye,
+    this.rightEye,
+    this.eyesClosed = false,
+    this.smileProbability = 0,
+    this.faceLocked = false,
+  });
+
+  static const empty = LiveFaceFrame();
+}
+
 class FaceTracker {
   FaceTracker({required this.cameraDescription});
 
   final CameraDescription cameraDescription;
+
+  /// 매 프레임 갱신되는 실시간 상태 (UI 시각화용).
+  final ValueNotifier<LiveFaceFrame> live = ValueNotifier(LiveFaceFrame.empty);
 
   final FaceDetector _detector = FaceDetector(
     options: FaceDetectorOptions(
@@ -186,6 +210,17 @@ class FaceTracker {
       compare(FaceLandmarkType.leftEar, FaceLandmarkType.rightEar);
 
       if (count > 0) _asymmetrySeries.add(sum / count);
+    }
+
+    // ── 7) 실시간 트래킹 상태 노출 (UI 시각화용)
+    if (!_disposed) {
+      live.value = LiveFaceFrame(
+        leftEye: leN,
+        rightEye: reN,
+        eyesClosed: _eyesClosed,
+        smileProbability: face.smilingProbability ?? 0,
+        faceLocked: true,
+      );
     }
   }
 
@@ -366,8 +401,26 @@ class FaceTracker {
     return out;
   }
 
+  /// 누적 시계열 초기화 — baseline 측정 끝난 후 본 측정 시작 시 호출.
+  void reset() {
+    _leftEyeSeries.clear();
+    _rightEyeSeries.clear();
+    _smileSeries.clear();
+    _asymmetrySeries.clear();
+    _gazeAversionSeries.clear();
+    _blinkTimes.clear();
+    _blinkCount = 0;
+    _eyesClosed = false;
+    _headRotationSum = 0;
+    _prevHeadX = null;
+    _prevHeadY = null;
+    _prevHeadZ = null;
+    _frames = 0;
+  }
+
   Future<void> dispose() async {
     _disposed = true;
+    live.dispose();
     await _detector.close();
   }
 }

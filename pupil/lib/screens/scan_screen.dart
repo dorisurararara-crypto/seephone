@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,15 @@ import '../services/sound_service.dart';
 
 /// 거짓말 탐지 스캔 화면.
 ///
-/// 3 phase 진행:
-///   ASK     — 2초 "질문하세요" 안내 (큰 텍스트 + 펄스)
-///   ANALYZE — 5초 카운트, ML Kit 실시간 분석 + 분석 HUD overlay
-///   DONE    — 결과 화면으로 이동
+/// 5 phase 진행:
+///   INIT       — 카메라 부팅
+///   BASELINE_ASK — 1.5초 "이름 말해보세요" 안내
+///   BASELINE   — 4초 평소 신호 측정 (진실 답변)
+///   ASK        — 2초 "이제 진짜 질문하세요"
+///   ANALYZE    — 8초 본 측정 + 분석 HUD
+///   DONE       — 결과 화면으로
+///
+/// baseline 차감으로 개인 편차 보정 → 정확도 향상.
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
 
@@ -22,7 +28,7 @@ class ScanScreen extends StatefulWidget {
   State<ScanScreen> createState() => _ScanScreenState();
 }
 
-enum _Phase { initializing, ask, analyze, done }
+enum _Phase { initializing, baselineAsk, baseline, ask, analyze, done }
 
 class _ScanScreenState extends State<ScanScreen>
     with TickerProviderStateMixin {
@@ -31,7 +37,8 @@ class _ScanScreenState extends State<ScanScreen>
   Timer? _phaseTimer;
 
   _Phase _phase = _Phase.initializing;
-  int _remaining = 5;
+  int _remaining = 8;
+  BaselineSignals _baseline = BaselineSignals.empty;
 
   bool _streaming = false;
   final _sfx = SoundService();
@@ -78,7 +85,7 @@ class _ScanScreenState extends State<ScanScreen>
       if (!mounted) return;
       setState(() {});
       await _startStream();
-      _startAskPhase();
+      _startBaselineAskPhase();
     } catch (_) {
       _navigateWithFallback();
     }
@@ -94,20 +101,67 @@ class _ScanScreenState extends State<ScanScreen>
     } catch (_) {}
   }
 
+  // === Phase 1: Baseline Ask (1.5초) ===
+  void _startBaselineAskPhase() {
+    setState(() {
+      _phase = _Phase.baselineAsk;
+      _remaining = 4;
+    });
+    _sfx.play(PupilSfx.scanStart);
+    _phaseTimer = Timer(const Duration(milliseconds: 1500), _startBaselinePhase);
+  }
+
+  // === Phase 2: Baseline 측정 (4초, 진실 신호) ===
+  void _startBaselinePhase() {
+    if (!mounted) return;
+    setState(() {
+      _phase = _Phase.baseline;
+      _remaining = 4;
+    });
+    _phaseTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+      setState(() => _remaining--);
+      _sfx.play(PupilSfx.tick);
+      if (_remaining <= 0) {
+        t.cancel();
+        _captureBaseline();
+        _startAskPhase();
+      }
+    });
+  }
+
+  void _captureBaseline() {
+    final r = _tracker?.snapshot();
+    if (r != null && r.hasData) {
+      _baseline = BaselineSignals(
+        pupilJitter: r.pupilJitter,
+        saccadeBurst: r.saccadeBurst,
+        gazeAversion: r.gazeAversion,
+        blinkCount: r.blinkCount,
+        facialAsymmetry: r.facialAsymmetry,
+        microFlicker: r.microFlicker,
+        headRotationDelta: r.headRotationSum,
+        smileProbabilityAvg: r.smileAvg,
+      );
+    }
+    // 누적 시계열 비우고 본 측정 준비
+    _tracker?.reset();
+  }
+
+  // === Phase 3: Ask (2초) ===
   void _startAskPhase() {
+    if (!mounted) return;
     setState(() => _phase = _Phase.ask);
     _sfx.play(PupilSfx.scanStart);
-    // 2초 후 분석 단계로
     _phaseTimer = Timer(const Duration(milliseconds: 2000), _startAnalyzePhase);
   }
 
+  // === Phase 4: Analyze (8초 본 측정) ===
   void _startAnalyzePhase() {
     if (!mounted) return;
     setState(() {
       _phase = _Phase.analyze;
-      _remaining = 5;
+      _remaining = 8;
     });
-    // HUD live snapshot — 250ms 마다 누적치 갱신
     _hudTicker = Timer.periodic(const Duration(milliseconds: 250), (_) {
       if (!mounted) return;
       setState(() => _liveSnapshot = _tracker?.snapshot());
@@ -151,6 +205,7 @@ class _ScanScreenState extends State<ScanScreen>
         headRotationDelta: result.headRotationSum,
         smileProbabilityAvg: result.smileAvg,
         questionHash: seed,
+        baseline: _baseline,
       );
     } else {
       score = LieDetector.fallback(seed.toString());
@@ -208,16 +263,20 @@ class _ScanScreenState extends State<ScanScreen>
                     ),
             ),
 
-            // 분석 단계: 어두운 vignette + HUD
-            if (_phase == _Phase.analyze)
+            // 분석 단계: 어두운 vignette + HUD + 실시간 눈알 트래킹
+            if (_phase == _Phase.analyze && _tracker != null)
               Positioned.fill(
                 child: IgnorePointer(
-                  child: AnimatedBuilder(
-                    animation: Listenable.merge([_pulse, _scanline]),
-                    builder: (context, _) => CustomPaint(
-                      painter: _AnalyzeHudPainter(
-                        pulse: _pulse.value,
-                        scanline: _scanline.value,
+                  child: ValueListenableBuilder<LiveFaceFrame>(
+                    valueListenable: _tracker!.live,
+                    builder: (context, frame, _) => AnimatedBuilder(
+                      animation: Listenable.merge([_pulse, _scanline]),
+                      builder: (context, _) => CustomPaint(
+                        painter: _AnalyzeHudPainter(
+                          pulse: _pulse.value,
+                          scanline: _scanline.value,
+                          frame: frame,
+                        ),
                       ),
                     ),
                   ),
@@ -232,7 +291,15 @@ class _ScanScreenState extends State<ScanScreen>
               child: _TopBar(phase: _phase),
             ),
 
-            // ASK phase: 큰 "질문하세요" 텍스트
+            // BASELINE_ASK phase: "이름 말해보세요" 안내
+            if (_phase == _Phase.baselineAsk)
+              _BaselineAskOverlay(pulse: _pulse),
+
+            // BASELINE phase: 카운트 + 진실 신호 측정 중
+            if (_phase == _Phase.baseline)
+              _BaselineMeasureOverlay(remaining: _remaining),
+
+            // ASK phase: 큰 "이제 진짜 질문하세요" 텍스트
             if (_phase == _Phase.ask) _AskOverlay(pulse: _pulse),
 
             // ANALYZE phase: HUD 신호 게이지 + 카운트
@@ -259,6 +326,8 @@ class _TopBar extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final label = switch (phase) {
       _Phase.initializing => l.statusInit,
+      _Phase.baselineAsk => l.statusBaseline,
+      _Phase.baseline => l.statusBaseline,
       _Phase.ask => l.statusAsk,
       _Phase.analyze => l.statusAnalyze,
       _Phase.done => l.statusDone,
@@ -593,7 +662,12 @@ class _Metric extends StatelessWidget {
 class _AnalyzeHudPainter extends CustomPainter {
   final double pulse; // 0-1
   final double scanline; // 0-1
-  _AnalyzeHudPainter({required this.pulse, required this.scanline});
+  final LiveFaceFrame frame;
+  _AnalyzeHudPainter({
+    required this.pulse,
+    required this.scanline,
+    required this.frame,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -678,9 +752,65 @@ class _AnalyzeHudPainter extends CustomPainter {
         canvas.drawCircle(Offset(x, y), 0.6, dot);
       }
     }
+
+    // ── 실시간 눈알 트래킹 점
+    // ML Kit landmark 는 face boundingBox 기준 정규화 좌표 (0~1).
+    // 분석 박스 내부에 매핑하면서 전면 카메라 mirror 보정 (좌우 반전).
+    final left = frame.leftEye;
+    final right = frame.rightEye;
+    if (left != null || right != null) {
+      Offset map(Point<double> p) {
+        // 전면 카메라는 셀카 미러링 — x 를 1-x 로 뒤집어야 사용자 시선과 일치
+        final nx = 1 - p.x;
+        final ny = p.y;
+        return Offset(
+          boxRect.left + nx * boxRect.width,
+          boxRect.top + ny * boxRect.height,
+        );
+      }
+
+      // 깜빡임 시 색을 빨강으로 (강조)
+      final eyeColor = frame.eyesClosed
+          ? const Color(0xFFFF3D5A)
+          : const Color(0xFF00E0FF);
+
+      // 눈 사이 연결선 (faint)
+      if (left != null && right != null) {
+        final lp = map(left);
+        final rp = map(right);
+        final linePaint = Paint()
+          ..color = eyeColor.withValues(alpha: 0.25)
+          ..strokeWidth = 1;
+        canvas.drawLine(lp, rp, linePaint);
+      }
+
+      void drawEye(Point<double> p) {
+        final c = map(p);
+        // 외곽 펄스 링
+        final ringPaint = Paint()
+          ..color = eyeColor.withValues(alpha: 0.35)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5;
+        canvas.drawCircle(c, 14 + pulse * 6, ringPaint);
+        // 내부 채운 원
+        final fillPaint = Paint()..color = eyeColor;
+        canvas.drawCircle(c, 5, fillPaint);
+        // 십자 미세선
+        final cross = Paint()
+          ..color = Colors.white.withValues(alpha: 0.6)
+          ..strokeWidth = 1;
+        canvas.drawLine(c.translate(-8, 0), c.translate(8, 0), cross);
+        canvas.drawLine(c.translate(0, -8), c.translate(0, 8), cross);
+      }
+
+      if (left != null) drawEye(left);
+      if (right != null) drawEye(right);
+    }
   }
 
   @override
   bool shouldRepaint(covariant _AnalyzeHudPainter old) =>
-      old.pulse != pulse || old.scanline != scanline;
+      old.pulse != pulse ||
+      old.scanline != scanline ||
+      old.frame != frame;
 }
