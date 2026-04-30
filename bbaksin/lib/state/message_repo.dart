@@ -39,7 +39,7 @@ class MessageRepository {
     '재테크': 'money', '연봉': 'money', '보너스': 'money', '세금': 'money',
     '쇼핑': 'money', '명품백': 'money', '신용카드': 'money',
 
-    // DIET
+    // DIET — 다이어트·식사·음식 결정
     '다이어트': 'diet', '살빼': 'diet', '살찌': 'diet', '체중': 'diet',
     '몸무게': 'diet', '운동': 'diet', '헬스': 'diet', '폭식': 'diet',
     '야식': 'diet', '치킨': 'diet', '피자': 'diet', '햄버거': 'diet',
@@ -49,6 +49,11 @@ class MessageRepository {
     '간식': 'diet', '뱃살': 'diet', '복근': 'diet',
     '식단': 'diet', '단식': 'diet', '러닝': 'diet',
     '필라테스': 'diet', '요가': 'diet',
+    // 식사 결정 (뭐 먹을까 류) — diet 카테고리로
+    '점심': 'diet', '저녁': 'diet', '아침': 'diet', '식사': 'diet',
+    '메뉴': 'diet', '뭐먹': 'diet', '뭐 먹': 'diet', '먹을까': 'diet',
+    '굶을까': 'diet', '시켜먹': 'diet', '시켜 먹': 'diet',
+    '음식': 'diet', '맛집': 'diet',
 
     // WORK
     '회사': 'work', '상사': 'work', '사장': 'work', '학교': 'work',
@@ -65,10 +70,10 @@ class MessageRepository {
 
   // === Decision 보조 키워드 (weight 1) ===
   // strong keyword 가 0개일 때만 decision 카테고리 매칭에 활용.
+  // (식사 관련 키워드는 strong → diet 로 옮김)
   static const _decisionHelperKeywords = <String>[
-    '점심', '저녁', '아침', '메뉴', '뭐먹', '뭐 먹', '뭐로',
-    '결정', '골라', '고를', '선택', '망설',
-    '할까', '말까', '살까', '갈까', '먹을까', '굶을까',
+    '뭐로', '결정', '골라', '고를', '선택', '망설',
+    '할까', '말까', '살까', '갈까',
     '어디', '어느', '두 가지', '두가지',
   ];
 
