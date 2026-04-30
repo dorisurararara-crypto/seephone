@@ -12,31 +12,73 @@ class AppLocalizationsKo extends AppLocalizations {
   String get appTitle => '동공 지진 탐지기';
 
   @override
+  String get appName => '동공 지진 탐지기';
+
+  @override
   String get introTitleLine1 => '동공 지진';
 
   @override
   String get introTitleLine2 => '탐지기';
 
   @override
-  String get introTagline => '카메라로 친구 눈동자 떨림을 측정. 거짓말이면 진도 폭발.';
+  String get introTagline => '카메라로 8가지 얼굴 신호 분석. 거짓말이면 진도 폭발.';
 
   @override
-  String get questionLabel => 'QUESTION';
+  String get stepStart => '버튼 누르고 친구 얼굴을 카메라에 비추세요';
 
   @override
-  String get questionHint => '예: 너 어제 몰래 치킨 먹었지?';
+  String get stepAsk => '\"질문하세요\" 가 뜨면 5초 안에 질문';
 
   @override
-  String get startButton => '카메라 켜고 스캔 시작';
+  String get stepAnalyze => '5초 동안 동공·표정·비대칭 분석 → 결과';
 
   @override
-  String get introInstruction => '※ 친구 얼굴이 화면 중앙에 오게 들고, 질문하고, 답할 때 3초 스캔합니다';
+  String get startButton => '탐지 시작';
 
   @override
-  String get questionRequired => '질문을 적어주세요';
+  String get introInstruction => '※ 친구 얼굴이 화면 중앙에 오게 들고 5초 스캔';
 
   @override
   String get scanning => 'SCANNING';
+
+  @override
+  String get askNow => '질문하세요';
+
+  @override
+  String get askHint => '지금 친구에게 직접 물어보세요';
+
+  @override
+  String get statusInit => 'INITIALIZING';
+
+  @override
+  String get statusAsk => 'AWAITING QUESTION';
+
+  @override
+  String get statusAnalyze => 'ANALYZING';
+
+  @override
+  String get statusDone => 'COMPLETE';
+
+  @override
+  String get metricBlink => 'BLINK';
+
+  @override
+  String get metricGaze => 'GAZE';
+
+  @override
+  String get metricAsym => 'ASYM';
+
+  @override
+  String get metricStress => 'STRESS';
+
+  @override
+  String get metricFrames => 'FRAMES';
+
+  @override
+  String get metricSaccade => 'SACCADE';
+
+  @override
+  String get metricFlicker => 'FLICKER';
 
   @override
   String get magnitudeLabel => 'PUPIL TREMOR MAGNITUDE';
@@ -94,4 +136,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get languageEnglish => 'English';
+
+  @override
+  String get questionLabel => 'QUESTION';
+
+  @override
+  String get questionHint => '예: 너 어제 몰래 치킨 먹었지?';
+
+  @override
+  String get questionRequired => '질문을 적어주세요';
 }

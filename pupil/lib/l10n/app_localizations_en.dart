@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Pupil Tremor Detector';
 
   @override
+  String get appName => 'Pupil Detector';
+
+  @override
   String get introTitleLine1 => 'Pupil Tremor';
 
   @override
@@ -19,26 +22,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get introTagline =>
-      'Measure your friend\'s pupil tremor with the camera. Lies make the magnitude explode.';
+      '8-signal facial analysis via camera. Lies make the magnitude explode.';
 
   @override
-  String get questionLabel => 'QUESTION';
+  String get stepStart => 'Tap, point camera at your friend\'s face';
 
   @override
-  String get questionHint => 'e.g. Did you sneak chicken last night?';
+  String get stepAsk => 'When \"ASK NOW\" appears, ask in 5 sec';
 
   @override
-  String get startButton => 'Open camera & start scan';
+  String get stepAnalyze => '5-sec analysis: pupils, expression, asymmetry';
 
   @override
-  String get introInstruction =>
-      '※ Center your friend\'s face, ask the question, then scan for 3 seconds.';
+  String get startButton => 'START DETECTION';
 
   @override
-  String get questionRequired => 'Please write a question';
+  String get introInstruction => '※ Center your friend\'s face — 5 second scan';
 
   @override
   String get scanning => 'SCANNING';
+
+  @override
+  String get askNow => 'ASK NOW';
+
+  @override
+  String get askHint => 'Ask your friend directly, right now';
+
+  @override
+  String get statusInit => 'INITIALIZING';
+
+  @override
+  String get statusAsk => 'AWAITING QUESTION';
+
+  @override
+  String get statusAnalyze => 'ANALYZING';
+
+  @override
+  String get statusDone => 'COMPLETE';
+
+  @override
+  String get metricBlink => 'BLINK';
+
+  @override
+  String get metricGaze => 'GAZE';
+
+  @override
+  String get metricAsym => 'ASYM';
+
+  @override
+  String get metricStress => 'STRESS';
+
+  @override
+  String get metricFrames => 'FRAMES';
+
+  @override
+  String get metricSaccade => 'SACCADE';
+
+  @override
+  String get metricFlicker => 'FLICKER';
 
   @override
   String get magnitudeLabel => 'PUPIL TREMOR MAGNITUDE';
@@ -97,4 +138,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageEnglish => 'English';
+
+  @override
+  String get questionLabel => 'QUESTION';
+
+  @override
+  String get questionHint => 'e.g. Did you sneak chicken last night?';
+
+  @override
+  String get questionRequired => 'Please write a question';
 }

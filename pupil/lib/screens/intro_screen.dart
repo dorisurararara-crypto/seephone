@@ -13,24 +13,8 @@ class IntroScreen extends ConsumerStatefulWidget {
 }
 
 class _IntroScreenState extends ConsumerState<IntroScreen> {
-  final _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   void _start() {
-    final l = AppLocalizations.of(context);
-    final q = _controller.text.trim();
-    if (q.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l.questionRequired)),
-      );
-      return;
-    }
-    context.push('/scan?q=${Uri.encodeComponent(q)}');
+    context.push('/scan');
   }
 
   void _openSettings() {
@@ -123,7 +107,7 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Text(
                     l.introTagline,
                     style: GoogleFonts.notoSansKr(
@@ -133,42 +117,32 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                     ),
                   ),
                   const Spacer(),
-                  Text(
-                    l.questionLabel,
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      letterSpacing: 1.5,
-                      color: Colors.white54,
-                    ),
-                  ),
+                  // 작동 흐름 안내
+                  _StepRow(num: '1', text: l.stepStart),
                   const SizedBox(height: 12),
-                  TextField(
-                    controller: _controller,
-                    maxLines: 2,
-                    style: GoogleFonts.notoSansKr(fontSize: 17, color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: l.questionHint,
-                      hintStyle: GoogleFonts.notoSansKr(color: Colors.white38),
-                      border: const UnderlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                  ),
+                  _StepRow(num: '2', text: l.stepAsk),
+                  const SizedBox(height: 12),
+                  _StepRow(num: '3', text: l.stepAnalyze),
                   const Spacer(),
                   FilledButton(
                     onPressed: _start,
                     style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      padding: const EdgeInsets.symmetric(vertical: 22),
                       backgroundColor: const Color(0xFFFF3D5A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                     child: Text(
                       l.startButton,
                       style: GoogleFonts.notoSansKr(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   Text(
                     l.introInstruction,
                     textAlign: TextAlign.center,
@@ -192,6 +166,48 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StepRow extends StatelessWidget {
+  final String num;
+  final String text;
+  const _StepRow({required this.num, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xFFFF3D5A), width: 1.5),
+            shape: BoxShape.circle,
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            num,
+            style: GoogleFonts.inter(
+              color: const Color(0xFFFF3D5A),
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: GoogleFonts.notoSansKr(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -8,9 +8,8 @@ import '../services/share_service.dart';
 import '../services/sound_service.dart';
 
 class ResultScreen extends StatefulWidget {
-  final String question;
   final double score;
-  const ResultScreen({super.key, required this.question, required this.score});
+  const ResultScreen({super.key, required this.score});
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
@@ -38,7 +37,6 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    // ScanScreen 에서 이미 측정된 magnitude 가 들어옴 — verdict 는 magnitude 로만 판정
     final magnitude = widget.score;
     final verdict = magnitude >= 7.5
         ? '🚨 새빨간 거짓말!'
@@ -70,22 +68,13 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: Column(
                     children: [
                       Text(
-                        l.questionLabel,
+                        l.appName.toUpperCase(),
                         style: GoogleFonts.inter(
                             fontSize: 11,
-                            letterSpacing: 2,
+                            letterSpacing: 4,
                             color: Colors.white54),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        widget.question,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.notoSansKr(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       Text(
                         l.magnitudeLabel,
                         style: GoogleFonts.inter(
@@ -157,7 +146,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     child: FilledButton(
                       onPressed: () => ShareService.shareResult(
                         controller: _shotController,
-                        question: widget.question,
+                        question: '',
                         score: magnitude,
                       ),
                       style: FilledButton.styleFrom(

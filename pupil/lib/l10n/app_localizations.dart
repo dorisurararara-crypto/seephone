@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'동공 지진 탐지기'**
   String get appTitle;
 
+  /// No description provided for @appName.
+  ///
+  /// In ko, this message translates to:
+  /// **'동공 지진 탐지기'**
+  String get appName;
+
   /// No description provided for @introTitleLine1.
   ///
   /// In ko, this message translates to:
@@ -119,44 +125,122 @@ abstract class AppLocalizations {
   /// No description provided for @introTagline.
   ///
   /// In ko, this message translates to:
-  /// **'카메라로 친구 눈동자 떨림을 측정. 거짓말이면 진도 폭발.'**
+  /// **'카메라로 8가지 얼굴 신호 분석. 거짓말이면 진도 폭발.'**
   String get introTagline;
 
-  /// No description provided for @questionLabel.
+  /// No description provided for @stepStart.
   ///
   /// In ko, this message translates to:
-  /// **'QUESTION'**
-  String get questionLabel;
+  /// **'버튼 누르고 친구 얼굴을 카메라에 비추세요'**
+  String get stepStart;
 
-  /// No description provided for @questionHint.
+  /// No description provided for @stepAsk.
   ///
   /// In ko, this message translates to:
-  /// **'예: 너 어제 몰래 치킨 먹었지?'**
-  String get questionHint;
+  /// **'\"질문하세요\" 가 뜨면 5초 안에 질문'**
+  String get stepAsk;
+
+  /// No description provided for @stepAnalyze.
+  ///
+  /// In ko, this message translates to:
+  /// **'5초 동안 동공·표정·비대칭 분석 → 결과'**
+  String get stepAnalyze;
 
   /// No description provided for @startButton.
   ///
   /// In ko, this message translates to:
-  /// **'카메라 켜고 스캔 시작'**
+  /// **'탐지 시작'**
   String get startButton;
 
   /// No description provided for @introInstruction.
   ///
   /// In ko, this message translates to:
-  /// **'※ 친구 얼굴이 화면 중앙에 오게 들고, 질문하고, 답할 때 3초 스캔합니다'**
+  /// **'※ 친구 얼굴이 화면 중앙에 오게 들고 5초 스캔'**
   String get introInstruction;
-
-  /// No description provided for @questionRequired.
-  ///
-  /// In ko, this message translates to:
-  /// **'질문을 적어주세요'**
-  String get questionRequired;
 
   /// No description provided for @scanning.
   ///
   /// In ko, this message translates to:
   /// **'SCANNING'**
   String get scanning;
+
+  /// No description provided for @askNow.
+  ///
+  /// In ko, this message translates to:
+  /// **'질문하세요'**
+  String get askNow;
+
+  /// No description provided for @askHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'지금 친구에게 직접 물어보세요'**
+  String get askHint;
+
+  /// No description provided for @statusInit.
+  ///
+  /// In ko, this message translates to:
+  /// **'INITIALIZING'**
+  String get statusInit;
+
+  /// No description provided for @statusAsk.
+  ///
+  /// In ko, this message translates to:
+  /// **'AWAITING QUESTION'**
+  String get statusAsk;
+
+  /// No description provided for @statusAnalyze.
+  ///
+  /// In ko, this message translates to:
+  /// **'ANALYZING'**
+  String get statusAnalyze;
+
+  /// No description provided for @statusDone.
+  ///
+  /// In ko, this message translates to:
+  /// **'COMPLETE'**
+  String get statusDone;
+
+  /// No description provided for @metricBlink.
+  ///
+  /// In ko, this message translates to:
+  /// **'BLINK'**
+  String get metricBlink;
+
+  /// No description provided for @metricGaze.
+  ///
+  /// In ko, this message translates to:
+  /// **'GAZE'**
+  String get metricGaze;
+
+  /// No description provided for @metricAsym.
+  ///
+  /// In ko, this message translates to:
+  /// **'ASYM'**
+  String get metricAsym;
+
+  /// No description provided for @metricStress.
+  ///
+  /// In ko, this message translates to:
+  /// **'STRESS'**
+  String get metricStress;
+
+  /// No description provided for @metricFrames.
+  ///
+  /// In ko, this message translates to:
+  /// **'FRAMES'**
+  String get metricFrames;
+
+  /// No description provided for @metricSaccade.
+  ///
+  /// In ko, this message translates to:
+  /// **'SACCADE'**
+  String get metricSaccade;
+
+  /// No description provided for @metricFlicker.
+  ///
+  /// In ko, this message translates to:
+  /// **'FLICKER'**
+  String get metricFlicker;
 
   /// No description provided for @magnitudeLabel.
   ///
@@ -265,6 +349,24 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'English'**
   String get languageEnglish;
+
+  /// No description provided for @questionLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'QUESTION'**
+  String get questionLabel;
+
+  /// No description provided for @questionHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'예: 너 어제 몰래 치킨 먹었지?'**
+  String get questionHint;
+
+  /// No description provided for @questionRequired.
+  ///
+  /// In ko, this message translates to:
+  /// **'질문을 적어주세요'**
+  String get questionRequired;
 }
 
 class _AppLocalizationsDelegate
