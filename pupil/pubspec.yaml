@@ -1,7 +1,7 @@
 name: pupil
 description: "동공 지진 탐지기 — 얼굴 인식 진실게임"
 publish_to: 'none'
-version: 1.0.0+7
+version: 1.0.0+8
 
 environment:
   sdk: ^3.11.0

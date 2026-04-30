@@ -43,18 +43,31 @@ fi
 echo "=== version: $ver+$cur_build → $ver+$new_build (ASC max=${asc_max:-?}) ==="
 sed -i '' "s/^version: .*/version: ${ver}+${new_build}/" pubspec.yaml
 
-echo "=== flutter build ipa --release (archive 까지만 중요, export 실패해도 OK) ==="
-# Flutter 내부 xcodebuild -exportArchive 는 로컬 키체인에 Apple Distribution cert 가
-# 없으면 "No signing certificate iOS Distribution found" 로 조용히 실패하고,
-# 이전 세션이 남긴 build/ios/ipa/*.ipa 를 그대로 fallback 재사용함 (→ CFBundleVersion
-# 중복 거부). 매 세션 반복되던 함정. 아래에서 archive 만 확보하고 export 는 무시.
-flutter build ipa --release --build-number "${new_build}" --build-name "${ver}" || {
-  echo "  (flutter export 실패는 예상된 동작 — archive 만 있으면 됨)"
-}
+echo "=== flutter build ios --release --no-codesign (Flutter framework 빌드만) ==="
+# 이전엔 'flutter build ipa' 한 방으로 archive + export 했지만, Flutter 내부 archive
+# 단계가 ASC API key 를 못 받아 capability 추가된 (HealthKit 등) 앱은 provisioning
+# profile 갱신 실패. 그래서 archive 도 직접 xcodebuild + ASC API 로 처리.
+flutter build ios --release --no-codesign --build-number "${new_build}" --build-name "${ver}"
 
 ARCHIVE='build/ios/archive/Runner.xcarchive'
+rm -rf "$ARCHIVE"
+
+echo "=== xcodebuild archive (ASC API key 로 cert + profile 자동 sync) ==="
+xcodebuild archive \
+  -workspace ios/Runner.xcworkspace \
+  -scheme Runner \
+  -configuration Release \
+  -destination "generic/platform=iOS" \
+  -archivePath "$ARCHIVE" \
+  -allowProvisioningUpdates \
+  -authenticationKeyPath "$HOME/.appstoreconnect/private_keys/AuthKey_${KEY_ID}.p8" \
+  -authenticationKeyID "$KEY_ID" \
+  -authenticationKeyIssuerID "$ISSUER_ID" \
+  FLUTTER_BUILD_NAME="${ver}" \
+  FLUTTER_BUILD_NUMBER="${new_build}"
+
 if [ ! -d "$ARCHIVE" ]; then
-  echo "❌ $ARCHIVE 생성 실패. flutter build 가 archive 자체를 못 만듦."
+  echo "❌ $ARCHIVE 생성 실패."
   exit 3
 fi
 
@@ -90,6 +103,10 @@ xcrun altool --upload-app --apple-id "$ASC_APP_ID" --type ios -f "$IPA_PATH" \
   --apiKey "$KEY_ID" --apiIssuer "$ISSUER_ID"
 
 upload_ts=$(date +%s)
+
+# Export compliance 누락 방지 — Info.plist 의 ITSAppUsesNonExemptEncryption=false 가
+# 자동 통과시키지만 만약을 위해 ASC 측에서도 보장.
+"${SCRIPT_DIR}/fix_export_compliance.rb" 2>&1 | tail -3 || true
 echo ""
 echo "✓ 업로드 완료. Apple 처리 대기 중… (최대 20분)"
 

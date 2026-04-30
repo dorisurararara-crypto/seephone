@@ -6,6 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 class ShareService {
+  static const _appStoreUrl = 'https://apps.apple.com/app/id6764363954';
+
   static Future<void> saveResult({
     required ScreenshotController controller,
     required BuildContext context,
@@ -42,7 +44,9 @@ class ShareService {
       await file.writeAsBytes(bytes);
       await Share.shareXFiles(
         [XFile(file.path)],
-        text: '내 분노 ${watts.toStringAsFixed(0)}W — 분노발전소',
+        text: '내 분노 ${watts.toStringAsFixed(0)}W — 분노발전소\n\n'
+            '— 흔들고 두드려서 빡침을 W로 측정 —\n'
+            '$_appStoreUrl',
       );
     } catch (_) {}
   }

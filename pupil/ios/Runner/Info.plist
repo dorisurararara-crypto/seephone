@@ -12,6 +12,8 @@
 	<string>Apple Watch / AirPods Pro 의 심박수로 거짓말 탐지 정확도를 높입니다.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>거짓말 탐지 결과를 건강 데이터에 기록하는 데 사용합니다.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3940256099942544~1458002511</string>
 	<key>SKAdNetworkItems</key>
