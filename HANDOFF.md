@@ -68,6 +68,36 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-02 06:14 (Mac, 야간 자율) — protagonist 1.0.1 metadata-only 업데이트 진행 중
+
+**상황**: 사용자가 출시한 protagonist 앱에서 광고 안 뜸. 원인은 AdMob app-ads.txt 인증 실패. AdMob 신규 앱 정책 (2025-01 이후) 은 인증 통과 전 광고 거의 안 서빙.
+
+**해결 완료** (사용자 자는 동안 전부 자율):
+1. ✅ GitHub Pages 사용자 사이트: `https://dorisurararara-crypto.github.io/app-ads.txt` 라이브
+2. ✅ pubspec 1.0.0+22 → 1.0.1+23
+3. ✅ xcodebuild exportArchive (ASC API key 자동 cert 발급) → ipa 29MB
+4. ✅ altool upload — Delivery `a1b655fe-cbc8-43c5-93f9-e0cf367f3885`
+5. ✅ ASC 처리 → build 23 VALID
+6. ✅ appStoreVersion 1.0.1 생성 (id=`d47c8ae7-93b0-4379-b9d7-25665f28955c`)
+7. ✅ marketing URL + support URL 둘 다 `https://dorisurararara-crypto.github.io/` 변경 (en-US + ko)
+8. ✅ whatsNew 설정
+9. ✅ reviewSubmission `9f9bdf1e-f7d9-40cf-a674-5520e727fa75` SUBMITTED
+10. ✅ **1.0.1 state=WAITING_FOR_REVIEW** (2026-05-01T21:16:26 UTC = 2026-05-02 06:16 KST)
+
+**추가 트랩 발견 + 해결책 (~/devapp/ERRORS.md #19/#20/#21)**:
+- #19 AdMob app-ads.txt 인증 신규 앱 필수 (2025-01+)
+- #20 라이브 앱 marketing/support URL 락 → 1.0.1 새 버전 필수
+- #21 Apple Distribution cert 누락 → fastlane cert 가 keychain partition list 락 일으킴 → xcodebuild `-allowProvisioningUpdates -authenticationKey*` 로 ASC API key 가 cert 자동 발급 (검증 출처: shadowrun HANDOFF v28)
+
+**예상 완료 타임라인**:
+- ASC 처리: 5-30분 (대기 중)
+- 1.0.1 reviewSubmissions 제출: 즉시
+- Apple metadata-only review: 12-24시간 (1.0.0 통과 이력 + 코드 변경 거의 없음 → 빠를 가능성 ↑)
+- AdMob 재크롤 + 인증: 1-6시간
+- 광고 fill 정상화: 추가 3-7일
+
+사용자가 깨면 ASC 콘솔에서 review 진행상황 확인 가능. AdMob 콘솔은 1.0.1 승인 후 자동 재인증.
+
 ### 2026-04-29 09:30 (Mac) — Plan B 진행: IAP review 스크린샷 자동 업로드 + build=4 업로드
 
 사용자가 ASC 법인정보·한국법·Paid Apps Agreement 일부 입력 진행 중. 그동안 Plan B 자동화:

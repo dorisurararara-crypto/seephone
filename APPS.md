@@ -158,8 +158,7 @@
 ```
 /seephone
 ├── APPS.md                   # 본 문서
-├── content-draft/            # 멘트·콘텐츠 큐레이션 작업 공간
-├── bbaksin/                  # 1번 앱 (Flutter 프로젝트)
+├── content-draft/            # 멘트·콘텐츠 큐레이션 작업 공간ㅍ
 ├── pupil/                    # 2번 앱 (예정)
 └── anger/                    # 3번 앱 (예정)
 ```
