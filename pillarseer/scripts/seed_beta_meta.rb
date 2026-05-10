@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# 베타 앱 설명·피드백 이메일·마케팅 URL 채우기 (한국어 + 영어)
+# 베타 앱 설명·피드백 이메일 채우기 (한국어 + 영어)
 require_relative '_helpers'
 
 FEEDBACK_EMAIL = 'dorisurararara@gmail.com'
@@ -7,52 +7,55 @@ FEEDBACK_EMAIL = 'dorisurararara@gmail.com'
 LOCALES = {
   'ko' => {
     description: <<~KO.strip,
-      POV: 나는 주인공
+      Pillar Seer — 글로벌 영어권 K-컬처 사주 앱
 
-      걸으면 BGM 자동, 폰 흔들면 칼소리, 버튼 누르면 화면 번쩍.
-      8가지 모드로 일상이 영화가 되는 효과음·BGM 앱.
+      생년월일·시간·출생지 입력하면 4기둥 (年月日時) 8자, 5행 분포, 일간 (Day Master) 분석.
+      매일 일진 vs 사용자 사주 충합으로 100점 만점 점수 + Lucky Color/Number/Direction.
 
-      [모드]
-      - 천하무적 발걸음: 걸을 때마다 효과음
-      - 주인공 등장: 화면 번쩍 + 등장 사운드
-      - 전설의 무기: 폰 휘두르면 칼·광선검 소리
-      - 인생은 드라마: 상황별 BGM 무한 반복
-      - 심판의 시간: 점수·천재·거짓말 즉석 카드
-      - 리액션 장인: 썰렁/메롱/딩동댕 사운드보드
-      - 공포의 몰카: 타이머 후 깜짝 사운드
-      - 내 목소리 이상해: 5초 녹음 → 변조 재생
+      [화면]
+      - Splash → Input → Result (Birth chart)
+      - Home (Today's Energy): 매일 점수 + 4 카테고리 + Lucky 카드
+      - Reports / Discover / Profile (Phase 2 추가 예정)
+
+      [기술]
+      - Julian Day Number 기반 일주 계산 (1900-01-01 = 甲戌 epoch)
+      - 5행 상생/상극 점수 산정 (河圖洛書)
+      - 60일주 × 5 fields 콘텐츠 (300 entries, 영어)
+      - 다크 코스믹 + 골드 (#D4AF37) 디자인 (mockup 17화면 중 7화면 구현)
 
       [테스트 포인트]
-      - 8개 모드 진입/사운드 재생 정상 여부
-      - 걷기·흔들기 센서 반응 정확도
-      - 점수 카드 캡처/공유 동작
-      - 광고 표시 정상 여부
+      - Splash 자동 전환 → Input 입력 → Find My Destiny 버튼 동작
+      - Result 4기둥 한자 + 영어 dayMaster + 5행 progress bar
+      - Bottom Nav 5탭 라우팅
+      - Continue to Daily Reading → Home
 
       문제 발견 시 dorisurararara@gmail.com 으로 회신 부탁드립니다.
     KO
   },
   'en-US' => {
     description: <<~EN.strip,
-      POV: I'm the Main Character
+      Pillar Seer — Korean Saju (Four Pillars of Destiny) for Global Gen Z
 
-      Walk and BGM plays automatically. Swing the phone for sword sounds.
-      Tap a button for a flash entrance. 8 modes that turn daily life into a movie.
+      Enter birth date, time, and place to receive your Four Pillars (Year/Month/Day/Hour),
+      Five Element distribution, and Day Master analysis.
+      Daily energy score (out of 100) based on today's pillar vs your chart, plus Lucky Color, Number, and Direction.
 
-      [Modes]
-      - Invincible Footsteps: SFX on each step
-      - Hero Entrance: Flash + entrance sound
-      - Legendary Weapon: Sword/lightsaber sounds when swinging
-      - Life Drama: Looping situational BGM
-      - Judgment Time: Instant score/genius/lie cards
-      - Reaction Master: Awkward/raspberry/ding-dong soundboard
-      - Prank Mode: Timer then surprise sound
-      - My Voice Sounds Weird: 5s record then voice modulation
+      [Screens]
+      - Splash → Input → Result (Birth chart with 4 pillars)
+      - Home (Today's Energy): daily score + 4 categories + Lucky card
+      - Reports / Discover / Profile (Phase 2)
+
+      [Tech]
+      - Julian Day Number based pillar calculation (1900-01-01 = 甲戌 epoch)
+      - Five Elements interaction scoring (河圖洛書 / He Tu Luo Shu)
+      - 60 day-pillar × 5 content fields (300 entries, English, mysterious K-pop tone)
+      - Dark cosmic + Celestial Gold (#D4AF37) design (7 of 17 mockup screens implemented)
 
       [Test Focus]
-      - All 8 modes launch and play sound correctly
-      - Walk/shake sensor accuracy
-      - Score card capture and share
-      - Ad display
+      - Splash auto-navigates → Input → Find My Destiny submit
+      - Result shows 4 pillars (Hanja), Day Master in English, Five Element bars
+      - Bottom Nav 5-tab routing works
+      - Continue to Daily Reading → Home flow
 
       Send issues to dorisurararara@gmail.com.
     EN

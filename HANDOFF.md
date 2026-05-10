@@ -68,6 +68,67 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-12 03:55 (Mac → Windows) — 🎉🎉🎉 TestFlight Beta Review 제출 완료! (사용자 mandate 달성)
+
+**사용자 야간 mandate**: "테스트플라이트에 심사를 넣는 거까지는 내가 자고 일어났을 때 되어 있어야 돼" → ✅ **달성**.
+
+**최종 상태**:
+| 항목 | 값 |
+|---|---|
+| ASC App | **Pillar Seer** (id `6768096855`) |
+| Bundle ID | `com.ganziman.pillarseer` |
+| Build | **3** (state=VALID) |
+| Delivery UUID | `438bbff5-8ded-4f1d-bad3-9ebd879ad3b3` |
+| 외부 그룹 | **ganzitester** (id `3217ce1c-29ca-4946-a26a-0c55529172a3`) |
+| **Public Link** | **https://testflight.apple.com/join/kRs36R3b** |
+| Beta Review | **SUBMITTED** ✅ (예상 24-48h 첫 심사) |
+
+**사용자가 깰 때 확인할 것**:
+1. 메일 (`dorisurararara@gmail.com`): Apple iTMS Beta Review 진행 알림
+2. ASC 콘솔: https://appstoreconnect.apple.com/apps/6768096855
+3. TestFlight 공개 링크 (심사 통과 후 활성): https://testflight.apple.com/join/kRs36R3b
+
+**진행한 단계 (4시간 내 야간 자율)**:
+
+1. ✅ **iOS Bundle ID 변경** com.seephone.pillarseer → com.ganziman.pillarseer
+2. ✅ **ExportOptions.plist** 생성 (automatic signing, Q6H9HCTK6W)
+3. ✅ **Apple Developer Bundle ID** 등록 (id 7M8X99YS32, ASC API)
+4. ✅ **ASC App 신규 등록** (fastlane produce_app — ASC API POST /v1/apps 는 403, fastlane 만 허용)
+5. ✅ **외부 베타 그룹 ganzitester 생성** (PublicLink kRs36R3b)
+6. ✅ **scripts/ + fastlane/** 인프라 (protagonist 패턴 재사용)
+7. ✅ **빌드 #1 (build_number 2)** flutter build ipa + xcodebuild exportArchive 성공 (IPA 22M)
+8. ❌ **빌드 #1 altool reject** code 90474: iPad UISupportedInterfaceOrientations 4개 모두 필요
+9. ✅ **Info.plist iPad orientations** 4개로 fix (Portrait + Upside Down + Landscape Left + Landscape Right)
+10. ✅ **빌드 #2 (build_number 3)** UPLOAD SUCCEEDED (22.6 MB / 2.8s, 8.1MB/s)
+11. ✅ **iTMS BUILD-STATUS: VALID** (자동 진단 30s 후)
+12. ✅ **ASC processing 완료** (~5분 소요, build_id 438bbff5-...)
+13. ✅ **betaAppLocalizations** ko + en-US (Pillar Seer 영문/한글 description + feedback email)
+14. ✅ **betaAppReviewDetails** Seunghyeon Lee / +821000000000 / dorisurararara@gmail.com
+15. ✅ **betaBuildLocalizations** ko + en-US (whatsNew "v1.0.0 first beta — Korean Saju for global Gen Z")
+16. ✅ **외부 그룹 ganzitester 할당** (HTTP 204)
+17. ✅ **Beta Review 제출** (`reviewSubmissions` SUBMITTED)
+
+**남은 자율 (TestFlight 심사 동안 진행 가능)**:
+- ⏳ Profile / Daily Detail / Compatibility 진짜 화면 (현재 placeholder)
+- ⏳ 앱 아이콘 (현재 Flutter 기본 placeholder, ASC 1024x1024 + 모든 사이즈 필요)
+- ⏳ Splash 시각 강화 (현재 Material auto_awesome icon)
+- ⏳ Codex/Gemini 코드 리뷰 (3사 합의 사이클)
+
+**인프라 트랩 + 해결 (다음 신규 앱에 재사용)**:
+- ASC API POST /v1/apps = 403 FORBIDDEN → fastlane produce_app 만 동작
+- fastlane spaceauth cookie 만료돼도 normal login fallback OK (사용자 자동)
+- iPad orientations 4개 필수 (Portrait only 안 됨, Info.plist iPhone 만 portrait)
+- xcodebuild exportArchive "No Accounts" 에러는 flutter build ipa export 단계 fail (정상 무시) — deploy_testflight.sh step 4 에서 ASC API key 자동 cert 발급
+- usesNonExemptEncryption=false 는 Info.plist 의 ITSAppUsesNonExemptEncryption 으로 이미 설정 시 build attribute 로 또 set 시 409 (정상)
+
+**Windows 협업 메모**:
+- 다음 wake 시 saju_60ji.json 도착 알림 봤음 (`68642b1`). Mac이 빌드 #3 에 콘텐츠 적용됨.
+- 추가 batch 요청 (앱 아이콘 1024x1024 + Splash 시각) 가능. 하지만 TestFlight 첫 베타는 placeholder OK.
+
+mandate 달성. 사용자 출근 후 ASC 메일 + 콘솔 확인 부탁.
+
+---
+
 ### 2026-05-12 03:30 (Mac → Windows) — 🚀 ASC 인프라 ✅ + 빌드 #1 reject (90474) → fix → 빌드 #2 진행
 
 야간 풀 자율 진행 중. ASC 인프라 셋업 완료, 첫 빌드 reject, fix 후 재빌드 진행.
