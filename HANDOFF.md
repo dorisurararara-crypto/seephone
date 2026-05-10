@@ -68,6 +68,46 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 20:05 (Mac → Windows) — 🚨 Pillar Seer 본체 파일 전부 누락, 시뮬 테스트 불가능 (재push 요청)
+
+`git pull` + `pillarseer/` 전수 점검 결과 **본체 파일이 commit 4aab3bd 에 전혀 포함되지 않음**. 시뮬 빌드/테스트 진행 불가.
+
+**현재 push 된 파일 (20개, 전부 Flutter generated artifacts)**:
+- `android/gradle/wrapper/`, `gradlew`, `gradlew.bat`, `GeneratedPluginRegistrant.java`
+- `ios/Runner/GeneratedPluginRegistrant.{h,m}`, `ios/Flutter/ephemeral/*`
+- `macos/Flutter/ephemeral/*`, `linux/.plugin_symlinks/*`, `windows/.plugin_symlinks/*`
+- `pillarseer/app/` 중복 폴더에도 동일한 generated 만 존재
+
+**누락된 것 (Mac 측에 0 byte)**:
+- ❌ `pillarseer/pubspec.yaml`
+- ❌ `pillarseer/lib/main.dart`
+- ❌ `pillarseer/lib/screens/{splash,input,result}_screen.dart`
+- ❌ `pillarseer/lib/services/saju_service.dart`
+- ❌ `pillarseer/lib/models/saju_result.dart`
+- ❌ `pillarseer/PRD.md`, `DESIGN.md`, `TECH.md`, `BUSINESS.md`, `README.md`
+- ❌ `pillarseer/mockup/screens-{en,ko}.html`, `web/`, `variants/`, `index.html`, `app/`
+- ❌ `pillarseer/ios/Runner.xcodeproj`, `Runner/Info.plist`, `Runner/AppDelegate.swift`
+- ❌ `pillarseer/android/app/build.gradle`, `AndroidManifest.xml`
+- ❌ `analysis_options.yaml`, `pillarseer/.metadata`
+
+**원인 추정** (가장 가능성 높은 것부터):
+1. Windows 측에서 `git add pillarseer/` 누락 → 본체는 working tree 에만 있고 staged 안 됨 → `git commit -am` 으로 modified 만 잡혀서 generated 만 push
+2. Windows 측에 `pillarseer/.gitignore` 가 본체를 막고 있음 (lib/, *.md, mockup/ 까지 ignore 했을 가능성)
+3. 본체가 다른 폴더에 만들어졌고 (예: `~/devapp/pillarseer/`) Windows가 잘못된 폴더에서 commit
+
+**Windows에 요청 (→ Windows)**:
+1. 본체 파일이 어느 디렉토리에 있는지 확인 (Windows: `dir %USERPROFILE%\seephone\pillarseer\lib` / `Get-ChildItem -Recurse pillarseer\*.dart`)
+2. `git ls-files pillarseer/ | wc -l` 로 staged 개수 확인 (현재 Mac 에서는 20)
+3. `pillarseer/.gitignore` 가 있다면 내용 공유 — 본체 막고 있으면 즉시 수정
+4. `git status pillarseer/` 로 untracked 확인 후 누락분 add
+5. **`git add -f pillarseer/` 강제 add 후 commit + push** (단, `.dart_tool/`, `build/`, `Pods/`, `.symlinks/`, `Generated.xcconfig` 등 진짜 generated 는 제외)
+6. 추천: `git add pillarseer/lib pillarseer/pubspec.yaml pillarseer/*.md pillarseer/mockup pillarseer/analysis_options.yaml pillarseer/ios/Runner.xcodeproj pillarseer/ios/Runner/Info.plist pillarseer/ios/Runner/AppDelegate.swift pillarseer/ios/Runner/Assets.xcassets pillarseer/android/app/build.gradle pillarseer/android/app/src/main/AndroidManifest.xml pillarseer/android/build.gradle pillarseer/android/settings.gradle pillarseer/android/gradle.properties pillarseer/.metadata`
+7. 본체 push 완료되면 HANDOFF "## 최신"에 alert. Mac 은 2분마다 polling.
+
+**Mac 폴링 모드 시작**: 사용자 요청으로 2분 간격 `git pull` + HANDOFF "## 최신" 추적. 본체 도착하면 즉시 step 2~9 (pub get → analyze → 시뮬 빌드 → UI 검증) 자율 진행.
+
+---
+
 ### 2026-05-11 19:30 (Windows → Mac) — 🆕 Pillar Seer 새 앱 시작, iOS 시뮬레이터 테스트 요청
 
 **컨셉**: 글로벌 영어권 대상 한국 사주 앱 (4번째 앱 후보). 디자인 톤 V1 Dark Mysterious (#1A0B2E + #D4AF37). BM = 무료 일생사주 + 월$4.99 구독 + 단건 결제 4종.
