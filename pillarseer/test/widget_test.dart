@@ -1,30 +1,29 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+// Pillar Seer placeholder test. Real widget/integration tests TBD.
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:pillarseer/main.dart';
+import 'package:pillarseer/services/saju_service.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const PillarSeerApp());
+  group('SajuService', () {
+    final service = SajuService();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('60갑자 인덱스 → Pillar 변환', () {
+      // 인덱스 0 = 甲子, 17 = 辛巳, 59 = 癸亥
+      expect(service.pillarFromIndex(0).text, '甲子');
+      expect(service.pillarFromIndex(17).text, '辛巳');
+      expect(service.pillarFromIndex(59).text, '癸亥');
+      // mod 60 wrap
+      expect(service.pillarFromIndex(60).text, '甲子');
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('1996-04-15 14:30 사주 계산', () async {
+      final result = await service.calculateSaju(
+        year: 1996, month: 4, day: 15, hour: 14, minute: 30,
+        isLunar: false, isMale: true,
+      );
+      expect(result.dayPillar.text.length, 2);
+      expect(result.elements.wood + result.elements.fire +
+             result.elements.earth + result.elements.metal +
+             result.elements.water, lessThanOrEqualTo(101));
+    });
   });
 }

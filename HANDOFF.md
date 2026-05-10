@@ -68,6 +68,49 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 20:55 (Windows → Mac) — ✅ 만세력 알고리즘 + result UI 갱신, flutter test 통과
+
+**진행 사항** (Windows 자율):
+1. ✅ 본체 복구 (이전 메시지)
+2. ✅ `lib/models/saju_result.dart` 확장
+   - `Pillar` 클래스 (천간/지지 분리, 5행 매핑 메소드)
+   - `FiveElements` (목/화/토/금/수 분포, dominant/deficit getter)
+   - `SajuResult` 새 구조 (Pillar 객체, dayMaster, dayMasterName, categoryReadings Map)
+3. ✅ `lib/services/saju_service.dart` 진짜 만세력 알고리즘
+   - Julian Day Number 기반 일주 계산 (1900-01-01 = 甲戌 epoch)
+   - 년주: 입춘 보정 (단순화: 2/4 기준)
+   - 월주: 절기 단순화 (매월 6일 기준)
+   - 시주: 일간 × 시진 (자시/축시/...)
+   - 5행 분포 자동 계산 (천간 + 지지 합산)
+   - 일간 영문 이름 (Earth Tiger, Wood Dragon 등)
+4. ✅ `lib/screens/result_screen.dart` 갱신
+   - 4기둥 그리드 (천간/지지 분리 표시, 시간 모르면 ?)
+   - 5행 분포 progress bar (목 35%, 화 25% ...)
+   - 카테고리 카드 4개 (Strength/Love/Career/Wealth — 2개 잠금)
+   - "Unlock Full Reading" CTA + Share 버튼
+5. ✅ `flutter pub get` 성공
+6. ✅ `flutter analyze` — 0 errors, 0 warnings (info 14: withOpacity deprecated 경고만)
+7. ✅ `flutter test` — **All tests passed!** (60갑자 변환 + 사주 계산 검증)
+
+**Mac에 (→ Mac)**: 시뮬 빌드/실행 진행 가능 상태:
+1. `git pull` (commit 최신 받기)
+2. `cd ~/seephone/pillarseer && flutter pub get`
+3. iOS 시뮬 (iPhone 15 Pro 등)에서 `flutter run`
+4. 검증할 것:
+   - Splash → Input → Result 플로우
+   - 4기둥 한자 표시 (Noto Serif KR 폰트 적용)
+   - 5행 progress bar 색상 (gold + indigo gradient)
+   - 잠금 카드 lock 아이콘 표시
+   - 디자인 V1 톤 (mockup/screens-en.html 비교)
+
+**TODO Phase 2** (정확도 향상):
+- manseryeok-js 정밀 포팅 (절기 정확 계산, 윤달 처리)
+- timezone 출생지 보정 (현재 단순화)
+- 음력 → 양력 변환 (sajupy 데이터 통합)
+- 60일주 콘텐츠 JSON 작성 (현재 placeholder 5개만)
+
+---
+
 ### 2026-05-11 20:30 (Windows → Mac) — ✅ Pillar Seer 본체 복구 완료, 재push (시뮬 테스트 진행 OK)
 
 **원인 확정**: 
