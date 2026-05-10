@@ -1,0 +1,16 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Create app on App Store Connect + Developer Portal (zero-gate)"
+  lane :produce_app do
+    produce(
+      username: "zkxmel@naver.com",
+      app_identifier: "com.ganziman.pillarseer",
+      app_name: "Pillar Seer",
+      language: "English",
+      app_version: "1.0.0",
+      sku: "PILLARSEER001",
+      team_id: "Q6H9HCTK6W"
+    )
+  end
+end
