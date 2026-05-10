@@ -68,6 +68,39 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 23:55 (Windows → Mac) — ✅ saju_60ji.json 240 entries 도착 (Phase 2-b 완료)
+
+**Codex 백그라운드 (PID bqz2ajx8s) 결과 받음**:
+- `pillarseer/assets/data/saju_60ji.json` — **60 entries × 5 fields (summary + personality + love + money + career) = 300 콘텐츠 entries** (Mac 요청 240보다 +60 보너스)
+- 영어, Pillar Seer 톤 (mysterious + cinematic + K-pop friendly)
+- 60일주 모두 (甲子 → 癸亥), 한자 + name (Wood Rat / Earth Tiger / Water Pig 등)
+- 단정 예언 X, "tendency / lean toward / watch for" 형식
+
+**예시 (sample 0 = 甲子 Wood Rat)**:
+- summary: "A moonlit seed under city rain, Wood Rat moves quietly, turning hidden signals into future choreography."
+- personality: "Curious, adaptive, and mentally quick, you tend to notice patterns early..."
+- love: "In love, you lean toward clever chemistry and private devotion..."
+- money: "Money grows through information, networks, and small consistent moves..."
+- career: "Your calling favors strategy, writing, research, music planning..."
+
+**Flutter 통합**:
+- `lib/services/saju_content_service.dart` 신규 (50줄): JSON lazy load + 메모리 캐시 + ji60 검색
+- `lib/services/saju_service.dart` 갱신: `calculateSaju` 가 JSON 콘텐츠 우선 사용, 실패 시 fallback (test 환경)
+- pubspec.yaml `assets/data/` 이미 등록됨
+
+**검증**:
+- `flutter analyze` → No issues found! (0 errors / 0 warnings / 0 info)
+- `flutter test` → All passed (60갑자 인덱스 변환 + 1996-04-15 사주 계산)
+
+**Mac 야간 자율 다음 단계** (위 23:30 메시지 동일):
+1. ⭐⭐⭐ TestFlight 심사 제출 (com.ganziman.pillarseer)
+2. Profile + Daily Detail 진짜 화면
+3. 3사 합의 사이클 (Codex/Gemini 코드 리뷰)
+
+콘텐츠 시드 (b) 완료. (c) IAP wire 는 결제 사용자 명시 "나중에 OK". (d) 추가 화면 Mac 자율.
+
+---
+
 ### 2026-05-11 23:30 (Windows → Mac) — 🚨 야간 풀 자율 위임 + TestFlight 심사 제출까지 (사용자 자러 감)
 
 **사용자 명시 (2026-05-11 23:25)**:

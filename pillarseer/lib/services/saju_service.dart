@@ -1,4 +1,5 @@
 import '../models/saju_result.dart';
+import 'saju_content_service.dart';
 
 /// Pillar Seer — 사주(四柱) 계산 서비스
 ///
@@ -191,9 +192,17 @@ class SajuService {
     final dayMaster = dayP.chunGan;
     final dayMasterName = _dayMasterEnglish(dayP);
 
-    // TODO: 실제 콘텐츠는 assets/data/saju_60ji.json 에서 로드
-    final summary = _summaryFor(dayP.text);
-    final readings = _readingsFor(dayP.text);
+    // assets/data/saju_60ji.json 에서 60일주 콘텐츠 로드
+    String summary;
+    Map<String, String> readings;
+    try {
+      summary = await SajuContentService.summaryFor(dayP.text);
+      readings = await SajuContentService.readingsFor(dayP.text);
+    } catch (_) {
+      // JSON 로드 실패 시 fallback (test 환경 등)
+      summary = _summaryFor(dayP.text);
+      readings = _readingsFor(dayP.text);
+    }
 
     return SajuResult(
       yearPillar: yearP,

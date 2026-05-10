@@ -1,0 +1,602 @@
+[
+  {
+    "index": 0,
+    "ji60": "甲子",
+    "name": "Wood Rat",
+    "summary": "A moonlit seed under city rain, Wood Rat moves quietly, turning hidden signals into future choreography.",
+    "personality": "Curious, adaptive, and mentally quick, you tend to notice patterns early and grow power through patience, timing, and subtle influence.",
+    "love": "In love, you lean toward clever chemistry and private devotion, but may test trust before letting anyone backstage.",
+    "money": "Money grows through information, networks, and small consistent moves; watch for overthinking opportunities until the wave has already changed.",
+    "career": "Your calling favors strategy, writing, research, music planning, data, design, or any role translating whispers into visible momentum."
+  },
+  {
+    "index": 1,
+    "ji60": "乙丑",
+    "name": "Wood Ox",
+    "summary": "Soft roots push through frozen earth, Wood Ox carries quiet glamour, slow devotion, and impossible staying power.",
+    "personality": "Gentle but stubborn underneath, you tend to build identity slowly, protecting your softness with discipline, taste, and emotional endurance.",
+    "love": "You may love carefully, choosing reliability over fireworks, yet your heart opens deeply when someone honors your pace.",
+    "money": "Wealth tends to come from patient accumulation, practical taste, and assets that mature slowly; avoid clinging to outdated security.",
+    "career": "You suit craft, wellness, food, finance, styling, operations, or any field where steady hands turn raw material into value."
+  },
+  {
+    "index": 2,
+    "ji60": "丙寅",
+    "name": "Fire Tiger",
+    "summary": "A sunrise tiger on a neon ridge, Fire Tiger enters like a main character before the beat drops.",
+    "personality": "Bold, warm, and restless, you tend to lead through presence, optimism, and dramatic courage, though impatience can burn allies.",
+    "love": "Romance moves fast when inspired; you crave admiration and adventure, but need partners who respect both freedom and sincerity.",
+    "money": "Money may arrive through bold launches, performance, or leadership; watch for spending like every comeback is guaranteed platinum.",
+    "career": "You shine in entertainment, entrepreneurship, teaching, branding, activism, or roles requiring confidence, visibility, and a fearless first move."
+  },
+  {
+    "index": 3,
+    "ji60": "丁卯",
+    "name": "Fire Rabbit",
+    "summary": "Candlelight behind silk curtains, Fire Rabbit glows softly, turning tenderness into a spell nobody sees coming.",
+    "personality": "Sensitive, stylish, and perceptive, you tend to influence through mood, beauty, and emotional intelligence rather than direct force.",
+    "love": "You seek poetic loyalty and gentle attention, yet may disappear emotionally when the room feels too sharp or careless.",
+    "money": "Your money luck favors aesthetics, relationships, curation, and soft power; avoid underpricing your taste because it feels effortless.",
+    "career": "You fit design, beauty, counseling, music, writing, hospitality, or any path where atmosphere becomes strategy and care becomes art."
+  },
+  {
+    "index": 4,
+    "ji60": "戊辰",
+    "name": "Earth Dragon",
+    "summary": "An ancient mountain dragon wakes under studio lights, Earth Dragon holds storms inside a perfectly still frame.",
+    "personality": "Grounded yet mythic, you tend to carry heavy potential, strategic pride, and a private need to become undeniable.",
+    "love": "Relationships may orbit your gravity; you want loyalty and respect, but vulnerability works better than silent emotional architecture.",
+    "money": "Wealth can build through property, systems, leadership, and long horizons; watch for hoarding control when collaboration would multiply returns.",
+    "career": "You suit management, real estate, engineering, politics, production, or roles where vision needs structure, patience, and command."
+  },
+  {
+    "index": 5,
+    "ji60": "己巳",
+    "name": "Earth Snake",
+    "summary": "Velvet earth hiding a flame, Earth Snake studies the room, then changes the ending with one move.",
+    "personality": "Observant, refined, and quietly intense, you tend to process deeply, protect your privacy, and reveal brilliance on your terms.",
+    "love": "You love with selective heat, craving loyalty and mental intimacy, but may test motives before showing your softer center.",
+    "money": "Money favors research, taste, negotiation, and hidden assets; avoid suspicion so strong that it blocks useful partnerships.",
+    "career": "You thrive in analysis, medicine, beauty, finance, psychology, strategy, or any career requiring precision beneath calm surfaces."
+  },
+  {
+    "index": 6,
+    "ji60": "庚午",
+    "name": "Metal Horse",
+    "summary": "A silver horse cuts through summer fire, Metal Horse turns pressure into speed, spectacle, and clean defiance.",
+    "personality": "Direct, charismatic, and competitive, you tend to move with strong opinions, fast instincts, and a need for honest impact.",
+    "love": "Love can feel electric and high-speed; you need passion, respect, and enough space to keep desire alive.",
+    "money": "Wealth may rise through decisive action, sales, sports, tech, or performance; watch impulse buys tied to pride or adrenaline.",
+    "career": "You suit leadership, engineering, media, athletics, law, or any role where courage, clarity, and momentum matter."
+  },
+  {
+    "index": 7,
+    "ji60": "辛未",
+    "name": "Metal Goat",
+    "summary": "A diamond hidden in warm dusk, Metal Goat polishes pain into elegance, taste, and quiet influence.",
+    "personality": "Graceful, exacting, and emotionally layered, you tend to refine everything around you while secretly craving safety and sincere appreciation.",
+    "love": "You prefer thoughtful romance with emotional texture, but may become sharp or distant when your standards feel ignored.",
+    "money": "Money tends to grow through quality, design, service, and careful selection; avoid perfectionism that delays profitable timing.",
+    "career": "You fit luxury, art, consulting, editing, therapy, interiors, or roles where refinement and empathy create lasting value."
+  },
+  {
+    "index": 8,
+    "ji60": "壬申",
+    "name": "Water Monkey",
+    "summary": "A black tide under chrome lights, Water Monkey thinks three scenes ahead and smiles like nothing happened.",
+    "personality": "Inventive, witty, and unpredictable, you tend to survive through intelligence, flexibility, and the ability to read hidden systems.",
+    "love": "You need mental sparkle and freedom in love, yet may dodge vulnerability with humor, mystery, or perfectly timed exits.",
+    "money": "Wealth favors trading, tech, media, consulting, and global networks; watch clever risks that become complicated too quickly.",
+    "career": "You thrive in innovation, strategy, entertainment, coding, marketing, or investigative work where speed and pattern recognition win."
+  },
+  {
+    "index": 9,
+    "ji60": "癸酉",
+    "name": "Water Rooster",
+    "summary": "Midnight rain on a mirror stage, Water Rooster turns precision, sadness, and sparkle into a signature.",
+    "personality": "Elegant, observant, and mentally sharp, you tend to notice flaws instantly while carrying a private ocean of feeling.",
+    "love": "In relationships, you seek polish and honesty, but may retreat when criticism replaces tenderness or emotional rhythm feels off.",
+    "money": "Money luck supports detail work, aesthetics, data, finance, and communication; avoid anxiety that turns every choice into a flaw.",
+    "career": "You suit editing, fashion, analytics, law, music, beauty, or roles requiring taste, accuracy, and controlled emotional power."
+  },
+  {
+    "index": 10,
+    "ji60": "甲戌",
+    "name": "Wood Dog",
+    "summary": "A lone tree beside a guarded gate, Wood Dog carries loyalty, old fire, and rebel tenderness.",
+    "personality": "Principled, protective, and quietly idealistic, you tend to grow through responsibility while questioning systems that feel spiritually false.",
+    "love": "You love with loyalty and watchfulness, needing trust before softness, and partners who understand your private moral weather.",
+    "money": "Wealth builds through service, leadership, land, education, or steady missions; avoid sacrificing prosperity to prove your integrity.",
+    "career": "You suit advocacy, teaching, management, architecture, social impact, or roles where ethics and structure must work together."
+  },
+  {
+    "index": 11,
+    "ji60": "乙亥",
+    "name": "Wood Pig",
+    "summary": "A willow floating over deep water, Wood Pig dreams softly, then grows a whole world underneath.",
+    "personality": "Imaginative, kind, and intuitive, you tend to absorb atmospheres easily and create meaning from feelings others overlook.",
+    "love": "You lean toward romantic depth and emotional refuge, but need boundaries so empathy does not become silent self-erasure.",
+    "money": "Money may flow through creativity, healing, education, travel, or community; watch generosity that forgets your own future.",
+    "career": "You fit writing, music, therapy, nonprofits, spirituality, research, or work that turns compassion into useful form."
+  },
+  {
+    "index": 12,
+    "ji60": "丙子",
+    "name": "Fire Rat",
+    "summary": "A spotlight reflected in midnight water, Fire Rat mixes charisma with secrets and impossible emotional timing.",
+    "personality": "Bright, clever, and internally restless, you tend to project confidence while privately tracking every subtle shift around you.",
+    "love": "Love can swing between heat and distance; you need playful chemistry plus reassurance that your brightness is truly seen.",
+    "money": "Wealth favors media, trading, communication, and fast ideas; avoid chasing attention when the numbers need colder discipline.",
+    "career": "You shine in entertainment, sales, journalism, social platforms, education, or roles where visibility meets quick strategic thinking."
+  },
+  {
+    "index": 13,
+    "ji60": "丁丑",
+    "name": "Fire Ox",
+    "summary": "A candle buried in winter soil, Fire Ox keeps glowing until the world finally notices the heat.",
+    "personality": "Quietly determined, loyal, and emotionally contained, you tend to build strength slowly and reveal passion only when trust is real.",
+    "love": "You may seem reserved, but love becomes steady and protective once someone respects your timing, effort, and hidden sensitivity.",
+    "money": "Money tends to improve through discipline, savings, craft, and practical planning; watch fear of risk becoming fear of growth.",
+    "career": "You suit operations, finance, food, education, design, engineering, or any work where consistency turns into quiet authority."
+  },
+  {
+    "index": 14,
+    "ji60": "戊寅",
+    "name": "Earth Tiger",
+    "summary": "A mountain tiger under thunder clouds, Earth Tiger brings big presence, deep roots, and cinematic ambition.",
+    "personality": "Protective, forceful, and future-minded, you tend to combine bravery with responsibility, though pride can make compromise difficult.",
+    "love": "In love, you may lead strongly and give generously, but need to soften control so intimacy can breathe.",
+    "money": "Wealth favors leadership, property, entrepreneurship, and bold long-term bets; watch expensive pride or rescuing everyone around you.",
+    "career": "You fit executive roles, construction, coaching, public service, startups, or missions that require courage and solid infrastructure."
+  },
+  {
+    "index": 15,
+    "ji60": "己卯",
+    "name": "Earth Rabbit",
+    "summary": "Garden soil beneath moonlit blossoms, Earth Rabbit turns gentleness into strategy and softness into survival.",
+    "personality": "Diplomatic, practical, and emotionally intelligent, you tend to create calm spaces while quietly steering outcomes with patience.",
+    "love": "You seek safe, graceful connection, but may avoid conflict too long when your heart already knows the truth.",
+    "money": "Money grows through service, design, wellness, education, and stable routines; avoid pleasing others at the cost of value.",
+    "career": "You suit HR, counseling, hospitality, agriculture, art direction, or roles where comfort, detail, and trust matter."
+  },
+  {
+    "index": 16,
+    "ji60": "庚辰",
+    "name": "Metal Dragon",
+    "summary": "Steel flashes inside a storm cloud, Metal Dragon carries destiny like armor and speaks in thunder.",
+    "personality": "Strong-willed, strategic, and intense, you tend to pursue mastery, respect, and transformation through pressure rather than comfort.",
+    "love": "Love may feel like a power exchange; you need honesty, depth, and partners unafraid of your force.",
+    "money": "Wealth favors engineering, finance, law, operations, and restructuring; watch control battles that slow profitable alliances.",
+    "career": "You suit crisis management, technology, military, law, medicine, or any field needing precision under heavy pressure."
+  },
+  {
+    "index": 17,
+    "ji60": "辛巳",
+    "name": "Metal Snake",
+    "summary": "A jeweled blade warmed by stage lights, Metal Snake moves with danger, elegance, and unreadable intent.",
+    "personality": "Magnetic, analytical, and selective, you tend to refine your image carefully while keeping deeper motives elegantly hidden.",
+    "love": "You crave loyalty with intrigue, but may become too guarded when desire asks for more vulnerability than control.",
+    "money": "Money comes through taste, strategy, luxury, research, or finance; watch obsession with perfect timing costing real opportunity.",
+    "career": "You thrive in beauty, surgery, investment, design, investigation, performance, or work requiring polish and psychological precision."
+  },
+  {
+    "index": 18,
+    "ji60": "壬午",
+    "name": "Water Horse",
+    "summary": "Ocean waves racing through a summer stadium, Water Horse feels everything, then turns feeling into motion.",
+    "personality": "Expressive, independent, and emotionally dynamic, you tend to move between intensity and freedom, rarely staying still inside.",
+    "love": "Romance needs passion and space; you may chase heat, then need distance to understand your own heart.",
+    "money": "Wealth favors travel, media, sales, performance, and flexible income; watch mood-based spending when emotions run hot.",
+    "career": "You suit entertainment, tourism, entrepreneurship, teaching, marketing, or roles where movement and emotional charisma are assets."
+  },
+  {
+    "index": 19,
+    "ji60": "癸未",
+    "name": "Water Goat",
+    "summary": "Mist over a quiet meadow, Water Goat turns longing into beauty and silence into emotional choreography.",
+    "personality": "Tender, imaginative, and quietly complex, you tend to sense unspoken feelings and protect yourself with graceful distance.",
+    "love": "You seek soulful comfort and gentle consistency, but may romanticize what needs a clearer conversation and firmer boundary.",
+    "money": "Money grows through art, care, education, food, and community; watch emotional spending disguised as healing or support.",
+    "career": "You fit therapy, music, design, hospitality, writing, wellness, or work that turns sensitivity into shared shelter."
+  },
+  {
+    "index": 20,
+    "ji60": "甲申",
+    "name": "Wood Monkey",
+    "summary": "A young tree climbing through metal scaffolds, Wood Monkey hacks the system with charm and nerve.",
+    "personality": "Inventive, ambitious, and mentally agile, you tend to grow by adapting quickly, learning fast, and challenging rigid structures.",
+    "love": "You need playful intelligence in love, but may overanalyze feelings or treat intimacy like a puzzle to solve.",
+    "money": "Wealth favors startups, tech, trade, consulting, and skill stacking; avoid scattering energy across too many shiny options.",
+    "career": "You suit product, engineering, entertainment, education, strategy, or roles where curiosity turns constraints into breakthroughs."
+  },
+  {
+    "index": 21,
+    "ji60": "乙酉",
+    "name": "Wood Rooster",
+    "summary": "A delicate vine wraps around a silver mic, Wood Rooster turns vulnerability into sharp, unforgettable style.",
+    "personality": "Polished, observant, and quietly resilient, you tend to balance sensitivity with exacting standards and a refined social radar.",
+    "love": "In love, you want elegance and emotional proof, but criticism can become armor when you feel unseen.",
+    "money": "Money favors beauty, editing, branding, negotiation, and specialist skills; watch comparing yourself into unnecessary scarcity.",
+    "career": "You fit fashion, communications, design, law, music, or roles where taste and precision create influence."
+  },
+  {
+    "index": 22,
+    "ji60": "丙戌",
+    "name": "Fire Dog",
+    "summary": "A firelit guardian on an old rooftop, Fire Dog burns for loyalty, truth, and dramatic redemption.",
+    "personality": "Warm, principled, and intense, you tend to protect your people fiercely while wrestling with private doubts and expectations.",
+    "love": "You love sincerely and dramatically, but need partners who can handle honesty without turning every spark into conflict.",
+    "money": "Wealth builds through leadership, service, media, property, or mission-driven work; avoid funding everyone else's emergency arc.",
+    "career": "You suit public service, entertainment, education, law, coaching, or careers where conviction and presence inspire action."
+  },
+  {
+    "index": 23,
+    "ji60": "丁亥",
+    "name": "Fire Pig",
+    "summary": "A lantern floating across black water, Fire Pig carries soft magic, secret courage, and cinematic longing.",
+    "personality": "Dreamy, compassionate, and quietly brave, you tend to feel deeply while hiding your strongest flame beneath gentleness.",
+    "love": "You seek emotional depth and almost fated connection, but need clarity so fantasy does not replace mutual effort.",
+    "money": "Money may flow through creativity, healing, travel, education, or spiritual work; watch avoidance when practical details need heat.",
+    "career": "You fit film, music, therapy, writing, teaching, or roles where imagination and empathy become guiding lights."
+  },
+  {
+    "index": 24,
+    "ji60": "戊子",
+    "name": "Earth Rat",
+    "summary": "A fortress built beside dark water, Earth Rat keeps secrets, stores power, and waits for timing.",
+    "personality": "Practical, guarded, and strategically sensitive, you tend to read risks early and protect your resources with quiet discipline.",
+    "love": "You may love cautiously, needing proof of loyalty before sharing fears, dreams, and the softer rooms inside.",
+    "money": "Wealth favors saving, finance, logistics, data, and assets; watch scarcity thinking that blocks generous growth opportunities.",
+    "career": "You suit accounting, operations, security, research, real estate, or roles where caution and timing create advantage."
+  },
+  {
+    "index": 25,
+    "ji60": "己丑",
+    "name": "Earth Ox",
+    "summary": "Winter soil holding a buried crown, Earth Ox builds slowly, quietly, and with impossible gravity.",
+    "personality": "Patient, practical, and deeply enduring, you tend to carry responsibility naturally while hiding how much pressure you absorb.",
+    "love": "Love is steady, loyal, and sometimes slow to begin; you need respect for your pace and effort.",
+    "money": "Money grows through savings, land, craft, management, and consistency; avoid becoming so safe that life stops expanding.",
+    "career": "You suit finance, farming, operations, engineering, administration, or any field where reliability becomes real authority."
+  },
+  {
+    "index": 26,
+    "ji60": "庚寅",
+    "name": "Metal Tiger",
+    "summary": "A sword-bearing tiger in first light, Metal Tiger brings rebellion, precision, and a fearless opening shot.",
+    "personality": "Brave, direct, and principled, you tend to challenge limits with sharp judgment, strong instincts, and visible confidence.",
+    "love": "You want passion with respect, but may push too hard when vulnerability feels like losing strategic ground.",
+    "money": "Wealth favors entrepreneurship, law, sports, engineering, and decisive leadership; watch risks taken mainly to prove strength.",
+    "career": "You suit leadership, defense, technology, activism, surgery, or roles where courage and precision must act together."
+  },
+  {
+    "index": 27,
+    "ji60": "辛卯",
+    "name": "Metal Rabbit",
+    "summary": "A silver needle under spring petals, Metal Rabbit blends elegance, edge, and a dangerously quiet intuition.",
+    "personality": "Refined, sensitive, and exacting, you tend to protect tenderness with taste, manners, and a sharp internal filter.",
+    "love": "You prefer graceful affection and emotional intelligence, but may withdraw when someone's roughness scratches your hidden softness.",
+    "money": "Money favors beauty, medicine, editing, design, and careful partnerships; avoid rejecting imperfect chances too quickly.",
+    "career": "You fit aesthetics, healthcare, diplomacy, writing, law, or roles where gentle presentation hides technical precision."
+  },
+  {
+    "index": 28,
+    "ji60": "壬辰",
+    "name": "Water Dragon",
+    "summary": "A black river coils around a dragon palace, Water Dragon dreams bigger than the visible skyline.",
+    "personality": "Visionary, emotional, and strategic, you tend to carry large inner tides with a gift for sensing future shifts.",
+    "love": "Love can feel mythic and consuming; you need partners who respect both your depth and your independence.",
+    "money": "Wealth favors global business, research, real estate, technology, and long cycles; watch grand plans lacking daily structure.",
+    "career": "You suit innovation, film, finance, oceanic fields, psychology, or roles where imagination meets command."
+  },
+  {
+    "index": 29,
+    "ji60": "癸巳",
+    "name": "Water Snake",
+    "summary": "Cold rain on a hidden flame, Water Snake moves like a plot twist wearing perfect eyeliner.",
+    "personality": "Intuitive, private, and mentally precise, you tend to understand motives quickly while revealing only what serves the moment.",
+    "love": "You love with depth and mystery, but may overread signals when a direct question would save your heart.",
+    "money": "Money favors research, beauty, strategy, therapy, finance, and discreet influence; watch secretive risks or emotional suspicion.",
+    "career": "You thrive in investigation, psychology, investment, art direction, medicine, or roles requiring insight beneath polished surfaces."
+  },
+  {
+    "index": 30,
+    "ji60": "甲午",
+    "name": "Wood Horse",
+    "summary": "A green flame gallops across the summer stage, Wood Horse turns freedom into a bright signature.",
+    "personality": "Idealistic, energetic, and expressive, you tend to grow through movement, inspiration, and a need to stay self-directed.",
+    "love": "Romance needs excitement and sincerity; you may resist routines that make affection feel like a schedule.",
+    "money": "Wealth favors teaching, entertainment, travel, startups, and creative sales; watch burning through resources for temporary momentum.",
+    "career": "You suit performance, education, entrepreneurship, marketing, sports, or roles where growth needs speed and warmth."
+  },
+  {
+    "index": 31,
+    "ji60": "乙未",
+    "name": "Wood Goat",
+    "summary": "Wildflowers grow through golden dust, Wood Goat turns gentleness, memory, and taste into quiet enchantment.",
+    "personality": "Artistic, empathetic, and persistent, you tend to grow around obstacles instead of attacking them directly, which becomes power.",
+    "love": "You seek emotional safety and subtle romance, but may stay too long where your softness is merely convenient.",
+    "money": "Money grows through design, food, care, education, and community; watch vague pricing or emotional discounts.",
+    "career": "You fit art, counseling, hospitality, fashion, teaching, or roles where patience and beauty create trust."
+  },
+  {
+    "index": 32,
+    "ji60": "丙申",
+    "name": "Fire Monkey",
+    "summary": "A camera flash in a chrome maze, Fire Monkey turns chaos into performance and timing into fame.",
+    "personality": "Bright, witty, and restless, you tend to improvise brilliantly, learn fast, and crave stimulation that keeps your spirit awake.",
+    "love": "Love needs humor, sparkle, and freedom; you may flirt with possibilities before admitting what truly has your attention.",
+    "money": "Wealth favors media, tech, trading, entertainment, and fast pivots; watch gambling energy when confidence outruns evidence.",
+    "career": "You suit content, product, sales, comedy, engineering, or roles where invention meets stage-ready confidence."
+  },
+  {
+    "index": 33,
+    "ji60": "丁酉",
+    "name": "Fire Rooster",
+    "summary": "A red spotlight hits a crystal mirror, Fire Rooster makes precision feel glamorous and fate feel edited.",
+    "personality": "Stylish, focused, and perceptive, you tend to polish your image carefully while carrying a sharp emotional intelligence.",
+    "love": "You want attention with substance, but may become critical when affection lacks effort, style, or emotional timing.",
+    "money": "Money favors beauty, media, performance, analysis, and premium service; watch spending to maintain a flawless appearance.",
+    "career": "You thrive in fashion, broadcasting, editing, design, law, or roles where shine depends on discipline."
+  },
+  {
+    "index": 34,
+    "ji60": "戊戌",
+    "name": "Earth Dog",
+    "summary": "A stone guardian under an eclipse, Earth Dog carries ancient vows, heavy loyalty, and buried thunder.",
+    "personality": "Steady, protective, and morally serious, you tend to hold the line even when your own heart gets tired.",
+    "love": "You love through loyalty and acts of service, but may hide pain until distance becomes easier than repair.",
+    "money": "Wealth builds through property, management, engineering, public service, and long commitments; avoid fear-based rigidity around resources.",
+    "career": "You suit administration, law, construction, security, teaching, or roles that require trust, endurance, and judgment."
+  },
+  {
+    "index": 35,
+    "ji60": "己亥",
+    "name": "Earth Pig",
+    "summary": "A quiet island in black water, Earth Pig holds dreams carefully until they become real ground.",
+    "personality": "Kind, receptive, and practical, you tend to balance deep feeling with a need for comfort, rhythm, and tangible proof.",
+    "love": "You seek tenderness and stability, but may absorb too much emotionally before naming what you actually need.",
+    "money": "Money flows through care work, food, property, education, or wellness; watch comfort spending when life feels uncertain.",
+    "career": "You fit counseling, hospitality, agriculture, finance, writing, or roles where empathy needs steady structure."
+  },
+  {
+    "index": 36,
+    "ji60": "庚子",
+    "name": "Metal Rat",
+    "summary": "A steel key drops into midnight water, Metal Rat unlocks secrets with nerve and surgical timing.",
+    "personality": "Sharp, strategic, and self-contained, you tend to move efficiently, protect your thoughts, and act before others notice.",
+    "love": "You need mental trust and emotional honesty, but may guard your vulnerability behind cool logic and perfect timing.",
+    "money": "Wealth favors finance, analytics, tech, trading, and negotiation; watch clever shortcuts that create hidden pressure.",
+    "career": "You suit data, law, cybersecurity, engineering, research, or roles where precision and nerve create leverage."
+  },
+  {
+    "index": 37,
+    "ji60": "辛丑",
+    "name": "Metal Ox",
+    "summary": "A diamond sleeping in winter earth, Metal Ox turns restraint into beauty and pressure into permanence.",
+    "personality": "Disciplined, refined, and quietly tough, you tend to value quality, loyalty, and results that can survive time.",
+    "love": "You may love slowly and selectively, needing proof through consistency rather than dramatic promises or soft talk.",
+    "money": "Money grows through savings, craft, luxury, finance, and long-term assets; avoid being too cautious to expand.",
+    "career": "You fit banking, design, engineering, medicine, operations, or roles where patience and precision become status."
+  },
+  {
+    "index": 38,
+    "ji60": "壬寅",
+    "name": "Water Tiger",
+    "summary": "A dark river runs through tiger country, Water Tiger carries wild instinct with cinematic emotional depth.",
+    "personality": "Bold, intuitive, and changeable, you tend to chase meaningful horizons while sensing currents others cannot explain.",
+    "love": "Love needs freedom, intensity, and emotional truth; you may leave when connection starts feeling like a cage.",
+    "money": "Wealth favors travel, media, leadership, consulting, and global ventures; watch big moods steering big financial choices.",
+    "career": "You suit entrepreneurship, film, education, activism, strategy, or roles where courage meets imagination."
+  },
+  {
+    "index": 39,
+    "ji60": "癸卯",
+    "name": "Water Rabbit",
+    "summary": "Moon rain on spring petals, Water Rabbit moves softly, seeing the secret bruise beneath every smile.",
+    "personality": "Gentle, intuitive, and socially perceptive, you tend to protect peace while carrying strong feelings beneath a delicate surface.",
+    "love": "You seek emotional safety and poetic tenderness, but may avoid hard truths to preserve a beautiful mood.",
+    "money": "Money favors art, care, writing, counseling, and refined service; watch indecision when clear value needs a price.",
+    "career": "You fit therapy, design, diplomacy, music, education, or roles where sensitivity becomes a professional instrument."
+  },
+  {
+    "index": 40,
+    "ji60": "甲辰",
+    "name": "Wood Dragon",
+    "summary": "A young forest rises from dragon bones, Wood Dragon dreams in scale and builds toward legend.",
+    "personality": "Visionary, proud, and growth-driven, you tend to carry big ideals and a strong need to make impact visible.",
+    "love": "In love, you want admiration and loyalty, but need to let partners be humans, not supporting mythology.",
+    "money": "Wealth favors entrepreneurship, property, leadership, education, and long-term development; watch overexpansion before roots are stable.",
+    "career": "You suit founding, architecture, management, politics, creative direction, or roles where vision needs organized growth."
+  },
+  {
+    "index": 41,
+    "ji60": "乙巳",
+    "name": "Wood Snake",
+    "summary": "A vine curls around a hidden flame, Wood Snake grows through charm, strategy, and quiet desire.",
+    "personality": "Subtle, persuasive, and imaginative, you tend to influence gently while studying timing, motives, and unspoken emotional weather.",
+    "love": "You love with intrigue and tenderness, but may keep escape routes open until trust feels beautifully proven.",
+    "money": "Money favors art, beauty, strategy, education, and relationship-based business; watch hesitation when bold visibility is needed.",
+    "career": "You fit branding, therapy, research, design, writing, or roles where soft presence carries deep calculation."
+  },
+  {
+    "index": 42,
+    "ji60": "丙午",
+    "name": "Fire Horse",
+    "summary": "Two suns race across a stadium sky, Fire Horse burns bright, loud, and impossible to ignore.",
+    "personality": "Passionate, expressive, and fiercely independent, you tend to lead with energy, confidence, and a need for open skies.",
+    "love": "Romance is intense and immediate; you need excitement, honesty, and partners who do not dim your flame.",
+    "money": "Wealth may rise through visibility, entrepreneurship, sales, performance, or sports; watch spending as emotional fireworks.",
+    "career": "You shine in entertainment, leadership, public speaking, travel, fitness, or any role that rewards charisma and speed."
+  },
+  {
+    "index": 43,
+    "ji60": "丁未",
+    "name": "Fire Goat",
+    "summary": "A small flame glows in a golden field, Fire Goat makes softness look strangely unstoppable.",
+    "personality": "Warm, artistic, and quietly determined, you tend to carry emotional memory and turn pain into beauty or guidance.",
+    "love": "You seek devotion with tenderness, but may become silently dramatic when your needs are guessed wrong or ignored.",
+    "money": "Money favors aesthetics, food, care, teaching, and creative service; watch emotional generosity that drains your reserves.",
+    "career": "You fit art, hospitality, counseling, education, fashion, or roles where warmth and taste become leadership."
+  },
+  {
+    "index": 44,
+    "ji60": "戊申",
+    "name": "Earth Monkey",
+    "summary": "A mountain machine hums at dusk, Earth Monkey turns practical intelligence into quiet, unbeatable leverage.",
+    "personality": "Resourceful, grounded, and mentally quick, you tend to solve problems through systems, timing, and calm tactical adjustments.",
+    "love": "You need smart, useful love with humor and loyalty, but may overmanage feelings instead of simply feeling them.",
+    "money": "Wealth favors operations, tech, logistics, finance, and diversified skills; watch clever complexity hiding basic priorities.",
+    "career": "You suit project management, engineering, consulting, supply chains, analytics, or roles where practical strategy wins."
+  },
+  {
+    "index": 45,
+    "ji60": "己酉",
+    "name": "Earth Rooster",
+    "summary": "Golden soil beneath a mirror stage, Earth Rooster perfects the details until reality starts obeying.",
+    "personality": "Organized, tasteful, and observant, you tend to create value through refinement, reliability, and a strong eye for flaws.",
+    "love": "You seek loyalty and clean communication, but may sound critical when you are really asking to feel secure.",
+    "money": "Money grows through service, beauty, accounting, quality control, and steady routines; avoid perfectionism that blocks delivery.",
+    "career": "You fit administration, finance, design, healthcare, editing, or roles where standards and consistency matter."
+  },
+  {
+    "index": 46,
+    "ji60": "庚戌",
+    "name": "Metal Dog",
+    "summary": "A steel guardian under red dust, Metal Dog protects the line with loyalty and quiet fire.",
+    "personality": "Honorable, tough, and protective, you tend to carry strong convictions and dislike anything that smells false or weak.",
+    "love": "You love with fierce loyalty, but may test commitment through distance, sarcasm, or impossible standards.",
+    "money": "Wealth favors law, security, engineering, management, and durable assets; watch all-or-nothing decisions under emotional pressure.",
+    "career": "You suit defense, justice, construction, operations, medicine, or roles where courage and responsibility meet."
+  },
+  {
+    "index": 47,
+    "ji60": "辛亥",
+    "name": "Metal Pig",
+    "summary": "A pearl sinks through dark water, Metal Pig hides refinement inside dreams, grief, and rare compassion.",
+    "personality": "Sensitive, elegant, and inwardly strong, you tend to absorb deep feelings while maintaining a composed outer polish.",
+    "love": "You want soulful tenderness and trust, but may retreat into fantasy when reality asks for direct negotiation.",
+    "money": "Money favors luxury, healing, research, writing, finance, and global connections; watch quiet avoidance of practical limits.",
+    "career": "You fit arts, therapy, medicine, investments, spirituality, or roles where depth and refinement work together."
+  },
+  {
+    "index": 48,
+    "ji60": "壬子",
+    "name": "Water Rat",
+    "summary": "Midnight water doubles itself, Water Rat moves through secret doors with instinct, memory, and velvet speed.",
+    "personality": "Deep, clever, and emotionally fluid, you tend to sense hidden currents and survive through adaptation and timing.",
+    "love": "Love needs psychological safety and mental connection, but you may disappear when feelings become too exposed.",
+    "money": "Wealth favors information, finance, research, trade, and networks; watch secrecy that prevents helpful support or accountability.",
+    "career": "You suit analytics, psychology, music, shipping, tech, or any field where invisible patterns become power."
+  },
+  {
+    "index": 49,
+    "ji60": "癸丑",
+    "name": "Water Ox",
+    "summary": "Cold rain seeps into ancient soil, Water Ox carries patience, memory, and a slow emotional spell.",
+    "personality": "Quiet, enduring, and deeply reflective, you tend to process life slowly while holding more feeling than you reveal.",
+    "love": "You love through dependability and quiet care, but may need time before naming fear, desire, or disappointment.",
+    "money": "Money grows through savings, property, research, care, and disciplined routines; watch emotional stagnation around old security patterns.",
+    "career": "You fit finance, healthcare, archives, agriculture, logistics, or roles where patience and memory become expertise."
+  },
+  {
+    "index": 50,
+    "ji60": "甲寅",
+    "name": "Wood Tiger",
+    "summary": "A green tiger breaks through dawn forest, Wood Tiger arrives with raw growth and main-stage courage.",
+    "personality": "Idealistic, brave, and expansive, you tend to begin cycles boldly and inspire others through visible conviction.",
+    "love": "You love with generous fire and protective instinct, but need partners who respect your independence and big direction.",
+    "money": "Wealth favors leadership, education, entrepreneurship, activism, and growth ventures; watch rushing before the structure can hold.",
+    "career": "You suit founding, teaching, coaching, politics, creative leadership, or roles where courage opens the road."
+  },
+  {
+    "index": 51,
+    "ji60": "乙卯",
+    "name": "Wood Rabbit",
+    "summary": "Spring vines under moonlight, Wood Rabbit survives by bending beautifully and blooming where nobody expected.",
+    "personality": "Gentle, creative, and socially graceful, you tend to grow through relationships, atmosphere, and quiet emotional intelligence.",
+    "love": "You seek sweet devotion and mutual care, but may avoid conflict until distance says what words would not.",
+    "money": "Money favors art, design, education, wellness, and collaboration; watch softness becoming undercharging or unclear boundaries.",
+    "career": "You fit design, diplomacy, counseling, music, teaching, or roles where grace and growth shape outcomes."
+  },
+  {
+    "index": 52,
+    "ji60": "丙辰",
+    "name": "Fire Dragon",
+    "summary": "A sunrise explodes over dragon stone, Fire Dragon turns ambition into spectacle and belief into weather.",
+    "personality": "Radiant, proud, and visionary, you tend to carry big presence with a need to transform ordinary scenes.",
+    "love": "Love can feel grand and cinematic; you need admiration, honesty, and partners who ground the drama.",
+    "money": "Wealth favors leadership, media, property, ventures, and bold branding; watch overpromising when the spotlight feels delicious.",
+    "career": "You suit entertainment, entrepreneurship, politics, architecture, directing, or roles where scale and charisma matter."
+  },
+  {
+    "index": 53,
+    "ji60": "丁巳",
+    "name": "Fire Snake",
+    "summary": "A secret flame coils behind velvet curtains, Fire Snake makes desire look controlled until it is not.",
+    "personality": "Magnetic, perceptive, and emotionally intense, you tend to read the room quickly and move with calculated warmth.",
+    "love": "You seek passion with loyalty and mystery, but jealousy or suspicion may rise when trust feels unfinished.",
+    "money": "Money favors luxury, finance, beauty, strategy, research, and performance; watch obsession with control blocking easier flow.",
+    "career": "You thrive in psychology, design, investment, entertainment, medicine, or roles requiring charm and precise timing."
+  },
+  {
+    "index": 54,
+    "ji60": "戊午",
+    "name": "Earth Horse",
+    "summary": "A desert mountain blazes at noon, Earth Horse carries heat, command, and unstoppable forward motion.",
+    "personality": "Confident, loyal, and action-oriented, you tend to turn conviction into movement while resisting anything that feels restrictive.",
+    "love": "You love boldly and protectively, but may need to listen before turning every emotion into a decision.",
+    "money": "Wealth favors leadership, property, sales, transport, and entrepreneurship; watch pride spending or impatient exits from stable gains.",
+    "career": "You suit management, real estate, fitness, logistics, public roles, or work needing stamina and visible confidence."
+  },
+  {
+    "index": 55,
+    "ji60": "己未",
+    "name": "Earth Goat",
+    "summary": "A golden field remembers every footprint, Earth Goat turns care, patience, and taste into legacy.",
+    "personality": "Nurturing, artistic, and quietly stubborn, you tend to protect comfort, family, and values with steady devotion.",
+    "love": "You seek warmth and loyalty, but may carry unspoken resentment when you give more than you receive.",
+    "money": "Money grows through property, food, care, craft, and long-term planning; watch emotional attachment to low-value situations.",
+    "career": "You fit hospitality, design, education, finance, wellness, or roles where stability and care become structure."
+  },
+  {
+    "index": 56,
+    "ji60": "庚申",
+    "name": "Metal Monkey",
+    "summary": "Twin blades flash in a chrome city, Metal Monkey wins through speed, wit, and fearless reinvention.",
+    "personality": "Brilliant, competitive, and tactical, you tend to master systems quickly and dislike being underestimated or slowed down.",
+    "love": "Love needs intelligence and excitement, but emotional honesty matters when cleverness starts replacing actual tenderness.",
+    "money": "Wealth favors tech, finance, trading, consulting, engineering, and sharp negotiation; watch risky moves made from boredom.",
+    "career": "You suit startups, law, coding, surgery, strategy, or roles where fast precision creates advantage."
+  },
+  {
+    "index": 57,
+    "ji60": "辛酉",
+    "name": "Metal Rooster",
+    "summary": "A mirror blade under white lights, Metal Rooster turns discipline into glamour and critique into power.",
+    "personality": "Precise, elegant, and self-possessed, you tend to demand excellence from yourself and quietly notice everything around you.",
+    "love": "You want polished loyalty and clear effort, but may need to soften standards so love can stay human.",
+    "money": "Money favors luxury, beauty, finance, law, editing, and specialist mastery; watch perfectionism delaying profitable exposure.",
+    "career": "You thrive in fashion, medicine, analytics, design, law, or roles where excellence is visibly measured."
+  },
+  {
+    "index": 58,
+    "ji60": "壬戌",
+    "name": "Water Dog",
+    "summary": "Dark water surrounds an old fortress, Water Dog guards dreams with loyalty and storm-born intuition.",
+    "personality": "Protective, intuitive, and emotionally complex, you tend to sense danger early while carrying quiet faith in people.",
+    "love": "You love deeply and loyally, but may test safety through silence when your fear needs direct language.",
+    "money": "Wealth favors research, security, counseling, property, and mission-driven systems; watch emotional pessimism blocking smart opportunities.",
+    "career": "You suit psychology, law, crisis work, education, security, or roles where compassion needs strong boundaries."
+  },
+  {
+    "index": 59,
+    "ji60": "癸亥",
+    "name": "Water Pig",
+    "summary": "A midnight ocean dreams of another ocean, Water Pig carries softness, psychic depth, and endless endings.",
+    "personality": "Imaginative, empathetic, and inwardly vast, you tend to feel life in waves and understand what remains unspoken.",
+    "love": "You seek soulful union and emotional refuge, but need boundaries so devotion does not become disappearance.",
+    "money": "Money may flow through creativity, healing, travel, spirituality, and networks; watch escapism when practical action is needed.",
+    "career": "You fit music, film, therapy, writing, research, or work that gives shape to the invisible."
+  }
+]
