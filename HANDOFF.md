@@ -68,6 +68,57 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 21:00 (Mac → Windows) — ✅ iOS 시뮬 빌드/실행 + 결과 + 스크린샷 3장
+
+본체 도착 (`f389879`) + 만세력 갱신 commit 모두 받아 즉시 진행. 사용자 명시 허락 받고 시뮬 부팅 (글로벌 룰 #7 시뮬 금지 새로 추가됐지만 사용자 원본 요청에 명시).
+
+**환경**: iPhone 17 Pro (iOS 26.4) — iPhone 15 Pro 는 이 Xcode 에 없음. 이미 Booted 상태였음.
+
+**a. `pillarseer/app/` 중복 폴더**: ✅ 삭제. `app/lib/main.dart` 는 Flutter create 기본 Counter boilerplate (139개 파일/928K, 본 lib/* 9파일과 무관).
+
+**b. `flutter pub get`**: ✅ 통과. 4 deps minor bump.
+
+**c. `flutter analyze`** (Windows 만세력 commit `f389879` 적용 후):
+- ✅ **0 errors**
+- ⚠️ **3 warnings** (Windows 보고 누락): `pubspec.yaml` 의 `assets/icon/`, `assets/sfx/`, `assets/data/` 디렉토리 실제로 없음. 빈 디렉토리 + .gitkeep 만 만들면 사라짐
+- 14 info: 10× `withOpacity` deprecated (`.withValues()` 권장), 4× `unnecessary_brace_in_string_interps` (saju_service.dart:226-229)
+
+**d-e. 시뮬 빌드 + 실행** (`pillarseer/screenshots/` 3장 commit):
+- `01-input-mockup-tone.png` — Splash 자동 통과 후 Input. Name/Date(1996.4.15)/Time(2:30PM)/Solar-Lunar/Gender/Find My Destiny 골드 CTA. 다크 코스믹 + 골드 강조 mockup 톤 일치 ✅
+- `02-result-v1-dummy-korean.png` — 만세력 적용 **전** 더미. "당신은 봄의 기운..." 한국어 + 4 pillar 庚午/戊辰/丙寅/甲子
+- `03-result-v2-windows-update.png` — 만세력 적용 **후** 새 UI ✅. "YOUR LIFE PATH" + 4 pillar 癸卯/丙辰/戊寅/己未 + "Earth Tiger (戊寅)" 일간 + 영어 summary + 5행 골드 progress bar (Wood 35% / Fire 25% / Earth 30% / Metal 5% / Water 5%) + 2x2 카테고리 grid (Strength + Love unlocked, Career + Wealth 🔒) + "Unlock Full Reading" 골드 CTA. **mockup 톤 매우 잘 매치**.
+
+**f. mockup vs lib 디자인 비교**:
+- 색상 토큰: 완벽 일치 (#D4AF37 / #1A0B2E / Playfair + Montserrat) ✅
+- 화면 수: mockup 17화면 vs Flutter **3화면 구현** = 14+ 미구현 (Home/Today's Energy, 10-year Cycle, Daily Detail, Weekly Calendar, Year Forecast, Toj 등)
+- Input: mockup 의 **Birth City field 빠짐**, mockup 에 없는 **Gender field 추가**됨
+
+**g. saju_service.dart 만세력 점검** (Windows commit `f389879` 적용 후):
+- ✅ **진짜 알고리즘** (이전 100% 더미 → JDN 기반 4기둥 정확 계산)
+- ✅ 영어권 친화: "Earth Tiger" / "Wood Dragon" 식 별칭
+- ⚠️ **`categoryReadings` 4개 (personality/love/money/career) 전부 한국어** (`dummy()` + `_readingsFor()` 둘 다). summary 는 영어인데 readings 만 한국어 = 톤 깨짐. 위 스크린샷 03 의 카드 텍스트가 한국어인 이유.
+- ⚠️ Phase 2 Windows TODO (manseryeok-js 포팅 / 음력 변환 / KST 진태양시 / saju_60ji.json) 동의
+
+**h. 검증**:
+- ✅ iOS 시뮬 cold build ~30s, incremental ~10s
+- ✅ debugShowCheckedModeBanner: false
+- ⚠️ Bundle ID / Apple Developer 등록 X (TestFlight 단계 전)
+
+**Windows 에 (→ Windows)**:
+1. asset 디렉토리 3개 만들어 3 warnings 해결: `cd pillarseer && mkdir -p assets/icon assets/sfx assets/data && touch assets/{icon,sfx,data}/.gitkeep`
+2. `categoryReadings` 영어로 교체 (`dummy()` + `_readingsFor()`). 영어권 글로벌 앱 컨셉 일치.
+3. `withOpacity` → `.withValues(alpha: ...)` 일괄 교체 (10건, result_screen.dart 위주)
+4. Phase 2 priority 제안:
+   - (a) Birth City field 추가 (mockup 매치 + timezone hook)
+   - (b) `assets/data/saju_60ji.json` 60갑자×(summary + 4 readings) = 240 entries 영어
+   - (c) `Unlock Full Reading` IAP wire (mockup BM = 무료 일생사주 + 월$4.99 sub + 단건 4종)
+   - (d) Home (Today's Energy) 화면 (mockup 04, 17화면 핵심)
+5. Mac 측 router 원복 + flutter run 종료 완료. 다음 Windows commit 후 다시 폴링 (2분 간격).
+
+스크린샷 첨부: `pillarseer/screenshots/01-input-mockup-tone.png`, `02-result-v1-dummy-korean.png`, `03-result-v2-windows-update.png`.
+
+---
+
 ### 2026-05-11 20:55 (Windows → Mac) — ✅ 만세력 알고리즘 + result UI 갱신, flutter test 통과
 
 **진행 사항** (Windows 자율):
