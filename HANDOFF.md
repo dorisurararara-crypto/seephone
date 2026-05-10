@@ -68,6 +68,45 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 19:30 (Windows → Mac) — 🆕 Pillar Seer 새 앱 시작, iOS 시뮬레이터 테스트 요청
+
+**컨셉**: 글로벌 영어권 대상 한국 사주 앱 (4번째 앱 후보). 디자인 톤 V1 Dark Mysterious (#1A0B2E + #D4AF37). BM = 무료 일생사주 + 월$4.99 구독 + 단건 결제 4종.
+
+**Windows에서 완료된 것** (모두 `seephone/pillarseer/`):
+- 5개 문서: PRD.md, DESIGN.md, TECH.md, BUSINESS.md, README.md (1,800+ 줄)
+- HTML mockup 6개 (`mockup/`): screens-en/ko (17화면 영/한), web (5페이지), variants (5톤), index, app
+- Flutter 프로젝트 셋업 (`lib/main.dart`, `lib/screens/{splash,input,result}_screen.dart`, `services/saju_service.dart`, `models/saju_result.dart`)
+- pubspec.yaml: Riverpod 3.3.1, go_router 17.2.0, google_fonts, flutter_animate, audioplayers
+- ⚠️ `pillarseer/app/` 중복 폴더 있음 — 삭제 필요 (Mac에서 정리)
+
+**Mac에 요청 (→ Mac)**:
+1. `git pull`
+2. `cd ~/seephone/pillarseer`
+3. `pillarseer/app/` 중복 폴더 정리 (rm -rf, 단 내용 비어있는지 먼저 확인)
+4. `flutter pub get` (의존성 설치)
+5. `flutter analyze` (정적 분석, 컴파일 에러 점검)
+6. **iOS 시뮬레이터** 부팅 (예: iPhone 15 Pro)
+7. `flutter run -d <simulator-id>` (시뮬레이터 빌드 + 실행)
+8. 3개 화면 동작 확인:
+   - Splash (자동 다음 화면 전환)
+   - Input (이름/생년월일시/도시/Solar-Lunar 입력 + Find My Destiny 버튼)
+   - Result (4기둥 + 5행 + 카드 표시)
+9. 결과 리포트 (스크린샷 권장):
+   - 빌드 성공/실패
+   - 컴파일 에러 (있다면 로그)
+   - UI 어색한 부분 (디자인 V1 톤 매치 여부 — `mockup/screens-en.html` 기준)
+   - 클릭/입력/네비게이션 동작
+   - 만세력 계산 정확도 (`saju_service.dart` 더미 vs 진짜)
+
+**Windows 제약** (글로벌 룰 #7, 2026-05-11 추가):
+- ⚠️ Windows 머신에서는 **에뮬레이터/시뮬레이터 절대 안 띄움** (이전 세션에서 본체 강제종료 발생)
+- iOS 빌드 + 시뮬레이터 테스트 + UI 검증 = **Mac 단독 담당**
+- Pillar Seer는 아직 ASC 미등록 (TestFlight 배포 전 단계)
+
+처리 후 결과를 "## 최신"에 덧붙여 commit+push 부탁드립니다.
+
+---
+
 ### 2026-05-02 06:14 (Mac, 야간 자율) — protagonist 1.0.1 metadata-only 업데이트 진행 중
 
 **상황**: 사용자가 출시한 protagonist 앱에서 광고 안 뜸. 원인은 AdMob app-ads.txt 인증 실패. AdMob 신규 앱 정책 (2025-01 이후) 은 인증 통과 전 광고 거의 안 서빙.
