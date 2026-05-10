@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 
@@ -39,6 +40,19 @@ class ResultScreen extends StatelessWidget {
                 foregroundColor: AppColors.midnightPurple,
                 minimumSize: const Size(double.infinity, 56),
                 textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),
+              ),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () => context.go('/home', extra: result),
+              icon: const Icon(Icons.arrow_forward, color: AppColors.celestialGold),
+              label: const Text(
+                'Continue to Daily Reading',
+                style: TextStyle(color: AppColors.ghostlyWhite, letterSpacing: 1.0),
+              ),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                side: BorderSide(color: AppColors.celestialGold.withValues(alpha: 0.4)),
               ),
             ),
             const SizedBox(height: 12),

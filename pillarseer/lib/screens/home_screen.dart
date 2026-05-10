@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
@@ -309,11 +310,11 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildBottomNav(BuildContext context, int activeIdx) {
     final items = [
-      {'icon': '✦', 'name': 'Home'},
-      {'icon': '柱', 'name': 'Reading'},
-      {'icon': '📜', 'name': 'Reports'},
-      {'icon': '🌙', 'name': 'Discover'},
-      {'icon': '○', 'name': 'Profile'},
+      {'icon': '✦', 'name': 'Home', 'route': '/home'},
+      {'icon': '柱', 'name': 'Reading', 'route': '/result'},
+      {'icon': '📜', 'name': 'Reports', 'route': '/reports'},
+      {'icon': '🌙', 'name': 'Discover', 'route': '/discover'},
+      {'icon': '○', 'name': 'Profile', 'route': '/profile'},
     ];
     return Container(
       height: 76,
@@ -328,27 +329,40 @@ class HomeScreen extends StatelessWidget {
           final item = entry.value;
           final isActive = i == activeIdx;
           return Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  item['icon'] as String,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
+            child: InkWell(
+              onTap: () {
+                if (i == activeIdx) return; // 같은 탭 무시
+                final route = item['route'] as String;
+                if (route == '/result') {
+                  context.go(route, extra: userSaju);
+                } else if (route == '/home') {
+                  context.go(route, extra: userSaju);
+                } else {
+                  context.go(route);
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    item['icon'] as String,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  (item['name'] as String).toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 9,
-                    letterSpacing: 0.5,
-                    fontWeight: FontWeight.w600,
-                    color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
+                  const SizedBox(height: 2),
+                  Text(
+                    (item['name'] as String).toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 9,
+                      letterSpacing: 0.5,
+                      fontWeight: FontWeight.w600,
+                      color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }).toList(),
