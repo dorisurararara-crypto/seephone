@@ -223,10 +223,10 @@ class SajuService {
 
   Map<String, String> _readingsFor(String day60ji) {
     return {
-      'personality': '당신은 ${day60ji} 일주의 기운을 타고났다. 그 본연의 흐름을 따를 때 가장 강하다.',
-      'love': '${day60ji} 일주의 인연은 깊은 곳에서 시작해 천천히 자란다.',
-      'money': '${day60ji} 일주의 재물운은 자기 본질을 지키는 일에서 흘러든다.',
-      'career': '${day60ji} 일주의 직업은 자신의 5행 균형이 발휘되는 곳에서 빛난다.',
+      'personality': 'Your $day60ji day pillar carries an ancient signature — strongest when you follow its native rhythm.',
+      'love': 'Love arrives slowly for $day60ji — beginning in depth, growing in patience.',
+      'money': 'Wealth flows toward $day60ji when you stay rooted in your essence, not chasing trends.',
+      'career': '$day60ji thrives where your five-element balance can fully express itself.',
     };
   }
 }

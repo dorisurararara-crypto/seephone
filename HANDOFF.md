@@ -68,6 +68,42 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 21:30 (Windows → Mac) — ✅ 4건 처리 + Birth City + Home 화면 + Daily 서비스 추가
+
+**Mac 21:00 후속 요청 4건 모두 처리** (`flutter analyze` No issues found! / `flutter test` All passed):
+
+1. ✅ **asset 디렉토리** — `assets/{icon,sfx,data}/.gitkeep` 생성. 3 warnings → 0
+2. ✅ **categoryReadings 영어** — `dummy()` + `_readingsFor()` 둘 다 영어. K-pop 글로벌 컨셉 일치
+3. ✅ **`withOpacity` → `.withValues(alpha:)`** — 10건 일괄 교체 (result_screen + home_screen 신규 코드)
+4. ✅ **library doc comment 수정** — `///` → `//` (info 14건 → 0)
+
+**Phase 2 priorities 시작 (Mac 요청 c-d 진행)**:
+
+5. ✅ **Birth City field 추가** (a) — `input_screen.dart` 에 location_on prefix + helper text + default "Seoul, South Korea"
+6. ✅ **Home 화면 (Today's Energy)** (d) — mockup 04번 재현
+   - `lib/screens/home_screen.dart` (286줄): score circle (gold gradient + glow) + 4 카테고리 + Lucky 카드 + Promo 카드 + Bottom Nav 5탭 (Home/Reading/Reports/Discover/Profile)
+   - `lib/services/daily_service.dart` (113줄): 5행 상생/상극 알고리즘 (사용자 일간 vs 오늘 일진 → 점수 계산)
+   - `lib/models/daily_fortune.dart` (44줄): DailyFortune (totalScore, 4 카테고리, lucky color/number/direction, dayPillar)
+   - `router.dart`: `/home` 라우트 추가
+7. ⏳ **남은 Phase 2** (다음 commit):
+   - (b) `assets/data/saju_60ji.json` 240 entries (60일주 × 4 카테고리)
+   - (c) IAP wire (RevenueCat 통합)
+
+**현재 화면 4개**: Splash → Input → Result + Home (별도 진입)
+
+**Mac에 (→ Mac)**:
+1. `git pull` (예상 commit 1개)
+2. `flutter pub get && flutter analyze` 재검증 (warnings 0 기대)
+3. `flutter run` 시뮬 (만약 사용자 허락) — 변경 확인:
+   - Input 에 Birth City field 표시
+   - Home 화면 새 라우트 (`go to '/home'` 직접 호출 또는 result 에서 진입 — 라우트만 등록, UI 진입 흐름은 Phase 2)
+   - Result 에 영어 readings 표시 (한국어 X)
+4. 스크린샷 추가 (선택): `home_screen` 동작 확인
+
+**자동 협업 메모**: Windows 측 2분 폴링 (PID b5obisudt) 정상. Mac commit `ecf79bc` + `8b466c9` 받음 확인.
+
+---
+
 ### 2026-05-11 21:00 (Mac → Windows) — ✅ iOS 시뮬 빌드/실행 + 결과 + 스크린샷 3장
 
 본체 도착 (`f389879`) + 만세력 갱신 commit 모두 받아 즉시 진행. 사용자 명시 허락 받고 시뮬 부팅 (글로벌 룰 #7 시뮬 금지 새로 추가됐지만 사용자 원본 요청에 명시).

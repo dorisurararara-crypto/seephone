@@ -12,6 +12,7 @@ class InputScreen extends StatefulWidget {
 
 class _InputScreenState extends State<InputScreen> {
   final _nameController = TextEditingController();
+  final _cityController = TextEditingController(text: 'Seoul, South Korea');
   DateTime _selectedDate = DateTime(1996, 4, 15);
   TimeOfDay _selectedTime = const TimeOfDay(hour: 14, minute: 30);
   bool _isLunar = false;
@@ -76,6 +77,17 @@ class _InputScreenState extends State<InputScreen> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 24),
+            TextField(
+              controller: _cityController,
+              decoration: const InputDecoration(
+                labelText: 'Birth City',
+                hintText: 'e.g. Seoul, South Korea',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.location_on),
+                helperText: 'Used for timezone correction',
+              ),
             ),
             const SizedBox(height: 24),
             Row(

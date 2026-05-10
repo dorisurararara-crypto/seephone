@@ -83,9 +83,9 @@ class ResultScreen extends StatelessWidget {
           width: 60,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
           decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withOpacity(0.6),
+            color: AppColors.midnightPurple.withValues(alpha:0.6),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.celestialGold.withOpacity(0.3)),
+            border: Border.all(color: AppColors.celestialGold.withValues(alpha:0.3)),
           ),
           child: Column(
             children: [
@@ -111,12 +111,12 @@ class ResultScreen extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.celestialGold.withOpacity(0.15), AppColors.spiritIndigo.withOpacity(0.15)],
+          colors: [AppColors.celestialGold.withValues(alpha:0.15), AppColors.spiritIndigo.withValues(alpha:0.15)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.celestialGold.withOpacity(0.5)),
+        border: Border.all(color: AppColors.celestialGold.withValues(alpha:0.5)),
       ),
       child: Column(
         children: [
@@ -176,7 +176,7 @@ class ResultScreen extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: pct / 100,
                 minHeight: 6,
-                backgroundColor: AppColors.spiritIndigo.withOpacity(0.2),
+                backgroundColor: AppColors.spiritIndigo.withValues(alpha:0.2),
                 valueColor: const AlwaysStoppedAnimation(AppColors.celestialGold),
               ),
             ),
@@ -218,9 +218,9 @@ class ResultScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.spiritIndigo.withOpacity(locked ? 0.05 : 0.1),
+                color: AppColors.spiritIndigo.withValues(alpha:locked ? 0.05 : 0.1),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.celestialGold.withOpacity(locked ? 0.1 : 0.2)),
+                border: Border.all(color: AppColors.celestialGold.withValues(alpha:locked ? 0.1 : 0.2)),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +234,7 @@ class ResultScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1.0,
                       color: locked
-                          ? AppColors.ghostlyWhite.withOpacity(0.5)
+                          ? AppColors.ghostlyWhite.withValues(alpha:0.5)
                           : AppColors.ghostlyWhite,
                     ),
                   ),

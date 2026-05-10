@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'screens/splash_screen.dart';
 import 'screens/input_screen.dart';
 import 'screens/result_screen.dart';
+import 'screens/home_screen.dart';
 import 'models/saju_result.dart';
 
 final router = GoRouter(
@@ -20,6 +21,13 @@ final router = GoRouter(
       builder: (context, state) {
         final result = state.extra as SajuResult?;
         return ResultScreen(result: result ?? SajuResult.dummy());
+      },
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) {
+        final result = state.extra as SajuResult?;
+        return HomeScreen(userSaju: result ?? SajuResult.dummy());
       },
     ),
   ],

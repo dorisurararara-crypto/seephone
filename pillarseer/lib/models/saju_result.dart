@@ -1,6 +1,5 @@
-/// Pillar Seer — 사주 결과 모델
-///
-/// 60갑자(六十甲子) 기반 4기둥 8자 + 5행 분포 + 일간(日干) + 풀이.
+// Pillar Seer — 사주 결과 모델.
+// 60갑자(六十甲子) 기반 4기둥 8자 + 5행 분포 + 일간(日干) + 풀이.
 
 class FiveElements {
   final int wood;   // 木 (0~100, %)
@@ -105,10 +104,10 @@ class SajuResult {
       dayMasterName: 'Earth Tiger',
       summary: 'You are a mountain that shelters tigers — patient, ancient, quietly enormous.',
       categoryReadings: const {
-        'personality': '당신은 흔들리지 않는 산과 같다. 오랜 인내와 깊은 뿌리를 지녔다.',
-        'love': '당신의 사랑은 봄날의 호랑이처럼 위엄 있고 따뜻하다. 단, 한 번 신뢰가 깨지면 회복이 더디다.',
-        'money': '재물은 천천히, 그러나 단단히 쌓인다. 일확천금보다 토지·부동산 류와 인연이 깊다.',
-        'career': '리더십이 자연스럽게 드러나는 자리에서 빛난다. 큰 조직, 정통 분야가 적성.',
+        'personality': 'Unshaken as a mountain — patient, deep-rooted, quietly enormous in influence.',
+        'love': 'Your love carries the dignity of a spring tiger — warm but proud. Trust broken heals slowly.',
+        'money': 'Wealth gathers slowly but firmly. Land, real estate, and long-term assets favor you.',
+        'career': 'Natural leadership emerges in established institutions and traditional fields.',
       },
     );
   }
