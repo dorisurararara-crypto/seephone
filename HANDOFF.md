@@ -68,6 +68,90 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-11 23:30 (Windows → Mac) — 🚨 야간 풀 자율 위임 + TestFlight 심사 제출까지 (사용자 자러 감)
+
+**사용자 명시 (2026-05-11 23:25)**:
+> "앱 완전히 바로 출시할 수준으로 완성 시키고 3사 합의해서 오류나 사용자 경험상 문제 생길 거 있으면 자율로 3사 합의해서 수정하고 반복하다가 다 되면 mac 쪽에 요청해서 테스트플라이트에 되도록 해야돼. 결제 이런 건 나중에 붙여도 되니까 우선 테스트플라이트에 심사를 넣는 거까지는 내가 자고 일어났을 때 되어 있어야 돼"
+
+**Mac에 풀 자율 권한 (→ Mac, 야간 진행)**:
+
+#### 1단계: Pillar Seer 출시 수준 마무리 (Mac 자율, 6~8시간)
+
+**Flutter 코드 (Mac에서 자율 진행 OK)**:
+- (b) `assets/data/saju_60ji.json` 240 entries (Windows 측 Codex 백그라운드 생성 진행 중 → 다음 commit 에 도착 예상. 늦으면 Mac 이 자동 생성)
+- (c) IAP wire — **결제는 사용자 명시 "나중에 붙여도 OK"**. UI 만 wire (`Unlock Full Reading` → Paywall 모달 노출 정도). RevenueCat 가입 X 까지는 Mac 도 못 함 → UI 만.
+- (d) 추가 화면 진짜 구현 (현재 placeholder 인 Reports / Discover / Profile):
+  - **Profile** (mockup 17): 사용자 사주 정보 + 다중 프로필 + 설정 메뉴 (푸시 알림 / 언어 / 구독 관리 placeholder / 개인정보)
+  - **Compatibility** (mockup 10): 두 사주 입력 + 매치 % + 5행 분석 + 잠금 미리보기
+  - **Tojeongbigyeol** (mockup 11): 144괘 카드 + 12개월 격자 + 잠금
+  - **Daily Detail** (mockup 08): Home score circle 클릭 시 진입, 4 카테고리 + 일진 분석
+  - 시간 부족 시: Profile + Daily Detail 만 진짜로, Compatibility/Tojeong 은 풍성한 placeholder
+
+**3사 합의 사이클** (Mac 자율, 무한 반복):
+- Codex (`codex exec ...`) + Gemini (`gemini -p ...`) 호출하여 코드 리뷰 / UX 검토 / 버그 사냥
+- 합의된 수정 사항 즉시 반영 → analyze + test → commit + push
+- HANDOFF 에 진행 상황 기록 (선택)
+
+#### 2단계: TestFlight 심사 제출 (Mac 단독, 사용자 깨기 전)
+
+**ASC 등록 (Bundle ID = `com.ganziman.pillarseer`)**:
+
+a. **App Store Connect API key 사용 가능** — `~/.appstoreconnect/private_keys/AuthKey_JSGU6J4JN4.p8` (Key ID `JSGU6J4JN4`, Issuer `5269abe3-03f1-46a9-a37c-35d950758714`, Team `Q6H9HCTK6W`)
+
+b. **신규 앱 등록 자동 시도** (`fastlane spaceship` 또는 ASC REST API):
+- Bundle ID `com.ganziman.pillarseer` Apple Developer Portal 에 등록
+- ASC 에 신규 앱 생성 (name="Pillar Seer", primary lang="en-US", bundle ID 위)
+- 실패 (2FA / 새 디바이스 인증 / 약관 동의 필요) 시 → 사용자 대기 큐 기록
+
+c. **빌드 + 업로드** (자동 진행):
+- `cd ~/seephone/pillarseer && flutter pub get`
+- iOS Xcode 프로젝트 Bundle ID 변경: `com.ganziman.pillarseer` (현재 com.example.pillarseer 일 가능성)
+- `xcodebuild archive` + `exportArchive` (`-allowProvisioningUpdates -authenticationKey*` 로 ASC API key 자동 cert 발급 — protagonist 패턴 재사용. ERRORS.md #21 참조)
+- `altool upload` → Delivery ID 받음
+- ASC 처리 대기 (5~30분, 폴링)
+
+d. **베타 메타 3종 자동 입력** (글로벌 룰 #4):
+- `betaAppLocalizations` (ko + en-US): description, feedbackEmail
+- `betaAppReviewDetails`: contactFirstName "Seunghyeon", contactLastName "Lee", contactPhone "+821000000000", contactEmail "dorisurararara@gmail.com"
+- `betaBuildLocalizations` (ko + en-US): whatsNew "v1.0.0 첫 베타 — Korean Saju for global Gen Z"
+
+e. **외부 베타 그룹 생성** (`ganzitester` 패턴, 신규 앱마다 새 그룹):
+- ASC API 로 betaGroup 생성 (name="ganzitester", isInternalGroup=false, hasAccessToAllBuilds=false)
+- 빌드 할당
+- Beta Review 제출 (`reviewSubmissions` POST + SUBMITTED)
+
+f. **결과 보고**: HANDOFF "## 최신" 에 다음 정보:
+- ASC App ID
+- Bundle ID 확정
+- Build number + Delivery ID
+- Beta Review 상태 (WAITING_FOR_REVIEW / IN_REVIEW)
+- 사용자가 깰 때 확인할 것: 메일 + ASC 콘솔
+
+**Windows 진행 사항 (지금 새벽 23:30)**:
+- Info.plist 수정: `CFBundleDisplayName` "Pillarseer" → "Pillar Seer", 다크 모드 강제 (`UIUserInterfaceStyle=Dark`), `ITSAppUsesNonExemptEncryption=false`, ATS HTTPS only, portrait only
+- saju_60ji.json: Codex 백그라운드 생성 중 (240 entries, 30~60분 예상). 도착하면 Windows 다음 활성화 시 commit
+- HTML mockup 6개 + Flutter 코드 7화면 + 만세력 알고리즘 + 5행 분포 모두 push 완료
+
+**진짜 자율 못 하는 영역 (사용자 대기)**:
+- Apple ID 2FA (새 디바이스 인증 SMS)
+- ASC 약관 변경 동의 (Paid Apps Agreement 등)
+- 첫 ASC 신규 앱 등록 시 신원 확인 (드물게)
+
+**Windows 폴링 안내**:
+- Windows 측은 Claude 자체가 메시지 와야 깨어남 (제약). 백그라운드 git pull (2분 간격, PID b5obisudt) 은 디스크 받기만 함
+- Mac → Windows 응답 필요한 경우 사용자가 깬 후 Windows 활성화 시 처리. 야간 사이클은 Mac 단독 진행 가능
+- TestFlight 심사 제출 = Mac 의 작업. Windows 협업 불필요
+
+**우선순위**:
+1. ⭐⭐⭐ TestFlight 심사 제출 (사용자 자고 일어났을 때 결과)
+2. ⭐⭐ Profile + Daily Detail 화면 진짜 구현
+3. ⭐ Compatibility / Tojeongbigyeol placeholder 강화
+4. saju_60ji.json 콘텐츠 (Windows Codex 결과 우선, 늦으면 Mac 자동 생성)
+
+**자율 결정 권한**: Mac Claude 가 모든 코드 수정 / 시뮬 빌드 / TestFlight 제출 자율 진행. 막히면 codex/gemini 상의 후 결정. 사용자 대기 큐 (Apple 2FA 등) 만 기록.
+
+---
+
 ### 2026-05-11 23:00 (Mac → Windows) — ✅ 22:30 검증 완료 + Reports placeholder 캡처
 
 Windows commit `3290feb` 받아 즉시 검증.
