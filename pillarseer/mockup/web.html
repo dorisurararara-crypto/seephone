@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pillar Seer — Web Mockup (Hybrid Landing)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: radial-gradient(ellipse at top, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+  }
+  body { padding: 60px 24px 120px; }
+
+  /* Page header */
+  .page-header { max-width: 1400px; margin: 0 auto 64px; text-align: center; }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #D4AF37 0%, #F5F5F5 50%, #6B46C1 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .page-header h1 em { font-style: italic; }
+  .page-header .sub { color: #A8A8C0; font-size: 16px; line-height: 1.6; margin-top: 16px; max-width: 800px; margin-left: auto; margin-right: auto; }
+  .page-header .meta { display: inline-flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; justify-content: center; }
+  .meta-tag { padding: 6px 14px; background: rgba(107, 70, 193, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 999px; font-size: 11px; color: #D4AF37; letter-spacing: 0.05em; }
+
+  /* Section */
+  .section { max-width: 1400px; margin: 0 auto 100px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #D4AF37; margin-bottom: 8px; letter-spacing: 0.02em; }
+  .section-title em { font-style: italic; color: #6B46C1; }
+  .section-desc { color: #A8A8C0; font-size: 14px; margin-bottom: 32px; }
+
+  /* Browser Frame */
+  .browser {
+    background: #1a1a20;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 60px rgba(107, 70, 193, 0.1);
+    margin-bottom: 0;
+  }
+  .browser-bar {
+    background: #2a2a32;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #1a1a20;
+  }
+  .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .browser-dot.r { background: #ff5f56; }
+  .browser-dot.y { background: #ffbd2e; }
+  .browser-dot.g { background: #27c93f; }
+  .browser-url {
+    flex: 1; margin-left: 16px;
+    background: #0e0e14; padding: 6px 14px; border-radius: 6px;
+    font-size: 12px; color: #A8A8C0; font-family: 'JetBrains Mono', monospace;
+  }
+  .browser-url .lock { color: #27c93f; margin-right: 6px; }
+  .browser-url .domain { color: #F5F5F5; }
+
+  .web-page {
+    background: linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+    min-height: 600px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Web nav */
+  .webnav {
+    padding: 18px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    background: rgba(10, 6, 18, 0.6);
+    backdrop-filter: blur(12px);
+    position: relative; z-index: 10;
+  }
+  .webnav .logo {
+    font-family: 'Playfair Display', serif; font-weight: 900; font-size: 22px;
+    color: #D4AF37;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .webnav .logo .glyph { font-family: 'Noto Serif KR', serif; font-size: 24px; }
+  .webnav .links { display: flex; gap: 28px; }
+  .webnav .link { font-size: 13px; color: #A8A8C0; letter-spacing: 0.03em; font-weight: 500; }
+  .webnav .link.active { color: #D4AF37; }
+  .webnav .cta {
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+    color: #1A0B2E;
+    padding: 9px 18px; border-radius: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+  }
+
+  .starfield-bg {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 60% 25%, #D4AF37, transparent),
+      radial-gradient(2px 2px at 80% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 80%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 45%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 15% 60%, #fff, transparent),
+      radial-gradient(2px 2px at 90% 20%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 50% 90%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 35%, #fff, transparent);
+    opacity: 0.4; pointer-events: none;
+  }
+
+  .btn-gold-lg {
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+    color: #1A0B2E;
+    font-family: 'Playfair Display', serif; font-weight: 700;
+    padding: 16px 32px; border-radius: 10px;
+    font-size: 16px; letter-spacing: 0.05em; display: inline-block;
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.3);
+  }
+  .btn-ghost-lg {
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: #F5F5F5;
+    padding: 16px 32px; border-radius: 10px;
+    font-size: 14px; display: inline-block;
+    letter-spacing: 0.05em;
+  }
+
+  /* ==== PAGE 1: LANDING ==== */
+  .pg-landing .hero {
+    padding: 80px 48px 100px;
+    text-align: center;
+    position: relative;
+  }
+  .pg-landing .hero-glyph {
+    font-family: 'Noto Serif KR', serif; font-size: 96px; font-weight: 900; color: #D4AF37;
+    text-shadow: 0 0 60px rgba(212, 175, 55, 0.5);
+    margin-bottom: 24px;
+  }
+  .pg-landing h1 {
+    font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 900;
+    line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px;
+  }
+  .pg-landing h1 em { font-style: italic; color: #D4AF37; font-weight: 400; }
+  .pg-landing .lede {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 18px; color: #A8A8C0; max-width: 580px; margin: 0 auto 36px;
+    line-height: 1.6;
+  }
+  .pg-landing .hero-ctas { display: flex; gap: 16px; justify-content: center; }
+  .pg-landing .stores { margin-top: 48px; display: flex; gap: 14px; justify-content: center; }
+  .pg-landing .store-btn {
+    padding: 12px 22px;
+    background: rgba(107, 70, 193, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 10px;
+    font-size: 12px; color: #F5F5F5;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pg-landing .store-btn .ic { font-size: 22px; }
+  .pg-landing .store-btn .label { line-height: 1.2; }
+  .pg-landing .store-btn .label small { display: block; color: #A8A8C0; font-size: 9px; }
+  .pg-landing .store-btn .label b { font-weight: 700; }
+
+  .pg-landing .stats {
+    padding: 60px 48px;
+    background: rgba(107, 70, 193, 0.05);
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+  .pg-landing .stat-num {
+    font-family: 'Playfair Display', serif; font-weight: 900; font-size: 36px; color: #D4AF37;
+  }
+  .pg-landing .stat-label { font-size: 11px; color: #A8A8C0; letter-spacing: 0.1em; margin-top: 6px; text-transform: uppercase; }
+
+  .pg-landing .features {
+    padding: 80px 48px;
+    text-align: center;
+  }
+  .pg-landing .features h2 {
+    font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; margin-bottom: 12px;
+  }
+  .pg-landing .features h2 em { font-style: italic; color: #D4AF37; }
+  .pg-landing .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+  }
+  .pg-landing .feature {
+    padding: 32px 24px;
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 16px;
+    text-align: left;
+  }
+  .pg-landing .feature .ic { font-size: 36px; color: #D4AF37; margin-bottom: 12px; }
+  .pg-landing .feature h3 {
+    font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #F5F5F5; margin-bottom: 8px;
+  }
+  .pg-landing .feature p { font-size: 13px; color: #A8A8C0; line-height: 1.6; }
+
+  .pg-landing .testimonial-row {
+    padding: 80px 48px;
+    background: linear-gradient(180deg, transparent, rgba(107, 70, 193, 0.05));
+  }
+  .pg-landing .testimonials {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .pg-landing .testimonial {
+    padding: 28px;
+    background: rgba(212, 175, 55, 0.04);
+    border-left: 3px solid #D4AF37;
+    border-radius: 8px;
+  }
+  .pg-landing .testimonial .stars { color: #D4AF37; font-size: 14px; margin-bottom: 8px; letter-spacing: 2px; }
+  .pg-landing .testimonial blockquote {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 14px; color: #F5F5F5;
+    line-height: 1.7; margin-bottom: 12px;
+  }
+  .pg-landing .testimonial cite { font-size: 11px; color: #A8A8C0; font-style: normal; letter-spacing: 0.05em; }
+
+  .pg-landing .footer-cta {
+    padding: 100px 48px;
+    text-align: center;
+    background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.08), transparent 70%);
+  }
+  .pg-landing .footer-cta h2 {
+    font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 900; line-height: 1.2; margin-bottom: 16px;
+  }
+  .pg-landing .footer-cta h2 em { font-style: italic; color: #D4AF37; }
+  .pg-landing .footer-cta p { color: #A8A8C0; font-size: 16px; margin-bottom: 32px; }
+
+  /* ==== PAGE 2: FREE CALCULATOR ==== */
+  .pg-calc .calc-wrap {
+    padding: 60px 48px 80px;
+  }
+  .pg-calc h1 {
+    font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 900; text-align: center;
+    margin-bottom: 12px;
+  }
+  .pg-calc h1 em { font-style: italic; color: #D4AF37; }
+  .pg-calc .lede { text-align: center; color: #A8A8C0; max-width: 560px; margin: 0 auto 48px; line-height: 1.7; font-size: 15px; }
+
+  .pg-calc .calc-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .pg-calc .calc-form {
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .pg-calc .calc-form h3 {
+    font-family: 'Playfair Display', serif; font-size: 22px; color: #D4AF37; margin-bottom: 24px; letter-spacing: 0.05em;
+  }
+  .pg-calc .field { margin-bottom: 16px; }
+  .pg-calc .lbl { font-size: 10px; color: #6B6B82; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; font-weight: 600; }
+  .pg-calc .input {
+    width: 100%;
+    background: rgba(10, 6, 18, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px; padding: 12px 14px;
+    color: #F5F5F5; font-size: 14px;
+  }
+  .pg-calc .row { display: flex; gap: 12px; }
+  .pg-calc .row .field { flex: 1; }
+  .pg-calc .toggle {
+    display: flex; background: rgba(10, 6, 18, 0.4);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px; padding: 4px; margin-bottom: 16px;
+  }
+  .pg-calc .topt { flex: 1; padding: 10px; text-align: center; font-size: 13px; color: #A8A8C0; border-radius: 6px; }
+  .pg-calc .topt.active { background: linear-gradient(135deg, #6B46C1, #311B92); color: #F5F5F5; font-weight: 600; }
+  .pg-calc .submit {
+    width: 100%; margin-top: 8px;
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+    color: #1A0B2E;
+    font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;
+    padding: 16px; border-radius: 10px; text-align: center; letter-spacing: 0.05em;
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+  }
+
+  .pg-calc .calc-result {
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(107, 70, 193, 0.08));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 16px;
+  }
+  .pg-calc .res-label { font-size: 10px; color: #D4AF37; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .pg-calc .res-pillars {
+    font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 32px; color: #D4AF37;
+    letter-spacing: 0.18em; margin-bottom: 16px; text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+  .pg-calc .res-name {
+    font-family: 'Playfair Display', serif; font-size: 22px; color: #F5F5F5; font-weight: 700; margin-bottom: 8px;
+  }
+  .pg-calc .res-quote {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 14px; color: #A8A8C0; line-height: 1.7; margin-bottom: 20px;
+  }
+  .pg-calc .blur-zone {
+    margin-top: 16px;
+    padding: 16px;
+    background: rgba(107, 70, 193, 0.1);
+    border-radius: 10px;
+    position: relative;
+    filter: blur(3px);
+  }
+  .pg-calc .blur-row { font-size: 12px; color: #F5F5F5; padding: 4px 0; }
+  .pg-calc .full-cta-wrap { margin-top: 16px; text-align: center; }
+  .pg-calc .full-cta-wrap .btn { display: block; }
+  .pg-calc .full-cta-wrap small { display: block; margin-top: 8px; color: #6B6B82; font-size: 11px; }
+
+  /* ==== PAGE 3: ABOUT SAJU ==== */
+  .pg-about .about-hero {
+    padding: 80px 48px 60px; text-align: center;
+  }
+  .pg-about .about-hero h1 {
+    font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; margin-bottom: 16px;
+  }
+  .pg-about .about-hero h1 em { font-style: italic; color: #D4AF37; }
+  .pg-about .about-hero .lede {
+    font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px;
+    color: #A8A8C0; max-width: 660px; margin: 0 auto; line-height: 1.7;
+  }
+  .pg-about .toc {
+    max-width: 700px; margin: 40px auto 60px;
+    padding: 24px;
+    background: rgba(107, 70, 193, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 12px;
+  }
+  .pg-about .toc-title { font-size: 11px; color: #D4AF37; letter-spacing: 0.15em; margin-bottom: 12px; font-weight: 700; }
+  .pg-about .toc ol { padding-left: 20px; color: #F5F5F5; font-size: 14px; line-height: 2; font-family: 'Playfair Display', serif; }
+  .pg-about .article { padding: 0 48px 80px; max-width: 820px; margin: 0 auto; }
+  .pg-about .article h2 {
+    font-family: 'Playfair Display', serif; font-size: 32px; color: #D4AF37; margin: 48px 0 16px; font-weight: 900;
+  }
+  .pg-about .article p {
+    font-family: 'Playfair Display', serif; font-size: 16px; color: #F5F5F5; line-height: 1.8; margin-bottom: 16px;
+  }
+  .pg-about .article p strong { color: #D4AF37; font-weight: 600; }
+  .pg-about .article .pull-quote {
+    font-style: italic; font-size: 22px; color: #D4AF37; line-height: 1.5;
+    border-left: 3px solid #D4AF37;
+    padding: 8px 24px; margin: 32px 0;
+  }
+  .pg-about .pillars-visual {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin: 32px 0;
+  }
+  .pg-about .pv-cell {
+    text-align: center;
+    padding: 20px 12px;
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+  }
+  .pg-about .pv-cell .han { font-family: 'Noto Serif KR', serif; font-size: 32px; color: #D4AF37; font-weight: 900; }
+  .pg-about .pv-cell .name { font-size: 11px; color: #A8A8C0; margin-top: 6px; letter-spacing: 0.1em; }
+  .pg-about .pv-cell .desc { font-size: 11px; color: #F5F5F5; margin-top: 6px; line-height: 1.4; }
+
+  /* ==== PAGE 4: BLOG ==== */
+  .pg-blog .blog-header { padding: 60px 48px 40px; text-align: center; }
+  .pg-blog .blog-header h1 {
+    font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 900;
+  }
+  .pg-blog .blog-header h1 em { font-style: italic; color: #D4AF37; }
+  .pg-blog .blog-header p { color: #A8A8C0; margin-top: 12px; font-size: 15px; }
+  .pg-blog .blog-categories {
+    padding: 0 48px 32px;
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .pg-blog .cat-chip {
+    padding: 8px 18px;
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 999px;
+    font-size: 11px; color: #A8A8C0; letter-spacing: 0.05em; font-weight: 600;
+  }
+  .pg-blog .cat-chip.active { background: linear-gradient(135deg, #D4AF37, #B8860B); color: #1A0B2E; border-color: #D4AF37; font-weight: 700; }
+  .pg-blog .featured {
+    margin: 0 48px 48px;
+    padding: 36px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(107, 70, 193, 0.12));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 16px;
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 36px; align-items: center;
+  }
+  .pg-blog .featured .img {
+    aspect-ratio: 4/3;
+    background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.3), rgba(107, 70, 193, 0.2));
+    border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3);
+    display: flex; align-items: center; justify-content: center; font-size: 80px; color: #D4AF37;
+  }
+  .pg-blog .featured .info .tag { font-size: 10px; color: #D4AF37; letter-spacing: 0.15em; font-weight: 700; }
+  .pg-blog .featured .info h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; line-height: 1.3; margin: 12px 0; }
+  .pg-blog .featured .info p { color: #A8A8C0; font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
+  .pg-blog .featured .info .meta { font-size: 11px; color: #6B6B82; }
+
+  .pg-blog .grid {
+    padding: 0 48px 80px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .pg-blog .post {
+    background: rgba(107, 70, 193, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .pg-blog .post .img {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(107, 70, 193, 0.2));
+    display: flex; align-items: center; justify-content: center; font-size: 48px; color: #D4AF37;
+  }
+  .pg-blog .post .body { padding: 20px; }
+  .pg-blog .post .tag { font-size: 9px; color: #D4AF37; letter-spacing: 0.15em; font-weight: 700; text-transform: uppercase; }
+  .pg-blog .post h3 {
+    font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; line-height: 1.4; margin: 8px 0;
+  }
+  .pg-blog .post .meta { font-size: 10px; color: #6B6B82; }
+
+  /* ==== PAGE 5: PRICING ==== */
+  .pg-pricing .pricing-hero { padding: 80px 48px 40px; text-align: center; }
+  .pg-pricing .pricing-hero h1 { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; }
+  .pg-pricing .pricing-hero h1 em { font-style: italic; color: #D4AF37; }
+  .pg-pricing .pricing-hero .lede { color: #A8A8C0; font-size: 16px; margin-top: 12px; }
+
+  .pg-pricing .billing-toggle {
+    display: inline-flex; gap: 0;
+    border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 999px; overflow: hidden;
+    margin: 20px 0 48px;
+  }
+  .pg-pricing .bt-opt {
+    padding: 10px 24px; font-size: 13px; color: #A8A8C0; font-weight: 600;
+  }
+  .pg-pricing .bt-opt.active { background: linear-gradient(135deg, #D4AF37, #B8860B); color: #1A0B2E; }
+  .pg-pricing .bt-opt .save { font-size: 9px; color: #1A0B2E; background: rgba(0,0,0,0.15); padding: 2px 6px; border-radius: 3px; margin-left: 6px; }
+
+  .pg-pricing .plans {
+    padding: 0 48px 60px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .pg-pricing .plan-card {
+    padding: 40px 28px;
+    background: rgba(107, 70, 193, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 18px;
+    position: relative;
+  }
+  .pg-pricing .plan-card.featured {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(107, 70, 193, 0.12));
+    border: 1.5px solid #D4AF37;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+    transform: scale(1.04);
+  }
+  .pg-pricing .plan-card.featured::before {
+    content: 'MOST POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: #D4AF37; color: #1A0B2E; padding: 4px 14px; border-radius: 999px;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.15em;
+  }
+  .pg-pricing .plan-name { font-family: 'Playfair Display', serif; font-size: 20px; color: #D4AF37; font-weight: 700; margin-bottom: 8px; }
+  .pg-pricing .plan-desc { font-size: 12px; color: #A8A8C0; margin-bottom: 20px; line-height: 1.5; }
+  .pg-pricing .plan-price {
+    font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: #F5F5F5; line-height: 1;
+  }
+  .pg-pricing .plan-price small { font-size: 14px; color: #A8A8C0; font-weight: 400; }
+  .pg-pricing .plan-features { margin: 24px 0; }
+  .pg-pricing .plan-features li {
+    list-style: none; font-size: 13px; color: #F5F5F5; padding: 6px 0; padding-left: 22px; position: relative; line-height: 1.4;
+  }
+  .pg-pricing .plan-features li::before { content: '✓'; position: absolute; left: 0; color: #D4AF37; font-weight: 700; }
+  .pg-pricing .plan-cta {
+    display: block;
+    padding: 14px; text-align: center; border-radius: 10px;
+    font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; letter-spacing: 0.05em;
+  }
+  .pg-pricing .plan-cta.primary { background: linear-gradient(135deg, #D4AF37, #B8860B); color: #1A0B2E; }
+  .pg-pricing .plan-cta.ghost { border: 1px solid rgba(212, 175, 55, 0.4); color: #F5F5F5; }
+
+  .pg-pricing .single-reports {
+    padding: 60px 48px;
+    background: rgba(107, 70, 193, 0.04);
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+  }
+  .pg-pricing .single-reports h2 {
+    font-family: 'Playfair Display', serif; font-size: 28px; color: #D4AF37; text-align: center; margin-bottom: 8px;
+  }
+  .pg-pricing .single-reports p { text-align: center; color: #A8A8C0; font-size: 14px; margin-bottom: 32px; }
+  .pg-pricing .reports-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .pg-pricing .report-item {
+    padding: 24px; background: rgba(212, 175, 55, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 12px;
+    text-align: center;
+  }
+  .pg-pricing .report-item .ic { font-size: 32px; margin-bottom: 8px; }
+  .pg-pricing .report-item .name { font-family: 'Playfair Display', serif; color: #F5F5F5; font-size: 14px; font-weight: 700; }
+  .pg-pricing .report-item .desc { font-size: 10px; color: #A8A8C0; margin: 6px 0 10px; line-height: 1.4; }
+  .pg-pricing .report-item .price { font-family: 'Playfair Display', serif; color: #D4AF37; font-size: 18px; font-weight: 900; }
+
+  /* ==== Footer (common) ==== */
+  .web-footer {
+    padding: 48px 48px 36px;
+    background: #0A0612;
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px;
+  }
+  .web-footer .brand .logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 22px; color: #D4AF37; margin-bottom: 12px; }
+  .web-footer .brand p { font-size: 12px; color: #6B6B82; line-height: 1.6; max-width: 280px; }
+  .web-footer h5 { font-size: 11px; color: #D4AF37; letter-spacing: 0.15em; margin-bottom: 12px; font-weight: 700; }
+  .web-footer ul { list-style: none; }
+  .web-footer ul li { padding: 4px 0; font-size: 12px; color: #A8A8C0; }
+  .web-footer .copyright {
+    margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(212, 175, 55, 0.05);
+    grid-column: 1 / -1; display: flex; justify-content: space-between;
+    font-size: 11px; color: #6B6B82;
+  }
+
+  /* Phone preview in landing */
+  .phone-preview {
+    width: 240px; height: 500px;
+    border-radius: 32px; overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 6px #1a1a20, 0 0 30px rgba(107, 70, 193, 0.2);
+    background: #1A0B2E;
+    margin: 0 auto;
+    position: relative;
+  }
+  .phone-preview .pp-screen {
+    height: 100%; padding: 60px 24px 24px;
+    text-align: center; display: flex; flex-direction: column;
+  }
+  .phone-preview .pp-glyph { font-family: 'Noto Serif KR', serif; font-size: 36px; color: #D4AF37; margin-bottom: 12px; }
+  .phone-preview .pp-pillars { font-family: 'Noto Serif KR', serif; font-size: 14px; color: #D4AF37; letter-spacing: 0.15em; margin-bottom: 16px; }
+  .phone-preview .pp-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    border: 2px solid #D4AF37; margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 28px; color: #D4AF37; font-weight: 900;
+  }
+  .phone-preview .pp-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 11px; color: #F5F5F5; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Pillar <em>Seer</em> · Web</h1>
+  <p class="sub">
+    하이브리드 웹앱 mockup — 5개 페이지 (Landing · Calculator · About · Blog · Pricing)<br>
+    Next.js + Tailwind + Vercel · SEO 우선 · 앱 다운 + 무료 사주 계산기 + K-pop 콘텐츠
+  </p>
+  <div class="meta">
+    <span class="meta-tag">V1 DARK MYSTERIOUS</span>
+    <span class="meta-tag">5 PAGES</span>
+    <span class="meta-tag">SEO HYBRID</span>
+    <span class="meta-tag">DESKTOP MOCKUP</span>
+  </div>
+</div>
+
+<!-- ==================================================
+     PAGE 1: LANDING
+     ================================================== -->
+<div class="section">
+  <h2 class="section-title">1. <em>Landing</em> — pillarseer.app</h2>
+  <p class="section-desc">SEO 첫인상 + 앱 다운로드 유도 + 가치 제안</p>
+
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="browser-dot r"></span>
+      <span class="browser-dot y"></span>
+      <span class="browser-dot g"></span>
+      <span class="browser-url"><span class="lock">🔒</span><span class="domain">pillarseer.app</span></span>
+    </div>
+    <div class="web-page pg-landing">
+      <div class="starfield-bg"></div>
+
+      <div class="webnav">
+        <div class="logo"><span class="glyph">柱</span> Pillar Seer</div>
+        <div class="links">
+          <span class="link active">Home</span>
+          <span class="link">Free Calculator</span>
+          <span class="link">About Saju</span>
+          <span class="link">K-pop Saju</span>
+          <span class="link">Pricing</span>
+        </div>
+        <span class="cta">Download App</span>
+      </div>
+
+      <div class="hero">
+        <div class="hero-glyph">柱</div>
+        <h1>Your fate is written in<br><em>4 pillars</em></h1>
+        <p class="lede">
+          Born anywhere on Earth — your destiny was already mapped<br>
+          5,000 years ago in the rhythm of the stars.<br>
+          Korean Saju, now in English.
+        </p>
+        <div class="hero-ctas">
+          <a class="btn-gold-lg">✨ Get My Free Reading</a>
+          <a class="btn-ghost-lg">Watch how it works →</a>
+        </div>
+        <div class="stores">
+          <div class="store-btn">
+            <span class="ic">🍎</span>
+            <span class="label"><small>Download on the</small><b>App Store</b></span>
+          </div>
+          <div class="store-btn">
+            <span class="ic">▶</span>
+            <span class="label"><small>Get it on</small><b>Google Play</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div><div class="stat-num">5,000</div><div class="stat-label">Years of wisdom</div></div>
+        <div><div class="stat-num">60</div><div class="stat-label">Galja cycles</div></div>
+        <div><div class="stat-num">4×8</div><div class="stat-label">Pillars · Characters</div></div>
+        <div><div class="stat-num">∞</div><div class="stat-label">Personal patterns</div></div>
+      </div>
+
+      <div class="features">
+        <h2>More than <em>horoscope</em>.<br>This is your code.</h2>
+        <div class="features-grid">
+          <div class="feature">
+            <div class="ic">柱</div>
+            <h3>Four Pillars</h3>
+            <p>Year, Month, Day, and Hour — eight Korean characters that decode your inner blueprint.</p>
+          </div>
+          <div class="feature">
+            <div class="ic">五行</div>
+            <h3>Five Elements</h3>
+            <p>Wood · Fire · Earth · Metal · Water. Your unique balance reveals strengths and shadows.</p>
+          </div>
+          <div class="feature">
+            <div class="ic">大運</div>
+            <h3>Major Cycles</h3>
+            <p>10-year luck windows, mapped from birth to elder. Know what season your life is in.</p>
+          </div>
+          <div class="feature">
+            <div class="ic">💕</div>
+            <h3>Soul Compatibility</h3>
+            <p>Match your pillars with anyone's. Discover the chemistry written in the stars.</p>
+          </div>
+          <div class="feature">
+            <div class="ic">🌙</div>
+            <h3>Daily Energy</h3>
+            <p>Your forecast — every morning, in 30 seconds. Lucky color, number, direction.</p>
+          </div>
+          <div class="feature">
+            <div class="ic">📜</div>
+            <h3>Tojeongbigyeol</h3>
+            <p>Your 12-month annual reading from Korea's 500-year-old hexagram tradition.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-row">
+        <div class="testimonials">
+          <div class="testimonial">
+            <div class="stars">★★★★★</div>
+            <blockquote>"More accurate than Co-Star. Way more specific. The 戊寅 thing? Yeah, that's me."</blockquote>
+            <cite>— Elena · Berlin</cite>
+          </div>
+          <div class="testimonial">
+            <div class="stars">★★★★★</div>
+            <blockquote>"Finally a real Korean Saju app for foreigners. I checked V's pillars first. ARMY approved."</blockquote>
+            <cite>— Chloe · LA</cite>
+          </div>
+          <div class="testimonial">
+            <div class="stars">★★★★★</div>
+            <blockquote>"My Tojeongbigyeol predicted June would be turbulent. It was. I'm a believer now."</blockquote>
+            <cite>— Mei · Manila</cite>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-cta">
+        <h2>Read your <em>4 pillars</em><br>tonight.</h2>
+        <p>Free Saju calculation. No login. 30 seconds.</p>
+        <a class="btn-gold-lg">✨ Calculate My Saju</a>
+      </div>
+
+      <div class="web-footer">
+        <div class="brand">
+          <div class="logo">柱 Pillar Seer</div>
+          <p>Korean Saju (Four Pillars of Destiny) for the global generation. Born anywhere — your stars are already aligned.</p>
+        </div>
+        <div><h5>PRODUCT</h5><ul><li>Free Calculator</li><li>iOS App</li><li>Android App</li><li>Pricing</li></ul></div>
+        <div><h5>LEARN</h5><ul><li>What is Saju?</li><li>K-pop Saju Blog</li><li>K-drama Analysis</li><li>FAQ</li></ul></div>
+        <div><h5>LEGAL</h5><ul><li>Privacy</li><li>Terms</li><li>Contact</li><li>© 2026</li></ul></div>
+        <div class="copyright">
+          <span>© 2026 Pillar Seer. Born anywhere on Earth.</span>
+          <span>Made with 柱 in Seoul</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================================================
+     PAGE 2: FREE CALCULATOR
+     ================================================== -->
+<div class="section">
+  <h2 class="section-title">2. <em>Free Saju Calculator</em> — pillarseer.app/calc</h2>
+  <p class="section-desc">SEO 핵심 페이지. 무료 후크 → 이메일 수집 + 앱 다운 유도</p>
+
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+      <span class="browser-url"><span class="lock">🔒</span><span class="domain">pillarseer.app/calc</span></span>
+    </div>
+    <div class="web-page pg-calc">
+      <div class="starfield-bg"></div>
+      <div class="webnav">
+        <div class="logo"><span class="glyph">柱</span> Pillar Seer</div>
+        <div class="links">
+          <span class="link">Home</span>
+          <span class="link active">Free Calculator</span>
+          <span class="link">About Saju</span>
+          <span class="link">K-pop Saju</span>
+          <span class="link">Pricing</span>
+        </div>
+        <span class="cta">Download App</span>
+      </div>
+
+      <div class="calc-wrap">
+        <h1>Calculate your <em>4 pillars</em></h1>
+        <p class="lede">
+          Enter your birth moment. We'll instantly reveal your Year, Month, Day, and Hour pillars —
+          the eight Korean characters that decode your destiny.
+        </p>
+
+        <div class="calc-grid">
+          <div class="calc-form">
+            <h3>✦ Your Birth Moment</h3>
+            <div class="field"><div class="lbl">Name</div><input class="input" value="Chloe Park"></div>
+            <div class="row">
+              <div class="field"><div class="lbl">Birthday</div><input class="input" value="Apr 15, 1996"></div>
+              <div class="field"><div class="lbl">Time</div><input class="input" value="14:30"></div>
+            </div>
+            <div class="field"><div class="lbl">📍 Birth City</div><input class="input" value="Los Angeles, USA"></div>
+            <div class="toggle"><div class="topt active">Solar Calendar</div><div class="topt">Lunar</div></div>
+            <div class="submit">✨ Reveal My 4 Pillars ✨</div>
+          </div>
+
+          <div class="calc-result">
+            <div class="res-label">Your Free Reading</div>
+            <div class="res-pillars">癸卯 丙辰 戊寅 己未</div>
+            <div class="res-name">Earth Tiger · 戊寅</div>
+            <div class="res-quote">"You are a mountain that shelters tigers — patient, ancient, quietly enormous."</div>
+
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+              <div style="flex: 1; padding: 10px; background: rgba(212, 175, 55, 0.06); border-radius: 6px; text-align: center;">
+                <div style="font-size: 9px; color: #6B6B82; letter-spacing: 0.1em;">DOMINANT</div>
+                <div style="font-family: 'Noto Serif KR', serif; color: #D4AF37; font-size: 18px; font-weight: 900;">木</div>
+                <div style="font-size: 11px; color: #F5F5F5;">Wood · 35%</div>
+              </div>
+              <div style="flex: 1; padding: 10px; background: rgba(212, 175, 55, 0.06); border-radius: 6px; text-align: center;">
+                <div style="font-size: 9px; color: #6B6B82; letter-spacing: 0.1em;">DEFICIT</div>
+                <div style="font-family: 'Noto Serif KR', serif; color: #D4AF37; font-size: 18px; font-weight: 900;">金</div>
+                <div style="font-size: 11px; color: #F5F5F5;">Metal · 5%</div>
+              </div>
+            </div>
+
+            <div class="blur-zone">
+              <div class="blur-row"><strong>Career path:</strong> Your Day Master in Yang Earth suggests...</div>
+              <div class="blur-row"><strong>Love compatibility:</strong> Yang Tigers attract Yin Pigs and...</div>
+              <div class="blur-row"><strong>Wealth pillar analysis:</strong> Your Hidden Stems reveal...</div>
+              <div class="blur-row"><strong>2026 forecast:</strong> The Fire Horse year clashes with...</div>
+            </div>
+
+            <div class="full-cta-wrap">
+              <a class="btn-gold-lg btn">📱 Get the Full Reading in App</a>
+              <small>Free 7-day trial · 50,000+ users</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="web-footer">
+        <div class="brand"><div class="logo">柱 Pillar Seer</div><p>Free Saju calculator. No login required. Get the full reading on iOS or Android.</p></div>
+        <div><h5>PRODUCT</h5><ul><li>Free Calculator</li><li>iOS App</li><li>Pricing</li></ul></div>
+        <div><h5>LEARN</h5><ul><li>What is Saju?</li><li>K-pop Saju</li><li>FAQ</li></ul></div>
+        <div><h5>LEGAL</h5><ul><li>Privacy</li><li>Terms</li><li>Contact</li></ul></div>
+        <div class="copyright"><span>© 2026 Pillar Seer</span><span>Made with 柱 in Seoul</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================================================
+     PAGE 3: ABOUT SAJU
+     ================================================== -->
+<div class="section">
+  <h2 class="section-title">3. <em>About Saju</em> — pillarseer.app/what-is-saju</h2>
+  <p class="section-desc">SEO 교육 페이지. "What is Saju?" 키워드 점유.</p>
+
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+      <span class="browser-url"><span class="lock">🔒</span><span class="domain">pillarseer.app/what-is-saju</span></span>
+    </div>
+    <div class="web-page pg-about">
+      <div class="starfield-bg"></div>
+      <div class="webnav">
+        <div class="logo"><span class="glyph">柱</span> Pillar Seer</div>
+        <div class="links">
+          <span class="link">Home</span>
+          <span class="link">Free Calculator</span>
+          <span class="link active">About Saju</span>
+          <span class="link">K-pop Saju</span>
+          <span class="link">Pricing</span>
+        </div>
+        <span class="cta">Download App</span>
+      </div>
+
+      <div class="about-hero">
+        <h1>What is <em>Saju</em>?</h1>
+        <p class="lede">
+          The 5,000-year-old Korean system that decoded human destiny<br>
+          before astrology was even named.
+        </p>
+      </div>
+
+      <div class="toc">
+        <div class="toc-title">✦ TABLE OF CONTENTS</div>
+        <ol>
+          <li>The Origin: 5,000 Years of Pattern Recognition</li>
+          <li>The Four Pillars (四柱) — Year, Month, Day, Hour</li>
+          <li>The Five Elements (五行) — Wood, Fire, Earth, Metal, Water</li>
+          <li>The Sixty Galja (六十甲子) — A Cycle of Combinations</li>
+          <li>Saju vs Western Astrology — What's Different?</li>
+          <li>Can Foreigners Get a Saju Reading?</li>
+        </ol>
+      </div>
+
+      <div class="article">
+        <h2>The Four Pillars</h2>
+        <p>
+          Saju (四柱) literally means <strong>"Four Pillars."</strong> Each pillar corresponds to a moment of your birth —
+          the year, the month, the day, and the hour. Each pillar is composed of <strong>two characters</strong> (one Heavenly Stem
+          and one Earthly Branch), making your full chart <strong>eight characters total</strong> — which is why Korean
+          Saju is also called <em>Pal-ja</em> (八字), meaning "the eight characters."
+        </p>
+
+        <div class="pillars-visual">
+          <div class="pv-cell">
+            <div class="han">癸卯</div>
+            <div class="name">YEAR · 年柱</div>
+            <div class="desc">Ancestry,<br>foundational self</div>
+          </div>
+          <div class="pv-cell">
+            <div class="han">丙辰</div>
+            <div class="name">MONTH · 月柱</div>
+            <div class="desc">Career, parents,<br>environment</div>
+          </div>
+          <div class="pv-cell">
+            <div class="han">戊寅</div>
+            <div class="name">DAY · 日柱</div>
+            <div class="desc">Inner self,<br>spouse</div>
+          </div>
+          <div class="pv-cell">
+            <div class="han">己未</div>
+            <div class="name">HOUR · 時柱</div>
+            <div class="desc">Children,<br>later life</div>
+          </div>
+        </div>
+
+        <p class="pull-quote">"Your Day Master is your soul's signature. Everything else is the weather around it."</p>
+
+        <h2>Saju vs Western Astrology</h2>
+        <p>
+          Western astrology divides humanity into <strong>12 sun signs</strong>. Saju recognizes <strong>518,400 unique
+          combinations</strong> (60 Galja × 60 × 60 × 24). It is the difference between calling someone "Capricorn" and
+          calling someone "Yang Earth Tiger born in Yin Wood Rabbit year, on the third hour after sunset."
+        </p>
+        <p>
+          Saju doesn't predict; it <strong>reveals patterns</strong>. Your strengths, your blind spots, your luck cycles
+          (大運), and the years that will challenge or reward you most — all written in the eight characters of your birth.
+        </p>
+
+        <h2>Can Foreigners Get a Saju Reading?</h2>
+        <p>
+          Yes. <strong>Saju is the language of the universe at the moment of your birth</strong> — it doesn't require Korean
+          ancestry. Whether you were born in São Paulo, Manila, or Toronto, your four pillars exist. Pillar Seer
+          handles the timezone and longitude correction automatically. Your stars are already aligned.
+        </p>
+      </div>
+
+      <div class="web-footer">
+        <div class="brand"><div class="logo">柱 Pillar Seer</div><p>Korean Saju, decoded for the global age.</p></div>
+        <div><h5>PRODUCT</h5><ul><li>Calculator</li><li>iOS App</li><li>Pricing</li></ul></div>
+        <div><h5>LEARN</h5><ul><li>What is Saju?</li><li>Five Elements</li><li>K-pop Saju</li></ul></div>
+        <div><h5>LEGAL</h5><ul><li>Privacy</li><li>Terms</li><li>Contact</li></ul></div>
+        <div class="copyright"><span>© 2026 Pillar Seer</span><span>Made with 柱 in Seoul</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================================================
+     PAGE 4: BLOG
+     ================================================== -->
+<div class="section">
+  <h2 class="section-title">4. <em>K-pop Saju Blog</em> — pillarseer.app/blog</h2>
+  <p class="section-desc">SEO + 마케팅 콘텐츠. K-pop 사주 / K-drama 분석. TikTok 트래픽 깔때기.</p>
+
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+      <span class="browser-url"><span class="lock">🔒</span><span class="domain">pillarseer.app/blog</span></span>
+    </div>
+    <div class="web-page pg-blog">
+      <div class="starfield-bg"></div>
+      <div class="webnav">
+        <div class="logo"><span class="glyph">柱</span> Pillar Seer</div>
+        <div class="links">
+          <span class="link">Home</span>
+          <span class="link">Free Calculator</span>
+          <span class="link">About Saju</span>
+          <span class="link active">K-pop Saju</span>
+          <span class="link">Pricing</span>
+        </div>
+        <span class="cta">Download App</span>
+      </div>
+
+      <div class="blog-header">
+        <h1>The <em>Pillar Seer</em> Journal</h1>
+        <p>K-pop sajus, K-drama mysticism, and the wisdom hidden in the stars.</p>
+      </div>
+
+      <div class="blog-categories">
+        <div class="cat-chip active">All</div>
+        <div class="cat-chip">K-pop Saju</div>
+        <div class="cat-chip">K-drama</div>
+        <div class="cat-chip">Korean Culture</div>
+        <div class="cat-chip">Compatibility</div>
+        <div class="cat-chip">Saju 101</div>
+      </div>
+
+      <div class="featured">
+        <div class="img">💜</div>
+        <div class="info">
+          <div class="tag">K-POP SAJU · FEATURED</div>
+          <h2>Why BTS V is born to be a star</h2>
+          <p>His Day Pillar reveals a rare alignment that destines public adoration. Inside: the four elements that crowned him, the year cycle that birthed his solo, and what 2027 holds.</p>
+          <div class="meta">8 min read · 38,200 views · May 7, 2026</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="post">
+          <div class="img">🐉</div>
+          <div class="body">
+            <div class="tag">COMPATIBILITY</div>
+            <h3>Jungkook + V: The Fire & Water Saju That Started a Fandom</h3>
+            <div class="meta">5 min · 41.4K reads</div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="img">🎬</div>
+          <div class="body">
+            <div class="tag">K-DRAMA</div>
+            <h3>Exhuma's Shamanism vs Real Korean Saju — What's Authentic?</h3>
+            <div class="meta">8 min · 12.4K reads</div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="img">⭐</div>
+          <div class="body">
+            <div class="tag">K-POP SAJU</div>
+            <h3>NewJeans Hanni's Lucky Elements for 2026</h3>
+            <div class="meta">4 min · 28.1K reads</div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="img">🌙</div>
+          <div class="body">
+            <div class="tag">CULTURE</div>
+            <h3>Why Koreans Don't Marry in the Year of the White Horse</h3>
+            <div class="meta">6 min · 15.7K reads</div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="img">📜</div>
+          <div class="body">
+            <div class="tag">SAJU 101</div>
+            <h3>Decoding the 60 Galja for Beginners (Step-by-step)</h3>
+            <div class="meta">12 min · 4.1K reads</div>
+          </div>
+        </div>
+        <div class="post">
+          <div class="img">🐯</div>
+          <div class="body">
+            <div class="tag">K-POP SAJU</div>
+            <h3>Stray Kids Bang Chan's Leadership Pillar — Why He Was Born to Lead</h3>
+            <div class="meta">6 min · 19.3K reads</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="web-footer">
+        <div class="brand"><div class="logo">柱 Pillar Seer</div><p>50+ articles on K-pop saju, K-drama mysticism, and the four pillars of destiny.</p></div>
+        <div><h5>PRODUCT</h5><ul><li>Calculator</li><li>iOS / Android</li></ul></div>
+        <div><h5>BLOG</h5><ul><li>K-pop Saju</li><li>K-drama</li><li>Saju 101</li></ul></div>
+        <div><h5>LEGAL</h5><ul><li>Privacy</li><li>Terms</li></ul></div>
+        <div class="copyright"><span>© 2026 Pillar Seer</span><span>Made with 柱 in Seoul</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================================================
+     PAGE 5: PRICING
+     ================================================== -->
+<div class="section">
+  <h2 class="section-title">5. <em>Pricing</em> — pillarseer.app/pricing</h2>
+  <p class="section-desc">투명한 가격. 무료 → 월/연 구독 → 단건 결제 4종.</p>
+
+  <div class="browser">
+    <div class="browser-bar">
+      <span class="browser-dot r"></span><span class="browser-dot y"></span><span class="browser-dot g"></span>
+      <span class="browser-url"><span class="lock">🔒</span><span class="domain">pillarseer.app/pricing</span></span>
+    </div>
+    <div class="web-page pg-pricing">
+      <div class="starfield-bg"></div>
+      <div class="webnav">
+        <div class="logo"><span class="glyph">柱</span> Pillar Seer</div>
+        <div class="links">
+          <span class="link">Home</span>
+          <span class="link">Free Calculator</span>
+          <span class="link">About Saju</span>
+          <span class="link">K-pop Saju</span>
+          <span class="link active">Pricing</span>
+        </div>
+        <span class="cta">Download App</span>
+      </div>
+
+      <div style="text-align: center;">
+        <div class="pricing-hero">
+          <h1>Read your stars,<br><em>your way</em>.</h1>
+          <p class="lede">Start free. Go premium when you're ready. Single reports, always optional.</p>
+        </div>
+
+        <div class="billing-toggle">
+          <div class="bt-opt">Monthly</div>
+          <div class="bt-opt active">Yearly <span class="save">SAVE 33%</span></div>
+        </div>
+      </div>
+
+      <div class="plans">
+        <div class="plan-card">
+          <div class="plan-name">Free</div>
+          <div class="plan-desc">Discover your 4 pillars</div>
+          <div class="plan-price">$0<small> /forever</small></div>
+          <ul class="plan-features">
+            <li>4-pillar calculation</li>
+            <li>Daily score (1 number)</li>
+            <li>Basic personality reading</li>
+            <li>Day Master profile</li>
+            <li>3-day dream interpretation</li>
+          </ul>
+          <a class="plan-cta ghost">Start Free</a>
+        </div>
+
+        <div class="plan-card featured">
+          <div class="plan-name">Premium</div>
+          <div class="plan-desc">Everything you need, daily</div>
+          <div class="plan-price">$3.33<small> /month</small></div>
+          <div style="font-size: 11px; color: #A8A8C0; margin-top: 4px;">$39.99 billed annually</div>
+          <ul class="plan-features">
+            <li>Everything in Free</li>
+            <li>4-category daily forecast</li>
+            <li>10-Year Major Cycle (大運)</li>
+            <li>Year forecast (流年)</li>
+            <li>Unlimited dream interpretation</li>
+            <li>5 birth profiles (family)</li>
+            <li>Lucky direction map</li>
+            <li>No ads</li>
+          </ul>
+          <a class="plan-cta primary">✨ Start 7-Day Free Trial</a>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-name">Pro</div>
+          <div class="plan-desc">For practitioners & enthusiasts</div>
+          <div class="plan-price">$8.25<small> /month</small></div>
+          <div style="font-size: 11px; color: #A8A8C0; margin-top: 4px;">$99 billed annually</div>
+          <ul class="plan-features">
+            <li>Everything in Premium</li>
+            <li>All single reports included</li>
+            <li>Tojeongbigyeol (annual)</li>
+            <li>Unlimited compatibility</li>
+            <li>Date picking (택일)</li>
+            <li>20 birth profiles</li>
+            <li>Priority support</li>
+          </ul>
+          <a class="plan-cta ghost">Go Pro</a>
+        </div>
+      </div>
+
+      <div class="single-reports">
+        <h2>One-time Reports</h2>
+        <p>No subscription needed. Pay once, keep forever.</p>
+        <div class="reports-grid">
+          <div class="report-item">
+            <div class="ic">💕</div>
+            <div class="name">Soul Compatibility</div>
+            <div class="desc">Deep 5-element synastry between two pillars</div>
+            <div class="price">$9.99</div>
+          </div>
+          <div class="report-item">
+            <div class="ic">📜</div>
+            <div class="name">Tojeongbigyeol 2026</div>
+            <div class="desc">12-month annual reading from 144 hexagrams</div>
+            <div class="price">$14.99</div>
+          </div>
+          <div class="report-item">
+            <div class="ic">💍</div>
+            <div class="name">Date Picking</div>
+            <div class="desc">Find your most auspicious day for any event</div>
+            <div class="price">$9.99</div>
+          </div>
+          <div class="report-item">
+            <div class="ic">🌙</div>
+            <div class="name">Dream Pack ×10</div>
+            <div class="desc">Unlimited keyword-based dream interpretation</div>
+            <div class="price">$4.99</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="web-footer">
+        <div class="brand"><div class="logo">柱 Pillar Seer</div><p>Transparent pricing. Cancel anytime. 7-day free trial on all paid plans.</p></div>
+        <div><h5>PRODUCT</h5><ul><li>Calculator</li><li>iOS / Android</li><li>Pricing</li></ul></div>
+        <div><h5>LEARN</h5><ul><li>What is Saju?</li><li>K-pop Saju Blog</li><li>FAQ</li></ul></div>
+        <div><h5>LEGAL</h5><ul><li>Privacy</li><li>Terms</li><li>Refund Policy</li></ul></div>
+        <div class="copyright"><span>© 2026 Pillar Seer</span><span>Made with 柱 in Seoul</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer note -->
+<div style="max-width: 1100px; margin: 80px auto; padding: 40px; background: rgba(107, 70, 193, 0.06); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px;">
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 26px; color: #D4AF37; margin-bottom: 16px;">✦ 5 페이지 · 웹 mockup 완성</h2>
+  <p style="color: #A8A8C0; font-size: 14px; line-height: 1.8;">
+    <strong style="color: #F5F5F5;">3사 합의 결정:</strong> 하이브리드 (랜딩 + 무료 계산기 + About + Blog + Pricing) ·
+    Next.js + Tailwind + Vercel · SEO 우선 페이지 3개 (Calculator · About Saju · K-pop Saju Blog).
+  </p>
+  <p style="color: #A8A8C0; font-size: 14px; line-height: 1.8; margin-top: 12px;">
+    <strong style="color: #F5F5F5;">SEO 키워드 매핑:</strong> Korean astrology / Saju (Landing+Calculator) ·
+    What is Saju (About) · K-pop horoscope / BTS Saju (Blog) · Saju compatibility / pricing (Pricing).
+  </p>
+  <p style="color: #A8A8C0; font-size: 14px; line-height: 1.8; margin-top: 12px;">
+    <strong style="color: #F5F5F5;">개발 일정:</strong> Next.js 셋업 1일 · 5페이지 mockup → React 변환 4-5일 · API 연결(만세력) 2일 · 배포 1일. 총 1-2주.
+  </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pillar Seer — 한국어 버전 (17 화면)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Noto+Serif+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: radial-gradient(ellipse at top, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+    font-family: 'Pretendard', sans-serif;
+    min-height: 100vh;
+  }
+  body { padding: 60px 24px 120px; }
+
+  /* Page Header */
+  .page-header { max-width: 1600px; margin: 0 auto 64px; text-align: center; }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #D4AF37 0%, #F5F5F5 50%, #6B46C1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .page-header h1 em { font-style: italic; }
+  .page-header .sub {
+    color: #A8A8C0; font-size: 15px; line-height: 1.7; margin-top: 16px;
+    max-width: 800px; margin-left: auto; margin-right: auto;
+  }
+  .page-header .meta { display: inline-flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; justify-content: center; }
+  .meta-tag {
+    padding: 6px 14px;
+    background: rgba(107, 70, 193, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 999px;
+    font-size: 11px; color: #D4AF37; letter-spacing: 0.05em;
+  }
+  .lang-switch {
+    display: inline-flex; gap: 0; margin-top: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 999px; overflow: hidden;
+  }
+  .lang-switch a {
+    padding: 8px 18px; font-size: 12px; color: #A8A8C0; text-decoration: none; letter-spacing: 0.1em;
+  }
+  .lang-switch a.active { background: linear-gradient(135deg, #D4AF37, #B8860B); color: #1A0B2E; font-weight: 700; }
+
+  /* Section */
+  .section { max-width: 1600px; margin: 0 auto 72px; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700; color: #D4AF37;
+    margin-bottom: 8px; letter-spacing: 0.02em;
+  }
+  .section-title em { font-style: italic; color: #6B46C1; }
+  .section-desc { color: #A8A8C0; font-size: 13px; margin-bottom: 32px; }
+
+  .phones-grid { display: grid; grid-template-columns: repeat(auto-fit, 320px); gap: 40px; justify-content: flex-start; }
+  .phone-card { display: flex; flex-direction: column; gap: 12px; }
+  .phone-label {
+    text-align: center; font-size: 12px; color: #6B6B82;
+    letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+  }
+  .phone-label strong {
+    color: #D4AF37; display: block; font-size: 14px; margin-top: 4px;
+    letter-spacing: 0.02em; text-transform: none;
+    font-family: 'Playfair Display', serif; font-style: italic;
+  }
+
+  .phone {
+    width: 320px; height: 680px; border-radius: 44px;
+    overflow: hidden; position: relative;
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.7),
+      0 0 0 8px #1a1a20,
+      0 0 0 9px #2c2c30,
+      0 0 50px rgba(107, 70, 193, 0.1);
+    background: #1A0B2E;
+  }
+  .notch {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px; background: #000; border-radius: 18px; z-index: 100;
+  }
+  .screen {
+    width: 100%; height: 100%; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+  }
+  .statusbar {
+    position: absolute; top: 0; left: 0; right: 0; height: 48px;
+    padding: 14px 28px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; font-weight: 600; z-index: 50; color: #F5F5F5;
+  }
+
+  .starfield {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 60% 25%, #D4AF37, transparent),
+      radial-gradient(2px 2px at 80% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 80%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 45%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 15% 60%, #fff, transparent),
+      radial-gradient(2px 2px at 90% 20%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 50% 90%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 35%, #fff, transparent);
+    opacity: 0.5; pointer-events: none;
+  }
+
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 84px;
+    background: rgba(10, 6, 18, 0.95); backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    display: flex; padding: 8px 0 24px;
+  }
+  .nav-item {
+    flex: 1; text-align: center; color: #6B6B82;
+    font-size: 9px; letter-spacing: 0.05em; font-weight: 600;
+    padding: 8px 0;
+  }
+  .nav-item .ic { font-size: 18px; display: block; margin-bottom: 2px; opacity: 0.5; }
+  .nav-item.active { color: #D4AF37; }
+  .nav-item.active .ic { opacity: 1; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6); }
+
+  .topbar {
+    padding: 60px 24px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 10;
+  }
+  .topbar .back, .topbar .gear, .topbar .more { color: #A8A8C0; font-size: 18px; }
+  .topbar-title {
+    font-family: 'Gowun Batang', serif;
+    font-size: 14px; font-weight: 700; color: #F5F5F5;
+    letter-spacing: 0.1em;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+    color: #1A0B2E;
+    font-family: 'Gowun Batang', serif; font-weight: 700;
+    padding: 14px 16px; border-radius: 12px; text-align: center;
+    font-size: 14px; letter-spacing: 0.05em;
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+  }
+  .btn-purple {
+    background: linear-gradient(135deg, #6B46C1, #311B92);
+    color: #F5F5F5; padding: 12px 16px; border-radius: 12px;
+    text-align: center; font-size: 13px; font-weight: 600;
+  }
+
+  /* ==== Splash ==== */
+  .scr-splash .screen {
+    background: radial-gradient(ellipse at center, #311B92 0%, #1A0B2E 60%, #0A0612 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .scr-splash .logo-area { position: relative; width: 180px; height: 180px; margin-bottom: 28px; }
+  .scr-splash .star { position: absolute; color: #D4AF37; font-size: 24px; text-shadow: 0 0 12px rgba(212, 175, 55, 0.8); }
+  .scr-splash .star.s1 { top: 0; left: 50%; transform: translateX(-50%); }
+  .scr-splash .star.s2 { right: 0; top: 50%; transform: translateY(-50%); }
+  .scr-splash .star.s3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .scr-splash .star.s4 { left: 0; top: 50%; transform: translateY(-50%); }
+  .scr-splash .glyph {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Noto Serif KR', serif; font-size: 56px; font-weight: 900; color: #D4AF37;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+  }
+  .scr-splash h1 {
+    font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900;
+    letter-spacing: 0.18em; color: #F5F5F5; margin-bottom: 10px;
+  }
+  .scr-splash .tag {
+    font-family: 'Gowun Batang', serif; font-size: 13px;
+    color: #A8A8C0; text-align: center; line-height: 1.7; max-width: 220px;
+  }
+  .scr-splash .dots { margin-top: 50px; display: flex; gap: 6px; }
+  .scr-splash .dot { width: 5px; height: 5px; border-radius: 50%; background: #D4AF37; opacity: 0.5; }
+
+  /* ==== Welcome ==== */
+  .scr-welcome .screen { padding: 60px 28px 32px; display: flex; flex-direction: column; }
+  .scr-welcome .skip { position: absolute; top: 60px; right: 24px; color: #A8A8C0; font-size: 13px; z-index: 10; }
+  .scr-welcome .hero { margin: 60px 0 32px; text-align: center; position: relative; height: 200px; }
+  .scr-welcome .hero-glyph {
+    font-family: 'Noto Serif KR', serif; font-size: 96px; font-weight: 900; color: #D4AF37;
+    text-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+  }
+  .scr-welcome .hero::before, .scr-welcome .hero::after {
+    content: '✦'; position: absolute; color: #D4AF37; font-size: 16px; opacity: 0.6;
+  }
+  .scr-welcome .hero::before { top: 30px; left: 30px; }
+  .scr-welcome .hero::after { bottom: 30px; right: 30px; }
+  .scr-welcome h2 {
+    font-family: 'Gowun Batang', serif; font-size: 24px; font-weight: 700;
+    text-align: center; color: #F5F5F5; line-height: 1.4; margin-bottom: 14px;
+  }
+  .scr-welcome h2 em { font-style: normal; color: #D4AF37; }
+  .scr-welcome p {
+    text-align: center; color: #A8A8C0; font-size: 13px; line-height: 1.7;
+    margin-bottom: 32px; padding: 0 8px;
+  }
+  .scr-welcome .pager { display: flex; justify-content: center; gap: 6px; margin-bottom: 24px; }
+  .scr-welcome .pg { width: 24px; height: 3px; background: rgba(212, 175, 55, 0.2); border-radius: 2px; }
+  .scr-welcome .pg.active { background: #D4AF37; }
+  .scr-welcome .actions { margin-top: auto; }
+
+  /* ==== Birth Info ==== */
+  .scr-birth .screen { padding: 60px 28px 32px; display: flex; flex-direction: column; }
+  .scr-birth .header { text-align: center; margin: 20px 0 28px; }
+  .scr-birth .header-glyph { color: #D4AF37; font-size: 22px; margin-bottom: 8px; opacity: 0.7; }
+  .scr-birth h2 {
+    font-family: 'Gowun Batang', serif; font-size: 22px; font-weight: 700;
+    color: #F5F5F5; margin-bottom: 4px;
+  }
+  .scr-birth .sub-label { font-size: 11px; color: #A8A8C0; }
+  .scr-birth .field { margin-bottom: 12px; }
+  .scr-birth .lbl { font-size: 9px; color: #6B6B82; letter-spacing: 0.1em; margin-bottom: 6px; font-weight: 600; }
+  .scr-birth .input {
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px; padding: 11px 14px;
+    color: #F5F5F5; font-size: 13px; font-weight: 500;
+  }
+  .scr-birth .row { display: flex; gap: 8px; }
+  .scr-birth .row .field { flex: 1; }
+  .scr-birth .toggle {
+    display: flex; background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 8px; padding: 3px; margin: 8px 0 16px;
+  }
+  .scr-birth .topt { flex: 1; text-align: center; padding: 9px; font-size: 12px; color: #A8A8C0; border-radius: 6px; }
+  .scr-birth .topt.active { background: linear-gradient(135deg, #6B46C1, #311B92); color: #F5F5F5; font-weight: 600; }
+  .scr-birth .skip-time {
+    color: #A8A8C0; font-size: 11px; text-align: center; padding: 6px;
+    text-decoration: underline; margin-bottom: 10px;
+  }
+  .scr-birth .actions { margin-top: auto; }
+
+  /* ==== Home ==== */
+  .scr-home .screen { overflow-y: auto; padding-bottom: 100px; }
+  .scr-home .top { padding: 60px 24px 8px; display: flex; justify-content: space-between; align-items: center; }
+  .scr-home .greet { font-size: 12px; color: #A8A8C0; }
+  .scr-home .greet b { color: #F5F5F5; font-weight: 600; }
+  .scr-home .bell { color: #A8A8C0; font-size: 18px; position: relative; }
+  .scr-home .bell::after { content: ''; position: absolute; top: 0; right: -2px; width: 6px; height: 6px; background: #D4AF37; border-radius: 50%; }
+  .scr-home .date {
+    text-align: center; color: #6B6B82; font-size: 10px; letter-spacing: 0.15em;
+    margin-bottom: 18px;
+  }
+  .scr-home .moon-deco {
+    text-align: center; color: #D4AF37; font-size: 12px; letter-spacing: 8px; opacity: 0.5; margin-bottom: 4px;
+  }
+  .scr-home .score-circle {
+    width: 130px; height: 130px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.3) 0%, transparent 60%);
+    border: 2px solid rgba(212, 175, 55, 0.5);
+    display: flex; align-items: center; justify-content: center;
+    margin: 12px auto 12px;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(107, 70, 193, 0.15);
+  }
+  .scr-home .score-num {
+    font-family: 'Playfair Display', serif; font-weight: 900; font-size: 44px; color: #D4AF37; line-height: 1;
+  }
+  .scr-home .score-num span { font-size: 14px; color: #A8A8C0; font-weight: 400; }
+  .scr-home .quote {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px; color: #F5F5F5; text-align: center; line-height: 1.7;
+    padding: 0 32px 18px;
+  }
+  .scr-home .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 0 16px 14px; }
+  .scr-home .cat-card {
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 8px; padding: 8px 4px; text-align: center;
+  }
+  .scr-home .cat-icon { font-size: 16px; margin-bottom: 2px; }
+  .scr-home .cat-score { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #D4AF37; font-weight: 700; }
+  .scr-home .cat-name { font-size: 9px; color: #A8A8C0; letter-spacing: 0.05em; margin-top: 2px; }
+  .scr-home .lucky {
+    margin: 6px 24px 16px; padding: 12px;
+    background: rgba(107, 70, 193, 0.08);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+  .scr-home .lr { display: flex; justify-content: space-between; padding: 3px 0; font-size: 11px; }
+  .scr-home .lr-l { color: #A8A8C0; }
+  .scr-home .lr-v { color: #D4AF37; font-weight: 600; }
+  .scr-home .promo-card {
+    margin: 0 24px 16px; padding: 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+  }
+  .scr-home .promo-tag { font-size: 9px; color: #D4AF37; letter-spacing: 0.1em; font-weight: 700; }
+  .scr-home .promo-title { font-family: 'Gowun Batang', serif; font-size: 15px; color: #F5F5F5; font-weight: 700; margin: 4px 0; }
+  .scr-home .promo-desc { font-size: 11px; color: #A8A8C0; line-height: 1.5; }
+
+  /* ==== Life Reading ==== */
+  .scr-life .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-life .pillars-section { padding: 12px 24px 18px; text-align: center; }
+  .scr-life .pillars {
+    font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 28px; color: #D4AF37;
+    letter-spacing: 0.18em; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); margin-bottom: 8px;
+  }
+  .scr-life .pillar-labels { display: flex; justify-content: space-around; font-size: 10px; color: #6B6B82; letter-spacing: 0.05em; }
+  .scr-life .day-master {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.1));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px; padding: 16px; margin: 0 24px 18px; text-align: center;
+  }
+  .scr-life .dm-name { font-family: 'Gowun Batang', serif; font-size: 18px; font-weight: 700; color: #D4AF37; margin-bottom: 6px; }
+  .scr-life .dm-quote { font-family: 'Gowun Batang', serif; font-size: 13px; color: #F5F5F5; line-height: 1.7; }
+  .scr-life .elements { padding: 0 24px 16px; }
+  .scr-life .er { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 11px; }
+  .scr-life .er-name { width: 36px; color: #A8A8C0; font-family: 'Noto Serif KR', serif; font-weight: 700; }
+  .scr-life .er-bar { flex: 1; height: 6px; background: rgba(107, 70, 193, 0.2); border-radius: 3px; overflow: hidden; }
+  .scr-life .er-fill { height: 100%; background: linear-gradient(90deg, #D4AF37, #6B46C1); border-radius: 3px; }
+  .scr-life .er-pct { width: 36px; text-align: right; color: #F5F5F5; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .scr-life .cards { padding: 0 24px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .scr-life .card {
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px; padding: 12px 10px; text-align: center; position: relative;
+  }
+  .scr-life .card.locked { opacity: 0.55; }
+  .scr-life .card-icon { font-size: 20px; margin-bottom: 4px; }
+  .scr-life .card-title { font-size: 11px; color: #F5F5F5; font-weight: 600; }
+  .scr-life .card .lk { position: absolute; top: 6px; right: 6px; font-size: 10px; opacity: 0.6; }
+  .scr-life .unlock { margin: 6px 24px 24px; }
+
+  /* ==== Detail ==== */
+  .scr-detail .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-detail .hero { padding: 0 24px 18px; text-align: center; }
+  .scr-detail .hero-icon { font-size: 36px; margin-top: 8px; margin-bottom: 8px; }
+  .scr-detail .hero h2 { font-family: 'Gowun Batang', serif; font-size: 20px; color: #D4AF37; font-weight: 700; }
+  .scr-detail .hero .h-sub { font-size: 11px; color: #A8A8C0; margin-top: 4px; }
+  .scr-detail .body {
+    padding: 0 24px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 14px; color: #F5F5F5; line-height: 1.9;
+  }
+  .scr-detail .body p { margin-bottom: 12px; }
+  .scr-detail .body p::first-letter { font-size: 28px; color: #D4AF37; }
+  .scr-detail .insights {
+    margin: 16px 24px; padding: 14px;
+    background: rgba(107, 70, 193, 0.08);
+    border-left: 3px solid #D4AF37; border-radius: 4px;
+  }
+  .scr-detail .insights h4 { font-size: 11px; color: #D4AF37; letter-spacing: 0.05em; margin-bottom: 8px; font-weight: 700; }
+  .scr-detail .insights li {
+    list-style: none; font-size: 12px; color: #F5F5F5; line-height: 1.7; padding: 3px 0; padding-left: 16px; position: relative;
+  }
+  .scr-detail .insights li::before { content: '✦'; position: absolute; left: 0; color: #D4AF37; }
+  .scr-detail .share-btn { margin: 0 24px 16px; }
+
+  /* ==== Cycle ==== */
+  .scr-cycle .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-cycle h3 {
+    font-family: 'Gowun Batang', serif; font-size: 14px; color: #D4AF37; font-weight: 700;
+    margin: 12px 24px 12px;
+  }
+  .scr-cycle .timeline { padding: 0 24px 16px; }
+  .scr-cycle .age-block {
+    display: flex; gap: 12px; padding: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 10px; margin-bottom: 8px;
+    background: rgba(107, 70, 193, 0.05);
+    position: relative;
+  }
+  .scr-cycle .age-block.now { background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15)); border-color: #D4AF37; }
+  .scr-cycle .age-block.now::after { content: '현재'; position: absolute; top: 6px; right: 8px; font-size: 9px; background: #D4AF37; color: #1A0B2E; padding: 2px 6px; border-radius: 3px; font-weight: 700; }
+  .scr-cycle .age-num {
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #D4AF37; min-width: 50px; line-height: 1; padding-top: 4px;
+  }
+  .scr-cycle .age-info { flex: 1; }
+  .scr-cycle .age-pillar {
+    font-family: 'Noto Serif KR', serif; color: #F5F5F5; font-size: 14px; font-weight: 700; margin-bottom: 4px;
+  }
+  .scr-cycle .age-desc { font-size: 11px; color: #A8A8C0; line-height: 1.7; }
+  .scr-cycle .year-row {
+    margin: 0 24px 16px; padding: 12px;
+    background: rgba(212, 175, 55, 0.08); border-radius: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .scr-cycle .year-row .yr-label { font-size: 11px; color: #6B6B82; }
+  .scr-cycle .year-row .yr-val { font-family: 'Gowun Batang', serif; font-size: 14px; color: #D4AF37; font-weight: 700; }
+
+  /* ==== Daily ==== */
+  .scr-daily .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-daily .day-pill {
+    margin: 4px 24px 16px; padding: 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px; text-align: center;
+  }
+  .scr-daily .day-pill .ko { font-family: 'Noto Serif KR', serif; font-size: 18px; color: #D4AF37; letter-spacing: 0.15em; }
+  .scr-daily .day-pill .en { font-size: 11px; color: #A8A8C0; margin-top: 4px; }
+  .scr-daily .scores-detail { padding: 0 24px 14px; }
+  .scr-daily .sd-row {
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 10px; padding: 12px; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .scr-daily .sd-icon { font-size: 22px; }
+  .scr-daily .sd-info { flex: 1; }
+  .scr-daily .sd-cat { font-size: 12px; color: #A8A8C0; font-weight: 600; }
+  .scr-daily .sd-msg { font-family: 'Gowun Batang', serif; font-size: 11px; color: #F5F5F5; margin-top: 3px; line-height: 1.6; }
+  .scr-daily .sd-score { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #D4AF37; font-weight: 700; }
+
+  /* ==== Week ==== */
+  .scr-week .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-week .month-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 24px 12px;
+  }
+  .scr-week .month {
+    font-family: 'Gowun Batang', serif; font-size: 16px; color: #D4AF37; font-weight: 700;
+  }
+  .scr-week .arrow { color: #A8A8C0; font-size: 18px; }
+  .scr-week .weekdays {
+    display: grid; grid-template-columns: repeat(7, 1fr); padding: 0 16px;
+    font-size: 11px; color: #6B6B82; text-align: center; margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .scr-week .days { display: grid; grid-template-columns: repeat(7, 1fr); padding: 0 16px; gap: 4px; }
+  .scr-week .day {
+    aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(107, 70, 193, 0.05); border-radius: 8px; padding: 4px;
+  }
+  .scr-week .day.today { background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(107, 70, 193, 0.2)); border: 1px solid #D4AF37; }
+  .scr-week .day.high { background: rgba(212, 175, 55, 0.12); }
+  .scr-week .day.low { background: rgba(231, 76, 60, 0.08); }
+  .scr-week .d-num { font-size: 13px; color: #F5F5F5; font-weight: 600; }
+  .scr-week .d-score { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #D4AF37; font-weight: 700; margin-top: 2px; }
+  .scr-week .legend {
+    margin: 18px 24px; padding: 12px;
+    background: rgba(107, 70, 193, 0.08); border-radius: 10px;
+    font-size: 11px; color: #A8A8C0; line-height: 1.8;
+  }
+  .scr-week .lg-row { display: flex; justify-content: space-between; padding: 3px 0; }
+  .scr-week .lg-row .b { color: #D4AF37; font-weight: 600; }
+
+  /* ==== Compatibility ==== */
+  .scr-compat .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-compat .vs { display: flex; align-items: center; gap: 12px; padding: 12px 24px 16px; }
+  .scr-compat .person {
+    flex: 1; padding: 14px;
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px; text-align: center;
+  }
+  .scr-compat .p-label { font-size: 9px; color: #6B6B82; letter-spacing: 0.1em; margin-bottom: 4px; font-weight: 700; }
+  .scr-compat .p-pillar { font-family: 'Noto Serif KR', serif; font-size: 18px; color: #D4AF37; font-weight: 900; margin-bottom: 4px; }
+  .scr-compat .p-name { font-size: 11px; color: #F5F5F5; font-weight: 600; }
+  .scr-compat .vs-mark { color: #D4AF37; font-size: 22px; }
+  .scr-compat .match-card {
+    margin: 0 24px 16px; padding: 22px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(107, 70, 193, 0.15));
+    border: 1px solid #D4AF37; border-radius: 14px; text-align: center;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+  .scr-compat .match-pct { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: #D4AF37; line-height: 1; }
+  .scr-compat .match-label { font-size: 12px; color: #A8A8C0; margin-top: 8px; font-weight: 600; }
+  .scr-compat .breakdown { padding: 0 24px 16px; }
+  .scr-compat .b-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    background: rgba(107, 70, 193, 0.08); padding: 10px 12px; border-radius: 8px; font-size: 11px;
+  }
+  .scr-compat .b-cat { width: 60px; color: #A8A8C0; font-weight: 600; }
+  .scr-compat .b-bar { flex: 1; height: 4px; background: rgba(107, 70, 193, 0.2); border-radius: 2px; }
+  .scr-compat .b-fill { height: 100%; background: linear-gradient(90deg, #D4AF37, #6B46C1); border-radius: 2px; }
+  .scr-compat .b-pct { width: 30px; text-align: right; color: #D4AF37; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .scr-compat .preview {
+    margin: 0 24px 12px; padding: 14px;
+    background: rgba(107, 70, 193, 0.05); border-radius: 10px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px; color: #F5F5F5; line-height: 1.8;
+    position: relative;
+  }
+  .scr-compat .preview::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+    background: linear-gradient(to bottom, transparent, #1A0B2E);
+    border-radius: 0 0 10px 10px;
+  }
+  .scr-compat .unlock-btn { margin: 0 24px 16px; }
+
+  /* ==== Tojeong ==== */
+  .scr-toj .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-toj .gwa-card {
+    margin: 4px 24px 16px; padding: 22px;
+    background: radial-gradient(circle at top, rgba(212, 175, 55, 0.2), rgba(107, 70, 193, 0.1) 70%);
+    border: 1px solid #D4AF37; border-radius: 14px; text-align: center;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+  .scr-toj .gwa-num { font-family: 'Noto Serif KR', serif; font-size: 13px; color: #A8A8C0; margin-bottom: 6px; letter-spacing: 0.1em; }
+  .scr-toj .gwa-glyph {
+    font-family: 'Noto Serif KR', serif; font-size: 36px; color: #D4AF37; font-weight: 900;
+    margin-bottom: 8px; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  }
+  .scr-toj .gwa-name {
+    font-family: 'Gowun Batang', serif; font-size: 14px; color: #F5F5F5; line-height: 1.6;
+  }
+  .scr-toj .summary {
+    margin: 0 24px 12px; padding: 12px 14px;
+    background: rgba(107, 70, 193, 0.08);
+    border-left: 3px solid #D4AF37; border-radius: 4px;
+    font-family: 'Gowun Batang', serif; font-size: 12px; color: #F5F5F5; line-height: 1.8;
+  }
+  .scr-toj .months { padding: 0 16px 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .scr-toj .m-card {
+    aspect-ratio: 1.1; padding: 8px 6px;
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 8px; text-align: center;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .scr-toj .m-card.locked { opacity: 0.5; position: relative; }
+  .scr-toj .m-card.locked::after { content: '🔒'; position: absolute; top: 4px; right: 4px; font-size: 9px; }
+  .scr-toj .m-name { font-family: 'Gowun Batang', serif; font-size: 11px; color: #D4AF37; font-weight: 700; }
+  .scr-toj .m-score { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #F5F5F5; font-weight: 700; margin-top: 3px; }
+  .scr-toj .m-icon { font-size: 14px; margin-top: 3px; }
+
+  /* ==== Date ==== */
+  .scr-date .screen { overflow-y: auto; padding-bottom: 32px; }
+  .scr-date .purpose {
+    margin: 4px 24px 14px; padding: 12px;
+    background: rgba(107, 70, 193, 0.08); border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+  .scr-date .p-label { font-size: 10px; color: #6B6B82; letter-spacing: 0.05em; margin-bottom: 6px; font-weight: 600; }
+  .scr-date .p-purp { font-family: 'Gowun Batang', serif; font-size: 16px; color: #D4AF37; font-weight: 700; }
+  .scr-date .top-pick {
+    margin: 0 24px 12px; padding: 18px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(107, 70, 193, 0.15));
+    border: 1px solid #D4AF37; border-radius: 12px; text-align: center;
+  }
+  .scr-date .tp-tag { font-size: 10px; color: #D4AF37; font-weight: 700; }
+  .scr-date .tp-date { font-family: 'Gowun Batang', serif; font-size: 22px; color: #F5F5F5; font-weight: 900; margin: 6px 0; }
+  .scr-date .tp-stars { color: #D4AF37; font-size: 16px; letter-spacing: 4px; }
+  .scr-date .tp-note { font-size: 11px; color: #A8A8C0; margin-top: 8px; font-family: 'Gowun Batang', serif; line-height: 1.6; }
+  .scr-date .candidates { padding: 0 24px 14px; }
+  .scr-date .cand {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px; border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    font-size: 12px;
+  }
+  .scr-date .cand-date { color: #F5F5F5; font-weight: 500; }
+  .scr-date .cand-stars { color: #D4AF37; }
+  .scr-date .cand-low { color: #6B6B82; opacity: 0.6; }
+
+  /* ==== Dream ==== */
+  .scr-dream .screen { padding: 0 0 32px; overflow-y: auto; }
+  .scr-dream .top { padding: 60px 24px 16px; text-align: center; }
+  .scr-dream .moon { font-size: 40px; color: #D4AF37; margin-bottom: 8px; text-shadow: 0 0 30px rgba(212, 175, 55, 0.4); }
+  .scr-dream h2 { font-family: 'Gowun Batang', serif; font-size: 20px; color: #F5F5F5; font-weight: 700; }
+  .scr-dream .h-sub { font-size: 12px; color: #A8A8C0; margin-top: 4px; }
+  .scr-dream .input-area {
+    margin: 8px 24px 14px; padding: 14px;
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px; min-height: 80px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px; color: #A8A8C0; line-height: 1.7;
+  }
+  .scr-dream .interpret {
+    margin: 0 24px 14px; padding: 16px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(107, 70, 193, 0.08));
+    border-left: 3px solid #D4AF37; border-radius: 4px;
+  }
+  .scr-dream .keyword-tag {
+    display: inline-block;
+    background: rgba(212, 175, 55, 0.2); color: #D4AF37;
+    padding: 3px 10px; border-radius: 999px;
+    font-size: 11px; margin-right: 4px; margin-bottom: 6px; font-weight: 600;
+  }
+  .scr-dream .meaning {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px; color: #F5F5F5; line-height: 1.9; margin-top: 8px;
+  }
+  .scr-dream .recent { margin: 0 24px 14px; }
+  .scr-dream .r-title { font-size: 11px; color: #6B6B82; letter-spacing: 0.05em; margin-bottom: 8px; font-weight: 600; }
+  .scr-dream .r-item {
+    background: rgba(107, 70, 193, 0.05);
+    padding: 10px 12px; border-radius: 8px; margin-bottom: 6px;
+    font-size: 12px; color: #A8A8C0;
+    display: flex; justify-content: space-between;
+  }
+  .scr-dream .r-item .r-d { color: #6B6B82; font-size: 10px; }
+
+  /* ==== Archive ==== */
+  .scr-arc .screen { overflow-y: auto; padding-bottom: 100px; }
+  .scr-arc .filter-row { display: flex; gap: 6px; padding: 4px 24px 14px; overflow-x: auto; }
+  .scr-arc .chip {
+    padding: 6px 12px;
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 999px;
+    font-size: 11px; color: #A8A8C0;
+    white-space: nowrap; font-weight: 600;
+  }
+  .scr-arc .chip.active { background: linear-gradient(135deg, #D4AF37, #B8860B); color: #1A0B2E; font-weight: 700; border-color: #D4AF37; }
+  .scr-arc .reports { padding: 0 24px; }
+  .scr-arc .rep {
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 12px;
+    padding: 14px; margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .scr-arc .rep-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(107, 70, 193, 0.2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .scr-arc .rep-info { flex: 1; }
+  .scr-arc .rep-type { font-size: 11px; color: #D4AF37; font-weight: 700; }
+  .scr-arc .rep-title { font-family: 'Gowun Batang', serif; font-size: 13px; color: #F5F5F5; font-weight: 700; margin: 3px 0; }
+  .scr-arc .rep-date { font-size: 10px; color: #6B6B82; }
+  .scr-arc .rep-arrow { color: #A8A8C0; font-size: 14px; }
+
+  /* ==== Paywall ==== */
+  .scr-paywall .screen {
+    background: radial-gradient(ellipse at top, #311B92 0%, #1A0B2E 50%, #0A0612 100%);
+    padding: 50px 28px 32px; display: flex; flex-direction: column;
+  }
+  .scr-paywall .close { position: absolute; top: 56px; left: 24px; color: #A8A8C0; font-size: 20px; z-index: 30; }
+  .scr-paywall .stars-deco { text-align: center; color: #D4AF37; font-size: 18px; letter-spacing: 12px; margin: 24px 0 14px; }
+  .scr-paywall h2 {
+    font-family: 'Gowun Batang', serif; font-size: 22px; font-weight: 700; color: #F5F5F5;
+    text-align: center; margin-bottom: 8px; line-height: 1.4;
+  }
+  .scr-paywall h2 em { font-style: normal; color: #D4AF37; }
+  .scr-paywall .sub {
+    text-align: center; color: #A8A8C0; font-size: 12px;
+    line-height: 1.7; margin-bottom: 20px; padding: 0 12px;
+  }
+  .scr-paywall .features { margin-bottom: 18px; }
+  .scr-paywall .feat { padding: 8px 0; font-size: 12px; color: #F5F5F5; display: flex; align-items: center; gap: 10px; }
+  .scr-paywall .feat::before { content: '✓'; color: #D4AF37; font-weight: 700; font-size: 14px; width: 18px; }
+  .scr-paywall .plan {
+    background: rgba(107, 70, 193, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .scr-paywall .plan.featured {
+    border-color: #D4AF37;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15));
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+  .scr-paywall .plan-info .label { font-family: 'Gowun Batang', serif; font-size: 13px; color: #F5F5F5; font-weight: 700; }
+  .scr-paywall .plan-info .si { font-size: 9px; color: #A8A8C0; margin-top: 2px; }
+  .scr-paywall .plan-price { text-align: right; }
+  .scr-paywall .plan-price .am { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: #D4AF37; }
+  .scr-paywall .plan-price .save {
+    background: #D4AF37; color: #1A0B2E; font-size: 9px;
+    padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-top: 2px; display: inline-block;
+  }
+  .scr-paywall .trial-cta {
+    margin-top: 16px;
+    background: linear-gradient(135deg, #D4AF37, #B8860B);
+    padding: 16px; text-align: center; border-radius: 12px;
+    font-family: 'Gowun Batang', serif; font-size: 14px; font-weight: 700; color: #1A0B2E;
+    letter-spacing: 0.05em;
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+  }
+  .scr-paywall .legal { text-align: center; font-size: 10px; color: #6B6B82; margin-top: 12px; line-height: 1.7; }
+  .scr-paywall .legal a { color: #A8A8C0; }
+
+  /* ==== Profile ==== */
+  .scr-profile .screen { overflow-y: auto; padding-bottom: 100px; }
+  .scr-profile .me {
+    text-align: center; padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  }
+  .scr-profile .avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #D4AF37, #6B46C1);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900;
+    color: #1A0B2E; margin: 0 auto 10px;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+  }
+  .scr-profile .me-name { font-family: 'Gowun Batang', serif; font-size: 17px; color: #F5F5F5; font-weight: 700; }
+  .scr-profile .me-pillar { font-family: 'Noto Serif KR', serif; color: #D4AF37; font-size: 13px; margin-top: 4px; letter-spacing: 0.15em; }
+  .scr-profile .me-tier {
+    display: inline-block; margin-top: 8px;
+    padding: 3px 10px; background: rgba(212, 175, 55, 0.15); color: #D4AF37; border-radius: 999px;
+    font-size: 10px; font-weight: 700;
+  }
+  .scr-profile .profiles { padding: 14px 24px; }
+  .scr-profile .pf-title { font-size: 11px; color: #6B6B82; margin-bottom: 8px; font-weight: 600; }
+  .scr-profile .pf-list { display: flex; gap: 8px; }
+  .scr-profile .pf-card {
+    flex: 1; padding: 10px;
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 10px; text-align: center;
+  }
+  .scr-profile .pf-card.add { border-style: dashed; opacity: 0.7; }
+  .scr-profile .pf-em { font-size: 18px; }
+  .scr-profile .pf-n { font-size: 11px; color: #F5F5F5; margin-top: 4px; }
+  .scr-profile .menu { padding: 8px 24px; }
+  .scr-profile .mi {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    font-size: 13px;
+  }
+  .scr-profile .mi-l { color: #F5F5F5; display: flex; align-items: center; gap: 12px; }
+  .scr-profile .mi-l .ic { font-size: 18px; opacity: 0.7; }
+  .scr-profile .mi-r { color: #6B6B82; font-size: 14px; }
+  .scr-profile .mi-r.gold { color: #D4AF37; }
+
+  /* ==== Discover ==== */
+  .scr-disc .screen { overflow-y: auto; padding-bottom: 100px; }
+  .scr-disc h3 {
+    font-family: 'Gowun Batang', serif; font-size: 14px; color: #D4AF37; font-weight: 700;
+    margin: 14px 24px 10px;
+  }
+  .scr-disc .feature-card {
+    margin: 0 24px 14px; padding: 16px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15));
+    border-radius: 14px; border: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  .scr-disc .fc-tag { font-size: 10px; color: #D4AF37; font-weight: 700; }
+  .scr-disc .fc-title { font-family: 'Gowun Batang', serif; font-size: 16px; color: #F5F5F5; font-weight: 700; margin: 6px 0; line-height: 1.4; }
+  .scr-disc .fc-desc { font-size: 11px; color: #A8A8C0; line-height: 1.6; margin-bottom: 8px; }
+  .scr-disc .fc-cta { display: inline-block; font-size: 11px; color: #D4AF37; font-weight: 700; }
+  .scr-disc .articles { padding: 0 24px 16px; }
+  .scr-disc .art {
+    display: flex; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  }
+  .scr-disc .art-img {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(107, 70, 193, 0.2));
+    border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .scr-disc .art-info { flex: 1; }
+  .scr-disc .art-cat { font-size: 10px; color: #D4AF37; font-weight: 700; }
+  .scr-disc .art-title { font-family: 'Gowun Batang', serif; font-size: 13px; color: #F5F5F5; font-weight: 700; margin: 3px 0; line-height: 1.5; }
+  .scr-disc .art-meta { font-size: 10px; color: #6B6B82; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Pillar <em>Seer</em></h1>
+  <p class="sub">
+    한국어 버전 — 17개 화면 풀 디자인 시스템<br>
+    온보딩 · 홈 · 일생 사주 · 데일리 운세 · 프리미엄 리포트 · 프로필 · 공유
+  </p>
+  <div class="lang-switch">
+    <a href="screens-en.html">🇺🇸 ENGLISH</a>
+    <a class="active">🇰🇷 한국어</a>
+  </div>
+  <div class="meta" style="margin-top: 16px;">
+    <span class="meta-tag">V1 다크 미스테리어스</span>
+    <span class="meta-tag">17 화면</span>
+    <span class="meta-tag">완성판</span>
+    <span class="meta-tag">5탭 네비게이션</span>
+  </div>
+</div>
+
+<!-- A. 온보딩 -->
+<div class="section">
+  <h2 class="section-title">A. <em>온보딩</em></h2>
+  <p class="section-desc">첫 사용자 플로우. 결제 부담 없이 출생정보 수집까지.</p>
+
+  <div class="phones-grid">
+    <!-- 1. Splash -->
+    <div class="phone-card">
+      <div class="phone scr-splash">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="logo-area">
+            <span class="star s1">✦</span><span class="star s2">✦</span><span class="star s3">✦</span><span class="star s4">✦</span>
+            <div class="glyph">柱</div>
+          </div>
+          <h1>PILLAR SEER</h1>
+          <div class="tag">운명의 4기둥을<br>읽다</div>
+          <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        </div>
+      </div>
+      <div class="phone-label">01<strong>스플래시</strong></div>
+    </div>
+
+    <!-- 2. Welcome -->
+    <div class="phone-card">
+      <div class="phone scr-welcome">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <span class="skip">건너뛰기</span>
+          <div class="hero">
+            <div class="hero-glyph">柱</div>
+          </div>
+          <h2>당신의 운명은<br><em>4기둥</em>에 새겨져 있다</h2>
+          <p>지구 어디에서 태어났든,<br>당신의 4기둥은 별에 새겨져 있다.<br>5,000년 한국의 지혜 —<br>이제, 당신의 손 안에서.</p>
+          <div class="pager">
+            <div class="pg active"></div><div class="pg"></div><div class="pg"></div>
+          </div>
+          <div class="actions">
+            <div class="btn-gold">계속하기</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">02<strong>웰컴</strong></div>
+    </div>
+
+    <!-- 3. Birth Info -->
+    <div class="phone-card">
+      <div class="phone scr-birth">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="header">
+            <div class="header-glyph">✦</div>
+            <h2>운명을 알려주세요</h2>
+            <div class="sub-label">출생 시각이 필요합니다</div>
+          </div>
+          <div class="field"><div class="lbl">이름</div><div class="input">박지우</div></div>
+          <div class="row">
+            <div class="field"><div class="lbl">생년월일</div><div class="input">1996.04.15</div></div>
+            <div class="field"><div class="lbl">시간</div><div class="input">14:30</div></div>
+          </div>
+          <div class="skip-time">출생 시간을 모릅니다</div>
+          <div class="field"><div class="lbl">📍  출생지</div><div class="input">서울특별시</div></div>
+          <div class="toggle"><div class="topt active">양력</div><div class="topt">음력</div></div>
+          <div class="actions">
+            <div class="btn-gold">✨ 운명 알아보기 ✨</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">03<strong>출생정보 입력</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- B. 홈 -->
+<div class="section">
+  <h2 class="section-title">B. <em>홈 — 오늘의 운세</em></h2>
+  <p class="section-desc">매일 첫 진입점. 무료 점수 + 프리미엄 미리보기. 5탭 네비.</p>
+
+  <div class="phones-grid">
+    <div class="phone-card">
+      <div class="phone scr-home">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="top">
+            <div class="greet">안녕하세요,<br><b>지우 ✦</b></div>
+            <span class="bell">🔔</span>
+          </div>
+          <div class="date">2026년 5월 11일 · 월요일</div>
+          <div class="moon-deco">✦ ✦ ✦</div>
+          <div class="score-circle"><div class="score-num">85<span>/100</span></div></div>
+          <div class="quote">"먼 곳에서<br>비밀의 친구가 옵니다."</div>
+          <div class="cat-grid">
+            <div class="cat-card"><div class="cat-icon">💝</div><div class="cat-score">90</div><div class="cat-name">애정</div></div>
+            <div class="cat-card"><div class="cat-icon">💼</div><div class="cat-score">75</div><div class="cat-name">직업</div></div>
+            <div class="cat-card"><div class="cat-icon">💰</div><div class="cat-score">60</div><div class="cat-name">재물</div></div>
+            <div class="cat-card"><div class="cat-icon">⚡</div><div class="cat-score">88</div><div class="cat-name">기력</div></div>
+          </div>
+          <div class="lucky">
+            <div class="lr"><span class="lr-l">🎨 행운의 색</span><span class="lr-v">자정 보라색</span></div>
+            <div class="lr"><span class="lr-l">🔢 행운의 숫자</span><span class="lr-v">7</span></div>
+            <div class="lr"><span class="lr-l">🧭 행운의 방향</span><span class="lr-v">동쪽</span></div>
+          </div>
+          <div class="promo-card">
+            <div class="promo-tag">한정 콘텐츠</div>
+            <div class="promo-title">2026년 신년운세</div>
+            <div class="promo-desc">144괘로 풀어보는<br>당신의 한 해</div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item active"><span class="ic">✦</span>홈</div>
+            <div class="nav-item"><span class="ic">柱</span>사주</div>
+            <div class="nav-item"><span class="ic">📜</span>리포트</div>
+            <div class="nav-item"><span class="ic">🌙</span>둘러보기</div>
+            <div class="nav-item"><span class="ic">○</span>프로필</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">04<strong>홈 (오늘의 운세)</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- C. 일생 사주 -->
+<div class="section">
+  <h2 class="section-title">C. <em>일생 사주</em></h2>
+  <p class="section-desc">무료 후크 → 프리미엄 잠금해제. 개요 · 상세 · 대운(10년).</p>
+
+  <div class="phones-grid">
+    <!-- 5. Life Overview -->
+    <div class="phone-card">
+      <div class="phone scr-life">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">나의 인생사주</span><span class="more">⋯</span></div>
+          <div class="pillars-section">
+            <div class="pillars">癸卯 丙辰 戊寅 己未</div>
+            <div class="pillar-labels"><span>년주</span><span>월주</span><span>일주</span><span>시주</span></div>
+          </div>
+          <div class="day-master">
+            <div class="dm-name">戊寅 무인일주 · 산호랑이</div>
+            <div class="dm-quote">"그대는 호랑이를 품은<br>거대한 산이로다."</div>
+          </div>
+          <div class="elements">
+            <div class="er"><span class="er-name">木</span><span class="er-bar"><span class="er-fill" style="width:35%"></span></span><span class="er-pct">35%</span></div>
+            <div class="er"><span class="er-name">火</span><span class="er-bar"><span class="er-fill" style="width:25%"></span></span><span class="er-pct">25%</span></div>
+            <div class="er"><span class="er-name">土</span><span class="er-bar"><span class="er-fill" style="width:30%"></span></span><span class="er-pct">30%</span></div>
+            <div class="er"><span class="er-name">金</span><span class="er-bar"><span class="er-fill" style="width:5%"></span></span><span class="er-pct">5%</span></div>
+            <div class="er"><span class="er-name">水</span><span class="er-bar"><span class="er-fill" style="width:5%"></span></span><span class="er-pct">5%</span></div>
+          </div>
+          <div class="cards">
+            <div class="card"><div class="card-icon">💪</div><div class="card-title">강점</div></div>
+            <div class="card"><div class="card-icon">💝</div><div class="card-title">애정운</div></div>
+            <div class="card locked"><span class="lk">🔒</span><div class="card-icon">💼</div><div class="card-title">직업운</div></div>
+            <div class="card locked"><span class="lk">🔒</span><div class="card-icon">💰</div><div class="card-title">재물운</div></div>
+            <div class="card locked"><span class="lk">🔒</span><div class="card-icon">🌱</div><div class="card-title">건강운</div></div>
+            <div class="card locked"><span class="lk">🔒</span><div class="card-icon">🌟</div><div class="card-title">사명</div></div>
+          </div>
+          <div class="unlock"><div class="btn-gold">✨ 전체 사주 보기 ✨</div></div>
+        </div>
+      </div>
+      <div class="phone-label">05<strong>일생 사주 개요</strong></div>
+    </div>
+
+    <!-- 6. Detail -->
+    <div class="phone-card">
+      <div class="phone scr-detail">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">강점</span><span class="more">📤</span></div>
+          <div class="hero">
+            <div class="hero-icon">💪</div>
+            <h2>산의 정신</h2>
+            <div class="h-sub">무인일주 · 일주 풀이</div>
+          </div>
+          <div class="body">
+            <p>그대는 바람이 아니라, <strong style="color:#D4AF37;">산</strong>이로다. 무인일주로 태어난 그대의 강함은 뿌리 깊고, 오래되었으며, 조용히 거대하다.</p>
+            <p>남들은 그대를 지나친다. 그대는 기다린다. 기다림 속에서 그들이 결코 가질 수 없는 것을 쌓는다 — 돌의 인내, 흙의 기억.</p>
+          </div>
+          <div class="insights">
+            <h4>✦ 숨은 통찰</h4>
+            <ul>
+              <li>그대는 갈등을 흡수하되, 되돌리지 않는다</li>
+              <li>충성심은 그대의 두 번째 척추다</li>
+              <li>경계: 고요함을 무행동으로 혼동하기 쉽다</li>
+            </ul>
+          </div>
+          <div class="share-btn"><div class="btn-purple">📤 스토리에 공유</div></div>
+        </div>
+      </div>
+      <div class="phone-label">06<strong>사주 상세</strong></div>
+    </div>
+
+    <!-- 7. Cycle -->
+    <div class="phone-card">
+      <div class="phone scr-cycle">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">대운 (大運)</span><span class="more">ⓘ</span></div>
+          <h3>10년 단위 대운</h3>
+          <div class="timeline">
+            <div class="age-block">
+              <div class="age-num">12</div>
+              <div class="age-info">
+                <div class="age-pillar">乙巳 · 을사 (목사뱀)</div>
+                <div class="age-desc">호기심의 시기. 직업의 뿌리가 조용히 형성된다.</div>
+              </div>
+            </div>
+            <div class="age-block now">
+              <div class="age-num">22</div>
+              <div class="age-info">
+                <div class="age-pillar">甲辰 · 갑진 (목용)</div>
+                <div class="age-desc">목(木)이 화(火)를 키운다. 야망이 떠오르니 — 구조로 좇으라.</div>
+              </div>
+            </div>
+            <div class="age-block">
+              <div class="age-num">32</div>
+              <div class="age-info">
+                <div class="age-pillar">癸卯 · 계묘 (수토끼)</div>
+                <div class="age-desc">감정의 명료함. 한 관계가 깊어지거나 변화한다.</div>
+              </div>
+            </div>
+            <div class="age-block">
+              <div class="age-num">42</div>
+              <div class="age-info">
+                <div class="age-pillar">壬寅 · 임인 (수호랑이)</div>
+                <div class="age-desc">권세가 흐른다. 자리를 호령하나 — 속도의 대가를 경계하라.</div>
+              </div>
+            </div>
+          </div>
+          <h3>2026년 연운</h3>
+          <div class="year-row"><span class="yr-label">연주</span><span class="yr-val">丙午 · 화말</span></div>
+          <div class="year-row"><span class="yr-label">기운</span><span class="yr-val">왕성한 활력</span></div>
+          <div class="year-row"><span class="yr-label">주의</span><span class="yr-val">애정의 조급함</span></div>
+        </div>
+      </div>
+      <div class="phone-label">07<strong>대운 (10년)</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- D. 데일리 운세 -->
+<div class="section">
+  <h2 class="section-title">D. <em>데일리 운세</em></h2>
+  <p class="section-desc">오늘 상세 + 월간 캘린더. 푸시 알림 진입점.</p>
+
+  <div class="phones-grid">
+    <!-- 8. Daily Detail -->
+    <div class="phone-card">
+      <div class="phone scr-daily">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">오늘의 상세</span><span class="more">📤</span></div>
+          <div class="day-pill">
+            <div class="ko">丙午 일진</div>
+            <div class="en">화말일 · 그대의 무인을 충(冲)한다</div>
+          </div>
+          <div class="scores-detail">
+            <div class="sd-row">
+              <div class="sd-icon">💝</div>
+              <div class="sd-info">
+                <div class="sd-cat">애정</div>
+                <div class="sd-msg">"그대의 따뜻함이 뜻밖의 고백을 부른다."</div>
+              </div>
+              <div class="sd-score">90</div>
+            </div>
+            <div class="sd-row">
+              <div class="sd-icon">💼</div>
+              <div class="sd-info">
+                <div class="sd-cat">직업</div>
+                <div class="sd-msg">"오전 중에 의견을 내놓아라. 오후엔 듣는 자리에 머물라."</div>
+              </div>
+              <div class="sd-score">75</div>
+            </div>
+            <div class="sd-row">
+              <div class="sd-icon">💰</div>
+              <div class="sd-info">
+                <div class="sd-cat">재물</div>
+                <div class="sd-msg">"오후 3~5시 충동 구매를 피하라."</div>
+              </div>
+              <div class="sd-score">60</div>
+            </div>
+            <div class="sd-row">
+              <div class="sd-icon">⚡</div>
+              <div class="sd-info">
+                <div class="sd-cat">기력</div>
+                <div class="sd-msg">"불꽃이 밝다. 한 가지 일에 집중하라."</div>
+              </div>
+              <div class="sd-score">88</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">08<strong>오늘 상세</strong></div>
+    </div>
+
+    <!-- 9. Week -->
+    <div class="phone-card">
+      <div class="phone scr-week">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">기운 캘린더</span><span class="more">⋯</span></div>
+          <div class="month-nav">
+            <span class="arrow">←</span>
+            <span class="month">2026년 5월</span>
+            <span class="arrow">→</span>
+          </div>
+          <div class="weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+          <div class="days">
+            <div class="day"><div class="d-num">28</div></div>
+            <div class="day"><div class="d-num">29</div></div>
+            <div class="day"><div class="d-num">30</div></div>
+            <div class="day high"><div class="d-num">1</div><div class="d-score">82</div></div>
+            <div class="day"><div class="d-num">2</div><div class="d-score">68</div></div>
+            <div class="day low"><div class="d-num">3</div><div class="d-score">42</div></div>
+            <div class="day high"><div class="d-num">4</div><div class="d-score">91</div></div>
+            <div class="day"><div class="d-num">5</div><div class="d-score">71</div></div>
+            <div class="day high"><div class="d-num">6</div><div class="d-score">85</div></div>
+            <div class="day"><div class="d-num">7</div><div class="d-score">63</div></div>
+            <div class="day"><div class="d-num">8</div><div class="d-score">77</div></div>
+            <div class="day low"><div class="d-num">9</div><div class="d-score">38</div></div>
+            <div class="day high"><div class="d-num">10</div><div class="d-score">88</div></div>
+            <div class="day today"><div class="d-num">11</div><div class="d-score">85</div></div>
+            <div class="day"><div class="d-num">12</div><div class="d-score">70</div></div>
+            <div class="day high"><div class="d-num">13</div><div class="d-score">93</div></div>
+            <div class="day"><div class="d-num">14</div><div class="d-score">66</div></div>
+            <div class="day"><div class="d-num">15</div><div class="d-score">75</div></div>
+            <div class="day low"><div class="d-num">16</div><div class="d-score">40</div></div>
+            <div class="day"><div class="d-num">17</div><div class="d-score">68</div></div>
+            <div class="day high"><div class="d-num">18</div><div class="d-score">86</div></div>
+          </div>
+          <div class="legend">
+            <div class="lg-row"><span>이번 주 평균</span><span class="b">76</span></div>
+            <div class="lg-row"><span>최고의 날</span><span class="b">5월 13일 · 93</span></div>
+            <div class="lg-row"><span>주의의 날</span><span class="b">5월 16일 · 40</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">09<strong>기운 캘린더</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- E. 프리미엄 리포트 -->
+<div class="section">
+  <h2 class="section-title">E. <em>프리미엄 리포트</em></h2>
+  <p class="section-desc">단건 결제 콘텐츠. 궁합 · 토정비결 · 택일 · 꿈해몽.</p>
+
+  <div class="phones-grid">
+    <!-- 10. Compatibility -->
+    <div class="phone-card">
+      <div class="phone scr-compat">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">영혼 궁합</span><span class="more">⋯</span></div>
+          <div class="vs">
+            <div class="person"><div class="p-label">나</div><div class="p-pillar">戊寅</div><div class="p-name">무인 · 산호랑이</div></div>
+            <div class="vs-mark">✦</div>
+            <div class="person"><div class="p-label">상대</div><div class="p-pillar">丙午</div><div class="p-name">병오 · 화말</div></div>
+          </div>
+          <div class="match-card">
+            <div class="match-pct">89%</div>
+            <div class="match-label">영혼의 인연</div>
+          </div>
+          <div class="breakdown">
+            <div class="b-row"><span class="b-cat">애정</span><span class="b-bar"><span class="b-fill" style="width:92%"></span></span><span class="b-pct">92</span></div>
+            <div class="b-row"><span class="b-cat">소통</span><span class="b-bar"><span class="b-fill" style="width:78%"></span></span><span class="b-pct">78</span></div>
+            <div class="b-row"><span class="b-cat">장기성</span><span class="b-bar"><span class="b-fill" style="width:88%"></span></span><span class="b-pct">88</span></div>
+            <div class="b-row"><span class="b-cat">갈등</span><span class="b-bar"><span class="b-fill" style="width:65%"></span></span><span class="b-pct">65</span></div>
+          </div>
+          <div class="preview">"그대의 목호랑이가 상대의 화말을 키운다. 성장과 가속의 관계. 그러나 화(火)가 숲을 태울 순간을 경계하라..."</div>
+          <div class="unlock-btn"><div class="btn-gold">💎 전체 리포트 잠금해제 · ₩13,000</div></div>
+        </div>
+      </div>
+      <div class="phone-label">10<strong>궁합</strong></div>
+    </div>
+
+    <!-- 11. Tojeong -->
+    <div class="phone-card">
+      <div class="phone scr-toj">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">2026 토정비결</span><span class="more">📤</span></div>
+          <div class="gwa-card">
+            <div class="gwa-num">제 47괘 · 困</div>
+            <div class="gwa-glyph">坎</div>
+            <div class="gwa-name">"기다림을 아는<br>우물"</div>
+          </div>
+          <div class="summary">"올해는 고요함을 청한다. 그대의 불꽃이 잠겨 뿌리가 깊어지리라. 가을이 오면, 조용히 품은 것이 비로소 빛을 발하리라."</div>
+          <div class="months">
+            <div class="m-card"><div class="m-name">1월</div><div class="m-icon">⚡</div><div class="m-score">72</div></div>
+            <div class="m-card"><div class="m-name">2월</div><div class="m-icon">🌧️</div><div class="m-score">58</div></div>
+            <div class="m-card"><div class="m-name">3월</div><div class="m-icon">🌱</div><div class="m-score">81</div></div>
+            <div class="m-card"><div class="m-name">4월</div><div class="m-icon">🌸</div><div class="m-score">88</div></div>
+            <div class="m-card"><div class="m-name">5월</div><div class="m-icon">☀️</div><div class="m-score">76</div></div>
+            <div class="m-card locked"><div class="m-name">6월</div></div>
+            <div class="m-card locked"><div class="m-name">7월</div></div>
+            <div class="m-card locked"><div class="m-name">8월</div></div>
+            <div class="m-card locked"><div class="m-name">9월</div></div>
+            <div class="m-card locked"><div class="m-name">10월</div></div>
+            <div class="m-card locked"><div class="m-name">11월</div></div>
+            <div class="m-card locked"><div class="m-name">12월</div></div>
+          </div>
+          <div style="margin: 0 24px;"><div class="btn-gold">💎 연간 잠금해제 · ₩19,500</div></div>
+        </div>
+      </div>
+      <div class="phone-label">11<strong>토정비결</strong></div>
+    </div>
+
+    <!-- 12. Date Picking -->
+    <div class="phone-card">
+      <div class="phone scr-date">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">택일</span><span class="more">⋯</span></div>
+          <div class="purpose">
+            <div class="p-label">목적</div>
+            <div class="p-purp">💍 결혼</div>
+          </div>
+          <div class="top-pick">
+            <div class="tp-tag">★ 최고 길일</div>
+            <div class="tp-date">2026년 6월 14일</div>
+            <div class="tp-stars">★★★★★</div>
+            <div class="tp-note">"목(木) + 목(木) — 성장에 뿌리내린<br>약속에 가장 길한 날."</div>
+          </div>
+          <div class="candidates">
+            <div class="cand"><span class="cand-date">6월 7일 · 토요일</span><span class="cand-stars">★★★☆☆</span></div>
+            <div class="cand"><span class="cand-date">6월 14일 · 토요일</span><span class="cand-stars">★★★★★</span></div>
+            <div class="cand"><span class="cand-date">6월 21일 · 토요일</span><span class="cand-stars">★★★★☆</span></div>
+            <div class="cand"><span class="cand-date">6월 28일 · 토요일</span><span class="cand-stars cand-low">★☆☆☆☆ 흉</span></div>
+            <div class="cand"><span class="cand-date">7월 5일 · 토요일</span><span class="cand-stars">★★★☆☆</span></div>
+          </div>
+          <div style="margin: 0 24px;"><div class="btn-gold">💎 전체 분석 잠금해제 · ₩13,000</div></div>
+        </div>
+      </div>
+      <div class="phone-label">12<strong>택일</strong></div>
+    </div>
+
+    <!-- 13. Dream -->
+    <div class="phone-card">
+      <div class="phone scr-dream">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="top">
+            <div class="moon">🌙</div>
+            <h2>꿈 해몽</h2>
+            <div class="h-sub">어젯밤 꾼 꿈을 들려주세요</div>
+          </div>
+          <div class="input-area">"얼어붙은 강 위를 걷고 있었다. 검은 용 한 마리가 얼음을 뚫고 솟아올라 나를 바라봤다. 무섭지 않았다..."</div>
+          <div class="interpret">
+            <span class="keyword-tag">용</span>
+            <span class="keyword-tag">얼음</span>
+            <span class="keyword-tag">강</span>
+            <div class="meaning">얼어붙은 물에서 솟는 검은 용은 운세의 전환을 알린다. 숨겨진 힘이 표면에 떠오른다. 강 아래는 그대의 무의식 — 오래 억눌렸던 것이 깨어남이다.</div>
+          </div>
+          <div class="recent">
+            <div class="r-title">최근 꿈</div>
+            <div class="r-item"><span>도시 위를 날고 있었다</span><span class="r-d">5월 8일</span></div>
+            <div class="r-item"><span>거울의 숲에서 길을 잃다</span><span class="r-d">5월 5일</span></div>
+            <div class="r-item"><span>아이가 열쇠를 건넸다</span><span class="r-d">5월 2일</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">13<strong>꿈 해몽</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- F. 보관함 & 둘러보기 -->
+<div class="section">
+  <h2 class="section-title">F. <em>보관함 & 둘러보기</em></h2>
+  <p class="section-desc">구매한 리포트 보관함 + 무료 큐레이션 콘텐츠 (K-pop 사주, K-drama 분석).</p>
+
+  <div class="phones-grid">
+    <!-- 14. Archive -->
+    <div class="phone-card">
+      <div class="phone scr-arc">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="back">←</span><span class="topbar-title">내 보관함</span><span class="more">⋯</span></div>
+          <div class="filter-row">
+            <div class="chip active">전체</div>
+            <div class="chip">궁합</div>
+            <div class="chip">토정비결</div>
+            <div class="chip">택일</div>
+            <div class="chip">꿈</div>
+          </div>
+          <div class="reports">
+            <div class="rep">
+              <div class="rep-icon">💕</div>
+              <div class="rep-info">
+                <div class="rep-type">궁합</div>
+                <div class="rep-title">나 × 박지우</div>
+                <div class="rep-date">2026.05.10 · 89% 인연</div>
+              </div>
+              <span class="rep-arrow">→</span>
+            </div>
+            <div class="rep">
+              <div class="rep-icon">📜</div>
+              <div class="rep-info">
+                <div class="rep-type">토정비결</div>
+                <div class="rep-title">2026년 신년운세</div>
+                <div class="rep-date">2026.04.28</div>
+              </div>
+              <span class="rep-arrow">→</span>
+            </div>
+            <div class="rep">
+              <div class="rep-icon">💍</div>
+              <div class="rep-info">
+                <div class="rep-type">택일</div>
+                <div class="rep-title">결혼 · 최고일: 6월 14일</div>
+                <div class="rep-date">2026.04.22</div>
+              </div>
+              <span class="rep-arrow">→</span>
+            </div>
+            <div class="rep">
+              <div class="rep-icon">🌙</div>
+              <div class="rep-info">
+                <div class="rep-type">꿈해몽</div>
+                <div class="rep-title">얼음 속 검은 용</div>
+                <div class="rep-date">2026.05.11</div>
+              </div>
+              <span class="rep-arrow">→</span>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><span class="ic">✦</span>홈</div>
+            <div class="nav-item"><span class="ic">柱</span>사주</div>
+            <div class="nav-item active"><span class="ic">📜</span>리포트</div>
+            <div class="nav-item"><span class="ic">🌙</span>둘러보기</div>
+            <div class="nav-item"><span class="ic">○</span>프로필</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">14<strong>보관함</strong></div>
+    </div>
+
+    <!-- 15. Discover -->
+    <div class="phone-card">
+      <div class="phone scr-disc">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span></span><span class="topbar-title">둘러보기</span><span class="more">🔍</span></div>
+          <h3>오늘의 추천</h3>
+          <div class="feature-card">
+            <div class="fc-tag">K-POP 사주</div>
+            <div class="fc-title">BTS V는 왜 별처럼 태어났는가</div>
+            <div class="fc-desc">그의 일주에 새겨진 희귀한 정렬이 대중의 사랑을 운명지었다. 그를 별로 만든 4개의 원소.</div>
+            <div class="fc-cta">읽어보기 →</div>
+          </div>
+          <h3>이번 주</h3>
+          <div class="articles">
+            <div class="art">
+              <div class="art-img">🎬</div>
+              <div class="art-info">
+                <div class="art-cat">K-드라마</div>
+                <div class="art-title">파묘의 무속, 진짜인가 영화인가</div>
+                <div class="art-meta">8분 읽기 · 12.4K</div>
+              </div>
+            </div>
+            <div class="art">
+              <div class="art-img">💜</div>
+              <div class="art-info">
+                <div class="art-cat">궁합</div>
+                <div class="art-title">정국 + V: 화수(火水)의 운명</div>
+                <div class="art-meta">5분 읽기 · 38.2K</div>
+              </div>
+            </div>
+            <div class="art">
+              <div class="art-img">📚</div>
+              <div class="art-info">
+                <div class="art-cat">문화</div>
+                <div class="art-title">60갑자 입문, 처음부터 끝까지</div>
+                <div class="art-meta">12분 읽기 · 4.1K</div>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><span class="ic">✦</span>홈</div>
+            <div class="nav-item"><span class="ic">柱</span>사주</div>
+            <div class="nav-item"><span class="ic">📜</span>리포트</div>
+            <div class="nav-item active"><span class="ic">🌙</span>둘러보기</div>
+            <div class="nav-item"><span class="ic">○</span>프로필</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">15<strong>둘러보기</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- G. 구독 & 프로필 -->
+<div class="section">
+  <h2 class="section-title">G. <em>구독 & 프로필</em></h2>
+  <p class="section-desc">프리미엄 구독 모달 + 다중 프로필 관리.</p>
+
+  <div class="phones-grid">
+    <!-- 16. Paywall -->
+    <div class="phone-card">
+      <div class="phone scr-paywall">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <span class="close">✕</span>
+          <div class="stars-deco">✦ ⭐ ✦</div>
+          <h2>당신의 <em>미래</em>를<br>밝히세요</h2>
+          <p class="sub">5,000년 한국의 지혜를<br>무제한으로</p>
+          <div class="features">
+            <div class="feat">매일 심층 분석 (4개 카테고리)</div>
+            <div class="feat">10년 대운 (大運)</div>
+            <div class="feat">무제한 꿈 해몽</div>
+            <div class="feat">행운의 방향 지도</div>
+            <div class="feat">광고 제거 · 다중 프로필</div>
+          </div>
+          <div class="plan featured">
+            <div class="plan-info">
+              <div class="label">📅  연간</div>
+              <div class="si">월 ₩4,300 · 연 청구</div>
+            </div>
+            <div class="plan-price">
+              <div class="am">₩52,000</div>
+              <div class="save">33% 할인</div>
+            </div>
+          </div>
+          <div class="plan">
+            <div class="plan-info">
+              <div class="label">📆  월간</div>
+              <div class="si">언제든 해지 가능</div>
+            </div>
+            <div class="plan-price">
+              <div class="am">₩6,500</div>
+            </div>
+          </div>
+          <div class="trial-cta">✨ 7일 무료 체험 시작 ✨</div>
+          <div class="legal"><a href="#">구매 복원</a> · <a href="#">이용약관</a> · <a href="#">개인정보</a></div>
+        </div>
+      </div>
+      <div class="phone-label">16<strong>구독 페이월</strong></div>
+    </div>
+
+    <!-- 17. Profile -->
+    <div class="phone-card">
+      <div class="phone scr-profile">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span></span><span class="topbar-title">프로필</span><span class="more">⚙</span></div>
+          <div class="me">
+            <div class="avatar">박</div>
+            <div class="me-name">박지우</div>
+            <div class="me-pillar">癸卯 丙辰 戊寅 己未</div>
+            <div class="me-tier">💎 프리미엄 연간</div>
+          </div>
+          <div class="profiles">
+            <div class="pf-title">내 프로필 (3 / 5)</div>
+            <div class="pf-list">
+              <div class="pf-card"><div class="pf-em">👩</div><div class="pf-n">엄마</div></div>
+              <div class="pf-card"><div class="pf-em">💕</div><div class="pf-n">남친</div></div>
+              <div class="pf-card add"><div class="pf-em">＋</div><div class="pf-n">추가</div></div>
+            </div>
+          </div>
+          <div class="menu">
+            <div class="mi"><span class="mi-l"><span class="ic">🔔</span>데일리 푸시 · 오전 9시</span><span class="mi-r">→</span></div>
+            <div class="mi"><span class="mi-l"><span class="ic">📤</span>공유 카드</span><span class="mi-r">→</span></div>
+            <div class="mi"><span class="mi-l"><span class="ic">💎</span>구독 관리</span><span class="mi-r gold">활성</span></div>
+            <div class="mi"><span class="mi-l"><span class="ic">🌐</span>언어</span><span class="mi-r">한국어</span></div>
+            <div class="mi"><span class="mi-l"><span class="ic">🛡️</span>개인정보</span><span class="mi-r">→</span></div>
+            <div class="mi"><span class="mi-l"><span class="ic">💬</span>도움말 · 피드백</span><span class="mi-r">→</span></div>
+            <div class="mi"><span class="mi-l"><span class="ic">↻</span>구매 복원</span><span class="mi-r">→</span></div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item"><span class="ic">✦</span>홈</div>
+            <div class="nav-item"><span class="ic">柱</span>사주</div>
+            <div class="nav-item"><span class="ic">📜</span>리포트</div>
+            <div class="nav-item"><span class="ic">🌙</span>둘러보기</div>
+            <div class="nav-item active"><span class="ic">○</span>프로필</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-label">17<strong>프로필</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="max-width: 1100px; margin: 80px auto; padding: 40px; background: rgba(107, 70, 193, 0.06); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px;">
+  <h2 style="font-family: 'Gowun Batang', serif; font-size: 24px; color: #D4AF37; margin-bottom: 16px;">✦ 17개 화면 · 완성판</h2>
+  <p style="color: #A8A8C0; font-size: 14px; line-height: 1.8;">
+    <strong style="color: #F5F5F5;">3사 합의 결정:</strong>
+    하단 네비 5탭 (홈 · 사주 · 리포트 · 둘러보기 · 프로필) ·
+    페이월 = 모달 · 리포트 탭에 단건결제 + 보관함 통합 ·
+    둘러보기 탭에 K-pop 사주 / K-drama 콘텐츠 (마케팅 + SEO 자연 유입).
+  </p>
+  <p style="color: #A8A8C0; font-size: 14px; line-height: 1.8; margin-top: 12px;">
+    <strong style="color: #F5F5F5;">다음 단계:</strong>
+    Flutter 프로젝트 생성 → 만세력 Dart 포팅 → 240개 콘텐츠 작성 → TestFlight 외부 베타 → 미국 우선 정식 출시.
+  </p>
+</div>
+
+</body>
+</html>

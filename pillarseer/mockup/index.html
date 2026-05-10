@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pillar Seer — Mockup Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: radial-gradient(ellipse at top, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+  }
+  body { padding: 80px 24px 80px; }
+  .container { max-width: 900px; margin: 0 auto; text-align: center; }
+
+  .glyph-hero { font-family: 'Noto Serif KR', serif; font-size: 80px; color: #D4AF37; text-shadow: 0 0 40px rgba(212, 175, 55, 0.4); margin-bottom: 12px; }
+
+  h1 {
+    font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 900;
+    background: linear-gradient(135deg, #D4AF37 0%, #F5F5F5 50%, #6B46C1 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: italic; }
+  .subtitle { color: #A8A8C0; font-size: 16px; line-height: 1.7; margin-bottom: 60px; }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px; margin-top: 40px;
+  }
+  .card {
+    padding: 32px;
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    text-align: left;
+    display: block;
+  }
+  .card:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: #D4AF37;
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(212, 175, 55, 0.15);
+  }
+  .card .num {
+    font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900;
+    color: rgba(212, 175, 55, 0.4); display: block; margin-bottom: 8px;
+  }
+  .card .title {
+    font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+    color: #D4AF37; margin-bottom: 8px;
+  }
+  .card .title em { font-style: italic; color: #F5F5F5; }
+  .card .desc { font-size: 13px; color: #A8A8C0; line-height: 1.6; }
+  .card .tag {
+    display: inline-block; margin-top: 12px;
+    padding: 4px 10px; background: rgba(212, 175, 55, 0.15);
+    border-radius: 999px; font-size: 10px; color: #D4AF37; letter-spacing: 0.1em;
+  }
+
+  .info {
+    margin-top: 60px;
+    padding: 24px;
+    background: rgba(107, 70, 193, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 16px;
+    font-size: 13px; color: #A8A8C0; line-height: 1.7;
+    text-align: left;
+  }
+  .info strong { color: #D4AF37; }
+  .info code { background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; color: #D4AF37; font-family: monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="glyph-hero">柱</div>
+  <h1>Pillar <em>Seer</em></h1>
+  <p class="subtitle">
+    한국 사주 글로벌 영어권 앱 · Korean Saju for Global Gen Z<br>
+    디자인 목업 인덱스 페이지
+  </p>
+
+  <div class="grid">
+
+    <a href="screens-ko.html" class="card">
+      <span class="num">17</span>
+      <div class="title">완성판 화면 <em>(한국어)</em></div>
+      <div class="desc">17개 화면 풀 스펙. 온보딩부터 결제, 보관함까지. 한국어 콘텐츠로 검토용.</div>
+      <span class="tag">🇰🇷 KOREAN</span>
+    </a>
+
+    <a href="screens-en.html" class="card">
+      <span class="num">17</span>
+      <div class="title">Full Screens <em>(English)</em></div>
+      <div class="desc">17 screens, full spec. From onboarding to paywall to archive. Production language.</div>
+      <span class="tag">🇺🇸 ENGLISH</span>
+    </a>
+
+    <a href="web.html" class="card">
+      <span class="num">5</span>
+      <div class="title">웹앱 <em>mockup</em></div>
+      <div class="desc">하이브리드 웹앱 — Landing · Free Calculator · About · Blog · Pricing.<br>Next.js + Tailwind + Vercel.</div>
+      <span class="tag">🌐 WEB · 5 PAGES</span>
+    </a>
+
+    <a href="variants.html" class="card">
+      <span class="num">5</span>
+      <div class="title">디자인 톤 <em>variants</em></div>
+      <div class="desc">5개 디자인 컨셉 비교 (Dark Mysterious / K-Shamanism / Y2K Cyber / Beige / K-pop Kitsch).<br>→ V1 확정.</div>
+      <span class="tag">DESIGN TONES</span>
+    </a>
+
+    <a href="app.html" class="card">
+      <span class="num">5</span>
+      <div class="title">초기 5화면 <em>(deprecated)</em></div>
+      <div class="desc">최초 만든 5개 화면 (Splash, Onboarding, Life, Daily, Paywall). 현재는 screens-en/ko가 정식.</div>
+      <span class="tag">LEGACY</span>
+    </a>
+
+  </div>
+
+  <div class="info">
+    <strong>📂 mockup 폴더 구조</strong><br>
+    <code>index.html</code> — 이 페이지 (인덱스)<br>
+    <code>screens-en.html</code> — 17개 화면 풀 스펙 (영문, 출시판)<br>
+    <code>screens-ko.html</code> — 17개 화면 풀 스펙 (한국어, 검토용)<br>
+    <code>variants.html</code> — 5개 디자인 톤 비교 (V1 확정됨)<br>
+    <code>app.html</code> — 초기 5화면 (legacy)<br>
+    <br>
+    <strong>📱 아이폰 접속</strong>: 같은 WiFi에서 <code>http://192.168.219.107:8000/</code><br>
+    <strong>💻 데스크탑</strong>: <code>http://localhost:8000/</code>
+  </div>
+
+</div>
+
+</body>
+</html>

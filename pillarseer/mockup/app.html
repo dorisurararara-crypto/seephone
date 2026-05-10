@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pillar Seer — App Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: radial-gradient(ellipse at top, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+  }
+  body { padding: 60px 24px 120px; }
+
+  /* Header */
+  .page-header { max-width: 1400px; margin: 0 auto 64px; text-align: center; }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #D4AF37 0%, #F5F5F5 50%, #6B46C1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .page-header h1 em { font-style: italic; }
+  .page-header .sub {
+    color: #A8A8C0;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 16px;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .page-header .meta {
+    display: inline-flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .meta-tag {
+    padding: 6px 14px;
+    background: rgba(107, 70, 193, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 999px;
+    font-size: 12px;
+    color: #D4AF37;
+    letter-spacing: 0.05em;
+  }
+
+  /* Phone Grid */
+  .phones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 320px);
+    gap: 48px;
+    justify-content: center;
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+  .phone-card { display: flex; flex-direction: column; gap: 16px; }
+  .phone-label {
+    text-align: center;
+    font-size: 13px;
+    color: #6B6B82;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .phone-label strong { color: #D4AF37; display: block; font-size: 16px; margin-top: 4px; letter-spacing: 0.02em; text-transform: none; font-family: 'Playfair Display', serif; font-style: italic; }
+
+  .phone {
+    width: 320px;
+    height: 680px;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.8),
+      0 0 0 8px #1a1a20,
+      0 0 0 9px #2c2c30,
+      0 0 60px rgba(107, 70, 193, 0.15);
+  }
+  .notch {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 28px;
+    background: #000;
+    border-radius: 18px;
+    z-index: 100;
+  }
+  .screen {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #1A0B2E;
+    color: #F5F5F5;
+  }
+  .statusbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 48px;
+    padding: 14px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 50;
+    color: #F5F5F5;
+  }
+  .statusbar .right { display: flex; gap: 6px; align-items: center; }
+
+  /* Common starfield */
+  .starfield {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 60% 25%, #D4AF37, transparent),
+      radial-gradient(2px 2px at 80% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 80%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 45%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 15% 60%, #fff, transparent),
+      radial-gradient(2px 2px at 90% 20%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 50% 90%, #fff, transparent);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* ============================================
+     Screen 1: SPLASH
+     ============================================ */
+  .splash .screen {
+    background: radial-gradient(ellipse at center, #311B92 0%, #1A0B2E 60%, #0A0612 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .splash .logo-stars {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 24px;
+  }
+  .splash .logo-stars .star {
+    position: absolute;
+    color: #D4AF37;
+    font-size: 28px;
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+  }
+  .splash .star.s1 { top: 0; left: 50%; transform: translateX(-50%); }
+  .splash .star.s2 { right: 0; top: 50%; transform: translateY(-50%); }
+  .splash .star.s3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .splash .star.s4 { left: 0; top: 50%; transform: translateY(-50%); }
+  .splash .center-glyph {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 64px;
+    font-weight: 900;
+    color: #D4AF37;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+  }
+  .splash h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: #F5F5F5;
+    margin-bottom: 12px;
+  }
+  .splash .tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #A8A8C0;
+    letter-spacing: 0.05em;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 240px;
+  }
+  .splash .loading-dots {
+    margin-top: 60px;
+    display: flex;
+    gap: 6px;
+  }
+  .splash .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #D4AF37;
+    opacity: 0.5;
+  }
+
+  /* ============================================
+     Screen 2: ONBOARDING
+     ============================================ */
+  .onboarding .screen {
+    background: linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+    padding: 70px 28px 32px;
+    display: flex;
+    flex-direction: column;
+  }
+  .onboarding .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .onboarding .title-glyph {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 36px;
+    color: #D4AF37;
+    margin-bottom: 8px;
+  }
+  .onboarding h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #F5F5F5;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .onboarding .subtitle {
+    font-size: 12px;
+    color: #A8A8C0;
+    font-style: italic;
+  }
+  .onboarding .field {
+    margin-bottom: 14px;
+  }
+  .onboarding .field-label {
+    font-size: 10px;
+    color: #6B6B82;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .onboarding .field-input {
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: #F5F5F5;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .onboarding .row { display: flex; gap: 10px; }
+  .onboarding .row .field { flex: 1; }
+  .onboarding .toggle {
+    display: flex;
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    padding: 4px;
+    margin: 12px 0 18px;
+  }
+  .onboarding .toggle-opt {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+    color: #A8A8C0;
+    border-radius: 6px;
+  }
+  .onboarding .toggle-opt.active {
+    background: linear-gradient(135deg, #6B46C1, #311B92);
+    color: #F5F5F5;
+    font-weight: 600;
+  }
+  .onboarding .cta {
+    margin-top: auto;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    padding: 18px;
+    text-align: center;
+    border-radius: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1A0B2E;
+    letter-spacing: 0.1em;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  }
+  .onboarding .cta::before { content: '✨ '; }
+  .onboarding .cta::after { content: ' ✨'; }
+  .onboarding .footer-stars {
+    text-align: center;
+    margin-top: 16px;
+    color: #D4AF37;
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  /* ============================================
+     Screen 3: LIFE READING
+     ============================================ */
+  .life .screen {
+    background: linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+    padding: 60px 0 0;
+    overflow-y: auto;
+  }
+  .life .topbar {
+    padding: 0 24px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .life .back { color: #A8A8C0; font-size: 16px; }
+  .life .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #F5F5F5;
+    letter-spacing: 0.1em;
+  }
+  .life .gear { color: #A8A8C0; font-size: 16px; }
+  .life .pillars-section {
+    padding: 16px 24px 20px;
+    text-align: center;
+  }
+  .life .pillars {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: 28px;
+    color: #D4AF37;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  }
+  .life .pillar-labels {
+    display: flex;
+    justify-content: space-around;
+    font-size: 9px;
+    color: #6B6B82;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .life .day-master {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(107, 70, 193, 0.1) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 0 24px 20px;
+    text-align: center;
+  }
+  .life .dm-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #D4AF37;
+    margin-bottom: 6px;
+  }
+  .life .dm-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #F5F5F5;
+    line-height: 1.5;
+  }
+  .life .elements {
+    padding: 0 24px 16px;
+  }
+  .life .element-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+  .life .el-icon { width: 16px; }
+  .life .el-name {
+    width: 50px;
+    color: #A8A8C0;
+    letter-spacing: 0.05em;
+  }
+  .life .el-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(107, 70, 193, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .life .el-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #D4AF37, #6B46C1);
+    border-radius: 3px;
+  }
+  .life .el-pct {
+    width: 40px;
+    text-align: right;
+    color: #F5F5F5;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .life .cards {
+    padding: 12px 24px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .life .card {
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+  }
+  .life .card.locked { opacity: 0.55; }
+  .life .card-icon { font-size: 22px; margin-bottom: 6px; }
+  .life .card-title {
+    font-size: 11px;
+    color: #F5F5F5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .life .card .lock { position: absolute; top: 8px; right: 8px; font-size: 11px; opacity: 0.6; }
+  .life .unlock-cta {
+    margin: 8px 24px 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    border-radius: 12px;
+    text-align: center;
+    color: #1A0B2E;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+  }
+
+  /* ============================================
+     Screen 4: DAILY FORTUNE
+     ============================================ */
+  .daily .screen {
+    background: linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+    padding: 60px 0 0;
+    overflow-y: auto;
+  }
+  .daily .topbar {
+    padding: 0 24px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .daily .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #F5F5F5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .daily .date {
+    text-align: center;
+    color: #A8A8C0;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+  .daily .moon-section {
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .daily .moon-deco {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #D4AF37;
+    font-size: 12px;
+    letter-spacing: 6px;
+    opacity: 0.6;
+  }
+  .daily .score-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.3) 0%, transparent 60%);
+    border: 2px solid rgba(212, 175, 55, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px auto 12px;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(107, 70, 193, 0.15);
+  }
+  .daily .score-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 48px;
+    color: #D4AF37;
+    line-height: 1;
+  }
+  .daily .score-num span {
+    font-size: 14px;
+    color: #A8A8C0;
+    font-weight: 400;
+  }
+  .daily .quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #F5F5F5;
+    text-align: center;
+    line-height: 1.5;
+    padding: 0 32px 18px;
+  }
+  .daily .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    padding: 0 20px 16px;
+  }
+  .daily .cat-card {
+    background: rgba(107, 70, 193, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: 8px;
+    padding: 10px 4px;
+    text-align: center;
+  }
+  .daily .cat-card.locked { opacity: 0.55; position: relative; }
+  .daily .cat-card.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 9px;
+    opacity: 0.6;
+  }
+  .daily .cat-icon { font-size: 16px; margin-bottom: 3px; }
+  .daily .cat-score { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #D4AF37; font-weight: 700; }
+  .daily .cat-name {
+    font-size: 8px;
+    color: #A8A8C0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+  }
+  .daily .lucky {
+    margin: 8px 24px 16px;
+    padding: 14px;
+    background: rgba(107, 70, 193, 0.08);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+  .daily .lucky-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 11px;
+  }
+  .daily .lucky-label { color: #A8A8C0; }
+  .daily .lucky-val { color: #D4AF37; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .daily .share {
+    margin: 0 24px 24px;
+    padding: 14px;
+    background: linear-gradient(135deg, #6B46C1 0%, #311B92 100%);
+    border-radius: 10px;
+    text-align: center;
+    color: #F5F5F5;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .daily .share::before { content: '📤  '; }
+
+  /* ============================================
+     Screen 5: PAYWALL
+     ============================================ */
+  .paywall .screen {
+    background: radial-gradient(ellipse at top, #311B92 0%, #1A0B2E 50%, #0A0612 100%);
+    padding: 50px 28px 32px;
+    display: flex;
+    flex-direction: column;
+  }
+  .paywall .close {
+    position: absolute;
+    top: 56px;
+    left: 24px;
+    color: #A8A8C0;
+    font-size: 18px;
+    z-index: 30;
+  }
+  .paywall .stars-row {
+    text-align: center;
+    color: #D4AF37;
+    font-size: 18px;
+    letter-spacing: 12px;
+    margin: 24px 0 16px;
+  }
+  .paywall h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: #F5F5F5;
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .paywall h2 em {
+    font-style: italic;
+    color: #D4AF37;
+    font-weight: 400;
+  }
+  .paywall .sub {
+    text-align: center;
+    color: #A8A8C0;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    padding: 0 12px;
+  }
+  .paywall .features {
+    margin-bottom: 24px;
+  }
+  .paywall .feat {
+    padding: 9px 0;
+    font-size: 13px;
+    color: #F5F5F5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .paywall .feat::before {
+    content: '✓';
+    color: #D4AF37;
+    font-weight: 700;
+    font-size: 14px;
+    width: 18px;
+  }
+  .paywall .plan {
+    background: rgba(107, 70, 193, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  .paywall .plan.featured {
+    border-color: #D4AF37;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15));
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+  .paywall .plan-info .label { font-family: 'Playfair Display', serif; font-size: 13px; color: #F5F5F5; font-weight: 700; letter-spacing: 0.05em; }
+  .paywall .plan-info .sub-info { font-size: 10px; color: #A8A8C0; margin-top: 2px; }
+  .paywall .plan-price { text-align: right; }
+  .paywall .plan-price .amount { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #D4AF37; }
+  .paywall .plan-price .save {
+    background: #D4AF37;
+    color: #1A0B2E;
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+    display: inline-block;
+  }
+  .paywall .trial-cta {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    padding: 16px;
+    text-align: center;
+    border-radius: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1A0B2E;
+    letter-spacing: 0.08em;
+    box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
+  }
+  .paywall .legal {
+    text-align: center;
+    font-size: 10px;
+    color: #6B6B82;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+  .paywall .legal a { color: #A8A8C0; text-decoration: underline; }
+
+  /* ============================================
+     Footer info
+     ============================================ */
+  .design-info {
+    max-width: 1200px;
+    margin: 100px auto 0;
+    padding: 40px;
+    background: rgba(107, 70, 193, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 24px;
+  }
+  .design-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: #D4AF37;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .palette {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .color {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .color .swatch {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+  }
+  .color .name { font-size: 11px; color: #F5F5F5; font-weight: 600; }
+  .color .hex { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #A8A8C0; }
+
+  .typography {
+    margin-bottom: 32px;
+  }
+  .typography .typo-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(168, 168, 192, 0.15);
+  }
+  .typography .typo-name { width: 200px; font-size: 12px; color: #A8A8C0; }
+  .typography .typo-sample { color: #F5F5F5; }
+
+  .notes { color: #A8A8C0; font-size: 13px; line-height: 1.7; }
+  .notes strong { color: #D4AF37; }
+  .notes ul { margin: 8px 0 0 20px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Pillar <em>Seer</em></h1>
+  <p class="sub">
+    Korean Saju (Four Pillars of Destiny) for Global Gen Z<br>
+    "Read your destiny through the four pillars."
+  </p>
+  <div class="meta">
+    <span class="meta-tag">DARK MYSTERIOUS</span>
+    <span class="meta-tag">PURPLE × GOLD</span>
+    <span class="meta-tag">CO-STAR INSPIRED</span>
+    <span class="meta-tag">5 SCREENS MOCKUP</span>
+  </div>
+</div>
+
+<div class="phones-grid">
+
+  <!-- Screen 1: SPLASH -->
+  <div class="phone-card">
+    <div class="phone splash">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="starfield"></div>
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="right">📶 100%</span>
+        </div>
+        <div class="logo-stars">
+          <span class="star s1">✦</span>
+          <span class="star s2">✦</span>
+          <span class="star s3">✦</span>
+          <span class="star s4">✦</span>
+          <div class="center-glyph">柱</div>
+        </div>
+        <h1>PILLAR SEER</h1>
+        <div class="tagline">Read your destiny<br>through the four pillars</div>
+        <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">Screen 1<strong>Splash</strong></div>
+  </div>
+
+  <!-- Screen 2: ONBOARDING -->
+  <div class="phone-card">
+    <div class="phone onboarding">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="starfield"></div>
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="right">📶 100%</span>
+        </div>
+        <div class="header">
+          <div class="title-glyph">✦</div>
+          <h2>Enter Your Fate</h2>
+          <div class="subtitle">We need your birth moment</div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">Name</div>
+          <div class="field-input">Chloe Park</div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <div class="field-label">Birthday</div>
+            <div class="field-input">Apr 15, 2003</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Time</div>
+            <div class="field-input">14:30</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">📍  Birth City</div>
+          <div class="field-input">Los Angeles, USA</div>
+        </div>
+
+        <div class="toggle">
+          <div class="toggle-opt active">Solar</div>
+          <div class="toggle-opt">Lunar</div>
+        </div>
+
+        <div class="cta">FIND MY DESTINY</div>
+        <div class="footer-stars">✦ ✦ ✦</div>
+      </div>
+    </div>
+    <div class="phone-label">Screen 2<strong>Onboarding</strong></div>
+  </div>
+
+  <!-- Screen 3: LIFE READING -->
+  <div class="phone-card">
+    <div class="phone life">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="right">📶 100%</span>
+        </div>
+        <div class="topbar">
+          <span class="back">←</span>
+          <span class="topbar-title">YOUR LIFE PATH</span>
+          <span class="gear">⚙</span>
+        </div>
+
+        <div class="pillars-section">
+          <div class="pillars">癸卯 丙辰 戊寅 己未</div>
+          <div class="pillar-labels">
+            <span>YEAR</span>
+            <span>MONTH</span>
+            <span>DAY</span>
+            <span>HOUR</span>
+          </div>
+        </div>
+
+        <div class="day-master">
+          <div class="dm-name">Earth Tiger (戊寅)</div>
+          <div class="dm-quote">"You are a mountain that<br>shelters tigers."</div>
+        </div>
+
+        <div class="elements">
+          <div class="element-row">
+            <span class="el-icon">🌳</span>
+            <span class="el-name">Wood</span>
+            <span class="el-bar"><span class="el-fill" style="width: 35%"></span></span>
+            <span class="el-pct">35%</span>
+          </div>
+          <div class="element-row">
+            <span class="el-icon">🔥</span>
+            <span class="el-name">Fire</span>
+            <span class="el-bar"><span class="el-fill" style="width: 25%"></span></span>
+            <span class="el-pct">25%</span>
+          </div>
+          <div class="element-row">
+            <span class="el-icon">🏔️</span>
+            <span class="el-name">Earth</span>
+            <span class="el-bar"><span class="el-fill" style="width: 30%"></span></span>
+            <span class="el-pct">30%</span>
+          </div>
+          <div class="element-row">
+            <span class="el-icon">⚙️</span>
+            <span class="el-name">Metal</span>
+            <span class="el-bar"><span class="el-fill" style="width: 5%"></span></span>
+            <span class="el-pct">5%</span>
+          </div>
+          <div class="element-row">
+            <span class="el-icon">💧</span>
+            <span class="el-name">Water</span>
+            <span class="el-bar"><span class="el-fill" style="width: 5%"></span></span>
+            <span class="el-pct">5%</span>
+          </div>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">💪</div>
+            <div class="card-title">Strength</div>
+          </div>
+          <div class="card">
+            <div class="card-icon">💝</div>
+            <div class="card-title">Love</div>
+          </div>
+          <div class="card locked">
+            <span class="lock">🔒</span>
+            <div class="card-icon">💼</div>
+            <div class="card-title">Career</div>
+          </div>
+          <div class="card locked">
+            <span class="lock">🔒</span>
+            <div class="card-icon">💰</div>
+            <div class="card-title">Wealth</div>
+          </div>
+        </div>
+
+        <div class="unlock-cta">✨ UNLOCK FULL READING ✨</div>
+      </div>
+    </div>
+    <div class="phone-label">Screen 3<strong>Life Reading</strong></div>
+  </div>
+
+  <!-- Screen 4: DAILY FORTUNE -->
+  <div class="phone-card">
+    <div class="phone daily">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="starfield"></div>
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="right">📶 100%</span>
+        </div>
+        <div class="topbar">
+          <span class="back" style="color: #A8A8C0;">←</span>
+          <span class="topbar-title">Today's Energy</span>
+          <span style="color: #A8A8C0;">🔔</span>
+        </div>
+        <div class="date">MAY 10, 2026 · SATURDAY</div>
+
+        <div class="moon-section">
+          <div class="moon-deco">✦ ✦ ✦</div>
+          <div class="score-circle">
+            <div class="score-num">85<span>/100</span></div>
+          </div>
+        </div>
+
+        <div class="quote">"A secret friend<br>arrives from afar."</div>
+
+        <div class="cat-grid">
+          <div class="cat-card">
+            <div class="cat-icon">💝</div>
+            <div class="cat-score">90</div>
+            <div class="cat-name">Love</div>
+          </div>
+          <div class="cat-card locked">
+            <div class="cat-icon">💼</div>
+            <div class="cat-score">75</div>
+            <div class="cat-name">Work</div>
+          </div>
+          <div class="cat-card locked">
+            <div class="cat-icon">💰</div>
+            <div class="cat-score">60</div>
+            <div class="cat-name">Wealth</div>
+          </div>
+          <div class="cat-card locked">
+            <div class="cat-icon">⚡</div>
+            <div class="cat-score">88</div>
+            <div class="cat-name">Energy</div>
+          </div>
+        </div>
+
+        <div class="lucky">
+          <div class="lucky-row">
+            <span class="lucky-label">🎨  Lucky Color</span>
+            <span class="lucky-val">Midnight Purple</span>
+          </div>
+          <div class="lucky-row">
+            <span class="lucky-label">🔢  Lucky Number</span>
+            <span class="lucky-val">7</span>
+          </div>
+          <div class="lucky-row">
+            <span class="lucky-label">🧭  Lucky Direction</span>
+            <span class="lucky-val">East</span>
+          </div>
+        </div>
+
+        <div class="share">SHARE TO STORY</div>
+      </div>
+    </div>
+    <div class="phone-label">Screen 4<strong>Daily Fortune</strong></div>
+  </div>
+
+  <!-- Screen 5: PAYWALL -->
+  <div class="phone-card">
+    <div class="phone paywall">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="starfield"></div>
+        <div class="statusbar">
+          <span>9:41</span>
+          <span class="right">📶 100%</span>
+        </div>
+        <span class="close">✕</span>
+
+        <div class="stars-row">✦ ⭐ ✦</div>
+        <h2>UNVEIL YOUR<br><em>future</em></h2>
+        <p class="sub">Get unlimited access to<br>5,000-year-old Korean wisdom</p>
+
+        <div class="features">
+          <div class="feat">Daily In-depth Analysis</div>
+          <div class="feat">10-Year Major Cycle (大運)</div>
+          <div class="feat">Unlimited Dream Interpretation</div>
+          <div class="feat">Lucky Direction Map</div>
+          <div class="feat">No Ads · Multi Profiles</div>
+        </div>
+
+        <div class="plan featured">
+          <div class="plan-info">
+            <div class="label">📅  Yearly</div>
+            <div class="sub-info">$3.33 / month · billed yearly</div>
+          </div>
+          <div class="plan-price">
+            <div class="amount">$39.99</div>
+            <div class="save">SAVE 33%</div>
+          </div>
+        </div>
+
+        <div class="plan">
+          <div class="plan-info">
+            <div class="label">📆  Monthly</div>
+            <div class="sub-info">Cancel anytime</div>
+          </div>
+          <div class="plan-price">
+            <div class="amount">$4.99</div>
+          </div>
+        </div>
+
+        <div class="trial-cta">✨ START 7-DAY FREE TRIAL ✨</div>
+        <div class="legal">
+          <a href="#">Restore Purchase</a> · <a href="#">Terms</a> · <a href="#">Privacy</a>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">Screen 5<strong>Paywall</strong></div>
+  </div>
+
+</div>
+
+<!-- Design Info -->
+<div class="design-info">
+  <h2>✦ Design System</h2>
+
+  <h3 style="color: #F5F5F5; font-size: 14px; letter-spacing: 0.1em; margin-bottom: 12px; text-transform: uppercase;">Color Palette</h3>
+  <div class="palette">
+    <div class="color">
+      <div class="swatch" style="background: #1A0B2E"></div>
+      <div class="name">Deep Midnight</div>
+      <div class="hex">#1A0B2E</div>
+    </div>
+    <div class="color">
+      <div class="swatch" style="background: #0A0612"></div>
+      <div class="name">Cosmic Black</div>
+      <div class="hex">#0A0612</div>
+    </div>
+    <div class="color">
+      <div class="swatch" style="background: #D4AF37"></div>
+      <div class="name">Celestial Gold</div>
+      <div class="hex">#D4AF37</div>
+    </div>
+    <div class="color">
+      <div class="swatch" style="background: #311B92"></div>
+      <div class="name">Spirit Indigo</div>
+      <div class="hex">#311B92</div>
+    </div>
+    <div class="color">
+      <div class="swatch" style="background: #6B46C1"></div>
+      <div class="name">Mystic Violet</div>
+      <div class="hex">#6B46C1</div>
+    </div>
+    <div class="color">
+      <div class="swatch" style="background: #F5F5F5"></div>
+      <div class="name">Ghostly White</div>
+      <div class="hex">#F5F5F5</div>
+    </div>
+    <div class="color">
+      <div class="swatch" style="background: #A8A8C0"></div>
+      <div class="name">Moonlight Gray</div>
+      <div class="hex">#A8A8C0</div>
+    </div>
+  </div>
+
+  <h3 style="color: #F5F5F5; font-size: 14px; letter-spacing: 0.1em; margin: 32px 0 12px; text-transform: uppercase;">Typography</h3>
+  <div class="typography">
+    <div class="typo-row">
+      <div class="typo-name">Display · Playfair Display</div>
+      <div class="typo-sample" style="font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900;">Read your destiny</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-name">Body · Montserrat</div>
+      <div class="typo-sample" style="font-family: 'Montserrat', sans-serif; font-size: 16px;">Your fate awaits in the stars.</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-name">Korean / 한자 · Noto Serif KR</div>
+      <div class="typo-sample" style="font-family: 'Noto Serif KR', serif; font-size: 24px; font-weight: 900; color: #D4AF37;">癸卯 丙辰 戊寅 己未</div>
+    </div>
+    <div class="typo-row">
+      <div class="typo-name">Mono · JetBrains Mono</div>
+      <div class="typo-sample" style="font-family: 'JetBrains Mono', monospace; font-size: 14px;">85/100 · #D4AF37</div>
+    </div>
+  </div>
+
+  <h3 style="color: #F5F5F5; font-size: 14px; letter-spacing: 0.1em; margin: 32px 0 12px; text-transform: uppercase;">Design Notes</h3>
+  <div class="notes">
+    <ul>
+      <li><strong>Tone:</strong> Mysterious × Ancient × Modern × Cinematic (Co-Star meets K-shamanism)</li>
+      <li><strong>Background:</strong> Always dark — no light mode (정통 점성술 톤)</li>
+      <li><strong>Hierarchy:</strong> Korean characters (한자) get gold + glow, like sacred symbols</li>
+      <li><strong>Animations:</strong> Stars converge → logo (3s splash), 8자 calligraphy fade-in (5s), score counter 0→target (1.5s)</li>
+      <li><strong>Premium signal:</strong> Gold accents + locked icons. Free = subdued violet, Premium = glowing gold</li>
+      <li><strong>Inspiration:</strong> Co-Star (minimalism) + Sanctuary (paywall UX) + 파묘 영화 (cinematic mystique)</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

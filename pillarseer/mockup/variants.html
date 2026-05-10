@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pillar Seer — 5 Design Variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;700;900&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #0a0a0a;
+    color: #eaeaea;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+  body { padding: 60px 24px 120px; }
+
+  /* Header */
+  .page-header { max-width: 1400px; margin: 0 auto 64px; text-align: center; }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .page-header h1 em { font-style: italic; color: #D4AF37; font-weight: 400; }
+  .page-header .sub {
+    color: #8a8a91;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-top: 16px;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .page-header .pick-hint {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 10px 20px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 999px;
+    font-size: 13px;
+    color: #D4AF37;
+    letter-spacing: 0.05em;
+  }
+
+  /* Variants list */
+  .variant {
+    max-width: 1400px;
+    margin: 0 auto 100px;
+    padding-bottom: 60px;
+    border-bottom: 1px dashed #2a2a2a;
+  }
+  .variant:last-child { border-bottom: none; }
+
+  .variant-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+  .variant-num {
+    font-size: 56px;
+    font-weight: 900;
+    color: #2a2a2a;
+    letter-spacing: -0.04em;
+    font-family: 'Inter', sans-serif;
+  }
+  .variant-name {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .variant-tag {
+    font-size: 11px;
+    color: #888;
+    padding: 5px 12px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+  .variant-desc {
+    color: #b0b0b0;
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin-bottom: 20px;
+  }
+  .variant-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    font-size: 12px;
+    color: #777;
+  }
+  .variant-meta b { color: #ddd; font-weight: 600; }
+  .swatches { display: inline-flex; gap: 4px; vertical-align: middle; margin-left: 6px; }
+  .swatch { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #2a2a2a; }
+
+  .phones-row { display: flex; gap: 32px; flex-wrap: wrap; }
+  .phone-card { display: flex; flex-direction: column; gap: 12px; }
+  .phone-label {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .phone {
+    width: 320px;
+    height: 680px;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 8px #1a1a1a, 0 0 0 9px #2c2c30;
+  }
+  .notch {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 28px; background: #000; border-radius: 18px; z-index: 100;
+  }
+  .screen { width: 100%; height: 100%; position: relative; overflow: hidden; }
+  .statusbar {
+    position: absolute; top: 0; left: 0; right: 0; height: 48px;
+    padding: 14px 28px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; font-weight: 600; z-index: 50;
+  }
+
+  /* ==============================================================
+     V1 — Dark Mysterious (Co-Star Style)
+     ============================================================== */
+  .v1 .screen {
+    background: radial-gradient(ellipse at top, #1A0B2E 0%, #0A0612 100%);
+    color: #F5F5F5;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .v1 .statusbar { color: #F5F5F5; }
+  .v1 .starfield {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 60% 25%, #D4AF37, transparent),
+      radial-gradient(2px 2px at 80% 70%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 80%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 45%, #D4AF37, transparent),
+      radial-gradient(1px 1px at 90% 20%, #D4AF37, transparent);
+    opacity: 0.5;
+  }
+  .v1 .topbar { padding: 60px 24px 16px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
+  .v1 .topbar-title { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 600; letter-spacing: 0.15em; }
+  .v1 .pillars-section { padding: 12px 24px 16px; text-align: center; position: relative; z-index: 10; }
+  .v1 .pillars { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 26px; color: #D4AF37; letter-spacing: 0.18em; text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); margin-bottom: 8px; }
+  .v1 .pillar-labels { display: flex; justify-content: space-around; font-size: 9px; color: #6B6B82; letter-spacing: 0.1em; }
+  .v1 .day-master { background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.1)); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 18px; margin: 16px 24px 18px; text-align: center; position: relative; z-index: 10; }
+  .v1 .dm-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #D4AF37; margin-bottom: 6px; }
+  .v1 .dm-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 13px; color: #F5F5F5; line-height: 1.6; }
+  .v1 .elements { padding: 0 24px 16px; position: relative; z-index: 10; }
+  .v1 .el-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 11px; }
+  .v1 .el-name { width: 50px; color: #A8A8C0; }
+  .v1 .el-bar { flex: 1; height: 6px; background: rgba(107, 70, 193, 0.2); border-radius: 3px; }
+  .v1 .el-fill { height: 100%; background: linear-gradient(90deg, #D4AF37, #6B46C1); border-radius: 3px; }
+  .v1 .el-pct { width: 40px; text-align: right; color: #F5F5F5; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .v1 .cta { margin: 12px 24px 24px; padding: 16px; background: linear-gradient(135deg, #D4AF37, #B8860B); border-radius: 12px; text-align: center; color: #1A0B2E; font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3); position: relative; z-index: 10; }
+
+  /* ==============================================================
+     V2 — K-Shamanism Horror (파묘 영화 톤)
+     ============================================================== */
+  .v2 .screen {
+    background:
+      linear-gradient(180deg, rgba(20, 0, 0, 0.8) 0%, rgba(10, 0, 0, 0.95) 100%),
+      repeating-linear-gradient(45deg, #1a0808 0px, #0d0303 2px, transparent 2px, transparent 8px);
+    color: #f5e6d3;
+    font-family: 'Cinzel', serif;
+  }
+  .v2 .statusbar { color: #f5e6d3; }
+  .v2 .topbar { padding: 60px 24px 16px; text-align: center; }
+  .v2 .topbar-title { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 0.4em; color: #c8102e; }
+  .v2 .pillars-section { padding: 24px 0 20px; text-align: center; position: relative; }
+  .v2 .pillars-section::before, .v2 .pillars-section::after { content: '神'; position: absolute; color: #c8102e; font-family: 'Noto Serif KR', serif; font-size: 18px; font-weight: 900; opacity: 0.4; }
+  .v2 .pillars-section::before { top: 20px; left: 24px; }
+  .v2 .pillars-section::after { top: 20px; right: 24px; }
+  .v2 .pillars { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 32px; color: #c8102e; letter-spacing: 0.15em; line-height: 1.2; margin-bottom: 6px; text-shadow: 0 0 16px rgba(200, 16, 46, 0.6); }
+  .v2 .pillar-labels { display: flex; justify-content: space-around; font-size: 9px; color: #8a6a4a; letter-spacing: 0.2em; padding: 0 24px; }
+  .v2 .day-master { margin: 20px 24px; padding: 22px 18px; background: rgba(200, 16, 46, 0.1); border: 2px solid #c8102e; box-shadow: inset 0 0 0 6px rgba(245, 230, 211, 0.05); position: relative; text-align: center; }
+  .v2 .dm-name { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 900; color: #f5e6d3; margin-bottom: 8px; letter-spacing: 0.08em; }
+  .v2 .dm-quote { font-family: 'Cinzel', serif; font-style: italic; font-size: 13px; color: #c8102e; line-height: 1.6; letter-spacing: 0.05em; }
+  .v2 .elements { padding: 0 24px 16px; }
+  .v2 .el-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 11px; padding: 6px 10px; background: rgba(200, 16, 46, 0.05); border-left: 2px solid #c8102e; }
+  .v2 .el-name { width: 50px; color: #f5e6d3; font-family: 'Cinzel', serif; letter-spacing: 0.1em; text-transform: uppercase; }
+  .v2 .el-bar { flex: 1; height: 4px; background: rgba(200, 16, 46, 0.15); }
+  .v2 .el-fill { height: 100%; background: #c8102e; }
+  .v2 .el-pct { width: 40px; text-align: right; color: #f5e6d3; font-family: 'Cinzel', serif; font-weight: 700; }
+  .v2 .cta { margin: 12px 24px 24px; padding: 18px; background: #c8102e; color: #f5e6d3; text-align: center; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 900; letter-spacing: 0.2em; border: 2px solid #f5e6d3; }
+
+  /* ==============================================================
+     V3 — Y2K Cyber Mystic
+     ============================================================== */
+  .v3 .screen {
+    background: linear-gradient(180deg, #0F0F2C 0%, #1a0d3a 50%, #0F0F2C 100%);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    overflow: hidden;
+  }
+  .v3 .screen::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 255, 255, 0.03) 3px, rgba(0, 255, 255, 0.03) 4px); pointer-events: none; }
+  .v3 .statusbar { color: #00FFFF; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .v3 .topbar { padding: 60px 24px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .v3 .topbar-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FF00FF; letter-spacing: 0.3em; text-transform: uppercase; }
+  .v3 .pillars-section { padding: 16px 24px 16px; text-align: center; }
+  .v3 .pillars { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 28px; color: #fff; letter-spacing: 0.1em; line-height: 1.3; margin-bottom: 8px; text-shadow: 2px 0 #FF00FF, -2px 0 #00FFFF; }
+  .v3 .pillar-labels { display: flex; justify-content: space-around; font-size: 9px; color: #00FFFF; letter-spacing: 0.2em; font-family: 'JetBrains Mono', monospace; }
+  .v3 .day-master { margin: 20px 24px; padding: 16px; background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.05)); border: 1px solid #FF00FF; border-radius: 4px; text-align: center; position: relative; }
+  .v3 .day-master::before { content: '◣ ◢'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); color: #FF00FF; font-size: 14px; background: #0F0F2C; padding: 0 8px; }
+  .v3 .dm-name { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #00FFFF; margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .v3 .dm-quote { font-family: 'Space Grotesk', sans-serif; font-style: italic; font-size: 12px; color: #fff; line-height: 1.5; }
+  .v3 .elements { padding: 0 24px 16px; }
+  .v3 .el-row { display: grid; grid-template-columns: 16px 50px 1fr 40px; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .v3 .el-name { color: #00FFFF; text-transform: uppercase; }
+  .v3 .el-bar { height: 8px; background: rgba(0, 255, 255, 0.1); position: relative; }
+  .v3 .el-fill { height: 100%; background: linear-gradient(90deg, #FF00FF, #00FFFF); }
+  .v3 .el-pct { color: #FF00FF; font-weight: 700; }
+  .v3 .cta { margin: 12px 24px 24px; padding: 14px; background: linear-gradient(90deg, #FF00FF, #00FFFF); color: #0F0F2C; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; border-radius: 4px; }
+
+  /* ==============================================================
+     V4 — Minimal Beige Meditation (Apple-like quiet)
+     ============================================================== */
+  .v4 .screen {
+    background: #F5F1E8;
+    color: #1A1A1A;
+    font-family: 'Inter', sans-serif;
+  }
+  .v4 .statusbar { color: #1A1A1A; }
+  .v4 .topbar { padding: 60px 28px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .v4 .topbar-title { font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #6b6b6b; }
+  .v4 .pillars-section { padding: 16px 28px 24px; text-align: center; }
+  .v4 .pillars { font-family: 'Noto Serif KR', serif; font-weight: 400; font-size: 26px; color: #1A1A1A; letter-spacing: 0.2em; margin-bottom: 10px; }
+  .v4 .pillar-labels { display: flex; justify-content: space-around; font-size: 9px; color: #999; letter-spacing: 0.15em; text-transform: uppercase; }
+  .v4 .day-master { margin: 16px 28px 24px; padding: 24px 20px; border-top: 1px solid #d4caa8; border-bottom: 1px solid #d4caa8; text-align: center; }
+  .v4 .dm-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; color: #1A1A1A; margin-bottom: 8px; font-style: italic; }
+  .v4 .dm-quote { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b6b6b; line-height: 1.7; font-style: italic; }
+  .v4 .elements { padding: 0 28px 16px; }
+  .v4 .el-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 11px; padding-bottom: 8px; border-bottom: 1px solid #e8dfc4; }
+  .v4 .el-row:last-child { border-bottom: none; }
+  .v4 .el-name { width: 60px; color: #1A1A1A; font-weight: 500; }
+  .v4 .el-bar { flex: 1; height: 1px; background: #d4caa8; position: relative; }
+  .v4 .el-fill { height: 1px; background: #1A1A1A; position: absolute; top: 0; left: 0; }
+  .v4 .el-pct { width: 40px; text-align: right; color: #6b6b6b; font-family: 'Cormorant Garamond', serif; font-style: italic; }
+  .v4 .cta { margin: 12px 28px 24px; padding: 16px; background: #1A1A1A; color: #F5F1E8; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  /* ==============================================================
+     V5 — K-pop Kitsch Fan
+     ============================================================== */
+  .v5 .screen {
+    background: linear-gradient(180deg, #FFD6E8 0%, #C8B6FF 50%, #B8C0FF 100%);
+    color: #2C1B47;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .v5 .statusbar { color: #2C1B47; }
+  .v5 .topbar { padding: 60px 24px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .v5 .topbar-title { font-family: 'Black Han Sans', sans-serif; font-size: 16px; color: #2C1B47; letter-spacing: 0.05em; }
+  .v5 .pillars-section { padding: 8px 0 16px; text-align: center; }
+  .v5 .pillars { font-family: 'Noto Serif KR', serif; font-weight: 900; font-size: 28px; color: #2C1B47; letter-spacing: 0.15em; margin-bottom: 6px; }
+  .v5 .pillar-labels { display: flex; justify-content: space-around; font-size: 10px; color: #6e5c8a; letter-spacing: 0.15em; padding: 0 24px; font-weight: 700; }
+  .v5 .day-master { margin: 16px 24px; padding: 20px; background: #fff; border: 3px solid #2C1B47; border-radius: 24px; text-align: center; box-shadow: 5px 5px 0 #2C1B47; transform: rotate(-1.5deg); position: relative; }
+  .v5 .day-master::before { content: '✨'; position: absolute; top: -14px; right: -10px; font-size: 32px; transform: rotate(15deg); }
+  .v5 .dm-name { font-family: 'Black Han Sans', sans-serif; font-size: 22px; color: #2C1B47; margin-bottom: 8px; }
+  .v5 .dm-quote { font-family: 'Pretendard', sans-serif; font-weight: 600; font-size: 13px; color: #2C1B47; line-height: 1.5; }
+  .v5 .elements { padding: 8px 24px 16px; }
+  .v5 .el-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; background: #fff; padding: 8px 12px; border-radius: 14px; border: 2px solid #2C1B47; box-shadow: 2px 2px 0 #2C1B47; }
+  .v5 .el-name { width: 50px; color: #2C1B47; font-weight: 700; }
+  .v5 .el-bar { flex: 1; height: 8px; background: #f0e6ff; border-radius: 4px; }
+  .v5 .el-fill { height: 100%; background: linear-gradient(90deg, #FF6B9D, #C8B6FF); border-radius: 4px; }
+  .v5 .el-pct { width: 36px; text-align: right; color: #FF6B9D; font-weight: 800; font-family: 'Pretendard', sans-serif; }
+  .v5 .cta { margin: 12px 24px 24px; padding: 18px; background: #FF6B9D; color: #fff; text-align: center; font-family: 'Black Han Sans', sans-serif; font-size: 18px; letter-spacing: 0.05em; border-radius: 16px; border: 3px solid #2C1B47; box-shadow: 4px 4px 0 #2C1B47; }
+  .v5 .cta::before { content: '💖 '; }
+
+  /* ==============================================================
+     Mobile / iPhone Responsive
+     ============================================================== */
+  @media (max-width: 768px) {
+    body { padding: 24px 12px 80px; }
+    .page-header h1 { font-size: 36px; }
+    .page-header .sub { font-size: 14px; }
+    .page-header .pick-hint { font-size: 12px; padding: 8px 14px; }
+
+    .variant { margin-bottom: 60px; padding-bottom: 40px; }
+    .variant-num { font-size: 40px; }
+    .variant-name { font-size: 22px; }
+    .variant-tag { font-size: 10px; padding: 4px 8px; }
+    .variant-desc { font-size: 13px; line-height: 1.6; }
+    .variant-meta { font-size: 11px; gap: 12px; flex-direction: column; align-items: flex-start; }
+
+    /* Phone scales down */
+    .phones-row { justify-content: center; }
+    .phone {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      aspect-ratio: 320 / 680;
+      border-radius: 36px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 0 6px #1a1a1a, 0 0 0 7px #2c2c30;
+    }
+    .notch { width: 90px; height: 22px; top: 10px; }
+    .statusbar { padding: 12px 22px 0; height: 40px; font-size: 12px; }
+
+    /* Reduce internal padding for smaller phone */
+    .v1 .topbar, .v2 .topbar, .v3 .topbar, .v4 .topbar, .v5 .topbar { padding-top: 50px; }
+    .v1 .pillars, .v3 .pillars, .v4 .pillars, .v5 .pillars { font-size: 22px; letter-spacing: 0.12em; }
+    .v2 .pillars { font-size: 26px; }
+    .v1 .dm-name, .v3 .dm-name, .v5 .dm-name { font-size: 17px; }
+    .v2 .dm-name { font-size: 18px; }
+    .v4 .dm-name { font-size: 24px; }
+    .v1 .dm-quote, .v2 .dm-quote, .v3 .dm-quote, .v5 .dm-quote { font-size: 12px; }
+    .v4 .dm-quote { font-size: 12px; }
+    .v1 .el-row, .v2 .el-row, .v3 .el-row, .v4 .el-row, .v5 .el-row { font-size: 10px; margin-bottom: 6px; }
+    .v1 .cta, .v2 .cta, .v3 .cta, .v4 .cta, .v5 .cta { font-size: 12px; padding: 14px; margin-bottom: 16px; }
+    .v5 .cta { font-size: 16px; }
+
+    .phone-label { font-size: 10px; }
+  }
+
+  @media (max-width: 480px) {
+    .variant-head { gap: 8px; }
+    .variant-num { font-size: 32px; }
+    .variant-name { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Pillar <em>Seer</em></h1>
+  <p class="sub">
+    같은 화면(Life Reading), 5가지 다른 디자인 톤.<br>
+    각각의 매력과 타겟이 다릅니다. <strong style="color: #D4AF37;">"이거다"</strong> 하는 거 1개 골라주세요.
+  </p>
+  <div class="pick-hint">⬇ 5개 중 마음에 드는 번호 알려주시면 그 톤으로 모든 화면을 만듭니다</div>
+</div>
+
+<!-- ============================================
+     V1 — Dark Mysterious (Co-Star Style)
+     ============================================ -->
+<div class="variant">
+  <div class="variant-head">
+    <span class="variant-num">01</span>
+    <span class="variant-name">Dark Mysterious</span>
+    <span class="variant-tag">CO-STAR INSPIRED</span>
+    <span class="variant-tag">SAFE BET</span>
+  </div>
+  <p class="variant-desc">
+    이전에 만든 톤. 보라/검정 + 골드 별 + 한자 글로우. Co-Star, Sanctuary 같은 글로벌 점성술 앱과 같은 코드.
+    <strong style="color: #ddd;">신비롭고 고급스럽다.</strong> Gen Z 글로벌 시장의 안전한 정답.
+  </p>
+  <div class="variant-meta">
+    <span><b>분위기:</b> Mysterious × Premium × Calm</span>
+    <span><b>타겟:</b> Co-Star 유저, 점성술 헤비, 30대 여성</span>
+    <span><b>색상:</b>
+      <span class="swatches">
+        <span class="swatch" style="background: #1A0B2E"></span>
+        <span class="swatch" style="background: #D4AF37"></span>
+        <span class="swatch" style="background: #6B46C1"></span>
+        <span class="swatch" style="background: #F5F5F5"></span>
+      </span>
+    </span>
+    <span><b>폰트:</b> Playfair Display + Montserrat + Noto Serif KR</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone v1">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="starfield"></div>
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span>←</span><span class="topbar-title">YOUR LIFE PATH</span><span>⚙</span></div>
+          <div class="pillars-section">
+            <div class="pillars">癸卯 丙辰 戊寅 己未</div>
+            <div class="pillar-labels"><span>YEAR</span><span>MONTH</span><span>DAY</span><span>HOUR</span></div>
+          </div>
+          <div class="day-master">
+            <div class="dm-name">Earth Tiger (戊寅)</div>
+            <div class="dm-quote">"You are a mountain<br>that shelters tigers."</div>
+          </div>
+          <div class="elements">
+            <div class="el-row"><span>🌳</span><span class="el-name">Wood</span><span class="el-bar"><span class="el-fill" style="width:35%"></span></span><span class="el-pct">35%</span></div>
+            <div class="el-row"><span>🔥</span><span class="el-name">Fire</span><span class="el-bar"><span class="el-fill" style="width:25%"></span></span><span class="el-pct">25%</span></div>
+            <div class="el-row"><span>🏔️</span><span class="el-name">Earth</span><span class="el-bar"><span class="el-fill" style="width:30%"></span></span><span class="el-pct">30%</span></div>
+            <div class="el-row"><span>⚙️</span><span class="el-name">Metal</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">5%</span></div>
+            <div class="el-row"><span>💧</span><span class="el-name">Water</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">5%</span></div>
+          </div>
+          <div class="cta">✨ UNLOCK FULL READING ✨</div>
+        </div>
+      </div>
+      <div class="phone-label">Life Reading</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     V2 — K-Shamanism Horror (파묘 영화 톤)
+     ============================================ -->
+<div class="variant">
+  <div class="variant-head">
+    <span class="variant-num">02</span>
+    <span class="variant-name">K-Shamanism Horror</span>
+    <span class="variant-tag">파묘 / 악귀 톤</span>
+    <span class="variant-tag">CINEMATIC</span>
+  </div>
+  <p class="variant-desc">
+    한국 무속 영화 톤. 검정 + 핏빛 빨강 + 한자 부적. 파묘 / 악귀 / Exhuma 같은 K-shamanism
+    엔터테인먼트 붐을 직접 활용. <strong style="color: #ddd;">강렬하고 영화적.</strong> 외국인이 한국 사주를 신비롭게 인식.
+    호불호 갈리지만 <strong style="color: #ddd;">팬덤은 미친다.</strong>
+  </p>
+  <div class="variant-meta">
+    <span><b>분위기:</b> Horror × Cinematic × Strong</span>
+    <span><b>타겟:</b> K-drama 팬, 호러 좋아하는 MZ, 25~35</span>
+    <span><b>색상:</b>
+      <span class="swatches">
+        <span class="swatch" style="background: #0a0000"></span>
+        <span class="swatch" style="background: #c8102e"></span>
+        <span class="swatch" style="background: #f5e6d3"></span>
+        <span class="swatch" style="background: #1a0808"></span>
+      </span>
+    </span>
+    <span><b>폰트:</b> Cinzel + Noto Serif KR (부적 한자)</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone v2">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span class="topbar-title">YOUR FATE</span></div>
+          <div class="pillars-section">
+            <div class="pillars">癸卯 丙辰<br>戊寅 己未</div>
+            <div class="pillar-labels"><span>YEAR</span><span>MONTH</span><span>DAY</span><span>HOUR</span></div>
+          </div>
+          <div class="day-master">
+            <div class="dm-name">戊寅 · EARTH TIGER</div>
+            <div class="dm-quote">"You are a mountain<br>that shelters tigers."</div>
+          </div>
+          <div class="elements">
+            <div class="el-row"><span>木</span><span class="el-name">Wood</span><span class="el-bar"><span class="el-fill" style="width:35%"></span></span><span class="el-pct">35</span></div>
+            <div class="el-row"><span>火</span><span class="el-name">Fire</span><span class="el-bar"><span class="el-fill" style="width:25%"></span></span><span class="el-pct">25</span></div>
+            <div class="el-row"><span>土</span><span class="el-name">Earth</span><span class="el-bar"><span class="el-fill" style="width:30%"></span></span><span class="el-pct">30</span></div>
+            <div class="el-row"><span>金</span><span class="el-name">Metal</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">05</span></div>
+            <div class="el-row"><span>水</span><span class="el-name">Water</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">05</span></div>
+          </div>
+          <div class="cta">▼ UNLOCK FATE ▼</div>
+        </div>
+      </div>
+      <div class="phone-label">Life Reading</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     V3 — Y2K Cyber Mystic
+     ============================================ -->
+<div class="variant">
+  <div class="variant-head">
+    <span class="variant-num">03</span>
+    <span class="variant-name">Y2K Cyber Mystic</span>
+    <span class="variant-tag">NEON</span>
+    <span class="variant-tag">GLITCH</span>
+  </div>
+  <p class="variant-desc">
+    네온 마젠타 + 사이안 + 글리치. Y2K 리바이벌 트렌드 + 디지털 점성술.
+    <strong style="color: #ddd;">디지털 시대의 운명 코드 같은 느낌.</strong> 기술 친화 Gen Z, NewJeans/aespa Cyber 컨셉 팬에 어필.
+    틱톡 알고리즘 강함 (네온 = 자동 후킹).
+  </p>
+  <div class="variant-meta">
+    <span><b>분위기:</b> Digital × Edgy × Trendy</span>
+    <span><b>타겟:</b> Gen Z 18~25, 테크/사이버펑크 팬, K-pop Cyber 컨셉</span>
+    <span><b>색상:</b>
+      <span class="swatches">
+        <span class="swatch" style="background: #0F0F2C"></span>
+        <span class="swatch" style="background: #FF00FF"></span>
+        <span class="swatch" style="background: #00FFFF"></span>
+        <span class="swatch" style="background: #fff"></span>
+      </span>
+    </span>
+    <span><b>폰트:</b> Space Grotesk + JetBrains Mono</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone v3">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>09:41</span><span>SIG 100%</span></div>
+          <div class="topbar"><span style="color:#FF00FF">‹‹</span><span class="topbar-title">// LIFE.SCAN //</span><span style="color:#00FFFF">▣</span></div>
+          <div class="pillars-section">
+            <div class="pillars">癸卯 丙辰 戊寅 己未</div>
+            <div class="pillar-labels"><span>YR</span><span>MO</span><span>DAY</span><span>HR</span></div>
+          </div>
+          <div class="day-master">
+            <div class="dm-name">EARTH_TIGER.exe</div>
+            <div class="dm-quote">"mountain.protocol<br>= shelter(tigers)"</div>
+          </div>
+          <div class="elements">
+            <div class="el-row"><span>🌳</span><span class="el-name">WOOD</span><span class="el-bar"><span class="el-fill" style="width:35%"></span></span><span class="el-pct">35%</span></div>
+            <div class="el-row"><span>🔥</span><span class="el-name">FIRE</span><span class="el-bar"><span class="el-fill" style="width:25%"></span></span><span class="el-pct">25%</span></div>
+            <div class="el-row"><span>🏔️</span><span class="el-name">EARTH</span><span class="el-bar"><span class="el-fill" style="width:30%"></span></span><span class="el-pct">30%</span></div>
+            <div class="el-row"><span>⚙️</span><span class="el-name">METAL</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">05%</span></div>
+            <div class="el-row"><span>💧</span><span class="el-name">WATER</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">05%</span></div>
+          </div>
+          <div class="cta">&gt;&gt; DECRYPT FATE &lt;&lt;</div>
+        </div>
+      </div>
+      <div class="phone-label">Life Reading</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     V4 — Minimal Beige Meditation
+     ============================================ -->
+<div class="variant">
+  <div class="variant-head">
+    <span class="variant-num">04</span>
+    <span class="variant-name">Minimal Beige</span>
+    <span class="variant-tag">CALM / MEDITATION</span>
+    <span class="variant-tag">APPLE-LIKE</span>
+  </div>
+  <p class="variant-desc">
+    베이지 + 검정 + 골드 한 줄. Calm/Headspace 명상 앱 톤. 라이트 모드.
+    <strong style="color: #ddd;">절제된 럭셔리, 차분한 자기성찰.</strong>
+    유럽/북미 자기계발 앱 유저 (Elena 페르소나) 직격. 다른 4개와 정반대 톤.
+    <strong style="color: #ddd;">여백이 곧 깊이.</strong>
+  </p>
+  <div class="variant-meta">
+    <span><b>분위기:</b> Calm × Sophisticated × Quiet</span>
+    <span><b>타겟:</b> Calm/Headspace 유저, 30대 직장인, 자기계발 진심</span>
+    <span><b>색상:</b>
+      <span class="swatches">
+        <span class="swatch" style="background: #F5F1E8"></span>
+        <span class="swatch" style="background: #1A1A1A"></span>
+        <span class="swatch" style="background: #D4AF37"></span>
+        <span class="swatch" style="background: #d4caa8"></span>
+      </span>
+    </span>
+    <span><b>폰트:</b> Cormorant Garamond + Inter</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone v4">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span>←</span><span class="topbar-title">Your Life Path</span><span>⚙</span></div>
+          <div class="pillars-section">
+            <div class="pillars">癸卯 丙辰 戊寅 己未</div>
+            <div class="pillar-labels"><span>year</span><span>month</span><span>day</span><span>hour</span></div>
+          </div>
+          <div class="day-master">
+            <div class="dm-name">Earth Tiger</div>
+            <div class="dm-quote">"You are a mountain that shelters tigers."</div>
+          </div>
+          <div class="elements">
+            <div class="el-row"><span class="el-name">Wood</span><span class="el-bar"><span class="el-fill" style="width:35%"></span></span><span class="el-pct">35</span></div>
+            <div class="el-row"><span class="el-name">Fire</span><span class="el-bar"><span class="el-fill" style="width:25%"></span></span><span class="el-pct">25</span></div>
+            <div class="el-row"><span class="el-name">Earth</span><span class="el-bar"><span class="el-fill" style="width:30%"></span></span><span class="el-pct">30</span></div>
+            <div class="el-row"><span class="el-name">Metal</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">5</span></div>
+            <div class="el-row"><span class="el-name">Water</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">5</span></div>
+          </div>
+          <div class="cta">Continue Reading</div>
+        </div>
+      </div>
+      <div class="phone-label">Life Reading</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     V5 — K-pop Kitsch Fan
+     ============================================ -->
+<div class="variant">
+  <div class="variant-head">
+    <span class="variant-num">05</span>
+    <span class="variant-name">K-pop Kitsch</span>
+    <span class="variant-tag">CUTE / FANDOM</span>
+    <span class="variant-tag">INSTA-FRIENDLY</span>
+  </div>
+  <p class="variant-desc">
+    핑크 + 퍼플 그라디언트 + 두꺼운 검정 테두리 + 그림자. Y2K + 키덜트.
+    <strong style="color: #ddd;">"내 최애와의 궁합" 캡처가 인스타 도배되는 톤.</strong>
+    BTS/뉴진스 팬 (Chloe 페르소나) 직격. 진지한 점성술 톤은 없지만 <strong style="color: #ddd;">바이럴 폭발력 1위.</strong>
+  </p>
+  <div class="variant-meta">
+    <span><b>분위기:</b> Cute × Playful × Viral</span>
+    <span><b>타겟:</b> K-pop 팬덤 18~25 여성, 인스타/틱톡 헤비</span>
+    <span><b>색상:</b>
+      <span class="swatches">
+        <span class="swatch" style="background: #FFD6E8"></span>
+        <span class="swatch" style="background: #C8B6FF"></span>
+        <span class="swatch" style="background: #FF6B9D"></span>
+        <span class="swatch" style="background: #2C1B47"></span>
+      </span>
+    </span>
+    <span><b>폰트:</b> Black Han Sans + Pretendard</span>
+  </div>
+  <div class="phones-row">
+    <div class="phone-card">
+      <div class="phone v5">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span>📶 100%</span></div>
+          <div class="topbar"><span>←</span><span class="topbar-title">My Life Path 💜</span><span>⚙</span></div>
+          <div class="pillars-section">
+            <div class="pillars">癸卯 丙辰 戊寅 己未</div>
+            <div class="pillar-labels"><span>YEAR</span><span>MONTH</span><span>DAY</span><span>HOUR</span></div>
+          </div>
+          <div class="day-master">
+            <div class="dm-name">EARTH TIGER</div>
+            <div class="dm-quote">"You are a mountain<br>that shelters tigers."</div>
+          </div>
+          <div class="elements">
+            <div class="el-row"><span>🌳</span><span class="el-name">Wood</span><span class="el-bar"><span class="el-fill" style="width:35%"></span></span><span class="el-pct">35%</span></div>
+            <div class="el-row"><span>🔥</span><span class="el-name">Fire</span><span class="el-bar"><span class="el-fill" style="width:25%"></span></span><span class="el-pct">25%</span></div>
+            <div class="el-row"><span>🏔️</span><span class="el-name">Earth</span><span class="el-bar"><span class="el-fill" style="width:30%"></span></span><span class="el-pct">30%</span></div>
+            <div class="el-row"><span>⚙️</span><span class="el-name">Metal</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">5%</span></div>
+            <div class="el-row"><span>💧</span><span class="el-name">Water</span><span class="el-bar"><span class="el-fill" style="width:5%"></span></span><span class="el-pct">5%</span></div>
+          </div>
+          <div class="cta">UNLOCK ALL!</div>
+        </div>
+      </div>
+      <div class="phone-label">Life Reading</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer Hint -->
+<div style="max-width: 800px; margin: 80px auto; text-align: center; padding: 32px; background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px;">
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: #D4AF37; margin-bottom: 12px;">선택해주세요</h2>
+  <p style="color: #aaa; font-size: 14px; line-height: 1.7;">
+    번호(01~05)로 알려주시면 그 톤으로 모든 화면(Onboarding · Life Reading · Daily · Compatibility · Tojung · Paywall · Profile 등 8~10개)을 만들어 갑니다.<br>
+    또는 "1+2 섞어서" "3 인데 톤 좀 더 차분하게" 같은 변형 요청도 OK.
+  </p>
+</div>
+
+</body>
+</html>
