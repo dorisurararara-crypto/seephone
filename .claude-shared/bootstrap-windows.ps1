@@ -79,6 +79,54 @@ try {
     Write-Host "==> 메모리 정션 생성: $MemTarget → $MemSrc"
 }
 
+# --- 2.5. statusline + model OpusPlan 자동 셋업 ----------------------------
+# 토큰 효율 룰 #8 (global.md 참조)
+$StatusLineSrc = Join-Path $SharedDir "statusline-windows.ps1"
+$StatusLineDst = Join-Path $ClaudeDir "statusline.ps1"
+$SettingsJson = Join-Path $ClaudeDir "settings.json"
+
+# statusline 스크립트가 .claude-shared에 없으면 .claude에서 옮김 (기존 방식)
+if (-not (Test-Path $StatusLineSrc) -and (Test-Path $StatusLineDst)) {
+    Copy-Item $StatusLineDst $StatusLineSrc
+    Write-Host "==> 기존 statusline.ps1 → .claude-shared/statusline-windows.ps1 복사"
+}
+# .claude-shared에 있으면 ~/.claude/로 복사
+if (Test-Path $StatusLineSrc) {
+    Copy-Item $StatusLineSrc $StatusLineDst -Force
+    Write-Host "==> statusline.ps1 → ~/.claude/ 복사"
+}
+
+# settings.json 패치 (model + statusLine 자동 추가)
+if (Test-Path $SettingsJson) {
+    $settings = Get-Content $SettingsJson -Raw | ConvertFrom-Json
+    $changed = $false
+    if (-not $settings.PSObject.Properties["model"]) {
+        $settings | Add-Member -MemberType NoteProperty -Name "model" -Value "opusplan"
+        $changed = $true
+        Write-Host "==> settings.json: model = opusplan 추가"
+    }
+    if (-not $settings.PSObject.Properties["statusLine"]) {
+        $sl = @{ type = "command"; command = "powershell -NoProfile -ExecutionPolicy Bypass -File $StatusLineDst"; padding = 0 }
+        $settings | Add-Member -MemberType NoteProperty -Name "statusLine" -Value $sl
+        $changed = $true
+        Write-Host "==> settings.json: statusLine 추가"
+    }
+    if ($changed) {
+        Copy-Item $SettingsJson "$SettingsJson.bak.$Ts"
+        $settings | ConvertTo-Json -Depth 10 | Set-Content $SettingsJson -Encoding UTF8
+        Write-Host "==> settings.json 갱신 완료 (백업: $SettingsJson.bak.$Ts)"
+    } else {
+        Write-Host "==> settings.json: model/statusLine 이미 등록됨"
+    }
+} else {
+    Write-Host "==> settings.json 없음 — 새로 생성"
+    $newSettings = @{
+        model = "opusplan"
+        statusLine = @{ type = "command"; command = "powershell -NoProfile -ExecutionPolicy Bypass -File $StatusLineDst"; padding = 0 }
+    }
+    $newSettings | ConvertTo-Json -Depth 10 | Set-Content $SettingsJson -Encoding UTF8
+}
+
 # --- 3. 검증 -----------------------------------------------------------
 Write-Host ""
 Write-Host "==> 검증"

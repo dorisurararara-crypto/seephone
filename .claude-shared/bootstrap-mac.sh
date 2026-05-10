@@ -56,6 +56,45 @@ fi
 ln -sfn "$MEM_SRC" "$MEM_TARGET"
 echo "==> 메모리 심볼릭 링크: $MEM_TARGET → $MEM_SRC"
 
+# --- 2.5. statusline + model OpusPlan 자동 셋업 ----------------------------
+# 토큰 효율 룰 #8 (global.md 참조)
+STATUSLINE_SRC="$SHARED_DIR/statusline-mac.sh"
+STATUSLINE_DST="$HOME/.claude/statusline.sh"
+SETTINGS_JSON="$HOME/.claude/settings.json"
+
+if [ -f "$STATUSLINE_SRC" ]; then
+  cp "$STATUSLINE_SRC" "$STATUSLINE_DST"
+  chmod +x "$STATUSLINE_DST"
+  echo "==> statusline.sh → ~/.claude/ 복사 (chmod +x)"
+fi
+
+# settings.json 패치 (model + statusLine)
+if [ -f "$SETTINGS_JSON" ]; then
+  if command -v jq >/dev/null 2>&1; then
+    cp "$SETTINGS_JSON" "$SETTINGS_JSON.bak.$TS"
+    tmp=$(mktemp)
+    jq --arg cmd "bash $STATUSLINE_DST" '
+      .model = (.model // "opusplan") |
+      .statusLine = (.statusLine // {type:"command", command:$cmd, padding:0})
+    ' "$SETTINGS_JSON" > "$tmp" && mv "$tmp" "$SETTINGS_JSON"
+    echo "==> settings.json 갱신 (model=opusplan + statusLine, 백업: $SETTINGS_JSON.bak.$TS)"
+  else
+    echo "==> jq 없음 — settings.json 수동 갱신 필요. brew install jq 권장"
+  fi
+else
+  echo "==> settings.json 없음 — 새로 생성"
+  cat > "$SETTINGS_JSON" <<EOF
+{
+  "model": "opusplan",
+  "statusLine": {
+    "type": "command",
+    "command": "bash $STATUSLINE_DST",
+    "padding": 0
+  }
+}
+EOF
+fi
+
 # --- 3. 검증 -----------------------------------------------------------
 echo ""
 echo "==> 검증"
