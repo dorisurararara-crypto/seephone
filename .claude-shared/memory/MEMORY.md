@@ -1,0 +1,20 @@
+- [자율 모드 — 묻지 말고 끝까지](feedback_autonomous_mode.md) — 3개 앱 다 완성될 때까지 묻기 전에 로컬·웹 검색 먼저
+- [앱 공장 운영 방식 — zero-gate + codex](feedback_app_factory_workflow.md) — 아이디어→자동빌드→"출시" 한마디. 막히면 codex 무료한도 상의. 빌드 후 시뮬 사용자 테스트 의무.
+- [새 앱 폴더 위치 — devapp](reference_devapp_location.md) — 신규 앱은 `~/devapp/{name}/` 단독. seephone 모노레포는 동결.
+- [zero-gate factory 검증 결과 + 신규 앱 6분 부팅 체크리스트](reference_zero_gate_factory.md) — 사용자 손 0회 자동. cookie 30일 재사용. 인프라 컴포넌트·트랩·신규 앱 ID 매핑.
+- [야간 테스트 + 출시 준비](feedback_overnight_test_and_release.md) — SFX wire + 시뮬 사용자 테스트 반복 + "출시" 받으면 즉시 배포
+- [seephone 프로젝트 현재 상태](project_seephone_state.md) — 3앱 모노레포 디렉토리 구조 + 각 앱 진행 상태
+- [seephone 모든 ID 매핑](reference_seephone_ids.md) — Bundle ID / ASC App ID / 베타 그룹 / Public link / API 키 위치
+- [TestFlight 자동 배포 파이프라인](reference_testflight_pipeline.md) — IPA 빌드부터 외부 베타 그룹 배포까지 사용자 손 안 거치는 전체 흐름
+- [ElevenLabs SFX·TTS API](reference_elevenlabs.md) — 검증된 prompt 레시피 + 비용 + 트랩
+- [Mac↔Windows 협업 워크플로우](reference_workflow.md) — HANDOFF.md + Cron 30min 폴링 + 이미지 생성 batch 프로토콜
+- [알려진 이슈·트랩](feedback_known_issues.md) — ML Kit ARM64 / ASC App API 거부 / GitHub Pages private / Flutter export 실패 등
+- [Xcode 26 altool silent fail 버그](feedback_xcode26_altool_bug.md) — 같은 팀 비슷한 prefix bundle ID 다수 시 altool 이 잘못된 app 에 attach. `--apple-id <numerical>` 명시 필수.
+- [이미지 dimension 한계 방지](feedback_screenshot_token_explosion.md) — iOS 시뮬 스크린샷·AI PNG Read 는 한 턴 1-3장 제한, 텍스트 로그 우선
+- [야간 작업 큐 (2026-04-29 02:00)](project_pending_work_queue.md) — compact 직전 진행 중이던 우선순위 6개 (Pro 가짜 가격, Android 서명, ritual fallback, i18n, Apple 처리 모니터링)
+- [수익 모델 결정](project_monetization_decision.md) — 구독 X, 테마 단건 구매 / 광고 / 둘 다 자율 판단 (2026-04-29 사용자 mandate). codex 상의 후 결정.
+- [2026-04-29 야간 작업 로그](project_overnight_log.md) — 사용자 자는 동안 진행한 작업·결과 append-only. 새 세션 "이어서하자" 시 이거부터.
+- [2026-05-02 야간: protagonist 1.0.1 + AdMob 인증](project_overnight_log_20260502.md) — app-ads.txt 인증 위해 1.0.1 metadata-only update. xcodebuild ASC API key 직접 발급 패턴.
+- [Distribution cert + xcodebuild 패턴 (검증)](reference_xcodebuild_signing.md) — fastlane cert/sigh 사용 X. xcodebuild `-allowProvisioningUpdates -authenticationKey*` 로 ASC API key 자동 발급. 매 세션 first-shot success.
+- [이니셜전문가 앱 진행 상황](project_initialexpert.md) — ~/devapp/initialexpert. 광고 이니셜 디코딩 검색. 데이터 6308건 + Flutter 시뮬 작동. AdMob 키 + 풀크롤만 남음.
+- [iOS + Android 양 플랫폼 자동 배포 파이프라인](reference_deploy_pipeline.md) — protagonist 검증. ground truth = ~/devapp/protagonist/DEPLOY.md. Play Console 자동화 포함.

@@ -9,7 +9,42 @@
 3. **진짜 사용자만 할 수 있는 일**만 미루고 (Apple ID 2FA, 본인인증, 신규 계정 가입 등) → "사용자 대기" 목록 기록
 4. 그 외 **모든 작업 자율 진행**, 다 끝낸 후 종합 보고
 
+---
 
+## 🔁 양쪽 머신 동기화: `.claude-shared/`
+
+이 레포의 `.claude-shared/` 폴더는 **Mac ↔ Windows 두 머신의 Claude Code 운영 환경을 git 으로 동기화**하는
+공통 ground truth 입니다.
+
+- `.claude-shared/global.md` — OS 무관 글로벌 운영 룰
+- `.claude-shared/global-mac.md` — Mac 전용 (Apple Dev / fastlane / iOS)
+- `.claude-shared/global-windows.md` — Windows 전용 (이미지 생성)
+- `.claude-shared/memory/` — auto memory 스냅샷 (양방향 동기화 — 한쪽에서 학습한 내용을 다른 쪽도 봄)
+- `.claude-shared/bootstrap-{mac,windows}.{sh,ps1}` — 첫 셋업 스크립트
+
+### 새 머신에서 첫 셋업 (한 번만)
+
+**Mac**:
+```sh
+cd ~/seephone && bash .claude-shared/bootstrap-mac.sh
+```
+
+**Windows** (PowerShell, Developer Mode 또는 관리자):
+```powershell
+cd $env:USERPROFILE\seephone; .\.claude-shared\bootstrap-windows.ps1
+```
+
+부트스트랩이 다음을 자동 수행:
+1. `~/.claude/CLAUDE.md` 를 `.claude-shared/global.md` + `global-{os}.md` @import 두 줄로 치환 (기존 백업)
+2. `~/.claude/projects/<encoded>/memory/` 폴더를 `.claude-shared/memory/` 심볼릭 링크로 교체
+
+이후 `git pull` 만으로 글로벌 운영 룰·메모리가 양쪽 동기화. 자세한 내용은 `.claude-shared/README.md`.
+
+### 변경 시
+어느 머신에서든 `.claude-shared/*.md` 수정 → `git commit -m "chore: shared <요약>" && git push` →
+다른 머신은 `git pull` 로 자동 반영.
+
+---
 
 이 디렉토리는 **3개의 1인 개발 앱**을 담는 모노레포입니다. 각 앱은 같은 모노레포 안에서 별도 디렉토리로 관리되고, 인프라(ASC 자격증명, TestFlight 스크립트, 이미지 생성 워크플로우)를 공유합니다.
 
@@ -39,6 +74,7 @@
 ├── CLAUDE.md             # 본 문서 (양쪽 Claude 공통 지침)
 ├── APPS.md               # 3개 앱 개요·기획서
 ├── HANDOFF.md            # Mac ↔ Windows 메시지 큐
+├── .claude-shared/       # 양쪽 머신 글로벌 CLAUDE.md + memory ground truth
 ├── .gitignore
 ├── prompts/              # 이미지 생성 배치 요청 (Mac → Windows)
 │   └── batch_NNN.json
