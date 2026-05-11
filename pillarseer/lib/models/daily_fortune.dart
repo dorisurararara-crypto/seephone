@@ -12,6 +12,15 @@ class DailyFortune {
   final int luckyNumber;
   final String luckyDirection; // East / West / North / South / NE...
   final String dayPillar;      // 오늘의 일진 (예: 丙午)
+  // 카테고리별 한 줄 가이드 (codex Round 3 권장 — 점신 대비 데일리 리텐션)
+  final String loveGuideEn;
+  final String loveGuideKo;
+  final String workGuideEn;
+  final String workGuideKo;
+  final String wealthGuideEn;
+  final String wealthGuideKo;
+  final String energyGuideEn;
+  final String energyGuideKo;
 
   const DailyFortune({
     required this.date,
@@ -25,6 +34,14 @@ class DailyFortune {
     required this.luckyNumber,
     required this.luckyDirection,
     required this.dayPillar,
+    this.loveGuideEn = '',
+    this.loveGuideKo = '',
+    this.workGuideEn = '',
+    this.workGuideKo = '',
+    this.wealthGuideEn = '',
+    this.wealthGuideKo = '',
+    this.energyGuideEn = '',
+    this.energyGuideKo = '',
   });
 
   factory DailyFortune.dummy() {

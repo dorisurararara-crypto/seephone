@@ -44,6 +44,7 @@ class HomeScreen extends ConsumerWidget {
                 englishLabel: _englishForGanji(fortune.dayPillar),
               ),
               _CategoryGrid(fortune: fortune),
+              _CategoryGuidesCard(fortune: fortune),
               _LuckyCard(fortune: fortune),
               const _PromoCard(),
               const SizedBox(height: 16),
@@ -862,6 +863,72 @@ class _CatItem {
   final String name;
   final int score;
   const _CatItem({required this.icon, required this.name, required this.score});
+}
+
+class _CategoryGuidesCard extends StatelessWidget {
+  final DailyFortune fortune;
+  const _CategoryGuidesCard({required this.fortune});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final useKo = (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final entries = [
+      (icon: Icons.favorite, label: l.homeCategoryLove, emoji: '💞',
+          text: useKo ? fortune.loveGuideKo : fortune.loveGuideEn),
+      (icon: Icons.work_outline, label: l.homeCategoryWork, emoji: '💼',
+          text: useKo ? fortune.workGuideKo : fortune.workGuideEn),
+      (icon: Icons.savings_outlined, label: l.homeCategoryWealth, emoji: '💰',
+          text: useKo ? fortune.wealthGuideKo : fortune.wealthGuideEn),
+      (icon: Icons.bolt, label: l.homeCategoryEnergy, emoji: '⚡',
+          text: useKo ? fortune.energyGuideKo : fortune.energyGuideEn),
+    ];
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 14, 20, 4),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: AppColors.spiritIndigo.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        children: entries.where((e) => e.text.isNotEmpty).map((e) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(e.emoji, style: const TextStyle(fontSize: 16)),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: 52,
+                    child: Text(
+                      e.label.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 10.5,
+                        letterSpacing: 0.8,
+                        color: AppColors.celestialGold,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      e.text,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppColors.ghostlyWhite,
+                        height: 1.55,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )).toList(),
+      ),
+    );
+  }
 }
 
 class _LuckyCard extends StatelessWidget {

@@ -21,9 +21,12 @@ void main() {
         isLunar: false, isMale: true,
       );
       expect(result.dayPillar.text.length, 2);
-      expect(result.elements.wood + result.elements.fire +
+      // 5행 백분율 합은 반올림 오차로 100±3 허용
+      final sum = result.elements.wood + result.elements.fire +
              result.elements.earth + result.elements.metal +
-             result.elements.water, lessThanOrEqualTo(101));
+             result.elements.water;
+      expect(sum, greaterThanOrEqualTo(97));
+      expect(sum, lessThanOrEqualTo(103));
     });
   });
 }

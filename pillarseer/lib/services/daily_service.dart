@@ -98,6 +98,11 @@ class DailyService {
     final energyScore = (base + ((seed * 11) % 11) - 5).clamp(20, 100);
     final total = ((loveScore + workScore + wealthScore + energyScore) / 4).round();
 
+    final love = _categoryGuide('love', loveScore);
+    final work = _categoryGuide('work', workScore);
+    final wealth = _categoryGuide('wealth', wealthScore);
+    final energy = _categoryGuide('energy', energyScore);
+
     return DailyFortune(
       date: t,
       totalScore: total,
@@ -110,7 +115,43 @@ class DailyService {
       luckyNumber: _luckyNumberFor(userElement),
       luckyDirection: _luckyDirectionFor(userElement),
       dayPillar: todayPillar.text,
+      loveGuideEn: love.en,
+      loveGuideKo: love.ko,
+      workGuideEn: work.en,
+      workGuideKo: work.ko,
+      wealthGuideEn: wealth.en,
+      wealthGuideKo: wealth.ko,
+      energyGuideEn: energy.en,
+      energyGuideKo: energy.ko,
     );
+  }
+
+  /// 카테고리별 점수 → 한 줄 가이드 (mood band)
+  static ({String en, String ko}) _categoryGuide(String cat, int score) {
+    final band = score >= 80 ? 'high' : score >= 55 ? 'mid' : 'low';
+    const map = {
+      'love': {
+        'high': (en: 'Make the move — chemistry is on your side today.', ko: '먼저 다가가도 좋아요. 오늘은 케미가 당신 편이에요.'),
+        'mid': (en: 'Listen more than you speak — depth beats charm today.', ko: '말보다 듣기. 오늘은 깊이가 매력을 이깁니다.'),
+        'low': (en: 'Hold off on big confessions — give it 24 hours.', ko: '큰 고백은 미루세요. 24시간만 기다려도 OK.'),
+      },
+      'work': {
+        'high': (en: 'Pitch the bold idea — your timing window is open.', ko: '용감한 제안을 던지세요. 타이밍의 창이 열렸어요.'),
+        'mid': (en: 'Steady execution today — close one task fully.', ko: '꾸준한 실행의 날. 한 가지를 끝까지 매듭짓기.'),
+        'low': (en: 'Defer big decisions — protect your bandwidth.', ko: '큰 결정은 미루기. 에너지를 보호하세요.'),
+      },
+      'wealth': {
+        'high': (en: 'Cash flow window — sign, invoice, or negotiate today.', ko: '돈의 창이 열렸어요. 서명·청구·협상에 좋아요.'),
+        'mid': (en: 'Review before you spend — smart audit today.', ko: '쓰기 전 점검. 오늘은 똑똑한 감사의 날.'),
+        'low': (en: 'Avoid impulse purchases — sit on it for 48 hours.', ko: '충동 지출 금물. 48시간만 참아 보세요.'),
+      },
+      'energy': {
+        'high': (en: 'High vitality — push the workout, do the call.', ko: '활력 최고치. 운동·통화 같은 액션 일로 풀어보세요.'),
+        'mid': (en: 'Pace yourself — don\'t burn the whole battery.', ko: '페이스 조절. 배터리 한 번에 다 쓰지 마세요.'),
+        'low': (en: 'Rest is productive today — recovery > output.', ko: '오늘은 쉬는 게 생산이에요. 회복 > 산출.'),
+      },
+    };
+    return map[cat]![band]!;
   }
 
   /// 일주 인덱스 (SajuService 와 동일 알고리즘)
