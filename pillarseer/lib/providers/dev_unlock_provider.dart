@@ -27,8 +27,20 @@ class DevUnlockNotifier extends Notifier<bool> {
     return false;
   }
 
+  /// Release safety (codex Round 9 critical fix):
+  /// release build 에서는 prefs 의 dev unlock 상태도 무시 + 삭제.
+  /// 이전에 debug build 에서 unlock 한 사용자가 release update 받았을 때
+  /// Pro 상태가 그대로 살아나는 보안 구멍 방지.
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!kDevGateEnabled) {
+      // 잔존 dev unlock 강제 제거
+      if (prefs.getBool(_kPrefsProKey) == true) {
+        await prefs.setBool(_kPrefsProKey, false);
+      }
+      state = false;
+      return;
+    }
     state = prefs.getBool(_kPrefsProKey) ?? false;
   }
 

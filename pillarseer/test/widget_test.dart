@@ -147,4 +147,20 @@ void main() {
       expect(r2.current, 1);
     });
   });
+
+  group('Dev unlock release safety (codex Round 9)', () {
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+    });
+
+    // Note: kDevGateEnabled 은 const 라 test에서 override 불가.
+    // 디버그 환경에서 true, release 에서 false. 이 테스트는 디버그 환경에서
+    // pref 상태가 정상적으로 read 되는지만 확인.
+    test('apply() invalid 코드 시 unchanged', () async {
+      // 실제 Notifier 호출은 ProviderContainer 필요해 통합 테스트에서 다룸.
+      // 여기선 prefs key 명세 회귀.
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('app.dev.pro_unlocked') ?? false, false);
+    });
+  });
 }

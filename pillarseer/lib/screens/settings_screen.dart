@@ -1,6 +1,7 @@
 // Pillar Seer — 설정 화면. 언어 / 테마 / 알림 / About.
 // Version 라벨 5탭 hidden gate → ganzinam95/12 dev unlock dialog.
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -429,10 +430,25 @@ class _LinkTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           onTap: () async {
+            final messenger = ScaffoldMessenger.of(context);
             final uri = Uri.parse(url);
             try {
-              await launchUrl(uri, mode: LaunchMode.externalApplication);
-            } catch (_) {}
+              final ok = await launchUrl(uri,
+                  mode: LaunchMode.externalApplication);
+              if (!ok) throw Exception('launch returned false');
+            } catch (_) {
+              // codex Round 9 fix: silent catch 대신 사용자 fallback (clipboard copy + snackbar)
+              await Clipboard.setData(ClipboardData(text: url));
+              if (!context.mounted) return;
+              messenger
+                ..hideCurrentSnackBar()
+                ..showSnackBar(SnackBar(
+                  content: Text('URL copied: $value'),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: AppColors.celestialGold,
+                  duration: const Duration(seconds: 3),
+                ));
+            }
           },
           borderRadius: BorderRadius.circular(10),
           child: Container(
