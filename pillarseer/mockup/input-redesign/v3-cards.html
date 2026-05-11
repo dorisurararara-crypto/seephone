@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>V3 카드 컨베이어 — Input</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Serif KR', serif; background: #050306; padding: 40px 20px; min-height: 100vh; }
+    h1 { color: #D4AF37; font-size: 22px; text-align: center; letter-spacing: 4px; margin-bottom: 8px; }
+    .han { color: #A8A8C0; font-size: 12px; text-align: center; letter-spacing: 6px; margin-bottom: 24px; }
+    .lang-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 36px; }
+    .lang-toggle button { background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); color: #F5F5F5; padding: 6px 16px; border-radius: 16px; cursor: pointer; font-size: 12px; }
+    .lang-toggle button.active { background: #D4AF37; color: #050306; border-color: #D4AF37; font-weight: 700; }
+    .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .phone { width: 320px; height: 690px; background: #050306; border-radius: 36px; padding: 12px; border: 4px solid #050306; box-shadow: 0 12px 48px rgba(0,0,0,0.9); position: relative; overflow: hidden; }
+    .screen {
+      width: 100%; height: 100%;
+      background: linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+      border-radius: 24px; padding: 24px 12px; color: #F5F5F5;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .label { position: absolute; top: -22px; left: 12px; font-size: 10px; color: #A8A8C0; letter-spacing: 2px; font-weight: 700; }
+
+    .header {
+      text-align: center; padding-bottom: 12px;
+    }
+    .header .han { color: #D4AF37; font-size: 11px; letter-spacing: 2px; margin: 0 0 4px; }
+    .header h2 { font-size: 18px; color: #F5F5F5; letter-spacing: 4px; font-weight: 700; }
+    .header .progress { display: flex; gap: 4px; justify-content: center; margin-top: 10px; }
+    .header .dot { width: 24px; height: 3px; background: rgba(212, 175, 55, 0.2); border-radius: 2px; }
+    .header .dot.active { background: #D4AF37; }
+
+    .deck {
+      flex: 1;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px 12px;
+    }
+    .card {
+      width: 80%; aspect-ratio: 3 / 4;
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.15), rgba(49, 27, 146, 0.25));
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(212, 175, 55, 0.15);
+      position: absolute;
+    }
+    .card.behind {
+      transform: rotate(6deg) translateY(-12px);
+      opacity: 0.4;
+      z-index: 0;
+    }
+    .card.front {
+      z-index: 2;
+    }
+    .card .icon { font-size: 52px; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+    .card .q { font-size: 16px; color: #F5F5F5; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .card .q-en { font-size: 11px; color: #A8A8C0; font-style: italic; }
+    .card .value {
+      margin-top: 14px;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px; color: #D4AF37; font-weight: 700;
+      text-align: center;
+    }
+    .card .hint { margin-top: 8px; font-size: 10px; color: #A8A8C0; text-align: center; }
+
+    .nav-area { padding-top: 12px; }
+    .swipe-hint {
+      text-align: center; font-size: 11px; color: #A8A8C0;
+      margin-bottom: 12px; letter-spacing: 1px;
+    }
+    .nav-row { display: flex; gap: 8px; }
+    .nav-btn { flex: 1; padding: 12px; border-radius: 10px; text-align: center; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .nav-btn.skip { background: rgba(255,255,255,0.08); color: #A8A8C0; border: 1px solid rgba(255,255,255,0.15); }
+    .nav-btn.next { background: linear-gradient(135deg, #D4AF37, #B8941F); color: #050306; }
+  </style>
+</head>
+<body>
+  <h1>V3 카드 컨베이어</h1>
+  <p class="han">Card Carousel · 스와이프 input</p>
+  <div class="lang-toggle">
+    <button onclick="setLang('ko')" id="btn-ko" class="active">한국어</button>
+    <button onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+
+  <div class="row">
+    <div class="phone"><span class="label">DATE</span>
+      <div class="screen">
+        <div class="header">
+          <div class="han">入力 · INPUT</div>
+          <h2 data-ko="당신의 정보" data-en="YOUR DETAILS">당신의 정보</h2>
+          <div class="progress">
+            <div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+        </div>
+        <div class="deck">
+          <div class="card behind">
+            <div class="icon">🌙</div>
+            <div class="q" data-ko="시간" data-en="TIME">시간</div>
+          </div>
+          <div class="card front">
+            <div class="icon">📅</div>
+            <div class="q" data-ko="생년월일" data-en="DATE OF BIRTH">생년월일</div>
+            <div class="q-en" data-ko="生年月日" data-en="生年月日">生年月日</div>
+            <div class="value" data-ko="1996년 4월 15일" data-en="Apr 15, 1996">1996년 4월 15일</div>
+            <div class="hint" data-ko="탭하여 변경" data-en="Tap to change">탭하여 변경</div>
+          </div>
+        </div>
+        <div class="nav-area">
+          <div class="swipe-hint" data-ko="← 스와이프로 이전 / 다음 →" data-en="← Swipe back / forward →">← 스와이프로 이전 / 다음 →</div>
+          <div class="nav-row">
+            <div class="nav-btn skip" data-ko="← 이전" data-en="← Back">← 이전</div>
+            <div class="nav-btn next" data-ko="다음 →" data-en="Next →">다음 →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone"><span class="label">FINAL</span>
+      <div class="screen">
+        <div class="header">
+          <div class="han">入力 · INPUT</div>
+          <h2 data-ko="당신의 정보" data-en="YOUR DETAILS">당신의 정보</h2>
+          <div class="progress">
+            <div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div>
+          </div>
+        </div>
+        <div class="deck">
+          <div class="card front">
+            <div class="icon">✦</div>
+            <div class="q" data-ko="준비 완료" data-en="READY">준비 완료</div>
+            <div class="q-en" data-ko="당신의 운명을 펼칩니다" data-en="Unveiling your destiny">당신의 운명을 펼칩니다</div>
+          </div>
+        </div>
+        <div class="nav-area">
+          <div class="nav-row">
+            <div class="nav-btn next" style="flex: 1;" data-ko="✦ 내 사주 보기" data-en="✦ Find My Destiny">✦ 내 사주 보기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:36px;color:#A8A8C0;font-size:11px"><a href="index.html" style="color:#D4AF37">← 5톤 비교로</a></p>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('[data-ko]').forEach(el => { el.textContent = el.dataset[lang]; });
+      document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+  </script>
+</body>
+</html>

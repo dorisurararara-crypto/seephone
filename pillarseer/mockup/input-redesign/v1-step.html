@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>V1 스텝 위저드 — Input</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Serif KR', serif; background: #050306; padding: 40px 20px; min-height: 100vh; }
+    h1 { color: #D4AF37; font-size: 22px; text-align: center; letter-spacing: 4px; margin-bottom: 8px; }
+    .han { color: #A8A8C0; font-size: 12px; text-align: center; letter-spacing: 6px; margin-bottom: 24px; }
+    .lang-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 36px; }
+    .lang-toggle button {
+      background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #F5F5F5; padding: 6px 16px; border-radius: 16px; cursor: pointer; font-size: 12px;
+    }
+    .lang-toggle button.active { background: #D4AF37; color: #050306; border-color: #D4AF37; font-weight: 700; }
+    .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .phone {
+      width: 320px; height: 690px;
+      background: linear-gradient(180deg, #0A0612 0%, #050306 100%);
+      border-radius: 36px; padding: 12px;
+      border: 4px solid #050306;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.9);
+      position: relative; overflow: hidden;
+    }
+    .screen {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(49, 27, 146, 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, #0A0612 0%, #050306 100%);
+      border-radius: 24px; padding: 24px; color: #F5F5F5;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .label { position: absolute; top: -22px; left: 12px; font-size: 10px; color: #A8A8C0; letter-spacing: 2px; font-weight: 700; }
+
+    /* progress bar */
+    .progress { display: flex; gap: 4px; margin-bottom: 24px; }
+    .progress .dot { flex: 1; height: 3px; border-radius: 2px; background: rgba(212, 175, 55, 0.2); }
+    .progress .dot.active { background: #D4AF37; }
+
+    .step-hero {
+      font-size: 64px; text-align: center; margin: 30px 0 20px;
+      filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
+    }
+    .step-q {
+      font-size: 22px; color: #F5F5F5; font-weight: 700; text-align: center;
+      line-height: 1.4; margin-bottom: 8px; letter-spacing: 0.5px;
+    }
+    .step-hint {
+      font-size: 13px; color: #A8A8C0; text-align: center; margin-bottom: 32px; font-style: italic;
+    }
+    .step-input {
+      background: rgba(49, 27, 146, 0.2); border: 2px solid rgba(212, 175, 55, 0.4);
+      border-radius: 16px; padding: 18px 20px; font-size: 18px; color: #F5F5F5;
+      text-align: center; margin-bottom: auto;
+      font-family: inherit; outline: none;
+    }
+    .step-input.gold { color: #D4AF37; font-weight: 700; }
+
+    .step-actions { display: flex; gap: 10px; margin-top: 24px; }
+    .btn-back, .btn-next {
+      flex: 1; padding: 14px; border-radius: 12px; text-align: center;
+      font-size: 14px; font-weight: 700; letter-spacing: 1px; cursor: pointer;
+    }
+    .btn-back { background: rgba(255,255,255,0.08); color: #A8A8C0; border: 1px solid rgba(255,255,255,0.15); }
+    .btn-next { background: linear-gradient(135deg, #D4AF37, #B8941F); color: #050306; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    .step-count { font-size: 11px; color: #6B6B82; text-align: center; margin-top: 12px; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <h1>V1 스텝 위저드</h1>
+  <p class="han">Step Wizard · 한 입력씩, 큰 비주얼</p>
+  <div class="lang-toggle">
+    <button onclick="setLang('ko')" id="btn-ko" class="active">한국어</button>
+    <button onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+
+  <div class="row">
+    <!-- Step 1: Name -->
+    <div class="phone"><span class="label">01 NAME</span>
+      <div class="screen">
+        <div class="progress">
+          <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="step-hero">✨</div>
+        <div class="step-q" data-ko="당신의 이름은?" data-en="What's your name?">당신의 이름은?</div>
+        <div class="step-hint" data-ko="별이 누구를 부를지 알려주세요" data-en="Let the stars know whom to call">별이 누구를 부를지 알려주세요</div>
+        <input class="step-input" data-ko-placeholder="이름 또는 닉네임" data-en-placeholder="Name or nickname" placeholder="이름 또는 닉네임" />
+        <div class="step-actions">
+          <div class="btn-next" data-ko="다음 →" data-en="Next →">다음 →</div>
+        </div>
+        <div class="step-count" data-ko="1 / 5" data-en="1 / 5">1 / 5</div>
+      </div>
+    </div>
+
+    <!-- Step 2: Date -->
+    <div class="phone"><span class="label">02 DATE</span>
+      <div class="screen">
+        <div class="progress">
+          <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="step-hero">📅</div>
+        <div class="step-q" data-ko="언제 태어났나요?" data-en="When were you born?">언제 태어났나요?</div>
+        <div class="step-hint" data-ko="별자리가 그날을 기억합니다" data-en="The stars remember that day">별자리가 그날을 기억합니다</div>
+        <div class="step-input gold" data-ko="1996년 4월 15일" data-en="Apr 15, 1996">1996년 4월 15일</div>
+        <div class="step-actions">
+          <div class="btn-back" data-ko="← 이전" data-en="← Back">← 이전</div>
+          <div class="btn-next" data-ko="다음 →" data-en="Next →">다음 →</div>
+        </div>
+        <div class="step-count" data-ko="2 / 5" data-en="2 / 5">2 / 5</div>
+      </div>
+    </div>
+
+    <!-- Step 3: Time -->
+    <div class="phone"><span class="label">03 TIME</span>
+      <div class="screen">
+        <div class="progress">
+          <div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="step-hero">🌙</div>
+        <div class="step-q" data-ko="태어난 시간은?" data-en="What time were you born?">태어난 시간은?</div>
+        <div class="step-hint" data-ko="시진(時辰)이 시주(時柱)를 정합니다" data-en="The hour shapes your hour pillar (時柱)">시진(時辰)이 시주(時柱)를 정합니다</div>
+        <div class="step-input gold" data-ko="오후 2시 30분" data-en="2:30 PM">오후 2시 30분</div>
+        <div style="text-align: center; margin-top: 16px; font-size: 12px; color: #A8A8C0;">
+          ☐ <span data-ko="태어난 시간을 모름" data-en="I don't know my birth time">태어난 시간을 모름</span>
+        </div>
+        <div class="step-actions">
+          <div class="btn-back" data-ko="← 이전" data-en="← Back">← 이전</div>
+          <div class="btn-next" data-ko="다음 →" data-en="Next →">다음 →</div>
+        </div>
+        <div class="step-count" data-ko="3 / 5" data-en="3 / 5">3 / 5</div>
+      </div>
+    </div>
+
+    <!-- Step 4: City -->
+    <div class="phone"><span class="label">04 CITY</span>
+      <div class="screen">
+        <div class="progress">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+        </div>
+        <div class="step-hero">📍</div>
+        <div class="step-q" data-ko="어디서 태어났나요?" data-en="Where were you born?">어디서 태어났나요?</div>
+        <div class="step-hint" data-ko="선택 — 시간대 보정에 사용" data-en="Optional — for timezone alignment">선택 — 시간대 보정에 사용</div>
+        <input class="step-input" data-ko-placeholder="예: 서울특별시" data-en-placeholder="e.g. Seoul, South Korea" placeholder="예: 서울특별시" />
+        <div class="step-actions">
+          <div class="btn-back" data-ko="← 이전" data-en="← Back">← 이전</div>
+          <div class="btn-next" data-ko="다음 →" data-en="Next →">다음 →</div>
+        </div>
+        <div class="step-count" data-ko="4 / 5" data-en="4 / 5">4 / 5</div>
+      </div>
+    </div>
+
+    <!-- Step 5: Confirm -->
+    <div class="phone"><span class="label">05 CONFIRM</span>
+      <div class="screen">
+        <div class="progress">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+        </div>
+        <div class="step-hero">✦</div>
+        <div class="step-q" data-ko="준비 되었나요?" data-en="Ready?">준비 되었나요?</div>
+        <div class="step-hint" data-ko="별이 네 기둥을 펼쳐 보입니다" data-en="The stars unveil your four pillars">별이 네 기둥을 펼쳐 보입니다</div>
+        <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 12px; padding: 14px; font-size: 13px; line-height: 1.8; color: #F5F5F5;">
+          <div data-ko="👤  홍길동" data-en="👤  John">👤  홍길동</div>
+          <div data-ko="📅  1996년 4월 15일" data-en="📅  Apr 15, 1996">📅  1996년 4월 15일</div>
+          <div data-ko="🌙  오후 2시 30분" data-en="🌙  2:30 PM">🌙  오후 2시 30분</div>
+          <div data-ko="📍  서울특별시" data-en="📍  Seoul, KR">📍  서울특별시</div>
+        </div>
+        <div class="step-actions">
+          <div class="btn-back" data-ko="← 이전" data-en="← Back">← 이전</div>
+          <div class="btn-next" data-ko="✦ 내 사주 보기" data-en="✦ Find My Destiny">✦ 내 사주 보기</div>
+        </div>
+        <div class="step-count" data-ko="5 / 5" data-en="5 / 5">5 / 5</div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:36px;color:#A8A8C0;font-size:11px"><a href="index.html" style="color:#D4AF37">← Input 디자인 5톤 비교로</a></p>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('[data-ko]').forEach(el => {
+        el.textContent = el.dataset[lang];
+      });
+      document.querySelectorAll('[data-ko-placeholder]').forEach(el => {
+        el.placeholder = el.dataset[lang + 'Placeholder'];
+      });
+      document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+  </script>
+</body>
+</html>

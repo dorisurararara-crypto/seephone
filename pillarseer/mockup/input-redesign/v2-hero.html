@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>V2 히어로 + 폼 — Input</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Serif KR', serif; background: #050306; padding: 40px 20px; min-height: 100vh; }
+    h1 { color: #D4AF37; font-size: 22px; text-align: center; letter-spacing: 4px; margin-bottom: 8px; }
+    .han { color: #A8A8C0; font-size: 12px; text-align: center; letter-spacing: 6px; margin-bottom: 24px; }
+    .lang-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 36px; }
+    .lang-toggle button { background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); color: #F5F5F5; padding: 6px 16px; border-radius: 16px; cursor: pointer; font-size: 12px; }
+    .lang-toggle button.active { background: #D4AF37; color: #050306; border-color: #D4AF37; font-weight: 700; }
+    .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .phone {
+      width: 320px; height: 690px;
+      background: #050306; border-radius: 36px; padding: 12px;
+      border: 4px solid #050306; box-shadow: 0 12px 48px rgba(0,0,0,0.9);
+      position: relative; overflow: hidden;
+    }
+    .screen {
+      width: 100%; height: 100%; background: #0A0612;
+      border-radius: 24px; color: #F5F5F5;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* HERO area */
+    .hero {
+      height: 38%;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(212, 175, 55, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(49, 27, 146, 0.5) 0%, transparent 60%),
+        linear-gradient(180deg, #1A0B2E 0%, #0A0612 100%);
+      position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .star { position: absolute; width: 3px; height: 3px; background: #D4AF37; border-radius: 50%; box-shadow: 0 0 6px rgba(212, 175, 55, 0.8); }
+    .star.s1 { top: 18%; left: 22%; }
+    .star.s2 { top: 28%; right: 18%; }
+    .star.s3 { top: 60%; left: 14%; }
+    .star.s4 { top: 50%; right: 30%; }
+    .star.s5 { top: 78%; left: 70%; }
+    .hero-pillars { display: flex; gap: 8px; margin-bottom: 12px; }
+    .hero-pillars .p {
+      width: 38px; height: 56px;
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.2), rgba(49, 27, 146, 0.4));
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px; font-weight: 800; color: #D4AF37;
+    }
+    .hero-title {
+      font-size: 22px; color: #F5F5F5; font-weight: 900; letter-spacing: 4px;
+    }
+    .hero-sub {
+      font-size: 11px; color: #A8A8C0; font-style: italic; margin-top: 4px;
+    }
+
+    /* FORM area */
+    .form { flex: 1; padding: 18px 20px; overflow: auto; }
+    .form .top {
+      font-size: 12px; color: #D4AF37; letter-spacing: 2px;
+      text-align: center; margin-bottom: 14px; font-weight: 700;
+    }
+    .field {
+      background: rgba(49, 27, 146, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 10px;
+      padding: 10px 14px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .field .ico { font-size: 18px; opacity: 0.7; }
+    .field .stack { flex: 1; }
+    .field .lbl { font-size: 9px; color: #D4AF37; letter-spacing: 1px; }
+    .field .val { font-size: 13px; color: #F5F5F5; margin-top: 2px; }
+    .btn {
+      background: linear-gradient(135deg, #D4AF37, #B8941F);
+      color: #050306; padding: 14px; border-radius: 14px;
+      text-align: center; font-size: 14px; font-weight: 900; letter-spacing: 2px;
+      margin-top: 14px;
+      box-shadow: 0 0 24px rgba(212, 175, 55, 0.3);
+    }
+    .label { position: absolute; top: -22px; left: 12px; font-size: 10px; color: #A8A8C0; letter-spacing: 2px; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>V2 히어로 + 폼</h1>
+  <p class="han">Hero + Form · 비주얼 임팩트</p>
+  <div class="lang-toggle">
+    <button onclick="setLang('ko')" id="btn-ko" class="active">한국어</button>
+    <button onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+
+  <div class="row">
+    <div class="phone"><span class="label">INPUT</span>
+      <div class="screen">
+        <div class="hero">
+          <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span><span class="star s4"></span><span class="star s5"></span>
+          <div class="hero-pillars">
+            <div class="p">年</div><div class="p">月</div><div class="p">日</div><div class="p">時</div>
+          </div>
+          <div class="hero-title" data-ko="필러시어" data-en="PILLAR SEER">필러시어</div>
+          <div class="hero-sub" data-ko="네 기둥, 당신의 운명" data-en="Four pillars, your destiny">네 기둥, 당신의 운명</div>
+        </div>
+
+        <div class="form">
+          <div class="top" data-ko="당신의 정보를 알려주세요" data-en="TELL US YOUR DETAILS">당신의 정보를 알려주세요</div>
+
+          <div class="field">
+            <span class="ico">👤</span>
+            <div class="stack">
+              <div class="lbl" data-ko="이름" data-en="NAME">이름</div>
+              <div class="val" data-ko="홍길동" data-en="John">홍길동</div>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ico">📅</span>
+            <div class="stack">
+              <div class="lbl" data-ko="생년월일" data-en="BIRTHDAY">생년월일</div>
+              <div class="val" data-ko="1996년 4월 15일" data-en="Apr 15, 1996">1996년 4월 15일</div>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ico">🌙</span>
+            <div class="stack">
+              <div class="lbl" data-ko="태어난 시간" data-en="BIRTH TIME">태어난 시간</div>
+              <div class="val" data-ko="오후 2시 30분" data-en="2:30 PM">오후 2시 30분</div>
+            </div>
+          </div>
+          <div class="field">
+            <span class="ico">📍</span>
+            <div class="stack">
+              <div class="lbl" data-ko="출생지 (선택)" data-en="BIRTH CITY (OPTIONAL)">출생지 (선택)</div>
+              <div class="val" data-ko="서울특별시" data-en="Seoul, KR">서울특별시</div>
+            </div>
+          </div>
+          <div class="btn" data-ko="✦ 내 사주 보기 ✦" data-en="✦ Find My Destiny ✦">✦ 내 사주 보기 ✦</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:36px;color:#A8A8C0;font-size:11px"><a href="index.html" style="color:#D4AF37">← 5톤 비교로</a></p>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('[data-ko]').forEach(el => { el.textContent = el.dataset[lang]; });
+      document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>V5 미니멀 모던 — Input</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard', sans-serif; background: #050306; padding: 40px 20px; min-height: 100vh; }
+    h1 { color: #D4AF37; font-size: 22px; text-align: center; letter-spacing: 4px; margin-bottom: 8px; font-family: 'Pretendard', sans-serif; }
+    .han { color: #A8A8C0; font-size: 12px; text-align: center; letter-spacing: 6px; margin-bottom: 24px; }
+    .lang-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 36px; }
+    .lang-toggle button { background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); color: #F5F5F5; padding: 6px 16px; border-radius: 16px; cursor: pointer; font-size: 12px; font-family: inherit; }
+    .lang-toggle button.active { background: #D4AF37; color: #050306; border-color: #D4AF37; font-weight: 700; }
+    .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .phone { width: 320px; height: 690px; background: #050306; border-radius: 36px; padding: 12px; border: 4px solid #050306; box-shadow: 0 12px 48px rgba(0,0,0,0.9); position: relative; overflow: hidden; }
+    .screen {
+      width: 100%; height: 100%;
+      background: #0A0612;
+      border-radius: 24px; padding: 32px 24px; color: #F5F5F5;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .label { position: absolute; top: -22px; left: 12px; font-size: 10px; color: #A8A8C0; letter-spacing: 2px; font-weight: 700; }
+
+    .top {
+      margin-bottom: 32px;
+    }
+    .top .small {
+      font-size: 11px; color: #D4AF37; letter-spacing: 3px; font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .top h1-screen {
+      font-size: 28px; color: #F5F5F5; font-weight: 900; letter-spacing: -0.5px;
+      line-height: 1.2; display: block;
+    }
+    .top .sub {
+      font-size: 14px; color: #A8A8C0; margin-top: 8px; line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+    .field .lbl {
+      font-size: 11px; color: #6B6B82; letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 6px; font-weight: 700;
+    }
+    .field .input {
+      background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 8px 0; font-size: 18px; color: #F5F5F5; font-weight: 500;
+      width: 100%;
+      font-family: inherit;
+    }
+    .field .input.value { color: #D4AF37; }
+
+    .row2 { display: flex; gap: 12px; }
+    .row2 .field { flex: 1; }
+
+    .toggle-row { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .toggle-row .lbl { font-size: 11px; color: #6B6B82; letter-spacing: 1px; margin-right: 4px; align-self: center; font-weight: 700; }
+    .pill {
+      background: transparent; border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 999px; padding: 6px 14px; font-size: 12px; color: #A8A8C0;
+    }
+    .pill.active { background: #D4AF37; border-color: #D4AF37; color: #050306; font-weight: 700; }
+
+    .btn-area { margin-top: auto; }
+    .btn {
+      background: #D4AF37;
+      color: #050306; padding: 18px; border-radius: 18px;
+      text-align: center; font-size: 16px; font-weight: 900;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
+    }
+    .free { text-align: center; font-size: 11px; color: #6B6B82; margin-top: 14px; }
+  </style>
+</head>
+<body>
+  <h1>V5 미니멀 모던</h1>
+  <p class="han">Minimalist Modern · iOS native feel</p>
+  <div class="lang-toggle">
+    <button onclick="setLang('ko')" id="btn-ko" class="active">한국어</button>
+    <button onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+
+  <div class="row">
+    <div class="phone"><span class="label">INPUT</span>
+      <div class="screen">
+        <div class="top">
+          <div class="small" data-ko="STEP 1 / 1" data-en="STEP 1 / 1">STEP 1 / 1</div>
+          <div class="top h1-screen" style="font-size:28px;font-weight:900;letter-spacing:-0.5px;line-height:1.2;color:#F5F5F5" data-ko="당신의 사주를 펼칩니다" data-en="Unveil your destiny">당신의 사주를 펼칩니다</div>
+          <div class="sub" data-ko="기본 정보만 입력하면 즉시 4기둥이 나타납니다." data-en="Just basic info — your four pillars appear instantly.">기본 정보만 입력하면 즉시 4기둥이 나타납니다.</div>
+        </div>
+
+        <div class="field">
+          <div class="lbl" data-ko="이름" data-en="NAME">이름</div>
+          <div class="input value" data-ko="홍길동" data-en="John">홍길동</div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <div class="lbl" data-ko="생년월일" data-en="BIRTHDAY">생년월일</div>
+            <div class="input value" data-ko="1996.04.15" data-en="1996.04.15">1996.04.15</div>
+          </div>
+          <div class="field">
+            <div class="lbl" data-ko="시간" data-en="TIME">시간</div>
+            <div class="input value" data-ko="14:30" data-en="14:30">14:30</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="lbl" data-ko="출생지 (선택)" data-en="BIRTH CITY (OPTIONAL)">출생지 (선택)</div>
+          <div class="input value" data-ko="서울특별시" data-en="Seoul, KR">서울특별시</div>
+        </div>
+
+        <div class="toggle-row">
+          <span class="lbl" data-ko="달력" data-en="CAL.">달력</span>
+          <span class="pill active" data-ko="양력" data-en="Solar">양력</span>
+          <span class="pill" data-ko="음력" data-en="Lunar">음력</span>
+        </div>
+
+        <div class="toggle-row">
+          <span class="lbl" data-ko="성별" data-en="GENDER">성별</span>
+          <span class="pill" data-ko="남" data-en="Male">남</span>
+          <span class="pill active" data-ko="여" data-en="Female">여</span>
+          <span class="pill" data-ko="기타" data-en="Other">기타</span>
+        </div>
+
+        <div class="btn-area">
+          <div class="btn" data-ko="내 사주 보기" data-en="Find My Destiny">내 사주 보기</div>
+          <div class="free" data-ko="무료 · 로그인 불필요" data-en="Free · No login">무료 · 로그인 불필요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:36px;color:#A8A8C0;font-size:11px"><a href="index.html" style="color:#D4AF37">← 5톤 비교로</a></p>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('[data-ko]').forEach(el => { el.textContent = el.dataset[lang]; });
+      document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pillar Seer — Input 화면 리디자인 후보</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Serif KR', serif; background: #0A0612; color: #F5F5F5; padding: 40px 20px 80px; line-height: 1.6; }
+    h1 { text-align: center; font-size: 28px; font-weight: 900; color: #D4AF37; letter-spacing: 4px; margin-bottom: 12px; }
+    .sub { text-align: center; color: #A8A8C0; font-size: 14px; margin-bottom: 48px; font-style: italic; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); max-width: 1400px; margin: 0 auto; gap: 24px; }
+    .card {
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      background: rgba(212, 175, 55, 0.12);
+      border-color: rgba(212, 175, 55, 0.5);
+      transform: translateY(-4px);
+    }
+    .num { font-family: 'Nanum Myeongjo', serif; font-size: 14px; color: #D4AF37; letter-spacing: 2px; }
+    .title { font-size: 20px; font-weight: 700; margin-top: 8px; color: #F5F5F5; }
+    .sub-en { font-size: 12px; color: #6B6B82; margin-top: 4px; font-style: italic; }
+    .desc { font-size: 13px; color: #A8A8C0; margin-top: 12px; line-height: 1.7; }
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      background: rgba(212, 175, 55, 0.15);
+      color: #D4AF37;
+      border-radius: 4px;
+      margin-top: 12px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <h1>INPUT 화면 리디자인</h1>
+  <p class="sub">5가지 방향 — 각 mockup 안에서 한국어/영어 토글 가능</p>
+  <div class="grid">
+    <a class="card" href="v1-step.html">
+      <div class="num">01</div>
+      <div class="title">스텝 위저드</div>
+      <div class="sub-en">Step Wizard</div>
+      <div class="desc">한 화면에 하나씩. 큰 비주얼 + 한 줄 질문. 진행 바 표시. Co-Star 류 onboarding.</div>
+      <div class="tag">⭐ GenZ trendy</div>
+    </a>
+    <a class="card" href="v2-hero.html">
+      <div class="num">02</div>
+      <div class="title">히어로 + 폼</div>
+      <div class="sub-en">Hero Image + Form</div>
+      <div class="desc">상단 큰 mystical 비주얼 (별자리/4기둥 한자) + 하단 form. 임팩트 강함.</div>
+      <div class="tag">✨ Mystical</div>
+    </a>
+    <a class="card" href="v3-cards.html">
+      <div class="num">03</div>
+      <div class="title">카드 컨베이어</div>
+      <div class="sub-en">Card Carousel</div>
+      <div class="desc">각 입력이 카드 형태. 가로 스와이프로 다음 입력. 게임처럼 즐겁게.</div>
+      <div class="tag">🎴 Playful</div>
+    </a>
+    <a class="card" href="v4-mystical.html">
+      <div class="num">04</div>
+      <div class="title">미스틱 폼 (현재 + α)</div>
+      <div class="sub-en">Current + Mystical Polish</div>
+      <div class="desc">현재 form 유지 + 별자리 배경 + 한자 watermark + 골드 액센트 강화. 작은 변경.</div>
+      <div class="tag">🛡️ Safe</div>
+    </a>
+    <a class="card" href="v5-modern.html">
+      <div class="num">05</div>
+      <div class="title">미니멀 모던</div>
+      <div class="sub-en">Minimalist Modern</div>
+      <div class="desc">Pretendard 폰트 + 큰 spacing + 큰 button. 깔끔, modern. iOS native 느낌.</div>
+      <div class="tag">📱 Modern</div>
+    </a>
+  </div>
+</body>
+</html>

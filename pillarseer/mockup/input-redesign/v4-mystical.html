@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>V4 미스틱 폼 — Input</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Serif KR', serif; background: #050306; padding: 40px 20px; min-height: 100vh; }
+    h1 { color: #D4AF37; font-size: 22px; text-align: center; letter-spacing: 4px; margin-bottom: 8px; }
+    .han { color: #A8A8C0; font-size: 12px; text-align: center; letter-spacing: 6px; margin-bottom: 24px; }
+    .lang-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 36px; }
+    .lang-toggle button { background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); color: #F5F5F5; padding: 6px 16px; border-radius: 16px; cursor: pointer; font-size: 12px; }
+    .lang-toggle button.active { background: #D4AF37; color: #050306; border-color: #D4AF37; font-weight: 700; }
+    .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .phone { width: 320px; height: 690px; background: #050306; border-radius: 36px; padding: 12px; border: 4px solid #050306; box-shadow: 0 12px 48px rgba(0,0,0,0.9); position: relative; overflow: hidden; }
+    .screen {
+      width: 100%; height: 100%;
+      background: linear-gradient(180deg, #0A0612 0%, #050306 100%);
+      border-radius: 24px; padding: 24px 20px; color: #F5F5F5;
+      position: relative; overflow: hidden;
+    }
+    .label { position: absolute; top: -22px; left: 12px; font-size: 10px; color: #A8A8C0; letter-spacing: 2px; font-weight: 700; }
+
+    /* 별자리 배경 */
+    .star { position: absolute; background: #D4AF37; border-radius: 50%; box-shadow: 0 0 4px rgba(212, 175, 55, 0.7); pointer-events: none; }
+    .star.s1 { top: 8%; left: 12%; width: 2px; height: 2px; }
+    .star.s2 { top: 14%; right: 16%; width: 3px; height: 3px; opacity: 0.6; }
+    .star.s3 { top: 22%; left: 80%; width: 2px; height: 2px; }
+    .star.s4 { top: 45%; left: 6%; width: 2.5px; height: 2.5px; }
+    .star.s5 { top: 65%; right: 8%; width: 2px; height: 2px; }
+    .star.s6 { top: 75%; left: 18%; width: 3px; height: 3px; opacity: 0.5; }
+    .star.s7 { top: 38%; right: 30%; width: 2px; height: 2px; }
+
+    /* 한자 watermark */
+    .han-bg {
+      position: absolute;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 200px; color: rgba(212, 175, 55, 0.03);
+      font-weight: 800;
+      pointer-events: none;
+      letter-spacing: -20px;
+      line-height: 0.8;
+    }
+    .han-bg.tl { top: -40px; left: -30px; }
+    .han-bg.br { bottom: -80px; right: -30px; }
+
+    .top {
+      text-align: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .top::after {
+      content: '✦';
+      position: absolute;
+      bottom: -8px; left: 50%; transform: translateX(-50%);
+      color: #D4AF37; font-size: 14px;
+      background: #0A0612;
+      padding: 0 8px;
+    }
+    .top .han { color: #D4AF37; font-size: 10px; letter-spacing: 4px; margin: 0 0 4px; }
+    .top h2 { font-size: 18px; color: #F5F5F5; letter-spacing: 6px; font-weight: 700; }
+
+    .field {
+      background: rgba(49, 27, 146, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+    .field .ico {
+      width: 32px; height: 32px;
+      background: rgba(212, 175, 55, 0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .field .stack { flex: 1; }
+    .field .lbl { font-size: 9px; color: #D4AF37; letter-spacing: 1.5px; font-weight: 700; }
+    .field .val { font-size: 13px; color: #F5F5F5; margin-top: 2px; }
+    .field .arrow { color: #A8A8C0; font-size: 14px; }
+
+    .chips { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+    .chips .lbl { font-size: 11px; color: #A8A8C0; }
+    .chip {
+      background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 999px; padding: 5px 12px; font-size: 11px; color: #F5F5F5;
+    }
+    .chip.active { background: rgba(212, 175, 55, 0.25); border-color: #D4AF37; color: #D4AF37; font-weight: 700; }
+
+    .btn {
+      background: linear-gradient(135deg, #D4AF37, #B8941F);
+      color: #050306; padding: 14px; border-radius: 14px;
+      text-align: center; font-size: 14px; font-weight: 900; letter-spacing: 2px;
+      margin-top: 12px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.35);
+      position: relative; z-index: 2;
+    }
+    .free { text-align: center; font-size: 10px; color: #6B6B82; margin-top: 10px; letter-spacing: 0.5px; position: relative; z-index: 2; }
+  </style>
+</head>
+<body>
+  <h1>V4 미스틱 폼 (현재 + α)</h1>
+  <p class="han">Mystical Form · 가장 작은 변경, 가장 안전</p>
+  <div class="lang-toggle">
+    <button onclick="setLang('ko')" id="btn-ko" class="active">한국어</button>
+    <button onclick="setLang('en')" id="btn-en">English</button>
+  </div>
+
+  <div class="row">
+    <div class="phone"><span class="label">INPUT</span>
+      <div class="screen">
+        <span class="han-bg tl">柱</span>
+        <span class="han-bg br">命</span>
+        <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+        <span class="star s4"></span><span class="star s5"></span><span class="star s6"></span><span class="star s7"></span>
+
+        <div class="top">
+          <div class="han">運命入力</div>
+          <h2 data-ko="운명 입력" data-en="ENTER YOUR FATE">운명 입력</h2>
+        </div>
+
+        <div class="field">
+          <div class="ico">👤</div>
+          <div class="stack">
+            <div class="lbl" data-ko="이름" data-en="NAME">이름</div>
+            <div class="val" data-ko="홍길동" data-en="John">홍길동</div>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+        <div class="field">
+          <div class="ico">📅</div>
+          <div class="stack">
+            <div class="lbl" data-ko="생년월일" data-en="BIRTHDAY">생년월일</div>
+            <div class="val" data-ko="1996년 4월 15일" data-en="Apr 15, 1996">1996년 4월 15일</div>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+        <div class="field">
+          <div class="ico">🌙</div>
+          <div class="stack">
+            <div class="lbl" data-ko="태어난 시간" data-en="BIRTH TIME">태어난 시간</div>
+            <div class="val" data-ko="오후 2시 30분" data-en="2:30 PM">오후 2시 30분</div>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+        <div class="field">
+          <div class="ico">📍</div>
+          <div class="stack">
+            <div class="lbl" data-ko="출생지 (선택)" data-en="BIRTH CITY (OPTIONAL)">출생지 (선택)</div>
+            <div class="val" data-ko="서울특별시" data-en="Seoul, KR">서울특별시</div>
+          </div>
+          <div class="arrow">›</div>
+        </div>
+
+        <div class="chips">
+          <span class="lbl" data-ko="달력:" data-en="Calendar:">달력:</span>
+          <span class="chip active" data-ko="양력" data-en="Solar">양력</span>
+          <span class="chip" data-ko="음력 (준비)" data-en="Lunar (soon)">음력 (준비)</span>
+        </div>
+        <div class="chips">
+          <span class="lbl" data-ko="성별:" data-en="Gender:">성별:</span>
+          <span class="chip" data-ko="남" data-en="Male">남</span>
+          <span class="chip active" data-ko="여" data-en="Female">여</span>
+          <span class="chip" data-ko="기타" data-en="Other">기타</span>
+        </div>
+
+        <div class="btn" data-ko="✦ 내 사주 보기 ✦" data-en="✦ Find My Destiny ✦">✦ 내 사주 보기 ✦</div>
+        <div class="free" data-ko="무료 4기둥 사주 · 로그인 불필요" data-en="Free 4-pillar reading · No login">무료 4기둥 사주 · 로그인 불필요</div>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:36px;color:#A8A8C0;font-size:11px"><a href="index.html" style="color:#D4AF37">← 5톤 비교로</a></p>
+
+  <script>
+    function setLang(lang) {
+      document.querySelectorAll('[data-ko]').forEach(el => { el.textContent = el.dataset[lang]; });
+      document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+  </script>
+</body>
+</html>
