@@ -2,6 +2,58 @@
 
 > **시작 명령** (새 세션에서): `cd ~/seephone/pillarseer && cat RESUME.md` 읽고 그대로 자율 진행.
 
+## 🎯 협업 프로토콜 (PM = codex, Coder/QA = Claude)
+
+사용자 mandate (2026-05-12 ~14:50):
+> "codex 와 claude 가 완전히 앱을 제대로 만들고 아이콘 하나하나까지 기능 제대로
+> 동작하는지 부족한 부분은 없는지 자세하게 분석. 명령은 codex 가 하게."
+
+### 역할 분담
+- **codex = PM (Product Manager)**: 전체 plan, 화면별 우선순위, 사용자 관점 판단, 콘텐츠 퀄리티 검토, 다음 명령 발행
+- **Claude = Coder + QA**: 코드 작성, 아이콘/버튼 단위 동작 검증, 오류 발견, 추가/수정 제안
+
+### 매 cycle 프로토콜 (무한 iterate)
+1. **Claude → codex**: "다음 무엇을 할까요? 현재 상태 X, 옵션 A/B/C." (codex 에 plan 검토 요청)
+2. **codex**: 우선순위 + 명령 ("Z 부터 해. 이유: ...")
+3. **Claude**: 코드 작성 + 화면 빌드 + 캡쳐
+4. **Claude → codex**: "Z 완성. 화면 X, 코드 Y. 검토 부탁."
+   - 첨부: 캡쳐 image, 코드 diff 요약, 클릭 가능한 모든 아이콘/버튼 list
+5. **codex**: 사용자 관점 review → "통과 / 추가 필요 / 수정 필요" 판단
+   - 부족한 부분 / 사용자 헷갈림 / 추가하면 좋은 것 / 콘텐츠 퀄리티 vs 점신·평생사주
+6. **Claude**: 통과 → 다음 화면. 수정 → 다시 step 3.
+
+### 아이콘/버튼 단위 QA 체크리스트 (Claude 가 매 화면마다)
+- [ ] 모든 IconButton/Icon/TextButton/InkWell 의 onTap 동작 확인 (null 또는 wire)
+- [ ] 사용자가 클릭한 후 무엇이 일어나는지 명확? (모달/페이지 이동/SnackBar)
+- [ ] 왜 이 화면을 보는지 명확? (Header + sub-text)
+- [ ] 다음 화면 어디로 갈지 명확? (CTA + 보조 액션)
+- [ ] 처음 본 사용자가 헷갈리는 부분 없나?
+- [ ] 한국어/영어 둘 다 자연스러운가? (직역 X)
+- [ ] 콘텐츠 퀄리티가 점신/평생사주 무료 결과 수준인가?
+
+### codex 호출 패턴
+
+```bash
+codex exec --skip-git-repo-check "[현재 상태 + 질문]" 2>&1 | tail -50
+```
+
+- 화면 캡쳐 첨부: `--image /path/to/cap.png` (codex 가 multimodal 지원 시)
+- 긴 review: `cat capture_log.md | codex exec --skip-git-repo-check "검토:"`
+- 사용자 mandate 인용 + "PM 입장에서 결정"
+
+### 막힐 때 fallback (사용자 mandate)
+1. 인터넷 검색 (WebSearch / WebFetch)
+2. 커뮤니티 (Reddit / GitHub Issues / 개발자 블로그)
+3. codex 에 방법 물음 ("이거 어떻게 해결?")
+4. **그래도 안 되면**: 뒤로 미루고 마지막에 한 번에 보고 (혼자 결정 X)
+
+### 사용자 보고 (한 번에)
+- 완료: 모든 화면 + 콘텐츠 + Build #5
+- 안 된 것 (있다면): list + 이유 + codex 의견
+- 사용자 액션 필요한 것 (있다면): 명확하게
+
+---
+
 ## 현재 상태 (2026-05-12 ~14:40 KST)
 
 ### TestFlight
