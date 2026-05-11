@@ -118,6 +118,8 @@ class DeepContentService {
     final luckyDirection = raw?['luckyDirection'] as String? ??
         _luckyDirectionFor(isKo, dominant);
 
+    final elementsNote = _elementsNoteFor(isKo, dominant, deficit);
+    final tenGodsNote = _tenGodsNoteFor(isKo, day60ji, dominant);
     final hooks = _threeHits(
       isKo: isKo,
       day60ji: day60ji,
@@ -147,7 +149,65 @@ class DeepContentService {
       loveHook: hooks.love,
       todayHook: hooks.today,
       whyReason: hooks.why,
+      elementsNote: elementsNote,
+      tenGodsNote: tenGodsNote,
     );
+  }
+
+  /// 5행 dominant/deficit 한 줄 해석 (Round 4 codex 권장)
+  static String _elementsNoteFor(bool ko, String dom, String def) {
+    const koDomDesc = {
+      '木': '나무 기운(추진력·성장)이 강해 새 도전·확장에 유리합니다.',
+      '火': '불 기운(표현·열정)이 강해 무대·발표·관계 확장에서 빛납니다.',
+      '土': '흙 기운(안정·신뢰)이 강해 책임감과 약속을 지키는 힘이 큽니다.',
+      '金': '쇠 기운(정밀·판단)이 강해 결정·정리·비판적 사고가 뛰어납니다.',
+      '水': '물 기운(직관·깊이)이 강해 통찰과 흐름을 읽는 감각이 좋습니다.',
+    };
+    const koDefDesc = {
+      '木': '나무가 부족해 시작이 늦거나 추진력이 약할 수 있어요. 식물·산책 자주.',
+      '火': '불이 부족해 표현·감정 분출이 어려울 수 있어요. 따뜻한 빛·운동 권장.',
+      '土': '흙이 부족해 약속·끝맺음에 흔들릴 수 있어요. 루틴·기록 도움.',
+      '金': '쇠가 부족해 결단력·정리정돈이 약할 수 있어요. 청소·일정 정리 의식.',
+      '水': '물이 부족해 직관·휴식이 부족할 수 있어요. 충분한 수분·수면.',
+    };
+    const enDomDesc = {
+      '木': 'Strong Wood energy — pushy, growth-prone, great for new ventures.',
+      '火': 'Strong Fire energy — expressive, magnetic, shines on stage.',
+      '土': 'Strong Earth energy — grounded, reliable, you finish what you start.',
+      '金': 'Strong Metal energy — sharp judgment, decisive, sees what others miss.',
+      '水': 'Strong Water energy — intuitive, deep, reads currents others don\'t.',
+    };
+    const enDefDesc = {
+      '木': 'Light on Wood — slow starts. Walks and greenery help.',
+      '火': 'Light on Fire — expression can stall. Sunlight and movement help.',
+      '土': 'Light on Earth — follow-through wavers. Build a routine.',
+      '金': 'Light on Metal — decisions linger. Clean a closet to reset.',
+      '水': 'Light on Water — intuition needs rest. Drink water, sleep more.',
+    };
+    if (ko) {
+      return '${koDomDesc[dom] ?? ''} ${koDefDesc[def] ?? ''}';
+    }
+    return '${enDomDesc[dom] ?? ''} ${enDefDesc[def] ?? ''}';
+  }
+
+  /// 십신 핵심 관계 한 줄 (가장 강한 신 → 의미)
+  static String _tenGodsNoteFor(bool ko, String day60ji, String dom) {
+    // dominant element 와 day master 의 관계로 핵심 십신 유형 결정
+    const ko10g = {
+      '木': '식상(食傷) 기운 — 표현·창작·output 이 곧 당신의 무기예요.',
+      '火': '재성(財星) 기운 — 돈과 기회가 당신을 향해 흐릅니다.',
+      '土': '관성(官星) 기운 — 권위·책임·인정이 자연스럽게 와요.',
+      '金': '인성(印星) 기운 — 배움·후원·전통이 당신의 자원이에요.',
+      '水': '비겁(比劫) 기운 — 동료·팀워크가 당신을 키워요.',
+    };
+    const en10g = {
+      '木': 'Output energy (食傷) — your expression and creations are your weapon.',
+      '火': 'Wealth energy (財星) — money and opportunity flow toward you.',
+      '土': 'Authority energy (官星) — recognition and responsibility come naturally.',
+      '金': 'Resource energy (印星) — learning, mentors, tradition are your base.',
+      '水': 'Peer energy (比劫) — your team and tribe grow you.',
+    };
+    return (ko ? ko10g[dom] : en10g[dom]) ?? '';
   }
 
   // ──────── 3-hit summary (codex PM 권고: 성격/연애/오늘 액션 + why)

@@ -68,7 +68,35 @@ class ResultScreen extends ConsumerWidget {
             const SizedBox(height: 10),
             _Section(
               locked: false,
-              child: _ElementsBar(result: result),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _ElementsBar(result: result),
+                  if (reading != null && reading.elementsNote.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                      decoration: BoxDecoration(
+                        color:
+                            AppColors.midnightPurple.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColors.celestialGold
+                              .withValues(alpha: 0.2),
+                        ),
+                      ),
+                      child: Text(
+                        reading.elementsNote,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          color: AppColors.ghostlyWhite,
+                          height: 1.7,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
             const SizedBox(height: 22),
             _SectionHeader(
@@ -78,7 +106,35 @@ class ResultScreen extends ConsumerWidget {
             const SizedBox(height: 10),
             _Section(
               locked: !isPro,
-              child: _TenGodsTable(rows: result.tenGods, useKo: useKo),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _TenGodsTable(rows: result.tenGods, useKo: useKo),
+                  if (reading != null && reading.tenGodsNote.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.celestialGold.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AppColors.celestialGold
+                              .withValues(alpha: 0.35),
+                        ),
+                      ),
+                      child: Text(
+                        reading.tenGodsNote,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          color: AppColors.celestialGold,
+                          fontWeight: FontWeight.w700,
+                          height: 1.7,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
             const SizedBox(height: 22),
             _SectionHeader(title: l.resultLifeThemesTitle, hint: ''),

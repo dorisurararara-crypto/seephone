@@ -182,6 +182,8 @@ class DeepReading {
   final String loveHook;          // 연애 한 방
   final String todayHook;         // 오늘/올해 액션 한 방
   final String whyReason;         // 왜 그렇게 풀이되는지 1줄 근거
+  final String elementsNote;      // 5행 dominant/deficit 한 줄 해석
+  final String tenGodsNote;       // 십신 핵심 관계 한 줄
 
   const DeepReading({
     required this.dayMasterDeep,
@@ -201,6 +203,8 @@ class DeepReading {
     this.loveHook = '',
     this.todayHook = '',
     this.whyReason = '',
+    this.elementsNote = '',
+    this.tenGodsNote = '',
   });
 
   factory DeepReading.fallback({
