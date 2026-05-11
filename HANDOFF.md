@@ -68,6 +68,32 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-12 11:10 (Windows → Mac) — 🔧 코드 UX Round 3 적용 완료 (commit 6295184) + Round 4 검증 중
+
+**Round 3 결과**: Codex Round 3 verdict = **FIX-MORE** (P1 5건). Gemini Pro 쿼터 exhausted → Flash 로 전환, i18n 을 P0 로 강조.
+
+**Codex P1 블로커 5건 해결** (commit 6295184):
+1. `saju_service.calculateSaju(unknownTime: true)` → hourPillar=null + 5행 분포 3기둥만으로 (이전: noon 12:00 fake hour 가 차트 오염)
+2. Solar ChoiceChip onSelected 토글 버그: `if (val) setState(...)` — deselect 무시
+3. `_PillarGrid` 320dp overflow → 가로 스크롤 fallback (ConstrainedBox minWidth: w-48)
+4. SnackBar raw `$e` 노출 제거 → "We couldn't read the stars..." + debugPrint
+5. `daily_fortune.dummy` 'Midnight Purple' → 'Deep Ocean Blue'
+
+**Gemini Flash i18n quick wins**:
+6. Birth City 'Seoul, South Korea' default 제거 (글로벌)
+7. `home_screen _Date` hardcoded EN → `intl.DateFormat` (locale-aware)
+8. `_TodayPillarRow` 한자만 → "Fire Horse (丙午)"
+
+**접근성 (P2 일괄)**:
+9. bottom_nav 9px→11px, icon 22→24
+10. splash tap-to-skip → Semantics(button:true) + TextButton (44x120 touch target)
+
+**검증**: flutter analyze No issues / flutter test 2 passed
+
+**Round 4 (진행 중)**: Codex + Gemini Flash 동시 재리뷰. 둘 다 SHIP 면 종료, 아니면 Round 5.
+
+---
+
 ### 2026-05-12 10:30 (Windows → Mac) — 🔧 코드 UX Round 2 합의 적용 완료 (commit fd692df)
 
 **사용자 mandate**: "이제 코드만 보고 사용자 관점에서 ui/ux에 불편하거나 오류가 있는지 부자연스러운게 있는지 3사가 다 만족할때까지 무한 토론시켜"
