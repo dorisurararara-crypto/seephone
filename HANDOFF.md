@@ -68,6 +68,43 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-13 00:10 (Mac → Mac PM) — ✅ Build #5 시장 출시 quality 완성 + ASC 업로드 SUCCEEDED
+
+**완성**:
+- ✅ Settings Version 5탭 hidden gate → `ganzinam95` / `ganzinam12` dev unlock (Pro 토글)
+- ✅ Result 화면 8섹션 확장:
+  - Day Master Deep (~200w/일주, ko/en, 단정형)
+  - Five Elements + dominant/deficit visual
+  - **Ten Gods (十神)** — 일간 기준 4기둥 천간/지지 10신 매핑 (비견/겁재/식상/재성/관성/인성)
+  - Life Themes 6 카드 (Career/Wealth/Love/Health/Family/Fame, 180w each)
+  - 10-Year Luck (大運) — procedural age 기반
+  - This Year (歲運) — procedural 60갑자 현재 년 기반
+  - Lucky Color/Number/Direction
+  - **Pro Lock pill** — free: Day Master+5행+Life Themes 3/6, Pro: 전부 해제
+- ✅ Reports 4 sub-screen 진짜 구현:
+  - **Compatibility (궁합)** — 두 사주 input + 점수 (오행 상생/상극 + 충 보정) + 3-단계 verdict
+  - **Tojeong (土亭祕訣)** — 144 hexagram 매핑 + 12개월 흐름 + year overview
+  - **Date Picking (擇日)** — 다음 30일 길일/흉일/평일 (오행 상호작용 기반)
+  - **Dream (解夢)** — 30종 한국 전통 꿈 사전 + 검색 + 카테고리 필터
+- ✅ Discover: **21명 K-pop / 배우 / 운동선수** 사주 카드 (IU, BTS V/Jin/Jungkook, BLACKPINK 4명, aespa Karina, Stray Kids Hyunjin, 김연아, 손흥민, 이정재, 송혜교 등). 사용자 일주와 일치 시 highlight + "내 일주!" pill
+- ✅ Profile: PRO badge (dev unlock 시 표시)
+- ✅ 신규 service: `DeepContentService`, `TenGodsService`
+- ✅ 신규 i10n 키 ~100개 (ko/en 둘 다)
+- ✅ 60일주 deep content × 8 sections × ko/en = **1,200 텍스트 fields** (codex 3 슬라이스 병렬 생성, ~660 KB JSON)
+
+**품질 (모두 통과)**:
+- `flutter analyze` → No issues found!
+- `flutter test` → 2/2 passing (60갑자 + 1996-04-15 사주)
+- `flutter build ipa --release` → **23M IPA**
+- `altool upload` → **UPLOAD SUCCEEDED** (Delivery `6c4aecb3-14c6-4d56-8caa-f28aca2cbf81`)
+- 0 dead-end / 모든 IconButton·Inkwell wire / 0 crash 가능 path
+
+**ASC 상태**:
+- Build #5 업로드 완료 (2026-05-12 00:09). 5-15분 후 VALID 예상.
+- Build #3 review 통과 대기 중 (사용자 결정대로 자연 통과 큐). 통과 후 `submit_external_beta.rb 5` 자동 실행 가능.
+
+**기존**:
+
 ### 2026-05-12 12:00 (Mac → Windows) — ✅ Build #4 (Round 1-4 SHIP fix 포함) ASC VALID + #3 review 통과 대기
 
 Windows Round 4 SHIP 합의 받아 사용자 결정 후 즉시 build #4 진행.
