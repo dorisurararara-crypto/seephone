@@ -409,6 +409,39 @@ class AppL10nEn extends AppL10n {
   String get personalCautionLabel => 'Watch for';
 
   @override
+  String get settingsTrust => 'Trust & Data';
+
+  @override
+  String get settingsTrustHowCalculated => 'How readings are calculated';
+
+  @override
+  String get settingsTrustHowCalculatedDesc =>
+      'KASI manseryeok · 立春 year · 23h day rule · True Solar Time';
+
+  @override
+  String get settingsTrustDataLocal => 'Your data stays on this device';
+
+  @override
+  String get settingsTrustDataLocalDesc => 'No login, no servers, no tracking';
+
+  @override
+  String get settingsTrustDeleteAll => 'Delete all my data';
+
+  @override
+  String get settingsTrustDeleteAllDesc =>
+      'Removes saved chart + streak + preferences';
+
+  @override
+  String get settingsTrustOffline => 'Works fully offline';
+
+  @override
+  String get settingsTrustOfflineDesc => 'Once installed, no network needed';
+
+  @override
+  String get settingsDeletedSnack =>
+      'All your data was deleted. Welcome back fresh.';
+
+  @override
   String get splashTrust => 'Korean traditional Four Pillars · made easy';
 
   @override

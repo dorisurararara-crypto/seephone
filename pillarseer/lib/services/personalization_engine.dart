@@ -97,11 +97,11 @@ class PersonalizationEngine {
     final profile = PillarProfile.from(saju);
     final t = now ?? DateTime.now();
 
-    // deterministic seed (chart + day)
-    final seed = (saju.day60ji.codeUnits.fold<int>(0, (a, b) => a + b) +
-            t.year * 366 +
-            t.month * 31 +
-            t.day) &
+    // deterministic seed — full chart hash + date (codex Round 7 fix)
+    // 4기둥 + 5행 분포 + 나이 → 같은 일주여도 다른 사용자는 다른 결과
+    final chartHash = _chartHash(saju);
+    final seed = (chartHash * 1009 +
+            t.year * 366 + t.month * 31 + t.day) &
         0x7fffffff;
 
     // Pick atoms by topic priority
@@ -124,6 +124,8 @@ class PersonalizationEngine {
         .replaceAll('{domEn}', _elNameEn(profile.dominantEl))
         .replaceAll('{def}', _elNameKo(profile.deficitEl))
         .replaceAll('{defEn}', _elNameEn(profile.deficitEl))
+        .replaceAll('{compKo}', _compensationKo(profile.deficitEl))
+        .replaceAll('{compEn}', _compensationEn(profile.deficitEl))
         .replaceAll('{season}', _seasonKo(profile.season))
         .replaceAll('{seasonEn}', _seasonEn(profile.season));
 
@@ -311,6 +313,54 @@ class PersonalizationEngine {
       enTpl: 'Low {defEn} — sit on big decisions 24 hours before you act.',
       condition: (p, t) => !p.isStrong,
     ),
+    InsightAtom(
+      topic: 'caution',
+      priority: 65,
+      koTpl: '주말 분위기 — 약속을 무리해서 잡지 마세요.',
+      enTpl: 'Weekend energy — don\'t overschedule social bandwidth.',
+      condition: (p, t) => t.weekday >= 6,
+    ),
+    // identity 추가
+    InsightAtom(
+      topic: 'identity',
+      priority: 60,
+      koTpl: '{season}의 {dm} — 환절기 결을 잘 읽는 타입이에요.',
+      enTpl: '{dmEn} in {seasonEn} — you read transitional moments well.',
+      condition: (p, t) => p.season == 'transition',
+    ),
+    // today 추가
+    InsightAtom(
+      topic: 'today',
+      priority: 60,
+      koTpl: '오늘은 약한 {def} 기운을 의도적으로 보태면 흐름이 풀립니다.',
+      enTpl: 'Today, intentionally adding {defEn} unblocks the day.',
+      condition: (p, t) => !p.isStrong,
+    ),
+    // action 추가
+    InsightAtom(
+      topic: 'action',
+      priority: 60,
+      koTpl: '오늘 한 번은 {compKo}을(를) 일정에 끼워 넣으세요.',
+      enTpl: 'Slot one block of {compEn} into today\'s schedule.',
+      condition: (p, t) => true,
+    ),
   ];
+
+  /// Full chart hash — 4 pillars + 5 elements + age 조합
+  static int _chartHash(SajuResult saju) {
+    int h = 0;
+    h = h * 31 + saju.yearPillar.text.codeUnits.fold<int>(0, (a, b) => a + b);
+    h = h * 31 + saju.monthPillar.text.codeUnits.fold<int>(0, (a, b) => a + b);
+    h = h * 31 + saju.dayPillar.text.codeUnits.fold<int>(0, (a, b) => a + b);
+    if (saju.hourPillar != null) {
+      h = h * 31 +
+          saju.hourPillar!.text.codeUnits.fold<int>(0, (a, b) => a + b);
+    }
+    h = h * 31 + saju.elements.wood + saju.elements.fire * 7 +
+        saju.elements.earth * 13 + saju.elements.metal * 17 +
+        saju.elements.water * 19;
+    h = h * 31 + (saju.userAge ?? 0);
+    return h & 0x7fffffff;
+  }
 
 }

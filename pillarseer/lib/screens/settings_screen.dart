@@ -2,9 +2,15 @@
 // Version 라벨 5탭 hidden gate → ganzinam95/12 dev unlock dialog.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/dev_unlock_provider.dart';
 import '../providers/locale_provider.dart';
+import '../providers/notification_provider.dart';
+import '../providers/saju_provider.dart';
+import '../providers/streak_provider.dart';
+import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -195,6 +201,33 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const SizedBox(height: 24),
           _sectionHeader(context, l.settingsNotifications),
           _disabledTile(context, l.settingsNotificationsDesc),
+          const SizedBox(height: 24),
+          _sectionHeader(context, l.settingsTrust),
+          _TrustTile(
+            icon: Icons.verified_outlined,
+            title: l.settingsTrustHowCalculated,
+            subtitle: l.settingsTrustHowCalculatedDesc,
+            onTap: null,
+          ),
+          _TrustTile(
+            icon: Icons.smartphone_outlined,
+            title: l.settingsTrustDataLocal,
+            subtitle: l.settingsTrustDataLocalDesc,
+            onTap: null,
+          ),
+          _TrustTile(
+            icon: Icons.cloud_off_outlined,
+            title: l.settingsTrustOffline,
+            subtitle: l.settingsTrustOfflineDesc,
+            onTap: null,
+          ),
+          _TrustTile(
+            icon: Icons.delete_outline,
+            title: l.settingsTrustDeleteAll,
+            subtitle: l.settingsTrustDeleteAllDesc,
+            destructive: true,
+            onTap: () => _confirmDeleteAll(context, ref, l),
+          ),
           if (isPro) ...[
             const SizedBox(height: 24),
             _sectionHeader(context, 'STATUS'),
@@ -285,6 +318,55 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
+  Future<void> _confirmDeleteAll(
+      BuildContext context, WidgetRef ref, AppL10n l) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.cosmicBlack,
+        title: Text(l.settingsTrustDeleteAll,
+            style: const TextStyle(color: AppColors.ghostlyWhite)),
+        content: Text(l.settingsTrustDeleteAllDesc,
+            style: const TextStyle(color: AppColors.moonlightGray)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l.modalNotNow,
+                style:
+                    const TextStyle(color: AppColors.moonlightGray)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent.shade200,
+              foregroundColor: AppColors.cosmicBlack,
+            ),
+            child: Text(l.settingsTrustDeleteAll),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    await NotificationService.cancelDaily();
+    if (!context.mounted) return;
+    ref.read(sajuResultProvider.notifier).clear();
+    ref.read(userBirthInfoProvider.notifier).clear();
+    // streak/notif provider 상태도 초기화
+    ref.invalidate(streakProvider);
+    ref.invalidate(notificationProvider);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(l.settingsDeletedSnack),
+        backgroundColor: AppColors.celestialGold,
+        behavior: SnackBarBehavior.floating,
+      ));
+    context.go('/input');
+  }
+
   Widget _aboutTile(BuildContext context, String label, String value) {
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
@@ -314,6 +396,86 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TrustTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+  final bool destructive;
+  const _TrustTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.destructive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = destructive
+        ? Colors.redAccent.shade200
+        : AppColors.celestialGold;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: AppColors.spiritIndigo.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: accent.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(icon, color: accent, size: 18),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 13.5,
+                          color: destructive
+                              ? Colors.redAccent.shade200
+                              : AppColors.ghostlyWhite,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          color: AppColors.moonlightGray,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (onTap != null) ...[
+                  const SizedBox(width: 6),
+                  const Icon(Icons.chevron_right,
+                      color: AppColors.fadedSilver, size: 18),
+                ],
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

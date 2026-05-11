@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
+import 'notification_pool_service.dart';
 
 class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
@@ -49,56 +50,73 @@ class NotificationService {
     return true;
   }
 
-  /// 매일 오전 8시 반복 알림 등록.
+  /// 30일 × 매일 오전 8시 알림 등록 — 각 알림마다 NotificationPool 에서 다른 문구 선택.
+  /// codex Round 7 fix: matchDateTimeComponents.time 으로 무한반복 시 첫 문구가 계속 반복되는 문제 해결.
+  /// day60ji null 시 fallback fixed body 사용.
   static Future<void> scheduleDaily8am({
     required String title,
     required String body,
+    String? day60ji,
+    bool useKo = false,
+    int daysAhead = 30,
   }) async {
     await ensureInitialized();
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      8,
-      0,
-      0,
-    );
-    if (scheduled.isBefore(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
+    // 기존 모든 daily 알림 cancel
+    for (var i = 0; i < 64; i++) {
+      try {
+        await _plugin.cancel(id: _kDailyId + i);
+      } catch (_) {}
     }
-    try {
-      await _plugin.zonedSchedule(
-        id: _kDailyId,
-        title: title,
-        body: body,
-        scheduledDate: scheduled,
-        notificationDetails: const NotificationDetails(
-          iOS: DarwinNotificationDetails(
-            presentAlert: true,
-            presentBadge: true,
-            presentSound: true,
+    final now = tz.TZDateTime.now(tz.local);
+    for (var i = 0; i < daysAhead; i++) {
+      final target = tz.TZDateTime(
+          tz.local, now.year, now.month, now.day, 8, 0, 0)
+          .add(Duration(days: i));
+      if (target.isBefore(now)) continue;
+      String pickedBody = body;
+      if (day60ji != null && day60ji.isNotEmpty) {
+        final picked = NotificationPoolService.pickFor(
+          DateTime(target.year, target.month, target.day),
+          day60ji,
+        );
+        pickedBody = useKo ? picked.ko : picked.en;
+      }
+      try {
+        await _plugin.zonedSchedule(
+          id: _kDailyId + i,
+          title: title,
+          body: pickedBody,
+          scheduledDate: target,
+          notificationDetails: const NotificationDetails(
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+            android: AndroidNotificationDetails(
+              'daily_fortune',
+              'Daily Fortune',
+              channelDescription: '매일 아침 8시 오늘의 사주 운세',
+              importance: Importance.high,
+              priority: Priority.high,
+            ),
           ),
-          android: AndroidNotificationDetails(
-            'daily_fortune',
-            'Daily Fortune',
-            channelDescription: '매일 아침 8시 오늘의 사주 운세',
-            importance: Importance.high,
-            priority: Priority.high,
-          ),
-        ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        matchDateTimeComponents: DateTimeComponents.time,
-      );
-    } catch (e) {
-      if (kDebugMode) print('schedule failed: $e');
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        );
+      } catch (e) {
+        if (kDebugMode) print('schedule[$i] failed: $e');
+        break;
+      }
     }
   }
 
   static Future<void> cancelDaily() async {
     await ensureInitialized();
-    await _plugin.cancel(id: _kDailyId);
+    for (var i = 0; i < 64; i++) {
+      try {
+        await _plugin.cancel(id: _kDailyId + i);
+      } catch (_) {}
+    }
   }
 
   static Future<bool> isEnabled() async {

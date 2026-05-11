@@ -395,6 +395,37 @@ class AppL10nKo extends AppL10n {
   String get personalCautionLabel => '주의할 점';
 
   @override
+  String get settingsTrust => '신뢰 & 데이터';
+
+  @override
+  String get settingsTrustHowCalculated => '이 풀이는 어떻게 계산되나요';
+
+  @override
+  String get settingsTrustHowCalculatedDesc =>
+      'KASI 만세력 · 입춘 기준 · 자시 규칙 · 진태양시';
+
+  @override
+  String get settingsTrustDataLocal => '당신의 데이터는 이 기기 안에만';
+
+  @override
+  String get settingsTrustDataLocalDesc => '로그인 없음, 서버 전송 없음, 추적 없음';
+
+  @override
+  String get settingsTrustDeleteAll => '내 데이터 모두 삭제';
+
+  @override
+  String get settingsTrustDeleteAllDesc => '사주·연속 기록·설정까지 전부 삭제';
+
+  @override
+  String get settingsTrustOffline => '오프라인에서도 완전히 동작';
+
+  @override
+  String get settingsTrustOfflineDesc => '설치 후 네트워크 없이도 사용 가능';
+
+  @override
+  String get settingsDeletedSnack => '모든 데이터를 삭제했어요. 새로 시작합니다.';
+
+  @override
   String get splashTrust => '정통 사주, 누구나 쉽게';
 
   @override

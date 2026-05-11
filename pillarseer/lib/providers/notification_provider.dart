@@ -1,7 +1,6 @@
 // Pillar Seer — 일일 알림 토글 상태 provider.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/notification_pool_service.dart';
 import '../services/notification_service.dart';
 
 class NotificationToggle {
@@ -44,16 +43,12 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
       state = state.copyWith(enabled: false, permissionGranted: false);
       return false;
     }
-    // Pool 에서 다양한 body 선택 (오늘 기준 deterministic)
-    String body = pushBody;
-    if (day60ji != null && day60ji.isNotEmpty) {
-      final picked =
-          NotificationPoolService.pickFor(DateTime.now(), day60ji);
-      body = useKo ? picked.ko : picked.en;
-    }
+    // NotificationService 가 30일 × 매일 다른 문구 자동 schedule
     await NotificationService.scheduleDaily8am(
       title: pushTitle,
-      body: body,
+      body: pushBody,
+      day60ji: day60ji,
+      useKo: useKo,
     );
     await NotificationService.setEnabled(true);
     state = state.copyWith(enabled: true, permissionGranted: true);

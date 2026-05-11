@@ -859,6 +859,66 @@ abstract class AppL10n {
   /// **'Watch for'**
   String get personalCautionLabel;
 
+  /// No description provided for @settingsTrust.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust & Data'**
+  String get settingsTrust;
+
+  /// No description provided for @settingsTrustHowCalculated.
+  ///
+  /// In en, this message translates to:
+  /// **'How readings are calculated'**
+  String get settingsTrustHowCalculated;
+
+  /// No description provided for @settingsTrustHowCalculatedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'KASI manseryeok · 立春 year · 23h day rule · True Solar Time'**
+  String get settingsTrustHowCalculatedDesc;
+
+  /// No description provided for @settingsTrustDataLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data stays on this device'**
+  String get settingsTrustDataLocal;
+
+  /// No description provided for @settingsTrustDataLocalDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'No login, no servers, no tracking'**
+  String get settingsTrustDataLocalDesc;
+
+  /// No description provided for @settingsTrustDeleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all my data'**
+  String get settingsTrustDeleteAll;
+
+  /// No description provided for @settingsTrustDeleteAllDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes saved chart + streak + preferences'**
+  String get settingsTrustDeleteAllDesc;
+
+  /// No description provided for @settingsTrustOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Works fully offline'**
+  String get settingsTrustOffline;
+
+  /// No description provided for @settingsTrustOfflineDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Once installed, no network needed'**
+  String get settingsTrustOfflineDesc;
+
+  /// No description provided for @settingsDeletedSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'All your data was deleted. Welcome back fresh.'**
+  String get settingsDeletedSnack;
+
   /// No description provided for @splashTrust.
   ///
   /// In en, this message translates to:
