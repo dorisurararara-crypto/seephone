@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pillar Seer — 디자인 리뉴얼 후보 5가지</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Black+Han+Sans&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Serif KR', serif;
+      background: #0A0612;
+      color: #F5F5F5;
+      padding: 40px 20px 80px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
+      color: #D4AF37;
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+    .sub {
+      text-align: center;
+      color: #A8A8C0;
+      font-size: 14px;
+      margin-bottom: 48px;
+      font-style: italic;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 24px;
+    }
+    .card {
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      background: rgba(212, 175, 55, 0.12);
+      border-color: rgba(212, 175, 55, 0.5);
+      transform: translateY(-4px);
+    }
+    .num {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 14px;
+      color: #D4AF37;
+      letter-spacing: 2px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 8px;
+      color: #F5F5F5;
+    }
+    .han {
+      font-size: 14px;
+      color: #6B6B82;
+      margin-top: 2px;
+      font-family: 'Noto Serif KR', serif;
+    }
+    .desc {
+      font-size: 13px;
+      color: #A8A8C0;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+    .palette {
+      display: flex;
+      gap: 4px;
+      margin-top: 14px;
+    }
+    .sw {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 64px;
+      color: #6B6B82;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>PILLAR SEER</h1>
+  <p class="sub">디자인 리뉴얼 5가지 — 한국 전통 강화 sub-theme</p>
+
+  <div class="grid">
+    <a class="card" href="v1-hanji.html">
+      <div class="num">01</div>
+      <div class="title">한지 (Hanji)</div>
+      <div class="han">韓紙 · paper of Korea</div>
+      <div class="desc">베이지·크림 한지 종이 톤 + 먹의 검은 한자. 사주 책을 펼쳐보는 듯. 따뜻한 전통.</div>
+      <div class="palette">
+        <div class="sw" style="background:#F4ECD8"></div>
+        <div class="sw" style="background:#E5D5B7"></div>
+        <div class="sw" style="background:#8B4513"></div>
+        <div class="sw" style="background:#1A1A1A"></div>
+        <div class="sw" style="background:#C8A968"></div>
+      </div>
+    </a>
+
+    <a class="card" href="v2-royal.html">
+      <div class="num">02</div>
+      <div class="title">궁중 (Royal Court)</div>
+      <div class="han">宮中 · royal palace</div>
+      <div class="desc">청자 색 + 황금 + 단청 무늬. 조선 왕실 비전 책을 열어보는 단아한 격조.</div>
+      <div class="palette">
+        <div class="sw" style="background:#0D2A3D"></div>
+        <div class="sw" style="background:#1A4A5E"></div>
+        <div class="sw" style="background:#7CB9A8"></div>
+        <div class="sw" style="background:#D4AF37"></div>
+        <div class="sw" style="background:#F5F5F5"></div>
+      </div>
+    </a>
+
+    <a class="card" href="v3-talisman.html">
+      <div class="num">03</div>
+      <div class="title">부적 (Talisman)</div>
+      <div class="han">符籍 · spirit talisman</div>
+      <div class="desc">진홍 + 깊은 골드 + 부적 문양. 무당의 비결을 받아보는 신비 mystical.</div>
+      <div class="palette">
+        <div class="sw" style="background:#1A0512"></div>
+        <div class="sw" style="background:#5C0A1E"></div>
+        <div class="sw" style="background:#C41E3A"></div>
+        <div class="sw" style="background:#D4AF37"></div>
+        <div class="sw" style="background:#FFF5E1"></div>
+      </div>
+    </a>
+
+    <a class="card" href="v4-temple.html">
+      <div class="num">04</div>
+      <div class="title">사찰 (Temple)</div>
+      <div class="han">寺刹 · buddhist temple</div>
+      <div class="desc">진한 보라 + 황금 + 단청. 절에서 듣는 명상적 사주. 깊고 고요한 mysticism.</div>
+      <div class="palette">
+        <div class="sw" style="background:#1A0B2E"></div>
+        <div class="sw" style="background:#3D1E5A"></div>
+        <div class="sw" style="background:#6B46C1"></div>
+        <div class="sw" style="background:#D4AF37"></div>
+        <div class="sw" style="background:#FFFAF0"></div>
+      </div>
+    </a>
+
+    <a class="card" href="v5-kmodern.html">
+      <div class="num">05</div>
+      <div class="title">K-modern (current+)</div>
+      <div class="han">現代韓國</div>
+      <div class="desc">현재 다크 코스믹 톤 유지 + 한자 강조 + 한국 element 살짝. 가장 안전한 evolution.</div>
+      <div class="palette">
+        <div class="sw" style="background:#0A0612"></div>
+        <div class="sw" style="background:#1A0B2E"></div>
+        <div class="sw" style="background:#311B92"></div>
+        <div class="sw" style="background:#D4AF37"></div>
+        <div class="sw" style="background:#F5F5F5"></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="footer">
+    각 카드 클릭 → Splash · Input · Result · Home 4화면 mockup
+  </div>
+</body>
+</html>

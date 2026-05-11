@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>V4 사찰 — Pillar Seer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Serif KR', serif; background: #0F0820; padding: 40px 20px; min-height: 100vh; }
+    h1 { color: #D4AF37; font-size: 22px; text-align: center; letter-spacing: 4px; margin-bottom: 8px; }
+    .han { color: #6B46C1; font-size: 12px; text-align: center; letter-spacing: 6px; margin-bottom: 36px; }
+    .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .phone {
+      width: 320px; height: 690px;
+      background: linear-gradient(180deg, #1A0B2E 0%, #0F0820 100%);
+      border-radius: 36px; padding: 12px;
+      border: 4px solid #0F0820;
+      box-shadow: 0 12px 48px rgba(107, 70, 193, 0.3);
+      position: relative; overflow: hidden;
+    }
+    .screen {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(107, 70, 193, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, #1A0B2E 0%, #0F0820 100%);
+      border-radius: 24px;
+      position: relative; overflow: hidden;
+      padding: 16px;
+      color: #FFFAF0;
+    }
+    .label { position: absolute; top: -22px; left: 12px; font-size: 10px; color: #6B46C1; letter-spacing: 2px; font-weight: 700; }
+
+    /* Splash — 단청 무늬 (Dancheong colors: 6각형 + 보라/황금) */
+    .scr-splash { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+    .dancheong {
+      width: 140px; height: 140px;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dancheong .hex {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        conic-gradient(from 0deg, #D4AF37, #6B46C1, #D4AF37, #6B46C1, #D4AF37, #6B46C1, #D4AF37);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      opacity: 0.4;
+    }
+    .dancheong .inner {
+      width: 100px; height: 100px;
+      background: #1A0B2E;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .dancheong .inner .char {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 44px; font-weight: 800;
+      color: #D4AF37;
+      text-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+    }
+    .scr-splash h2 { margin-top: 28px; font-size: 24px; color: #D4AF37; letter-spacing: 12px; font-family: 'Nanum Myeongjo', serif; font-weight: 700; }
+    .scr-splash .ko { margin-top: 4px; font-size: 11px; color: #B59AE5; letter-spacing: 4px; }
+    .scr-splash .tag { margin-top: 18px; font-size: 11px; color: #C5B2EB; text-align: center; line-height: 1.7; font-style: italic; }
+
+    /* Input */
+    .scr-input .top { text-align: center; padding: 12px 0 18px; border-bottom: 1px solid #3D1E5A; margin-bottom: 18px; }
+    .scr-input .top .han { color: #D4AF37; font-size: 11px; margin: 0 0 4px; }
+    .scr-input .top h2 { font-size: 16px; color: #FFFAF0; letter-spacing: 4px; font-family: 'Nanum Myeongjo', serif; font-weight: 700; }
+    .field { background: rgba(107, 70, 193, 0.12); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; }
+    .field .lbl { font-size: 9px; color: #D4AF37; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
+    .field .val { font-size: 13px; color: #FFFAF0; margin-top: 4px; }
+    .btn-temple { background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%); color: #1A0B2E; padding: 14px; border-radius: 8px; text-align: center; font-size: 13px; letter-spacing: 4px; margin-top: 14px; font-family: 'Nanum Myeongjo', serif; font-weight: 700; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+
+    /* Result */
+    .scr-result h2 { text-align: center; font-size: 13px; color: #D4AF37; letter-spacing: 6px; padding: 12px 0; border-bottom: 1px solid #3D1E5A; margin-bottom: 14px; font-weight: 700; font-family: 'Nanum Myeongjo', serif; }
+    .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+    .pillar { background: rgba(107, 70, 193, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 6px; padding: 6px 2px; text-align: center; }
+    .pillar .pos { font-size: 8px; color: #B59AE5; letter-spacing: 1.5px; }
+    .pillar .gan, .pillar .ji { font-family: 'Nanum Myeongjo', serif; font-size: 22px; font-weight: 700; color: #D4AF37; line-height: 1.0; margin: 4px 0; }
+    .pillar .ji { color: #FFFAF0; }
+    .pillar.day { background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(107, 70, 193, 0.2)); border-color: #D4AF37; }
+    .pillar .en { font-size: 7px; color: #B59AE5; }
+    .scr-result .summary { background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(107, 70, 193, 0.15)); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 12px; padding: 14px; font-size: 11px; color: #FFFAF0; text-align: center; line-height: 1.6; margin-bottom: 12px; }
+    .scr-result .summary .day { font-family: 'Nanum Myeongjo', serif; font-size: 17px; font-weight: 700; color: #D4AF37; margin-bottom: 6px; letter-spacing: 2px; }
+    .elements { display: flex; gap: 4px; }
+    .el { flex: 1; background: rgba(107, 70, 193, 0.1); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 6px; padding: 6px 4px; text-align: center; }
+    .el .h { font-family: 'Nanum Myeongjo', serif; font-size: 14px; color: #D4AF37; }
+    .el .pct { font-size: 10px; color: #FFFAF0; margin-top: 2px; font-weight: 700; }
+    .el.dom { background: rgba(212, 175, 55, 0.25); border-color: #D4AF37; }
+
+    /* Home */
+    .scr-home .greet { font-size: 11px; color: #B59AE5; font-style: italic; }
+    .scr-home .greet b { color: #D4AF37; font-style: normal; font-weight: 700; }
+    .score-card {
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(107, 70, 193, 0.2) 50%, transparent 80%);
+      border: 2px solid rgba(212, 175, 55, 0.6);
+      border-radius: 50%; width: 140px; height: 140px;
+      margin: 14px auto;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+    }
+    .score-card .num { font-family: 'Nanum Myeongjo', serif; font-size: 50px; font-weight: 800; color: #D4AF37; line-height: 1.0; }
+    .score-card .out { font-size: 11px; color: #B59AE5; }
+    .quote { text-align: center; font-size: 11px; color: #C5B2EB; font-style: italic; padding: 8px 16px; line-height: 1.6; }
+    .pill-today { background: rgba(107, 70, 193, 0.2); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 999px; padding: 4px 12px; width: fit-content; margin: 8px auto; font-size: 10px; color: #D4AF37; letter-spacing: 0.6px; }
+    .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 10px; }
+    .cat { background: rgba(107, 70, 193, 0.12); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 6px; padding: 8px 2px; text-align: center; }
+    .cat .ico { font-size: 14px; }
+    .cat .sc { font-size: 13px; color: #D4AF37; font-weight: 700; }
+    .cat .name { font-size: 8px; color: #B59AE5; letter-spacing: 1px; }
+    .nav { position: absolute; bottom: 14px; left: 14px; right: 14px; display: flex; justify-content: space-around; padding-top: 8px; border-top: 1px solid rgba(212, 175, 55, 0.15); font-size: 9px; color: #B59AE5; }
+    .nav .active { color: #D4AF37; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>V4 사찰 — Temple</h1>
+  <p class="han">寺刹 · 명상적 사주</p>
+  <div class="row">
+    <div class="phone"><span class="label">01 SPLASH</span><div class="screen"><div class="scr-splash">
+      <div class="dancheong"><div class="hex"></div><div class="inner"><div class="char">柱</div></div></div>
+      <h2>필러시어</h2>
+      <div class="ko">PILLAR SEER</div>
+      <p class="tag">사주 네 기둥이<br>당신의 운명을 보여드립니다.</p>
+    </div></div></div>
+
+    <div class="phone"><span class="label">02 INPUT</span><div class="screen"><div class="scr-input">
+      <div class="top"><div class="han">運命入力</div><h2>운명 입력</h2></div>
+      <div class="field"><div class="lbl">姓名 · 이름</div><div class="val">홍길동</div></div>
+      <div class="field"><div class="lbl">生年月日</div><div class="val">1996년 4월 15일</div></div>
+      <div class="field"><div class="lbl">出生時 · 태어난 시간</div><div class="val">오후 2시 30분</div></div>
+      <div class="field"><div class="lbl">出生地</div><div class="val">서울특별시</div></div>
+      <div class="btn-temple">내 사주 보기 ✦</div>
+    </div></div></div>
+
+    <div class="phone"><span class="label">03 RESULT</span><div class="screen"><div class="scr-result">
+      <h2>당 신 의 사 주</h2>
+      <div class="pillars">
+        <div class="pillar"><div class="pos">年柱</div><div class="gan">癸</div><div class="ji">卯</div><div class="en">계묘</div></div>
+        <div class="pillar"><div class="pos">月柱</div><div class="gan">丙</div><div class="ji">辰</div><div class="en">병진</div></div>
+        <div class="pillar day"><div class="pos">日柱</div><div class="gan">戊</div><div class="ji">寅</div><div class="en">무인</div></div>
+        <div class="pillar"><div class="pos">時柱</div><div class="gan">己</div><div class="ji">未</div><div class="en">기미</div></div>
+      </div>
+      <div class="summary"><div class="day">戊寅 · 무인일주</div>"호랑이를 품은 산"<br>흔들리지 않는 인내,<br>오랜 뿌리의 묵직함.</div>
+      <div class="elements">
+        <div class="el dom"><div class="h">木</div><div class="pct">35%</div></div>
+        <div class="el"><div class="h">火</div><div class="pct">25%</div></div>
+        <div class="el"><div class="h">土</div><div class="pct">30%</div></div>
+        <div class="el"><div class="h">金</div><div class="pct">5%</div></div>
+        <div class="el"><div class="h">水</div><div class="pct">5%</div></div>
+      </div>
+    </div></div></div>
+
+    <div class="phone"><span class="label">04 HOME</span><div class="screen"><div class="scr-home">
+      <div class="greet">좋은 저녁입니다,<br><b>무인 (戊寅) ✦</b></div>
+      <div class="score-card"><div class="num">33</div><div class="out">/100</div></div>
+      <div class="pill-today">오늘의 일진 · 갑신 (甲申)</div>
+      <p class="quote">"천천히 움직이세요.<br>얼음 아래 물이 자신의 때를 압니다."</p>
+      <div class="cats">
+        <div class="cat"><div class="ico">💝</div><div class="sc">38</div><div class="name">애정</div></div>
+        <div class="cat"><div class="ico">💼</div><div class="sc">32</div><div class="name">직업</div></div>
+        <div class="cat"><div class="ico">💰</div><div class="sc">31</div><div class="name">재물</div></div>
+        <div class="cat"><div class="ico">⚡</div><div class="sc">30</div><div class="name">활력</div></div>
+      </div>
+      <div class="nav"><span class="active">홈</span><span>사주</span><span>리포트</span><span>탐색</span><span>프로필</span></div>
+    </div></div></div>
+  </div>
+  <p style="text-align:center;margin-top:36px;color:#B59AE5;font-size:11px"><a href="index.html" style="color:#D4AF37">← 5톤 비교로</a></p>
+</body>
+</html>
