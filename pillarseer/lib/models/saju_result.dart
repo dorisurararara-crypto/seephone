@@ -58,6 +58,36 @@ class Pillar {
     };
     return map[jiJi] ?? '?';
   }
+
+  /// 천간 영문 (Yin/Yang + 5행)
+  String get chunGanEnglish {
+    const map = {
+      '甲': 'Yang Wood', '乙': 'Yin Wood',
+      '丙': 'Yang Fire', '丁': 'Yin Fire',
+      '戊': 'Yang Earth', '己': 'Yin Earth',
+      '庚': 'Yang Metal', '辛': 'Yin Metal',
+      '壬': 'Yang Water', '癸': 'Yin Water',
+    };
+    return map[chunGan] ?? '?';
+  }
+
+  /// 지지 영문 (12지 동물)
+  String get jiJiEnglish {
+    const map = {
+      '子': 'Rat', '丑': 'Ox', '寅': 'Tiger', '卯': 'Rabbit',
+      '辰': 'Dragon', '巳': 'Snake', '午': 'Horse', '未': 'Goat',
+      '申': 'Monkey', '酉': 'Rooster', '戌': 'Dog', '亥': 'Pig',
+    };
+    return map[jiJi] ?? '?';
+  }
+
+  /// 일주 영문 이름 (예: Earth Tiger, Wood Dragon)
+  String get pairEnglish {
+    const elementName = {
+      '木': 'Wood', '火': 'Fire', '土': 'Earth', '金': 'Metal', '水': 'Water',
+    };
+    return '${elementName[chunGanElement] ?? "?"} $jiJiEnglish';
+  }
 }
 
 class SajuResult {

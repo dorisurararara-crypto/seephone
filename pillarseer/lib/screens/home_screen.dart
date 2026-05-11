@@ -1,74 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
 import '../services/daily_service.dart';
+import '../providers/saju_provider.dart';
+import '../widgets/bottom_nav.dart';
 
-/// Home (Today's Energy) — mockup 04번. 매일 첫 진입점.
-///
-/// 풍자: 사용자 사주 + 오늘 일진 → 종합점수 + 4 카테고리 + Lucky 정보 + Bottom Nav 5탭.
-class HomeScreen extends StatelessWidget {
-  final SajuResult userSaju;
-
-  const HomeScreen({super.key, required this.userSaju});
+/// Home (Today's Energy). 사용자 사주 + 오늘 일진 → 종합 점수 + 4 카테고리 + Lucky.
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final fortune = DailyService().calculate(userSaju);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final saju = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    final birth = ref.watch(userBirthInfoProvider);
+    final fortune = DailyService().calculate(saju);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: Column(
             children: [
-              _buildHeader(context),
-              _buildDate(context, fortune.date),
+              _Header(name: birth?.name, dayMasterName: saju.dayMasterName),
+              _Date(date: fortune.date),
               const SizedBox(height: 12),
-              _buildMoonDeco(),
-              _buildScoreCircle(context, fortune.totalScore),
-              _buildQuote(context, fortune.quote),
-              _buildCategoryGrid(context, fortune),
-              _buildLuckyCard(context, fortune),
-              _buildPromoCard(context),
+              const _MoonDeco(),
+              _ScoreCircle(score: fortune.totalScore),
+              _Quote(quote: fortune.quote),
+              _TodayPillarRow(dayPillar: fortune.dayPillar),
+              _CategoryGrid(fortune: fortune),
+              _LuckyCard(fortune: fortune),
+              const _PromoCard(),
               const SizedBox(height: 16),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(context, 0),
+      bottomNavigationBar: const PillarBottomNav(activeIdx: 0),
     );
   }
+}
 
-  Widget _buildHeader(BuildContext context) {
+class _Header extends StatelessWidget {
+  final String? name;
+  final String dayMasterName;
+  const _Header({required this.name, required this.dayMasterName});
+
+  String _greeting() {
+    final h = DateTime.now().hour;
+    if (h < 5) return 'Late night,';
+    if (h < 12) return 'Good morning,';
+    if (h < 18) return 'Good afternoon,';
+    return 'Good evening,';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayName = (name != null && name!.trim().isNotEmpty)
+        ? name!.trim()
+        : dayMasterName;
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Good evening,',
-                style: TextStyle(fontSize: 12, color: AppColors.moonlightGray, fontStyle: FontStyle.italic),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                '${userSaju.dayMasterName}  ✦',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.ghostlyWhite,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _greeting(),
+                  style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.moonlightGray,
+                      fontStyle: FontStyle.italic),
                 ),
-              ),
-            ],
+                const SizedBox(height: 2),
+                Text(
+                  '$displayName  ✦',
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.ghostlyWhite,
+                  ),
+                ),
+              ],
+            ),
           ),
           Stack(
             clipBehavior: Clip.none,
             children: [
-              const Icon(Icons.notifications_none, size: 22, color: AppColors.moonlightGray),
+              const Icon(Icons.notifications_none,
+                  size: 22, color: AppColors.moonlightGray),
               Positioned(
                 top: 0,
                 right: 0,
@@ -87,10 +114,19 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildDate(BuildContext context, DateTime date) {
-    final months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    final weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+class _Date extends StatelessWidget {
+  final DateTime date;
+  const _Date({required this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    const months = [
+      'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+      'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
+    ];
+    const weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Text(
@@ -104,18 +140,30 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildMoonDeco() {
+class _MoonDeco extends StatelessWidget {
+  const _MoonDeco();
+
+  @override
+  Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 4),
       child: Text(
         '✦  ✦  ✦',
-        style: TextStyle(fontSize: 12, color: AppColors.celestialGold, letterSpacing: 8),
+        style: TextStyle(
+            fontSize: 12, color: AppColors.celestialGold, letterSpacing: 8),
       ),
     );
   }
+}
 
-  Widget _buildScoreCircle(BuildContext context, int score) {
+class _ScoreCircle extends StatelessWidget {
+  final int score;
+  const _ScoreCircle({required this.score});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       width: 140,
@@ -129,7 +177,8 @@ class HomeScreen extends StatelessWidget {
           ],
           stops: const [0.0, 0.7],
         ),
-        border: Border.all(color: AppColors.celestialGold.withValues(alpha: 0.6), width: 2),
+        border: Border.all(
+            color: AppColors.celestialGold.withValues(alpha: 0.6), width: 2),
         boxShadow: [
           BoxShadow(
             color: AppColors.celestialGold.withValues(alpha: 0.2),
@@ -151,7 +200,10 @@ class HomeScreen extends StatelessWidget {
             children: const [
               TextSpan(
                 text: '\n/100',
-                style: TextStyle(fontSize: 13, color: AppColors.moonlightGray, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.moonlightGray,
+                    fontWeight: FontWeight.w400),
               ),
             ],
           ),
@@ -159,10 +211,16 @@ class HomeScreen extends StatelessWidget {
       ),
     ).animate().scale(duration: 600.ms).fadeIn();
   }
+}
 
-  Widget _buildQuote(BuildContext context, String quote) {
+class _Quote extends StatelessWidget {
+  final String quote;
+  const _Quote({required this.quote});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(36, 0, 36, 18),
+      padding: const EdgeInsets.fromLTRB(36, 0, 36, 14),
       child: Text(
         '"$quote"',
         textAlign: TextAlign.center,
@@ -175,13 +233,52 @@ class HomeScreen extends StatelessWidget {
       ),
     ).animate().fadeIn(delay: 400.ms);
   }
+}
 
-  Widget _buildCategoryGrid(BuildContext context, DailyFortune f) {
+class _TodayPillarRow extends StatelessWidget {
+  final String dayPillar;
+  const _TodayPillarRow({required this.dayPillar});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: AppColors.spiritIndigo.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+              color: AppColors.celestialGold.withValues(alpha: 0.25)),
+        ),
+        child: Text(
+          "Today's Pillar · $dayPillar",
+          style: const TextStyle(
+            fontSize: 11,
+            color: AppColors.celestialGold,
+            letterSpacing: 0.6,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CategoryGrid extends StatelessWidget {
+  final DailyFortune fortune;
+  const _CategoryGrid({required this.fortune});
+
+  @override
+  Widget build(BuildContext context) {
     final cats = [
-      {'icon': '💝', 'name': 'Love', 'score': f.loveScore},
-      {'icon': '💼', 'name': 'Work', 'score': f.workScore},
-      {'icon': '💰', 'name': 'Wealth', 'score': f.wealthScore},
-      {'icon': '⚡', 'name': 'Energy', 'score': f.energyScore},
+      _CatItem(icon: Icons.favorite, name: 'Love', score: fortune.loveScore),
+      _CatItem(icon: Icons.work_outline, name: 'Work', score: fortune.workScore),
+      _CatItem(
+          icon: Icons.savings_outlined,
+          name: 'Wealth',
+          score: fortune.wealthScore),
+      _CatItem(icon: Icons.bolt, name: 'Energy', score: fortune.energyScore),
     ];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -193,15 +290,16 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: AppColors.spiritIndigo.withValues(alpha: 0.1),
-                border: Border.all(color: AppColors.celestialGold.withValues(alpha: 0.15)),
+                border: Border.all(
+                    color: AppColors.celestialGold.withValues(alpha: 0.15)),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
                 children: [
-                  Text(c['icon'] as String, style: const TextStyle(fontSize: 18)),
-                  const SizedBox(height: 2),
+                  Icon(c.icon, size: 18, color: AppColors.celestialGold),
+                  const SizedBox(height: 4),
                   Text(
-                    '${c['score']}',
+                    '${c.score}',
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.celestialGold,
@@ -210,7 +308,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    (c['name'] as String).toUpperCase(),
+                    c.name.toUpperCase(),
                     style: const TextStyle(
                       fontSize: 9,
                       color: AppColors.moonlightGray,
@@ -225,33 +323,52 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildLuckyCard(BuildContext context, DailyFortune f) {
+class _CatItem {
+  final IconData icon;
+  final String name;
+  final int score;
+  const _CatItem({required this.icon, required this.name, required this.score});
+}
+
+class _LuckyCard extends StatelessWidget {
+  final DailyFortune fortune;
+  const _LuckyCard({required this.fortune});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(24, 14, 24, 14),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.spiritIndigo.withValues(alpha: 0.08),
-        border: Border.all(color: AppColors.celestialGold.withValues(alpha: 0.15)),
+        border:
+            Border.all(color: AppColors.celestialGold.withValues(alpha: 0.15)),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
-          _luckyRow('🎨  Lucky Color', f.luckyColor),
-          _luckyRow('🔢  Lucky Number', '${f.luckyNumber}'),
-          _luckyRow('🧭  Lucky Direction', f.luckyDirection),
+          _row(Icons.palette_outlined, 'Lucky Color', fortune.luckyColor),
+          _row(Icons.tag, 'Lucky Number', '${fortune.luckyNumber}'),
+          _row(Icons.explore_outlined, 'Lucky Direction', fortune.luckyDirection),
         ],
       ),
     );
   }
 
-  Widget _luckyRow(String label, String value) {
+  Widget _row(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 11, color: AppColors.moonlightGray)),
+          Icon(icon, size: 14, color: AppColors.moonlightGray),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(label,
+                style: const TextStyle(
+                    fontSize: 11, color: AppColors.moonlightGray)),
+          ),
           Text(value,
               style: const TextStyle(
                 fontSize: 11,
@@ -262,110 +379,66 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildPromoCard(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.celestialGold.withValues(alpha: 0.15),
-            AppColors.spiritIndigo.withValues(alpha: 0.15),
-          ],
+class _PromoCard extends StatelessWidget {
+  const _PromoCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(const SnackBar(
+            content: Text('Annual reading coming soon.'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.spiritIndigo,
+          ));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.celestialGold.withValues(alpha: 0.15),
+              AppColors.spiritIndigo.withValues(alpha: 0.15),
+            ],
+          ),
+          border:
+              Border.all(color: AppColors.celestialGold.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(12),
         ),
-        border: Border.all(color: AppColors.celestialGold.withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            'LIMITED',
-            style: TextStyle(
-              fontSize: 9,
-              color: AppColors.celestialGold,
-              letterSpacing: 1.5,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            "Your 2026 Annual Reading",
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: AppColors.ghostlyWhite,
-            ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            'Discover the 144 hexagrams\nthat shape your year ahead.',
-            style: TextStyle(fontSize: 11, color: AppColors.moonlightGray, height: 1.5),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNav(BuildContext context, int activeIdx) {
-    final items = [
-      {'icon': '✦', 'name': 'Home', 'route': '/home'},
-      {'icon': '柱', 'name': 'Reading', 'route': '/result'},
-      {'icon': '📜', 'name': 'Reports', 'route': '/reports'},
-      {'icon': '🌙', 'name': 'Discover', 'route': '/discover'},
-      {'icon': '○', 'name': 'Profile', 'route': '/profile'},
-    ];
-    return Container(
-      height: 76,
-      decoration: BoxDecoration(
-        color: AppColors.cosmicBlack.withValues(alpha: 0.95),
-        border: Border(top: BorderSide(color: AppColors.celestialGold.withValues(alpha: 0.15))),
-      ),
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
-      child: Row(
-        children: items.asMap().entries.map((entry) {
-          final i = entry.key;
-          final item = entry.value;
-          final isActive = i == activeIdx;
-          return Expanded(
-            child: InkWell(
-              onTap: () {
-                if (i == activeIdx) return; // 같은 탭 무시
-                final route = item['route'] as String;
-                if (route == '/result') {
-                  context.go(route, extra: userSaju);
-                } else if (route == '/home') {
-                  context.go(route, extra: userSaju);
-                } else {
-                  context.go(route);
-                }
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    item['icon'] as String,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    (item['name'] as String).toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 9,
-                      letterSpacing: 0.5,
-                      fontWeight: FontWeight.w600,
-                      color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
-                    ),
-                  ),
-                ],
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'LIMITED',
+              style: TextStyle(
+                fontSize: 9,
+                color: AppColors.celestialGold,
+                letterSpacing: 1.5,
+                fontWeight: FontWeight.w700,
               ),
             ),
-          );
-        }).toList(),
+            SizedBox(height: 4),
+            Text(
+              "Your 2026 Annual Reading",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: AppColors.ghostlyWhite,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              'Discover the 144 hexagrams\nthat shape your year ahead.',
+              style: TextStyle(
+                  fontSize: 11, color: AppColors.moonlightGray, height: 1.5),
+            ),
+          ],
+        ),
       ),
     );
   }

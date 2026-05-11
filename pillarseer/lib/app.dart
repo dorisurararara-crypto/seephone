@@ -8,13 +8,27 @@ class PillarSeerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp.router(
-        title: 'Pillar Seer',
-        theme: AppTheme.darkTheme,
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
-      ),
+    return const ProviderScope(child: _RouterHost());
+  }
+}
+
+class _RouterHost extends ConsumerStatefulWidget {
+  const _RouterHost();
+
+  @override
+  ConsumerState<_RouterHost> createState() => _RouterHostState();
+}
+
+class _RouterHostState extends ConsumerState<_RouterHost> {
+  late final _router = buildRouter(ref);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Pillar Seer',
+      theme: AppTheme.darkTheme,
+      routerConfig: _router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

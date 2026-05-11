@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
-import '../models/saju_result.dart';
+import '../widgets/bottom_nav.dart';
 
 /// 다른 탭의 placeholder. Phase 2에서 각 탭 풀 화면으로 교체.
 class PlaceholderScreen extends StatelessWidget {
   final String title;
   final String description;
-  final String icon;
+  final IconData iconData;
   final int activeNavIdx; // 0=Home 1=Reading 2=Reports 3=Discover 4=Profile
-  final SajuResult? userSaju;
 
   const PlaceholderScreen({
     super.key,
     required this.title,
     required this.description,
-    required this.icon,
+    required this.iconData,
     required this.activeNavIdx,
-    this.userSaju,
   });
 
   @override
@@ -30,7 +27,7 @@ class PlaceholderScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(icon, style: const TextStyle(fontSize: 56)),
+                Icon(iconData, size: 56, color: AppColors.celestialGold),
                 const SizedBox(height: 24),
                 Text(
                   title.toUpperCase(),
@@ -58,7 +55,8 @@ class PlaceholderScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.spiritIndigo.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: AppColors.celestialGold.withValues(alpha: 0.3)),
+                    border: Border.all(
+                        color: AppColors.celestialGold.withValues(alpha: 0.3)),
                   ),
                   child: const Text(
                     'COMING SOON',
@@ -75,67 +73,7 @@ class PlaceholderScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(context),
-    );
-  }
-
-  Widget _buildBottomNav(BuildContext context) {
-    final items = [
-      {'icon': '✦', 'name': 'Home', 'route': '/home'},
-      {'icon': '柱', 'name': 'Reading', 'route': '/result'},
-      {'icon': '📜', 'name': 'Reports', 'route': '/reports'},
-      {'icon': '🌙', 'name': 'Discover', 'route': '/discover'},
-      {'icon': '○', 'name': 'Profile', 'route': '/profile'},
-    ];
-    return Container(
-      height: 76,
-      decoration: BoxDecoration(
-        color: AppColors.cosmicBlack.withValues(alpha: 0.95),
-        border: Border(top: BorderSide(color: AppColors.celestialGold.withValues(alpha: 0.15))),
-      ),
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
-      child: Row(
-        children: items.asMap().entries.map((entry) {
-          final i = entry.key;
-          final item = entry.value;
-          final isActive = i == activeNavIdx;
-          return Expanded(
-            child: InkWell(
-              onTap: () {
-                if (i == activeNavIdx) return;
-                final route = item['route'] as String;
-                if (route == '/home' || route == '/result') {
-                  context.go(route, extra: userSaju);
-                } else {
-                  context.go(route);
-                }
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    item['icon'] as String,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    (item['name'] as String).toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 9,
-                      letterSpacing: 0.5,
-                      fontWeight: FontWeight.w600,
-                      color: isActive ? AppColors.celestialGold : AppColors.moonlightGray,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
+      bottomNavigationBar: PillarBottomNav(activeIdx: activeNavIdx),
     );
   }
 }

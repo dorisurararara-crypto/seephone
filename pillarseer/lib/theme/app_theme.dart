@@ -11,12 +11,24 @@ class AppColors {
   static const moonlightGray = Color(0xFFA8A8C0);
   static const fadedSilver = Color(0xFF6B6B82);
 
-  // Element Colors
+  // Element Colors (Wood/Fire/Earth/Metal/Water)
   static const woodJade = Color(0xFF27AE60);
   static const fireRed = Color(0xFFE74C3C);
   static const earthBronze = Color(0xFFC19A6B);
   static const metalSilver = Color(0xFFBDC3C7);
   static const waterOcean = Color(0xFF2980B9);
+
+  /// 5행 → 색상 매핑
+  static Color forElement(String element) {
+    switch (element) {
+      case '木': case 'Wood': return woodJade;
+      case '火': case 'Fire': return fireRed;
+      case '土': case 'Earth': return earthBronze;
+      case '金': case 'Metal': return metalSilver;
+      case '水': case 'Water': return waterOcean;
+      default: return celestialGold;
+    }
+  }
 }
 
 class AppTheme {

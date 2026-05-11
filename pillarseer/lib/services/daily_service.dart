@@ -33,14 +33,14 @@ class DailyService {
     return 60;
   }
 
-  /// 5행 → 행운의 색
+  /// 5행 → 행운의 색 (Water 는 'Deep Ocean Blue' — 'Midnight Purple' 은 앱 배경색이라 혼동 방지)
   String _luckyColorFor(String element) {
     const map = {
       '木': 'Forest Jade',
       '火': 'Phoenix Red',
       '土': 'Ancient Bronze',
       '金': 'Lunar Silver',
-      '水': 'Midnight Purple',
+      '水': 'Deep Ocean Blue',
     };
     return map[element] ?? 'Celestial Gold';
   }
