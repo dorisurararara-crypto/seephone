@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../l10n/app_localizations.dart';
+import '../models/saju_result.dart';
 import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
 import '../theme/app_theme.dart';
@@ -209,7 +211,7 @@ class _Celebrity {
   }
 }
 
-class _CelebTile extends StatelessWidget {
+class _CelebTile extends ConsumerWidget {
   final _Celebrity celeb;
   final bool useKo;
   final bool isMatch;
@@ -220,114 +222,353 @@ class _CelebTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.spiritIndigo.withValues(alpha: 0.18),
-            AppColors.midnightPurple.withValues(alpha: 0.4),
-          ],
+    final mySaju = ref.watch(sajuResultProvider);
+    return InkWell(
+      onTap: () => _showCompare(context, l, mySaju, useKo),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.spiritIndigo.withValues(alpha: 0.2),
+              AppColors.midnightPurple.withValues(alpha: 0.45),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isMatch
+                ? AppColors.celestialGold
+                : AppColors.celestialGold.withValues(alpha: 0.3),
+            width: isMatch ? 1.8 : 1,
+          ),
         ),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isMatch
-              ? AppColors.celestialGold
-              : AppColors.celestialGold.withValues(alpha: 0.3),
-          width: isMatch ? 1.5 : 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.celestialGold.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.celestialGold.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: AppColors.celestialGold.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  child:
+                      Text(celeb.emoji, style: const TextStyle(fontSize: 30)),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        useKo ? celeb.nameKo : celeb.nameEn,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.ghostlyWhite,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${celeb.dayPillarName} · ${celeb.dayPillar}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: AppColors.celestialGold,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        celeb.birth,
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          color: AppColors.fadedSilver,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Text(celeb.emoji,
-                    style: const TextStyle(fontSize: 24)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      useKo ? celeb.nameKo : celeb.nameEn,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.ghostlyWhite,
+                if (isMatch)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.celestialGold.withValues(alpha: 0.28),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                        color: AppColors.celestialGold.withValues(alpha: 0.75),
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${celeb.dayPillarName} (${celeb.dayPillar}) · ${celeb.birth}',
+                    child: Text(
+                      useKo ? '내 일주!' : 'YOUR PILLAR!',
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 10.5,
                         color: AppColors.celestialGold,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              useKo ? celeb.blurbKo : celeb.blurbEn,
+              style: const TextStyle(
+                fontSize: 13.5,
+                color: AppColors.moonlightGray,
+                height: 1.65,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(Icons.touch_app_outlined,
+                    size: 14,
+                    color: AppColors.celestialGold.withValues(alpha: 0.7)),
+                const SizedBox(width: 6),
+                Text(
+                  l.discoverShareCompare,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.celestialGold,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCompare(
+      BuildContext context, AppL10n l, SajuResult? me, bool useKo) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.78),
+      builder: (ctx) => Dialog(
+        backgroundColor: AppColors.cosmicBlack,
+        insetPadding: const EdgeInsets.all(20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+              color: AppColors.celestialGold.withValues(alpha: 0.55)),
+        ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(22, 24, 22, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(celeb.emoji,
+                        style: const TextStyle(fontSize: 34)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${l.discoverCompareTitle}${useKo ? celeb.nameKo : celeb.nameEn}',
+                            style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.ghostlyWhite,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${celeb.dayPillarName} · ${celeb.dayPillar}',
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              color: AppColors.celestialGold,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
-              if (isMatch)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: AppColors.celestialGold.withValues(alpha: 0.25),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: AppColors.celestialGold.withValues(alpha: 0.7),
+                const SizedBox(height: 16),
+                if (me != null) ...[
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color:
+                          AppColors.celestialGold.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.celestialGold
+                            .withValues(alpha: 0.45),
+                      ),
+                    ),
+                    child: Text(
+                      me.day60ji == celeb.dayPillar
+                          ? l.discoverCompareSame(celeb.dayPillarName)
+                          : l.discoverCompareDifferent(
+                              me.dayMasterName, celeb.dayPillarName),
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.celestialGold,
+                        height: 1.5,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    useKo ? '내 일주!' : 'YOUR PILLAR!',
-                    style: const TextStyle(
-                      fontSize: 9,
-                      color: AppColors.celestialGold,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
-                    ),
+                  const SizedBox(height: 12),
+                  _compareRow(l.discoverCompareSimilar,
+                      _similarities(me, useKo)),
+                  const SizedBox(height: 10),
+                  _compareRow(
+                      l.discoverCompareContrast, _contrasts(me, useKo)),
+                  const SizedBox(height: 16),
+                ],
+                Text(
+                  useKo ? celeb.blurbKo : celeb.blurbEn,
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    color: AppColors.moonlightGray,
+                    height: 1.7,
                   ),
                 ),
-            ],
+                const SizedBox(height: 18),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        icon: const Icon(Icons.close,
+                            size: 16, color: AppColors.moonlightGray),
+                        label: Text(
+                          l.discoverCompareClose,
+                          style: const TextStyle(
+                            color: AppColors.moonlightGray,
+                            fontSize: 13,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: AppColors.celestialGold
+                                .withValues(alpha: 0.3),
+                          ),
+                          minimumSize: const Size(0, 46),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                          GoRouter.of(context).go('/reports/compatibility');
+                        },
+                        icon: const Icon(Icons.favorite, size: 16),
+                        label: Text(
+                          l.discoverCompareSeeChart,
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.celestialGold,
+                          foregroundColor: AppColors.cosmicBlack,
+                          minimumSize: const Size(0, 46),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            useKo ? celeb.blurbKo : celeb.blurbEn,
+        ),
+      ),
+    );
+  }
+
+  String _similarities(SajuResult me, bool useKo) {
+    final sameElement = me.dayPillar.chunGanElement == _celebElement();
+    if (sameElement) {
+      return useKo
+          ? '같은 오행 기운 · 비슷한 추진력 결'
+          : 'Same elemental base · similar momentum signature';
+    }
+    return useKo
+        ? '다른 오행이지만 보완 관계 · 서로의 결핍을 채울 수 있음'
+        : "Different elements, complementary roles · you fill each other's gaps";
+  }
+
+  String _contrasts(SajuResult me, bool useKo) {
+    if (celeb.dayPillar.length >= 2 &&
+        me.dayPillar.jiJi == celeb.dayPillar[1]) {
+      return useKo
+          ? '비슷한 베이스지만 표현 방식이 다름'
+          : 'Similar base, different expression style';
+    }
+    return useKo
+        ? '리듬·페이스가 다름 — 한쪽이 빠를 때 다른 쪽은 느리게'
+        : 'Different rhythms — one pushes, the other paces';
+  }
+
+  String _celebElement() {
+    const map = {
+      '甲': '木', '乙': '木',
+      '丙': '火', '丁': '火',
+      '戊': '土', '己': '土',
+      '庚': '金', '辛': '金',
+      '壬': '水', '癸': '水',
+    };
+    if (celeb.dayPillar.isEmpty) return '';
+    return map[celeb.dayPillar[0]] ?? '';
+  }
+
+  Widget _compareRow(String label, String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.spiritIndigo.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            label,
             style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.moonlightGray,
+              fontSize: 10.5,
+              color: AppColors.celestialGold,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.6,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.ghostlyWhite,
               height: 1.6,
             ),
           ),
-          if (isMatch) ...[
-            const SizedBox(height: 8),
-            Text(
-              l.discoverShareCompare,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.celestialGold,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

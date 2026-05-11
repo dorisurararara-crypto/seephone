@@ -25,7 +25,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final delay = reduceMotion
         ? const Duration(milliseconds: 400)
-        : const Duration(milliseconds: 2800);
+        : const Duration(milliseconds: 1500);
     _timer = Timer(delay, _go);
   }
 
@@ -61,16 +61,40 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         color: AppColors.ghostlyWhite,
       ),
     );
-    final tagline = Text(
-      l.splashTagline,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 13,
-        fontStyle: FontStyle.italic,
-        color: AppColors.moonlightGray,
-        height: 1.6,
-        letterSpacing: 0.5,
-      ),
+    final tagline = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          l.splashTagline,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 13,
+            fontStyle: FontStyle.italic,
+            color: AppColors.moonlightGray,
+            height: 1.6,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          decoration: BoxDecoration(
+            color: AppColors.celestialGold.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(
+                color: AppColors.celestialGold.withValues(alpha: 0.35)),
+          ),
+          child: Text(
+            l.splashTrust,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              color: AppColors.celestialGold,
+              letterSpacing: 1.2,
+            ),
+          ),
+        ),
+      ],
     );
 
     return Scaffold(

@@ -577,6 +577,162 @@ abstract class AppL10n {
   /// **'Get your day\'s energy delivered each morning'**
   String get settingsNotificationsDesc;
 
+  /// No description provided for @homeNotifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Every morning at 8 — just what to watch out for ☀️'**
+  String get homeNotifTitle;
+
+  /// No description provided for @homeNotifSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A 1-line daily ping, never a marketing blast'**
+  String get homeNotifSubtitle;
+
+  /// No description provided for @homeNotifEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on'**
+  String get homeNotifEnable;
+
+  /// No description provided for @homeNotifOn.
+  ///
+  /// In en, this message translates to:
+  /// **'ON · 8:00 AM'**
+  String get homeNotifOn;
+
+  /// No description provided for @homeNotifPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications in iOS Settings to enable.'**
+  String get homeNotifPermissionDenied;
+
+  /// No description provided for @homeNotifEnabledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily 8 AM reading turned on ✨'**
+  String get homeNotifEnabledSnack;
+
+  /// No description provided for @homeNotifDisabledSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily notification turned off.'**
+  String get homeNotifDisabledSnack;
+
+  /// No description provided for @homeNotifSampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar Seer · Today\'s Energy'**
+  String get homeNotifSampleTitle;
+
+  /// No description provided for @homeNotifSampleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to see today\'s score, lucky color, and one-line guide.'**
+  String get homeNotifSampleBody;
+
+  /// No description provided for @homeHourlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s flow ⏰'**
+  String get homeHourlyTitle;
+
+  /// No description provided for @homeHourlySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Three quick windows for the day'**
+  String get homeHourlySubtitle;
+
+  /// No description provided for @homeHourlyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'NOW'**
+  String get homeHourlyNow;
+
+  /// No description provided for @homeHourlyNext.
+  ///
+  /// In en, this message translates to:
+  /// **'NEXT'**
+  String get homeHourlyNext;
+
+  /// No description provided for @homeHourlyLater.
+  ///
+  /// In en, this message translates to:
+  /// **'LATER'**
+  String get homeHourlyLater;
+
+  /// No description provided for @homeHourlySeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See full 12-hour flow'**
+  String get homeHourlySeeAll;
+
+  /// No description provided for @homeHourlyFullTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s 12-Hour Flow'**
+  String get homeHourlyFullTitle;
+
+  /// No description provided for @splashTrust.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean traditional Four Pillars · made easy'**
+  String get splashTrust;
+
+  /// No description provided for @resultTrustLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your birth date·time + Five Elements + Ten Gods.'**
+  String get resultTrustLine;
+
+  /// No description provided for @resultProHookHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Want to go deeper?'**
+  String get resultProHookHeader;
+
+  /// No description provided for @resultProHookYearLoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your 2026 Love Chapter'**
+  String get resultProHookYearLoveTitle;
+
+  /// No description provided for @resultProHookYearLoveTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'See which months your bonds deepen vs cool off.'**
+  String get resultProHookYearLoveTeaser;
+
+  /// No description provided for @resultProHookCompatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match with that person'**
+  String get resultProHookCompatTitle;
+
+  /// No description provided for @resultProHookCompatTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter their birth date — see why you click & where you clash.'**
+  String get resultProHookCompatTeaser;
+
+  /// No description provided for @resultProHookDatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Important dates this year'**
+  String get resultProHookDatesTitle;
+
+  /// No description provided for @resultProHookDatesTeaser.
+  ///
+  /// In en, this message translates to:
+  /// **'Auspicious vs avoid days for big decisions, signings, launches.'**
+  String get resultProHookDatesTeaser;
+
+  /// No description provided for @resultProHookCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get resultProHookCta;
+
   /// No description provided for @settingsAbout.
   ///
   /// In en, this message translates to:
@@ -682,44 +838,218 @@ abstract class AppL10n {
   /// No description provided for @resultDayMasterDeepTitle.
   ///
   /// In en, this message translates to:
-  /// **'DAY MASTER — INNER SIGNATURE'**
+  /// **'Your Core Self 🪨'**
   String get resultDayMasterDeepTitle;
+
+  /// No description provided for @resultDayMasterTermHint.
+  ///
+  /// In en, this message translates to:
+  /// **'= Day Master (日干) — the heart of your chart'**
+  String get resultDayMasterTermHint;
 
   /// No description provided for @resultFiveElementsDetailTitle.
   ///
   /// In en, this message translates to:
-  /// **'FIVE ELEMENTS — ENERGY BALANCE'**
+  /// **'5 Energy Balance 🌳🔥🪨⚙️💧'**
   String get resultFiveElementsDetailTitle;
+
+  /// No description provided for @resultFiveElementsTermHint.
+  ///
+  /// In en, this message translates to:
+  /// **'= Five Elements (五行) inside you'**
+  String get resultFiveElementsTermHint;
 
   /// No description provided for @resultTenGodsTitle.
   ///
   /// In en, this message translates to:
-  /// **'TEN GODS — RELATIONAL MAP'**
+  /// **'Your Relationship Map 🤝'**
   String get resultTenGodsTitle;
+
+  /// No description provided for @resultTenGodsTermHint.
+  ///
+  /// In en, this message translates to:
+  /// **'= Ten Gods (十神) — how people, money, work appear in your chart'**
+  String get resultTenGodsTermHint;
 
   /// No description provided for @resultLifeThemesTitle.
   ///
   /// In en, this message translates to:
-  /// **'LIFE THEMES'**
+  /// **'Big Picture of Your Life 🎬'**
   String get resultLifeThemesTitle;
 
   /// No description provided for @resultTenYearLuckTitle.
   ///
   /// In en, this message translates to:
-  /// **'10-YEAR LUCK (大運)'**
+  /// **'Your 10-Year Chapter 📚'**
   String get resultTenYearLuckTitle;
+
+  /// No description provided for @resultTenYearLuckTermHint.
+  ///
+  /// In en, this message translates to:
+  /// **'= Great Luck (大運) — the decade you\'re inside'**
+  String get resultTenYearLuckTermHint;
 
   /// No description provided for @resultThisYearTitle.
   ///
   /// In en, this message translates to:
-  /// **'THIS YEAR (歲運)'**
+  /// **'This Year\'s Vibe 🎯'**
   String get resultThisYearTitle;
+
+  /// No description provided for @resultThisYearTermHint.
+  ///
+  /// In en, this message translates to:
+  /// **'= Annual Luck (歲運)'**
+  String get resultThisYearTermHint;
 
   /// No description provided for @resultLuckyTitle.
   ///
   /// In en, this message translates to:
-  /// **'LUCKY ALIGNMENTS'**
+  /// **'Today\'s Luck Compass ✨'**
   String get resultLuckyTitle;
+
+  /// No description provided for @resultIntroLeadIn.
+  ///
+  /// In en, this message translates to:
+  /// **'You are'**
+  String get resultIntroLeadIn;
+
+  /// No description provided for @resultIntroLeadOut.
+  ///
+  /// In en, this message translates to:
+  /// **'kind of person.'**
+  String get resultIntroLeadOut;
+
+  /// No description provided for @resultFirstTimeBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'New to saju? Tap here for a 30-sec guide →'**
+  String get resultFirstTimeBanner;
+
+  /// No description provided for @resultGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saju in 30 Seconds'**
+  String get resultGuideTitle;
+
+  /// No description provided for @resultGuideBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your birth date + time produces 4 pillars (year/month/day/hour). The DAY pillar is your Core Self. The 5 elements (Wood/Fire/Earth/Metal/Water) show your inner balance. The other readings — relationships, career, lucky color — flow from your Core Self.'**
+  String get resultGuideBody;
+
+  /// No description provided for @resultGuideGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get resultGuideGotIt;
+
+  /// No description provided for @resultPillarsCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your 4 Pillars (Year · Month · Day · Hour)'**
+  String get resultPillarsCardTitle;
+
+  /// No description provided for @resultThreeHitHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Your 30-Second Read'**
+  String get resultThreeHitHeader;
+
+  /// No description provided for @resultThreeHitPersonalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PERSONALITY'**
+  String get resultThreeHitPersonalityLabel;
+
+  /// No description provided for @resultThreeHitLoveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'IN LOVE'**
+  String get resultThreeHitLoveLabel;
+
+  /// No description provided for @resultThreeHitTodayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get resultThreeHitTodayLabel;
+
+  /// No description provided for @resultWhyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Why it reads this way:'**
+  String get resultWhyLabel;
+
+  /// No description provided for @resultEasyModeBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New to saju?'**
+  String get resultEasyModeBannerTitle;
+
+  /// No description provided for @resultEasyModeBannerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'We translate the hard words. Tap to read it the easy way.'**
+  String get resultEasyModeBannerDesc;
+
+  /// No description provided for @resultEasyModeBannerCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy mode'**
+  String get resultEasyModeBannerCta;
+
+  /// No description provided for @resultEasyModeBannerSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Just show me'**
+  String get resultEasyModeBannerSkip;
+
+  /// No description provided for @discoverCompareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You + '**
+  String get discoverCompareTitle;
+
+  /// No description provided for @discoverCompareSame.
+  ///
+  /// In en, this message translates to:
+  /// **'Same {pillar} type 🔥'**
+  String discoverCompareSame(Object pillar);
+
+  /// No description provided for @discoverCompareDifferent.
+  ///
+  /// In en, this message translates to:
+  /// **'Different types: {mine} vs {theirs}'**
+  String discoverCompareDifferent(Object mine, Object theirs);
+
+  /// No description provided for @discoverCompareSimilar.
+  ///
+  /// In en, this message translates to:
+  /// **'What you share'**
+  String get discoverCompareSimilar;
+
+  /// No description provided for @discoverCompareContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Where you differ'**
+  String get discoverCompareContrast;
+
+  /// No description provided for @discoverCompareShareCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Make share card'**
+  String get discoverCompareShareCard;
+
+  /// No description provided for @discoverCompareSeeChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatibility report'**
+  String get discoverCompareSeeChart;
+
+  /// No description provided for @discoverCompareClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get discoverCompareClose;
 
   /// No description provided for @resultThemeCareer.
   ///

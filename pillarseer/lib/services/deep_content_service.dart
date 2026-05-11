@@ -118,6 +118,17 @@ class DeepContentService {
     final luckyDirection = raw?['luckyDirection'] as String? ??
         _luckyDirectionFor(isKo, dominant);
 
+    final hooks = _threeHits(
+      isKo: isKo,
+      day60ji: day60ji,
+      name: name,
+      dominant: dominant,
+      deficit: deficit,
+      personalityFull: dmDeep,
+      loveFull: love,
+      thisYearFull: _thisYear(isKo, day60ji, currentYearGanji),
+    );
+
     return DeepReading(
       dayMasterDeep: dmDeep,
       career: career,
@@ -131,7 +142,101 @@ class DeepContentService {
       luckyDirection: luckyDirection,
       tenYearLuck: _tenYearLuck(isKo, day60ji, userAge),
       thisYear: _thisYear(isKo, day60ji, currentYearGanji),
+      oneLineYouAre: hooks.oneLine,
+      personalityHook: hooks.personality,
+      loveHook: hooks.love,
+      todayHook: hooks.today,
+      whyReason: hooks.why,
     );
+  }
+
+  // ──────── 3-hit summary (codex PM 권고: 성격/연애/오늘 액션 + why)
+
+  static ({String oneLine, String personality, String love, String today, String why}) _threeHits({
+    required bool isKo,
+    required String day60ji,
+    required String name,
+    required String dominant,
+    required String deficit,
+    required String personalityFull,
+    required String loveFull,
+    required String thisYearFull,
+  }) {
+    // 일주별 임팩트 라인 (성격 짧은 형용사구)
+    final oneLine = _oneLinerFor(isKo, day60ji, name, dominant);
+    final personality = _firstSentence(personalityFull, isKo: isKo);
+    final love = _firstSentence(loveFull, isKo: isKo);
+    final today = _todayHookFor(isKo, day60ji, dominant);
+    final why = _whyReasonFor(isKo, day60ji, name, dominant, deficit);
+    return (oneLine: oneLine, personality: personality, love: love, today: today, why: why);
+  }
+
+  /// "큰 산 같은" / "like a tall mountain" — 5행 dominant 기반 짧은 형용사구
+  static String _oneLinerFor(bool ko, String day60ji, String name, String dom) {
+    const koMap = {
+      '木': '쭉 뻗는 나무 같은',
+      '火': '환하게 타오르는 불 같은',
+      '土': '큰 산 같은',
+      '金': '벼린 칼 같은',
+      '水': '깊은 물 같은',
+    };
+    const enMap = {
+      '木': 'tall-tree',
+      '火': 'bright-flame',
+      '土': 'mountain',
+      '金': 'forged-blade',
+      '水': 'deep-water',
+    };
+    final fallback = enMap[dom] ?? 'steady';
+    return ko ? (koMap[dom] ?? '한결같은') : '$fallback-energy';
+  }
+
+  /// 첫 문장만 추출 (마침표 / 句점 기준).
+  static String _firstSentence(String full, {required bool isKo}) {
+    if (full.isEmpty) return '';
+    final ko = full.split(RegExp(r'(?<=[.다요!?])\s'));
+    final firstKo = ko.isNotEmpty ? ko.first.trim() : full;
+    final en = firstKo.split(RegExp(r'(?<=[.!?])\s'));
+    final result = en.isNotEmpty ? en.first.trim() : firstKo;
+    if (result.length > 130) {
+      return '${result.substring(0, 127)}...';
+    }
+    return result;
+  }
+
+  static String _todayHookFor(bool ko, String ji, String dom) {
+    const koMap = {
+      '木': '오늘은 새 아이디어 한 줄을 메모해 두면 일주일 뒤 쓰임이 옵니다.',
+      '火': '오늘은 말보다 타이밍이 중요한 날. 답장·제안은 오전보다 오후가 낫습니다.',
+      '土': '오늘은 결정을 늦추지 말고, 한 가지를 매듭짓는 데 집중하세요.',
+      '金': '오늘은 디테일이 평가를 가릅니다. 한 줄 더 확인하고 보내세요.',
+      '水': '오늘은 듣는 시간이 길수록 좋아요. 말은 마지막 5분만.',
+    };
+    const enMap = {
+      '木': 'Note one fresh idea today — it pays off within a week.',
+      '火': 'Today, timing beats words. Send replies after noon, not before.',
+      '土': "Today, don't postpone — pick one thing and close it.",
+      '金': 'Today, details decide reviews. Re-check once before you send.',
+      '水': 'Today, listen long. Save your words for the last 5 minutes.',
+    };
+    return (ko ? koMap[dom] : enMap[dom]) ?? '';
+  }
+
+  static String _whyReasonFor(bool ko, String ji, String name, String dom, String def) {
+    const koElName = {
+      '木': '나무', '火': '불', '土': '흙·산', '金': '쇠·칼', '水': '물',
+    };
+    const enElName = {
+      '木': 'wood', '火': 'fire', '土': 'earth/mountain', '金': 'metal/blade', '水': 'water',
+    };
+    if (ko) {
+      final domName = koElName[dom] ?? '한 가지';
+      final defName = koElName[def] ?? '한 가지';
+      return '$ji 일주는 $domName 기운이 강하고 $defName 기운이 약해서, 위와 같은 결로 풀어드린 거예요.';
+    }
+    final domName = enElName[dom] ?? 'one';
+    final defName = enElName[def] ?? 'one';
+    return 'Your $ji day pillar runs strong on $domName and short on $defName — that\'s why the reading reads this way.';
   }
 
   // ──────── fallback content (콘텐츠 부족 시 사용)

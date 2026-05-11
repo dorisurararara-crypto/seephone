@@ -1,6 +1,6 @@
-// Pillar Seer — Result screen. 8섹션 deep reading + Pro Lock.
-// Free user 는 Day Master + Five Elements + Life Themes(Career/Wealth/Love) 만 unlocked.
-// devUnlockProvider true 면 모두 unlocked.
+// Pillar Seer — Result screen. MZ/K-pop 친근 톤 + 3-hit 요약 + 큰 글씨.
+// 한자어는 모두 보조 subtitle 로만, 메인 헤더는 친근 라벨 + emoji.
+// Free user 는 본성+5행+Life Themes 3/6 만 unlocked; Pro 면 모두 해제.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -36,59 +36,84 @@ class ResultScreen extends ConsumerWidget {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _PillarGrid(result: result),
-            const SizedBox(height: 28),
-            _DayMasterCard(result: result),
-            const SizedBox(height: 24),
-            _SectionShell(
+            _EasyModeBanner(),
+            const SizedBox(height: 8),
+            _TrustLine(),
+            const SizedBox(height: 14),
+            _ThreeHitCard(result: result, reading: reading, useKo: useKo),
+            const SizedBox(height: 22),
+            _SectionHeader(
               title: l.resultDayMasterDeepTitle,
+              hint: l.resultDayMasterTermHint,
+            ),
+            const SizedBox(height: 10),
+            _PillarGrid(result: result),
+            const SizedBox(height: 18),
+            _DayMasterCard(result: result),
+            const SizedBox(height: 14),
+            _Section(
               locked: false,
+              whyLine: reading?.whyReason,
               child: _LongText(text: reading?.dayMasterDeep ?? result.summary),
             ),
-            const SizedBox(height: 18),
-            _SectionShell(
+            const SizedBox(height: 22),
+            _SectionHeader(
               title: l.resultFiveElementsDetailTitle,
+              hint: l.resultFiveElementsTermHint,
+            ),
+            const SizedBox(height: 10),
+            _Section(
               locked: false,
               child: _ElementsBar(result: result),
             ),
-            const SizedBox(height: 18),
-            _SectionShell(
+            const SizedBox(height: 22),
+            _SectionHeader(
               title: l.resultTenGodsTitle,
+              hint: l.resultTenGodsTermHint,
+            ),
+            const SizedBox(height: 10),
+            _Section(
               locked: !isPro,
               child: _TenGodsTable(rows: result.tenGods, useKo: useKo),
             ),
-            const SizedBox(height: 18),
-            _LifeThemesBlock(
-              reading: reading,
-              isPro: isPro,
-            ),
-            const SizedBox(height: 18),
-            _SectionShell(
+            const SizedBox(height: 22),
+            _SectionHeader(title: l.resultLifeThemesTitle, hint: ''),
+            const SizedBox(height: 10),
+            _LifeThemesBlock(reading: reading, isPro: isPro),
+            const SizedBox(height: 22),
+            _SectionHeader(
               title: l.resultTenYearLuckTitle,
-              locked: !isPro,
-              child: _LongText(
-                text: reading?.tenYearLuck ?? '',
-              ),
+              hint: l.resultTenYearLuckTermHint,
             ),
-            const SizedBox(height: 18),
-            _SectionShell(
+            const SizedBox(height: 10),
+            _Section(
+              locked: !isPro,
+              child: _LongText(text: reading?.tenYearLuck ?? ''),
+            ),
+            const SizedBox(height: 22),
+            _SectionHeader(
               title: l.resultThisYearTitle,
-              locked: !isPro,
-              child: _LongText(
-                text: reading?.thisYear ?? '',
-              ),
+              hint: l.resultThisYearTermHint,
             ),
-            const SizedBox(height: 18),
-            _SectionShell(
-              title: l.resultLuckyTitle,
+            const SizedBox(height: 10),
+            _Section(
+              locked: !isPro,
+              child: _LongText(text: reading?.thisYear ?? ''),
+            ),
+            const SizedBox(height: 22),
+            _SectionHeader(title: l.resultLuckyTitle, hint: ''),
+            const SizedBox(height: 10),
+            _Section(
               locked: !isPro,
               child: _LuckyBlock(reading: reading, useKo: useKo),
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 30),
+            if (!isPro) _ProHooks(),
+            const SizedBox(height: 18),
             if (!isPro)
               ElevatedButton.icon(
                 onPressed: () => showComingSoonModal(context),
@@ -97,9 +122,9 @@ class ResultScreen extends ConsumerWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.celestialGold,
                   foregroundColor: AppColors.midnightPurple,
-                  minimumSize: const Size(double.infinity, 56),
+                  minimumSize: const Size(double.infinity, 58),
                   textStyle: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.5,
                   ),
@@ -113,10 +138,12 @@ class ResultScreen extends ConsumerWidget {
               label: Text(
                 l.resultContinueDaily,
                 style: const TextStyle(
-                    color: AppColors.ghostlyWhite, letterSpacing: 1.0),
+                    color: AppColors.ghostlyWhite,
+                    fontSize: 15,
+                    letterSpacing: 1.0),
               ),
               style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 52),
                 side: BorderSide(
                   color: AppColors.celestialGold.withValues(alpha: 0.4),
                 ),
@@ -128,7 +155,8 @@ class ResultScreen extends ConsumerWidget {
               icon: const Icon(Icons.share, color: AppColors.moonlightGray),
               label: Text(
                 l.resultShare,
-                style: const TextStyle(color: AppColors.moonlightGray),
+                style: const TextStyle(
+                    color: AppColors.moonlightGray, fontSize: 14),
               ),
             ),
           ],
@@ -139,7 +167,645 @@ class ResultScreen extends ConsumerWidget {
   }
 }
 
-// ──────── Pillar grid (4기둥)
+// ──────── Trust line (codex PM 권고 — 작은 신뢰 문구 1줄)
+
+class _TrustLine extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Row(
+        children: [
+          const Icon(Icons.verified_outlined,
+              size: 14, color: AppColors.celestialGold),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              l.resultTrustLine,
+              style: const TextStyle(
+                fontSize: 11.5,
+                color: AppColors.fadedSilver,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────── Pro hooks — Result 중하단 3카드 (올해 연애 / 그 사람 / 중요 날짜)
+
+class _ProHooks extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final hooks = [
+      _ProHook(
+        emoji: '💞',
+        title: l.resultProHookYearLoveTitle,
+        teaser: l.resultProHookYearLoveTeaser,
+        onTap: () => showComingSoonModal(context),
+      ),
+      _ProHook(
+        emoji: '🤝',
+        title: l.resultProHookCompatTitle,
+        teaser: l.resultProHookCompatTeaser,
+        onTap: () => context.go('/reports/compatibility'),
+      ),
+      _ProHook(
+        emoji: '📅',
+        title: l.resultProHookDatesTitle,
+        teaser: l.resultProHookDatesTeaser,
+        onTap: () => context.go('/reports/date-picking'),
+      ),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 2, bottom: 10),
+          child: Text(
+            l.resultProHookHeader,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w900,
+              color: AppColors.celestialGold,
+            ),
+          ),
+        ),
+        ...hooks.map((h) => _ProHookCard(hook: h)),
+      ],
+    );
+  }
+}
+
+class _ProHook {
+  final String emoji;
+  final String title;
+  final String teaser;
+  final VoidCallback onTap;
+  const _ProHook({
+    required this.emoji,
+    required this.title,
+    required this.teaser,
+    required this.onTap,
+  });
+}
+
+class _ProHookCard extends StatelessWidget {
+  final _ProHook hook;
+  const _ProHookCard({required this.hook});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return InkWell(
+      onTap: hook.onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.celestialGold.withValues(alpha: 0.13),
+              AppColors.spiritIndigo.withValues(alpha: 0.2),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: AppColors.celestialGold.withValues(alpha: 0.4),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: AppColors.midnightPurple.withValues(alpha: 0.6),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColors.celestialGold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(hook.emoji, style: const TextStyle(fontSize: 24)),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    hook.title,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.ghostlyWhite,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    hook.teaser,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      color: AppColors.moonlightGray,
+                      height: 1.55,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: AppColors.celestialGold.withValues(alpha: 0.25),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: AppColors.celestialGold.withValues(alpha: 0.65),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.lock_open,
+                      size: 11, color: AppColors.celestialGold),
+                  const SizedBox(width: 4),
+                  Text(
+                    l.resultProHookCta,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.celestialGold,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ──────── Easy mode banner — "처음이세요?"
+
+class _EasyModeBanner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return InkWell(
+      onTap: () => _showGuide(context, l),
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.spiritIndigo.withValues(alpha: 0.3),
+              AppColors.celestialGold.withValues(alpha: 0.12),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: AppColors.celestialGold.withValues(alpha: 0.35),
+          ),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.help_outline,
+                size: 24, color: AppColors.celestialGold),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.resultEasyModeBannerTitle,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.celestialGold,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    l.resultEasyModeBannerDesc,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      color: AppColors.moonlightGray,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.fadedSilver),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showGuide(BuildContext context, AppL10n l) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.75),
+      builder: (ctx) => Dialog(
+        backgroundColor: AppColors.cosmicBlack,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+          side: BorderSide(
+              color: AppColors.celestialGold.withValues(alpha: 0.45)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 24, 22, 18),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.menu_book_outlined,
+                  color: AppColors.celestialGold, size: 32),
+              const SizedBox(height: 10),
+              Text(
+                l.resultGuideTitle,
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.celestialGold,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                l.resultGuideBody,
+                style: const TextStyle(
+                  fontSize: 14.5,
+                  color: AppColors.ghostlyWhite,
+                  height: 1.7,
+                ),
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.celestialGold,
+                    foregroundColor: AppColors.cosmicBlack,
+                    minimumSize: const Size(0, 48),
+                  ),
+                  child: Text(
+                    l.resultGuideGotIt,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ──────── 3-hit summary — codex PM 권고: 성격 / 연애 / 오늘 한 방씩
+
+class _ThreeHitCard extends StatelessWidget {
+  final SajuResult result;
+  final DeepReading? reading;
+  final bool useKo;
+  const _ThreeHitCard({
+    required this.result,
+    required this.reading,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final oneLine = reading?.oneLineYouAre ??
+        (useKo ? '한결같은' : 'steady-energy');
+    final whoYouAre = useKo
+        ? '${l.resultIntroLeadIn} $oneLine ${l.resultIntroLeadOut}'
+        : '${l.resultIntroLeadIn} a $oneLine ${l.resultIntroLeadOut}';
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 22),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.celestialGold.withValues(alpha: 0.22),
+            AppColors.spiritIndigo.withValues(alpha: 0.2),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.55),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.resultThreeHitHeader,
+            style: const TextStyle(
+              fontSize: 11.5,
+              letterSpacing: 1.5,
+              color: AppColors.moonlightGray,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            whoYouAre,
+            style: const TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.w900,
+              color: AppColors.celestialGold,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${result.dayMasterName} · ${result.day60ji}',
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.fadedSilver,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 16),
+          _hit(l.resultThreeHitPersonalityLabel, '🪨',
+              reading?.personalityHook ?? ''),
+          const SizedBox(height: 10),
+          _hit(l.resultThreeHitLoveLabel, '💞',
+              reading?.loveHook ?? ''),
+          const SizedBox(height: 10),
+          _hit(l.resultThreeHitTodayLabel, '🎯',
+              reading?.todayHook ?? ''),
+        ],
+      ),
+    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.05, end: 0);
+  }
+
+  Widget _hit(String label, String emoji, String text) {
+    if (text.isEmpty) return const SizedBox.shrink();
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppColors.midnightPurple.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(emoji, style: const TextStyle(fontSize: 16)),
+              const SizedBox(width: 6),
+              Text(
+                label.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 11,
+                  letterSpacing: 1.2,
+                  color: AppColors.celestialGold,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14.5,
+              color: AppColors.ghostlyWhite,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────── Section header — friendly title + small hint
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  final String hint;
+  const _SectionHeader({required this.title, required this.hint});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w900,
+              color: AppColors.celestialGold,
+              height: 1.25,
+            ),
+          ),
+          if (hint.isNotEmpty) ...[
+            const SizedBox(height: 3),
+            Text(
+              hint,
+              style: const TextStyle(
+                fontSize: 11.5,
+                color: AppColors.fadedSilver,
+                fontStyle: FontStyle.italic,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ──────── Section shell (Pro Lock 적용)
+
+class _Section extends StatelessWidget {
+  final bool locked;
+  final Widget child;
+  final String? whyLine;
+  const _Section({
+    required this.locked,
+    required this.child,
+    this.whyLine,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
+      decoration: BoxDecoration(
+        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: locked ? 0.12 : 0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (locked) ...[
+            _LockedPlaceholder(),
+          ] else ...[
+            child,
+            if (whyLine != null && whyLine!.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.celestialGold.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.celestialGold.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.psychology_outlined,
+                        size: 14, color: AppColors.celestialGold),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            color: AppColors.moonlightGray,
+                            height: 1.5,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: '${l.resultWhyLabel} ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.celestialGold,
+                              ),
+                            ),
+                            TextSpan(text: whyLine),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _LockedPlaceholder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return InkWell(
+      onTap: () => showComingSoonModal(context),
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+        decoration: BoxDecoration(
+          color: AppColors.midnightPurple.withValues(alpha: 0.4),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppColors.celestialGold.withValues(alpha: 0.18),
+          ),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.lock_outline,
+                color: AppColors.celestialGold, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                l.resultUnlockHint,
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  color: AppColors.fadedSilver,
+                  height: 1.5,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppColors.celestialGold.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: AppColors.celestialGold.withValues(alpha: 0.45),
+                ),
+              ),
+              child: Text(
+                l.resultProLocked,
+                style: const TextStyle(
+                  fontSize: 10,
+                  letterSpacing: 1.0,
+                  color: AppColors.celestialGold,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ──────── Long body text — 15.5pt
+
+class _LongText extends StatelessWidget {
+  final String text;
+  const _LongText({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 15.5,
+        color: AppColors.ghostlyWhite,
+        height: 1.75,
+      ),
+    );
+  }
+}
+
+// ──────── 4 Pillars grid
 
 class _PillarGrid extends StatelessWidget {
   final SajuResult result;
@@ -148,28 +814,29 @@ class _PillarGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const ClampingScrollPhysics(),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width - 40,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _PillarItem(label: l.resultPillarYear, pillar: result.yearPillar),
-            _PillarItem(label: l.resultPillarMonth, pillar: result.monthPillar),
-            _PillarItem(
-              label: l.resultPillarDay,
-              pillar: result.dayPillar,
-              highlight: true,
-            ),
-            _PillarItem(label: l.resultPillarHour, pillar: result.hourPillar),
-          ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+      decoration: BoxDecoration(
+        color: AppColors.midnightPurple.withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.25),
         ),
       ),
-    ).animate().fadeIn(duration: 700.ms).slideY(begin: 0.1, end: 0);
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _PillarItem(label: l.resultPillarYear, pillar: result.yearPillar),
+          _PillarItem(label: l.resultPillarMonth, pillar: result.monthPillar),
+          _PillarItem(
+            label: l.resultPillarDay,
+            pillar: result.dayPillar,
+            highlight: true,
+          ),
+          _PillarItem(label: l.resultPillarHour, pillar: result.hourPillar),
+        ],
+      ),
+    );
   }
 }
 
@@ -194,27 +861,27 @@ class _PillarItem extends StatelessWidget {
         Text(
           label.toUpperCase(),
           style: const TextStyle(
-            fontSize: 9,
+            fontSize: 10.5,
             color: AppColors.moonlightGray,
             letterSpacing: 1.2,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: 8),
         Container(
-          width: 64,
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+          width: 70,
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
           decoration: BoxDecoration(
             color: AppColors.midnightPurple.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: borderColor, width: highlight ? 1.5 : 1),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: borderColor, width: highlight ? 1.8 : 1),
           ),
           child: Column(
             children: [
               Text(
                 isNull ? '?' : pillar!.chunGan,
                 style: const TextStyle(
-                  fontSize: 22,
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: AppColors.celestialGold,
                 ),
@@ -223,7 +890,7 @@ class _PillarItem extends StatelessWidget {
               Text(
                 isNull ? '?' : pillar!.jiJi,
                 style: const TextStyle(
-                  fontSize: 22,
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: AppColors.ghostlyWhite,
                 ),
@@ -233,14 +900,14 @@ class _PillarItem extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         SizedBox(
-          width: 68,
+          width: 72,
           child: Text(
             isNull ? '—' : pillar!.pairEnglish,
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 9,
+              fontSize: 10.5,
               color: AppColors.moonlightGray,
               height: 1.2,
             ),
@@ -251,7 +918,7 @@ class _PillarItem extends StatelessWidget {
   }
 }
 
-// ──────── Day Master quick card
+// ──────── Day Master compact card
 
 class _DayMasterCard extends StatelessWidget {
   final SajuResult result;
@@ -259,204 +926,73 @@ class _DayMasterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.celestialGold.withValues(alpha: 0.18),
-            AppColors.spiritIndigo.withValues(alpha: 0.18),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.55),
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            l.resultDayMaster.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 10,
-              letterSpacing: 2.5,
-              color: AppColors.moonlightGray,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '${result.dayMasterName} (${result.day60ji})',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: AppColors.celestialGold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            result.summary,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-              color: AppColors.ghostlyWhite,
-              height: 1.6,
-            ),
-          ),
-        ],
-      ),
-    ).animate().scale(delay: 400.ms, duration: 500.ms);
-  }
-}
-
-// ──────── Section shell — title + Pro lock pill
-
-class _SectionShell extends StatelessWidget {
-  final String title;
-  final bool locked;
-  final Widget child;
-  const _SectionShell({
-    required this.title,
-    required this.locked,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-      decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+        color: AppColors.spiritIndigo.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: locked ? 0.12 : 0.25),
+          color: AppColors.celestialGold.withValues(alpha: 0.35),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  title.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 11,
-                    letterSpacing: 1.6,
-                    color: locked
-                        ? AppColors.celestialGold.withValues(alpha: 0.55)
-                        : AppColors.celestialGold,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+          Container(
+            width: 56,
+            height: 56,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.celestialGold.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppColors.celestialGold.withValues(alpha: 0.5),
               ),
-              if (locked)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: AppColors.celestialGold.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: AppColors.celestialGold.withValues(alpha: 0.45),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.lock,
-                          size: 10, color: AppColors.celestialGold),
-                      const SizedBox(width: 4),
-                      Text(
-                        l.resultProLocked,
-                        style: const TextStyle(
-                          fontSize: 9,
-                          letterSpacing: 1.0,
-                          color: AppColors.celestialGold,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+            ),
+            child: Text(
+              result.day60ji,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                color: AppColors.celestialGold,
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  result.dayMasterName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.ghostlyWhite,
                   ),
                 ),
-            ],
+                const SizedBox(height: 4),
+                Text(
+                  result.summary,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.moonlightGray,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 12),
-          if (locked)
-            _LockedPlaceholder()
-          else
-            child,
         ],
       ),
     );
   }
 }
 
-class _LockedPlaceholder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return InkWell(
-      onTap: () => showComingSoonModal(context),
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 14),
-        decoration: BoxDecoration(
-          color: AppColors.midnightPurple.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.15),
-          ),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.auto_awesome,
-                color: AppColors.celestialGold, size: 18),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                l.resultUnlockHint,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.fadedSilver,
-                  height: 1.5,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ──────── Long text body
-
-class _LongText extends StatelessWidget {
-  final String text;
-  const _LongText({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 13.5,
-        color: AppColors.ghostlyWhite,
-        height: 1.7,
-      ),
-    );
-  }
-}
-
-// ──────── Five elements bar
+// ──────── Five Elements bar
 
 class _ElementsBar extends StatelessWidget {
   final SajuResult result;
@@ -470,11 +1006,11 @@ class _ElementsBar extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _row('Wood', '木', el.wood, dom, def),
-        _row('Fire', '火', el.fire, dom, def),
-        _row('Earth', '土', el.earth, dom, def),
-        _row('Metal', '金', el.metal, dom, def),
-        _row('Water', '水', el.water, dom, def),
+        _row('Wood 나무', '木', el.wood, dom, def),
+        _row('Fire 불', '火', el.fire, dom, def),
+        _row('Earth 흙', '土', el.earth, dom, def),
+        _row('Metal 쇠', '金', el.metal, dom, def),
+        _row('Water 물', '水', el.water, dom, def),
       ],
     );
   }
@@ -484,74 +1020,74 @@ class _ElementsBar extends StatelessWidget {
     final isDom = han == dom;
     final isDef = han == def;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           Container(
-            width: 22,
-            height: 22,
+            width: 28,
+            height: 28,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.15),
+              color: color.withValues(alpha: 0.18),
               shape: BoxShape.circle,
-              border: Border.all(color: color.withValues(alpha: 0.6)),
+              border: Border.all(color: color.withValues(alpha: 0.7)),
             ),
             child: Text(
               han,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 14,
                 color: color,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w800,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           SizedBox(
-            width: 50,
+            width: 84,
             child: Text(
               name,
               style: const TextStyle(
-                fontSize: 11,
+                fontSize: 13,
                 color: AppColors.moonlightGray,
               ),
             ),
           ),
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
                 value: pct / 100,
-                minHeight: 6,
+                minHeight: 8,
                 backgroundColor: AppColors.spiritIndigo.withValues(alpha: 0.2),
                 valueColor: AlwaysStoppedAnimation(color),
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           SizedBox(
-            width: 50,
+            width: 56,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   '$pct%',
                   style: const TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     color: AppColors.ghostlyWhite,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 if (isDom)
                   const Padding(
                     padding: EdgeInsets.only(left: 4),
                     child: Icon(Icons.star,
-                        size: 11, color: AppColors.celestialGold),
+                        size: 14, color: AppColors.celestialGold),
                   )
                 else if (isDef)
                   const Padding(
                     padding: EdgeInsets.only(left: 4),
                     child: Icon(Icons.warning_amber_rounded,
-                        size: 11, color: AppColors.fadedSilver),
+                        size: 13, color: AppColors.fadedSilver),
                   ),
               ],
             ),
@@ -571,11 +1107,11 @@ class _TenGodsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headerStyle = const TextStyle(
-      fontSize: 10,
+    const headerStyle = TextStyle(
+      fontSize: 11.5,
       letterSpacing: 1.2,
       color: AppColors.moonlightGray,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w800,
     );
     return Column(
       children: [
@@ -595,9 +1131,9 @@ class _TenGodsTable extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         ...rows.map((row) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Row(
                 children: [
                   Expanded(
@@ -605,8 +1141,9 @@ class _TenGodsTable extends StatelessWidget {
                     child: Text(
                       _posLabel(row.position, useKo),
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 14,
                         color: AppColors.ghostlyWhite,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -617,7 +1154,7 @@ class _TenGodsTable extends StatelessWidget {
                           ? '—'
                           : (useKo ? row.chunGanGod!.ko : row.chunGanGod!.en),
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 12.5,
                         color: AppColors.celestialGold,
                       ),
                     ),
@@ -629,7 +1166,7 @@ class _TenGodsTable extends StatelessWidget {
                           ? '—'
                           : (useKo ? row.jiJiGod!.ko : row.jiJiGod!.en),
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 12.5,
                         color: AppColors.celestialGold,
                       ),
                     ),
@@ -668,7 +1205,7 @@ class _TenGodsTable extends StatelessWidget {
   }
 }
 
-// ──────── Life themes — 6 cards (Career/Wealth/Love/Health/Family/Fame)
+// ──────── Life themes block
 
 class _LifeThemesBlock extends StatelessWidget {
   final DeepReading? reading;
@@ -679,55 +1216,30 @@ class _LifeThemesBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final themes = <_ThemeItem>[
-      _ThemeItem(l.resultThemeCareer, Icons.work_outline,
-          reading?.career ?? '', locked: false),
-      _ThemeItem(l.resultThemeWealth, Icons.savings_outlined,
-          reading?.wealth ?? '', locked: false),
-      _ThemeItem(l.resultThemeLove, Icons.favorite_border,
-          reading?.love ?? '', locked: false),
-      _ThemeItem(l.resultThemeHealth, Icons.spa_outlined,
-          reading?.health ?? '', locked: !isPro),
-      _ThemeItem(l.resultThemeFamily, Icons.diversity_3,
-          reading?.family ?? '', locked: !isPro),
-      _ThemeItem(l.resultThemeFame, Icons.auto_awesome,
-          reading?.fame ?? '', locked: !isPro),
+      _ThemeItem(l.resultThemeCareer, '💼', reading?.career ?? '',
+          locked: false),
+      _ThemeItem(l.resultThemeWealth, '💰', reading?.wealth ?? '',
+          locked: false),
+      _ThemeItem(l.resultThemeLove, '💞', reading?.love ?? '', locked: false),
+      _ThemeItem(l.resultThemeHealth, '🌿', reading?.health ?? '',
+          locked: !isPro),
+      _ThemeItem(l.resultThemeFamily, '🏠', reading?.family ?? '',
+          locked: !isPro),
+      _ThemeItem(l.resultThemeFame, '🌟', reading?.fame ?? '',
+          locked: !isPro),
     ];
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-      decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.25),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l.resultLifeThemesTitle.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 11,
-              letterSpacing: 1.6,
-              color: AppColors.celestialGold,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ...themes.map((t) => _ThemeCard(item: t)),
-        ],
-      ),
+    return Column(
+      children: themes.map((t) => _ThemeCard(item: t)).toList(),
     );
   }
 }
 
 class _ThemeItem {
   final String title;
-  final IconData icon;
+  final String emoji;
   final String text;
   final bool locked;
-  const _ThemeItem(this.title, this.icon, this.text, {required this.locked});
+  const _ThemeItem(this.title, this.emoji, this.text, {required this.locked});
 }
 
 class _ThemeCard extends StatelessWidget {
@@ -738,14 +1250,14 @@ class _ThemeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       decoration: BoxDecoration(
-        color: AppColors.midnightPurple.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(10),
+        color: AppColors.midnightPurple.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppColors.celestialGold
-              .withValues(alpha: item.locked ? 0.08 : 0.2),
+              .withValues(alpha: item.locked ? 0.1 : 0.25),
         ),
       ),
       child: Column(
@@ -753,24 +1265,18 @@ class _ThemeCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                item.icon,
-                size: 16,
-                color: item.locked
-                    ? AppColors.celestialGold.withValues(alpha: 0.5)
-                    : AppColors.celestialGold,
-              ),
+              Text(item.emoji, style: const TextStyle(fontSize: 22)),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   item.title.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     letterSpacing: 1.4,
                     color: item.locked
                         ? AppColors.fadedSilver
                         : AppColors.ghostlyWhite,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -788,15 +1294,15 @@ class _ThemeCard extends StatelessWidget {
                   child: Row(
                     children: [
                       const Icon(Icons.lock,
-                          size: 9, color: AppColors.celestialGold),
-                      const SizedBox(width: 3),
+                          size: 10, color: AppColors.celestialGold),
+                      const SizedBox(width: 4),
                       Text(
                         l.resultProLocked,
                         style: const TextStyle(
-                          fontSize: 8,
+                          fontSize: 9.5,
                           letterSpacing: 0.8,
                           color: AppColors.celestialGold,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ],
@@ -804,7 +1310,7 @@ class _ThemeCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           if (item.locked)
             InkWell(
               onTap: () => showComingSoonModal(context),
@@ -814,7 +1320,7 @@ class _ThemeCard extends StatelessWidget {
                 child: Text(
                   l.resultUnlockHint,
                   style: const TextStyle(
-                    fontSize: 11,
+                    fontSize: 12.5,
                     color: AppColors.fadedSilver,
                     height: 1.5,
                   ),
@@ -825,7 +1331,7 @@ class _ThemeCard extends StatelessWidget {
             Text(
               item.text,
               style: const TextStyle(
-                fontSize: 12.5,
+                fontSize: 14.5,
                 color: AppColors.ghostlyWhite,
                 height: 1.7,
               ),
@@ -836,7 +1342,7 @@ class _ThemeCard extends StatelessWidget {
   }
 }
 
-// ──────── Lucky alignments
+// ──────── Lucky block
 
 class _LuckyBlock extends StatelessWidget {
   final DeepReading? reading;
@@ -860,16 +1366,16 @@ class _LuckyBlock extends StatelessWidget {
 
   Widget _row(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: Row(
         children: [
-          Icon(icon, size: 15, color: AppColors.moonlightGray),
-          const SizedBox(width: 10),
+          Icon(icon, size: 17, color: AppColors.moonlightGray),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               label,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: AppColors.moonlightGray,
               ),
             ),
@@ -877,9 +1383,9 @@ class _LuckyBlock extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 15,
               color: AppColors.celestialGold,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ],

@@ -250,6 +250,85 @@ class AppL10nKo extends AppL10n {
   String get settingsNotificationsDesc => '매일 아침 오늘의 운세를 받아보세요';
 
   @override
+  String get homeNotifTitle => '매일 아침 8시, 오늘 조심할 것만 알려드릴게요 ☀️';
+
+  @override
+  String get homeNotifSubtitle => '광고 푸시 X, 한 줄 알림만 가요';
+
+  @override
+  String get homeNotifEnable => '켜기';
+
+  @override
+  String get homeNotifOn => '켜짐 · 오전 8:00';
+
+  @override
+  String get homeNotifPermissionDenied => 'iOS 설정에서 알림을 허용해 주세요.';
+
+  @override
+  String get homeNotifEnabledSnack => '매일 오전 8시 알림이 켜졌어요 ✨';
+
+  @override
+  String get homeNotifDisabledSnack => '일일 알림을 껐어요.';
+
+  @override
+  String get homeNotifSampleTitle => 'Pillar Seer · 오늘의 기운';
+
+  @override
+  String get homeNotifSampleBody => '오늘의 점수, 행운의 색, 한 줄 조언을 확인해 보세요.';
+
+  @override
+  String get homeHourlyTitle => '오늘의 흐름 ⏰';
+
+  @override
+  String get homeHourlySubtitle => '지금 · 다음 · 저녁';
+
+  @override
+  String get homeHourlyNow => '지금';
+
+  @override
+  String get homeHourlyNext => '다음';
+
+  @override
+  String get homeHourlyLater => '저녁';
+
+  @override
+  String get homeHourlySeeAll => '오늘 12시간 흐름 전체 보기';
+
+  @override
+  String get homeHourlyFullTitle => '오늘의 12시간 흐름';
+
+  @override
+  String get splashTrust => '정통 사주, 누구나 쉽게';
+
+  @override
+  String get resultTrustLine => '당신의 생년월일시와 오행·십신 흐름을 바탕으로 풀이했어요.';
+
+  @override
+  String get resultProHookHeader => '더 깊게 보고 싶다면?';
+
+  @override
+  String get resultProHookYearLoveTitle => '올해 연애 흐름 보기';
+
+  @override
+  String get resultProHookYearLoveTeaser => '올해는 관계가 깊어지는 달과 멀어지는 달이 갈려요.';
+
+  @override
+  String get resultProHookCompatTitle => '그 사람과 궁합 보기';
+
+  @override
+  String get resultProHookCompatTeaser =>
+      '상대 생년월일을 넣으면 끌리는 이유와 부딪히는 지점을 볼 수 있어요.';
+
+  @override
+  String get resultProHookDatesTitle => '올해 중요한 날짜';
+
+  @override
+  String get resultProHookDatesTeaser => '결정·서명·런칭을 위한 길일/피할 날을 미리 확인하세요.';
+
+  @override
+  String get resultProHookCta => '잠금 해제';
+
+  @override
   String get settingsAbout => '정보';
 
   @override
@@ -301,25 +380,117 @@ class AppL10nKo extends AppL10n {
   String get devGateInvalid => '인식할 수 없는 코드입니다.';
 
   @override
-  String get resultDayMasterDeepTitle => '일간 (日干) — 본질의 결';
+  String get resultDayMasterDeepTitle => '당신의 본성 🪨';
 
   @override
-  String get resultFiveElementsDetailTitle => '오행 (五行) — 기운의 균형';
+  String get resultDayMasterTermHint => '= 일간 (日干) — 사주의 중심';
 
   @override
-  String get resultTenGodsTitle => '십신 (十神) — 관계의 지도';
+  String get resultFiveElementsDetailTitle => '5가지 에너지 균형 🌳🔥🪨⚙️💧';
 
   @override
-  String get resultLifeThemesTitle => '삶의 주제';
+  String get resultFiveElementsTermHint => '= 오행 (五行) — 당신 안의 다섯 기운';
 
   @override
-  String get resultTenYearLuckTitle => '대운 (大運) · 10년 흐름';
+  String get resultTenGodsTitle => '사람 관계 지도 🤝';
 
   @override
-  String get resultThisYearTitle => '세운 (歲運) · 올해';
+  String get resultTenGodsTermHint => '= 십신 (十神) — 사람·돈·일이 당신에게 어떻게 보이는지';
 
   @override
-  String get resultLuckyTitle => '오늘의 길운';
+  String get resultLifeThemesTitle => '내 삶의 큰 그림 🎬';
+
+  @override
+  String get resultTenYearLuckTitle => '내 인생의 10년 챕터 📚';
+
+  @override
+  String get resultTenYearLuckTermHint => '= 대운 (大運) — 지금 살고 있는 10년 흐름';
+
+  @override
+  String get resultThisYearTitle => '올해의 분위기 🎯';
+
+  @override
+  String get resultThisYearTermHint => '= 세운 (歲運)';
+
+  @override
+  String get resultLuckyTitle => '오늘의 행운 나침반 ✨';
+
+  @override
+  String get resultIntroLeadIn => '당신은';
+
+  @override
+  String get resultIntroLeadOut => '사람이에요.';
+
+  @override
+  String get resultFirstTimeBanner => '사주 처음이세요? 30초 가이드 보기 →';
+
+  @override
+  String get resultGuideTitle => '30초만에 이해하는 사주';
+
+  @override
+  String get resultGuideBody =>
+      '생년월일+시간으로 네 기둥(年·月·日·時)이 만들어져요. 그 중 일주(日)가 \'당신의 본성\'. 5가지 에너지(나무·불·흙·쇠·물)의 균형이 내 안의 결을 보여줘요. 나머지 풀이(관계·일·운세)는 모두 본성에서 나옵니다.';
+
+  @override
+  String get resultGuideGotIt => '알겠어요';
+
+  @override
+  String get resultPillarsCardTitle => '당신의 네 기둥 (年·月·日·時)';
+
+  @override
+  String get resultThreeHitHeader => '당신을 30초로 요약하면';
+
+  @override
+  String get resultThreeHitPersonalityLabel => '성격';
+
+  @override
+  String get resultThreeHitLoveLabel => '연애';
+
+  @override
+  String get resultThreeHitTodayLabel => '오늘';
+
+  @override
+  String get resultWhyLabel => '이렇게 풀이된 이유:';
+
+  @override
+  String get resultEasyModeBannerTitle => '사주 처음이세요?';
+
+  @override
+  String get resultEasyModeBannerDesc => '어려운 말 없이 풀어서 보여드릴게요.';
+
+  @override
+  String get resultEasyModeBannerCta => '쉽게 보기';
+
+  @override
+  String get resultEasyModeBannerSkip => '그냥 볼게요';
+
+  @override
+  String get discoverCompareTitle => '나 + ';
+
+  @override
+  String discoverCompareSame(Object pillar) {
+    return '같은 $pillar 타입 🔥';
+  }
+
+  @override
+  String discoverCompareDifferent(Object mine, Object theirs) {
+    return '다른 타입: $mine vs $theirs';
+  }
+
+  @override
+  String get discoverCompareSimilar => '닮은 점';
+
+  @override
+  String get discoverCompareContrast => '다른 점';
+
+  @override
+  String get discoverCompareShareCard => '공유 카드 만들기';
+
+  @override
+  String get discoverCompareSeeChart => '궁합 리포트 보기';
+
+  @override
+  String get discoverCompareClose => '닫기';
 
   @override
   String get resultThemeCareer => '직업';

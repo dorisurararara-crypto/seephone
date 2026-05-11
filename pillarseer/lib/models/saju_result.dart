@@ -176,6 +176,12 @@ class DeepReading {
   final String luckyDirection;
   final String tenYearLuck;
   final String thisYear;
+  // 30-second 3-hit summary (codex PM 권고)
+  final String oneLineYouAre;     // "큰 산 같은" — 임팩트 한 줄
+  final String personalityHook;   // 성격 한 방
+  final String loveHook;          // 연애 한 방
+  final String todayHook;         // 오늘/올해 액션 한 방
+  final String whyReason;         // 왜 그렇게 풀이되는지 1줄 근거
 
   const DeepReading({
     required this.dayMasterDeep,
@@ -190,6 +196,11 @@ class DeepReading {
     required this.luckyDirection,
     required this.tenYearLuck,
     required this.thisYear,
+    this.oneLineYouAre = '',
+    this.personalityHook = '',
+    this.loveHook = '',
+    this.todayHook = '',
+    this.whyReason = '',
   });
 
   factory DeepReading.fallback({

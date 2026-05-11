@@ -259,6 +259,92 @@ class AppL10nEn extends AppL10n {
       'Get your day\'s energy delivered each morning';
 
   @override
+  String get homeNotifTitle =>
+      'Every morning at 8 — just what to watch out for ☀️';
+
+  @override
+  String get homeNotifSubtitle =>
+      'A 1-line daily ping, never a marketing blast';
+
+  @override
+  String get homeNotifEnable => 'Turn on';
+
+  @override
+  String get homeNotifOn => 'ON · 8:00 AM';
+
+  @override
+  String get homeNotifPermissionDenied =>
+      'Allow notifications in iOS Settings to enable.';
+
+  @override
+  String get homeNotifEnabledSnack => 'Daily 8 AM reading turned on ✨';
+
+  @override
+  String get homeNotifDisabledSnack => 'Daily notification turned off.';
+
+  @override
+  String get homeNotifSampleTitle => 'Pillar Seer · Today\'s Energy';
+
+  @override
+  String get homeNotifSampleBody =>
+      'Open to see today\'s score, lucky color, and one-line guide.';
+
+  @override
+  String get homeHourlyTitle => 'Today\'s flow ⏰';
+
+  @override
+  String get homeHourlySubtitle => 'Three quick windows for the day';
+
+  @override
+  String get homeHourlyNow => 'NOW';
+
+  @override
+  String get homeHourlyNext => 'NEXT';
+
+  @override
+  String get homeHourlyLater => 'LATER';
+
+  @override
+  String get homeHourlySeeAll => 'See full 12-hour flow';
+
+  @override
+  String get homeHourlyFullTitle => 'Today\'s 12-Hour Flow';
+
+  @override
+  String get splashTrust => 'Korean traditional Four Pillars · made easy';
+
+  @override
+  String get resultTrustLine =>
+      'Based on your birth date·time + Five Elements + Ten Gods.';
+
+  @override
+  String get resultProHookHeader => 'Want to go deeper?';
+
+  @override
+  String get resultProHookYearLoveTitle => 'Your 2026 Love Chapter';
+
+  @override
+  String get resultProHookYearLoveTeaser =>
+      'See which months your bonds deepen vs cool off.';
+
+  @override
+  String get resultProHookCompatTitle => 'Match with that person';
+
+  @override
+  String get resultProHookCompatTeaser =>
+      'Enter their birth date — see why you click & where you clash.';
+
+  @override
+  String get resultProHookDatesTitle => 'Important dates this year';
+
+  @override
+  String get resultProHookDatesTeaser =>
+      'Auspicious vs avoid days for big decisions, signings, launches.';
+
+  @override
+  String get resultProHookCta => 'Unlock';
+
+  @override
   String get settingsAbout => 'About';
 
   @override
@@ -311,25 +397,123 @@ class AppL10nEn extends AppL10n {
   String get devGateInvalid => 'Code not recognized.';
 
   @override
-  String get resultDayMasterDeepTitle => 'DAY MASTER — INNER SIGNATURE';
+  String get resultDayMasterDeepTitle => 'Your Core Self 🪨';
 
   @override
-  String get resultFiveElementsDetailTitle => 'FIVE ELEMENTS — ENERGY BALANCE';
+  String get resultDayMasterTermHint =>
+      '= Day Master (日干) — the heart of your chart';
 
   @override
-  String get resultTenGodsTitle => 'TEN GODS — RELATIONAL MAP';
+  String get resultFiveElementsDetailTitle => '5 Energy Balance 🌳🔥🪨⚙️💧';
 
   @override
-  String get resultLifeThemesTitle => 'LIFE THEMES';
+  String get resultFiveElementsTermHint => '= Five Elements (五行) inside you';
 
   @override
-  String get resultTenYearLuckTitle => '10-YEAR LUCK (大運)';
+  String get resultTenGodsTitle => 'Your Relationship Map 🤝';
 
   @override
-  String get resultThisYearTitle => 'THIS YEAR (歲運)';
+  String get resultTenGodsTermHint =>
+      '= Ten Gods (十神) — how people, money, work appear in your chart';
 
   @override
-  String get resultLuckyTitle => 'LUCKY ALIGNMENTS';
+  String get resultLifeThemesTitle => 'Big Picture of Your Life 🎬';
+
+  @override
+  String get resultTenYearLuckTitle => 'Your 10-Year Chapter 📚';
+
+  @override
+  String get resultTenYearLuckTermHint =>
+      '= Great Luck (大運) — the decade you\'re inside';
+
+  @override
+  String get resultThisYearTitle => 'This Year\'s Vibe 🎯';
+
+  @override
+  String get resultThisYearTermHint => '= Annual Luck (歲運)';
+
+  @override
+  String get resultLuckyTitle => 'Today\'s Luck Compass ✨';
+
+  @override
+  String get resultIntroLeadIn => 'You are';
+
+  @override
+  String get resultIntroLeadOut => 'kind of person.';
+
+  @override
+  String get resultFirstTimeBanner =>
+      'New to saju? Tap here for a 30-sec guide →';
+
+  @override
+  String get resultGuideTitle => 'Saju in 30 Seconds';
+
+  @override
+  String get resultGuideBody =>
+      'Your birth date + time produces 4 pillars (year/month/day/hour). The DAY pillar is your Core Self. The 5 elements (Wood/Fire/Earth/Metal/Water) show your inner balance. The other readings — relationships, career, lucky color — flow from your Core Self.';
+
+  @override
+  String get resultGuideGotIt => 'Got it';
+
+  @override
+  String get resultPillarsCardTitle =>
+      'Your 4 Pillars (Year · Month · Day · Hour)';
+
+  @override
+  String get resultThreeHitHeader => 'Your 30-Second Read';
+
+  @override
+  String get resultThreeHitPersonalityLabel => 'PERSONALITY';
+
+  @override
+  String get resultThreeHitLoveLabel => 'IN LOVE';
+
+  @override
+  String get resultThreeHitTodayLabel => 'TODAY';
+
+  @override
+  String get resultWhyLabel => 'Why it reads this way:';
+
+  @override
+  String get resultEasyModeBannerTitle => 'New to saju?';
+
+  @override
+  String get resultEasyModeBannerDesc =>
+      'We translate the hard words. Tap to read it the easy way.';
+
+  @override
+  String get resultEasyModeBannerCta => 'Easy mode';
+
+  @override
+  String get resultEasyModeBannerSkip => 'Just show me';
+
+  @override
+  String get discoverCompareTitle => 'You + ';
+
+  @override
+  String discoverCompareSame(Object pillar) {
+    return 'Same $pillar type 🔥';
+  }
+
+  @override
+  String discoverCompareDifferent(Object mine, Object theirs) {
+    return 'Different types: $mine vs $theirs';
+  }
+
+  @override
+  String get discoverCompareSimilar => 'What you share';
+
+  @override
+  String get discoverCompareContrast => 'Where you differ';
+
+  @override
+  String get discoverCompareShareCard => 'Make share card';
+
+  @override
+  String get discoverCompareSeeChart => 'Compatibility report';
+
+  @override
+  String get discoverCompareClose => 'Close';
 
   @override
   String get resultThemeCareer => 'CAREER';

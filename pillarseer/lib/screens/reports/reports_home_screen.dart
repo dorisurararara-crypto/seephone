@@ -52,21 +52,21 @@ class ReportsHomeScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 12, bottom: 4, left: 4),
                 child: Text(
-                  l.reportsHomeTitle.toUpperCase(),
+                  l.reportsHomeTitle,
                   style: const TextStyle(
-                    fontSize: 22,
+                    fontSize: 26,
                     fontWeight: FontWeight.w900,
                     color: AppColors.celestialGold,
-                    letterSpacing: 2.0,
+                    letterSpacing: 1.2,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(4, 0, 4, 16),
+                padding: const EdgeInsets.fromLTRB(4, 0, 4, 20),
                 child: Text(
                   l.reportsHomeSubtitle,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     color: AppColors.moonlightGray,
                     fontStyle: FontStyle.italic,
                     height: 1.5,
@@ -128,58 +128,57 @@ class _ReportTile extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 64,
-                height: 64,
+                width: 76,
+                height: 76,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.celestialGold.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.celestialGold.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.4),
+                    color: AppColors.celestialGold.withValues(alpha: 0.45),
                   ),
                 ),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     Positioned(
-                      top: 6,
+                      top: 7,
                       right: 8,
                       child: Text(
                         card.symbol,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12.5,
                           color: AppColors.celestialGold
-                              .withValues(alpha: 0.55),
-                          fontWeight: FontWeight.w700,
+                              .withValues(alpha: 0.6),
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
                     Icon(card.icon,
-                        size: 26, color: AppColors.celestialGold),
+                        size: 30, color: AppColors.celestialGold),
                   ],
                 ),
               ),
-              const SizedBox(width: 14),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      card.title.toUpperCase(),
+                      card.title,
                       style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
                         color: AppColors.ghostlyWhite,
-                        letterSpacing: 1.2,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       card.desc,
                       style: const TextStyle(
-                        fontSize: 11.5,
+                        fontSize: 13.5,
                         color: AppColors.moonlightGray,
-                        height: 1.5,
+                        height: 1.55,
                       ),
                     ),
                   ],
