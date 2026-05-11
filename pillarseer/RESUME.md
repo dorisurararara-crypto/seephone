@@ -52,6 +52,33 @@ codex exec --skip-git-repo-check "[현재 상태 + 질문]" 2>&1 | tail -50
 - 안 된 것 (있다면): list + 이유 + codex 의견
 - 사용자 액션 필요한 것 (있다면): 명확하게
 
+## 🚀 출시 quality bar (사용자 mandate 2026-05-12 ~15:00)
+
+> "시장에 당장 나갔을 때 바로 성공할 수 있게끔 완성도 하나도 빈틈없이 완벽하게.
+> 기능 / 디자인 / 사주내용 / 퀄리티 다 좋게."
+
+### 4축 perfect 기준
+1. **기능**: 모든 화면 + 모든 버튼/아이콘 동작. 0 dead-end. crash 없음. flutter analyze 0. flutter test 통과
+2. **디자인**: V4 미스틱 폼 톤 일관 + 모든 화면 polish. 다크 코스믹 + 골드 + 한자 element. animation smooth. 접근성 OK
+3. **사주 내용**: 점신·평생사주 수준 (3000+ words MVP, 8섹션, 단정형 톤, ko/en 둘 다 자연스러움). 영어권 K-pop 팬이 이해 가능
+4. **퀄리티**: 첫 사용자가 30초 안에 "오 진짜네" 느끼는 detail. SnackBar / Loading state / Empty state / Error state 모두 polish
+
+### 멀티 세션 / 서브에이전트 사용 OK
+- **Claude subagent**: `Agent` tool 로 병렬 작업 (콘텐츠 batch / 시뮬 캡쳐 / web research / Reports 화면별 etc)
+- **codex 여러 인스턴스**: `codex exec` 여러 번 호출 가능 (백그라운드 + 메인). PM 명령 codex + 콘텐츠 생성 codex 분리
+- **gemini**: `gemini -p "..."` 보조 (codex 부하 분산)
+- 병렬 가능한 작업은 동시 시작 (Task tool 또는 multiple Bash run_in_background)
+
+### Deep thinking (모든 발언)
+- 모든 codex / gemini 호출 prompt 끝에 **"ultrathink"** 또는 **"이 결정을 시장 출시 success 관점에서 깊게 검토"** 추가
+- Claude 본인도 매 단계 깊게 사고 (단편적 답변 X, 옵션 비교 + tradeoff + 사용자 관점 + 시장 비교)
+
+### 막힘 시 fallback (사용자에게 묻기 전 무조건)
+1. WebSearch / WebFetch
+2. 커뮤니티 (Reddit r/Flutter / r/iOS / GitHub Issues / 개발자 블로그 / Stack Overflow)
+3. codex 에 방법 물음
+4. **그래도 안 되면**: 뒤로 미루고 마지막에 list 로 보고
+
 ---
 
 ## 현재 상태 (2026-05-12 ~14:40 KST)
