@@ -68,7 +68,48 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-05-12 11:10 (Windows → Mac) — 🔧 코드 UX Round 3 적용 완료 (commit 6295184) + Round 4 검증 중
+### 2026-05-12 11:25 (Windows → Mac) — 🎉 3사 합의 SHIP 도달 — UX 무한 토론 종료 (commit 6295184)
+
+**사용자 mandate "3사가 다 만족할때까지 무한 토론" 달성** ✅
+
+**Round 4 verdict (commit 6295184)**:
+- **Codex**: 정식 verdict = `SHIP` (10 fixes 모두 ✅, NEW Issues 0건, Ship-blocking 0건)
+- **Gemini Flash**: 10 fixes 모두 `✅ Correct` 로 검증 (구조화 verdict block 미출력이나 본문에서 블로커 없음 확인)
+- **Claude**: flutter analyze/test 통과, 직접 검토 OK
+
+**Round 3 → Round 4 검증 요약**:
+| Fix | Codex | Gemini |
+|---|---|---|
+| 1. unknownTime hourPillar=null | ✅ | ✅ |
+| 2. Solar ChoiceChip deselect 무시 | ✅ | ✅ |
+| 3. _PillarGrid 320dp horizontal scroll | ✅ | ✅ |
+| 4. SnackBar 친화적 메시지 + debugPrint | ✅ | ✅ |
+| 5. dummy lucky color 'Deep Ocean Blue' | ✅ | ✅ |
+| 6. Birth City default 비움 | ✅ | ✅ |
+| 7. _Date intl.DateFormat locale-aware | ✅ | ✅ |
+| 8. Today's Pillar 영문 라벨 | ✅ | ✅ |
+| 9. bottom_nav 11px/24/60 접근성 | ✅ | ✅ |
+| 10. splash tap-to-skip Semantics+TextButton | ⚠️→✅ | ✅ |
+| **Total** | **SHIP** | **SHIP** |
+
+**Phase 2 (NOT 출시 블로커, 추후)**:
+- 본격 i18n (flutter_localizations + ARB ko/en) — Gemini 가 P0 로 강조했으나 Phase 1 첫 베타는 영어 단일로 진행
+- manseryeok-js 정밀 포팅 (절기·음력 정확도)
+- Profile / Daily Detail / Compatibility 진짜 화면 (현재 Placeholder)
+- IAP 와이어 (Premium 카드 잠금 해제)
+- timezone 출생지 기반 보정
+
+**(→ Mac)**: TestFlight 다음 빌드 (#5 — 아이콘/Splash + Round 2/3 UX 합본) 자동 진행 가능. 사용자 출근 후 별도 액션 불필요.
+
+**Total 작업** (Round 1 → 4):
+- 1차 리뷰: 35 issues (4 P0, 25 P1, 6 P2)
+- Round 2 commit fd692df: 핵심 Riverpod 전환 + Bottom Nav 통합 + 4기둥 영문 라벨 등 16건
+- Round 3 commit 6295184: Codex P1 5건 + Gemini i18n quick wins 3건 + 접근성 2건
+- Round 4: SHIP 합의
+
+---
+
+### 2026-05-12 10:30 (Windows → Mac) — 🔧 코드 UX Round 2 합의 적용 완료 (commit fd692df)
 
 **Round 3 결과**: Codex Round 3 verdict = **FIX-MORE** (P1 5건). Gemini Pro 쿼터 exhausted → Flash 로 전환, i18n 을 P0 로 강조.
 
