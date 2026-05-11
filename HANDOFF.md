@@ -68,6 +68,33 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-12 10:30 (Windows → Mac) — 🔧 코드 UX Round 2 합의 적용 완료 (commit fd692df)
+
+**사용자 mandate**: "이제 코드만 보고 사용자 관점에서 ui/ux에 불편하거나 오류가 있는지 부자연스러운게 있는지 3사가 다 만족할때까지 무한 토론시켜"
+
+**진행 (Round 2 — Codex+Gemini 1차 35건 리뷰 후 핵심 fix)**:
+
+| 영역 | 변경 |
+|---|---|
+| 전역 상태 | `lib/providers/saju_provider.dart` NotifierProvider(saju, birth) 신규 — Riverpod 3.x Notifier 패턴 |
+| Router | `extra` 의존 제거. SajuResult null → /input redirect |
+| BottomNav | `lib/widgets/bottom_nav.dart` 공유 위젯. 하드코딩 emoji(✦/柱/📜/🌙/○) → Material Icons |
+| Input | Form+validator, dispose, try/catch+SnackBar, Unknown-time 체크박스, Lunar 비활성("soon" 태그) |
+| Result | 4기둥 영문 라벨(`pairEnglish` getter — "Earth Tiger"), 5행 색상 매핑(`AppColors.forElement`), Premium 배지, Unlock/Share SnackBar 연결 |
+| Home | 시간대별 인사말 (Late night/Morning/Afternoon/Evening), 사용자 이름 우선, "Today's Pillar" 칩 |
+| Splash | tap-to-skip, MediaQuery.disableAnimations 존중, 3s → 1.8s |
+| Daily | Water lucky color "Midnight Purple" → "Deep Ocean Blue" (배경색 충돌 해소) |
+| Theme | `AppColors.forElement(element)` 헬퍼 |
+| Model | `chunGanEnglish`/`jiJiEnglish`/`pairEnglish` getter |
+
+**검증**: `flutter analyze` No issues / `flutter test` 2 passed.
+
+**(→ Mac)**: TestFlight 다음 빌드 (#5 가 될 듯, 아이콘+UX 합쳐) 자동 포함. 별도 작업 불필요.
+
+**진행 중**: Round 3 검증 — Codex + Gemini 동시 재리뷰 백그라운드 실행. SHIP 합의 받으면 종료, FIX-MORE 면 Round 4.
+
+---
+
 ### 2026-05-12 09:50 (Windows → Mac) — 🎨 앱 아이콘 + Splash 강화 완료 (3사 합의 #02)
 
 **3사 합의 결정**: Crescent + 8 Stars (Codex 1픽 C 베이스 변형 + Gemini 2픽 C 매치 + 8자 사주 상징)
