@@ -162,7 +162,9 @@ class SajuService {
     return '$elem $anim';
   }
 
-  /// 메인 사주 계산 함수
+  /// 메인 사주 계산 함수.
+  /// [unknownTime]=true 면 시주(hourPillar) 미계산 → null 반환,
+  /// 5행 분포도 3기둥(년/월/일)만으로 산출 (가짜 hour 값으로 차트가 오염되지 않게).
   Future<SajuResult> calculateSaju({
     required int year,
     required int month,
@@ -171,6 +173,7 @@ class SajuService {
     required int minute,
     required bool isLunar,
     required bool isMale,
+    bool unknownTime = false,
   }) async {
     // 음력 입력은 양력 변환 필요 (Phase 2: sajupy 데이터)
     // 현재는 양력 그대로 처리
@@ -181,14 +184,15 @@ class SajuService {
     final yearIdx = _yearPillarIndex(year, month, day);
     final monthIdx = _monthPillarIndex(yearIdx, month, day);
     final dayIdx = _dayPillarIndex(year, month, day);
-    final hourIdx = _hourPillarIndex(dayIdx, hour);
 
     final yearP = pillarFromIndex(yearIdx);
     final monthP = pillarFromIndex(monthIdx);
     final dayP = pillarFromIndex(dayIdx);
-    final hourP = pillarFromIndex(hourIdx);
+    final hourP = unknownTime ? null : pillarFromIndex(_hourPillarIndex(dayIdx, hour));
 
-    final elements = _calculateElements([yearP, monthP, dayP, hourP]);
+    final pillarsForElements = <Pillar>[yearP, monthP, dayP];
+    if (hourP != null) pillarsForElements.add(hourP);
+    final elements = _calculateElements(pillarsForElements);
     final dayMaster = dayP.chunGan;
     final dayMasterName = _dayMasterEnglish(dayP);
 

@@ -36,7 +36,7 @@ class DailyFortune {
       wealthScore: 60,
       energyScore: 88,
       quote: 'A secret friend arrives from afar.',
-      luckyColor: 'Midnight Purple',
+      luckyColor: 'Deep Ocean Blue',
       luckyNumber: 7,
       luckyDirection: 'East',
       dayPillar: '丙午',

@@ -89,14 +89,23 @@ class _PillarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _PillarItem(label: 'Year', pillar: result.yearPillar),
-        _PillarItem(label: 'Month', pillar: result.monthPillar),
-        _PillarItem(label: 'Day', pillar: result.dayPillar, highlight: true),
-        _PillarItem(label: 'Hour', pillar: result.hourPillar),
-      ],
+    // 320dp 같은 좁은 폭에서 4기둥 + 영문 라벨이 overflow 되지 않게 가로 스크롤 fallback.
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const ClampingScrollPhysics(),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width - 48),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _PillarItem(label: 'Year', pillar: result.yearPillar),
+            _PillarItem(label: 'Month', pillar: result.monthPillar),
+            _PillarItem(label: 'Day', pillar: result.dayPillar, highlight: true),
+            _PillarItem(label: 'Hour', pillar: result.hourPillar),
+          ],
+        ),
+      ),
     ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.1, end: 0);
   }
 }
@@ -156,10 +165,12 @@ class _PillarItem extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         SizedBox(
-          width: 72,
+          width: 68,
           child: Text(
             isNull ? '—' : pillar!.pairEnglish,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontSize: 9,
               color: AppColors.moonlightGray,

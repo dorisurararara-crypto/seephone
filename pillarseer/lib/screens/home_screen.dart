@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
@@ -30,7 +31,10 @@ class HomeScreen extends ConsumerWidget {
               const _MoonDeco(),
               _ScoreCircle(score: fortune.totalScore),
               _Quote(quote: fortune.quote),
-              _TodayPillarRow(dayPillar: fortune.dayPillar),
+              _TodayPillarRow(
+                dayPillar: fortune.dayPillar,
+                englishLabel: _englishForGanji(fortune.dayPillar),
+              ),
               _CategoryGrid(fortune: fortune),
               _LuckyCard(fortune: fortune),
               const _PromoCard(),
@@ -41,6 +45,14 @@ class HomeScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 0),
     );
+  }
+
+  /// 60갑자 텍스트 → 영문 일주 이름 (예: 丙午 → "Fire Horse").
+  /// dummy fallback 이거나 길이가 다르면 원문 그대로 반환.
+  String _englishForGanji(String ganji) {
+    if (ganji.length != 2) return '';
+    final p = Pillar(chunGan: ganji[0], jiJi: ganji[1]);
+    return p.pairEnglish;
   }
 }
 
@@ -122,15 +134,12 @@ class _Date extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const months = [
-      'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-      'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC',
-    ];
-    const weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    final locale = Localizations.maybeLocaleOf(context)?.toString();
+    final fmt = DateFormat('EEE · MMM d, y', locale);
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Text(
-        '${weekdays[date.weekday - 1]} · ${months[date.month - 1]} ${date.day}, ${date.year}',
+        fmt.format(date).toUpperCase(),
         style: const TextStyle(
           fontSize: 10,
           color: AppColors.moonlightGray,
@@ -237,14 +246,19 @@ class _Quote extends StatelessWidget {
 
 class _TodayPillarRow extends StatelessWidget {
   final String dayPillar;
-  const _TodayPillarRow({required this.dayPillar});
+  final String englishLabel;
+  const _TodayPillarRow({required this.dayPillar, required this.englishLabel});
 
   @override
   Widget build(BuildContext context) {
+    final hasEnglish = englishLabel.isNotEmpty;
+    final text = hasEnglish
+        ? "Today's Pillar · $englishLabel ($dayPillar)"
+        : "Today's Pillar · $dayPillar";
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration: BoxDecoration(
           color: AppColors.spiritIndigo.withValues(alpha: 0.18),
           borderRadius: BorderRadius.circular(999),
@@ -252,7 +266,7 @@ class _TodayPillarRow extends StatelessWidget {
               color: AppColors.celestialGold.withValues(alpha: 0.25)),
         ),
         child: Text(
-          "Today's Pillar · $dayPillar",
+          text,
           style: const TextStyle(
             fontSize: 11,
             color: AppColors.celestialGold,

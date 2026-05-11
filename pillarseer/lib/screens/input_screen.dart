@@ -16,7 +16,8 @@ class InputScreen extends ConsumerStatefulWidget {
 class _InputScreenState extends ConsumerState<InputScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _cityController = TextEditingController(text: 'Seoul, South Korea');
+  // 글로벌 K-pop 팬 대상이라 서울 default 제거. 사용자가 직접 입력.
+  final _cityController = TextEditingController();
   DateTime? _selectedDate;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 12, minute: 0);
   bool _isLunar = false;
@@ -137,7 +138,10 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                   ChoiceChip(
                     label: const Text('Solar'),
                     selected: !_isLunar,
-                    onSelected: (val) => setState(() => _isLunar = !val),
+                    // 선택 해제는 무시 — Solar/Lunar 둘 중 하나는 항상 선택돼 있어야 함.
+                    onSelected: (val) {
+                      if (val) setState(() => _isLunar = false);
+                    },
                   ),
                   ChoiceChip(
                     label: const Text('Lunar (soon)'),
@@ -188,7 +192,8 @@ class _InputScreenState extends ConsumerState<InputScreen> {
 
     try {
       final svc = SajuService();
-      final hour = _unknownTime ? 12 : _selectedTime.hour;
+      // unknownTime 일 때 hour/minute 은 0 으로 전달 — 어차피 saju_service 가 hourPillar 를 만들지 않음.
+      final hour = _unknownTime ? 0 : _selectedTime.hour;
       final minute = _unknownTime ? 0 : _selectedTime.minute;
       final result = await svc.calculateSaju(
         year: _selectedDate!.year,
@@ -198,6 +203,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         minute: minute,
         isLunar: _isLunar,
         isMale: true, // gender 미사용 (향후 대운 방향 결정에 활용 예정)
+        unknownTime: _unknownTime,
       );
 
       // 전역 상태에 저장 (router extra 의존 제거)
@@ -215,11 +221,12 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       if (mounted) {
         context.go('/result');
       }
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('calculateSaju failed: $e\n$st');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to calculate. Please try again. ($e)'),
+          const SnackBar(
+            content: Text("We couldn't read the stars. Please check your inputs and try again."),
             backgroundColor: AppColors.fireRed,
           ),
         );

@@ -124,17 +124,30 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                         ],
                 ),
               ),
-              const Positioned(
+              Positioned(
                 left: 0,
                 right: 0,
                 bottom: 30,
                 child: Center(
-                  child: Text(
-                    'tap to skip',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: AppColors.fadedSilver,
-                      letterSpacing: 2.0,
+                  child: Semantics(
+                    button: true,
+                    label: 'Skip splash and continue',
+                    child: TextButton(
+                      onPressed: _go,
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.fadedSilver,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        minimumSize: const Size(120, 44),
+                      ),
+                      child: const Text(
+                        'tap to skip',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.fadedSilver,
+                          letterSpacing: 2.0,
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -26,11 +26,11 @@ class PillarBottomNav extends StatelessWidget {
           top: BorderSide(color: AppColors.celestialGold.withValues(alpha: 0.15)),
         ),
       ),
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+      padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 56,
+          height: 60,
           child: Row(
             children: _items.asMap().entries.map((entry) {
               final i = entry.key;
@@ -51,18 +51,19 @@ class PillarBottomNav extends StatelessWidget {
                       children: [
                         Icon(
                           item.icon,
-                          size: 22,
+                          size: 24,
                           color: isActive
                               ? AppColors.celestialGold
                               : AppColors.moonlightGray,
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 3),
                         Text(
-                          item.label.toUpperCase(),
+                          item.label,
                           style: TextStyle(
-                            fontSize: 9,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                            letterSpacing: 0.3,
+                            fontWeight:
+                                isActive ? FontWeight.w700 : FontWeight.w500,
                             color: isActive
                                 ? AppColors.celestialGold
                                 : AppColors.moonlightGray,
