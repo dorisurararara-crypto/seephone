@@ -119,7 +119,7 @@ class AppL10nEn extends AppL10n {
   String get resultLocked => 'LOCKED';
 
   @override
-  String get resultUnlockFull => 'Unlock Full Reading';
+  String get resultUnlockFull => 'Full Reading — coming in Phase 2';
 
   @override
   String get resultContinueDaily => 'Continue to Daily Reading';
@@ -529,6 +529,9 @@ class AppL10nEn extends AppL10n {
   String get paywallClose => 'Maybe later';
 
   @override
+  String get profileReset => 'Reset birth chart';
+
+  @override
   String get splashTrust => 'Korean traditional Four Pillars · made easy';
 
   @override
@@ -560,7 +563,7 @@ class AppL10nEn extends AppL10n {
       'Auspicious vs avoid days for big decisions, signings, launches.';
 
   @override
-  String get resultProHookCta => 'Unlock';
+  String get resultProHookCta => 'Coming soon';
 
   @override
   String get settingsAbout => 'About';

@@ -117,7 +117,7 @@ class AppL10nKo extends AppL10n {
   String get resultLocked => '잠금';
 
   @override
-  String get resultUnlockFull => '전체 풀이 잠금 해제';
+  String get resultUnlockFull => '전체 풀이 — Phase 2 출시 예정';
 
   @override
   String get resultContinueDaily => '오늘의 운세 보기';
@@ -510,6 +510,9 @@ class AppL10nKo extends AppL10n {
   String get paywallClose => '다음에';
 
   @override
+  String get profileReset => '사주 다시 입력';
+
+  @override
   String get splashTrust => '정통 사주, 누구나 쉽게';
 
   @override
@@ -538,7 +541,7 @@ class AppL10nKo extends AppL10n {
   String get resultProHookDatesTeaser => '결정·서명·런칭을 위한 길일/피할 날을 미리 확인하세요.';
 
   @override
-  String get resultProHookCta => '잠금 해제';
+  String get resultProHookCta => '곧 출시';
 
   @override
   String get settingsAbout => '정보';

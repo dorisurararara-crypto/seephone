@@ -316,7 +316,7 @@ abstract class AppL10n {
   /// No description provided for @resultUnlockFull.
   ///
   /// In en, this message translates to:
-  /// **'Unlock Full Reading'**
+  /// **'Full Reading — coming in Phase 2'**
   String get resultUnlockFull;
 
   /// No description provided for @resultContinueDaily.
@@ -1087,6 +1087,12 @@ abstract class AppL10n {
   /// **'Maybe later'**
   String get paywallClose;
 
+  /// No description provided for @profileReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset birth chart'**
+  String get profileReset;
+
   /// No description provided for @splashTrust.
   ///
   /// In en, this message translates to:
@@ -1144,7 +1150,7 @@ abstract class AppL10n {
   /// No description provided for @resultProHookCta.
   ///
   /// In en, this message translates to:
-  /// **'Unlock'**
+  /// **'Coming soon'**
   String get resultProHookCta;
 
   /// No description provided for @settingsAbout.

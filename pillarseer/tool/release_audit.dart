@@ -23,6 +23,8 @@ void main(List<String> args) async {
   await _checkL10n(issues);
   await _checkTests(issues);
   await _checkCelebrities(issues);
+  await _checkProCopySafety(issues);
+  await _checkLegalUrlsLive(issues);
 
   print('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   print('Summary');
@@ -35,11 +37,15 @@ void main(List<String> args) async {
   print('  ❌ Errors: ${errors.length}');
   if (errors.isNotEmpty) {
     print('\n❌ ERRORS:');
-    for (final e in errors) print('  - ${e.where}: ${e.msg}');
+    for (final e in errors) {
+      print('  - ${e.where}: ${e.msg}');
+    }
   }
   if (warns.isNotEmpty) {
     print('\n⚠️  WARNINGS:');
-    for (final w in warns) print('  - ${w.where}: ${w.msg}');
+    for (final w in warns) {
+      print('  - ${w.where}: ${w.msg}');
+    }
   }
   if (errors.isEmpty && (warns.isEmpty || !strict)) {
     print('\n✅ Release preflight PASSED.');
@@ -234,6 +240,89 @@ Future<void> _checkCelebrities(List<_Issue> issues) async {
     issues.add(_Issue('error', 'celebrities',
         'BTS V dayPillar regression — expected 乙未, got ${v['dayPillar']}'));
   }
+}
+
+/// codex Round 11 — Pro/IAP 심사 리스크 audit.
+/// 무료 앱으로 출시하지만 "Pro/Unlock/Subscribe" 가 IAP imply 하면 rejection 위험.
+Future<void> _checkProCopySafety(List<_Issue> issues) async {
+  print('▶ Checking Pro/Unlock copy review safety...');
+  // Sensitive phrases that imply IAP without one
+  // Word-boundary regex — only flag IAP-implying phrases that are actually rendered.
+  // Paywall l10n keys ($4.99/month etc) are defined but no UI reads them yet —
+  // verified via grep in lib/screens/ — so excluded from sensitive list until paywall UI lands.
+  final sensitive = <RegExp>[
+    RegExp(r'\bSubscribe\b'),
+    RegExp(r'\bBuy now\b'),
+    RegExp(r'\bPurchase\b'),
+  ];
+  final files = [
+    'lib/l10n/app_en.arb',
+    'lib/l10n/app_ko.arb',
+  ];
+  var hits = 0;
+  for (final p in files) {
+    final f = File(p);
+    if (!f.existsSync()) continue;
+    final src = await f.readAsString();
+    for (final rx in sensitive) {
+      if (rx.hasMatch(src)) {
+        issues.add(_Issue('warn', 'pro_copy',
+            'l10n "$p" matches /${rx.pattern}/ — IAP implication risk'));
+        hits++;
+      }
+    }
+  }
+  if (hits == 0) {
+    issues.add(_Issue('info', 'pro_copy',
+        'no IAP-implying phrases (Subscribe/Buy/Pay/Purchase) in l10n'));
+  }
+  // resultUnlockFull / resultProHookCta should mention "coming"
+  final en = await File('lib/l10n/app_en.arb').readAsString();
+  final enJson = jsonDecode(en) as Map<String, dynamic>;
+  final unlockEn = (enJson['resultUnlockFull'] as String? ?? '').toLowerCase();
+  if (!unlockEn.contains('coming') && !unlockEn.contains('phase')) {
+    issues.add(_Issue('warn', 'pro_copy',
+        'resultUnlockFull "${enJson['resultUnlockFull']}" does not signal future tense — rejection risk'));
+  } else {
+    issues.add(_Issue('info', 'pro_copy',
+        'resultUnlockFull explicitly future-tense (coming/phase)'));
+  }
+  final hookCtaEn = (enJson['resultProHookCta'] as String? ?? '').toLowerCase();
+  if (hookCtaEn == 'unlock') {
+    issues.add(_Issue('warn', 'pro_copy',
+        'resultProHookCta is bare "Unlock" — rephrase to "Coming soon" to avoid IAP implication'));
+  } else {
+    issues.add(_Issue('info', 'pro_copy', 'resultProHookCta: "${enJson['resultProHookCta']}"'));
+  }
+}
+
+/// codex Round 11 — Privacy/Terms/Support URL 실제 HTTP 200 확인.
+Future<void> _checkLegalUrlsLive(List<_Issue> issues) async {
+  print('▶ Checking legal URLs are reachable (HTTP)...');
+  const urls = [
+    'https://dorisurararara-crypto.github.io/pillarseer/privacy.html',
+    'https://dorisurararara-crypto.github.io/pillarseer/terms.html',
+    'https://dorisurararara-crypto.github.io/pillarseer/support.html',
+  ];
+  final client = HttpClient();
+  client.connectionTimeout = const Duration(seconds: 8);
+  for (final u in urls) {
+    try {
+      final req = await client.headUrl(Uri.parse(u));
+      final res = await req.close();
+      if (res.statusCode == 200) {
+        issues.add(_Issue('info', 'legal_url',
+            '$u → ${res.statusCode}'));
+      } else {
+        issues.add(_Issue('warn', 'legal_url',
+            '$u → HTTP ${res.statusCode} (App Review may flag)'));
+      }
+    } catch (e) {
+      issues.add(_Issue('warn', 'legal_url',
+          '$u → unreachable: ${e.toString().split(",").first}'));
+    }
+  }
+  client.close();
 }
 
 class _Issue {

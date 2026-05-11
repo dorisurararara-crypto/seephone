@@ -39,7 +39,7 @@
   "resultCareer": "CAREER",
   "resultWealth": "WEALTH",
   "resultLocked": "LOCKED",
-  "resultUnlockFull": "Unlock Full Reading",
+  "resultUnlockFull": "Full Reading — coming in Phase 2",
   "resultContinueDaily": "Continue to Daily Reading",
   "resultShare": "Share My Path",
 
@@ -174,6 +174,7 @@
   "paywallSoon": "Payments coming soon — leave your email below for early access",
   "paywallRestoreLater": "Restore purchase (later)",
   "paywallClose": "Maybe later",
+  "profileReset": "Reset birth chart",
 
   "splashTrust": "Korean traditional Four Pillars · made easy",
   "resultTrustLine": "Based on your birth date·time + Five Elements + Ten Gods.",
@@ -185,7 +186,7 @@
   "resultProHookCompatTeaser": "Enter their birth date — see why you click & where you clash.",
   "resultProHookDatesTitle": "Important dates this year",
   "resultProHookDatesTeaser": "Auspicious vs avoid days for big decisions, signings, launches.",
-  "resultProHookCta": "Unlock",
+  "resultProHookCta": "Coming soon",
   "settingsAbout": "About",
   "settingsVersion": "Version",
   "settingsPrivacy": "Privacy Policy",

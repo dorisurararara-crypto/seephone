@@ -106,23 +106,12 @@ class ProfileScreen extends ConsumerWidget {
             _row(
               context,
               icon: Icons.refresh,
-              label: 'Reset',
+              label: l.profileReset,
               onTap: () {
                 ref.read(sajuResultProvider.notifier).clear();
                 ref.read(userBirthInfoProvider.notifier).clear();
                 context.go('/input');
               },
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l.placeholderProfileDesc,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                fontStyle: FontStyle.italic,
-                color: AppColors.fadedSilver,
-                height: 1.6,
-              ),
             ),
           ],
         ),
