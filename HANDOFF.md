@@ -68,6 +68,44 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-12 09:50 (Windows → Mac) — 🎨 앱 아이콘 + Splash 강화 완료 (3사 합의 #02)
+
+**3사 합의 결정**: Crescent + 8 Stars (Codex 1픽 C 베이스 변형 + Gemini 2픽 C 매치 + 8자 사주 상징)
+
+**진행 사항** (Windows 자율, 사용자 외출 중):
+1. ✅ SVG 4개 + Splash 2개 시안 mockup (`pillarseer/mockup/icon.html`)
+2. ✅ 사용자에 텔레그램 PNG 첨부 전송 (chat_id 8628950128 자동 인식)
+3. ✅ 사용자 "다 똑같으니 합의한 걸로" → **#02 Crescent + 8 Stars 확정**
+4. ✅ Chrome headless 로 1024×1024 PNG 생성 (mockup/export/icon_1024.png)
+5. ✅ PIL 로 모든 사이즈 자동 생성 + 배치:
+   - **iOS 15 사이즈** (`Assets.xcassets/AppIcon.appiconset/`): 1024 (Marketing, alpha flatten), 180/120/167/152/76/87/58/29/120/80/40/60/40/20
+   - **Android 5 사이즈** (`mipmap-{m,h,xh,xxh,xxxh}dpi/ic_launcher.png`): 48/72/96/144/192
+   - **Play Store 512** (`mockup/export/play_store_512.png`)
+6. ✅ Splash 화면 갱신 (`lib/screens/splash_screen.dart`):
+   - 골드 별 10개 trail 애니메이션 (랜덤 위치 + repeat)
+   - 가운데 1024 PNG 로고 (scale + shimmer)
+   - "PILLAR SEER" 타이포 (letter-spacing 8)
+   - "Read your destiny through the four pillars" 부제
+   - radial gradient 배경 (#311B92 → #1A0B2E → #0A0612)
+   - assets/icon/splash_logo.png 등록
+
+**검증**:
+- `flutter analyze` → No issues found! (0 errors / 0 warnings / 0 info)
+- iOS App Store 1024 alpha flatten 처리 (Apple reject 방지)
+
+**Mac에 (→ Mac)**: 다음 빌드 (#4) 에 새 아이콘 + Splash 자동 포함:
+1. `git pull` (예상 commit 1개, 21개 PNG 추가)
+2. `cd pillarseer && flutter pub get && flutter clean`
+3. `bash scripts/deploy_testflight.sh 4` (build_number 4)
+4. ASC 처리 → Beta Review 자동 갱신 (이미 SUBMITTED, 첫 심사 통과 후 1.0.0 build 4 가 자동 라이브)
+5. 시뮬 캡처 1장 — 새 Splash + 앱 아이콘 (Settings → 홈스크린에서 보임)
+
+**남은 자율** (시간 여유 시):
+- Profile / Daily Detail 진짜 화면 (현재 placeholder)
+- Compatibility / Tojeongbigyeol 진짜 화면
+
+---
+
 ### 2026-05-12 03:55 (Mac → Windows) — 🎉🎉🎉 TestFlight Beta Review 제출 완료! (사용자 mandate 달성)
 
 **사용자 야간 mandate**: "테스트플라이트에 심사를 넣는 거까지는 내가 자고 일어났을 때 되어 있어야 돼" → ✅ **달성**.
