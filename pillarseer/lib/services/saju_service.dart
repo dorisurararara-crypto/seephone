@@ -1,5 +1,7 @@
 import '../models/saju_result.dart';
+import 'deep_content_service.dart';
 import 'saju_content_service.dart';
+import 'ten_gods_service.dart';
 
 /// Pillar Seer — 사주(四柱) 계산 서비스
 ///
@@ -208,6 +210,47 @@ class SajuService {
       readings = _readingsFor(dayP.text);
     }
 
+    // 8섹션 deep content + 10신 table + 대운/세운 procedural
+    final currentYearGanji = DeepContentService.currentYearGanji();
+    final today = DateTime.now();
+    final hasBirthdayPassed = today.month > month ||
+        (today.month == month && today.day >= day);
+    final age = today.year - year - (hasBirthdayPassed ? 0 : 1);
+    DeepReading? deepEn;
+    DeepReading? deepKo;
+    try {
+      final pair = await DeepContentService.buildFor(
+        day60ji: dayP.text,
+        dayMasterName: dayMasterName,
+        currentYearGanji: currentYearGanji,
+        userAge: age.clamp(1, 120),
+        dominantElement: elements.dominant,
+        deficitElement: elements.deficit,
+        shortReadings: readings,
+      );
+      deepEn = pair.en;
+      deepKo = pair.ko;
+    } catch (_) {
+      // deep content optional; result still works without it
+    }
+
+    final base = SajuResult(
+      yearPillar: yearP,
+      monthPillar: monthP,
+      dayPillar: dayP,
+      hourPillar: hourP,
+      elements: elements,
+      dayMaster: dayMaster,
+      dayMasterName: dayMasterName,
+      summary: summary,
+      categoryReadings: readings,
+      deepEn: deepEn,
+      deepKo: deepKo,
+      userAge: age.clamp(1, 120),
+      currentYearGanji: currentYearGanji,
+    );
+
+    final tenGods = TenGodsService.tableFor(base);
     return SajuResult(
       yearPillar: yearP,
       monthPillar: monthP,
@@ -218,6 +261,11 @@ class SajuService {
       dayMasterName: dayMasterName,
       summary: summary,
       categoryReadings: readings,
+      deepEn: deepEn,
+      deepKo: deepKo,
+      tenGods: tenGods,
+      userAge: age.clamp(1, 120),
+      currentYearGanji: currentYearGanji,
     );
   }
 

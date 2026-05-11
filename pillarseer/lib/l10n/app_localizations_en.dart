@@ -288,4 +288,225 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get modalNotifyConfirm => 'We\'ll let you know!';
+
+  @override
+  String get devGateTitle => 'ENTER CODE';
+
+  @override
+  String get devGateHint => 'Code';
+
+  @override
+  String get devGateApply => 'Apply';
+
+  @override
+  String get devGateCancel => 'Cancel';
+
+  @override
+  String get devGateUnlocked => 'Pro features unlocked.';
+
+  @override
+  String get devGateLocked => 'Returned to free mode.';
+
+  @override
+  String get devGateInvalid => 'Code not recognized.';
+
+  @override
+  String get resultDayMasterDeepTitle => 'DAY MASTER — INNER SIGNATURE';
+
+  @override
+  String get resultFiveElementsDetailTitle => 'FIVE ELEMENTS — ENERGY BALANCE';
+
+  @override
+  String get resultTenGodsTitle => 'TEN GODS — RELATIONAL MAP';
+
+  @override
+  String get resultLifeThemesTitle => 'LIFE THEMES';
+
+  @override
+  String get resultTenYearLuckTitle => '10-YEAR LUCK (大運)';
+
+  @override
+  String get resultThisYearTitle => 'THIS YEAR (歲運)';
+
+  @override
+  String get resultLuckyTitle => 'LUCKY ALIGNMENTS';
+
+  @override
+  String get resultThemeCareer => 'CAREER';
+
+  @override
+  String get resultThemeWealth => 'WEALTH';
+
+  @override
+  String get resultThemeLove => 'LOVE';
+
+  @override
+  String get resultThemeHealth => 'HEALTH';
+
+  @override
+  String get resultThemeFamily => 'FAMILY';
+
+  @override
+  String get resultThemeFame => 'FAME';
+
+  @override
+  String get resultProLocked => 'PRO';
+
+  @override
+  String get resultUnlockHint =>
+      'Tap Unlock Full Reading to reveal locked sections.';
+
+  @override
+  String get reportsHomeTitle => 'REPORTS';
+
+  @override
+  String get reportsHomeSubtitle => 'Deep readings beyond your daily pillar.';
+
+  @override
+  String get reportsCardCompatibility => 'Compatibility';
+
+  @override
+  String get reportsCardCompatibilityDesc =>
+      'Two charts, one chemistry. Element match + life-pillar resonance.';
+
+  @override
+  String get reportsCardTojeong => 'Tojeong (土亭祕訣)';
+
+  @override
+  String get reportsCardTojeongDesc =>
+      'Korean New Year fortune — 144 hexagrams, 12 months ahead.';
+
+  @override
+  String get reportsCardDatePicking => 'Date Picking (擇日)';
+
+  @override
+  String get reportsCardDatePickingDesc =>
+      'Auspicious vs avoid dates for weddings, openings, signings.';
+
+  @override
+  String get reportsCardDream => 'Dream (解夢)';
+
+  @override
+  String get reportsCardDreamDesc =>
+      'Search Korean dream interpretation by symbol or theme.';
+
+  @override
+  String get compatTitle => 'COMPATIBILITY';
+
+  @override
+  String get compatYouLabel => 'YOU';
+
+  @override
+  String get compatPartnerLabel => 'PARTNER';
+
+  @override
+  String get compatEnterPartner => 'Enter your partner\'s birth info';
+
+  @override
+  String get compatPartnerName => 'Partner Name';
+
+  @override
+  String get compatCalculate => 'Calculate Match';
+
+  @override
+  String get compatMatchScore => 'Compatibility Score';
+
+  @override
+  String get compatElementsHeader => 'Element Resonance';
+
+  @override
+  String get compatPillarHeader => 'Pillar Chemistry';
+
+  @override
+  String get compatVerdictHigh =>
+      'A magnetic alignment — your elements feed each other in cycles of growth.';
+
+  @override
+  String get compatVerdictMid =>
+      'A workable balance — friction sharpens you, requiring honest communication.';
+
+  @override
+  String get compatVerdictLow =>
+      'An intense gravity — beautiful when conscious, exhausting when unmanaged.';
+
+  @override
+  String get tojeongTitle => 'TOJEONG (土亭祕訣)';
+
+  @override
+  String get tojeongSubtitle => 'Your 144 hexagram fortune for the year.';
+
+  @override
+  String get tojeongHexagram => 'Your Hexagram';
+
+  @override
+  String get tojeongYearOverview => 'Year Overview';
+
+  @override
+  String get tojeongMonthlyHeader => 'Monthly Path';
+
+  @override
+  String get datePickTitle => 'DATE PICKING';
+
+  @override
+  String get datePickSubtitle => 'Find auspicious days in the next 30 days.';
+
+  @override
+  String get datePickGoodDays => 'Auspicious';
+
+  @override
+  String get datePickAvoidDays => 'Avoid';
+
+  @override
+  String get datePickNeutral => 'Neutral';
+
+  @override
+  String get datePickReason => 'Why';
+
+  @override
+  String get dreamTitle => 'DREAM INTERPRETATION';
+
+  @override
+  String get dreamSearchHint => 'Search dream symbol (e.g. snake, water)';
+
+  @override
+  String get dreamCategoryAll => 'All';
+
+  @override
+  String get dreamCategoryAuspicious => 'Auspicious';
+
+  @override
+  String get dreamCategoryWarning => 'Warning';
+
+  @override
+  String get dreamCategoryWealth => 'Wealth';
+
+  @override
+  String get dreamCategoryLove => 'Love';
+
+  @override
+  String get dreamCategoryHealth => 'Health';
+
+  @override
+  String get discoverTitle => 'DISCOVER';
+
+  @override
+  String get discoverSubtitle => 'K-pop & K-drama saju, decoded.';
+
+  @override
+  String get discoverFilterAll => 'All';
+
+  @override
+  String get discoverFilterIdol => 'Idols';
+
+  @override
+  String get discoverFilterActor => 'Actors';
+
+  @override
+  String get discoverFilterAthlete => 'Athletes';
+
+  @override
+  String get discoverFilterIcon => 'Icons';
+
+  @override
+  String get discoverShareCompare => 'Compare with my chart';
 }

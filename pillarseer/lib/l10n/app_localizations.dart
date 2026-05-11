@@ -636,6 +636,432 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'We\'ll let you know!'**
   String get modalNotifyConfirm;
+
+  /// No description provided for @devGateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ENTER CODE'**
+  String get devGateTitle;
+
+  /// No description provided for @devGateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get devGateHint;
+
+  /// No description provided for @devGateApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get devGateApply;
+
+  /// No description provided for @devGateCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get devGateCancel;
+
+  /// No description provided for @devGateUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro features unlocked.'**
+  String get devGateUnlocked;
+
+  /// No description provided for @devGateLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned to free mode.'**
+  String get devGateLocked;
+
+  /// No description provided for @devGateInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Code not recognized.'**
+  String get devGateInvalid;
+
+  /// No description provided for @resultDayMasterDeepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DAY MASTER — INNER SIGNATURE'**
+  String get resultDayMasterDeepTitle;
+
+  /// No description provided for @resultFiveElementsDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'FIVE ELEMENTS — ENERGY BALANCE'**
+  String get resultFiveElementsDetailTitle;
+
+  /// No description provided for @resultTenGodsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TEN GODS — RELATIONAL MAP'**
+  String get resultTenGodsTitle;
+
+  /// No description provided for @resultLifeThemesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'LIFE THEMES'**
+  String get resultLifeThemesTitle;
+
+  /// No description provided for @resultTenYearLuckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'10-YEAR LUCK (大運)'**
+  String get resultTenYearLuckTitle;
+
+  /// No description provided for @resultThisYearTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'THIS YEAR (歲運)'**
+  String get resultThisYearTitle;
+
+  /// No description provided for @resultLuckyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'LUCKY ALIGNMENTS'**
+  String get resultLuckyTitle;
+
+  /// No description provided for @resultThemeCareer.
+  ///
+  /// In en, this message translates to:
+  /// **'CAREER'**
+  String get resultThemeCareer;
+
+  /// No description provided for @resultThemeWealth.
+  ///
+  /// In en, this message translates to:
+  /// **'WEALTH'**
+  String get resultThemeWealth;
+
+  /// No description provided for @resultThemeLove.
+  ///
+  /// In en, this message translates to:
+  /// **'LOVE'**
+  String get resultThemeLove;
+
+  /// No description provided for @resultThemeHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'HEALTH'**
+  String get resultThemeHealth;
+
+  /// No description provided for @resultThemeFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'FAMILY'**
+  String get resultThemeFamily;
+
+  /// No description provided for @resultThemeFame.
+  ///
+  /// In en, this message translates to:
+  /// **'FAME'**
+  String get resultThemeFame;
+
+  /// No description provided for @resultProLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'PRO'**
+  String get resultProLocked;
+
+  /// No description provided for @resultUnlockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Unlock Full Reading to reveal locked sections.'**
+  String get resultUnlockHint;
+
+  /// No description provided for @reportsHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'REPORTS'**
+  String get reportsHomeTitle;
+
+  /// No description provided for @reportsHomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep readings beyond your daily pillar.'**
+  String get reportsHomeSubtitle;
+
+  /// No description provided for @reportsCardCompatibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatibility'**
+  String get reportsCardCompatibility;
+
+  /// No description provided for @reportsCardCompatibilityDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Two charts, one chemistry. Element match + life-pillar resonance.'**
+  String get reportsCardCompatibilityDesc;
+
+  /// No description provided for @reportsCardTojeong.
+  ///
+  /// In en, this message translates to:
+  /// **'Tojeong (土亭祕訣)'**
+  String get reportsCardTojeong;
+
+  /// No description provided for @reportsCardTojeongDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean New Year fortune — 144 hexagrams, 12 months ahead.'**
+  String get reportsCardTojeongDesc;
+
+  /// No description provided for @reportsCardDatePicking.
+  ///
+  /// In en, this message translates to:
+  /// **'Date Picking (擇日)'**
+  String get reportsCardDatePicking;
+
+  /// No description provided for @reportsCardDatePickingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Auspicious vs avoid dates for weddings, openings, signings.'**
+  String get reportsCardDatePickingDesc;
+
+  /// No description provided for @reportsCardDream.
+  ///
+  /// In en, this message translates to:
+  /// **'Dream (解夢)'**
+  String get reportsCardDream;
+
+  /// No description provided for @reportsCardDreamDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Korean dream interpretation by symbol or theme.'**
+  String get reportsCardDreamDesc;
+
+  /// No description provided for @compatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'COMPATIBILITY'**
+  String get compatTitle;
+
+  /// No description provided for @compatYouLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'YOU'**
+  String get compatYouLabel;
+
+  /// No description provided for @compatPartnerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PARTNER'**
+  String get compatPartnerLabel;
+
+  /// No description provided for @compatEnterPartner.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your partner\'s birth info'**
+  String get compatEnterPartner;
+
+  /// No description provided for @compatPartnerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Name'**
+  String get compatPartnerName;
+
+  /// No description provided for @compatCalculate.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate Match'**
+  String get compatCalculate;
+
+  /// No description provided for @compatMatchScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatibility Score'**
+  String get compatMatchScore;
+
+  /// No description provided for @compatElementsHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Element Resonance'**
+  String get compatElementsHeader;
+
+  /// No description provided for @compatPillarHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar Chemistry'**
+  String get compatPillarHeader;
+
+  /// No description provided for @compatVerdictHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'A magnetic alignment — your elements feed each other in cycles of growth.'**
+  String get compatVerdictHigh;
+
+  /// No description provided for @compatVerdictMid.
+  ///
+  /// In en, this message translates to:
+  /// **'A workable balance — friction sharpens you, requiring honest communication.'**
+  String get compatVerdictMid;
+
+  /// No description provided for @compatVerdictLow.
+  ///
+  /// In en, this message translates to:
+  /// **'An intense gravity — beautiful when conscious, exhausting when unmanaged.'**
+  String get compatVerdictLow;
+
+  /// No description provided for @tojeongTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TOJEONG (土亭祕訣)'**
+  String get tojeongTitle;
+
+  /// No description provided for @tojeongSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your 144 hexagram fortune for the year.'**
+  String get tojeongSubtitle;
+
+  /// No description provided for @tojeongHexagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Hexagram'**
+  String get tojeongHexagram;
+
+  /// No description provided for @tojeongYearOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Year Overview'**
+  String get tojeongYearOverview;
+
+  /// No description provided for @tojeongMonthlyHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Path'**
+  String get tojeongMonthlyHeader;
+
+  /// No description provided for @datePickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DATE PICKING'**
+  String get datePickTitle;
+
+  /// No description provided for @datePickSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find auspicious days in the next 30 days.'**
+  String get datePickSubtitle;
+
+  /// No description provided for @datePickGoodDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Auspicious'**
+  String get datePickGoodDays;
+
+  /// No description provided for @datePickAvoidDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Avoid'**
+  String get datePickAvoidDays;
+
+  /// No description provided for @datePickNeutral.
+  ///
+  /// In en, this message translates to:
+  /// **'Neutral'**
+  String get datePickNeutral;
+
+  /// No description provided for @datePickReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Why'**
+  String get datePickReason;
+
+  /// No description provided for @dreamTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DREAM INTERPRETATION'**
+  String get dreamTitle;
+
+  /// No description provided for @dreamSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search dream symbol (e.g. snake, water)'**
+  String get dreamSearchHint;
+
+  /// No description provided for @dreamCategoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get dreamCategoryAll;
+
+  /// No description provided for @dreamCategoryAuspicious.
+  ///
+  /// In en, this message translates to:
+  /// **'Auspicious'**
+  String get dreamCategoryAuspicious;
+
+  /// No description provided for @dreamCategoryWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get dreamCategoryWarning;
+
+  /// No description provided for @dreamCategoryWealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Wealth'**
+  String get dreamCategoryWealth;
+
+  /// No description provided for @dreamCategoryLove.
+  ///
+  /// In en, this message translates to:
+  /// **'Love'**
+  String get dreamCategoryLove;
+
+  /// No description provided for @dreamCategoryHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get dreamCategoryHealth;
+
+  /// No description provided for @discoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DISCOVER'**
+  String get discoverTitle;
+
+  /// No description provided for @discoverSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'K-pop & K-drama saju, decoded.'**
+  String get discoverSubtitle;
+
+  /// No description provided for @discoverFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get discoverFilterAll;
+
+  /// No description provided for @discoverFilterIdol.
+  ///
+  /// In en, this message translates to:
+  /// **'Idols'**
+  String get discoverFilterIdol;
+
+  /// No description provided for @discoverFilterActor.
+  ///
+  /// In en, this message translates to:
+  /// **'Actors'**
+  String get discoverFilterActor;
+
+  /// No description provided for @discoverFilterAthlete.
+  ///
+  /// In en, this message translates to:
+  /// **'Athletes'**
+  String get discoverFilterAthlete;
+
+  /// No description provided for @discoverFilterIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Icons'**
+  String get discoverFilterIcon;
+
+  /// No description provided for @discoverShareCompare.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare with my chart'**
+  String get discoverShareCompare;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -4,20 +4,35 @@ import 'screens/splash_screen.dart';
 import 'screens/input_screen.dart';
 import 'screens/result_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/placeholder_screen.dart';
+import 'screens/discover_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/reports/reports_home_screen.dart';
+import 'screens/reports/compatibility_screen.dart';
+import 'screens/reports/tojeong_screen.dart';
+import 'screens/reports/date_picking_screen.dart';
+import 'screens/reports/dream_screen.dart';
 import 'providers/saju_provider.dart';
 
 /// 전역 라우터. extra 의존 제거.
-/// SajuResult 가 null 이면 /input 으로 redirect (Bottom Nav 탭 이동 후에도 안전).
+/// SajuResult 가 null 이면 /input 으로 redirect.
 GoRouter buildRouter(WidgetRef ref) {
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
       final result = ref.read(sajuResultProvider);
       final loc = state.matchedLocation;
-      const protected = ['/result', '/home', '/reports', '/discover', '/profile'];
+      const protected = [
+        '/result',
+        '/home',
+        '/reports',
+        '/reports/compatibility',
+        '/reports/tojeong',
+        '/reports/date-picking',
+        '/reports/dream',
+        '/discover',
+        '/profile',
+      ];
       if (result == null && protected.contains(loc)) {
         return '/input';
       }
@@ -42,13 +57,27 @@ GoRouter buildRouter(WidgetRef ref) {
       ),
       GoRoute(
         path: '/reports',
-        builder: (context, state) =>
-            const PlaceholderScreen(kind: PlaceholderKind.reports),
+        builder: (context, state) => const ReportsHomeScreen(),
+      ),
+      GoRoute(
+        path: '/reports/compatibility',
+        builder: (context, state) => const CompatibilityScreen(),
+      ),
+      GoRoute(
+        path: '/reports/tojeong',
+        builder: (context, state) => const TojeongScreen(),
+      ),
+      GoRoute(
+        path: '/reports/date-picking',
+        builder: (context, state) => const DatePickingScreen(),
+      ),
+      GoRoute(
+        path: '/reports/dream',
+        builder: (context, state) => const DreamScreen(),
       ),
       GoRoute(
         path: '/discover',
-        builder: (context, state) =>
-            const PlaceholderScreen(kind: PlaceholderKind.discover),
+        builder: (context, state) => const DiscoverScreen(),
       ),
       GoRoute(
         path: '/profile',
@@ -61,4 +90,3 @@ GoRouter buildRouter(WidgetRef ref) {
     ],
   );
 }
-

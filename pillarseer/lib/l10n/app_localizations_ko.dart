@@ -278,4 +278,217 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get modalNotifyConfirm => '준비되면 알려드리겠습니다!';
+
+  @override
+  String get devGateTitle => '코드 입력';
+
+  @override
+  String get devGateHint => '코드';
+
+  @override
+  String get devGateApply => '적용';
+
+  @override
+  String get devGateCancel => '취소';
+
+  @override
+  String get devGateUnlocked => 'Pro 기능이 해제되었습니다.';
+
+  @override
+  String get devGateLocked => '무료 모드로 돌아갔습니다.';
+
+  @override
+  String get devGateInvalid => '인식할 수 없는 코드입니다.';
+
+  @override
+  String get resultDayMasterDeepTitle => '일간 (日干) — 본질의 결';
+
+  @override
+  String get resultFiveElementsDetailTitle => '오행 (五行) — 기운의 균형';
+
+  @override
+  String get resultTenGodsTitle => '십신 (十神) — 관계의 지도';
+
+  @override
+  String get resultLifeThemesTitle => '삶의 주제';
+
+  @override
+  String get resultTenYearLuckTitle => '대운 (大運) · 10년 흐름';
+
+  @override
+  String get resultThisYearTitle => '세운 (歲運) · 올해';
+
+  @override
+  String get resultLuckyTitle => '오늘의 길운';
+
+  @override
+  String get resultThemeCareer => '직업';
+
+  @override
+  String get resultThemeWealth => '재물';
+
+  @override
+  String get resultThemeLove => '애정';
+
+  @override
+  String get resultThemeHealth => '건강';
+
+  @override
+  String get resultThemeFamily => '가족';
+
+  @override
+  String get resultThemeFame => '명예';
+
+  @override
+  String get resultProLocked => 'PRO';
+
+  @override
+  String get resultUnlockHint => '전체 풀이를 잠금 해제하면 모든 섹션이 열립니다.';
+
+  @override
+  String get reportsHomeTitle => '심층 리포트';
+
+  @override
+  String get reportsHomeSubtitle => '일진을 넘어선 깊은 풀이.';
+
+  @override
+  String get reportsCardCompatibility => '궁합';
+
+  @override
+  String get reportsCardCompatibilityDesc => '두 사주의 케미. 오행 조화 + 기둥 공명.';
+
+  @override
+  String get reportsCardTojeong => '토정비결 (土亭祕訣)';
+
+  @override
+  String get reportsCardTojeongDesc => '신년운세 — 144괘 + 12개월 흐름.';
+
+  @override
+  String get reportsCardDatePicking => '택일 (擇日)';
+
+  @override
+  String get reportsCardDatePickingDesc => '결혼·개업·서명 등 길일 vs 흉일 가이드.';
+
+  @override
+  String get reportsCardDream => '해몽 (解夢)';
+
+  @override
+  String get reportsCardDreamDesc => '꿈 상징·테마로 한국 전통 해몽 검색.';
+
+  @override
+  String get compatTitle => '궁합 (宮合)';
+
+  @override
+  String get compatYouLabel => '나';
+
+  @override
+  String get compatPartnerLabel => '상대';
+
+  @override
+  String get compatEnterPartner => '상대방의 생일 정보를 입력하세요';
+
+  @override
+  String get compatPartnerName => '상대 이름';
+
+  @override
+  String get compatCalculate => '궁합 계산';
+
+  @override
+  String get compatMatchScore => '궁합 점수';
+
+  @override
+  String get compatElementsHeader => '오행 공명';
+
+  @override
+  String get compatPillarHeader => '기둥 케미';
+
+  @override
+  String get compatVerdictHigh => '자력처럼 끌리는 결합 — 오행이 서로를 살리는 사이클.';
+
+  @override
+  String get compatVerdictMid => '균형은 가능한 사이 — 마찰이 두 사람을 다듬으니 솔직함이 필요합니다.';
+
+  @override
+  String get compatVerdictLow => '강한 중력의 인연 — 의식하면 빛나고, 방치하면 지칩니다.';
+
+  @override
+  String get tojeongTitle => '토정비결 (土亭祕訣)';
+
+  @override
+  String get tojeongSubtitle => '올 한 해의 144괘 운세.';
+
+  @override
+  String get tojeongHexagram => '당신의 괘';
+
+  @override
+  String get tojeongYearOverview => '올해 개관';
+
+  @override
+  String get tojeongMonthlyHeader => '월별 흐름';
+
+  @override
+  String get datePickTitle => '택일 (擇日)';
+
+  @override
+  String get datePickSubtitle => '앞으로 30일 길일을 찾아드립니다.';
+
+  @override
+  String get datePickGoodDays => '길일';
+
+  @override
+  String get datePickAvoidDays => '피할 날';
+
+  @override
+  String get datePickNeutral => '평일';
+
+  @override
+  String get datePickReason => '이유';
+
+  @override
+  String get dreamTitle => '해몽 (解夢)';
+
+  @override
+  String get dreamSearchHint => '꿈 키워드 검색 (예: 뱀, 물)';
+
+  @override
+  String get dreamCategoryAll => '전체';
+
+  @override
+  String get dreamCategoryAuspicious => '길몽';
+
+  @override
+  String get dreamCategoryWarning => '경고';
+
+  @override
+  String get dreamCategoryWealth => '재물';
+
+  @override
+  String get dreamCategoryLove => '애정';
+
+  @override
+  String get dreamCategoryHealth => '건강';
+
+  @override
+  String get discoverTitle => '디스커버';
+
+  @override
+  String get discoverSubtitle => 'K-pop·K-drama 사주를 풀어보세요.';
+
+  @override
+  String get discoverFilterAll => '전체';
+
+  @override
+  String get discoverFilterIdol => '아이돌';
+
+  @override
+  String get discoverFilterActor => '배우';
+
+  @override
+  String get discoverFilterAthlete => '운동선수';
+
+  @override
+  String get discoverFilterIcon => '아이콘';
+
+  @override
+  String get discoverShareCompare => '내 사주와 비교';
 }

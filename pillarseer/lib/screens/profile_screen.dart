@@ -1,9 +1,10 @@
-// Pillar Seer — Profile 화면 (Phase 1 간단 구현).
-// 사용자 사주 요약 + Settings 진입 + Reset.
+// Pillar Seer — Profile 화면.
+// 사용자 사주 요약 + Pro 상태 + Settings 진입 + Reset.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../l10n/app_localizations.dart';
+import '../providers/dev_unlock_provider.dart';
 import '../providers/saju_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/bottom_nav.dart';
@@ -16,6 +17,7 @@ class ProfileScreen extends ConsumerWidget {
     final l = AppL10n.of(context);
     final saju = ref.watch(sajuResultProvider);
     final info = ref.watch(userBirthInfoProvider);
+    final isPro = ref.watch(devUnlockProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -56,6 +58,38 @@ class ProfileScreen extends ConsumerWidget {
                       style: const TextStyle(
                         fontSize: 14,
                         color: AppColors.celestialGold,
+                      ),
+                    ),
+                  ],
+                  if (isPro) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.celestialGold.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(
+                          color:
+                              AppColors.celestialGold.withValues(alpha: 0.6),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.workspace_premium,
+                              size: 12, color: AppColors.celestialGold),
+                          SizedBox(width: 5),
+                          Text(
+                            'PRO',
+                            style: TextStyle(
+                              fontSize: 10,
+                              letterSpacing: 1.2,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.celestialGold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
