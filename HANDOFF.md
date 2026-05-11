@@ -68,6 +68,72 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-12 03:50 (Mac 야간 자율) — 🏆 codex Round 12 **9.6/10 — v1.0 출시 OK** blessing
+
+사용자 mandate ("3시간+ 회의·반복, 1등이야 할 때까지") 충실히 이행. codex 와 12 라운드 이터레이션 완료.
+
+#### 최종 codex PM 평가
+```
+Round  점수    핵심
+1     4.6   초기 (shadowrun fork baseline)
+2     6.8   친근화 (일간→당신의 본성, glow up, easy mode banner)
+3     8.5   hourly + Pro hook + trust pill
+4     8.6   만세력 KASI + 카테고리 일운
+5+6   7.8   Streak + Calc Basis + Share + Notif Pool + Personalization (quality bar 올라감)
+7     8.1   ★ critical fix (atom 토큰 + chart hash + notif schedule + celeb 20명 KASI 정정)
+8     8.7   production hardening (tz.local + dev gate release-safe + url_launcher)
+9     9.2   ★ release safety (dev gate persistence 차단 + URL fallback)
+10    9.3   release preflight audit tool (20 checks)
+11    9.6   ★ Pro/IAP review safety + audit v2 (26 checks, HTTP 200 verify)
+12    9.6   📦 v1.0 출시 OK blessing — "지금 더 고칠수록 일정 리스크가 큼"
+```
+
+#### 출시 Ready Status
+- **Builds #3 ~ #15** ASC VALID 누적 13개
+- **Build #15** (Round 11 최종 — Pro/IAP review safety + 26 audit pass) deploy 중
+- **Privacy/Terms/Support** 실제 라이브: `dorisurararara-crypto.github.io/pillarseer/`
+- **Release preflight**: `dart run tool/release_audit.dart` → 26 PASSED / 0 errors / 0 warnings
+- **Tests**: 41+ passing (KASI 20명 celebrity 회귀 + personalization + tengods + streak)
+- **flutter analyze**: 0 issues
+- **App Store metadata**: `app_store_metadata.md` 작성 완료 (한·영 description + keywords + age rating + privacy)
+
+#### ❗ 사용자 액션 필요 (내일 아침)
+
+**1. Build #3 review 큐 점유 manual cancel (codex 확정 0% API path)**
+- ASC 웹 → Apps → Pillar Seer → TestFlight → Build #3 → Cancel Review/Withdraw
+- 그 후 터미널: `cd ~/seephone/pillarseer && ruby scripts/submit_external_beta.rb 15`
+
+**2. App Store production 정식 출시 (선택)**
+- ASC 웹 → Apps → Pillar Seer → "+ Version 1.0.0"
+- Build #15 선택
+- `app_store_metadata.md` 복사 → description / keywords / subtitle
+- Age rating 4+ 설문
+- Privacy URL/Support URL 입력
+- Screenshots upload (5장 — 자동 캡쳐 못 함, 사용자 1회 수동 또는 dart-define screenshot mode rebuild)
+- Submit for Review
+
+#### Round 11 새 기능 (마지막 라운드)
+- **Pro/IAP review safety** 카피 정리:
+  - "Unlock Full Reading" → "Full Reading — coming in Phase 2"
+  - "Unlock" CTA → "Coming soon"
+- **Release audit v2** (`tool/release_audit.dart`):
+  - 26 checks (pubspec/dev gate/privacy/Info.plist/assets/l10n/tests/celebs/Pro copy/HTTP 200)
+  - HTTP HEAD 실제 200 검증
+  - --strict 모드
+- **iOS Info.plist** LSApplicationQueriesSchemes whitelist
+
+#### 누적 코드베이스
+- 14 service: Manseryeok / TenGods / DeepContent / Hourly / Daily / Notification / NotificationPool / Personalization / Streak / SajuContent / Saju + dev tools
+- 12 screen: Splash / Input / Result / Home / Profile / Settings / Reports x 4 (home/compatibility/tojeong/datepicking/dream) / Discover
+- 6 provider: Saju / Locale / DevUnlock / Notification / Streak / UserBirthInfo
+- 250+ l10n keys ko/en
+- 1.2K KASI deep content fields (60일주 × 8 sections × ko/en)
+- 30 dreams + 20 celebrities + 144 hexagrams
+
+#### 막혔던 것 (codex+인터넷+커뮤니티 확인 후 미룬 것)
+- **ASC API DELETE betaAppReviewSubmissions** → 403 FORBIDDEN (Apple 정책 확정, fastlane #18408 확인)
+- **시뮬레이터 자동 입력 → Result 캡쳐** → SCREENSHOT_MODE dart-define 시도했으나 timer 충돌, manual capture 필요
+
 ### 2026-05-12 01:05 (Mac 야간 자율) — ✅ Round 2·3·4 일괄 완료 + codex GO blessing + 4 builds 업로드
 
 **codex PM 최종 점수**: **8.6/10 — App Store 출시 GO: Y** ✅
