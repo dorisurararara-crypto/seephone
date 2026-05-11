@@ -10,15 +10,30 @@ import '../services/daily_service.dart';
 import '../services/hourly_service.dart';
 import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
+import '../providers/streak_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
 
 /// Home (Today's Energy). 사용자 사주 + 오늘 일진 → 종합 점수 + 4 카테고리 + Lucky.
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 매일 첫 진입 시 streak tick
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(streakProvider.notifier).tick();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final saju = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
     final birth = ref.watch(userBirthInfoProvider);
     final fortune = DailyService().calculate(saju);
@@ -30,6 +45,8 @@ class HomeScreen extends ConsumerWidget {
           child: Column(
             children: [
               _Header(name: birth?.name, dayMasterName: saju.dayMasterName),
+              const SizedBox(height: 4),
+              const _StreakChip(),
               const SizedBox(height: 4),
               const _NotifToggleCard(),
               _HourlyFlowCard(saju: saju),
@@ -130,9 +147,16 @@ class _NotifToggleCard extends ConsumerWidget {
                 final notifier = ref.read(notificationProvider.notifier);
                 final messenger = ScaffoldMessenger.of(context);
                 if (v) {
+                  final saju = ref.read(sajuResultProvider);
+                  final useKo = (Localizations.maybeLocaleOf(context)
+                              ?.languageCode ??
+                          'en') ==
+                      'ko';
                   final ok = await notifier.enable(
                     pushTitle: l.homeNotifSampleTitle,
                     pushBody: l.homeNotifSampleBody,
+                    day60ji: saju?.day60ji,
+                    useKo: useKo,
                   );
                   messenger
                     ..hideCurrentSnackBar()
@@ -165,6 +189,69 @@ class _NotifToggleCard extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StreakChip extends ConsumerWidget {
+  const _StreakChip();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final streak = ref.watch(streakProvider);
+    if (streak.current <= 0) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
+            decoration: BoxDecoration(
+              color: AppColors.fireRed.withValues(alpha: 0.18),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: AppColors.fireRed.withValues(alpha: 0.45),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('🔥', style: TextStyle(fontSize: 13)),
+                const SizedBox(width: 5),
+                Text(
+                  l.homeStreakDays(streak.current),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.fireRed,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (streak.celebrate) ...[
+            const SizedBox(width: 8),
+            Text(
+              l.homeStreakNewDay,
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.celestialGold,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+          const Spacer(),
+          if (streak.longest > streak.current)
+            Text(
+              l.homeStreakLongest(streak.longest),
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.fadedSilver,
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -660,52 +747,56 @@ class _ScoreCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
-      width: 140,
-      height: 140,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: [
-            AppColors.celestialGold.withValues(alpha: 0.3),
-            Colors.transparent,
-          ],
-          stops: const [0.0, 0.7],
-        ),
-        border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.6), width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.celestialGold.withValues(alpha: 0.2),
-            blurRadius: 30,
-          ),
-        ],
-      ),
-      child: Center(
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            text: '$score',
-            style: const TextStyle(
-              fontSize: 46,
-              fontWeight: FontWeight.w900,
-              color: AppColors.celestialGold,
-              height: 1,
-            ),
-            children: const [
-              TextSpan(
-                text: '\n/100',
-                style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.moonlightGray,
-                    fontWeight: FontWeight.w400),
-              ),
+    return Semantics(
+      label: 'Today\'s energy score: $score out of 100',
+      excludeSemantics: true,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 12),
+        width: 140,
+        height: 140,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(
+            colors: [
+              AppColors.celestialGold.withValues(alpha: 0.3),
+              Colors.transparent,
             ],
+            stops: const [0.0, 0.7],
+          ),
+          border: Border.all(
+              color: AppColors.celestialGold.withValues(alpha: 0.6), width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.celestialGold.withValues(alpha: 0.2),
+              blurRadius: 30,
+            ),
+          ],
+        ),
+        child: Center(
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: '$score',
+              style: const TextStyle(
+                fontSize: 46,
+                fontWeight: FontWeight.w900,
+                color: AppColors.celestialGold,
+                height: 1,
+              ),
+              children: const [
+                TextSpan(
+                  text: '\n/100',
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: AppColors.moonlightGray,
+                      fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    ).animate().scale(duration: 600.ms).fadeIn();
+      ).animate().scale(duration: 600.ms).fadeIn(),
+    );
   }
 }
 

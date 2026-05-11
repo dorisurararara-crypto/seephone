@@ -298,6 +298,103 @@ class AppL10nKo extends AppL10n {
   String get homeHourlyFullTitle => '오늘의 12시간 흐름';
 
   @override
+  String get homeStreakTitle => '매일 확인 연속 🔥';
+
+  @override
+  String homeStreakDays(Object days) {
+    return '$days일';
+  }
+
+  @override
+  String homeStreakLongest(Object days) {
+    return '최장 $days일';
+  }
+
+  @override
+  String get homeStreakNewDay => '오늘 +1';
+
+  @override
+  String get homeShareCard => '내 사주 공유하기';
+
+  @override
+  String get shareCardTitle => '사주 공유';
+
+  @override
+  String get shareCardSubtitle => '본성 카드를 친구에게 보내요';
+
+  @override
+  String get shareCardSave => '이미지로 저장';
+
+  @override
+  String get shareCardSaved => '사진 앱에 저장됨';
+
+  @override
+  String get shareCardCopy => '텍스트 복사';
+
+  @override
+  String get shareCardCopied => '클립보드에 복사됨';
+
+  @override
+  String get shareCardClose => '닫기';
+
+  @override
+  String get resultBasisTitle => '이 풀이는 어떻게 계산됐어요';
+
+  @override
+  String get resultBasisCalendar => '달력';
+
+  @override
+  String get resultBasisSolar => '양력';
+
+  @override
+  String get resultBasisLunar => '음력 → 양력 (KASI)';
+
+  @override
+  String get resultBasisTimezone => '타임존';
+
+  @override
+  String get resultBasisTrueSun => '진태양시';
+
+  @override
+  String get resultBasisTrueSunOn => '적용됨 (서울 -32분)';
+
+  @override
+  String get resultBasisTrueSunOff => '표준시만 적용';
+
+  @override
+  String get resultBasisManseryeok => '만세력 출처';
+
+  @override
+  String get resultBasisManseryeokVal => '한국천문연구원 (KASI)';
+
+  @override
+  String get resultBasisYearBoundary => '년 기준';
+
+  @override
+  String get resultBasisYearBoundaryVal => '입춘 (立春, 2월 4일)';
+
+  @override
+  String get resultBasisDayBoundary => '일 기준';
+
+  @override
+  String get resultBasisDayBoundaryVal => '자시 (子時, 23:00 이후 다음날)';
+
+  @override
+  String get personalCardTitle => '오늘, 당신만을 위한 한 줄 🎯';
+
+  @override
+  String get personalHeadlineLabel => '당신은';
+
+  @override
+  String get personalBodyLabel => '오늘 흐름';
+
+  @override
+  String get personalActionLabel => '이거 해보세요';
+
+  @override
+  String get personalCautionLabel => '주의할 점';
+
+  @override
   String get splashTrust => '정통 사주, 누구나 쉽게';
 
   @override

@@ -3,9 +3,12 @@
 // Free user 는 본성+5행+Life Themes 3/6 만 unlocked; Pro 면 모두 해제.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
+import '../services/personalization_engine.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
@@ -44,6 +47,8 @@ class ResultScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             _TrustLine(),
             const SizedBox(height: 14),
+            _PersonalForYouCard(result: result, useKo: useKo),
+            const SizedBox(height: 18),
             _ThreeHitCard(result: result, reading: reading, useKo: useKo),
             const SizedBox(height: 22),
             _SectionHeader(
@@ -167,7 +172,9 @@ class ResultScreen extends ConsumerWidget {
               locked: !isPro,
               child: _LuckyBlock(reading: reading, useKo: useKo),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 24),
+            _CalculationBasisCard(result: result, useKo: useKo),
+            const SizedBox(height: 22),
             if (!isPro) _ProHooks(),
             const SizedBox(height: 18),
             if (!isPro)
@@ -207,18 +214,254 @@ class ResultScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             TextButton.icon(
-              onPressed: () => showComingSoonModal(context),
-              icon: const Icon(Icons.share, color: AppColors.moonlightGray),
+              onPressed: () => _shareChart(context, result, useKo),
+              icon: const Icon(Icons.share, color: AppColors.celestialGold),
               label: Text(
                 l.resultShare,
                 style: const TextStyle(
-                    color: AppColors.moonlightGray, fontSize: 14),
+                    color: AppColors.celestialGold,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 1),
+    );
+  }
+}
+
+// ──────── Personalization Engine 카드 (codex Round 6 #1 ROI)
+
+class _PersonalForYouCard extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _PersonalForYouCard({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final p = PersonalizationEngine.buildFor(result);
+    final head = useKo ? p.headlineKo : p.headlineEn;
+    final body = useKo ? p.bodyKo : p.bodyEn;
+    final action = useKo ? p.actionKo : p.actionEn;
+    final caution = useKo ? p.cautionKo : p.cautionEn;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.celestialGold.withValues(alpha: 0.18),
+            AppColors.mysticViolet.withValues(alpha: 0.22),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.6),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.auto_awesome,
+                  size: 18, color: AppColors.celestialGold),
+              const SizedBox(width: 8),
+              Text(
+                l.personalCardTitle,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.celestialGold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          _row('🪨', l.personalHeadlineLabel, head),
+          const SizedBox(height: 10),
+          _row('🌊', l.personalBodyLabel, body),
+          const SizedBox(height: 10),
+          _row('✅', l.personalActionLabel, action),
+          const SizedBox(height: 10),
+          _row('⚠️', l.personalCautionLabel, caution),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(String emoji, String label, String text) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppColors.midnightPurple.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 16)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    letterSpacing: 1.0,
+                    color: AppColors.celestialGold,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.ghostlyWhite,
+                    height: 1.6,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────── Share chart — copy + share via OS sheet
+
+Future<void> _shareChart(BuildContext context, SajuResult result, bool useKo) async {
+  final reading = useKo ? result.deepKo : result.deepEn;
+  final oneLine = reading?.oneLineYouAre ?? '';
+  final personality = reading?.personalityHook ?? '';
+  final today = reading?.todayHook ?? '';
+  final text = useKo
+      ? '''✨ 내 사주 — Pillar Seer ✨
+
+당신은 $oneLine 사람이에요.
+일주: ${result.dayMasterName} · ${result.day60ji}
+
+🪨 성격: $personality
+🎯 오늘: $today
+
+🔗 Pillar Seer 앱에서 확인'''
+      : '''✨ My Saju — Pillar Seer ✨
+
+You are a $oneLine person.
+Day Pillar: ${result.dayMasterName} · ${result.day60ji}
+
+🪨 Personality: $personality
+🎯 Today: $today
+
+🔗 Open Pillar Seer to read yours''';
+  try {
+    await SharePlus.instance.share(ShareParams(text: text));
+  } catch (_) {
+    // fallback: clipboard copy
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!context.mounted) return;
+    final l = AppL10n.of(context);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(l.shareCardCopied),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.celestialGold,
+        duration: const Duration(seconds: 2),
+      ));
+  }
+}
+
+// ──────── Calculation Basis (codex Round 5 #1 — 정확성 신뢰 패널)
+
+class _CalculationBasisCard extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _CalculationBasisCard({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final rows = [
+      (label: l.resultBasisManseryeok, value: l.resultBasisManseryeokVal),
+      (label: l.resultBasisYearBoundary, value: l.resultBasisYearBoundaryVal),
+      (label: l.resultBasisDayBoundary, value: l.resultBasisDayBoundaryVal),
+      (label: l.resultBasisTrueSun, value: l.resultBasisTrueSunOn),
+    ];
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        color: AppColors.midnightPurple.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.celestialGold.withValues(alpha: 0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.verified, size: 16, color: AppColors.celestialGold),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l.resultBasisTitle,
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.celestialGold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ...rows.map((r) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 90,
+                      child: Text(
+                        r.label,
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          color: AppColors.moonlightGray,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        r.value,
+                        style: const TextStyle(
+                          fontSize: 11.5,
+                          color: AppColors.ghostlyWhite,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
     );
   }
 }
@@ -912,7 +1155,13 @@ class _PillarItem extends StatelessWidget {
     final borderColor = highlight
         ? AppColors.celestialGold
         : AppColors.celestialGold.withValues(alpha: 0.3);
-    return Column(
+    final semanticLabel = isNull
+        ? '$label pillar: unknown'
+        : '$label pillar: ${pillar!.text}, ${pillar!.pairEnglish}';
+    return Semantics(
+      label: semanticLabel,
+      excludeSemantics: true,
+      child: Column(
       children: [
         Text(
           label.toUpperCase(),
@@ -970,6 +1219,7 @@ class _PillarItem extends StatelessWidget {
           ),
         ),
       ],
+    ),
     );
   }
 }

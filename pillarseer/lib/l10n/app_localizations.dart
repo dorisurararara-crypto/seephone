@@ -673,6 +673,192 @@ abstract class AppL10n {
   /// **'Today\'s 12-Hour Flow'**
   String get homeHourlyFullTitle;
 
+  /// No description provided for @homeStreakTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily check-in streak 🔥'**
+  String get homeStreakTitle;
+
+  /// No description provided for @homeStreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String homeStreakDays(Object days);
+
+  /// No description provided for @homeStreakLongest.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest: {days} days'**
+  String homeStreakLongest(Object days);
+
+  /// No description provided for @homeStreakNewDay.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 today'**
+  String get homeStreakNewDay;
+
+  /// No description provided for @homeShareCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Share my chart'**
+  String get homeShareCard;
+
+  /// No description provided for @shareCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your saju'**
+  String get shareCardTitle;
+
+  /// No description provided for @shareCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send your Core Self to friends'**
+  String get shareCardSubtitle;
+
+  /// No description provided for @shareCardSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save image'**
+  String get shareCardSave;
+
+  /// No description provided for @shareCardSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to Photos'**
+  String get shareCardSaved;
+
+  /// No description provided for @shareCardCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy text'**
+  String get shareCardCopy;
+
+  /// No description provided for @shareCardCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get shareCardCopied;
+
+  /// No description provided for @shareCardClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get shareCardClose;
+
+  /// No description provided for @resultBasisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How this reading was calculated'**
+  String get resultBasisTitle;
+
+  /// No description provided for @resultBasisCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get resultBasisCalendar;
+
+  /// No description provided for @resultBasisSolar.
+  ///
+  /// In en, this message translates to:
+  /// **'Solar'**
+  String get resultBasisSolar;
+
+  /// No description provided for @resultBasisLunar.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunar → Solar (KASI)'**
+  String get resultBasisLunar;
+
+  /// No description provided for @resultBasisTimezone.
+  ///
+  /// In en, this message translates to:
+  /// **'Timezone'**
+  String get resultBasisTimezone;
+
+  /// No description provided for @resultBasisTrueSun.
+  ///
+  /// In en, this message translates to:
+  /// **'True Solar Time'**
+  String get resultBasisTrueSun;
+
+  /// No description provided for @resultBasisTrueSunOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied (Seoul -32 min)'**
+  String get resultBasisTrueSunOn;
+
+  /// No description provided for @resultBasisTrueSunOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard time only'**
+  String get resultBasisTrueSunOff;
+
+  /// No description provided for @resultBasisManseryeok.
+  ///
+  /// In en, this message translates to:
+  /// **'Manseryeok source'**
+  String get resultBasisManseryeok;
+
+  /// No description provided for @resultBasisManseryeokVal.
+  ///
+  /// In en, this message translates to:
+  /// **'KASI (Korea Astronomy and Space Science Institute)'**
+  String get resultBasisManseryeokVal;
+
+  /// No description provided for @resultBasisYearBoundary.
+  ///
+  /// In en, this message translates to:
+  /// **'Year boundary'**
+  String get resultBasisYearBoundary;
+
+  /// No description provided for @resultBasisYearBoundaryVal.
+  ///
+  /// In en, this message translates to:
+  /// **'Ipchun (立春, Feb 4)'**
+  String get resultBasisYearBoundaryVal;
+
+  /// No description provided for @resultBasisDayBoundary.
+  ///
+  /// In en, this message translates to:
+  /// **'Day boundary'**
+  String get resultBasisDayBoundary;
+
+  /// No description provided for @resultBasisDayBoundaryVal.
+  ///
+  /// In en, this message translates to:
+  /// **'Jashi (子時, 23:00 next-day rule)'**
+  String get resultBasisDayBoundaryVal;
+
+  /// No description provided for @personalCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today, for YOU 🎯'**
+  String get personalCardTitle;
+
+  /// No description provided for @personalHeadlineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your read'**
+  String get personalHeadlineLabel;
+
+  /// No description provided for @personalBodyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s flow'**
+  String get personalBodyLabel;
+
+  /// No description provided for @personalActionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Try this'**
+  String get personalActionLabel;
+
+  /// No description provided for @personalCautionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch for'**
+  String get personalCautionLabel;
+
   /// No description provided for @splashTrust.
   ///
   /// In en, this message translates to:

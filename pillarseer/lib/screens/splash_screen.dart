@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../providers/saju_provider.dart';
+import '../services/saju_service.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -29,10 +30,35 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     _timer = Timer(delay, _go);
   }
 
-  void _go() {
+  /// Screenshot 모드 — --dart-define=SCREENSHOT_MODE=true 빌드 시
+  /// 더미 사주를 seed 하고 /result 로 바로 이동. App Store screenshot 캡쳐용.
+  static const _screenshotMode =
+      bool.fromEnvironment('SCREENSHOT_MODE', defaultValue: false);
+
+  void _go() async {
     if (_navigated || !mounted) return;
     _navigated = true;
+    if (_screenshotMode) {
+      final svc = SajuService();
+      final result = await svc.calculateSaju(
+        year: 1996, month: 4, day: 15, hour: 14, minute: 30,
+        isLunar: false, isMale: true,
+      );
+      ref.read(sajuResultProvider.notifier).set(result);
+      ref.read(userBirthInfoProvider.notifier).set(UserBirthInfo(
+            name: 'Demo',
+            birthDate: DateTime(1996, 4, 15),
+            birthHour: 14,
+            birthMinute: 30,
+            birthCity: '',
+            isLunar: false,
+          ));
+      if (!mounted) return;
+      context.go('/result');
+      return;
+    }
     final hasSaju = ref.read(sajuResultProvider) != null;
+    if (!mounted) return;
     context.go(hasSaju ? '/home' : '/input');
   }
 

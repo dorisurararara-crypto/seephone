@@ -311,6 +311,104 @@ class AppL10nEn extends AppL10n {
   String get homeHourlyFullTitle => 'Today\'s 12-Hour Flow';
 
   @override
+  String get homeStreakTitle => 'Daily check-in streak 🔥';
+
+  @override
+  String homeStreakDays(Object days) {
+    return '$days days';
+  }
+
+  @override
+  String homeStreakLongest(Object days) {
+    return 'Longest: $days days';
+  }
+
+  @override
+  String get homeStreakNewDay => '+1 today';
+
+  @override
+  String get homeShareCard => 'Share my chart';
+
+  @override
+  String get shareCardTitle => 'Share your saju';
+
+  @override
+  String get shareCardSubtitle => 'Send your Core Self to friends';
+
+  @override
+  String get shareCardSave => 'Save image';
+
+  @override
+  String get shareCardSaved => 'Saved to Photos';
+
+  @override
+  String get shareCardCopy => 'Copy text';
+
+  @override
+  String get shareCardCopied => 'Copied to clipboard';
+
+  @override
+  String get shareCardClose => 'Close';
+
+  @override
+  String get resultBasisTitle => 'How this reading was calculated';
+
+  @override
+  String get resultBasisCalendar => 'Calendar';
+
+  @override
+  String get resultBasisSolar => 'Solar';
+
+  @override
+  String get resultBasisLunar => 'Lunar → Solar (KASI)';
+
+  @override
+  String get resultBasisTimezone => 'Timezone';
+
+  @override
+  String get resultBasisTrueSun => 'True Solar Time';
+
+  @override
+  String get resultBasisTrueSunOn => 'Applied (Seoul -32 min)';
+
+  @override
+  String get resultBasisTrueSunOff => 'Standard time only';
+
+  @override
+  String get resultBasisManseryeok => 'Manseryeok source';
+
+  @override
+  String get resultBasisManseryeokVal =>
+      'KASI (Korea Astronomy and Space Science Institute)';
+
+  @override
+  String get resultBasisYearBoundary => 'Year boundary';
+
+  @override
+  String get resultBasisYearBoundaryVal => 'Ipchun (立春, Feb 4)';
+
+  @override
+  String get resultBasisDayBoundary => 'Day boundary';
+
+  @override
+  String get resultBasisDayBoundaryVal => 'Jashi (子時, 23:00 next-day rule)';
+
+  @override
+  String get personalCardTitle => 'Today, for YOU 🎯';
+
+  @override
+  String get personalHeadlineLabel => 'Your read';
+
+  @override
+  String get personalBodyLabel => 'Today\'s flow';
+
+  @override
+  String get personalActionLabel => 'Try this';
+
+  @override
+  String get personalCautionLabel => 'Watch for';
+
+  @override
   String get splashTrust => 'Korean traditional Four Pillars · made easy';
 
   @override
