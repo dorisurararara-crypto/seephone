@@ -68,6 +68,52 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-12 12:00 (Mac → Windows) — ✅ Build #4 (Round 1-4 SHIP fix 포함) ASC VALID + #3 review 통과 대기
+
+Windows Round 4 SHIP 합의 받아 사용자 결정 후 즉시 build #4 진행.
+
+**완료**:
+- ✅ `flutter pub get` (4 deps minor bump)
+- ✅ `flutter analyze` → No issues found!
+- ✅ `flutter test` → All 2 tests passed (60갑자 + 1996-04-15 사주)
+- ✅ `deploy_testflight.sh 4` → archive 23M (build #3 22M보다 1MB ↑, 새 fix들)
+- ✅ altool UPLOAD SUCCEEDED. **Delivery `6e1a52d3-7292-432c-9679-4b87b5679e4d`**
+- ✅ iTMS BUILD-STATUS / IMPORT-STATUS 둘 다 VALID
+- ✅ ASC processing 완료 (즉시, 캐시 효과). **Build #4 state=VALID**
+- ✅ betaBuildLocalizations / usesNonExemptEncryption — HTTP 409 (이미 ASC가 #3 메타 자동 propagate, 멱등 OK)
+
+**막힘**:
+- ❌ `submit_external_beta.rb 4` → HTTP 422 `ENTITY_UNPROCESSABLE.ANOTHER_BUILD_IN_REVIEW`. Apple 정책: 한 train(앱) 에 하나의 build 만 review 진행. Build #3 가 WAITING_FOR_REVIEW 라 #4 즉시 submit 불가.
+- ❌ ASC API DELETE `/v1/betaAppReviewSubmissions/{id}` → HTTP 403 FORBIDDEN. CRUD 중 CREATE/GET 만 허용, DELETE X.
+
+**사용자 결정 (2026-05-12 12:00)**: `#3 review 자연 통과 기다림 (24-48h)`. 첫 베타 사용자는 #3 (이전 코드) 를 받고, 통과 후 #4 (Round 1-4 SHIP fix 포함) 자동 submit 진행.
+
+**Build #4 vs #3 차이 (사용자 출시 후 받을 것)**:
+- Round 1: 만세력 정확도 + UX 합의
+- Round 2: Riverpod 상태 / Bottom Nav 통합 / 접근성
+- Round 3: state correctness + i18n quick wins (10 fix)
+- Round 4: SHIP verification (Codex SHIP + Gemini 10/10 ✅)
+- + 앱 아이콘 #02 (Crescent + 8 Stars) + Splash 강화
+
+**현재 상태 매트릭스**:
+| 항목 | Build #3 | Build #4 |
+|---|---|---|
+| ASC state | VALID | VALID |
+| Beta Review | WAITING_FOR_REVIEW (큐) | (자동 submit 대기) |
+| 사용자 자율 권한 | 이미 review 진행 | #3 통과 시 자동 |
+| 예상 사용자 받음 시점 | 2026-05-13 ~ 2026-05-14 | 2026-05-14 ~ 2026-05-16 |
+
+**다음 자동 단계 (cron 매 시 17분)**:
+- Mac 측 ASC `/v1/builds/{build3_id}/betaAppReviewSubmission` 폴링
+- Build #3 state APPROVED/REJECTED 변동 → 자동 build #4 submit
+- (현재 cron prompt 는 HANDOFF 만 폴링. ASC state 폴링 추가하려면 cron 갱신 필요. 사용자가 명시 시)
+
+**Mac 자율 추가 작업 가능 (Windows + 사용자 명시 X 인 동안)**:
+- Profile / Daily Detail / Compatibility 진짜 화면 구현 (Phase 2)
+- IAP wire (UI placeholder까지, 결제는 사용자 RevenueCat 가입 후)
+
+---
+
 ### 2026-05-12 11:25 (Windows → Mac) — 🎉 3사 합의 SHIP 도달 — UX 무한 토론 종료 (commit 6295184)
 
 **사용자 mandate "3사가 다 만족할때까지 무한 토론" 달성** ✅
