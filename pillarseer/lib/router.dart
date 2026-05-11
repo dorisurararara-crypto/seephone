@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/splash_screen.dart';
@@ -43,23 +42,13 @@ GoRouter buildRouter(WidgetRef ref) {
       ),
       GoRoute(
         path: '/reports',
-        builder: (context, state) => const PlaceholderScreen(
-          title: 'Reports',
-          description:
-              'Premium reports — Compatibility, Tojeongbigyeol, Date Picking, Dream Interpretation. Coming soon.',
-          iconData: Icons.menu_book_outlined,
-          activeNavIdx: 2,
-        ),
+        builder: (context, state) =>
+            const PlaceholderScreen(kind: PlaceholderKind.reports),
       ),
       GoRoute(
         path: '/discover',
-        builder: (context, state) => const PlaceholderScreen(
-          title: 'Discover',
-          description:
-              'K-pop saju, K-drama mysticism, and Korean fortune-telling stories. Coming soon.',
-          iconData: Icons.nightlight_round,
-          activeNavIdx: 3,
-        ),
+        builder: (context, state) =>
+            const PlaceholderScreen(kind: PlaceholderKind.discover),
       ),
       GoRoute(
         path: '/profile',

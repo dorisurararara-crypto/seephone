@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
 /// 5탭 Bottom Nav. home/result/placeholder 공유.
@@ -9,16 +10,16 @@ class PillarBottomNav extends StatelessWidget {
 
   const PillarBottomNav({super.key, required this.activeIdx});
 
-  static const _items = <_NavItem>[
-    _NavItem(icon: Icons.auto_awesome, label: 'Home', route: '/home'),
-    _NavItem(icon: Icons.view_column_outlined, label: 'Reading', route: '/result'),
-    _NavItem(icon: Icons.menu_book_outlined, label: 'Reports', route: '/reports'),
-    _NavItem(icon: Icons.nightlight_round, label: 'Discover', route: '/discover'),
-    _NavItem(icon: Icons.person_outline, label: 'Profile', route: '/profile'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final items = <_NavItem>[
+      _NavItem(icon: Icons.auto_awesome, label: l.navHome, route: '/home'),
+      _NavItem(icon: Icons.view_column_outlined, label: l.navReading, route: '/result'),
+      _NavItem(icon: Icons.menu_book_outlined, label: l.navReports, route: '/reports'),
+      _NavItem(icon: Icons.nightlight_round, label: l.navDiscover, route: '/discover'),
+      _NavItem(icon: Icons.person_outline, label: l.navProfile, route: '/profile'),
+    ];
     return Container(
       decoration: BoxDecoration(
         color: AppColors.cosmicBlack.withValues(alpha: 0.95),
@@ -32,7 +33,7 @@ class PillarBottomNav extends StatelessWidget {
         child: SizedBox(
           height: 60,
           child: Row(
-            children: _items.asMap().entries.map((entry) {
+            children: items.asMap().entries.map((entry) {
               final i = entry.key;
               final item = entry.value;
               final isActive = i == activeIdx;

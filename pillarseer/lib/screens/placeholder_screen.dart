@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../widgets/bottom_nav.dart';
 
-/// 다른 탭의 placeholder. Phase 2에서 각 탭 풀 화면으로 교체.
-class PlaceholderScreen extends StatelessWidget {
-  final String title;
-  final String description;
-  final IconData iconData;
-  final int activeNavIdx; // 0=Home 1=Reading 2=Reports 3=Discover 4=Profile
+enum PlaceholderKind { reports, discover }
 
-  const PlaceholderScreen({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.iconData,
-    required this.activeNavIdx,
-  });
+/// Reports / Discover placeholder (Phase 2 까지 임시).
+class PlaceholderScreen extends StatelessWidget {
+  final PlaceholderKind kind;
+
+  const PlaceholderScreen({super.key, required this.kind});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final String title;
+    final String description;
+    final IconData icon;
+    final int navIdx;
+    switch (kind) {
+      case PlaceholderKind.reports:
+        title = l.placeholderReportsTitle;
+        description = l.placeholderReportsDesc;
+        icon = Icons.menu_book_outlined;
+        navIdx = 2;
+        break;
+      case PlaceholderKind.discover:
+        title = l.placeholderDiscoverTitle;
+        description = l.placeholderDiscoverDesc;
+        icon = Icons.nightlight_round;
+        navIdx = 3;
+        break;
+    }
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -27,7 +40,7 @@ class PlaceholderScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(iconData, size: 56, color: AppColors.celestialGold),
+                Icon(icon, size: 56, color: AppColors.celestialGold),
                 const SizedBox(height: 24),
                 Text(
                   title.toUpperCase(),
@@ -58,9 +71,9 @@ class PlaceholderScreen extends StatelessWidget {
                     border: Border.all(
                         color: AppColors.celestialGold.withValues(alpha: 0.3)),
                   ),
-                  child: const Text(
-                    'COMING SOON',
-                    style: TextStyle(
+                  child: Text(
+                    l.placeholderComingSoon,
+                    style: const TextStyle(
                       fontSize: 10,
                       letterSpacing: 2.0,
                       color: AppColors.celestialGold,
@@ -73,7 +86,7 @@ class PlaceholderScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: PillarBottomNav(activeIdx: activeNavIdx),
+      bottomNavigationBar: PillarBottomNav(activeIdx: navIdx),
     );
   }
 }

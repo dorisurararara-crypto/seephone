@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../providers/saju_provider.dart';
 import '../widgets/bottom_nav.dart';
+import '../widgets/coming_soon_modal.dart';
 
 class ResultScreen extends ConsumerWidget {
   const ResultScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
     final result = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('YOUR LIFE PATH'),
+        title: Text(l.resultTitle),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -34,9 +37,9 @@ class ResultScreen extends ConsumerWidget {
             _CategoryGrid(result: result),
             const SizedBox(height: 32),
             ElevatedButton.icon(
-              onPressed: () => _showComingSoon(context, 'In-app purchase coming soon.'),
+              onPressed: () => showComingSoonModal(context),
               icon: const Icon(Icons.lock_open),
-              label: const Text('Unlock Full Reading'),
+              label: Text(l.resultUnlockFull),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.celestialGold,
                 foregroundColor: AppColors.midnightPurple,
@@ -49,9 +52,9 @@ class ResultScreen extends ConsumerWidget {
             OutlinedButton.icon(
               onPressed: () => context.go('/home'),
               icon: const Icon(Icons.arrow_forward, color: AppColors.celestialGold),
-              label: const Text(
-                'Continue to Daily Reading',
-                style: TextStyle(color: AppColors.ghostlyWhite, letterSpacing: 1.0),
+              label: Text(
+                l.resultContinueDaily,
+                style: const TextStyle(color: AppColors.ghostlyWhite, letterSpacing: 1.0),
               ),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
@@ -60,26 +63,16 @@ class ResultScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             TextButton.icon(
-              onPressed: () => _showComingSoon(context, 'Sharing to Story coming soon.'),
+              onPressed: () => showComingSoonModal(context),
               icon: const Icon(Icons.share, color: AppColors.moonlightGray),
-              label: const Text('Share to Story',
-                  style: TextStyle(color: AppColors.moonlightGray)),
+              label: Text(l.resultShare,
+                  style: const TextStyle(color: AppColors.moonlightGray)),
             ),
           ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 1),
     );
-  }
-
-  void _showComingSoon(BuildContext context, String msg) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text(msg),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.spiritIndigo,
-      ));
   }
 }
 
@@ -89,7 +82,7 @@ class _PillarGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 320dp 같은 좁은 폭에서 4기둥 + 영문 라벨이 overflow 되지 않게 가로 스크롤 fallback.
+    final l = AppL10n.of(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
@@ -99,10 +92,13 @@ class _PillarGrid extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _PillarItem(label: 'Year', pillar: result.yearPillar),
-            _PillarItem(label: 'Month', pillar: result.monthPillar),
-            _PillarItem(label: 'Day', pillar: result.dayPillar, highlight: true),
-            _PillarItem(label: 'Hour', pillar: result.hourPillar),
+            _PillarItem(label: l.resultPillarYear, pillar: result.yearPillar),
+            _PillarItem(label: l.resultPillarMonth, pillar: result.monthPillar),
+            _PillarItem(
+                label: l.resultPillarDay,
+                pillar: result.dayPillar,
+                highlight: true),
+            _PillarItem(label: l.resultPillarHour, pillar: result.hourPillar),
           ],
         ),
       ),
@@ -189,6 +185,7 @@ class _DayMasterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -206,9 +203,9 @@ class _DayMasterCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            'DAY MASTER',
-            style: TextStyle(
+          Text(
+            l.resultDayMaster.toUpperCase(),
+            style: const TextStyle(
               fontSize: 10,
               letterSpacing: 2.5,
               color: AppColors.moonlightGray,
@@ -248,17 +245,18 @@ class _ElementsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final el = result.elements;
     final dom = el.dominant;
     final def = el.deficit;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 8),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
           child: Text(
-            'FIVE ELEMENTS',
-            style: TextStyle(
+            l.resultFiveElements.toUpperCase(),
+            style: const TextStyle(
               fontSize: 10,
               letterSpacing: 2.0,
               color: AppColors.moonlightGray,
@@ -357,11 +355,12 @@ class _CategoryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final cats = <_Cat>[
-      const _Cat(icon: Icons.bolt, title: 'Strength', key: 'personality', locked: false),
-      const _Cat(icon: Icons.favorite, title: 'Love', key: 'love', locked: false),
-      const _Cat(icon: Icons.work_outline, title: 'Career', key: 'career', locked: true),
-      const _Cat(icon: Icons.savings_outlined, title: 'Wealth', key: 'money', locked: true),
+      _Cat(icon: Icons.bolt, title: l.resultStrength, key: 'personality', locked: false),
+      _Cat(icon: Icons.favorite, title: l.resultLove, key: 'love', locked: false),
+      _Cat(icon: Icons.work_outline, title: l.resultCareer, key: 'career', locked: true),
+      _Cat(icon: Icons.savings_outlined, title: l.resultWealth, key: 'money', locked: true),
     ];
 
     return GridView.count(
@@ -464,9 +463,10 @@ class _Cat {
   final String title;
   final String key;
   final bool locked;
-  const _Cat(
-      {required this.icon,
-      required this.title,
-      required this.key,
-      required this.locked});
+  const _Cat({
+    required this.icon,
+    required this.title,
+    required this.key,
+    required this.locked,
+  });
 }

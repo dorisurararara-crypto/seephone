@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
 import '../services/daily_service.dart';
 import '../providers/saju_provider.dart';
 import '../widgets/bottom_nav.dart';
+import '../widgets/coming_soon_modal.dart';
 
 /// Home (Today's Energy). 사용자 사주 + 오늘 일진 → 종합 점수 + 4 카테고리 + Lucky.
 class HomeScreen extends ConsumerWidget {
@@ -30,6 +32,7 @@ class HomeScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               const _MoonDeco(),
               _ScoreCircle(score: fortune.totalScore),
+              _ScoreExplanation(score: fortune.totalScore),
               _Quote(quote: fortune.quote),
               _TodayPillarRow(
                 dayPillar: fortune.dayPillar,
@@ -61,16 +64,17 @@ class _Header extends StatelessWidget {
   final String dayMasterName;
   const _Header({required this.name, required this.dayMasterName});
 
-  String _greeting() {
+  String _greeting(AppL10n l) {
     final h = DateTime.now().hour;
-    if (h < 5) return 'Late night,';
-    if (h < 12) return 'Good morning,';
-    if (h < 18) return 'Good afternoon,';
-    return 'Good evening,';
+    if (h < 5) return '${l.homeGreetingNight},';
+    if (h < 12) return '${l.homeGreetingMorning},';
+    if (h < 18) return '${l.homeGreetingAfternoon},';
+    return '${l.homeGreetingEvening},';
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final displayName = (name != null && name!.trim().isNotEmpty)
         ? name!.trim()
         : dayMasterName;
@@ -84,7 +88,7 @@ class _Header extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _greeting(),
+                  _greeting(l),
                   style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.moonlightGray,
@@ -222,6 +226,36 @@ class _ScoreCircle extends StatelessWidget {
   }
 }
 
+class _ScoreExplanation extends StatelessWidget {
+  final int score;
+  const _ScoreExplanation({required this.score});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final String msg;
+    if (score < 50) {
+      msg = l.homeExplanationLow;
+    } else if (score < 75) {
+      msg = l.homeExplanationMid;
+    } else {
+      msg = l.homeExplanationHigh;
+    }
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(32, 0, 32, 8),
+      child: Text(
+        msg,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 12,
+          color: AppColors.moonlightGray,
+          height: 1.5,
+        ),
+      ),
+    ).animate().fadeIn(delay: 200.ms);
+  }
+}
+
 class _Quote extends StatelessWidget {
   final String quote;
   const _Quote({required this.quote});
@@ -251,10 +285,11 @@ class _TodayPillarRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final hasEnglish = englishLabel.isNotEmpty;
     final text = hasEnglish
-        ? "Today's Pillar · $englishLabel ($dayPillar)"
-        : "Today's Pillar · $dayPillar";
+        ? '${l.homeTodaysPillar} · $englishLabel ($dayPillar)'
+        : '${l.homeTodaysPillar} · $dayPillar';
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Container(
@@ -285,14 +320,15 @@ class _CategoryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final cats = [
-      _CatItem(icon: Icons.favorite, name: 'Love', score: fortune.loveScore),
-      _CatItem(icon: Icons.work_outline, name: 'Work', score: fortune.workScore),
+      _CatItem(icon: Icons.favorite, name: l.homeCategoryLove, score: fortune.loveScore),
+      _CatItem(icon: Icons.work_outline, name: l.homeCategoryWork, score: fortune.workScore),
       _CatItem(
           icon: Icons.savings_outlined,
-          name: 'Wealth',
+          name: l.homeCategoryWealth,
           score: fortune.wealthScore),
-      _CatItem(icon: Icons.bolt, name: 'Energy', score: fortune.energyScore),
+      _CatItem(icon: Icons.bolt, name: l.homeCategoryEnergy, score: fortune.energyScore),
     ];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -361,13 +397,17 @@ class _LuckyCard extends StatelessWidget {
             Border.all(color: AppColors.celestialGold.withValues(alpha: 0.15)),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        children: [
-          _row(Icons.palette_outlined, 'Lucky Color', fortune.luckyColor),
-          _row(Icons.tag, 'Lucky Number', '${fortune.luckyNumber}'),
-          _row(Icons.explore_outlined, 'Lucky Direction', fortune.luckyDirection),
-        ],
-      ),
+      child: Builder(builder: (context) {
+        final l = AppL10n.of(context);
+        return Column(
+          children: [
+            _row(Icons.palette_outlined, l.homeLuckyColor, fortune.luckyColor),
+            _row(Icons.tag, l.homeLuckyNumber, '${fortune.luckyNumber}'),
+            _row(Icons.explore_outlined, l.homeLuckyDirection,
+                fortune.luckyDirection),
+          ],
+        );
+      }),
     );
   }
 
@@ -400,16 +440,9 @@ class _PromoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     return InkWell(
-      onTap: () {
-        ScaffoldMessenger.of(context)
-          ..hideCurrentSnackBar()
-          ..showSnackBar(const SnackBar(
-            content: Text('Annual reading coming soon.'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: AppColors.spiritIndigo,
-          ));
-      },
+      onTap: () => showComingSoonModal(context),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 24),
         padding: const EdgeInsets.all(14),
@@ -424,32 +457,34 @@ class _PromoCard extends StatelessWidget {
               Border.all(color: AppColors.celestialGold.withValues(alpha: 0.3)),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'LIMITED',
-              style: TextStyle(
+              l.homePromoLimited,
+              style: const TextStyle(
                 fontSize: 9,
                 color: AppColors.celestialGold,
                 letterSpacing: 1.5,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
-              "Your 2026 Annual Reading",
-              style: TextStyle(
+              l.homePromoTitle,
+              style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: AppColors.ghostlyWhite,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
-              'Discover the 144 hexagrams\nthat shape your year ahead.',
-              style: TextStyle(
-                  fontSize: 11, color: AppColors.moonlightGray, height: 1.5),
+              l.homePromoDesc,
+              style: const TextStyle(
+                  fontSize: 11,
+                  color: AppColors.moonlightGray,
+                  height: 1.5),
             ),
           ],
         ),
