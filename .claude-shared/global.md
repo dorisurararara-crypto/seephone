@@ -15,7 +15,25 @@
 **자율 진행** — 묻기 전에 로컬 탐색·웹 검색 먼저. 진짜 사용자만 가능한 영역(Apple 2FA·신규
 가입 등)만 사용자 대기 큐. 그 외 모두 자율.
 
-막히면 codex 무료 한도 안에서 상의 (`codex exec resume --last "..."`).
+막히면 codex / gemini 와 상의 (`codex exec "..."` / `gemini -p "..."`).
+
+### codex CLI 인증 — 반드시 ChatGPT 구독 모드 (API key X)
+
+사용자는 **ChatGPT Pro $200/월** 구독 중 — codex CLI 는 ChatGPT 구독으로 인증해야 추가 결제 X.
+API key (`sk-proj-...`) 모드는 별도 platform.openai.com pay-as-you-go = **돈 또 나감**.
+
+**확인**: `~/.codex/auth.json` 에 `"auth_mode": "apikey"` 보이면 잘못된 상태.
+
+**전환**:
+```bash
+codex logout
+codex login         # → "Sign in with ChatGPT" 선택 → 브라우저 OAuth
+```
+
+전환 후 `~/.codex/auth.json` 의 `auth_mode` 가 `chatgpt` 류로 변경됨. 토큰 자동 갱신.
+
+API key 모드 발견 시 Mac/Windows Claude 모두 **즉시 사용자에게 알리고 codex 호출 중단** —
+그 동안은 gemini (`gemini -p "..."`) 로 대체.
 
 ## 머신 식별 (필수 — 세션 시작 시)
 
