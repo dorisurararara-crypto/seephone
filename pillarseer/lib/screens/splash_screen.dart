@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../providers/saju_provider.dart';
 
@@ -43,26 +44,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final reduceMotion = MediaQuery.of(context).disableAnimations;
     final logo = Image.asset(
       'assets/icon/splash_logo.png',
       width: 180,
       height: 180,
-      semanticLabel: 'Pillar Seer logo',
+      semanticLabel: l.appTitle,
     );
-    final title = const Text(
-      'PILLAR SEER',
-      style: TextStyle(
+    final title = Text(
+      l.appTitle.toUpperCase(),
+      style: const TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.w900,
         letterSpacing: 8,
         color: AppColors.ghostlyWhite,
       ),
     );
-    const tagline = Text(
-      'Read your destiny\nthrough the four pillars',
+    final tagline = Text(
+      l.splashTagline,
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 13,
         fontStyle: FontStyle.italic,
         color: AppColors.moonlightGray,
@@ -131,7 +133,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 child: Center(
                   child: Semantics(
                     button: true,
-                    label: 'Skip splash and continue',
+                    label: l.splashSkipSemantic,
                     child: TextButton(
                       onPressed: _go,
                       style: TextButton.styleFrom(
@@ -140,9 +142,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                             horizontal: 16, vertical: 8),
                         minimumSize: const Size(120, 44),
                       ),
-                      child: const Text(
-                        'tap to skip',
-                        style: TextStyle(
+                      child: Text(
+                        l.splashTapToSkip,
+                        style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.fadedSilver,
                           letterSpacing: 2.0,

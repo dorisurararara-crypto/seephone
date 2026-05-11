@@ -6,6 +6,8 @@ import 'screens/input_screen.dart';
 import 'screens/result_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/placeholder_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/settings_screen.dart';
 import 'providers/saju_provider.dart';
 
 /// 전역 라우터. extra 의존 제거.
@@ -61,13 +63,11 @@ GoRouter buildRouter(WidgetRef ref) {
       ),
       GoRoute(
         path: '/profile',
-        builder: (context, state) => const PlaceholderScreen(
-          title: 'Profile',
-          description:
-              'Your birth chart archive, multi-profile management, and subscription. Coming soon.',
-          iconData: Icons.person_outline,
-          activeNavIdx: 4,
-        ),
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
   );

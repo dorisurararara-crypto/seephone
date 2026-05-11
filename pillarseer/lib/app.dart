@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'l10n/app_localizations.dart';
+import 'providers/locale_provider.dart';
 import 'router.dart';
 import 'theme/app_theme.dart';
 
@@ -24,11 +26,15 @@ class _RouterHostState extends ConsumerState<_RouterHost> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeProvider);
     return MaterialApp.router(
-      title: 'Pillar Seer',
+      onGenerateTitle: (ctx) => AppL10n.of(ctx).appTitle,
       theme: AppTheme.darkTheme,
       routerConfig: _router,
       debugShowCheckedModeBanner: false,
+      locale: locale,
+      localizationsDelegates: AppL10n.localizationsDelegates,
+      supportedLocales: AppL10n.supportedLocales,
     );
   }
 }
