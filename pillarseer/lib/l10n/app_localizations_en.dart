@@ -442,6 +442,93 @@ class AppL10nEn extends AppL10n {
       'All your data was deleted. Welcome back fresh.';
 
   @override
+  String get paywallTitle => 'Pillar Seer Pro';
+
+  @override
+  String get paywallSubtitle => 'Unlock your full Four Pillars map';
+
+  @override
+  String get paywallHeadline => 'More than today\'s one-liner.';
+
+  @override
+  String get paywallSubline =>
+      'Personalized relationship, career, money, and timing reports — every day.';
+
+  @override
+  String get paywallFreeColumn => 'Free';
+
+  @override
+  String get paywallProColumn => 'Pro';
+
+  @override
+  String get paywallFeature1 => 'Day Master + Five Elements';
+
+  @override
+  String get paywallFeature2 => 'Today\'s 30-second read';
+
+  @override
+  String get paywallFeature3 => 'Hourly flow';
+
+  @override
+  String get paywallFeature4 => 'K-pop celebrity compare';
+
+  @override
+  String get paywallFeature5 => 'Full Life Themes (6 areas)';
+
+  @override
+  String get paywallFeature6 =>
+      'Year of Love · Compatibility · Important Dates';
+
+  @override
+  String get paywallFeature7 => 'Ten Gods relationship map';
+
+  @override
+  String get paywallFeature8 => '10-Year Chapter (大運) full reading';
+
+  @override
+  String get paywallFeature9 => 'Personalized notifications';
+
+  @override
+  String get paywallFeature10 => 'Multi-profile (family, friends, lovers)';
+
+  @override
+  String get paywallMonthly => 'Monthly';
+
+  @override
+  String get paywallYearly => 'Yearly';
+
+  @override
+  String get paywallLifetime => 'Lifetime';
+
+  @override
+  String get paywallMonthlyPrice => '\$4.99 / month';
+
+  @override
+  String get paywallYearlyPrice => '\$29.99 / year';
+
+  @override
+  String get paywallYearlyHint => 'Save 50%';
+
+  @override
+  String get paywallLifetimePrice => '\$49.99 once';
+
+  @override
+  String get paywallLifetimeHint => 'Launch promo';
+
+  @override
+  String get paywallCta => 'Start Pro';
+
+  @override
+  String get paywallSoon =>
+      'Payments coming soon — leave your email below for early access';
+
+  @override
+  String get paywallRestoreLater => 'Restore purchase (later)';
+
+  @override
+  String get paywallClose => 'Maybe later';
+
+  @override
   String get splashTrust => 'Korean traditional Four Pillars · made easy';
 
   @override

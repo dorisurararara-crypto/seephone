@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/dev_unlock_provider.dart';
 import '../providers/locale_provider.dart';
@@ -267,9 +268,21 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: _onVersionTap,
             child: _aboutTile(context, l.settingsVersion, '1.0.0'),
           ),
-          _aboutTile(context, l.settingsPrivacy, 'pillarseer/privacy.html'),
-          _aboutTile(context, l.settingsTerms, 'pillarseer/terms.html'),
-          _aboutTile(context, l.settingsContact, 'dorisurararara@gmail.com'),
+          _LinkTile(
+            label: l.settingsPrivacy,
+            value: 'github.io/pillarseer/privacy',
+            url: 'https://dorisurararara-crypto.github.io/pillarseer/privacy.html',
+          ),
+          _LinkTile(
+            label: l.settingsTerms,
+            value: 'github.io/pillarseer/terms',
+            url: 'https://dorisurararara-crypto.github.io/pillarseer/terms.html',
+          ),
+          _LinkTile(
+            label: l.settingsContact,
+            value: 'dorisurararara@gmail.com',
+            url: 'mailto:dorisurararara@gmail.com',
+          ),
         ],
       ),
     );
@@ -396,6 +409,67 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LinkTile extends StatelessWidget {
+  final String label;
+  final String value;
+  final String url;
+  const _LinkTile({required this.label, required this.value, required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Material(
+        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          onTap: () async {
+            final uri = Uri.parse(url);
+            try {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
+            } catch (_) {}
+          },
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: AppColors.celestialGold.withValues(alpha: 0.1),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.ghostlyWhite,
+                    ),
+                  ),
+                ),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    color: AppColors.celestialGold,
+                    decoration: TextDecoration.underline,
+                    decorationColor: AppColors.celestialGold,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.open_in_new,
+                    size: 12, color: AppColors.celestialGold),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -426,6 +426,90 @@ class AppL10nKo extends AppL10n {
   String get settingsDeletedSnack => '모든 데이터를 삭제했어요. 새로 시작합니다.';
 
   @override
+  String get paywallTitle => 'Pillar Seer Pro';
+
+  @override
+  String get paywallSubtitle => '내 사주의 전체 흐름을 열어보세요';
+
+  @override
+  String get paywallHeadline => '오늘의 한 줄을 넘어서.';
+
+  @override
+  String get paywallSubline => '관계·일·돈·타이밍 리포트, 매일 개인화된 깊은 풀이.';
+
+  @override
+  String get paywallFreeColumn => '무료';
+
+  @override
+  String get paywallProColumn => 'Pro';
+
+  @override
+  String get paywallFeature1 => '일주 + 5행 분포';
+
+  @override
+  String get paywallFeature2 => '오늘의 30초 요약';
+
+  @override
+  String get paywallFeature3 => '시간대별 흐름';
+
+  @override
+  String get paywallFeature4 => 'K-pop 셀럽 비교';
+
+  @override
+  String get paywallFeature5 => '전체 Life Themes 6 영역';
+
+  @override
+  String get paywallFeature6 => '올해 연애 · 궁합 · 중요한 날짜';
+
+  @override
+  String get paywallFeature7 => '사람 관계 지도 (십신)';
+
+  @override
+  String get paywallFeature8 => '10년 인생 챕터 (大運) 풀 리딩';
+
+  @override
+  String get paywallFeature9 => '개인화 알림';
+
+  @override
+  String get paywallFeature10 => '다중 프로필 (가족·친구·연인)';
+
+  @override
+  String get paywallMonthly => '월간';
+
+  @override
+  String get paywallYearly => '연간';
+
+  @override
+  String get paywallLifetime => '평생';
+
+  @override
+  String get paywallMonthlyPrice => '월 5,900원';
+
+  @override
+  String get paywallYearlyPrice => '연 35,000원';
+
+  @override
+  String get paywallYearlyHint => '50% 할인';
+
+  @override
+  String get paywallLifetimePrice => '59,000원 단건';
+
+  @override
+  String get paywallLifetimeHint => '런칭 한정';
+
+  @override
+  String get paywallCta => 'Pro 시작하기';
+
+  @override
+  String get paywallSoon => '결제 곧 출시 — 이메일 남기면 얼리액세스 안내';
+
+  @override
+  String get paywallRestoreLater => '구매 복원 (나중에)';
+
+  @override
+  String get paywallClose => '다음에';
+
+  @override
   String get splashTrust => '정통 사주, 누구나 쉽게';
 
   @override

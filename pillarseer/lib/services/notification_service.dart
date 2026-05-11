@@ -3,6 +3,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
@@ -17,6 +18,14 @@ class NotificationService {
   static Future<void> ensureInitialized() async {
     if (_initialized) return;
     tzdata.initializeTimeZones();
+    // codex Round 8 fix: tz.local 을 디바이스 실제 timezone 으로 설정.
+    // 안하면 tz.local 이 UTC fallback 가능 → 8AM 알림이 한국 시간 17AM (UTC) 으로 보내짐.
+    try {
+      final localTz = await FlutterTimezone.getLocalTimezone();
+      tz.setLocalLocation(tz.getLocation(localTz.identifier));
+    } catch (e) {
+      if (kDebugMode) print('timezone init failed: $e');
+    }
     const ios = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,

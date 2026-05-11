@@ -919,6 +919,174 @@ abstract class AppL10n {
   /// **'All your data was deleted. Welcome back fresh.'**
   String get settingsDeletedSnack;
 
+  /// No description provided for @paywallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pillar Seer Pro'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock your full Four Pillars map'**
+  String get paywallSubtitle;
+
+  /// No description provided for @paywallHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'More than today\'s one-liner.'**
+  String get paywallHeadline;
+
+  /// No description provided for @paywallSubline.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalized relationship, career, money, and timing reports — every day.'**
+  String get paywallSubline;
+
+  /// No description provided for @paywallFreeColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get paywallFreeColumn;
+
+  /// No description provided for @paywallProColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get paywallProColumn;
+
+  /// No description provided for @paywallFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'Day Master + Five Elements'**
+  String get paywallFeature1;
+
+  /// No description provided for @paywallFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s 30-second read'**
+  String get paywallFeature2;
+
+  /// No description provided for @paywallFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'Hourly flow'**
+  String get paywallFeature3;
+
+  /// No description provided for @paywallFeature4.
+  ///
+  /// In en, this message translates to:
+  /// **'K-pop celebrity compare'**
+  String get paywallFeature4;
+
+  /// No description provided for @paywallFeature5.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Life Themes (6 areas)'**
+  String get paywallFeature5;
+
+  /// No description provided for @paywallFeature6.
+  ///
+  /// In en, this message translates to:
+  /// **'Year of Love · Compatibility · Important Dates'**
+  String get paywallFeature6;
+
+  /// No description provided for @paywallFeature7.
+  ///
+  /// In en, this message translates to:
+  /// **'Ten Gods relationship map'**
+  String get paywallFeature7;
+
+  /// No description provided for @paywallFeature8.
+  ///
+  /// In en, this message translates to:
+  /// **'10-Year Chapter (大運) full reading'**
+  String get paywallFeature8;
+
+  /// No description provided for @paywallFeature9.
+  ///
+  /// In en, this message translates to:
+  /// **'Personalized notifications'**
+  String get paywallFeature9;
+
+  /// No description provided for @paywallFeature10.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-profile (family, friends, lovers)'**
+  String get paywallFeature10;
+
+  /// No description provided for @paywallMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get paywallMonthly;
+
+  /// No description provided for @paywallYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get paywallYearly;
+
+  /// No description provided for @paywallLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get paywallLifetime;
+
+  /// No description provided for @paywallMonthlyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$4.99 / month'**
+  String get paywallMonthlyPrice;
+
+  /// No description provided for @paywallYearlyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$29.99 / year'**
+  String get paywallYearlyPrice;
+
+  /// No description provided for @paywallYearlyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Save 50%'**
+  String get paywallYearlyHint;
+
+  /// No description provided for @paywallLifetimePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$49.99 once'**
+  String get paywallLifetimePrice;
+
+  /// No description provided for @paywallLifetimeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch promo'**
+  String get paywallLifetimeHint;
+
+  /// No description provided for @paywallCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Pro'**
+  String get paywallCta;
+
+  /// No description provided for @paywallSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments coming soon — leave your email below for early access'**
+  String get paywallSoon;
+
+  /// No description provided for @paywallRestoreLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchase (later)'**
+  String get paywallRestoreLater;
+
+  /// No description provided for @paywallClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get paywallClose;
+
   /// No description provided for @splashTrust.
   ///
   /// In en, this message translates to:
