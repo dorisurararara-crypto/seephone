@@ -1,3 +1,5 @@
+// Dev tool — KASI 일주 검증용. lint suppression.
+// ignore_for_file: avoid_print
 import 'package:klc/klc.dart';
 void main() {
   final dates = [
