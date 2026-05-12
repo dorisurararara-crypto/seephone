@@ -923,6 +923,9 @@ class AppL10nEn extends AppL10n {
   String get dreamCategoryHealth => 'Health';
 
   @override
+  String get dreamCategoryFamily => 'Family';
+
+  @override
   String get discoverTitle => 'DISCOVER';
 
   @override

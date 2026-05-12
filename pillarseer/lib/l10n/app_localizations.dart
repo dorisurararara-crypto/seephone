@@ -784,7 +784,7 @@ abstract class AppL10n {
   /// No description provided for @resultBasisTrueSunOn.
   ///
   /// In en, this message translates to:
-  /// **'Applied (Seoul -32 min + equation of time ±16 min)'**
+  /// **'Applied (birth-city longitude + equation of time ±16 min)'**
   String get resultBasisTrueSunOn;
 
   /// No description provided for @resultBasisTrueSunOff.
@@ -1812,6 +1812,12 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Health'**
   String get dreamCategoryHealth;
+
+  /// No description provided for @dreamCategoryFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get dreamCategoryFamily;
 
   /// No description provided for @discoverTitle.
   ///

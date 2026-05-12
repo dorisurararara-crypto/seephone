@@ -57,8 +57,8 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
       _FilterChip('auspicious', l.dreamCategoryAuspicious),
       _FilterChip('wealth', l.dreamCategoryWealth),
       _FilterChip('love', l.dreamCategoryLove),
+      _FilterChip('family', l.dreamCategoryFamily),
       _FilterChip('warning', l.dreamCategoryWarning),
-      _FilterChip('health', l.dreamCategoryHealth),
     ];
     final query = _searchCtrl.text.trim().toLowerCase();
     final filtered = _all.where((d) {

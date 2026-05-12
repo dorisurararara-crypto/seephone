@@ -881,6 +881,9 @@ class AppL10nKo extends AppL10n {
   String get dreamCategoryHealth => '건강';
 
   @override
+  String get dreamCategoryFamily => '가족';
+
+  @override
   String get discoverTitle => '디스커버';
 
   @override
