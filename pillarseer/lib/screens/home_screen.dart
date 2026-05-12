@@ -944,30 +944,30 @@ class _CategoryGrid extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 3),
               padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
-                color: AppColors.spiritIndigo.withValues(alpha: 0.1),
-                border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.15)),
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.cardSurface,
+                border: Border.all(color: AppColors.cardBorder),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 children: [
-                  Icon(c.icon, size: 18, color: AppColors.celestialGold),
+                  Icon(c.icon, size: 18, color: AppColors.mysticViolet),
                   const SizedBox(height: 4),
                   Text(
                     '${c.score}',
                     style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.celestialGold,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: AppColors.ghostlyWhite,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    c.name.toUpperCase(),
+                    c.name,
                     style: const TextStyle(
-                      fontSize: 9,
+                      fontSize: 10.5,
                       color: AppColors.moonlightGray,
-                      letterSpacing: 0.6,
+                      letterSpacing: 0.2,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

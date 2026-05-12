@@ -1,6 +1,7 @@
 // Pillar Seer — Result screen. MZ/K-pop 친근 톤 + 3-hit 요약 + 큰 글씨.
 // 한자어는 모두 보조 subtitle 로만, 메인 헤더는 친근 라벨 + emoji.
 // Free user 는 본성+5행+Life Themes 3/6 만 unlocked; Pro 면 모두 해제.
+// ignore_for_file: unused_element, unused_element_parameter
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -104,12 +105,10 @@ class ResultScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 22),
-            _SectionHeader(
+            // 이하 항목 accordion 으로 정리 (codex Round 14 권고 — 너무 길음).
+            _AccordionSection(
               title: l.resultTenGodsTitle,
               hint: l.resultTenGodsTermHint,
-            ),
-            const SizedBox(height: 10),
-            _Section(
               locked: !isPro,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,11 +119,11 @@ class ResultScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                       decoration: BoxDecoration(
-                        color: AppColors.celestialGold.withValues(alpha: 0.1),
+                        color: AppColors.celestialGold.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: AppColors.celestialGold
-                              .withValues(alpha: 0.35),
+                              .withValues(alpha: 0.22),
                         ),
                       ),
                       child: Text(
@@ -141,40 +140,34 @@ class ResultScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 22),
-            _SectionHeader(title: l.resultLifeThemesTitle, hint: ''),
-            const SizedBox(height: 10),
-            _LifeThemesBlock(reading: reading, isPro: isPro),
-            const SizedBox(height: 22),
-            _SectionHeader(
+            _AccordionSection(
+              title: l.resultLifeThemesTitle,
+              locked: false,
+              child: _LifeThemesBlock(reading: reading, isPro: isPro),
+            ),
+            _AccordionSection(
               title: l.resultTenYearLuckTitle,
               hint: l.resultTenYearLuckTermHint,
-            ),
-            const SizedBox(height: 10),
-            _Section(
               locked: !isPro,
               child: _LongText(text: reading?.tenYearLuck ?? ''),
             ),
-            const SizedBox(height: 22),
-            _SectionHeader(
+            _AccordionSection(
               title: l.resultThisYearTitle,
               hint: l.resultThisYearTermHint,
-            ),
-            const SizedBox(height: 10),
-            _Section(
               locked: !isPro,
               child: _LongText(text: reading?.thisYear ?? ''),
             ),
-            const SizedBox(height: 22),
-            _SectionHeader(title: l.resultLuckyTitle, hint: ''),
-            const SizedBox(height: 10),
-            _Section(
+            _AccordionSection(
+              title: l.resultLuckyTitle,
               locked: !isPro,
               child: _LuckyBlock(reading: reading, useKo: useKo),
             ),
-            const SizedBox(height: 24),
-            _CalculationBasisCard(result: result, useKo: useKo),
-            const SizedBox(height: 22),
+            _AccordionSection(
+              title: l.resultBasisTitle,
+              locked: false,
+              child: _CalculationBasisBody(result: result, useKo: useKo),
+            ),
+            const SizedBox(height: 8),
             if (!isPro) _ProHooks(),
             const SizedBox(height: 18),
             if (!isPro)
@@ -386,12 +379,12 @@ Day Pillar: ${result.dayMasterName} · ${result.day60ji}
   }
 }
 
-// ──────── Calculation Basis (codex Round 5 #1 — 정확성 신뢰 패널)
+// ──────── Calculation Basis body (Round 14: accordion content)
 
-class _CalculationBasisCard extends StatelessWidget {
+class _CalculationBasisBody extends StatelessWidget {
   final SajuResult result;
   final bool useKo;
-  const _CalculationBasisCard({required this.result, required this.useKo});
+  const _CalculationBasisBody({required this.result, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -402,46 +395,20 @@ class _CalculationBasisCard extends StatelessWidget {
       (label: l.resultBasisDayBoundary, value: l.resultBasisDayBoundaryVal),
       (label: l.resultBasisTrueSun, value: l.resultBasisTrueSunOn),
     ];
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-      decoration: BoxDecoration(
-        color: AppColors.midnightPurple.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.25),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.verified, size: 16, color: AppColors.celestialGold),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  l.resultBasisTitle,
-                  style: const TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.celestialGold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          ...rows.map((r) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: rows
+          .map((r) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 90,
+                      width: 96,
                       child: Text(
                         r.label,
                         style: const TextStyle(
-                          fontSize: 11.5,
+                          fontSize: 12.5,
                           color: AppColors.moonlightGray,
                           fontWeight: FontWeight.w600,
                         ),
@@ -451,7 +418,7 @@ class _CalculationBasisCard extends StatelessWidget {
                       child: Text(
                         r.value,
                         style: const TextStyle(
-                          fontSize: 11.5,
+                          fontSize: 12.5,
                           color: AppColors.ghostlyWhite,
                           height: 1.5,
                         ),
@@ -459,9 +426,8 @@ class _CalculationBasisCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              )),
-        ],
-      ),
+              ))
+          .toList(),
     );
   }
 }
@@ -907,6 +873,153 @@ class _ThreeHitCard extends StatelessWidget {
 
 // ──────── Section header — friendly title + small hint
 
+/// Accordion section — codex Round 14 권고.
+/// Result 가 너무 길어서 핵심만 상단 고정, 나머지는 접힘.
+class _AccordionSection extends StatelessWidget {
+  final String title;
+  final String hint;
+  final bool locked;
+  final bool initiallyExpanded;
+  final Widget child;
+  final String? whyLine;
+
+  const _AccordionSection({
+    required this.title,
+    this.hint = '',
+    required this.locked,
+    this.initiallyExpanded = false,
+    required this.child,
+    this.whyLine,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          dividerColor: Colors.transparent,
+          listTileTheme: const ListTileThemeData(
+            dense: true,
+          ),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.cardSurface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: ExpansionTile(
+            initiallyExpanded: initiallyExpanded,
+            tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+            iconColor: AppColors.moonlightGray,
+            collapsedIconColor: AppColors.fadedSilver,
+            title: Row(
+              children: [
+                Container(
+                  width: 3,
+                  height: 16,
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.celestialGold,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: AppColors.ghostlyWhite,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                if (locked)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 7, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: AppColors.celestialGold.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                        color: AppColors.celestialGold.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: Text(
+                      l.resultProLocked,
+                      style: const TextStyle(
+                        fontSize: 9.5,
+                        letterSpacing: 0.8,
+                        color: AppColors.celestialGold,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            subtitle: hint.isEmpty
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.only(left: 13, top: 3),
+                    child: Text(
+                      hint,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        color: AppColors.fadedSilver,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+            children: [
+              if (locked)
+                _LockedPlaceholder()
+              else ...[
+                child,
+                if (whyLine != null && whyLine!.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.celestialGold.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: AppColors.celestialGold.withValues(alpha: 0.15),
+                      ),
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          color: AppColors.moonlightGray,
+                          height: 1.5,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '${l.resultWhyLabel} ',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.celestialGold,
+                            ),
+                          ),
+                          TextSpan(text: whyLine),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _SectionHeader extends StatelessWidget {
   final String title;
   final String hint;
@@ -919,14 +1032,30 @@ class _SectionHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w900,
-              color: AppColors.celestialGold,
-              height: 1.25,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 3,
+                height: 18,
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.celestialGold,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.ghostlyWhite,
+                    height: 1.25,
+                  ),
+                ),
+              ),
+            ],
           ),
           if (hint.isNotEmpty) ...[
             const SizedBox(height: 3),
@@ -968,7 +1097,7 @@ class _Section extends StatelessWidget {
         color: AppColors.spiritIndigo.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: locked ? 0.12 : 0.25),
+          color: AppColors.celestialGold.withValues(alpha: locked ? 0.08 : 0.15),
         ),
       ),
       child: Column(

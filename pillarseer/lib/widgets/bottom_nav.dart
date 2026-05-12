@@ -30,11 +30,10 @@ class PillarBottomNav extends StatelessWidget {
           route: '/profile'),
     ];
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.cosmicBlack.withValues(alpha: 0.95),
+      decoration: const BoxDecoration(
+        color: AppColors.cosmicBlack,
         border: Border(
-          top: BorderSide(
-              color: AppColors.celestialGold.withValues(alpha: 0.12)),
+          top: BorderSide(color: AppColors.cardBorder),
         ),
       ),
       padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
@@ -62,10 +61,10 @@ class PillarBottomNav extends StatelessWidget {
                       children: [
                         Icon(
                           item.icon,
-                          size: 24,
+                          size: 22,
                           color: isActive
-                              ? AppColors.celestialGold
-                              : AppColors.moonlightGray,
+                              ? AppColors.ghostlyWhite
+                              : AppColors.fadedSilver,
                         ),
                         const SizedBox(height: 3),
                         Text(
@@ -74,10 +73,20 @@ class PillarBottomNav extends StatelessWidget {
                             fontSize: 11.5,
                             letterSpacing: 0.2,
                             fontWeight:
-                                isActive ? FontWeight.w700 : FontWeight.w500,
+                                isActive ? FontWeight.w800 : FontWeight.w500,
                             color: isActive
-                                ? AppColors.celestialGold
-                                : AppColors.moonlightGray,
+                                ? AppColors.ghostlyWhite
+                                : AppColors.fadedSilver,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        // Active 표시는 작은 underline (gold 살짝)
+                        Container(
+                          width: isActive ? 18 : 0,
+                          height: 2,
+                          decoration: BoxDecoration(
+                            color: AppColors.celestialGold,
+                            borderRadius: BorderRadius.circular(1),
                           ),
                         ),
                       ],
