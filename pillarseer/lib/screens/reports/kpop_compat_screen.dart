@@ -23,7 +23,7 @@ class KpopCompatScreen extends ConsumerStatefulWidget {
 class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
   List<_Star> _stars = [];
   bool _loaded = false;
-  String _filter = 'all'; // all / idol / actor
+  String _filter = 'idol'; // K-POP 팬 page → 아이돌이 기본. all/idol/actor/athlete.
 
   @override
   void initState() {
@@ -240,10 +240,11 @@ class _TopMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = useKo ? star.nameKo : star.nameEn;
-    final shareableKo =
-        '나랑 제일 케미 터지는 K-POP 스타: $name ($score점)';
-    final shareableEn =
-        "My top K-POP chemistry: $name ($score)";
+    // Round 13 codex P0: 캡쳐용 초단문 한 줄 (밈처럼 박힘)
+    final memeKo = '오늘 내 케미픽: $name $score점';
+    final memeEn = "Today's chemistry: $name $score";
+    final fullKo = '나랑 제일 케미 터지는 K-POP 스타 — $name ($score점).';
+    final fullEn = 'My strongest K-POP chemistry — $name ($score).';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
@@ -254,21 +255,26 @@ class _TopMatchCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 헤더: meta label + share button — Row overflow 방지 위해 Flexible
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                useKo ? '오늘의 케미 1위 · TOP MATCH' : "Today's top match",
-                style: GoogleFonts.inter(
-                  fontSize: 9,
-                  letterSpacing: 4,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.taupe,
+              Expanded(
+                child: Text(
+                  useKo ? '오늘의 케미 1위 · TOP MATCH' : "Today's top match",
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               InkWell(
                 onTap: () async {
-                  final text = useKo ? shareableKo : shareableEn;
+                  final text = useKo ? memeKo : memeEn;
                   try {
                     await SharePlus.instance.share(ShareParams(text: text));
                   } catch (_) {
@@ -281,7 +287,7 @@ class _TopMatchCard extends StatelessWidget {
                     border: Border.all(color: AppColors.ink, width: 1),
                   ),
                   child: Text(
-                    useKo ? '공유 · 緣' : 'SHARE',
+                    useKo ? '공유' : 'SHARE',
                     style: GoogleFonts.inter(
                       fontSize: 9,
                       letterSpacing: 3,
@@ -293,21 +299,34 @@ class _TopMatchCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
+          // 캡쳐용 초단문 한 줄 — 밈처럼 박힘
           Text(
-            useKo ? shareableKo : shareableEn,
+            useKo ? memeKo : memeEn,
             style: GoogleFonts.notoSerifKr(
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: FontWeight.w400,
               color: AppColors.ink,
-              height: 1.4,
+              height: 1.3,
+              letterSpacing: -0.2,
+            ),
+            maxLines: 2,
+          ),
+          const SizedBox(height: 10),
+          // 보조 — 풀 문장
+          Text(
+            useKo ? fullKo : fullEn,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.accent,
+              height: 1.6,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             useKo ? star.blurbKo : star.blurbEn,
             style: GoogleFonts.notoSansKr(
-              fontSize: 13,
+              fontSize: 12.5,
               color: AppColors.inkLight,
               height: 1.7,
             ),

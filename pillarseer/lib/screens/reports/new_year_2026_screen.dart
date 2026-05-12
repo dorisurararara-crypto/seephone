@@ -58,7 +58,7 @@ class NewYear2026Screen extends ConsumerWidget {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          useKo ? useKo ? '2026 신년운세 · 歲 運' : 'NEW YEAR 2026 · 歲 運' : 'NEW  YEAR  2026',
+          useKo ? '2026 신년운세 · 歲 運' : 'NEW YEAR 2026 · 歲 運',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,
