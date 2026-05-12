@@ -10,11 +10,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/gong_mang_service.dart';
+import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
 import '../services/personalization_engine.dart';
 import '../services/shinsa_service.dart';
 import '../services/strength_service.dart';
 import '../services/twelve_unsung_service.dart';
+import '../services/yongsin_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
@@ -221,6 +223,20 @@ class ResultScreen extends ConsumerWidget {
             // ─── 그룹 2: 깊은 명리학 ───
             _GroupHeader(useKo ? '깊은 명리학' : 'DEEP MYEONGLI'),
             const SizedBox(height: 8),
+            _AccordionSection(
+              title: useKo
+                  ? '🎯 격국 (格局)'
+                  : '🎯 Gyeokguk (chart structure)',
+              locked: false,
+              child: _GyeokgukBlock(result: result, useKo: useKo),
+            ),
+            _AccordionSection(
+              title: useKo
+                  ? '🔮 용신 (用神)'
+                  : '🔮 Yongsin (most needed element)',
+              locked: false,
+              child: _YongsinBlock(result: result, useKo: useKo),
+            ),
             _AccordionSection(
               title: useKo
                   ? '⚖️ 신왕·신약 (身旺·身弱)'
@@ -628,6 +644,199 @@ class _MyeongliSummaryCard extends StatelessWidget {
         'hour': 'Hr',
       }[a] ??
       a;
+}
+
+// ──────── 격국(格局) block (Round 49: codex 지적 빠진 핵심)
+
+class _GyeokgukBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _GyeokgukBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final g = GyeokgukService.judge(
+      dayMaster: result.dayPillar.chunGan,
+      monthJi: result.monthPillar.jiJi,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.celestialGold.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+                color: AppColors.celestialGold.withValues(alpha: 0.4)),
+          ),
+          child: Text(
+            useKo ? g.name : g.nameEn,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.celestialGold,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          useKo ? g.desc : g.descEn,
+          style: const TextStyle(
+            fontSize: 13.5,
+            color: AppColors.ghostlyWhite,
+            height: 1.7,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.midnightPurple.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Text(
+            useKo
+                ? '격국(格局) — 사주의 구조 분류. 월지(月支) 본기가 일간 기준 어떤 십신인지로 결정. 명리학의 가장 핵심 분석.'
+                : 'Gyeokguk — chart structure classification. Determined by the month branch\'s core stem and its ten-god relation to day master.',
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: AppColors.fadedSilver,
+              height: 1.55,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────── 용신(用神) block (Round 49: codex 지적 빠진 핵심)
+
+class _YongsinBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _YongsinBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final el = result.elements;
+    final dm = result.dayPillar.chunGanElement;
+    final s = StrengthService.judge(
+      dayMasterElement: dm,
+      monthJi: result.monthPillar.jiJi,
+      wood: el.wood, fire: el.fire, earth: el.earth, metal: el.metal, water: el.water,
+    );
+    final y = YongsinService.judge(
+      dayMasterElement: dm,
+      strengthLabel: s.label,
+      wood: el.wood, fire: el.fire, earth: el.earth, metal: el.metal, water: el.water,
+    );
+    String elKo(String e) =>
+        {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}[e] ?? e;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 6,
+          children: [
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.celestialGold.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: AppColors.celestialGold.withValues(alpha: 0.5)),
+              ),
+              child: Text(
+                useKo
+                    ? '🔮 용신: ${elKo(y.yongsin)} (${y.yongsin})'
+                    : '🔮 Yongsin: ${y.yongsin}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.celestialGold,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.mysticViolet.withValues(alpha: 0.18),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: AppColors.mysticViolet.withValues(alpha: 0.45)),
+              ),
+              child: Text(
+                useKo
+                    ? '희신: ${elKo(y.huisin)}'
+                    : 'Huisin: ${y.huisin}',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.mysticViolet,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Text(
+          y.reason,
+          style: const TextStyle(
+            fontSize: 13,
+            color: AppColors.ghostlyWhite,
+            height: 1.7,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          useKo ? '💡 실생활 보충 방법' : '💡 Daily-life support',
+          style: const TextStyle(
+            fontSize: 11,
+            letterSpacing: 1.2,
+            color: AppColors.moonlightGray,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          YongsinService.compensationGuide(y.yongsin, ko: useKo),
+          style: const TextStyle(
+            fontSize: 12.5,
+            color: AppColors.ghostlyWhite,
+            height: 1.65,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.midnightPurple.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Text(
+            useKo
+                ? '용신(用神) — 사주에서 가장 필요한 오행. 일간 강약 + 5행 균형 기반. 인생 결정의 기준점.'
+                : 'Yongsin — the most needed element. Based on strength + 5-element balance. Decision compass for life.',
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: AppColors.fadedSilver,
+              height: 1.55,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 // ──────── 신왕·신약(身旺·身弱) block (Round 42: 일간 강약 판단)
