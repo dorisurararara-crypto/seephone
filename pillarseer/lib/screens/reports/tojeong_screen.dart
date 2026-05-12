@@ -282,19 +282,42 @@ final List<Hexagram> _hexagramData = List.generate(144, (i) {
   ];
   final arch = archetypes[i % 8];
   final cycle = (i ~/ 8) + 1;
-  final yearOverviewEn =
-      'Cycle ${cycle.toString().padLeft(2, '0')} of 18 — ${arch[1]}. '
-      'The year asks for ${arch[3].toLowerCase()} '
-      'When the gate of ${arch[1]} opens around mid-year, your patience '
-      'compounds into authority. Avoid forcing what is still ripening, '
-      'and avoid hesitating once timing arrives. The pillar of this hexagram '
-      'rewards specificity — name what you want, in writing, before summer.';
+  final archIdx = i % 8;
+  // 8 archetype 별 yearOverview 변형 (codex Round 30 권고 — 144 동일 템플릿 X).
+  const yearOverviewKoByArch = [
+    // 0 乾 Heaven — 권위
+    '의 결로 권위가 손에 돌아옵니다. 윗선과 정면으로 만나는 달이 한 해를 정합니다. 자필 한 줄이 가장 큰 무게를 가지고, 받지 않은 책임을 받게 됩니다.',
+    // 1 坤 Earth — 인내
+    '의 결로 인내가 수확이 됩니다. 빠른 길은 결국 짧은 가지로 끝나고, 매일의 작은 루틴이 가장 큰 차이를 만듭니다. 봄에 심은 것이 가을에 보입니다.',
+    // 2 震 Thunder — 충격
+    '의 결로 예상 밖 사건이 한 해를 다시 그립니다. 한 번의 결정이 4년의 결을 바꿉니다. 충격을 피하지 말고 결로 받아쓰세요.',
+    // 3 巽 Wind — 영향
+    '의 결로 미세한 흐름이 큰 결과를 만듭니다. 정면이 아닌 곁가지의 추천이 가장 큰 문을 엽니다. 말의 톤을 단계적으로 다듬으세요.',
+    // 4 坎 Water — 시험
+    '의 결로 담력이 단련됩니다. 시험은 깊지만 짧고, 통과 후 새로운 흐름이 깊은 곳에서 옵니다. 무리하지 말 것.',
+    // 5 離 Fire — 드러남
+    '의 결로 드러나는 한 해. 빛 아래 어떤 결을 보일지가 곧 정체성이 됩니다. 옷을 고른 뒤 무대로 가세요.',
+    // 6 艮 Mountain — 멈춤
+    '의 결로 멈춤이 가장 큰 행동이 됩니다. 한 산을 옮기려면 한 번 더 멈추세요. 결정 보류가 가장 큰 결정.',
+    // 7 兌 Lake — 대화
+    '의 결로 말이 문을 엽니다. 닫혀 있던 대화를 노크하는 달이 옵니다. 듣는 시간을 말하는 시간보다 두 배 두세요.',
+  ];
+  const yearOverviewEnByArch = [
+    ' opens authority into your hand. Direct meetings with leadership define the year — your signature carries weight; you receive responsibility you did not accept.',
+    ' rewards patience as harvest. Fast paths end in short branches. Daily routines make the biggest difference; what you plant in spring appears in autumn.',
+    ' redraws the year via an unexpected event. One decision reshapes four years. Do not flee the quake — write it down as grain.',
+    ' moves big results through subtle currents. The biggest doors open sideways, not head-on. Tune your tone in stages.',
+    ' tempers the nerve. The test runs deep yet short; new currents arrive from depth after the trial. Do not overreach.',
+    ' reveals you on a stage. What you show under light becomes identity. Pick your robe before entering.',
+    ' makes stillness the biggest action. To move a mountain, pause once more. Holding a decision is the biggest decision.',
+    ' opens doors through words. The conversation that was closed knocks again. Listen twice as long as you speak.',
+  ];
   final yearOverviewKo =
-      '18사이클 중 ${cycle.toString().padLeft(2, '0')} — ${arch[2]}. '
-      '${arch[4]} '
-      '${arch[2]}의 문이 중반에 열릴 때, 인내가 권위로 돌아옵니다. '
-      '익지 않은 것을 억지로 끌어내지 말고, 타이밍이 왔을 때 망설이지 마세요. '
-      '이 괘는 구체성을 보상합니다 — 여름이 오기 전 원하는 바를 문장으로 적으세요.';
+      '18사이클 중 ${cycle.toString().padLeft(2, '0')} — ${arch[2]}'
+      '${yearOverviewKoByArch[archIdx]}';
+  final yearOverviewEn =
+      'Cycle ${cycle.toString().padLeft(2, '0')} of 18 — ${arch[1]}'
+      '${yearOverviewEnByArch[archIdx]}';
   // 8 archetype × 12 month = 96 변형. (각 괘의 결에 맞춘 톤)
   const monthlyByArchetypeKo = [
     // 0 乾 Heaven Rises — 권위·결단
@@ -540,7 +563,6 @@ final List<Hexagram> _hexagramData = List.generate(144, (i) {
       'Sketch next year\'s first conversation in advance.',
     ],
   ];
-  final archIdx = i % 8;
   final monthlyKo = monthlyByArchetypeKo[archIdx];
   final monthlyEn = monthlyByArchetypeEn[archIdx];
   return Hexagram(
