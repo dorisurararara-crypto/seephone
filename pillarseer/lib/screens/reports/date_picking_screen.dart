@@ -1,8 +1,7 @@
-// Pillar Seer — Date Picking (擇日) Report.
-// 다음 30일 일진과 사용자 일간 5행 상호작용으로 길일/평일/흉일 분류.
-
+// Pillar Seer — Date Picking (擇日) Report. Aesop Luxury tone.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
@@ -31,55 +30,56 @@ class DatePickingScreen extends ConsumerWidget {
     final neutral = days.where((d) => d.kind == _DayKind.neutral).toList();
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(l.datePickTitle),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.bg,
         elevation: 0,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l.datePickSubtitle,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.moonlightGray,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              const SizedBox(height: 16),
-              _SummaryRow(
-                good: good.length,
-                neutral: neutral.length,
-                avoid: avoid.length,
-                useKo: useKo,
-              ),
-              const SizedBox(height: 18),
-              _Section(
-                title: l.datePickGoodDays,
-                color: AppColors.mysticViolet,
-                days: good,
-                useKo: useKo,
-              ),
-              const SizedBox(height: 14),
-              _Section(
-                title: l.datePickAvoidDays,
-                color: Colors.redAccent.shade200,
-                days: avoid,
-                useKo: useKo,
-              ),
-              const SizedBox(height: 14),
-              _Section(
-                title: l.datePickNeutral,
-                color: AppColors.fadedSilver,
-                days: neutral,
-                useKo: useKo,
-              ),
-            ],
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.ink),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'DATE PICKING · 擇 日',
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 5,
+            color: AppColors.ink,
           ),
+        ),
+        shape: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _HeroSection(subtitle: l.datePickSubtitle),
+            _Summary(good: good.length, neutral: neutral.length, avoid: avoid.length, useKo: useKo),
+            _Group(
+              meta: l.datePickGoodDays,
+              days: good,
+              useKo: useKo,
+              background: AppColors.bg,
+              accent: true,
+            ),
+            _Group(
+              meta: l.datePickAvoidDays,
+              days: avoid,
+              useKo: useKo,
+              background: AppColors.paper,
+            ),
+            _Group(
+              meta: l.datePickNeutral,
+              days: neutral,
+              useKo: useKo,
+              background: AppColors.bg,
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
@@ -193,12 +193,53 @@ class _DateDay {
   });
 }
 
-class _SummaryRow extends StatelessWidget {
+class _HeroSection extends StatelessWidget {
+  final String subtitle;
+  const _HeroSection({required this.subtitle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'NEXT  30  DAYS · 三 旬',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            subtitle,
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 17,
+              fontStyle: FontStyle.italic,
+              color: AppColors.accent,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Summary extends StatelessWidget {
   final int good;
   final int neutral;
   final int avoid;
   final bool useKo;
-  const _SummaryRow({
+  const _Summary({
     required this.good,
     required this.neutral,
     required this.avoid,
@@ -208,159 +249,198 @@ class _SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    return Row(
-      children: [
-        Expanded(
-          child: _chip(l.datePickGoodDays, good, AppColors.mysticViolet),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _chip(l.datePickNeutral, neutral, AppColors.fadedSilver),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _chip(l.datePickAvoidDays, avoid, Colors.redAccent.shade200),
-        ),
-      ],
-    );
-  }
-
-  Widget _chip(String label, int count, Color color) {
+    final cells = [
+      (l.datePickGoodDays, good, '吉'),
+      (l.datePickNeutral, neutral, '平'),
+      (l.datePickAvoidDays, avoid, '凶'),
+    ];
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.35)),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 30, 24, 30),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
       ),
-      child: Column(
-        children: [
-          Text(
-            '$count',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              color: color,
-            ),
+      child: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.line),
+            left: BorderSide(color: AppColors.line),
           ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 10,
-              color: AppColors.moonlightGray,
-              letterSpacing: 1.0,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
+        ),
+        child: Row(
+          children: cells.map((c) {
+            return Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    right: BorderSide(color: AppColors.line),
+                    bottom: BorderSide(color: AppColors.line),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      c.$3,
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w300,
+                        color: AppColors.accent,
+                        height: 1.0,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${c.$2}',
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w300,
+                        color: AppColors.ink,
+                        height: 1.0,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      c.$1.toUpperCase(),
+                      style: GoogleFonts.inter(
+                        fontSize: 9,
+                        letterSpacing: 3,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.taupe,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
 }
 
-class _Section extends StatelessWidget {
-  final String title;
-  final Color color;
+class _Group extends StatelessWidget {
+  final String meta;
   final List<_DateDay> days;
   final bool useKo;
-  const _Section({
-    required this.title,
-    required this.color,
+  final Color background;
+  final bool accent;
+  const _Group({
+    required this.meta,
     required this.days,
     required this.useKo,
+    required this.background,
+    this.accent = false,
   });
 
   @override
   Widget build(BuildContext context) {
     if (days.isEmpty) return const SizedBox.shrink();
     return Container(
-      padding: const EdgeInsets.all(14),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
       decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color == AppColors.fadedSilver
-              ? AppColors.cardBorder
-              : color.withValues(alpha: 0.28),
-        ),
+        color: background,
+        border: const Border(
+            bottom: BorderSide(color: AppColors.line, width: 1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration:
-                    BoxDecoration(color: color, shape: BoxShape.circle),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                title.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 11,
-                  letterSpacing: 1.4,
-                  color: color,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
+          Text(
+            meta.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
           ),
-          const SizedBox(height: 10),
-          ...days.take(12).map((d) => _row(d, useKo)),
-          if (days.length > 12)
-            Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(
-                '+ ${days.length - 12} more',
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: AppColors.fadedSilver,
-                ),
+          const SizedBox(height: 18),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: AppColors.line)),
+            ),
+            child: Column(
+              children: days.take(12).map((d) => _row(d)).toList(),
+            ),
+          ),
+          if (days.length > 12) ...[
+            const SizedBox(height: 12),
+            Text(
+              '+ ${days.length - 12} more days',
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                letterSpacing: 2,
+                color: AppColors.taupe,
+                fontStyle: FontStyle.italic,
               ),
             ),
+          ],
         ],
       ),
     );
   }
 
-  Widget _row(_DateDay d, bool useKo) {
-    final dateStr = DateFormat('MMM d (EEE)').format(d.date);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+  Widget _row(_DateDay d) {
+    final dateStr = DateFormat('MMM d').format(d.date);
+    final wd = DateFormat('EEE').format(d.date).toUpperCase();
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 0.6)),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 88,
-            child: Text(
-              dateStr,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.moonlightGray,
-                fontWeight: FontWeight.w700,
-              ),
+            width: 64,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  dateStr.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  wd,
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    letterSpacing: 2,
+                    color: AppColors.taupe,
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(
-            width: 56,
+            width: 58,
             child: Text(
-              '${d.pillar} · ${useKo ? d.animalKo : d.animal}',
-              style: const TextStyle(
-                fontSize: 10.5,
-                color: AppColors.moonlightGray,
+              d.pillar,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                color: AppColors.accent,
+                letterSpacing: 1,
+                height: 1.1,
               ),
             ),
           ),
           Expanded(
             child: Text(
               useKo ? d.reasonKo : d.reasonEn,
-              style: const TextStyle(
-                fontSize: 11.5,
-                color: AppColors.ghostlyWhite,
-                height: 1.5,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 12.5,
+                color: AppColors.ink,
+                height: 1.65,
               ),
             ),
           ),

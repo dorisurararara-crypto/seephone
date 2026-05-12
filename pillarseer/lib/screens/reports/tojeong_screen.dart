@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/locale_provider.dart';
@@ -27,143 +28,64 @@ class TojeongScreen extends ConsumerWidget {
     final hex = _hexagramFor(saju, birth);
     final year = DateTime.now().year;
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(l.tojeongTitle),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.bg,
         elevation: 0,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                '$year · ${l.tojeongSubtitle}',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.moonlightGray,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              const SizedBox(height: 16),
-              _HexagramCard(hex: hex, useKo: useKo),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.cardSurface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.cardBorder,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l.tojeongYearOverview.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 11,
-                        letterSpacing: 1.5,
-                        color: AppColors.moonlightGray,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      useKo ? hex.yearOverviewKo : hex.yearOverviewEn,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.ghostlyWhite,
-                        height: 1.7,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.cardSurface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.cardBorder,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l.tojeongMonthlyHeader.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 11,
-                        letterSpacing: 1.5,
-                        color: AppColors.moonlightGray,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ..._monthlyTexts(hex, useKo).asMap().entries.map((e) =>
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 38,
-                                child: Text(
-                                  useKo
-                                      ? '${e.key + 1}월'
-                                      : _monthEn(e.key),
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: AppColors.mysticViolet,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  e.value,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.ghostlyWhite,
-                                    height: 1.6,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ],
-                ),
-              ),
-            ],
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.ink),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'TOJEONG · 土 亭',
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 5,
+            color: AppColors.ink,
           ),
+        ),
+        shape: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _Section(
+              background: AppColors.bg,
+              meta: '$year · ${l.tojeongSubtitle}'.toUpperCase(),
+              child: _HexagramHero(hex: hex, useKo: useKo),
+            ),
+            _Section(
+              background: AppColors.paper,
+              meta: l.tojeongYearOverview,
+              child: Text(
+                useKo ? hex.yearOverviewKo : hex.yearOverviewEn,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 14,
+                  color: AppColors.ink,
+                  height: 1.85,
+                ),
+              ),
+            ),
+            _Section(
+              background: AppColors.bg,
+              meta: l.tojeongMonthlyHeader,
+              child: _MonthlyList(
+                texts: _monthlyTexts(hex, useKo),
+                useKo: useKo,
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
-  }
-
-  String _monthEn(int idx) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return months[idx % 12];
   }
 
   List<String> _monthlyTexts(Hexagram hex, bool useKo) {
@@ -180,63 +102,165 @@ class TojeongScreen extends ConsumerWidget {
   }
 }
 
-class _HexagramCard extends StatelessWidget {
-  final Hexagram hex;
-  final bool useKo;
-  const _HexagramCard({required this.hex, required this.useKo});
+class _Section extends StatelessWidget {
+  final Color background;
+  final String meta;
+  final Widget child;
+  const _Section({
+    required this.background,
+    required this.meta,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(22),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 32),
       decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorderStrong),
+        color: background,
+        border: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'No. ${hex.number}',
-            style: const TextStyle(
-              fontSize: 11,
-              letterSpacing: 1.4,
-              color: AppColors.moonlightGray,
-              fontWeight: FontWeight.w700,
+            meta,
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            hex.symbol,
-            style: const TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w900,
-              color: AppColors.celestialGold,
-              height: 1.0,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            useKo ? hex.nameKo : hex.nameEn,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.ghostlyWhite,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            useKo ? hex.taglineKo : hex.taglineEn,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12.5,
-              color: AppColors.moonlightGray,
-              fontStyle: FontStyle.italic,
-              height: 1.5,
-            ),
-          ),
+          const SizedBox(height: 22),
+          child,
         ],
+      ),
+    );
+  }
+}
+
+class _HexagramHero extends StatelessWidget {
+  final Hexagram hex;
+  final bool useKo;
+  const _HexagramHero({required this.hex, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'No. ${hex.number.toString().padLeft(3, '0')} / 144',
+          style: GoogleFonts.inter(
+            fontSize: 10,
+            letterSpacing: 3,
+            fontWeight: FontWeight.w500,
+            color: AppColors.taupe,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              hex.symbol,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 64,
+                fontWeight: FontWeight.w300,
+                color: AppColors.accent,
+                height: 1.0,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                useKo ? hex.nameKo : hex.nameEn,
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.ink,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Text(
+          useKo ? hex.taglineKo : hex.taglineEn,
+          style: GoogleFonts.cormorantGaramond(
+            fontSize: 15,
+            fontStyle: FontStyle.italic,
+            color: AppColors.accent,
+            height: 1.6,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MonthlyList extends StatelessWidget {
+  final List<String> texts;
+  final bool useKo;
+  const _MonthlyList({required this.texts, required this.useKo});
+
+  static const _monthsEn = [
+    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+  ];
+  static const _monthsKo = [
+    '1월', '2월', '3월', '4월', '5월', '6월',
+    '7월', '8월', '9월', '10월', '11월', '12월'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.line)),
+      ),
+      child: Column(
+        children: texts.asMap().entries.map((e) {
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            decoration: const BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(color: AppColors.line, width: 0.6)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 48,
+                  child: Text(
+                    useKo ? _monthsKo[e.key] : _monthsEn[e.key],
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    e.value,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.ink,
+                      height: 1.7,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }

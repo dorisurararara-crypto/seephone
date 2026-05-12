@@ -1,9 +1,9 @@
-// Pillar Seer — Dream (解夢) Report. 검색 + 카테고리 필터.
-
+// Pillar Seer — Dream (解夢) Report. Aesop Luxury tone.
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/locale_provider.dart';
 import '../../theme/app_theme.dart';
@@ -37,9 +37,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
         _loaded = true;
       });
     } catch (_) {
-      setState(() {
-        _loaded = true;
-      });
+      setState(() => _loaded = true);
     }
   }
 
@@ -52,13 +50,13 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
             systemLocale?.languageCode ??
             'en') ==
         'ko';
-    final filters = <_FilterChip>[
-      _FilterChip('all', l.dreamCategoryAll),
-      _FilterChip('auspicious', l.dreamCategoryAuspicious),
-      _FilterChip('wealth', l.dreamCategoryWealth),
-      _FilterChip('love', l.dreamCategoryLove),
-      _FilterChip('family', l.dreamCategoryFamily),
-      _FilterChip('warning', l.dreamCategoryWarning),
+    final filters = <_F>[
+      _F('all', l.dreamCategoryAll),
+      _F('auspicious', l.dreamCategoryAuspicious),
+      _F('wealth', l.dreamCategoryWealth),
+      _F('love', l.dreamCategoryLove),
+      _F('family', l.dreamCategoryFamily),
+      _F('warning', l.dreamCategoryWarning),
     ];
     final query = _searchCtrl.text.trim().toLowerCase();
     final filtered = _all.where((d) {
@@ -73,100 +71,144 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
     }).toList();
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(l.dreamTitle),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.bg,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.ink),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'DREAM · 解 夢',
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 5,
+            color: AppColors.ink,
+          ),
+        ),
+        shape: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
       ),
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+            Container(
+              padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+              decoration: const BoxDecoration(
+                color: AppColors.bg,
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
               child: TextField(
                 controller: _searchCtrl,
                 onChanged: (_) => setState(() {}),
-                style: const TextStyle(color: AppColors.ghostlyWhite),
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 16,
+                  color: AppColors.ink,
+                ),
+                cursorColor: AppColors.ink,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search,
-                      color: AppColors.mysticViolet),
+                  isDense: true,
                   hintText: l.dreamSearchHint,
-                  hintStyle: const TextStyle(
-                    color: AppColors.fadedSilver,
-                    fontSize: 13,
+                  hintStyle: GoogleFonts.notoSerifKr(
+                    fontSize: 16,
+                    color: AppColors.taupe.withValues(alpha: 0.6),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: AppColors.cardBorder,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.mysticViolet),
-                  ),
+                  filled: false,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                  prefixIcon: const Icon(Icons.search,
+                      color: AppColors.taupe, size: 18),
+                  prefixIconConstraints:
+                      const BoxConstraints(minWidth: 32, minHeight: 32),
+                  border: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.line)),
+                  enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.line)),
+                  focusedBorder: const UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: AppColors.ink, width: 1.2)),
                 ),
               ),
             ),
-            SizedBox(
-              height: 38,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                separatorBuilder: (_, _) => const SizedBox(width: 6),
-                itemCount: filters.length,
-                itemBuilder: (ctx, i) {
-                  final f = filters[i];
-                  final selected = f.id == _filter;
-                  return ChoiceChip(
-                    label: Text(f.label),
-                    selected: selected,
-                    onSelected: (_) => setState(() => _filter = f.id),
-                    selectedColor:
-                        AppColors.mysticViolet.withValues(alpha: 0.22),
-                    backgroundColor:
-                        AppColors.spiritIndigo.withValues(alpha: 0.18),
-                    labelStyle: TextStyle(
-                      color: selected
-                          ? AppColors.ghostlyWhite
-                          : AppColors.moonlightGray,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(999),
-                      side: BorderSide(
-                        color: selected
-                            ? AppColors.cardBorderStrong
-                            : AppColors.cardBorder,
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
+              child: SizedBox(
+                height: 46,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  itemCount: filters.length,
+                  itemBuilder: (ctx, i) {
+                    final f = filters[i];
+                    final selected = f.id == _filter;
+                    return GestureDetector(
+                      onTap: () => setState(() => _filter = f.id),
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 24),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: selected
+                                  ? AppColors.ink
+                                  : Colors.transparent,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          f.label.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 3,
+                            fontWeight: FontWeight.w500,
+                            color: selected
+                                ? AppColors.ink
+                                : AppColors.taupe,
+                          ),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-            const SizedBox(height: 8),
             Expanded(
               child: !_loaded
                   ? const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.mysticViolet))
+                      child: SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                              color: AppColors.ink, strokeWidth: 1.5)),
+                    )
                   : filtered.isEmpty
                       ? Center(
                           child: Text(
                             useKo ? '검색 결과 없음' : 'No matches',
-                            style: const TextStyle(
-                                color: AppColors.fadedSilver, fontSize: 13),
+                            style: GoogleFonts.cormorantGaramond(
+                                fontStyle: FontStyle.italic,
+                                color: AppColors.taupe,
+                                fontSize: 14),
                           ),
                         )
                       : ListView.separated(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 8),
+                          padding: EdgeInsets.zero,
                           itemCount: filtered.length,
-                          separatorBuilder: (_, _) =>
-                              const SizedBox(height: 10),
+                          separatorBuilder: (_, _) => const Divider(
+                              height: 1,
+                              color: AppColors.line,
+                              thickness: 1),
                           itemBuilder: (ctx, i) =>
-                              _DreamTile(dream: filtered[i], useKo: useKo),
+                              _DreamRow(dream: filtered[i], useKo: useKo),
                         ),
             ),
           ],
@@ -205,69 +247,56 @@ class _Dream {
   }
 }
 
-class _FilterChip {
+class _F {
   final String id;
   final String label;
-  const _FilterChip(this.id, this.label);
+  const _F(this.id, this.label);
 }
 
-class _DreamTile extends StatelessWidget {
+class _DreamRow extends StatelessWidget {
   final _Dream dream;
   final bool useKo;
-  const _DreamTile({required this.dream, required this.useKo});
+  const _DreamRow({required this.dream, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
-    final accent = dream.auspicious
-        ? AppColors.mysticViolet
-        : Colors.redAccent.shade200;
     return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accent.withValues(alpha: 0.3)),
-      ),
+      padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+      color: dream.auspicious ? AppColors.bg : AppColors.paper,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                dream.auspicious
-                    ? Icons.auto_awesome
-                    : Icons.warning_amber_rounded,
-                size: 14,
-                color: accent,
-              ),
-              const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  useKo
-                      ? '${dream.ko}  ·  ${dream.en}'
-                      : '${dream.en}  ·  ${dream.ko}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.ghostlyWhite,
-                    fontWeight: FontWeight.w700,
+                  useKo ? dream.ko : dream.en,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.ink,
                   ),
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: accent.withValues(alpha: 0.45)),
+                  border: Border.all(
+                      color: dream.auspicious
+                          ? AppColors.accent
+                          : AppColors.taupe,
+                      width: 1),
                 ),
                 child: Text(
                   dream.cat.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: accent,
-                    letterSpacing: 0.8,
-                    fontWeight: FontWeight.w700,
+                  style: GoogleFonts.inter(
+                    fontSize: 8.5,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w500,
+                    color: dream.auspicious
+                        ? AppColors.accent
+                        : AppColors.taupe,
                   ),
                 ),
               ),
@@ -275,11 +304,20 @@ class _DreamTile extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
+            useKo ? dream.en : dream.ko,
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 13,
+              fontStyle: FontStyle.italic,
+              color: AppColors.inkLight,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
             useKo ? dream.meaningKo : dream.meaningEn,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.moonlightGray,
-              height: 1.6,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.ink,
+              height: 1.75,
             ),
           ),
         ],
