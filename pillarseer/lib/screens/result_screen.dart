@@ -564,16 +564,9 @@ class _ProHookCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.celestialGold.withValues(alpha: 0.13),
-              AppColors.spiritIndigo.withValues(alpha: 0.2),
-            ],
-          ),
+          color: AppColors.cardSurface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.4),
-          ),
+          border: Border.all(color: AppColors.cardBorder),
         ),
         child: Row(
           children: [
@@ -584,9 +577,7 @@ class _ProHookCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.midnightPurple.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: AppColors.celestialGold.withValues(alpha: 0.45),
-                ),
+                border: Border.all(color: AppColors.cardBorderStrong),
               ),
               child: Text(hook.emoji, style: const TextStyle(fontSize: 24)),
             ),

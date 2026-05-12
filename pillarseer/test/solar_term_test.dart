@@ -279,6 +279,30 @@ void main() {
       );
     });
 
+    test('1988 DST 종료일 03:00 boundary — half-open 정확성', () {
+      // 1988-10-09 02:59 → DST 적용 중
+      // 1988-10-09 03:00 → DST 종료 (half-open)
+      expect(
+          ManseryeokService.isKoreanDst(DateTime(1988, 10, 9, 2, 59)), isTrue);
+      expect(
+          ManseryeokService.isKoreanDst(DateTime(1988, 10, 9, 3, 0)), isFalse);
+      // 1988-05-08 02:00 → DST 시작 (inclusive)
+      expect(
+          ManseryeokService.isKoreanDst(DateTime(1988, 5, 8, 1, 59)), isFalse);
+      expect(
+          ManseryeokService.isKoreanDst(DateTime(1988, 5, 8, 2, 0)), isTrue);
+    });
+
+    test('1990년대 출생자: DST 영향 없음 (1990, 1995)', () {
+      expect(ManseryeokService.isKoreanDst(DateTime(1990, 7, 15)), isFalse);
+      expect(ManseryeokService.isKoreanDst(DateTime(1995, 7, 15)), isFalse);
+    });
+
+    test('2000년대 이후 출생자: DST 영향 없음', () {
+      expect(ManseryeokService.isKoreanDst(DateTime(2000, 7, 15)), isFalse);
+      expect(ManseryeokService.isKoreanDst(DateTime(2024, 7, 15)), isFalse);
+    });
+
     test('도시별 보정이 calculate() 까지 흐름 — 부산 vs 서울 시주 boundary', () {
       // 1990-06-15 09:00 출생, 시주 boundary 근처 (실 태양시).
       // 서울 longitude -32분 → 진태양시 ~08:28 → 辰시
