@@ -38,6 +38,39 @@ class ResultScreen extends ConsumerWidget {
         title: Text(l.resultTitle),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 14),
+            child: Center(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.cardSurface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.cardBorderStrong),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.verified,
+                        size: 12, color: AppColors.celestialGold),
+                    const SizedBox(width: 4),
+                    Text(
+                      useKo ? '정밀 모드' : 'Precision',
+                      style: const TextStyle(
+                        fontSize: 10.5,
+                        color: AppColors.celestialGold,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
