@@ -1,8 +1,18 @@
 // 2026 신년운세 — KASI 12절 source-of-truth 잠금 테스트.
 //
-// codex Round 4 권고: "12개 전체 exact DateTime + name/stem/branch 테이블 잠금".
 // 화면(_NewYear2026Screen) 과 이 테스트가 모두 JolCalendar2026 을 참조.
 // 1분이라도 어긋나면 즉시 깨지도록 strict equality + ±20분 sanity check 양쪽 모두 검증.
+//
+// ─── KASI 데이터 Provenance (Round 5 권고) ─────────────────────────────────
+// 골든 테이블 _kasiTable 의 12개 datetime 출처:
+//   - 한국천문연구원(KASI) 「월력요항」 2026
+//   - 발표일: 2025-06-30
+//   - 보도자료: https://www.kasi.re.kr/kor/post/newsMaterial/32031
+//   - 알고리즘: NASA/JPL DE441 천체력 기반 KST(UTC+9) 절입시각
+//   - 외부 대조: https://uncle.tools/manse/solar-terms/2026
+// 범위: 12절만 추출 (중기 12개는 月支 boundary 가 아니므로 제외).
+// 정확도 기준: KASI 발표값 분 단위 strict equality + 천체 계산 ±20분 sanity.
+// ────────────────────────────────────────────────────────────────────────────
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pillarseer/services/jol_calendar_2026.dart';
