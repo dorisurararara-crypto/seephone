@@ -69,13 +69,26 @@ class DailyService {
     return map[element] ?? 7;
   }
 
-  /// 일진별 한 줄 메시지 (간단한 placeholder)
-  String _quoteFor(String dayPillar, int score) {
-    if (score >= 85) return 'A secret friend arrives from afar.';
-    if (score >= 70) return 'Speak your idea before noon. Listen after.';
-    if (score >= 55) return 'Stillness today plants the harvest of next month.';
-    if (score >= 40) return 'Watch for impulsive spending mid-day.';
-    return 'Move slow. The water beneath the ice has its own time.';
+  /// 일진별 한 줄 메시지 — ko/en 둘 다 반환
+  ({String ko, String en}) _quoteFor(String dayPillar, int score) {
+    if (score >= 85) {
+      return (ko: '먼 곳에서 비밀스러운 인연이 다가오는 날.',
+              en: 'A secret friend arrives from afar.');
+    }
+    if (score >= 70) {
+      return (ko: '아이디어는 점심 전에 말하고, 오후에는 듣는 날.',
+              en: 'Speak your idea before noon. Listen after.');
+    }
+    if (score >= 55) {
+      return (ko: '오늘의 고요함이 다음 달의 수확을 심습니다.',
+              en: 'Stillness today plants the harvest of next month.');
+    }
+    if (score >= 40) {
+      return (ko: '점심 무렵 충동 지출 조심하는 날.',
+              en: 'Watch for impulsive spending mid-day.');
+    }
+    return (ko: '천천히 움직이세요. 얼음 아래의 물은 자기 시간이 있습니다.',
+            en: 'Move slow. The water beneath the ice has its own time.');
   }
 
   /// 메인: 사용자 사주 + 오늘 날짜로 데일리 운세 계산
@@ -103,6 +116,8 @@ class DailyService {
     final wealth = _categoryGuide('wealth', wealthScore);
     final energy = _categoryGuide('energy', energyScore);
 
+    final quote = _quoteFor(todayPillar.text, total);
+
     return DailyFortune(
       date: t,
       totalScore: total,
@@ -110,7 +125,9 @@ class DailyService {
       workScore: workScore,
       wealthScore: wealthScore,
       energyScore: energyScore,
-      quote: _quoteFor(todayPillar.text, total),
+      quote: quote.en, // backward-compat
+      quoteEn: quote.en,
+      quoteKo: quote.ko,
       luckyColor: _luckyColorFor(userElement),
       luckyNumber: _luckyNumberFor(userElement),
       luckyDirection: _luckyDirectionFor(userElement),

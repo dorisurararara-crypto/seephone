@@ -7,7 +7,9 @@ class DailyFortune {
   final int workScore;
   final int wealthScore;
   final int energyScore;
-  final String quote;          // 한 줄 메시지
+  final String quote;          // 한 줄 메시지 (deprecated — quoteEn/Ko 사용)
+  final String quoteEn;
+  final String quoteKo;
   final String luckyColor;
   final int luckyNumber;
   final String luckyDirection; // East / West / North / South / NE...
@@ -30,6 +32,8 @@ class DailyFortune {
     required this.wealthScore,
     required this.energyScore,
     required this.quote,
+    this.quoteEn = '',
+    this.quoteKo = '',
     required this.luckyColor,
     required this.luckyNumber,
     required this.luckyDirection,

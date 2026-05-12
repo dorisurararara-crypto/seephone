@@ -13,6 +13,7 @@ class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
   static bool _initialized = false;
   static const _kPrefsEnabled = 'app.notif.daily8am.enabled';
+  static const _kPrefsScheduleSig = 'app.notif.daily8am.scheduleSig';
   static const int _kDailyId = 8888;
 
   static Future<void> ensureInitialized() async {
@@ -117,6 +118,13 @@ class NotificationService {
         break;
       }
     }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kPrefsScheduleSig, _scheduleSignature(
+      title: title,
+      body: body,
+      day60ji: day60ji,
+      useKo: useKo,
+    ));
   }
 
   static Future<void> cancelDaily() async {
@@ -137,4 +145,27 @@ class NotificationService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kPrefsEnabled, value);
   }
+
+  static Future<bool> needsReschedule({
+    required String title,
+    required String body,
+    String? day60ji,
+    required bool useKo,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_kPrefsScheduleSig) != _scheduleSignature(
+      title: title,
+      body: body,
+      day60ji: day60ji,
+      useKo: useKo,
+    );
+  }
+
+  static String _scheduleSignature({
+    required String title,
+    required String body,
+    String? day60ji,
+    required bool useKo,
+  }) =>
+      '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}';
 }

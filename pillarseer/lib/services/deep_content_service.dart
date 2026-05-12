@@ -13,6 +13,32 @@ class DeepContentService {
   static Map<String, Map<String, dynamic>>? _koCache;
   static bool _loaded = false;
 
+  /// codex 가 생성한 60일주 ko 본문에 "Wood Pig", "Metal Rabbit" 같은 영문 페어가
+  /// 섞여 있는 경우를 한국어 모드에서 제거 (사용자 실기 피드백).
+  static const _elNames = ['Wood', 'Fire', 'Earth', 'Metal', 'Water'];
+  static const _animNames = [
+    'Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake',
+    'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'
+  ];
+
+  static String _sanitizeKo(String text) {
+    var t = text;
+    for (final el in _elNames) {
+      for (final an in _animNames) {
+        t = t.replaceAll(' $el $an', '').replaceAll('$el $an ', '');
+      }
+    }
+    // 남은 단독 영문 element/animal 도 (단독 단어 단위) 제거
+    for (final el in _elNames) {
+      t = t.replaceAll(RegExp(r'(?<!\w)' + el + r'(?!\w)'), '');
+    }
+    for (final an in _animNames) {
+      t = t.replaceAll(RegExp(r'(?<!\w)' + an + r'(?!\w)'), '');
+    }
+    // 연속 공백 정리 + "는" "이" 앞 공백 정리
+    return t.replaceAll(RegExp(r'\s+'), ' ').replaceAll(' ,', ',').trim();
+  }
+
   static Future<void> _ensureLoaded() async {
     if (_loaded) return;
     final en = <String, Map<String, dynamic>>{};
@@ -96,20 +122,20 @@ class DeepContentService {
     required String deficit,
   }) {
     final isKo = lang == 'ko';
-    final dmDeep = raw?['dayMasterDeep'] as String? ??
-        _fallbackDayMasterDeep(isKo, day60ji, name);
-    final career = raw?['career'] as String? ??
-        _expandShort(shortReadings['career'] ?? '', isKo, 'career', day60ji);
-    final wealth = raw?['wealth'] as String? ??
-        _expandShort(shortReadings['money'] ?? '', isKo, 'wealth', day60ji);
-    final love = raw?['love'] as String? ??
-        _expandShort(shortReadings['love'] ?? '', isKo, 'love', day60ji);
-    final health = raw?['health'] as String? ??
-        _fallbackHealth(isKo, day60ji, deficit);
-    final family = raw?['family'] as String? ??
-        _fallbackFamily(isKo, day60ji);
-    final fame = raw?['fame'] as String? ??
-        _fallbackFame(isKo, day60ji, name);
+    String pickField(String key, String fallback) {
+      final v = (raw?[key] as String?) ?? fallback;
+      return isKo ? _sanitizeKo(v) : v;
+    }
+    final dmDeep = pickField('dayMasterDeep', _fallbackDayMasterDeep(isKo, day60ji, name));
+    final career = pickField('career',
+        _expandShort(shortReadings['career'] ?? '', isKo, 'career', day60ji));
+    final wealth = pickField('wealth',
+        _expandShort(shortReadings['money'] ?? '', isKo, 'wealth', day60ji));
+    final love = pickField('love',
+        _expandShort(shortReadings['love'] ?? '', isKo, 'love', day60ji));
+    final health = pickField('health', _fallbackHealth(isKo, day60ji, deficit));
+    final family = pickField('family', _fallbackFamily(isKo, day60ji));
+    final fame = pickField('fame', _fallbackFame(isKo, day60ji, name));
     final luckyColor = raw?['luckyColor'] as String? ??
         _luckyColorFor(isKo, dominant);
     final luckyNumber = (raw?['luckyNumber'] is int)

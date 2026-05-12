@@ -175,6 +175,9 @@
   "paywallRestoreLater": "구매 복원 (나중에)",
   "paywallClose": "다음에",
   "profileReset": "사주 다시 입력",
+  "inputBirthdayManualHint": "직접 입력: YYYY-MM-DD (예: 1996-05-16)",
+  "inputBirthdayManualInvalid": "날짜 형식이 잘못됐어요 — YYYY-MM-DD",
+  "inputBirthdayPickButton": "또는 달력에서 선택",
 
   "splashTrust": "정통 사주, 누구나 쉽게",
   "resultTrustLine": "당신의 생년월일시와 오행·십신 흐름을 바탕으로 풀이했어요.",

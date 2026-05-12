@@ -513,6 +513,15 @@ class AppL10nKo extends AppL10n {
   String get profileReset => '사주 다시 입력';
 
   @override
+  String get inputBirthdayManualHint => '직접 입력: YYYY-MM-DD (예: 1996-05-16)';
+
+  @override
+  String get inputBirthdayManualInvalid => '날짜 형식이 잘못됐어요 — YYYY-MM-DD';
+
+  @override
+  String get inputBirthdayPickButton => '또는 달력에서 선택';
+
+  @override
   String get splashTrust => '정통 사주, 누구나 쉽게';
 
   @override

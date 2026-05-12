@@ -175,6 +175,9 @@
   "paywallRestoreLater": "Restore purchase (later)",
   "paywallClose": "Maybe later",
   "profileReset": "Reset birth chart",
+  "inputBirthdayManualHint": "Type directly: YYYY-MM-DD (e.g. 1996-05-16)",
+  "inputBirthdayManualInvalid": "Invalid date — use YYYY-MM-DD format",
+  "inputBirthdayPickButton": "Or pick from calendar",
 
   "splashTrust": "Korean traditional Four Pillars · made easy",
   "resultTrustLine": "Based on your birth date·time + Five Elements + Ten Gods.",

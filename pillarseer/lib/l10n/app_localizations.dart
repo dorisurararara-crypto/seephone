@@ -1093,6 +1093,24 @@ abstract class AppL10n {
   /// **'Reset birth chart'**
   String get profileReset;
 
+  /// No description provided for @inputBirthdayManualHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type directly: YYYY-MM-DD (e.g. 1996-05-16)'**
+  String get inputBirthdayManualHint;
+
+  /// No description provided for @inputBirthdayManualInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid date — use YYYY-MM-DD format'**
+  String get inputBirthdayManualInvalid;
+
+  /// No description provided for @inputBirthdayPickButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Or pick from calendar'**
+  String get inputBirthdayPickButton;
+
   /// No description provided for @splashTrust.
   ///
   /// In en, this message translates to:

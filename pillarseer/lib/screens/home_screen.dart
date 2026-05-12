@@ -55,10 +55,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const _MoonDeco(),
               _ScoreCircle(score: fortune.totalScore),
               _ScoreExplanation(score: fortune.totalScore),
-              _Quote(quote: fortune.quote),
+              _Quote(quoteEn: fortune.quoteEn, quoteKo: fortune.quoteKo),
               _TodayPillarRow(
                 dayPillar: fortune.dayPillar,
-                englishLabel: _englishForGanji(fortune.dayPillar),
+                localizedLabel:
+                    _localizedGanjiLabel(context, fortune.dayPillar),
               ),
               _CategoryGrid(fortune: fortune),
               _CategoryGuidesCard(fortune: fortune),
@@ -73,12 +74,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  /// 60갑자 텍스트 → 영문 일주 이름 (예: 丙午 → "Fire Horse").
-  /// dummy fallback 이거나 길이가 다르면 원문 그대로 반환.
-  String _englishForGanji(String ganji) {
+  /// 60갑자 텍스트 → locale 라벨 (예: 丙午 → "Fire Horse" / "화 말").
+  String _localizedGanjiLabel(BuildContext context, String ganji) {
     if (ganji.length != 2) return '';
     final p = Pillar(chunGan: ganji[0], jiJi: ganji[1]);
-    return p.pairEnglish;
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    return useKo ? p.pairKoreanMeaning : p.pairEnglish;
   }
 }
 
@@ -90,6 +92,19 @@ class _NotifToggleCard extends ConsumerWidget {
     final l = AppL10n.of(context);
     final toggle = ref.watch(notificationProvider);
     final on = toggle.enabled;
+    final saju = ref.watch(sajuResultProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    if (on) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(notificationProvider.notifier).reconcileSchedule(
+              pushTitle: l.homeNotifSampleTitle,
+              pushBody: l.homeNotifSampleBody,
+              day60ji: saju?.day60ji,
+              useKo: useKo,
+            );
+      });
+    }
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
       child: Container(
@@ -147,11 +162,6 @@ class _NotifToggleCard extends ConsumerWidget {
                 final notifier = ref.read(notificationProvider.notifier);
                 final messenger = ScaffoldMessenger.of(context);
                 if (v) {
-                  final saju = ref.read(sajuResultProvider);
-                  final useKo = (Localizations.maybeLocaleOf(context)
-                              ?.languageCode ??
-                          'en') ==
-                      'ko';
                   final ok = await notifier.enable(
                     pushTitle: l.homeNotifSampleTitle,
                     pushBody: l.homeNotifSampleBody,
@@ -831,15 +841,19 @@ class _ScoreExplanation extends StatelessWidget {
 }
 
 class _Quote extends StatelessWidget {
-  final String quote;
-  const _Quote({required this.quote});
+  final String quoteEn;
+  final String quoteKo;
+  const _Quote({required this.quoteEn, required this.quoteKo});
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final text = useKo ? (quoteKo.isEmpty ? quoteEn : quoteKo) : quoteEn;
     return Padding(
       padding: const EdgeInsets.fromLTRB(36, 0, 36, 14),
       child: Text(
-        '"$quote"',
+        '"$text"',
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 14,
@@ -854,15 +868,18 @@ class _Quote extends StatelessWidget {
 
 class _TodayPillarRow extends StatelessWidget {
   final String dayPillar;
-  final String englishLabel;
-  const _TodayPillarRow({required this.dayPillar, required this.englishLabel});
+  final String localizedLabel;
+  const _TodayPillarRow({
+    required this.dayPillar,
+    required this.localizedLabel,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    final hasEnglish = englishLabel.isNotEmpty;
-    final text = hasEnglish
-        ? '${l.homeTodaysPillar} · $englishLabel ($dayPillar)'
+    final hasLabel = localizedLabel.isNotEmpty;
+    final text = hasLabel
+        ? '${l.homeTodaysPillar} · $localizedLabel ($dayPillar)'
         : '${l.homeTodaysPillar} · $dayPillar';
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),

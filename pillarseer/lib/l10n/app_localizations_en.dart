@@ -532,6 +532,17 @@ class AppL10nEn extends AppL10n {
   String get profileReset => 'Reset birth chart';
 
   @override
+  String get inputBirthdayManualHint =>
+      'Type directly: YYYY-MM-DD (e.g. 1996-05-16)';
+
+  @override
+  String get inputBirthdayManualInvalid =>
+      'Invalid date — use YYYY-MM-DD format';
+
+  @override
+  String get inputBirthdayPickButton => 'Or pick from calendar';
+
+  @override
   String get splashTrust => 'Korean traditional Four Pillars · made easy';
 
   @override

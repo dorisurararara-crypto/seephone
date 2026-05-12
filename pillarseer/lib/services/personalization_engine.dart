@@ -192,10 +192,10 @@ class PersonalizationEngine {
       'Your ${_gnameEn(p.dayMaster)} day master under ${_elNameEn(p.dominantEl)} dominance shapes today.';
 
   static String _fallbackBodyKo(PillarProfile p) =>
-      '한 가지에만 집중하면 보상이 따르는 ${_seasonKo(p.season)} 분위기입니다.';
+      '오늘은 한 가지에 집중하면 보상이 따라요. 당신은 출생 계절(${_seasonKo(p.season)}) 결을 가진 사람.';
 
   static String _fallbackBodyEn(PillarProfile p) =>
-      'Focus rewards you today — a ${_seasonEn(p.season)} kind of momentum.';
+      'Today, focus on one thing — you carry ${_seasonEn(p.season)}-born momentum.';
 
   static String _fallbackActionKo(PillarProfile p) =>
       '오늘 ${_elNameKo(p.deficitEl)} 기운을 보태는 행동(${_compensationKo(p.deficitEl)})을 하나만 의식하세요.';
@@ -244,8 +244,8 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 70,
-      koTpl: '{season}의 {dm}, 계절과 본성이 같은 방향으로 흘러요.',
-      enTpl: '{dmEn} born in {seasonEn} — your nature flows with the season.',
+      koTpl: '{season}생 {dm} — 출생 계절과 본성이 같은 방향이라 결이 자연스러워요.',
+      enTpl: '{dmEn} born in {seasonEn} — your nature flows with the season you were born in.',
       condition: (p, t) => (p.season == 'spring' && p.dayMasterElement == '木') ||
           (p.season == 'summer' && p.dayMasterElement == '火') ||
           (p.season == 'autumn' && p.dayMasterElement == '金') ||
@@ -324,7 +324,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 60,
-      koTpl: '{season}의 {dm} — 환절기 결을 잘 읽는 타입이에요.',
+      koTpl: '출생 계절 {season}의 {dm} — 환절기 결을 잘 읽는 타입이에요.',
       enTpl: '{dmEn} in {seasonEn} — you read transitional moments well.',
       condition: (p, t) => p.season == 'transition',
     ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../services/saju_service.dart';
@@ -95,33 +94,11 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                         textInputAction: TextInputAction.next,
                       ),
                     ),
-                    _IconField(
-                      icon: Icons.calendar_today_outlined,
-                      label: l.inputBirthday,
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate:
-                              _selectedDate ?? DateTime(2000, 1, 1),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                        );
-                        if (picked != null) {
-                          setState(() => _selectedDate = picked);
-                        }
-                      },
-                      child: Text(
-                        _selectedDate == null
-                            ? '—'
-                            : DateFormat.yMMMd(locale.toString())
-                                .format(_selectedDate!),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: _selectedDate == null
-                              ? AppColors.fadedSilver
-                              : AppColors.ghostlyWhite,
-                        ),
-                      ),
+                    _BirthdayInput(
+                      l: l,
+                      locale: locale,
+                      selectedDate: _selectedDate,
+                      onChanged: (d) => setState(() => _selectedDate = d),
                     ),
                     _IconField(
                       icon: Icons.access_time,
@@ -354,6 +331,163 @@ class _Header extends StatelessWidget {
                   color: AppColors.celestialGold.withValues(alpha: 0.2)),
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+/// 생년월일 입력 — 텍스트 직접 입력 + 캘린더 fallback (사용자 실기 피드백).
+/// 1990년대 휠 굴리기 너무 힘들다 → YYYY-MM-DD 타이핑 우선.
+class _BirthdayInput extends StatefulWidget {
+  final AppL10n l;
+  final Locale locale;
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime?> onChanged;
+  const _BirthdayInput({
+    required this.l,
+    required this.locale,
+    required this.selectedDate,
+    required this.onChanged,
+  });
+
+  @override
+  State<_BirthdayInput> createState() => _BirthdayInputState();
+}
+
+class _BirthdayInputState extends State<_BirthdayInput> {
+  late final TextEditingController _ctrl;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = TextEditingController(
+      text: widget.selectedDate == null
+          ? ''
+          : '${widget.selectedDate!.year.toString().padLeft(4, '0')}-${widget.selectedDate!.month.toString().padLeft(2, '0')}-${widget.selectedDate!.day.toString().padLeft(2, '0')}',
+    );
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged(String v) {
+    setState(() {
+      _error = null;
+    });
+    final clean = v.trim().replaceAll('.', '-').replaceAll('/', '-');
+    final m = RegExp(r'^(\d{4})-(\d{1,2})-(\d{1,2})$').firstMatch(clean);
+    if (m == null) {
+      widget.onChanged(null);
+      if (v.length >= 8) {
+        setState(() => _error = widget.l.inputBirthdayManualInvalid);
+      }
+      return;
+    }
+    final y = int.parse(m.group(1)!);
+    final mo = int.parse(m.group(2)!);
+    final d = int.parse(m.group(3)!);
+    if (y < 1900 || y > DateTime.now().year || mo < 1 || mo > 12 || d < 1 || d > 31) {
+      widget.onChanged(null);
+      setState(() => _error = widget.l.inputBirthdayManualInvalid);
+      return;
+    }
+    final dt = DateTime(y, mo, d);
+    if (dt.year != y || dt.month != mo || dt.day != d) {
+      widget.onChanged(null);
+      setState(() => _error = widget.l.inputBirthdayManualInvalid);
+      return;
+    }
+    widget.onChanged(dt);
+  }
+
+  Future<void> _openCalendar() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: widget.selectedDate ?? DateTime(2000, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      initialDatePickerMode: DatePickerMode.year,
+    );
+    if (picked != null) {
+      widget.onChanged(picked);
+      _ctrl.text =
+          '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
+      setState(() => _error = null);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _IconField(
+          icon: Icons.calendar_today_outlined,
+          label: widget.l.inputBirthday,
+          onTap: null,
+          child: TextField(
+            controller: _ctrl,
+            keyboardType: TextInputType.datetime,
+            inputFormatters: const [],
+            style: const TextStyle(
+              fontSize: 15,
+              color: AppColors.ghostlyWhite,
+              letterSpacing: 1.0,
+            ),
+            decoration: InputDecoration(
+              isCollapsed: true,
+              border: InputBorder.none,
+              hintText: widget.l.inputBirthdayManualHint,
+              hintStyle: const TextStyle(
+                color: AppColors.fadedSilver,
+                fontSize: 12.5,
+              ),
+            ),
+            onChanged: _onTextChanged,
+          ),
+        ),
+        if (_error != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 4, 0, 0),
+            child: Text(
+              _error!,
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.redAccent.shade200,
+              ),
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 6, 0, 8),
+          child: InkWell(
+            onTap: _openCalendar,
+            borderRadius: BorderRadius.circular(6),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.event,
+                      size: 14, color: AppColors.celestialGold),
+                  const SizedBox(width: 5),
+                  Text(
+                    widget.l.inputBirthdayPickButton,
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      color: AppColors.celestialGold,
+                      fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );

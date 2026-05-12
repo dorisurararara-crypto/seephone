@@ -100,6 +100,33 @@ class Pillar {
     };
     return '${elementName[chunGanElement] ?? "?"} $jiJiEnglish';
   }
+
+  /// 일주 한국어 음 (예: 신묘, 갑자, 병오)
+  String get pairKorean {
+    const ganKo = {
+      '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
+      '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+    };
+    const jiKo = {
+      '子': '자', '丑': '축', '寅': '인', '卯': '묘',
+      '辰': '진', '巳': '사', '午': '오', '未': '미',
+      '申': '신', '酉': '유', '戌': '술', '亥': '해',
+    };
+    return '${ganKo[chunGan] ?? "?"}${jiKo[jiJi] ?? "?"}';
+  }
+
+  /// 한국어 UI용 의미 라벨 (예: 금 토끼)
+  String get pairKoreanMeaning {
+    const elementName = {
+      '木': '목', '火': '화', '土': '토', '金': '금', '水': '수',
+    };
+    const animalName = {
+      '子': '쥐', '丑': '소', '寅': '호랑이', '卯': '토끼',
+      '辰': '용', '巳': '뱀', '午': '말', '未': '양',
+      '申': '원숭이', '酉': '닭', '戌': '개', '亥': '돼지',
+    };
+    return '${elementName[chunGanElement] ?? "?"} ${animalName[jiJi] ?? "?"}';
+  }
 }
 
 /// 십신 (十神) — 일간 기준 다른 천간/지지의 관계

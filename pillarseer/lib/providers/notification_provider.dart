@@ -60,6 +60,28 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
     await NotificationService.setEnabled(false);
     state = state.copyWith(enabled: false);
   }
+
+  Future<void> reconcileSchedule({
+    required String pushTitle,
+    required String pushBody,
+    String? day60ji,
+    required bool useKo,
+  }) async {
+    if (!state.enabled) return;
+    final needsReschedule = await NotificationService.needsReschedule(
+      title: pushTitle,
+      body: pushBody,
+      day60ji: day60ji,
+      useKo: useKo,
+    );
+    if (!needsReschedule) return;
+    await NotificationService.scheduleDaily8am(
+      title: pushTitle,
+      body: pushBody,
+      day60ji: day60ji,
+      useKo: useKo,
+    );
+  }
 }
 
 final notificationProvider =

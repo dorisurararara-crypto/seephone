@@ -1155,9 +1155,14 @@ class _PillarItem extends StatelessWidget {
     final borderColor = highlight
         ? AppColors.celestialGold
         : AppColors.celestialGold.withValues(alpha: 0.3);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final localizedPillarLabel = isNull
+        ? '—'
+        : (useKo ? pillar!.pairKoreanMeaning : pillar!.pairEnglish);
     final semanticLabel = isNull
         ? '$label pillar: unknown'
-        : '$label pillar: ${pillar!.text}, ${pillar!.pairEnglish}';
+        : '$label pillar: ${pillar!.text}, $localizedPillarLabel';
     return Semantics(
       label: semanticLabel,
       excludeSemantics: true,
@@ -1207,16 +1212,16 @@ class _PillarItem extends StatelessWidget {
         SizedBox(
           width: 72,
           child: Text(
-            isNull ? '—' : pillar!.pairEnglish,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 10.5,
-              color: AppColors.moonlightGray,
-              height: 1.2,
+              localizedPillarLabel,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 10.5,
+                color: AppColors.moonlightGray,
+                height: 1.2,
+              ),
             ),
-          ),
         ),
       ],
     ),
@@ -1232,6 +1237,8 @@ class _DayMasterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -1270,7 +1277,7 @@ class _DayMasterCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  result.dayMasterName,
+                  useKo ? result.dayPillar.pairKoreanMeaning : result.dayMasterName,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
