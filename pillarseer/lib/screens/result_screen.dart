@@ -1,6 +1,5 @@
-// Pillar Seer — Result screen. MZ/K-pop 친근 톤 + 3-hit 요약 + 큰 글씨.
-// 한자어는 모두 보조 subtitle 로만, 메인 헤더는 친근 라벨 + emoji.
-// Free user 는 본성+5행+Life Themes 3/6 만 unlocked; Pro 면 모두 해제.
+// Pillar Seer — Result screen (Aesop Luxury redesign).
+// 텍스트 위주 magazine editorial. emoji 제거. letter-spacing UPPERCASE 라벨.
 // ignore_for_file: unused_element, unused_element_parameter
 
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/gong_mang_service.dart';
 import '../services/gyeokguk_service.dart';
@@ -41,294 +41,153 @@ class ResultScreen extends ConsumerWidget {
     final reading = useKo ? result.deepKo : result.deepEn;
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(l.resultTitle),
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.bg,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        toolbarHeight: 56,
+        title: Text(
+          'P I L L A R    S E E R',
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 5,
+            color: AppColors.ink,
+          ),
+        ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 14),
+            padding: const EdgeInsets.only(right: 18),
             child: Center(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.cardSurface,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.cardBorderStrong),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.verified,
-                        size: 12, color: AppColors.celestialGold),
-                    const SizedBox(width: 4),
-                    Text(
-                      l.resultPrecisionBadge,
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        color: AppColors.celestialGold,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _AesopChip(label: l.resultPrecisionBadge),
             ),
           ),
         ],
+        shape: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+        padding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // codex Round 19 권고: "그래서 나는 누구인가" 가장 먼저.
-            // 1. 한 줄 정체성 (3-hit card)
-            _ThreeHitCard(result: result, reading: reading, useKo: useKo),
-            const SizedBox(height: 12),
-            // 1.5. 사주 코어 프로필 — 명리학 features 한 카드 종합 (Round 45)
-            _MyeongliSummaryCard(result: result, useKo: useKo),
-            const SizedBox(height: 14),
-            // 2. 사주 4기둥 (가장 핵심 결과)
-            _PillarGrid(result: result),
-            const SizedBox(height: 12),
-            // 3. 일간 상세 카드
-            _DayMasterCard(result: result),
-            const SizedBox(height: 14),
-            // 4. 오늘 조언 (개인화)
-            _PersonalForYouCard(result: result, useKo: useKo),
-            const SizedBox(height: 12),
-            // 5. 작은 신뢰 + 처음이세요? 보조 영역
-            _TrustLine(),
-            const SizedBox(height: 6),
-            _EasyModeBanner(),
-            const SizedBox(height: 22),
-            _SectionHeader(
-              title: l.resultDayMasterDeepTitle,
-              hint: l.resultDayMasterTermHint,
-            ),
-            const SizedBox(height: 10),
-            _Section(
-              locked: false,
-              whyLine: reading?.whyReason,
-              // KO 모드 fallback: result.summary 영어이므로 안전한 generic Korean.
-              child: _LongText(
-                  text: reading?.dayMasterDeep ??
-                      (useKo
-                          ? '당신의 일주 ${result.day60ji}는 정통 명리학 기준으로 매우 구체적인 결을 가집니다. 자세한 풀이는 곧 갱신됩니다.'
-                          : result.summary)),
-            ),
-            const SizedBox(height: 22),
-            _SectionHeader(
-              title: l.resultFiveElementsDetailTitle,
-              hint: l.resultFiveElementsTermHint,
-            ),
-            const SizedBox(height: 10),
-            _Section(
-              locked: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ElementsBar(result: result),
-                  if (reading != null && reading.elementsNote.isNotEmpty) ...[
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                      decoration: BoxDecoration(
-                        color:
-                            AppColors.midnightPurple.withValues(alpha: 0.4),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColors.celestialGold
-                              .withValues(alpha: 0.2),
-                        ),
-                      ),
-                      child: Text(
-                        reading.elementsNote,
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          color: AppColors.ghostlyWhite,
-                          height: 1.7,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: 22),
-            // ─── 그룹 1: 기본 풀이 ───
-            _GroupHeader(useKo ? '기본 풀이' : 'CORE READING'),
-            const SizedBox(height: 8),
-            // 이하 항목 accordion 으로 정리 (codex Round 14 권고 — 너무 길음).
-            _AccordionSection(
-              title: l.resultTenGodsTitle,
-              hint: l.resultTenGodsTermHint,
-              locked: !isPro,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _TenGodsTable(rows: result.tenGods, useKo: useKo),
-                  if (reading != null && reading.tenGodsNote.isNotEmpty) ...[
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.celestialGold.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColors.celestialGold
-                              .withValues(alpha: 0.22),
-                        ),
-                      ),
-                      child: Text(
-                        reading.tenGodsNote,
-                        style: const TextStyle(
-                          fontSize: 13.5,
-                          color: AppColors.celestialGold,
-                          fontWeight: FontWeight.w700,
-                          height: 1.7,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            _AccordionSection(
-              title: l.resultLifeThemesTitle,
-              locked: false,
-              child: _LifeThemesBlock(reading: reading, isPro: isPro),
-            ),
-            _AccordionSection(
-              title: l.resultTenYearLuckTitle,
-              hint: l.resultTenYearLuckTermHint,
-              locked: !isPro,
-              child: _LongText(text: reading?.tenYearLuck ?? ''),
-            ),
-            _AccordionSection(
-              title: l.resultThisYearTitle,
-              hint: l.resultThisYearTermHint,
-              locked: !isPro,
-              child: _LongText(text: reading?.thisYear ?? ''),
-            ),
-            _AccordionSection(
-              title: l.resultLuckyTitle,
-              locked: !isPro,
-              child: _LuckyBlock(reading: reading, useKo: useKo),
-            ),
-            const SizedBox(height: 18),
-            // ─── 그룹 2: 깊은 명리학 ───
-            _GroupHeader(useKo ? '깊은 명리학' : 'DEEP MYEONGLI'),
-            const SizedBox(height: 8),
-            _AccordionSection(
-              title: useKo
-                  ? '🎯 격국 — 사주의 큰 구조'
-                  : '🎯 Gyeokguk — chart structure',
-              locked: false,
-              child: _GyeokgukBlock(result: result, useKo: useKo),
-            ),
-            _AccordionSection(
-              title: useKo
-                  ? '🔮 용신 — 가장 필요한 오행'
-                  : '🔮 Yongsin — most needed element',
-              locked: false,
-              child: _YongsinBlock(result: result, useKo: useKo),
-            ),
-            _AccordionSection(
-              title: useKo
-                  ? '⚖️ 강약 — 일간이 강한가 약한가'
-                  : '⚖️ Day-master Strength',
-              locked: false,
-              child: _StrengthBlock(result: result, useKo: useKo),
-            ),
-            _AccordionSection(
-              title: useKo ? '🪐 공망 — 비어 있는 영역' : '🪐 Void Branches (空亡)',
-              locked: false,
-              child: _GongMangBlock(result: result, useKo: useKo),
-            ),
-            _AccordionSection(
-              title: useKo
-                  ? '🌸 신살 — 사주의 특별 표지'
-                  : '🌸 Shinsa (神煞)',
-              locked: false,
-              child: _ShinsaBlock(result: result, useKo: useKo),
-            ),
-            _AccordionSection(
-              title: useKo
-                  ? '🌀 12 운성 — 기둥별 일생 단계'
-                  : '🌀 12 Unsung (life cycle stages)',
-              locked: false,
-              child: _TwelveUnsungBlock(result: result, useKo: useKo),
-            ),
-            _AccordionSection(
-              title: useKo
-                  ? '⚡ 합·충 — 기둥 간 관계'
-                  : '⚡ Hap & Chung (合·沖)',
-              locked: false,
-              child: _HapchungBlock(result: result, useKo: useKo),
-            ),
-            const SizedBox(height: 18),
-            // ─── 그룹 3: 검증·신뢰 ───
-            _GroupHeader(useKo ? '검증·신뢰' : 'VERIFICATION'),
-            const SizedBox(height: 8),
-            _AccordionSection(
-              title: l.resultBasisTitle,
-              locked: false,
-              child: _CalculationBasisBody(result: result, useKo: useKo),
-            ),
-            const SizedBox(height: 8),
-            if (!isPro) _ProHooks(),
-            const SizedBox(height: 18),
-            if (!isPro)
-              ElevatedButton.icon(
-                onPressed: () => showComingSoonModal(context),
-                icon: const Icon(Icons.lock_open),
-                label: Text(l.resultUnlockFull),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.celestialGold,
-                  foregroundColor: AppColors.midnightPurple,
-                  minimumSize: const Size(double.infinity, 58),
-                  textStyle: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
+            // 1. Hero — 일주 한자 + 영문 보조
+            _DayMasterHero(result: result, reading: reading, useKo: useKo),
+            // 2. A READING — magazine body (paper bg)
+            _ReadingSection(result: result, reading: reading, useKo: useKo),
+            // 3. CHART ATTRIBUTES — 2x2 grid (bg)
+            _ChartAttributesSection(result: result, useKo: useKo),
+            // 4. FOUR PILLARS — 4-column hairline (paper bg)
+            _FourPillarsSection(result: result, useKo: useKo),
+            // 5. THREE STROKES — magazine 3-hit (bg)
+            _ThreeStrokesSection(result: result, reading: reading, useKo: useKo),
+            // 6. FOR YOU TODAY — Personalization Engine (paper bg)
+            _ForYouTodaySection(result: result, useKo: useKo),
+            // 7. FIVE ELEMENTS — bar chart (bg)
+            _FiveElementsSection(result: result, reading: reading, useKo: useKo),
+            // 8. CORE READING accordion group (paper bg)
+            _GroupSection(
+              groupLabel: useKo ? '기본 풀이 · CORE READING' : 'CORE READING',
+              background: AppColors.paper,
+              children: [
+                _AccordionRow(
+                  title: l.resultTenGodsTitle.toUpperCase(),
+                  hint: l.resultTenGodsTermHint,
+                  locked: !isPro,
+                  note: reading?.tenGodsNote,
+                  child: _TenGodsTable(rows: result.tenGods, useKo: useKo),
                 ),
-              ),
-            if (!isPro) const SizedBox(height: 12),
-            OutlinedButton.icon(
-              onPressed: () => context.go('/home'),
-              icon: const Icon(Icons.arrow_forward,
-                  color: AppColors.celestialGold),
-              label: Text(
-                l.resultContinueDaily,
-                style: const TextStyle(
-                    color: AppColors.ghostlyWhite,
-                    fontSize: 15,
-                    letterSpacing: 1.0),
-              ),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 52),
-                side: BorderSide(
-                  color: AppColors.celestialGold.withValues(alpha: 0.4),
+                _AccordionRow(
+                  title: l.resultLifeThemesTitle.toUpperCase(),
+                  locked: false,
+                  child: _LifeThemesBlock(reading: reading, isPro: isPro),
                 ),
-              ),
+                _AccordionRow(
+                  title: l.resultTenYearLuckTitle.toUpperCase(),
+                  hint: l.resultTenYearLuckTermHint,
+                  locked: !isPro,
+                  child: _LongText(text: reading?.tenYearLuck ?? ''),
+                ),
+                _AccordionRow(
+                  title: l.resultThisYearTitle.toUpperCase(),
+                  hint: l.resultThisYearTermHint,
+                  locked: !isPro,
+                  child: _LongText(text: reading?.thisYear ?? ''),
+                ),
+                _AccordionRow(
+                  title: l.resultLuckyTitle.toUpperCase(),
+                  locked: !isPro,
+                  child: _LuckyBlock(reading: reading, useKo: useKo),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            TextButton.icon(
-              onPressed: () => _shareChart(context, result, useKo),
-              icon: const Icon(Icons.share, color: AppColors.celestialGold),
-              label: Text(
-                l.resultShare,
-                style: const TextStyle(
-                    color: AppColors.celestialGold,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700),
-              ),
+            // 9. DEEP MYEONGLI accordion group (bg)
+            _GroupSection(
+              groupLabel: useKo ? '깊은 명리학 · DEEP MYEONGLI' : 'DEEP MYEONGLI',
+              background: AppColors.bg,
+              children: [
+                _AccordionRow(
+                  title: useKo ? '격국 · CHART FORMAT' : 'GYEOKGUK · CHART FORMAT',
+                  locked: false,
+                  child: _GyeokgukBlock(result: result, useKo: useKo),
+                ),
+                _AccordionRow(
+                  title: useKo ? '용신 · NEEDED ELEMENT' : 'YONGSIN · NEEDED ELEMENT',
+                  locked: false,
+                  child: _YongsinBlock(result: result, useKo: useKo),
+                ),
+                _AccordionRow(
+                  title: useKo ? '강약 · STRENGTH' : 'STRENGTH',
+                  locked: false,
+                  child: _StrengthBlock(result: result, useKo: useKo),
+                ),
+                _AccordionRow(
+                  title: useKo ? '공망 · VOID' : 'VOID BRANCHES',
+                  locked: false,
+                  child: _GongMangBlock(result: result, useKo: useKo),
+                ),
+                _AccordionRow(
+                  title: useKo ? '신살 · SHINSA' : 'SHINSA',
+                  locked: false,
+                  child: _ShinsaBlock(result: result, useKo: useKo),
+                ),
+                _AccordionRow(
+                  title: useKo ? '12 운성 · LIFE CYCLE' : '12 UNSUNG · LIFE CYCLE',
+                  locked: false,
+                  child: _TwelveUnsungBlock(result: result, useKo: useKo),
+                ),
+                _AccordionRow(
+                  title: useKo ? '합·충 · RELATIONS' : 'HAP & CHUNG · RELATIONS',
+                  locked: false,
+                  child: _HapchungBlock(result: result, useKo: useKo),
+                ),
+              ],
             ),
+            // 10. VERIFICATION (paper)
+            _GroupSection(
+              groupLabel: useKo ? '검증 · VERIFICATION' : 'VERIFICATION',
+              background: AppColors.paper,
+              children: [
+                _AccordionRow(
+                  title: l.resultBasisTitle.toUpperCase(),
+                  locked: false,
+                  child: _CalculationBasisBody(result: result, useKo: useKo),
+                ),
+              ],
+            ),
+            // 11. PRO HOOKS (only free) — bg
+            if (!isPro) ...[
+              _ProHooksSection(),
+            ],
+            // 12. CTA stack — ink (full-width)
+            _CtaStack(
+              isPro: isPro,
+              onShare: () => _shareChart(context, result, useKo),
+            ),
+            // 13. Footer — KASI source
+            _AesopFooter(),
           ],
         ),
       ),
@@ -337,12 +196,638 @@ class ResultScreen extends ConsumerWidget {
   }
 }
 
-// ──────── Personalization Engine 카드 (codex Round 6 #1 ROI)
+// ──────────── small primitives ────────────
 
-class _PersonalForYouCard extends StatelessWidget {
+class _AesopChip extends StatelessWidget {
+  final String label;
+  final Color? color;
+  const _AesopChip({required this.label, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = color ?? AppColors.inkLight;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.line, width: 1),
+      ),
+      child: Text(
+        label.toUpperCase(),
+        style: GoogleFonts.inter(
+          fontSize: 8,
+          letterSpacing: 3,
+          fontWeight: FontWeight.w500,
+          color: c,
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionFrame extends StatelessWidget {
+  final Color background;
+  final String? meta;
+  final Widget child;
+  final EdgeInsets padding;
+  final bool topBorder;
+  final bool bottomBorder;
+  const _SectionFrame({
+    required this.background,
+    required this.child,
+    this.meta,
+    this.padding = const EdgeInsets.fromLTRB(24, 36, 24, 36),
+    this.topBorder = false,
+    this.bottomBorder = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: background,
+        border: Border(
+          top: topBorder
+              ? const BorderSide(color: AppColors.line, width: 1)
+              : BorderSide.none,
+          bottom: bottomBorder
+              ? const BorderSide(color: AppColors.line, width: 1)
+              : BorderSide.none,
+        ),
+      ),
+      padding: padding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (meta != null) ...[
+            Text(
+              meta!.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 5,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+            const SizedBox(height: 22),
+          ],
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _LongText extends StatelessWidget {
+  final String text;
+  const _LongText({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: GoogleFonts.notoSansKr(
+        fontSize: 14.5,
+        height: 1.85,
+        color: AppColors.ink,
+      ),
+    );
+  }
+}
+
+// ──────────── Hero ────────────
+
+class _DayMasterHero extends StatelessWidget {
+  final SajuResult result;
+  final DeepReading? reading;
+  final bool useKo;
+  const _DayMasterHero({
+    required this.result,
+    required this.reading,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pair = result.dayPillar.pairKorean;
+    final meaning = useKo
+        ? result.dayPillar.pairKoreanMeaning
+        : result.dayMasterName;
+    final element = result.dayPillar.chunGanElement;
+    final elementKo = const {
+      '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
+    }[element] ?? element;
+    final subAccent = reading?.oneLineYouAre.trim() ?? '';
+
+    return _SectionFrame(
+      background: AppColors.bg,
+      meta: useKo ? 'DAY MASTER · 日 柱' : 'DAY MASTER · 日 柱',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$pair — $meaning',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 34,
+              fontWeight: FontWeight.w300,
+              letterSpacing: -0.5,
+              height: 1.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 14),
+          if (subAccent.isNotEmpty)
+            RichText(
+              text: TextSpan(
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12,
+                  color: AppColors.inkLight,
+                  height: 1.75,
+                  letterSpacing: 0.4,
+                ),
+                children: [
+                  TextSpan(
+                    text: useKo ? '한 단어로 — ' : 'In a word — ',
+                  ),
+                  TextSpan(
+                    text: subAccent,
+                    style: GoogleFonts.cormorantGaramond(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  TextSpan(
+                    text: useKo
+                        ? '. $elementKo의 결을 가진 일주입니다.'
+                        : '. A pillar carrying the grain of $element.',
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 600.ms),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── A READING ────────────
+
+class _ReadingSection extends StatelessWidget {
+  final SajuResult result;
+  final DeepReading? reading;
+  final bool useKo;
+  const _ReadingSection({
+    required this.result,
+    required this.reading,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final body = reading?.dayMasterDeep ??
+        (useKo
+            ? '당신의 일주 ${result.day60ji}는 정통 명리학 기준으로 매우 구체적인 결을 가집니다. 자세한 풀이는 곧 갱신됩니다.'
+            : result.summary);
+    final lead = useKo ? '한 줄 요약 ' : 'In summary ';
+    final accentPhrase = useKo
+        ? '속도보다 깊이로 흐르는'
+        : 'flowing in depth rather than speed';
+
+    return _SectionFrame(
+      background: AppColors.paper,
+      meta: 'A READING',
+      child: RichText(
+        text: TextSpan(
+          style: GoogleFonts.notoSansKr(
+            fontSize: 15,
+            height: 1.85,
+            color: AppColors.ink,
+            fontWeight: FontWeight.w400,
+          ),
+          children: [
+            TextSpan(text: lead),
+            TextSpan(
+              text: '— $accentPhrase ',
+              style: GoogleFonts.cormorantGaramond(
+                fontSize: 17,
+                fontStyle: FontStyle.italic,
+                color: AppColors.accent,
+                fontWeight: FontWeight.w400,
+                height: 1.85,
+              ),
+            ),
+            TextSpan(text: useKo ? '사주.\n\n' : 'reading.\n\n'),
+            TextSpan(text: body),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ──────────── CHART ATTRIBUTES (2×2 grid) ────────────
+
+class _ChartAttributesSection extends ConsumerWidget {
   final SajuResult result;
   final bool useKo;
-  const _PersonalForYouCard({required this.result, required this.useKo});
+  const _ChartAttributesSection({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final el = result.elements;
+    final dm = result.dayPillar.chunGanElement;
+    final strength = StrengthService.judge(
+      dayMasterElement: dm,
+      monthJi: result.monthPillar.jiJi,
+      wood: el.wood, fire: el.fire, earth: el.earth,
+      metal: el.metal, water: el.water,
+    );
+    final gmAreas = GongMangService.affectedAreas(
+      dayPillar: result.day60ji,
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    final gmBranches = GongMangService.forDayPillar(result.day60ji);
+    final gyeokguk = GyeokgukService.judge(
+      dayMaster: result.dayPillar.chunGan,
+      monthJi: result.monthPillar.jiJi,
+    );
+    final yongsin = YongsinService.judge(
+      dayMasterElement: dm,
+      strengthLabel: strength.label,
+      wood: el.wood, fire: el.fire, earth: el.earth,
+      metal: el.metal, water: el.water,
+    );
+    String elKo(String e) =>
+        {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}[e] ?? e;
+    String areaKo(String a) =>
+        {'year': '년', 'month': '월', 'day': '일', 'hour': '시'}[a] ?? a;
+
+    final hanForFormat = gyeokguk.name.split(' ').first;
+    final koForFormat = gyeokguk.name.contains(' ')
+        ? gyeokguk.name.split(' ').sublist(1).join(' ')
+        : '';
+    final hanForStrength = strength.label.contains('身')
+        ? strength.label.split(' ').firstWhere((s) => s.contains('身'),
+            orElse: () => strength.label)
+        : strength.label;
+    final voidValue = useKo
+        ? (gmAreas.isEmpty
+            ? (useKo ? '없음' : 'NONE')
+            : gmBranches.join(' · '))
+        : (gmAreas.isEmpty ? 'NONE' : gmBranches.join(' · '));
+    final voidKo = useKo
+        ? (gmAreas.isEmpty
+            ? '균형'
+            : gmAreas.map((a) => areaKo(a)).join('·'))
+        : '';
+
+    return _SectionFrame(
+      background: AppColors.bg,
+      meta: 'CHART  ATTRIBUTES',
+      child: _AttributeGrid(rows: [
+        [
+          _Attribute(
+            label: 'FORMAT',
+            han: hanForFormat,
+            ko: useKo ? koForFormat : '',
+            en: useKo ? '' : gyeokguk.nameEn,
+          ),
+          _Attribute(
+            label: 'YONGSIN',
+            han: yongsin.yongsin,
+            ko: useKo ? elKo(yongsin.yongsin) : '',
+            en: useKo ? '' : '',
+          ),
+        ],
+        [
+          _Attribute(
+            label: 'STRENGTH',
+            han: hanForStrength.length > 4
+                ? hanForStrength.substring(0, 2)
+                : hanForStrength,
+            ko: useKo
+                ? (strength.label.contains(' ')
+                    ? strength.label.split(' ').last
+                    : '')
+                : '',
+            en: useKo ? '' : strength.labelEn,
+          ),
+          _Attribute(
+            label: 'VOID',
+            han: voidValue,
+            ko: voidKo,
+            en: useKo ? '' : '',
+            small: voidValue.length > 5,
+          ),
+        ],
+      ]),
+    );
+  }
+}
+
+class _Attribute {
+  final String label;
+  final String han;
+  final String ko;
+  final String en;
+  final bool small;
+  const _Attribute({
+    required this.label,
+    required this.han,
+    this.ko = '',
+    this.en = '',
+    this.small = false,
+  });
+}
+
+class _AttributeGrid extends StatelessWidget {
+  final List<List<_Attribute>> rows;
+  const _AttributeGrid({required this.rows});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(color: AppColors.line),
+          left: BorderSide(color: AppColors.line),
+        ),
+      ),
+      child: Column(
+        children: rows.map((r) {
+          return IntrinsicHeight(
+            child: Row(
+              children: r.map((a) {
+                return Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 18),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        right: BorderSide(color: AppColors.line),
+                        bottom: BorderSide(color: AppColors.line),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          a.label,
+                          style: GoogleFonts.inter(
+                            fontSize: 9,
+                            letterSpacing: 3,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.taupe,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.end,
+                          spacing: 6,
+                          children: [
+                            Text(
+                              a.han,
+                              style: GoogleFonts.notoSerifKr(
+                                fontSize: a.small ? 14 : 18,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.accent,
+                                height: 1.2,
+                              ),
+                            ),
+                            if (a.ko.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 2),
+                                child: Text(
+                                  a.ko,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    color: AppColors.inkLight,
+                                  ),
+                                ),
+                              ),
+                            if (a.en.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 2),
+                                child: Text(
+                                  a.en,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    color: AppColors.inkLight,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+// ──────────── FOUR PILLARS ────────────
+
+class _FourPillarsSection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _FourPillarsSection({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final pillars = [
+      _PillarCol(label: 'YEAR', pillar: result.yearPillar),
+      _PillarCol(label: 'MONTH', pillar: result.monthPillar),
+      _PillarCol(label: 'DAY', pillar: result.dayPillar, isDay: true),
+      _PillarCol(label: 'HOUR', pillar: result.hourPillar),
+    ];
+    return _SectionFrame(
+      background: AppColors.paper,
+      meta: 'FOUR  PILLARS · 四  柱',
+      child: Row(
+        children: pillars.asMap().entries.map((e) {
+          final isLast = e.key == pillars.length - 1;
+          return Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  right: isLast
+                      ? BorderSide.none
+                      : const BorderSide(color: AppColors.line, width: 0.6),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: e.value,
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _PillarCol extends StatelessWidget {
+  final String label;
+  final Pillar? pillar;
+  final bool isDay;
+  const _PillarCol({
+    required this.label,
+    required this.pillar,
+    this.isDay = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isNull = pillar == null;
+    final color = isDay ? AppColors.accent : AppColors.ink;
+    final weight = isDay ? FontWeight.w400 : FontWeight.w300;
+    return Column(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            letterSpacing: 3,
+            fontWeight: FontWeight.w500,
+            color: AppColors.taupe,
+          ),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          isNull ? '—' : pillar!.chunGan,
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 26,
+            fontWeight: weight,
+            height: 1.1,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          isNull ? '—' : pillar!.jiJi,
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 26,
+            fontWeight: weight,
+            height: 1.1,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────────── THREE STROKES ────────────
+
+class _ThreeStrokesSection extends StatelessWidget {
+  final SajuResult result;
+  final DeepReading? reading;
+  final bool useKo;
+  const _ThreeStrokesSection({
+    required this.result,
+    required this.reading,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final items = <_Stroke>[
+      _Stroke(
+        label: l.resultThreeHitPersonalityLabel,
+        glyph: '性',
+        text: reading?.personalityHook ?? '',
+      ),
+      _Stroke(
+        label: l.resultThreeHitLoveLabel,
+        glyph: '緣',
+        text: reading?.loveHook ?? '',
+      ),
+      _Stroke(
+        label: l.resultThreeHitTodayLabel,
+        glyph: '今',
+        text: reading?.todayHook ?? '',
+      ),
+    ];
+    return _SectionFrame(
+      background: AppColors.bg,
+      meta: useKo ? 'THREE STROKES · 三 筆' : 'THREE STROKES · 三 筆',
+      child: Column(
+        children: items.where((i) => i.text.isNotEmpty).map((i) {
+          final isLast = i == items.last;
+          return Padding(
+            padding: EdgeInsets.only(bottom: isLast ? 0 : 22),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 48,
+                  child: Text(
+                    i.glyph,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.accent,
+                      height: 1.0,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        i.label.toUpperCase(),
+                        style: GoogleFonts.inter(
+                          fontSize: 9,
+                          letterSpacing: 4,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.taupe,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        i.text,
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 14,
+                          color: AppColors.ink,
+                          height: 1.75,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    ).animate().fadeIn(duration: 600.ms);
+  }
+}
+
+class _Stroke {
+  final String label;
+  final String glyph;
+  final String text;
+  const _Stroke({required this.label, required this.glyph, required this.text});
+}
+
+// ──────────── FOR YOU TODAY ────────────
+
+class _ForYouTodaySection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _ForYouTodaySection({required this.result, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -352,83 +837,217 @@ class _PersonalForYouCard extends StatelessWidget {
     final body = useKo ? p.bodyKo : p.bodyEn;
     final action = useKo ? p.actionKo : p.actionEn;
     final caution = useKo ? p.cautionKo : p.cautionEn;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorderStrong),
-      ),
+    final rows = <(String, String)>[
+      (l.personalHeadlineLabel, head),
+      (l.personalBodyLabel, body),
+      (l.personalActionLabel, action),
+      (l.personalCautionLabel, caution),
+    ];
+    return _SectionFrame(
+      background: AppColors.paper,
+      meta: l.personalCardTitle.toUpperCase(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.auto_awesome,
-                  size: 18, color: AppColors.celestialGold),
-              const SizedBox(width: 8),
-              Text(
-                l.personalCardTitle,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.celestialGold,
-                  letterSpacing: 0.5,
-                ),
+        children: rows.asMap().entries.map((e) {
+          final isLast = e.key == rows.length - 1;
+          return Container(
+            margin: EdgeInsets.only(bottom: isLast ? 0 : 16),
+            padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: isLast
+                    ? BorderSide.none
+                    : const BorderSide(color: AppColors.line, width: 0.6),
               ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          _row('🪨', l.personalHeadlineLabel, head),
-          const SizedBox(height: 10),
-          _row('🌊', l.personalBodyLabel, body),
-          const SizedBox(height: 10),
-          _row('✅', l.personalActionLabel, action),
-          const SizedBox(height: 10),
-          _row('⚠️', l.personalCautionLabel, caution),
-        ],
-      ),
-    );
-  }
-
-  Widget _row(String emoji, String label, String text) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-      decoration: BoxDecoration(
-        color: AppColors.midnightPurple.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(emoji, style: const TextStyle(fontSize: 16)),
-          const SizedBox(width: 10),
-          Expanded(
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  label.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 10,
-                    letterSpacing: 1.0,
-                    color: AppColors.celestialGold,
-                    fontWeight: FontWeight.w800,
+                  e.value.$1.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
-                  text,
-                  style: const TextStyle(
+                  e.value.$2,
+                  style: GoogleFonts.notoSansKr(
                     fontSize: 14,
-                    color: AppColors.ghostlyWhite,
-                    height: 1.6,
+                    color: AppColors.ink,
+                    height: 1.75,
                   ),
                 ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+// ──────────── FIVE ELEMENTS ────────────
+
+class _FiveElementsSection extends StatelessWidget {
+  final SajuResult result;
+  final DeepReading? reading;
+  final bool useKo;
+  const _FiveElementsSection({
+    required this.result,
+    required this.reading,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final el = result.elements;
+    final dom = el.dominant;
+    final def = el.deficit;
+    final names = useKo
+        ? const {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}
+        : const {
+            '木': 'Wood', '火': 'Fire', '土': 'Earth', '金': 'Metal', '水': 'Water'
+          };
+    final rows = [
+      ('木', el.wood),
+      ('火', el.fire),
+      ('土', el.earth),
+      ('金', el.metal),
+      ('水', el.water),
+    ];
+    return _SectionFrame(
+      background: AppColors.bg,
+      meta: useKo ? 'FIVE ELEMENTS · 五 行' : 'FIVE ELEMENTS · 五 行',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...rows.map((r) => _ElementRow(
+                han: r.$1,
+                name: names[r.$1]!,
+                pct: r.$2,
+                isDom: r.$1 == dom,
+                isDef: r.$1 == def,
+              )),
+          if (reading != null && reading!.elementsNote.isNotEmpty) ...[
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.only(top: 14),
+              decoration: const BoxDecoration(
+                border:
+                    Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+              ),
+              child: Text(
+                reading!.elementsNote,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 13,
+                  color: AppColors.inkLight,
+                  height: 1.75,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ElementRow extends StatelessWidget {
+  final String han;
+  final String name;
+  final int pct;
+  final bool isDom;
+  final bool isDef;
+  const _ElementRow({
+    required this.han,
+    required this.name,
+    required this.pct,
+    required this.isDom,
+    required this.isDef,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = AppColors.forElement(han);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 28,
+            child: Text(
+              han,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 20,
+                fontWeight: FontWeight.w300,
+                color: color,
+                height: 1.0,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 68,
+            child: Text(
+              name.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                letterSpacing: 3,
+                fontWeight: FontWeight.w500,
+                color: AppColors.inkLight,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                Container(height: 2, color: AppColors.line),
+                FractionallySizedBox(
+                  widthFactor: (pct / 100).clamp(0.0, 1.0),
+                  child: Container(height: 2, color: color),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          SizedBox(
+            width: 56,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '$pct%',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
+                  ),
+                ),
+                if (isDom)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      '★',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: AppColors.accent,
+                      ),
+                    ),
+                  )
+                else if (isDef)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      '·',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: AppColors.taupe,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -438,249 +1057,216 @@ class _PersonalForYouCard extends StatelessWidget {
   }
 }
 
-// ──────── Share chart — copy + share via OS sheet
+// ──────────── Group + Accordion ────────────
 
-Future<void> _shareChart(BuildContext context, SajuResult result, bool useKo) async {
-  final reading = useKo ? result.deepKo : result.deepEn;
-  final oneLine = reading?.oneLineYouAre ?? '';
-  final personality = reading?.personalityHook ?? '';
-  final today = reading?.todayHook ?? '';
-  final text = useKo
-      ? '''✨ 내 사주 — Pillar Seer ✨
-
-당신은 $oneLine 사람이에요.
-일주: ${result.dayPillar.pairKorean} · ${result.dayPillar.pairKoreanMeaning} · ${result.day60ji}
-
-🪨 성격: $personality
-🎯 오늘: $today
-
-🔗 Pillar Seer 앱에서 확인'''
-      : '''✨ My Saju — Pillar Seer ✨
-
-You are a $oneLine person.
-Day Pillar: ${result.dayMasterName} · ${result.day60ji}
-
-🪨 Personality: $personality
-🎯 Today: $today
-
-🔗 Open Pillar Seer to read yours''';
-  try {
-    await SharePlus.instance.share(ShareParams(text: text));
-  } catch (_) {
-    // fallback: clipboard copy
-    await Clipboard.setData(ClipboardData(text: text));
-    if (!context.mounted) return;
-    final l = AppL10n.of(context);
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: Text(l.shareCardCopied),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.celestialGold,
-        duration: const Duration(seconds: 2),
-      ));
-  }
-}
-
-// ──────── 그룹 헤더 (Round 48: 사용자 직관성 — 11 accordion 그룹화)
-
-class _GroupHeader extends StatelessWidget {
-  final String label;
-  const _GroupHeader(this.label);
+class _GroupSection extends StatelessWidget {
+  final String groupLabel;
+  final Color background;
+  final List<Widget> children;
+  const _GroupSection({
+    required this.groupLabel,
+    required this.background,
+    required this.children,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 3,
-          height: 16,
-          margin: const EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-            color: AppColors.celestialGold,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            letterSpacing: 1.8,
-            color: AppColors.celestialGold,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: AppColors.cardBorder,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ──────── 사주 코어 프로필 (Round 45: 모든 명리 features 한 카드 종합)
-
-class _MyeongliSummaryCard extends StatelessWidget {
-  final SajuResult result;
-  final bool useKo;
-  const _MyeongliSummaryCard({required this.result, required this.useKo});
-
-  @override
-  Widget build(BuildContext context) {
-    // 1. 강약 한 단어.
-    final el = result.elements;
-    final dm = result.dayPillar.chunGanElement;
-    final strength = StrengthService.judge(
-      dayMasterElement: dm,
-      monthJi: result.monthPillar.jiJi,
-      wood: el.wood,
-      fire: el.fire,
-      earth: el.earth,
-      metal: el.metal,
-      water: el.water,
-    );
-
-    // 2. 공망 영역.
-    final gmAreas = GongMangService.affectedAreas(
-      dayPillar: result.day60ji,
-      yearJi: result.yearPillar.jiJi,
-      monthJi: result.monthPillar.jiJi,
-      hourJi: result.hourPillar?.jiJi,
-    );
-
-    // 3. 활성 신살 (3개까지).
-    final activations = ShinsaService.analyzeChart(
-      yearJi: result.yearPillar.jiJi,
-      monthJi: result.monthPillar.jiJi,
-      dayChunGan: result.dayPillar.chunGan,
-      dayJi: result.dayPillar.jiJi,
-      hourJi: result.hourPillar?.jiJi,
-    );
-    final topShinsa = activations.keys.take(3).toList();
-
-    // 4. 격국 — 명리학 핵심 (Round 51)
-    final gyeokguk = GyeokgukService.judge(
-      dayMaster: result.dayPillar.chunGan,
-      monthJi: result.monthPillar.jiJi,
-    );
-
-    // 5. 용신 — 가장 필요한 오행 (Round 51)
-    final yongsin = YongsinService.judge(
-      dayMasterElement: dm,
-      strengthLabel: strength.label,
-      wood: el.wood, fire: el.fire, earth: el.earth,
-      metal: el.metal, water: el.water,
-    );
-    String yongsinKo(String e) =>
-        {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}[e] ?? e;
-
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.cardBorder),
+        color: background,
+        border: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            useKo ? '사주 코어 프로필' : 'Myeongli Snapshot',
-            style: const TextStyle(
-              fontSize: 11,
-              letterSpacing: 1.4,
-              color: AppColors.moonlightGray,
-              fontWeight: FontWeight.w800,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 32, 24, 18),
+            child: Text(
+              groupLabel.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 5,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
             ),
           ),
-          const SizedBox(height: 10),
-          // 격국·용신·강약·공망·신살 chips (Round 51 명리학 풀 통합)
-          Wrap(
-            spacing: 8,
-            runSpacing: 6,
-            children: [
-              // 격국 — 사주 구조 (가장 큰 핵심)
-              _chip(
-                useKo
-                    ? '🎯 ${gyeokguk.name.split(" ").first}'
-                    : '🎯 ${gyeokguk.nameEn.split(" ").first}',
-                AppColors.celestialGold,
-              ),
-              // 용신 — 가장 필요한 오행
-              _chip(
-                useKo
-                    ? '🔮 용신: ${yongsinKo(yongsin.yongsin)}'
-                    : '🔮 Yongsin: ${yongsin.yongsin}',
-                AppColors.celestialGold,
-              ),
-              // 강약
-              _chip(
-                useKo ? '⚖️ ${strength.label}' : '⚖️ ${strength.labelEn}',
-                AppColors.mysticViolet,
-              ),
-              // 공망
-              if (gmAreas.isNotEmpty)
-                _chip(
-                  useKo
-                      ? '🪐 공망: ${gmAreas.map((a) => _areaKo(a)).join("·")}'
-                      : '🪐 Void: ${gmAreas.map((a) => _areaEn(a)).join("·")}',
-                  AppColors.mysticViolet,
-                ),
-              if (gmAreas.isEmpty)
-                _chip(useKo ? '🪐 공망 없음' : '🪐 No Void',
-                    AppColors.fadedSilver),
-              // 활성 신살 (2개까지로 줄임, 격국+용신 추가로 공간 부족 방지)
-              for (final s in topShinsa.take(2)) _chip('🌸 $s', AppColors.fadedSilver),
-            ],
-          ),
-          const SizedBox(height: 4),
+          ...children,
+          const SizedBox(height: 16),
         ],
       ),
     );
   }
+}
 
-  Widget _chip(String text, Color color) {
+class _AccordionRow extends StatefulWidget {
+  final String title;
+  final String hint;
+  final bool locked;
+  final Widget child;
+  final String? note;
+  const _AccordionRow({
+    required this.title,
+    this.hint = '',
+    required this.locked,
+    required this.child,
+    this.note,
+  });
+
+  @override
+  State<_AccordionRow> createState() => _AccordionRowState();
+}
+
+class _AccordionRowState extends State<_AccordionRow> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.withValues(alpha: 0.4)),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
       ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 11.5,
-          color: color,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.3,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () => setState(() => _open = !_open),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.title,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 4,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.ink,
+                          ),
+                        ),
+                        if (widget.hint.isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          Text(
+                            widget.hint,
+                            style: GoogleFonts.notoSansKr(
+                              fontSize: 11,
+                              color: AppColors.taupe,
+                              height: 1.5,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (widget.locked)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: _AesopChip(label: l.resultProLocked),
+                    ),
+                  AnimatedRotation(
+                    turns: _open ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: const Icon(Icons.expand_more,
+                        size: 18, color: AppColors.taupe),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: const SizedBox(width: double.infinity),
+            secondChild: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.locked) _LockedPlaceholder() else widget.child,
+                  if (!widget.locked &&
+                      widget.note != null &&
+                      widget.note!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.only(top: 12),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                            top: BorderSide(color: AppColors.line, width: 0.6)),
+                      ),
+                      child: Text(
+                        widget.note!,
+                        style: GoogleFonts.cormorantGaramond(
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                          color: AppColors.accent,
+                          height: 1.7,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            crossFadeState: _open
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 220),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LockedPlaceholder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return InkWell(
+      onTap: () => showComingSoonModal(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.line, width: 0.6),
+            bottom: BorderSide(color: AppColors.line, width: 0.6),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l.resultUnlockHint,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                color: AppColors.inkLight,
+                height: 1.75,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              l.resultProLocked.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.accent,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-  String _areaKo(String a) => {
-        'year': '년',
-        'month': '월',
-        'day': '일',
-        'hour': '시',
-      }[a] ??
-      a;
-  String _areaEn(String a) => {
-        'year': 'Yr',
-        'month': 'Mo',
-        'day': 'Day',
-        'hour': 'Hr',
-      }[a] ??
-      a;
 }
 
-// ──────── 격국(格局) block (Round 49: codex 지적 빠진 핵심)
+// ──────────── Gyeokguk / Yongsin / Strength / GongMang / Shinsa / 12 Unsung / Hapchung ────────────
 
 class _GyeokgukBlock extends StatelessWidget {
   final SajuResult result;
@@ -696,59 +1282,34 @@ class _GyeokgukBlock extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.celestialGold.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-                color: AppColors.celestialGold.withValues(alpha: 0.4)),
+        Text(
+          useKo ? g.name : g.nameEn,
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 22,
+            fontWeight: FontWeight.w400,
+            color: AppColors.accent,
+            height: 1.3,
           ),
-          child: Text(
-            useKo ? g.name : g.nameEn,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.celestialGold,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
-            ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          useKo ? g.desc : g.descEn,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 14,
+            color: AppColors.ink,
+            height: 1.8,
           ),
         ),
         const SizedBox(height: 14),
-        Text(
-          useKo ? g.desc : g.descEn,
-          style: const TextStyle(
-            fontSize: 13.5,
-            color: AppColors.ghostlyWhite,
-            height: 1.7,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: Text(
-            useKo
-                ? '격국(格局) — 사주의 구조 분류. 월지(月支) 본기가 일간 기준 어떤 십신인지로 결정. 명리학의 가장 핵심 분석.'
-                : 'Gyeokguk — chart structure classification. Determined by the month branch\'s core stem and its ten-god relation to day master.',
-            style: const TextStyle(
-              fontSize: 11.5,
-              color: AppColors.fadedSilver,
-              height: 1.55,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
+        _FootnoteItalic(
+          useKo
+              ? '격국(格局) — 사주의 구조 분류. 월지(月支) 본기가 일간 기준 어떤 십신인지로 결정. 명리학의 가장 핵심 분석.'
+              : 'Gyeokguk — chart structure classification. Determined by the month branch\'s core stem and its ten-god relation to day master.',
         ),
       ],
     );
   }
 }
-
-// ──────── 용신(用神) block (Round 49: codex 지적 빠진 핵심)
 
 class _YongsinBlock extends StatelessWidget {
   final SajuResult result;
@@ -762,118 +1323,86 @@ class _YongsinBlock extends StatelessWidget {
     final s = StrengthService.judge(
       dayMasterElement: dm,
       monthJi: result.monthPillar.jiJi,
-      wood: el.wood, fire: el.fire, earth: el.earth, metal: el.metal, water: el.water,
+      wood: el.wood, fire: el.fire, earth: el.earth,
+      metal: el.metal, water: el.water,
     );
     final y = YongsinService.judge(
       dayMasterElement: dm,
       strengthLabel: s.label,
-      wood: el.wood, fire: el.fire, earth: el.earth, metal: el.metal, water: el.water,
+      wood: el.wood, fire: el.fire, earth: el.earth,
+      metal: el.metal, water: el.water,
     );
     String elKo(String e) =>
         {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}[e] ?? e;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
-          spacing: 8,
-          runSpacing: 6,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.celestialGold.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.5)),
+            Text(
+              y.yongsin,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 30,
+                fontWeight: FontWeight.w300,
+                color: AppColors.accent,
+                height: 1.0,
               ),
+            ),
+            const SizedBox(width: 10),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                useKo
-                    ? '🔮 용신: ${elKo(y.yongsin)} (${y.yongsin})'
-                    : '🔮 Yongsin: ${y.yongsin}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.celestialGold,
-                  fontWeight: FontWeight.w900,
+                useKo ? elKo(y.yongsin) : 'YONGSIN',
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  letterSpacing: 3,
+                  color: AppColors.inkLight,
                 ),
               ),
             ),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.mysticViolet.withValues(alpha: 0.18),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                    color: AppColors.mysticViolet.withValues(alpha: 0.45)),
-              ),
-              child: Text(
-                useKo
-                    ? '희신: ${elKo(y.huisin)}'
-                    : 'Huisin: ${y.huisin}',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.mysticViolet,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+            const Spacer(),
+            _AesopChip(
+              label: useKo ? '희신 ${elKo(y.huisin)}' : 'HUISIN ${y.huisin}',
             ),
           ],
         ),
         const SizedBox(height: 14),
         Text(
           y.reason,
-          style: const TextStyle(
-            fontSize: 13,
-            color: AppColors.ghostlyWhite,
-            height: 1.7,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 14,
+            color: AppColors.ink,
+            height: 1.8,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 14),
         Text(
-          useKo ? '💡 실생활 보충 방법' : '💡 Daily-life support',
-          style: const TextStyle(
-            fontSize: 11,
-            letterSpacing: 1.2,
-            color: AppColors.moonlightGray,
-            fontWeight: FontWeight.w800,
+          useKo ? '실생활 보충 · DAILY-LIFE SUPPORT' : 'DAILY-LIFE SUPPORT',
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            letterSpacing: 4,
+            fontWeight: FontWeight.w500,
+            color: AppColors.taupe,
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         Text(
           YongsinService.compensationGuide(y.yongsin, ko: useKo),
-          style: const TextStyle(
-            fontSize: 12.5,
-            color: AppColors.ghostlyWhite,
-            height: 1.65,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 13,
+            color: AppColors.inkLight,
+            height: 1.75,
           ),
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: Text(
-            useKo
-                ? '용신(用神) — 사주에서 가장 필요한 오행. 일간 강약 + 5행 균형 기반. 인생 결정의 기준점.'
-                : 'Yongsin — the most needed element. Based on strength + 5-element balance. Decision compass for life.',
-            style: const TextStyle(
-              fontSize: 11.5,
-              color: AppColors.fadedSilver,
-              height: 1.55,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
+        const SizedBox(height: 14),
+        _FootnoteItalic(useKo
+            ? '용신(用神) — 사주에서 가장 필요한 오행. 일간 강약 + 5행 균형 기반. 인생 결정의 기준점.'
+            : 'Yongsin — the most needed element. Based on strength + 5-element balance. Decision compass for life.'),
       ],
     );
   }
 }
-
-// ──────── 신왕·신약(身旺·身弱) block (Round 42: 일간 강약 판단)
 
 class _StrengthBlock extends StatelessWidget {
   final SajuResult result;
@@ -887,89 +1416,65 @@ class _StrengthBlock extends StatelessWidget {
     final j = StrengthService.judge(
       dayMasterElement: dm,
       monthJi: result.monthPillar.jiJi,
-      wood: el.wood,
-      fire: el.fire,
-      earth: el.earth,
-      metal: el.metal,
-      water: el.water,
+      wood: el.wood, fire: el.fire, earth: el.earth,
+      metal: el.metal, water: el.water,
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              useKo ? '강약 판단:' : 'Strength:',
-              style: const TextStyle(
-                fontSize: 12.5,
-                color: AppColors.moonlightGray,
+              useKo ? j.label : j.labelEn,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
+                color: AppColors.accent,
+                height: 1.2,
               ),
             ),
-            const SizedBox(width: 8),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.celestialGold.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.45)),
-              ),
+            const SizedBox(width: 10),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                useKo ? j.label : j.labelEn,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.celestialGold,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.8,
+                '${j.score}/100',
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  letterSpacing: 2,
+                  color: AppColors.inkLight,
                 ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              useKo ? '(강도 ${j.score}/100)' : '(score ${j.score}/100)',
-              style: const TextStyle(
-                fontSize: 11.5,
-                color: AppColors.fadedSilver,
               ),
             ),
           ],
         ),
+        const SizedBox(height: 8),
+        Container(
+          height: 2,
+          decoration: BoxDecoration(color: AppColors.line),
+          child: FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: (j.score / 100).clamp(0.0, 1.0),
+            child: Container(color: AppColors.ink),
+          ),
+        ),
         const SizedBox(height: 14),
         Text(
           StrengthService.guide(j.label, ko: useKo),
-          style: const TextStyle(
-            fontSize: 13.5,
-            color: AppColors.ghostlyWhite,
-            height: 1.7,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 14,
+            color: AppColors.ink,
+            height: 1.8,
           ),
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: Text(
-            useKo
-                ? '신왕/신약 — 일간(日干)이 사주 원국에서 강한지 약한지 판단. 인성·비겁이 강하면 신왕, 식상·재성·관성이 강하면 신약. 월령(월지)이 일간 도와주면 통근(通根)으로 강도 boost.'
-                : 'Day-master strength balance. Resource + Peer = supports; Output + Wealth + Officer = drains. Month-branch alignment (通根) boosts strength.',
-            style: const TextStyle(
-              fontSize: 11.5,
-              color: AppColors.fadedSilver,
-              height: 1.55,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
+        const SizedBox(height: 14),
+        _FootnoteItalic(useKo
+            ? '신왕/신약 — 일간(日干)이 사주 원국에서 강한지 약한지 판단. 인성·비겁이 강하면 신왕, 식상·재성·관성이 강하면 신약.'
+            : 'Day-master strength balance. Resource + Peer = supports; Output + Wealth + Officer = drains.'),
       ],
     );
   }
 }
-
-// ──────── 공망(空亡) block (Round 36: codex 권고 D — 명리학 디테일)
 
 class _GongMangBlock extends StatelessWidget {
   final SajuResult result;
@@ -985,66 +1490,36 @@ class _GongMangBlock extends StatelessWidget {
       monthJi: result.monthPillar.jiJi,
       hourJi: result.hourPillar?.jiJi,
     );
-    final interpretation =
-        GongMangService.interpretation(areas, ko: useKo);
+    final interpretation = GongMangService.interpretation(areas, ko: useKo);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              useKo ? '내 일주의 공망 지지: ' : 'Void branches for your day pillar: ',
-              style: const TextStyle(
-                fontSize: 12.5,
-                color: AppColors.moonlightGray,
-              ),
-            ),
-            Text(
-              gm.join(' · '),
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.celestialGold,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.0,
-              ),
-            ),
-          ],
+        Text(
+          gm.join(' · '),
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 26,
+            fontWeight: FontWeight.w300,
+            color: AppColors.accent,
+            letterSpacing: 4,
+          ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
         Text(
           interpretation,
-          style: const TextStyle(
-            fontSize: 13.5,
-            color: AppColors.ghostlyWhite,
-            height: 1.7,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 14,
+            color: AppColors.ink,
+            height: 1.8,
           ),
         ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: Text(
-            useKo
-                ? '공망(空亡)이란? 60갑자 한 순(旬, 10일)에서 천간 10개에 매칭되지 않는 지지 2개. 사주 원국 (년·월·시) 에 공망 지지가 있으면 해당 영역에 "비어 보이는 결"이 작동합니다.'
-                : 'Void (空亡): 2 branches per 10-day cycle (旬) that don\'t pair with a stem. When they appear in year/month/hour pillars, that life area has a "felt absence" — turned into depth, it becomes a strength.',
-            style: const TextStyle(
-              fontSize: 11.5,
-              color: AppColors.fadedSilver,
-              height: 1.55,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
+        const SizedBox(height: 14),
+        _FootnoteItalic(useKo
+            ? '공망(空亡) — 60갑자 한 순(旬, 10일)에서 천간 10개에 매칭되지 않는 지지 2개. 비어 보이는 결은 깊이로 전환됩니다.'
+            : 'Void (空亡): 2 branches per 10-day cycle that don\'t pair with a stem. The felt absence becomes depth.'),
       ],
     );
   }
 }
-
-// ──────── 신살(神煞) block (Round 36-37: codex E content depth)
 
 class _ShinsaBlock extends StatelessWidget {
   final SajuResult result;
@@ -1061,58 +1536,76 @@ class _ShinsaBlock extends StatelessWidget {
       hourJi: result.hourPillar?.jiJi,
     );
     if (activations.isEmpty) {
-      return Text(
-        useKo
-            ? '원국에 강한 신살 활성화 없음 — 사주 결이 균형 잡혀 있어 부수 요소에 휘둘리지 않습니다.'
-            : 'No strong shinsa activation — your chart is balanced and not pulled by auxiliary forces.',
-        style: const TextStyle(
-          fontSize: 13.5,
-          color: AppColors.ghostlyWhite,
-          height: 1.7,
-        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo
+                ? '원국에 강한 신살 활성화 없음 — 사주 결이 균형 잡혀 있어 부수 요소에 휘둘리지 않습니다.'
+                : 'No strong shinsa activation — your chart is balanced.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.8,
+            ),
+          ),
+        ],
       );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final entry in activations.entries)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-              decoration: BoxDecoration(
-                color: AppColors.midnightPurple.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.cardBorder),
-              ),
-              child: Text(
-                ShinsaService.interpretation(entry.key, entry.value, ko: useKo),
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.ghostlyWhite,
-                  height: 1.65,
-                ),
+        ...activations.entries.toList().asMap().entries.map((idx) {
+          final entry = idx.value;
+          final isLast = idx.key == activations.length - 1;
+          return Container(
+            margin: EdgeInsets.only(bottom: isLast ? 0 : 14),
+            padding: EdgeInsets.only(bottom: isLast ? 0 : 14),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: isLast
+                    ? BorderSide.none
+                    : const BorderSide(color: AppColors.line, width: 0.6),
               ),
             ),
-          ),
-        const SizedBox(height: 4),
-        Text(
-          useKo
-              ? '신살(神煞)이란? 사주 원국 지지가 일간/일지의 특정 패턴과 일치할 때 활성화되는 명리학 부수 요소. 운명을 결정하지는 않지만 결의 톤을 알려줍니다.'
-              : 'Shinsa: auxiliary myeongli markers activated when chart branches match certain stem/branch patterns. They don\'t decide fate — they tone the grain.',
-          style: const TextStyle(
-            fontSize: 11.5,
-            color: AppColors.fadedSilver,
-            height: 1.55,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 60,
+                  child: Text(
+                    entry.key,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    ShinsaService.interpretation(entry.key, entry.value,
+                            ko: useKo)
+                        .replaceFirst(RegExp(r'^[^—]*— '), ''),
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.ink,
+                      height: 1.7,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+        const SizedBox(height: 14),
+        _FootnoteItalic(useKo
+            ? '신살(神煞) — 사주 원국 지지가 일간/일지의 특정 패턴과 일치할 때 활성화되는 명리학 부수 요소.'
+            : 'Shinsa: auxiliary myeongli markers activated when chart branches match certain stem/branch patterns.'),
       ],
     );
   }
 }
-
-// ──────── 12 운성(運星) block (Round 37: codex E content depth)
 
 class _TwelveUnsungBlock extends StatelessWidget {
   final SajuResult result;
@@ -1136,82 +1629,75 @@ class _TwelveUnsungBlock extends StatelessWidget {
         }[area] ??
         area;
     String labelEn(String area) =>
-        {'year': 'Year', 'month': 'Month', 'day': 'Day', 'hour': 'Hour'}[
-            area] ??
+        {'year': 'YEAR', 'month': 'MONTH', 'day': 'DAY', 'hour': 'HOUR'}[area] ??
         area;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final entry in stages.entries)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+        ...stages.entries.toList().asMap().entries.map((idx) {
+          final entry = idx.value;
+          final isLast = idx.key == stages.length - 1;
+          return Container(
+            margin: EdgeInsets.only(bottom: isLast ? 0 : 12),
+            padding: EdgeInsets.only(bottom: isLast ? 0 : 12),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: isLast
+                    ? BorderSide.none
+                    : const BorderSide(color: AppColors.line, width: 0.6),
+              ),
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: 56,
+                  width: 58,
                   child: Text(
                     useKo ? labelKo(entry.key) : labelEn(entry.key),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.moonlightGray,
-                      fontWeight: FontWeight.w700,
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 60,
+                  width: 70,
                   child: Text(
                     useKo
                         ? entry.value
                         : (TwelveUnsungService.stagesEn[
-                                TwelveUnsungService.stages.indexOf(entry.value)]),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.celestialGold,
-                      fontWeight: FontWeight.w800,
+                            TwelveUnsungService.stages.indexOf(entry.value)]),
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.accent,
                     ),
                   ),
                 ),
                 Expanded(
                   child: Text(
                     TwelveUnsungService.interpretation(entry.value, ko: useKo),
-                    style: const TextStyle(
+                    style: GoogleFonts.notoSansKr(
                       fontSize: 12.5,
-                      color: AppColors.ghostlyWhite,
-                      height: 1.6,
+                      color: AppColors.ink,
+                      height: 1.7,
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: Text(
-            useKo
-                ? '12 운성(運星)이란? 일간이 12지지에 따라 가지는 일생 12 단계 (장생→제왕→절→태→...). 각 기둥 지지의 강약을 보여줍니다.'
-                : '12 Unsung: life-cycle stages your day stem moves through across the 12 branches (Birth → Peak → Severed → Womb → ...). It shows the strength of each pillar.',
-            style: const TextStyle(
-              fontSize: 11.5,
-              color: AppColors.fadedSilver,
-              height: 1.55,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ),
+          );
+        }),
+        const SizedBox(height: 14),
+        _FootnoteItalic(useKo
+            ? '12 운성(運星) — 일간이 12지지에 따라 가지는 일생 12 단계. 각 기둥 지지의 강약을 보여줍니다.'
+            : '12 Unsung: life-cycle stages your day stem moves through across the 12 branches.'),
       ],
     );
   }
 }
-
-// ──────── 합·충(合冲) block (Round 38: 명리학 dynamic relations)
 
 class _HapchungBlock extends StatelessWidget {
   final SajuResult result;
@@ -1230,18 +1716,11 @@ class _HapchungBlock extends StatelessWidget {
       hourGan: result.hourPillar?.chunGan,
       hourJi: result.hourPillar?.jiJi,
     );
-
-    String areaKo(String a) => {
-          'year': '년주',
-          'month': '월주',
-          'day': '일주',
-          'hour': '시주',
-        }[a] ??
-        a;
+    String areaKo(String a) =>
+        {'year': '년주', 'month': '월주', 'day': '일주', 'hour': '시주'}[a] ?? a;
     String areaEn(String a) =>
-        {'year': 'Year', 'month': 'Month', 'day': 'Day', 'hour': 'Hour'}[a] ??
+        {'year': 'YEAR', 'month': 'MONTH', 'day': 'DAY', 'hour': 'HOUR'}[a] ??
         a;
-
     final samhap = HapchungService.findSamhap(
       yearJi: result.yearPillar.jiJi,
       monthJi: result.monthPillar.jiJi,
@@ -1254,1359 +1733,152 @@ class _HapchungBlock extends StatelessWidget {
       dayJi: result.dayPillar.jiJi,
       hourJi: result.hourPillar?.jiJi,
     );
-    if (r.hap.isEmpty && r.chung.isEmpty && samhap.isEmpty && banghap.isEmpty) {
+    if (r.hap.isEmpty &&
+        r.chung.isEmpty &&
+        samhap.isEmpty &&
+        banghap.isEmpty) {
       return Text(
         useKo
             ? '원국에 강한 합·충 관계 없음 — 사주 흐름이 직선적이고 안정적입니다.'
             : 'No strong hap (合) or chung (沖) — your chart flows linearly and steadily.',
-        style: const TextStyle(
-          fontSize: 13.5,
-          color: AppColors.ghostlyWhite,
-          height: 1.7,
+        style: GoogleFonts.notoSansKr(
+          fontSize: 14,
+          color: AppColors.ink,
+          height: 1.8,
         ),
       );
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (r.hap.isNotEmpty) ...[
-          Text(
-            useKo ? '합(合) — 결합·조화 관계' : 'Hap (合) — Alliance / Harmony',
-            style: const TextStyle(
-              fontSize: 12,
-              letterSpacing: 1.2,
-              color: AppColors.mysticViolet,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 6),
-          for (final h in r.hap)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Text(
-                useKo
-                    ? '• ${areaKo(h.area1)} ↔ ${areaKo(h.area2)}${h.element.isEmpty ? "" : " (오행 화: ${h.element})"}'
-                    : '• ${areaEn(h.area1)} ↔ ${areaEn(h.area2)}${h.element.isEmpty ? "" : " (element: ${h.element})"}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.ghostlyWhite,
-                  height: 1.55,
-                ),
-              ),
-            ),
-          const SizedBox(height: 8),
-          Text(
-            HapchungService.hapInterpretation(ko: useKo),
-            style: const TextStyle(
-              fontSize: 12.5,
-              color: AppColors.fadedSilver,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          const SizedBox(height: 14),
-        ],
-        if (samhap.isNotEmpty) ...[
-          Text(
-            useKo ? '삼합(三合) — 3지지 결합' : 'Samhap (三合) — 3-branch unity',
-            style: const TextStyle(
-              fontSize: 12,
-              letterSpacing: 1.2,
-              color: AppColors.mysticViolet,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 6),
-          for (final s in samhap)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Text(
-                useKo
-                    ? '• ${s.areas.map((a) => areaKo(a)).join(" + ")} → 오행 화: ${s.element}'
-                    : '• ${s.areas.map((a) => areaEn(a)).join(" + ")} → element: ${s.element}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.ghostlyWhite,
-                  height: 1.55,
-                ),
-              ),
-            ),
-          const SizedBox(height: 8),
-          Text(
-            useKo
-                ? '삼합 — 3지지가 한 오행으로 강하게 결합. 가장 큰 합. 운기 흐름이 크게 굳어집니다.'
-                : 'Samhap — three branches lock into one element. The biggest combination; flow stabilizes strongly.',
-            style: const TextStyle(
-              fontSize: 12.5,
-              color: AppColors.fadedSilver,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          const SizedBox(height: 14),
-        ],
-        if (banghap.isNotEmpty) ...[
-          Text(
-            useKo ? '방합(方合) — 계절 3지지' : 'Banghap (方合) — Seasonal unity',
-            style: const TextStyle(
-              fontSize: 12,
-              letterSpacing: 1.2,
-              color: AppColors.mysticViolet,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 6),
-          for (final b in banghap)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Text(
-                useKo
-                    ? '• ${b.areas.map((a) => areaKo(a)).join(" + ")} → 계절 오행: ${b.element}'
-                    : '• ${b.areas.map((a) => areaEn(a)).join(" + ")} → seasonal element: ${b.element}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.ghostlyWhite,
-                  height: 1.55,
-                ),
-              ),
-            ),
-          const SizedBox(height: 8),
-          Text(
-            useKo
-                ? '방합 — 한 계절의 3지지가 한 오행으로 모임. 계절 기운이 강하게 작동.'
-                : 'Banghap — three branches of one season unite into one element. Seasonal force is amplified.',
-            style: const TextStyle(
-              fontSize: 12.5,
-              color: AppColors.fadedSilver,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          const SizedBox(height: 14),
-        ],
-        if (r.chung.isNotEmpty) ...[
-          Text(
-            useKo ? '충(沖) — 갈등·변동 관계' : 'Chung (沖) — Friction / Transition',
-            style: const TextStyle(
-              fontSize: 12,
-              letterSpacing: 1.2,
-              color: AppColors.celestialGold,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 6),
-          for (final c in r.chung)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Text(
-                useKo
-                    ? '• ${areaKo(c.area1)} ↔ ${areaKo(c.area2)}'
-                    : '• ${areaEn(c.area1)} ↔ ${areaEn(c.area2)}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: AppColors.ghostlyWhite,
-                  height: 1.55,
-                ),
-              ),
-            ),
-          const SizedBox(height: 8),
-          Text(
-            HapchungService.chungInterpretation(ko: useKo),
-            style: const TextStyle(
-              fontSize: 12.5,
-              color: AppColors.fadedSilver,
-              height: 1.6,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-// ──────── Calculation Basis body (Round 14: accordion content)
-
-class _CalculationBasisBody extends StatelessWidget {
-  final SajuResult result;
-  final bool useKo;
-  const _CalculationBasisBody({required this.result, required this.useKo});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final rows = [
-      (label: l.resultBasisManseryeok, value: l.resultBasisManseryeokVal),
-      (label: l.resultBasisYearBoundary, value: l.resultBasisYearBoundaryVal),
-      (label: l.resultBasisDayBoundary, value: l.resultBasisDayBoundaryVal),
-      (label: l.resultBasisTrueSun, value: l.resultBasisTrueSunOn),
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: rows
-          .map((r) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 96,
-                      child: Text(
-                        r.label,
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          color: AppColors.moonlightGray,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        r.value,
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          color: AppColors.ghostlyWhite,
-                          height: 1.5,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ))
-          .toList(),
-    );
-  }
-}
-
-// ──────── Trust line (codex PM 권고 — 작은 신뢰 문구 1줄)
-
-class _TrustLine extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Row(
-        children: [
-          const Icon(Icons.verified_outlined,
-              size: 14, color: AppColors.celestialGold),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              l.resultTrustLine,
-              style: const TextStyle(
-                fontSize: 11.5,
-                color: AppColors.fadedSilver,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ──────── Pro hooks — Result 중하단 3카드 (올해 연애 / 그 사람 / 중요 날짜)
-
-class _ProHooks extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final hooks = [
-      _ProHook(
-        emoji: '💞',
-        title: l.resultProHookYearLoveTitle,
-        teaser: l.resultProHookYearLoveTeaser,
-        onTap: () => showComingSoonModal(context),
-      ),
-      _ProHook(
-        emoji: '🤝',
-        title: l.resultProHookCompatTitle,
-        teaser: l.resultProHookCompatTeaser,
-        onTap: () => context.go('/reports/compatibility'),
-      ),
-      _ProHook(
-        emoji: '📅',
-        title: l.resultProHookDatesTitle,
-        teaser: l.resultProHookDatesTeaser,
-        onTap: () => context.go('/reports/date-picking'),
-      ),
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 2, bottom: 10),
-          child: Text(
-            l.resultProHookHeader,
-            style: const TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w900,
-              color: AppColors.celestialGold,
-            ),
-          ),
-        ),
-        ...hooks.map((h) => _ProHookCard(hook: h)),
-      ],
-    );
-  }
-}
-
-class _ProHook {
-  final String emoji;
-  final String title;
-  final String teaser;
-  final VoidCallback onTap;
-  const _ProHook({
-    required this.emoji,
-    required this.title,
-    required this.teaser,
-    required this.onTap,
-  });
-}
-
-class _ProHookCard extends StatelessWidget {
-  final _ProHook hook;
-  const _ProHookCard({required this.hook});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return InkWell(
-      onTap: hook.onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
-        decoration: BoxDecoration(
-          color: AppColors.cardSurface,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.cardBorder),
-        ),
-        child: Row(
+    Widget sub(String label, String? note, List<Widget> lines) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: AppColors.midnightPurple.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.cardBorderStrong),
+            Text(
+              label.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
               ),
-              child: Text(hook.emoji, style: const TextStyle(fontSize: 24)),
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    hook.title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.ghostlyWhite,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    hook.teaser,
-                    style: const TextStyle(
-                      fontSize: 12.5,
-                      color: AppColors.moonlightGray,
+            const SizedBox(height: 8),
+            ...lines,
+            if (note != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                note,
+                style: GoogleFonts.cormorantGaramond(
+                  fontSize: 13,
+                  fontStyle: FontStyle.italic,
+                  color: AppColors.accent,
+                  height: 1.6,
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (r.hap.isNotEmpty)
+          sub(
+            useKo ? '합(合) — 결합·조화' : 'HAP — ALLIANCE',
+            HapchungService.hapInterpretation(ko: useKo),
+            [
+              for (final h in r.hap)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text(
+                    useKo
+                        ? '· ${areaKo(h.area1)} ↔ ${areaKo(h.area2)}${h.element.isEmpty ? "" : " (오행 화: ${h.element})"}'
+                        : '· ${areaEn(h.area1)} ↔ ${areaEn(h.area2)}${h.element.isEmpty ? "" : " (element: ${h.element})"}',
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.ink,
                       height: 1.55,
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: AppColors.celestialGold.withValues(alpha: 0.25),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: AppColors.celestialGold.withValues(alpha: 0.65),
                 ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.lock_open,
-                      size: 11, color: AppColors.celestialGold),
-                  const SizedBox(width: 4),
-                  Text(
-                    l.resultProHookCta,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: AppColors.celestialGold,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ──────── Easy mode banner — "처음이세요?"
-
-class _EasyModeBanner extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return InkWell(
-      onTap: () => _showGuide(context, l),
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.spiritIndigo.withValues(alpha: 0.3),
-              AppColors.celestialGold.withValues(alpha: 0.12),
             ],
           ),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.35),
-          ),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.help_outline,
-                size: 24, color: AppColors.celestialGold),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l.resultEasyModeBannerTitle,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.celestialGold,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    l.resultEasyModeBannerDesc,
-                    style: const TextStyle(
-                      fontSize: 12.5,
-                      color: AppColors.moonlightGray,
-                      height: 1.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: AppColors.fadedSilver),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showGuide(BuildContext context, AppL10n l) {
-    showDialog<void>(
-      context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.75),
-      builder: (ctx) => Dialog(
-        backgroundColor: AppColors.cosmicBlack,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-          side: BorderSide(
-              color: AppColors.celestialGold.withValues(alpha: 0.45)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(22, 24, 22, 18),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.menu_book_outlined,
-                  color: AppColors.celestialGold, size: 32),
-              const SizedBox(height: 10),
-              Text(
-                l.resultGuideTitle,
-                style: const TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.celestialGold,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                l.resultGuideBody,
-                style: const TextStyle(
-                  fontSize: 14.5,
-                  color: AppColors.ghostlyWhite,
-                  height: 1.7,
-                ),
-              ),
-              const SizedBox(height: 18),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(ctx).pop(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.celestialGold,
-                    foregroundColor: AppColors.cosmicBlack,
-                    minimumSize: const Size(0, 48),
-                  ),
-                  child: Text(
-                    l.resultGuideGotIt,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ──────── 3-hit summary — codex PM 권고: 성격 / 연애 / 오늘 한 방씩
-
-class _ThreeHitCard extends StatelessWidget {
-  final SajuResult result;
-  final DeepReading? reading;
-  final bool useKo;
-  const _ThreeHitCard({
-    required this.result,
-    required this.reading,
-    required this.useKo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final oneLine = reading?.oneLineYouAre ??
-        (useKo ? '한결같은' : 'steady-energy');
-    final whoYouAre = useKo
-        ? '${l.resultIntroLeadIn} $oneLine ${l.resultIntroLeadOut}'
-        : '${l.resultIntroLeadIn} a $oneLine ${l.resultIntroLeadOut}';
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorderStrong),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 4,
-                height: 14,
-                margin: const EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.celestialGold,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              Text(
-                l.resultThreeHitHeader,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.moonlightGray,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            whoYouAre,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              color: AppColors.ghostlyWhite,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
+        if (samhap.isNotEmpty)
+          sub(
+            useKo ? '삼합(三合) — 3지지 결합' : 'SAMHAP — 3-BRANCH UNITY',
             useKo
-                ? '${result.dayPillar.pairKorean} · ${result.dayPillar.pairKoreanMeaning} · ${result.day60ji}'
-                : '${result.dayMasterName} · ${result.day60ji}',
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.fadedSilver,
-              letterSpacing: 0.8,
-            ),
-          ),
-          const SizedBox(height: 16),
-          _hit(l.resultThreeHitPersonalityLabel, '🪨',
-              reading?.personalityHook ?? ''),
-          const SizedBox(height: 10),
-          _hit(l.resultThreeHitLoveLabel, '💞',
-              reading?.loveHook ?? ''),
-          const SizedBox(height: 10),
-          _hit(l.resultThreeHitTodayLabel, '🎯',
-              reading?.todayHook ?? ''),
-        ],
-      ),
-    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.05, end: 0);
-  }
-
-  Widget _hit(String label, String emoji, String text) {
-    if (text.isEmpty) return const SizedBox.shrink();
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-      decoration: BoxDecoration(
-        color: AppColors.midnightPurple.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(emoji, style: const TextStyle(fontSize: 16)),
-              const SizedBox(width: 6),
-              Text(
-                label.toUpperCase(),
-                style: const TextStyle(
-                  fontSize: 11,
-                  letterSpacing: 1.2,
-                  color: AppColors.celestialGold,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 14.5,
-              color: AppColors.ghostlyWhite,
-              height: 1.6,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ──────── Section header — friendly title + small hint
-
-/// Accordion section — codex Round 14 권고.
-/// Result 가 너무 길어서 핵심만 상단 고정, 나머지는 접힘.
-class _AccordionSection extends StatelessWidget {
-  final String title;
-  final String hint;
-  final bool locked;
-  final bool initiallyExpanded;
-  final Widget child;
-  final String? whyLine;
-
-  const _AccordionSection({
-    required this.title,
-    this.hint = '',
-    required this.locked,
-    this.initiallyExpanded = false,
-    required this.child,
-    this.whyLine,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          dividerColor: Colors.transparent,
-          listTileTheme: const ListTileThemeData(
-            dense: true,
-          ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.cardSurface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.cardBorder),
-          ),
-          child: ExpansionTile(
-            initiallyExpanded: initiallyExpanded,
-            tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
-            iconColor: AppColors.moonlightGray,
-            collapsedIconColor: AppColors.fadedSilver,
-            title: Row(
-              children: [
-                Container(
-                  width: 3,
-                  height: 16,
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.celestialGold,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-                Expanded(
+                ? '삼합 — 3지지가 한 오행으로 강하게 결합. 가장 큰 합.'
+                : 'Samhap — three branches lock into one element. The biggest combination.',
+            [
+              for (final s in samhap)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
                   child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: AppColors.ghostlyWhite,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                if (locked)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 7, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: AppColors.celestialGold.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(
-                        color: AppColors.celestialGold.withValues(alpha: 0.4),
-                      ),
-                    ),
-                    child: Text(
-                      l.resultProLocked,
-                      style: const TextStyle(
-                        fontSize: 9.5,
-                        letterSpacing: 0.8,
-                        color: AppColors.celestialGold,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            subtitle: hint.isEmpty
-                ? null
-                : Padding(
-                    padding: const EdgeInsets.only(left: 13, top: 3),
-                    child: Text(
-                      hint,
-                      style: const TextStyle(
-                        fontSize: 11.5,
-                        color: AppColors.fadedSilver,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
-            children: [
-              if (locked)
-                _LockedPlaceholder()
-              else ...[
-                child,
-                if (whyLine != null && whyLine!.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: AppColors.celestialGold.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: AppColors.celestialGold.withValues(alpha: 0.15),
-                      ),
-                    ),
-                    child: RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 12.5,
-                          color: AppColors.moonlightGray,
-                          height: 1.5,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: '${l.resultWhyLabel} ',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.celestialGold,
-                            ),
-                          ),
-                          TextSpan(text: whyLine),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SectionHeader extends StatelessWidget {
-  final String title;
-  final String hint;
-  const _SectionHeader({required this.title, required this.hint});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 3,
-                height: 18,
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  color: AppColors.celestialGold,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              Flexible(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.ghostlyWhite,
-                    height: 1.25,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (hint.isNotEmpty) ...[
-            const SizedBox(height: 3),
-            Text(
-              hint,
-              style: const TextStyle(
-                fontSize: 11.5,
-                color: AppColors.fadedSilver,
-                fontStyle: FontStyle.italic,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-// ──────── Section shell (Pro Lock 적용)
-
-class _Section extends StatelessWidget {
-  final bool locked;
-  final Widget child;
-  final String? whyLine;
-  const _Section({
-    required this.locked,
-    required this.child,
-    this.whyLine,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-      decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: locked ? 0.08 : 0.15),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (locked) ...[
-            _LockedPlaceholder(),
-          ] else ...[
-            child,
-            if (whyLine != null && whyLine!.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                decoration: BoxDecoration(
-                  color: AppColors.celestialGold.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.2),
-                  ),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.psychology_outlined,
-                        size: 14, color: AppColors.celestialGold),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 12.5,
-                            color: AppColors.moonlightGray,
-                            height: 1.5,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: '${l.resultWhyLabel} ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.celestialGold,
-                              ),
-                            ),
-                            TextSpan(text: whyLine),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _LockedPlaceholder extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return InkWell(
-      onTap: () => showComingSoonModal(context),
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
-        decoration: BoxDecoration(
-          color: AppColors.midnightPurple.withValues(alpha: 0.4),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.18),
-          ),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.lock_outline,
-                color: AppColors.celestialGold, size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                l.resultUnlockHint,
-                style: const TextStyle(
-                  fontSize: 13.5,
-                  color: AppColors.fadedSilver,
-                  height: 1.5,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: AppColors.celestialGold.withValues(alpha: 0.18),
-                borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: AppColors.celestialGold.withValues(alpha: 0.45),
-                ),
-              ),
-              child: Text(
-                l.resultProLocked,
-                style: const TextStyle(
-                  fontSize: 10,
-                  letterSpacing: 1.0,
-                  color: AppColors.celestialGold,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ──────── Long body text — 15.5pt
-
-class _LongText extends StatelessWidget {
-  final String text;
-  const _LongText({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 15.5,
-        color: AppColors.ghostlyWhite,
-        height: 1.75,
-      ),
-    );
-  }
-}
-
-// ──────── 4 Pillars grid
-
-class _PillarGrid extends StatelessWidget {
-  final SajuResult result;
-  const _PillarGrid({required this.result});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.cardBorder),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _PillarItem(label: l.resultPillarYear, pillar: result.yearPillar),
-          _PillarItem(label: l.resultPillarMonth, pillar: result.monthPillar),
-          _PillarItem(
-            label: l.resultPillarDay,
-            pillar: result.dayPillar,
-            highlight: true,
-          ),
-          _PillarItem(label: l.resultPillarHour, pillar: result.hourPillar),
-        ],
-      ),
-    );
-  }
-}
-
-class _PillarItem extends StatelessWidget {
-  final String label;
-  final Pillar? pillar;
-  final bool highlight;
-  const _PillarItem({
-    required this.label,
-    required this.pillar,
-    this.highlight = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isNull = pillar == null;
-    final borderColor = highlight
-        ? AppColors.celestialGold  // day pillar 만 gold 강조 (핵심)
-        : AppColors.cardBorder;
-    final useKo =
-        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final localizedPillarLabel = isNull
-        ? '—'
-        : (useKo ? pillar!.pairKoreanMeaning : pillar!.pairEnglish);
-    final semanticLabel = isNull
-        ? '$label pillar: unknown'
-        : '$label pillar: ${pillar!.text}, $localizedPillarLabel';
-    return Semantics(
-      label: semanticLabel,
-      excludeSemantics: true,
-      child: Column(
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 10.5,
-            color: AppColors.moonlightGray,
-            letterSpacing: 1.2,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 70,
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
-          decoration: BoxDecoration(
-            color: AppColors.midnightPurple.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: borderColor, width: highlight ? 1.8 : 1),
-          ),
-          child: Column(
-            children: [
-              Text(
-                isNull ? '?' : pillar!.chunGan,
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  // day pillar 만 gold, 나머지는 white (codex Round 16 권고)
-                  color: highlight
-                      ? AppColors.celestialGold
-                      : AppColors.ghostlyWhite,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                isNull ? '?' : pillar!.jiJi,
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.ghostlyWhite,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 6),
-        SizedBox(
-          width: 72,
-          child: Text(
-              localizedPillarLabel,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 10.5,
-                color: AppColors.moonlightGray,
-                height: 1.2,
-              ),
-            ),
-        ),
-      ],
-    ),
-    );
-  }
-}
-
-// ──────── Day Master compact card
-
-class _DayMasterCard extends StatelessWidget {
-  final SajuResult result;
-  const _DayMasterCard({required this.result});
-
-  @override
-  Widget build(BuildContext context) {
-    final useKo =
-        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.cardBorderStrong),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.midnightPurple.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.cardBorderStrong),
-            ),
-            child: Text(
-              result.day60ji,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w900,
-                color: AppColors.ghostlyWhite,
-              ),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  useKo ? result.dayPillar.pairKoreanMeaning : result.dayMasterName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.ghostlyWhite,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Builder(builder: (context) {
-                  final useKo = (Localizations.maybeLocaleOf(context)
-                              ?.languageCode ??
-                          'en') ==
-                      'ko';
-                  // Korean 모드: deepKo.dayMasterDeep 첫 문장 또는 personality 첫 줄
-                  // English: result.summary (asset 가 영어라서 자연스러움)
-                  final reading = useKo ? result.deepKo : result.deepEn;
-                  String text;
-                  if (useKo && reading != null) {
-                    final src = reading.personalityHook.isNotEmpty
-                        ? reading.personalityHook
-                        : (reading.dayMasterDeep.isNotEmpty
-                            ? reading.dayMasterDeep.split('. ').first
-                            : result.summary);
-                    text = src;
-                  } else {
-                    text = result.summary;
-                  }
-                  return Text(
-                    text,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    useKo
+                        ? '· ${s.areas.map((a) => areaKo(a)).join(" + ")} → ${s.element}'
+                        : '· ${s.areas.map((a) => areaEn(a)).join(" + ")} → ${s.element}',
+                    style: GoogleFonts.notoSansKr(
                       fontSize: 13,
-                      fontStyle: FontStyle.italic,
-                      color: AppColors.moonlightGray,
-                      height: 1.5,
+                      color: AppColors.ink,
+                      height: 1.55,
                     ),
-                  );
-                }),
-              ],
-            ),
+                  ),
+                ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-// ──────── Five Elements bar
-
-class _ElementsBar extends StatelessWidget {
-  final SajuResult result;
-  const _ElementsBar({required this.result});
-
-  @override
-  Widget build(BuildContext context) {
-    final el = result.elements;
-    final dom = el.dominant;
-    final def = el.deficit;
-    final useKo =
-        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final names = useKo
-        ? const {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}
-        : const {
-            '木': 'Wood', '火': 'Fire', '土': 'Earth', '金': 'Metal', '水': 'Water',
-          };
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _row(names['木']!, '木', el.wood, dom, def),
-        _row(names['火']!, '火', el.fire, dom, def),
-        _row(names['土']!, '土', el.earth, dom, def),
-        _row(names['金']!, '金', el.metal, dom, def),
-        _row(names['水']!, '水', el.water, dom, def),
+        if (banghap.isNotEmpty)
+          sub(
+            useKo ? '방합(方合) — 계절 3지지' : 'BANGHAP — SEASONAL UNITY',
+            useKo
+                ? '방합 — 한 계절의 3지지가 한 오행으로 모임. 계절 기운이 강하게 작동.'
+                : 'Banghap — three branches of one season unite into one element.',
+            [
+              for (final b in banghap)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text(
+                    useKo
+                        ? '· ${b.areas.map((a) => areaKo(a)).join(" + ")} → ${b.element}'
+                        : '· ${b.areas.map((a) => areaEn(a)).join(" + ")} → ${b.element}',
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.ink,
+                      height: 1.55,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        if (r.chung.isNotEmpty)
+          sub(
+            useKo ? '충(沖) — 갈등·변동' : 'CHUNG — FRICTION',
+            HapchungService.chungInterpretation(ko: useKo),
+            [
+              for (final c in r.chung)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Text(
+                    useKo
+                        ? '· ${areaKo(c.area1)} ↔ ${areaKo(c.area2)}'
+                        : '· ${areaEn(c.area1)} ↔ ${areaEn(c.area2)}',
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.ink,
+                      height: 1.55,
+                    ),
+                  ),
+                ),
+            ],
+          ),
       ],
     );
   }
-
-  Widget _row(String name, String han, int pct, String dom, String def) {
-    final color = AppColors.forElement(han);
-    final isDom = han == dom;
-    final isDef = han == def;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.18),
-              shape: BoxShape.circle,
-              border: Border.all(color: color.withValues(alpha: 0.7)),
-            ),
-            child: Text(
-              han,
-              style: TextStyle(
-                fontSize: 14,
-                color: color,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          SizedBox(
-            width: 84,
-            child: Text(
-              name,
-              style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.moonlightGray,
-              ),
-            ),
-          ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: pct / 100,
-                minHeight: 8,
-                backgroundColor: AppColors.spiritIndigo.withValues(alpha: 0.2),
-                valueColor: AlwaysStoppedAnimation(color),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          SizedBox(
-            width: 56,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  '$pct%',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.ghostlyWhite,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                if (isDom)
-                  const Padding(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Icon(Icons.star,
-                        size: 14, color: AppColors.celestialGold),
-                  )
-                else if (isDef)
-                  const Padding(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Icon(Icons.warning_amber_rounded,
-                        size: 13, color: AppColors.fadedSilver),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-// ──────── Ten Gods table
+// ──────────── Ten Gods table ────────────
 
 class _TenGodsTable extends StatelessWidget {
   final List<TenGodRow> rows;
@@ -2615,105 +1887,109 @@ class _TenGodsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const headerStyle = TextStyle(
-      fontSize: 11.5,
-      letterSpacing: 1.2,
-      color: AppColors.moonlightGray,
-      fontWeight: FontWeight.w800,
+    final headerStyle = GoogleFonts.inter(
+      fontSize: 9,
+      letterSpacing: 3,
+      fontWeight: FontWeight.w500,
+      color: AppColors.taupe,
     );
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Text(useKo ? '기둥' : 'PILLAR', style: headerStyle),
-            ),
-            Expanded(
-              flex: 3,
-              child: Text(useKo ? '천간' : 'HEAVENLY', style: headerStyle),
-            ),
-            Expanded(
-              flex: 3,
-              child: Text(useKo ? '지지' : 'EARTHLY', style: headerStyle),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        ...rows.map((row) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                children: [
-                  Expanded(
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: [
+                Expanded(
                     flex: 2,
-                    child: Text(
-                      _posLabel(row.position, useKo),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.ghostlyWhite,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Expanded(
+                    child:
+                        Text(useKo ? 'PILLAR' : 'PILLAR', style: headerStyle)),
+                Expanded(
                     flex: 3,
-                    child: Text(
-                      row.chunGanGod == null
-                          ? '—'
-                          : (useKo ? row.chunGanGod!.ko : row.chunGanGod!.en),
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: AppColors.celestialGold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
+                    child:
+                        Text(useKo ? 'STEM' : 'STEM', style: headerStyle)),
+                Expanded(
                     flex: 3,
-                    child: Text(
-                      row.jiJiGod == null
-                          ? '—'
-                          : (useKo ? row.jiJiGod!.ko : row.jiJiGod!.en),
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: AppColors.celestialGold,
+                    child:
+                        Text(useKo ? 'BRANCH' : 'BRANCH', style: headerStyle)),
+              ],
+            ),
+          ),
+          ...rows.map((row) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: AppColors.line, width: 0.6),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        _posLabel(row.position, useKo),
+                        style: GoogleFonts.notoSerifKr(
+                          fontSize: 14,
+                          color: AppColors.ink,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )),
-      ],
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        row.chunGanGod == null
+                            ? '—'
+                            : (useKo ? row.chunGanGod!.ko : row.chunGanGod!.en),
+                        style: GoogleFonts.notoSerifKr(
+                          fontSize: 13,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        row.jiJiGod == null
+                            ? '—'
+                            : (useKo ? row.jiJiGod!.ko : row.jiJiGod!.en),
+                        style: GoogleFonts.notoSerifKr(
+                          fontSize: 13,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
     );
   }
 
   String _posLabel(String pos, bool ko) {
     if (ko) {
       switch (pos) {
-        case 'year':
-          return '년주';
-        case 'month':
-          return '월주';
-        case 'day':
-          return '일주';
-        case 'hour':
-          return '시주';
+        case 'year': return '년주';
+        case 'month': return '월주';
+        case 'day': return '일주';
+        case 'hour': return '시주';
       }
     }
     switch (pos) {
-      case 'year':
-        return 'Year';
-      case 'month':
-        return 'Month';
-      case 'day':
-        return 'Day';
-      case 'hour':
-        return 'Hour';
+      case 'year': return 'YEAR';
+      case 'month': return 'MONTH';
+      case 'day': return 'DAY';
+      case 'hour': return 'HOUR';
     }
     return pos;
   }
 }
 
-// ──────── Life themes block
+// ──────────── Life Themes ────────────
 
 class _LifeThemesBlock extends StatelessWidget {
   final DeepReading? reading;
@@ -2724,48 +2000,46 @@ class _LifeThemesBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final themes = <_ThemeItem>[
-      _ThemeItem(l.resultThemeCareer, '💼', reading?.career ?? '',
-          locked: false),
-      _ThemeItem(l.resultThemeWealth, '💰', reading?.wealth ?? '',
-          locked: false),
-      _ThemeItem(l.resultThemeLove, '💞', reading?.love ?? '', locked: false),
-      _ThemeItem(l.resultThemeHealth, '🌿', reading?.health ?? '',
-          locked: !isPro),
-      _ThemeItem(l.resultThemeFamily, '🏠', reading?.family ?? '',
-          locked: !isPro),
-      _ThemeItem(l.resultThemeFame, '🌟', reading?.fame ?? '',
-          locked: !isPro),
+      _ThemeItem(l.resultThemeCareer, 'CAREER', reading?.career ?? '', false),
+      _ThemeItem(l.resultThemeWealth, 'WEALTH', reading?.wealth ?? '', false),
+      _ThemeItem(l.resultThemeLove, 'LOVE', reading?.love ?? '', false),
+      _ThemeItem(l.resultThemeHealth, 'HEALTH', reading?.health ?? '', !isPro),
+      _ThemeItem(l.resultThemeFamily, 'FAMILY', reading?.family ?? '', !isPro),
+      _ThemeItem(l.resultThemeFame, 'FAME', reading?.fame ?? '', !isPro),
     ];
     return Column(
-      children: themes.map((t) => _ThemeCard(item: t)).toList(),
+      children: themes.asMap().entries.map((e) {
+        final isLast = e.key == themes.length - 1;
+        return _ThemeRow(item: e.value, isLast: isLast);
+      }).toList(),
     );
   }
 }
 
 class _ThemeItem {
-  final String title;
-  final String emoji;
+  final String titleLocalized;
+  final String labelEn;
   final String text;
   final bool locked;
-  const _ThemeItem(this.title, this.emoji, this.text, {required this.locked});
+  const _ThemeItem(this.titleLocalized, this.labelEn, this.text, this.locked);
 }
 
-class _ThemeCard extends StatelessWidget {
+class _ThemeRow extends StatelessWidget {
   final _ThemeItem item;
-  const _ThemeCard({required this.item});
+  final bool isLast;
+  const _ThemeRow({required this.item, required this.isLast});
 
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 18),
+      margin: EdgeInsets.only(bottom: isLast ? 0 : 18),
       decoration: BoxDecoration(
-        color: AppColors.midnightPurple.withValues(alpha: 0.55),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.celestialGold
-              .withValues(alpha: item.locked ? 0.1 : 0.25),
+        border: Border(
+          bottom: isLast
+              ? BorderSide.none
+              : const BorderSide(color: AppColors.line, width: 0.6),
         ),
       ),
       child: Column(
@@ -2773,75 +2047,41 @@ class _ThemeCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(item.emoji, style: const TextStyle(fontSize: 22)),
-              const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  item.title.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 13,
-                    letterSpacing: 1.4,
-                    color: item.locked
-                        ? AppColors.fadedSilver
-                        : AppColors.ghostlyWhite,
-                    fontWeight: FontWeight.w800,
+                  item.labelEn,
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
                   ),
                 ),
               ),
               if (item.locked)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.celestialGold.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(
-                      color: AppColors.celestialGold.withValues(alpha: 0.4),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.lock,
-                          size: 10, color: AppColors.celestialGold),
-                      const SizedBox(width: 4),
-                      Text(
-                        l.resultProLocked,
-                        style: const TextStyle(
-                          fontSize: 9.5,
-                          letterSpacing: 0.8,
-                          color: AppColors.celestialGold,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _AesopChip(label: l.resultProLocked),
             ],
           ),
           const SizedBox(height: 10),
           if (item.locked)
             InkWell(
               onTap: () => showComingSoonModal(context),
-              borderRadius: BorderRadius.circular(6),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Text(
-                  l.resultUnlockHint,
-                  style: const TextStyle(
-                    fontSize: 12.5,
-                    color: AppColors.fadedSilver,
-                    height: 1.5,
-                  ),
+              child: Text(
+                l.resultUnlockHint,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 13,
+                  color: AppColors.taupe,
+                  height: 1.7,
                 ),
               ),
             )
           else
             Text(
               item.text,
-              style: const TextStyle(
-                fontSize: 14.5,
-                color: AppColors.ghostlyWhite,
-                height: 1.7,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 14,
+                color: AppColors.ink,
+                height: 1.8,
               ),
             ),
         ],
@@ -2850,7 +2090,7 @@ class _ThemeCard extends StatelessWidget {
   }
 }
 
-// ──────── Lucky block
+// ──────────── Lucky ────────────
 
 class _LuckyBlock extends StatelessWidget {
   final DeepReading? reading;
@@ -2860,44 +2100,385 @@ class _LuckyBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (reading == null) return const SizedBox.shrink();
-    return Column(
-      children: [
-        _row(Icons.palette_outlined, useKo ? '행운의 색' : 'Lucky Color',
-            reading!.luckyColor),
-        _row(Icons.tag, useKo ? '행운의 숫자' : 'Lucky Number',
-            '${reading!.luckyNumber}'),
-        _row(Icons.explore_outlined, useKo ? '행운의 방향' : 'Lucky Direction',
-            reading!.luckyDirection),
-      ],
+    final rows = [
+      (useKo ? 'COLOR · 색' : 'COLOR', reading!.luckyColor),
+      (useKo ? 'NUMBER · 숫자' : 'NUMBER', '${reading!.luckyNumber}'),
+      (useKo ? 'DIRECTION · 방향' : 'DIRECTION', reading!.luckyDirection),
+    ];
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+      ),
+      child: Column(
+        children: rows.map((r) {
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            decoration: const BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(color: AppColors.line, width: 0.6)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    r.$1,
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                ),
+                Text(
+                  r.$2,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.accent,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
+}
 
-  Widget _row(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      child: Row(
-        children: [
-          Icon(icon, size: 17, color: AppColors.moonlightGray),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.moonlightGray,
+// ──────────── Calculation basis ────────────
+
+class _CalculationBasisBody extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _CalculationBasisBody({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final rows = [
+      (l.resultBasisManseryeok, l.resultBasisManseryeokVal),
+      (l.resultBasisYearBoundary, l.resultBasisYearBoundaryVal),
+      (l.resultBasisDayBoundary, l.resultBasisDayBoundaryVal),
+      (l.resultBasisTrueSun, l.resultBasisTrueSunOn),
+    ];
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+      ),
+      child: Column(
+        children: rows.map((r) {
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: const BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(color: AppColors.line, width: 0.6)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 96,
+                  child: Text(
+                    r.$1.toUpperCase(),
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    r.$2,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 12.5,
+                      color: AppColors.ink,
+                      height: 1.7,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+// ──────────── Pro hooks ────────────
+
+class _ProHooksSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final hooks = <(String, String, String, VoidCallback)>[
+      (
+        l.resultProHookYearLoveTitle,
+        l.resultProHookYearLoveTeaser,
+        '愛',
+        () => showComingSoonModal(context),
+      ),
+      (
+        l.resultProHookCompatTitle,
+        l.resultProHookCompatTeaser,
+        '緣',
+        () => context.go('/reports/compatibility'),
+      ),
+      (
+        l.resultProHookDatesTitle,
+        l.resultProHookDatesTeaser,
+        '日',
+        () => context.go('/reports/date-picking'),
+      ),
+    ];
+    return _SectionFrame(
+      background: AppColors.bg,
+      meta: l.resultProHookHeader.toUpperCase(),
+      child: Column(
+        children: hooks.asMap().entries.map((e) {
+          final isLast = e.key == hooks.length - 1;
+          final h = e.value;
+          return InkWell(
+            onTap: h.$4,
+            child: Container(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 18),
+              margin: EdgeInsets.only(bottom: isLast ? 0 : 18),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: isLast
+                      ? BorderSide.none
+                      : const BorderSide(color: AppColors.line, width: 0.6),
+                ),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 48,
+                    child: Text(
+                      h.$3,
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w300,
+                        color: AppColors.accent,
+                        height: 1.0,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          h.$1,
+                          style: GoogleFonts.notoSerifKr(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.ink,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          h.$2,
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 12.5,
+                            color: AppColors.inkLight,
+                            height: 1.6,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      '→',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        color: AppColors.taupe,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+// ──────────── CTAs ────────────
+
+class _CtaStack extends StatelessWidget {
+  final bool isPro;
+  final VoidCallback onShare;
+  const _CtaStack({required this.isPro, required this.onShare});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return Column(
+      children: [
+        if (!isPro)
+          InkWell(
+            onTap: () => showComingSoonModal(context),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 26),
+              alignment: Alignment.center,
+              color: AppColors.ink,
+              child: Text(
+                l.resultUnlockFull.toUpperCase(),
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  letterSpacing: 5,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.bg,
+                ),
               ),
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 15,
-              color: AppColors.celestialGold,
-              fontWeight: FontWeight.w800,
+        InkWell(
+          onTap: () => context.go('/home'),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 26),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              color: AppColors.bg,
+              border:
+                  Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+            ),
+            child: Text(
+              l.resultContinueDaily.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                letterSpacing: 5,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+              ),
             ),
           ),
-        ],
+        ),
+        InkWell(
+          onTap: onShare,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 22),
+            alignment: Alignment.center,
+            color: AppColors.bg,
+            child: Text(
+              l.resultShare.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────────── Footer ────────────
+
+class _AesopFooter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 22, 24, 30),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        'KASI · 입춘 · 12절 · 진태양시 · 균시차',
+        style: GoogleFonts.inter(
+          fontSize: 9,
+          letterSpacing: 3,
+          fontWeight: FontWeight.w400,
+          color: AppColors.taupe,
+        ),
       ),
     );
+  }
+}
+
+// ──────────── Footnote italic helper ────────────
+
+class _FootnoteItalic extends StatelessWidget {
+  final String text;
+  const _FootnoteItalic(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 12),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+      ),
+      child: Text(
+        text,
+        style: GoogleFonts.notoSansKr(
+          fontSize: 11.5,
+          color: AppColors.taupe,
+          height: 1.6,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+    );
+  }
+}
+
+// ──────────── Share chart ────────────
+
+Future<void> _shareChart(
+    BuildContext context, SajuResult result, bool useKo) async {
+  final reading = useKo ? result.deepKo : result.deepEn;
+  final oneLine = reading?.oneLineYouAre ?? '';
+  final personality = reading?.personalityHook ?? '';
+  final today = reading?.todayHook ?? '';
+  final text = useKo
+      ? '''Pillar Seer — 내 사주
+
+$oneLine 사람.
+일주 ${result.dayPillar.pairKorean} · ${result.dayPillar.pairKoreanMeaning} · ${result.day60ji}
+
+성격 — $personality
+오늘 — $today
+
+Pillar Seer 앱에서 정밀 풀이를 확인하세요.'''
+      : '''Pillar Seer — My Saju
+
+A $oneLine person.
+Day Pillar: ${result.dayMasterName} · ${result.day60ji}
+
+Personality — $personality
+Today — $today
+
+Open Pillar Seer for the full reading.''';
+  try {
+    await SharePlus.instance.share(ShareParams(text: text));
+  } catch (_) {
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!context.mounted) return;
+    final l = AppL10n.of(context);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(l.shareCardCopied),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.ink,
+        duration: const Duration(seconds: 2),
+      ));
   }
 }
