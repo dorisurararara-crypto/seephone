@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
+import '../../services/jol_calendar_2026.dart';
 import '../../services/seun_service.dart';
 import '../../services/strength_service.dart';
 import '../../services/yongsin_service.dart';
@@ -261,24 +262,9 @@ class _MonthlyFlow extends StatelessWidget {
     required this.useKo,
   });
 
-  /// 2026년 KASI 절기 12 월건 (KST 절입시각 기준).
-  /// 명리학 정통: 寅月 = 입춘 시작 → 卯月 = 경칩 → ...
-  /// 丙년 五虎遁 月干: 寅 庚, 卯 辛, 辰 壬, 巳 癸, 午 甲, 未 乙, 申 丙, 酉 丁, 戌 戊, 亥 己, 子 庚, 丑 辛.
-  /// 절입시각 출처: 2026년 KASI 천체력.
-  static const _slots = <(int, int, String, String, String, String)>[
-    (1, 5, '丑', '辛', '소한 1/5 17:23', 'Sohan · Jan 5 17:23'),
-    (2, 4, '寅', '庚', '입춘 2/4 05:02', 'Ipchun · Feb 4 05:02'),
-    (3, 5, '卯', '辛', '경칩 3/5 22:58', 'Gyeongchip · Mar 5 22:58'),
-    (4, 5, '辰', '壬', '청명 4/5 03:39', 'Cheongmyeong · Apr 5 03:39'),
-    (5, 5, '巳', '癸', '입하 5/5 20:48', 'Ipha · May 5 20:48'),
-    (6, 6, '午', '甲', '망종 6/6 00:48', 'Mangjong · Jun 6 00:48'),
-    (7, 7, '未', '乙', '소서 7/7 10:56', 'Soseo · Jul 7 10:56'),
-    (8, 7, '申', '丙', '입추 8/7 20:42', 'Ipchu · Aug 7 20:42'),
-    (9, 7, '酉', '丁', '백로 9/7 23:41', 'Baekro · Sep 7 23:41'),
-    (10, 8, '戌', '戊', '한로 10/8 15:29', 'Hanro · Oct 8 15:29'),
-    (11, 7, '亥', '己', '입동 11/7 18:52', 'Ipdong · Nov 7 18:52'),
-    (12, 7, '子', '庚', '대설 12/7 11:52', 'Daeseol · Dec 7 11:52'),
-  ];
+  /// 2026 KASI 12절 source-of-truth.
+  /// 데이터는 `JolCalendar2026` 에서 관리 (테스트도 동일 데이터 검증).
+  static List<JolSlot> get _slots => JolCalendar2026.displayOrder;
 
   static const _moodsKo = <String>[
     '동지 직후 — 한 해의 씨앗이 땅속에 봉인된 시기. 큰 결정보다 정돈과 비축.',
@@ -357,7 +343,7 @@ class _MonthlyFlow extends StatelessWidget {
             child: Column(
               children: List.generate(12, (i) {
                 final slot = _slots[i];
-                final ganji = '${slot.$4}${slot.$3}';
+                final ganji = '${slot.monthStem}${slot.monthBranch}';
                 return Container(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: const BoxDecoration(
@@ -385,7 +371,7 @@ class _MonthlyFlow extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              useKo ? slot.$5 : slot.$6,
+                              useKo ? slot.displayKo : slot.displayEn,
                               style: GoogleFonts.inter(
                                 fontSize: 9,
                                 letterSpacing: 3,

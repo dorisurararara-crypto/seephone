@@ -1,57 +1,112 @@
-// 2026 신년운세 — 절기 테이블 source-of-truth 잠금 테스트.
-// codex Round 2 권고: "KASI/KST 기준 source-of-truth 고정 + 테스트 추가".
+// 2026 신년운세 — KASI 12절 source-of-truth 잠금 테스트.
 //
-// 절기 시각 출처: 2026년 KASI 천체력 (KST, ±20분 정확도 권장).
+// codex Round 3 권고: "_slots 를 구조화하고 SolarTermService.jolDateTime() 과 직접 비교".
+// JolCalendar2026 이 source-of-truth, 화면(_NewYear2026Screen) 과 이 테스트가 모두 참조.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pillarseer/services/jol_calendar_2026.dart';
 import 'package:pillarseer/services/solar_term_service.dart';
 
 void main() {
-  group('2026 KASI 절기 — 12 월건 boundary', () {
-    // 2026년 KASI 월력요항 KST 절입시각.
-    // 명리학 월건은 12절기(중기는 안 봄): 소한·입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설.
-    final Map<String, DateTime> kasi2026 = {
-      '소한': DateTime(2026, 1, 5, 17, 23),
-      '입춘': DateTime(2026, 2, 4, 5, 2),
-      '경칩': DateTime(2026, 3, 5, 22, 58),
-      '청명': DateTime(2026, 4, 5, 3, 39),
-      '입하': DateTime(2026, 5, 5, 20, 48),
-      '망종': DateTime(2026, 6, 6, 0, 48),
-      '소서': DateTime(2026, 7, 7, 10, 56),
-      '입추': DateTime(2026, 8, 7, 20, 42),
-      '백로': DateTime(2026, 9, 7, 23, 41),
-      '한로': DateTime(2026, 10, 8, 15, 29),
-      '입동': DateTime(2026, 11, 7, 18, 52),
-      '대설': DateTime(2026, 12, 7, 11, 52),
-    };
-
-    test('입춘 2026 — KASI 5:02 ±20분', () {
-      final calc = SolarTermService.lipchun(2026);
-      final diff = calc.difference(kasi2026['입춘']!).inMinutes.abs();
-      expect(diff, lessThanOrEqualTo(20));
+  group('JolCalendar2026 — 12절 KASI source-of-truth', () {
+    test('12 entries 존재', () {
+      expect(JolCalendar2026.all.length, 12);
+      expect(JolCalendar2026.displayOrder.length, 12);
     });
 
-    test('년 boundary — 2026 입춘 후 양력 1월 6일 가정 시 2025 사주', () {
-      // (구체 ManseryeokService 검증은 solar_term_test 가 cover)
-      // 여기서는 절기 date 정합성만 확인.
-      expect(kasi2026['입춘']!.month, 2);
-      expect(kasi2026['입춘']!.day, 4);
+    test('display order = 1월 → 12월 (소한 시작, 대설 끝)', () {
+      final ord = JolCalendar2026.displayOrder;
+      expect(ord.first.nameKo, '소한');
+      expect(ord.first.monthBranch, '丑');
+      expect(ord.last.nameKo, '대설');
+      expect(ord.last.monthBranch, '子');
     });
 
-    test('월건 12 절기 chronological order', () {
-      final dates = kasi2026.values.toList();
-      for (int i = 1; i < dates.length; i++) {
-        expect(dates[i].isAfter(dates[i - 1]), true,
-            reason:
-                'idx $i (${kasi2026.keys.elementAt(i)}) is not after idx ${i - 1}');
+    test('경칩 2026 = 3/5 22:58 (NOT 3/6)', () {
+      final gc = JolCalendar2026.byJolIndex(1);
+      expect(gc.nameKo, '경칩');
+      expect(gc.dateTime.month, 3);
+      expect(gc.dateTime.day, 5);
+      expect(gc.dateTime.hour, 22);
+      expect(gc.dateTime.minute, 58);
+      expect(gc.monthBranch, '卯');
+      expect(gc.monthStem, '辛');
+    });
+
+    test('입춘 2026 = 2/4 05:02', () {
+      final ic = JolCalendar2026.byJolIndex(0);
+      expect(ic.nameKo, '입춘');
+      expect(ic.dateTime, DateTime(2026, 2, 4, 5, 2));
+      expect(ic.monthBranch, '寅');
+      expect(ic.monthStem, '庚');
+    });
+
+    test('소한 2026 = 1/5 17:23', () {
+      final sh = JolCalendar2026.byJolIndex(11);
+      expect(sh.nameKo, '소한');
+      expect(sh.dateTime, DateTime(2026, 1, 5, 17, 23));
+      expect(sh.monthBranch, '丑');
+      expect(sh.monthStem, '辛');
+    });
+
+    test('丙년 五虎遁 — 月干 정확성', () {
+      // 寅 庚, 卯 辛, 辰 壬, 巳 癸, 午 甲, 未 乙, 申 丙, 酉 丁, 戌 戊, 亥 己, 子 庚, 丑 辛
+      const expected = [
+        ('寅', '庚'), ('卯', '辛'), ('辰', '壬'), ('巳', '癸'),
+        ('午', '甲'), ('未', '乙'), ('申', '丙'), ('酉', '丁'),
+        ('戌', '戊'), ('亥', '己'), ('子', '庚'), ('丑', '辛'),
+      ];
+      for (int i = 0; i < 12; i++) {
+        final slot = JolCalendar2026.byJolIndex(i);
+        expect(slot.monthBranch, expected[i].$1,
+            reason: 'jolIndex $i branch mismatch');
+        expect(slot.monthStem, expected[i].$2,
+            reason: 'jolIndex $i stem mismatch');
       }
     });
 
-    test('경칩 2026 — 3/5 (NOT 3/6)', () {
-      // codex Round 1 에서 발견된 잘못된 매핑 회귀 테스트.
-      // 2026 경칩은 3/5 22:58 KST.
-      expect(kasi2026['경칩']!.month, 3);
-      expect(kasi2026['경칩']!.day, 5);
+    test('chronological order (소한 1월 → 입춘 2월 → ... 대설 12월)', () {
+      final ord = JolCalendar2026.displayOrder;
+      for (int i = 1; i < ord.length; i++) {
+        expect(ord[i].dateTime.isAfter(ord[i - 1].dateTime), true,
+            reason:
+                'idx $i (${ord[i].nameKo}) is not after idx ${i - 1} (${ord[i - 1].nameKo})');
+      }
+    });
+  });
+
+  group('JolCalendar2026 vs SolarTermService — 천체 계산과 ±20분 일치', () {
+    // 입춘(0) ~ 대설(10) — 2026 year 입력으로 계산.
+    // 소한(11) 은 2026 양력 1월 발생 → SolarTermService 입력은 2025.
+    for (int i = 0; i < 12; i++) {
+      test('jolIndex $i (${JolCalendar2026.byJolIndex(i).nameKo}) — KASI ±20분 이내', () {
+        final diff = JolCalendar2026.minutesDiff(i);
+        final slot = JolCalendar2026.byJolIndex(i);
+        expect(diff, lessThanOrEqualTo(20),
+            reason:
+                '${slot.nameKo} KASI=${slot.dateTime} vs SolarTermService calc, diff=$diff 분');
+      });
+    }
+  });
+
+  group('display string 형식', () {
+    test('displayKo: 입춘 2/4 05:02', () {
+      expect(JolCalendar2026.byJolIndex(0).displayKo, '입춘 2/4 05:02');
+    });
+    test('displayEn: Ipchun · Feb 4 05:02', () {
+      expect(JolCalendar2026.byJolIndex(0).displayEn, 'Ipchun · Feb 4 05:02');
+    });
+    test('displayKo: 경칩 3/5 22:58', () {
+      expect(JolCalendar2026.byJolIndex(1).displayKo, '경칩 3/5 22:58');
+    });
+  });
+
+  group('SolarTermService.lipchun(2026) — KASI 입춘 ±20분', () {
+    test('입춘 2026 = 2/4 05:02 ±20분', () {
+      final calc = SolarTermService.lipchun(2026);
+      final kasi = DateTime(2026, 2, 4, 5, 2);
+      final diff = calc.difference(kasi).inMinutes.abs();
+      expect(diff, lessThanOrEqualTo(20));
     });
   });
 }

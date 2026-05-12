@@ -48,7 +48,7 @@ class GongMangService {
   static String interpretation(List<String> areas, {bool ko = false}) {
     if (areas.isEmpty) {
       return ko
-          ? '원국에 공망 없음 — 4기둥 모두 안정적으로 결을 채웁니다.'
+          ? '원국에 공망 없음 — 4기둥 모두 안정적으로 자리를 채웁니다.'
           : 'No void (空亡) in your chart — all four pillars fill their grain.';
     }
     final parts = <String>[];

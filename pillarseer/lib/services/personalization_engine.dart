@@ -185,7 +185,7 @@ class PersonalizationEngine {
   // ──────── Fallbacks (atom 매치 실패 시)
 
   static String _fallbackHeadKo(PillarProfile p) =>
-      '{dm} 일간, {dom} 기운이 오늘의 결을 만들어요.'.replaceAll('{dm}', _gnameKo(p.dayMaster))
+      '{dm} 일간, {dom} 기운이 오늘의 흐름을 만들어요.'.replaceAll('{dm}', _gnameKo(p.dayMaster))
           .replaceAll('{dom}', _elNameKo(p.dominantEl));
 
   static String _fallbackHeadEn(PillarProfile p) =>

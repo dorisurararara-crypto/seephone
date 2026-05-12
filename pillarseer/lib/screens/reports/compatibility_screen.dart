@@ -687,7 +687,7 @@ class _DetailSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _sectionLabel(useKo ? '관계의 결 · TEXTURE' : 'RELATIONSHIP TEXTURE'),
+          _sectionLabel(useKo ? '관계의 무게 · TEXTURE' : 'RELATIONSHIP TEXTURE'),
           const SizedBox(height: 12),
           Text(
             a.summary,
@@ -798,10 +798,10 @@ class _DetailSection extends StatelessWidget {
           : "Shared deficit means one person's dip pulls both down at the same time.";
     } else if (generates[myEl] == ptEl || generates[ptEl] == myEl) {
       summary = useKo
-          ? '한쪽이 다른 쪽을 살리는 상생(相生) 관계예요. 시간이 갈수록 깊어지고, 서로의 결이 다듬어집니다.'
+          ? '한쪽이 다른 쪽을 살리는 상생(相生) 관계예요. 시간이 갈수록 깊어지고, 서로의 모서리가 다듬어집니다.'
           : 'A nourishing (相生) bond — one element feeds the other. Depth compounds over time.';
       attract = useKo
-          ? '서로 부족한 결을 자연스럽게 채워주고, 보호받는 느낌이 큽니다.'
+          ? '서로 부족한 부분을 자연스럽게 채워주고, 보호받는 느낌이 큽니다.'
           : "You fill each other's gaps naturally; both feel quietly protected.";
       friction = useKo
           ? '한 사람이 계속 주기만 하면 균형이 깨질 수 있어요. 받는 쪽의 표현이 중요합니다.'
