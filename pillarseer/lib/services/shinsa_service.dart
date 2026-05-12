@@ -43,6 +43,34 @@ class ShinsaService {
     return _munchangMap[dayChunGan] ?? '';
   }
 
+  /// 양인(羊刃) — 양 천간의 강한 살. 일간이 양 천간일 때 특정 지지.
+  /// 甲→卯, 丙→午, 戊→午, 庚→酉, 壬→子.
+  /// 음 천간은 일반적으로 양인이 없거나 약함 (학파 차이).
+  static String yangInFor(String dayChunGan) {
+    const map = {
+      '甲': '卯',
+      '丙': '午',
+      '戊': '午',
+      '庚': '酉',
+      '壬': '子',
+    };
+    return map[dayChunGan] ?? '';
+  }
+
+  /// 괴강(魁罡) — 강한 기상의 일주. 庚辰·庚戌·壬辰·壬戌·戊戌·戊辰.
+  /// 일주 자체로 판단 (일간+일지 조합).
+  static bool isGwaegangDayPillar(String dayPillar) {
+    const list = ['庚辰', '庚戌', '壬辰', '壬戌', '戊戌', '戊辰'];
+    return list.contains(dayPillar);
+  }
+
+  /// 백호대살(白虎大煞) — 강한 살의 일주.
+  /// 甲辰·乙未·丙戌·丁丑·戊辰·壬戌·癸丑.
+  static bool isBaekhoDayPillar(String dayPillar) {
+    const list = ['甲辰', '乙未', '丙戌', '丁丑', '戊辰', '壬戌', '癸丑'];
+    return list.contains(dayPillar);
+  }
+
   /// 사주 4기둥에서 어떤 신살이 활성화 되는지 찾기.
   /// 일지(또는 년지) 기준 역마/도화/화개 + 일간 기준 천을·문창.
   /// 결과: 신살 이름 → 활성화 영역 (year/month/day/hour) List.
@@ -61,6 +89,7 @@ class ShinsaService {
     final hwagae = hwagaeFor(dayJi);
     final cheonEul = cheonEulGwiInFor(dayChunGan);
     final munchang = munchangFor(dayChunGan);
+    final yangIn = yangInFor(dayChunGan);
 
     void check(String name, bool match, String area) {
       if (!match) return;
@@ -81,6 +110,15 @@ class ShinsaService {
       check('화개', ji == hwagae, area);
       check('천을귀인', cheonEul.contains(ji), area);
       check('문창귀인', ji == munchang, area);
+      check('양인', yangIn.isNotEmpty && ji == yangIn, area);
+    }
+    // 일주 자체 신살 (괴강, 백호) — 일주 영역에만.
+    final dayPillarStr = '$dayChunGan$dayJi';
+    if (isGwaegangDayPillar(dayPillarStr)) {
+      result.putIfAbsent('괴강', () => []).add('day');
+    }
+    if (isBaekhoDayPillar(dayPillarStr)) {
+      result.putIfAbsent('백호', () => []).add('day');
     }
     return result;
   }
@@ -95,6 +133,9 @@ class ShinsaService {
         '화개': '🪔 화개(華蓋) — 종교·예술·고독의 깊이. 혼자만의 시간이 가장 큰 자원.',
         '천을귀인': '✨ 천을귀인(天乙貴人) — 가장 길한 신살. 위기 순간 도움 주는 귀인이 있어요.',
         '문창귀인': '📚 문창귀인(文昌貴人) — 학문·시험·창작·기획에서 빛납니다.',
+        '양인': '⚔️ 양인(羊刃) — 강한 결단력·승부근성. 잘 쓰면 권위, 못 쓰면 충돌. 양 천간 사주 핵심 살.',
+        '괴강': '🌑 괴강(魁罡) — 강한 기상·리더십·고독. 庚辰/庚戌/壬辰/壬戌/戊戌/戊辰 일주. 자기 결로 살면 큰 사람.',
+        '백호': '🐅 백호(白虎) — 격렬한 운기. 큰 변화 후 새 사이클. 위기 통과의 결.',
       };
       final base = koMap[name] ?? '';
       if (areas.isEmpty) return base;
@@ -107,6 +148,9 @@ class ShinsaService {
       '화개': '🪔 Hwagae (華蓋) — religion, art, solitude. Alone time is your biggest asset.',
       '천을귀인': '✨ Cheoneul Guin (天乙貴人) — most auspicious. A guardian helps in crises.',
       '문창귀인': '📚 Munchang Guin (文昌貴人) — shines in study, exams, creation.',
+      '양인': '⚔️ Yangin (羊刃) — decisive force, competitive edge. Used well: authority. Used poorly: clash.',
+      '괴강': '🌑 Gwaegang (魁罡) — strong presence and solitude. Day pillars 庚辰/庚戌/壬辰/壬戌/戊戌/戊辰.',
+      '백호': '🐅 Baekho (白虎) — intense forces, crisis-to-renewal. Strong protective edge.',
     };
     final base = enMap[name] ?? '';
     if (areas.isEmpty) return base;

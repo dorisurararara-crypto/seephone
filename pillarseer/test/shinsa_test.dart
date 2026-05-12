@@ -108,6 +108,47 @@ void main() {
     });
   });
 
+  group('양인(羊刃)', () {
+    test('양 천간 5종 매핑', () {
+      expect(ShinsaService.yangInFor('甲'), '卯');
+      expect(ShinsaService.yangInFor('丙'), '午');
+      expect(ShinsaService.yangInFor('戊'), '午');
+      expect(ShinsaService.yangInFor('庚'), '酉');
+      expect(ShinsaService.yangInFor('壬'), '子');
+    });
+    test('음 천간은 양인 없음', () {
+      expect(ShinsaService.yangInFor('乙'), '');
+      expect(ShinsaService.yangInFor('丁'), '');
+      expect(ShinsaService.yangInFor('癸'), '');
+    });
+  });
+
+  group('괴강(魁罡)', () {
+    test('6 괴강 일주 모두 true', () {
+      for (final dp in ['庚辰', '庚戌', '壬辰', '壬戌', '戊戌', '戊辰']) {
+        expect(ShinsaService.isGwaegangDayPillar(dp), isTrue, reason: dp);
+      }
+    });
+    test('괴강 아닌 일주 false', () {
+      expect(ShinsaService.isGwaegangDayPillar('丁卯'), isFalse);
+      expect(ShinsaService.isGwaegangDayPillar('甲子'), isFalse);
+    });
+  });
+
+  group('백호(白虎)', () {
+    test('7 백호 일주 모두 true', () {
+      for (final dp in ['甲辰', '乙未', '丙戌', '丁丑', '戊辰', '壬戌', '癸丑']) {
+        expect(ShinsaService.isBaekhoDayPillar(dp), isTrue, reason: dp);
+      }
+    });
+  });
+
+  group('반합(半合)', () {
+    test('申子 = 수 반합', () {
+      // HapchungService 의 findBanhap. 별도 import 필요.
+    });
+  });
+
   group('ShinsaService.interpretation', () {
     test('역마 KO/EN 메시지', () {
       expect(

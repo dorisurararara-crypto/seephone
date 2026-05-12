@@ -192,6 +192,34 @@ class HapchungService {
     return out;
   }
 
+  /// 반합(半合) — 삼합 3지지 중 2개만 있을 때. 약한 합.
+  /// 申子辰 의 2개 (예: 申子, 子辰, 申辰) — 水 약합.
+  static List<({String element, List<String> areas})> findBanhap({
+    required String yearJi,
+    required String monthJi,
+    required String dayJi,
+    String? hourJi,
+  }) {
+    final out = <({String element, List<String> areas})>[];
+    final pairs = <(String, String)>[
+      ('year', yearJi),
+      ('month', monthJi),
+      ('day', dayJi),
+      if (hourJi != null) ('hour', hourJi),
+    ];
+    for (final group in _samhapGroups.values) {
+      final areas = <String>[];
+      for (final (a, j) in pairs) {
+        if (group.members.contains(j)) areas.add(a);
+      }
+      // 정확히 2개여야 반합 (3개는 완전 삼합 이미 다른 함수에서 잡힘)
+      if (areas.length == 2) {
+        out.add((element: group.element, areas: areas));
+      }
+    }
+    return out;
+  }
+
   /// 4지지에 방합 3개 모두 포함 검사.
   static List<({String element, List<String> areas})> findBanghap({
     required String yearJi,

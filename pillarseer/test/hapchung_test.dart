@@ -134,6 +134,36 @@ void main() {
     });
   });
 
+  group('반합(半合) — 삼합 2/3', () {
+    test('申子 = 수 반합 (year+month)', () {
+      final r = HapchungService.findBanhap(
+        yearJi: '申',
+        monthJi: '子',
+        dayJi: '寅', // 다른 삼합
+      );
+      expect(r.length, 1);
+      expect(r[0].element, '水');
+    });
+    test('子辰 = 수 반합', () {
+      final r = HapchungService.findBanhap(
+        yearJi: '寅',
+        monthJi: '子',
+        dayJi: '辰',
+      );
+      expect(r.length, 1);
+      expect(r[0].element, '水');
+    });
+    test('3개 다 있으면 반합 X (완전 삼합)', () {
+      final r = HapchungService.findBanhap(
+        yearJi: '申',
+        monthJi: '子',
+        dayJi: '辰',
+      );
+      // 3개 다 있으면 정확히 2 case 가 아니라 반합 결과 0.
+      expect(r, isEmpty);
+    });
+  });
+
   group('방합(方合)', () {
     test('寅卯辰 → 목 (봄방)', () {
       final r = HapchungService.findBanghap(
