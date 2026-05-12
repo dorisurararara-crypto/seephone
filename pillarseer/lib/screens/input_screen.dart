@@ -355,6 +355,8 @@ class _AppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Padding(
       padding: const EdgeInsets.only(bottom: 22),
       child: Column(
@@ -372,7 +374,7 @@ class _AppBar extends StatelessWidget {
                 ),
               ),
               Text(
-                'NEW READING',
+                useKo ? '사주 입력 · 新' : 'NEW READING',
                 style: GoogleFonts.inter(
                   fontSize: 8,
                   fontWeight: FontWeight.w500,

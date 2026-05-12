@@ -112,7 +112,7 @@ class ReportsHomeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'REPORTS · 譜',
+                    useKo ? '리포트 · 譜' : 'REPORTS · 譜',
                     style: GoogleFonts.inter(
                       fontSize: 8,
                       fontWeight: FontWeight.w500,
@@ -135,7 +135,7 @@ class ReportsHomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'DEEP CHAPTERS · 深 章',
+                    useKo ? '심층 풀이 · 深 章' : 'DEEP CHAPTERS · 深 章',
                     style: GoogleFonts.inter(
                       fontSize: 9,
                       letterSpacing: 5,

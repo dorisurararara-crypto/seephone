@@ -55,7 +55,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    'PROFILE · 我',
+                    useKo ? '프로필 · 我' : 'PROFILE · 我',
                     style: GoogleFonts.inter(
                       fontSize: 8,
                       fontWeight: FontWeight.w500,

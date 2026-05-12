@@ -97,6 +97,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 class _AppBarBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
       decoration: const BoxDecoration(
@@ -116,7 +118,7 @@ class _AppBarBlock extends StatelessWidget {
             ),
           ),
           Text(
-            'TODAY · 今 日',
+            useKo ? '오늘 · 今 日' : 'TODAY · 今 日',
             style: GoogleFonts.inter(
               fontSize: 8,
               fontWeight: FontWeight.w500,

@@ -91,7 +91,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     ),
                   ),
                   Text(
-                    'DISCOVER · 譜',
+                    useKo ? '둘러보기 · 譜' : 'DISCOVER · 譜',
                     style: GoogleFonts.inter(
                       fontSize: 8,
                       fontWeight: FontWeight.w500,
