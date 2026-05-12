@@ -351,16 +351,22 @@ class _DayMasterHero extends StatelessWidget {
                   ),
                   TextSpan(
                     text: subAccent,
-                    style: GoogleFonts.cormorantGaramond(
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                      color: AppColors.accent,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: useKo
+                        ? GoogleFonts.notoSerifKr(
+                            fontSize: 14,
+                            color: AppColors.accent,
+                            fontWeight: FontWeight.w400,
+                          )
+                        : GoogleFonts.cormorantGaramond(
+                            fontSize: 15,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.accent,
+                            fontWeight: FontWeight.w400,
+                          ),
                   ),
                   TextSpan(
                     text: useKo
-                        ? '. $elementKo의 결을 가진 일주입니다.'
+                        ? '. $elementKo의 성질을 가진 일주입니다.'
                         : '. A pillar carrying the grain of $element.',
                   ),
                 ],
@@ -388,7 +394,7 @@ class _ReadingSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final body = reading?.dayMasterDeep ??
         (useKo
-            ? '당신의 일주 ${result.day60ji}는 정통 명리학 기준으로 매우 구체적인 결을 가집니다. 자세한 풀이는 곧 갱신됩니다.'
+            ? '당신의 일주 ${result.day60ji}는 정통 명리학 기준으로 매우 구체적인 성질을 가집니다. 자세한 풀이는 곧 갱신됩니다.'
             : result.summary);
     final lead = useKo ? '한 줄 요약 ' : 'In summary ';
     final accentPhrase = useKo
@@ -410,13 +416,20 @@ class _ReadingSection extends StatelessWidget {
             TextSpan(text: lead),
             TextSpan(
               text: '— $accentPhrase ',
-              style: GoogleFonts.cormorantGaramond(
-                fontSize: 17,
-                fontStyle: FontStyle.italic,
-                color: AppColors.accent,
-                fontWeight: FontWeight.w400,
-                height: 1.85,
-              ),
+              style: useKo
+                  ? GoogleFonts.notoSerifKr(
+                      fontSize: 15,
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.w400,
+                      height: 1.85,
+                    )
+                  : GoogleFonts.cormorantGaramond(
+                      fontSize: 17,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.w400,
+                      height: 1.85,
+                    ),
             ),
             TextSpan(text: useKo ? '사주.\n\n' : 'reading.\n\n'),
             TextSpan(text: body),

@@ -771,7 +771,7 @@ class _DetailSection extends StatelessWidget {
 
     if (myEl == ptEl) {
       summary = useKo
-          ? '같은 오행 결을 가진 사이예요. 처음 만남이 빠르게 편안해지지만, 같은 약점이 동시에 드러나기 쉽습니다.'
+          ? '같은 오행 성질을 가진 사이예요. 처음 만남이 빠르게 편안해지지만, 같은 약점이 동시에 드러나기 쉽습니다.'
           : 'Same element grain. Comfort comes fast — but the same blind spots also surface at once.';
       attract = useKo
           ? '리듬·말투·결정 속도가 비슷해 설명 없이도 통하는 느낌이 큽니다.'
@@ -801,7 +801,7 @@ class _DetailSection extends StatelessWidget {
           : 'One notch sharper tone can read as control. Distance between intent and delivery is everything.';
     } else {
       summary = useKo
-          ? '약한 상호작용 — 충돌도 적고 흥분도 적습니다. 의식적으로 관계의 결을 만들 때 의미가 생깁니다.'
+          ? '약한 상호작용 — 충돌도 적고 흥분도 적습니다. 의식적으로 관계의 무게를 만들 때 깊이가 생깁니다.'
           : 'Mild interaction — neither clash nor spark dominates. You build the texture deliberately.';
       attract = useKo
           ? '판단을 강요하지 않는 편안함이 매력입니다.'

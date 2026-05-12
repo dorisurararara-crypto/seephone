@@ -580,7 +580,7 @@ abstract class AppL10n {
   /// No description provided for @homeNotifTitle.
   ///
   /// In en, this message translates to:
-  /// **'Every morning at 8 — just what to watch out for ☀️'**
+  /// **'Every morning at 8 — just what to watch out for.'**
   String get homeNotifTitle;
 
   /// No description provided for @homeNotifSubtitle.
@@ -610,7 +610,7 @@ abstract class AppL10n {
   /// No description provided for @homeNotifEnabledSnack.
   ///
   /// In en, this message translates to:
-  /// **'Daily 8 AM reading turned on ✨'**
+  /// **'Daily 8 AM reading turned on.'**
   String get homeNotifEnabledSnack;
 
   /// No description provided for @homeNotifDisabledSnack.
@@ -676,7 +676,7 @@ abstract class AppL10n {
   /// No description provided for @homeStreakTitle.
   ///
   /// In en, this message translates to:
-  /// **'Daily check-in streak 🔥'**
+  /// **'Daily check-in streak'**
   String get homeStreakTitle;
 
   /// No description provided for @homeStreakDays.
@@ -838,7 +838,7 @@ abstract class AppL10n {
   /// No description provided for @personalCardTitle.
   ///
   /// In en, this message translates to:
-  /// **'Today, for YOU 🎯'**
+  /// **'For You Today · 今 日'**
   String get personalCardTitle;
 
   /// No description provided for @personalHeadlineLabel.
@@ -1336,7 +1336,7 @@ abstract class AppL10n {
   /// No description provided for @resultDayMasterDeepTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your Core Self 🪨'**
+  /// **'Your Core Self · 日 干'**
   String get resultDayMasterDeepTitle;
 
   /// No description provided for @resultDayMasterTermHint.
@@ -1348,7 +1348,7 @@ abstract class AppL10n {
   /// No description provided for @resultFiveElementsDetailTitle.
   ///
   /// In en, this message translates to:
-  /// **'5 Energy Balance 🌳🔥🪨⚙️💧'**
+  /// **'Five Elements · 五 行'**
   String get resultFiveElementsDetailTitle;
 
   /// No description provided for @resultFiveElementsTermHint.
@@ -1360,7 +1360,7 @@ abstract class AppL10n {
   /// No description provided for @resultTenGodsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your Relationship Map 🤝'**
+  /// **'Ten Gods · 十 神'**
   String get resultTenGodsTitle;
 
   /// No description provided for @resultTenGodsTermHint.
@@ -1372,13 +1372,13 @@ abstract class AppL10n {
   /// No description provided for @resultLifeThemesTitle.
   ///
   /// In en, this message translates to:
-  /// **'Big Picture of Your Life 🎬'**
+  /// **'Life Themes · 主 題'**
   String get resultLifeThemesTitle;
 
   /// No description provided for @resultTenYearLuckTitle.
   ///
   /// In en, this message translates to:
-  /// **'Your 10-Year Chapter 📚'**
+  /// **'Ten-Year Chapter · 大 運'**
   String get resultTenYearLuckTitle;
 
   /// No description provided for @resultTenYearLuckTermHint.
@@ -1390,7 +1390,7 @@ abstract class AppL10n {
   /// No description provided for @resultThisYearTitle.
   ///
   /// In en, this message translates to:
-  /// **'This Year\'s Vibe 🎯'**
+  /// **'This Year · 歲 運'**
   String get resultThisYearTitle;
 
   /// No description provided for @resultThisYearTermHint.
@@ -1402,7 +1402,7 @@ abstract class AppL10n {
   /// No description provided for @resultLuckyTitle.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s Luck Compass ✨'**
+  /// **'Lucky Compass · 吉'**
   String get resultLuckyTitle;
 
   /// No description provided for @resultIntroLeadIn.
@@ -1510,7 +1510,7 @@ abstract class AppL10n {
   /// No description provided for @discoverCompareSame.
   ///
   /// In en, this message translates to:
-  /// **'Same {pillar} type 🔥'**
+  /// **'Same {pillar} type — your grains align.'**
   String discoverCompareSame(Object pillar);
 
   /// No description provided for @discoverCompareDifferent.

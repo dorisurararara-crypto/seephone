@@ -251,7 +251,7 @@ class AppL10nKo extends AppL10n {
   String get settingsNotificationsDesc => '매일 아침 오늘의 운세를 받아보세요';
 
   @override
-  String get homeNotifTitle => '매일 아침 8시, 오늘 조심할 것만 알려드릴게요 ☀️';
+  String get homeNotifTitle => '매일 아침 8시, 오늘 조심할 것만 알려드려요.';
 
   @override
   String get homeNotifSubtitle => '광고 푸시 X, 한 줄 알림만 가요';
@@ -266,7 +266,7 @@ class AppL10nKo extends AppL10n {
   String get homeNotifPermissionDenied => 'iOS 설정에서 알림을 허용해 주세요.';
 
   @override
-  String get homeNotifEnabledSnack => '매일 오전 8시 알림이 켜졌어요 ✨';
+  String get homeNotifEnabledSnack => '매일 오전 8시 알림이 켜졌어요.';
 
   @override
   String get homeNotifDisabledSnack => '일일 알림을 껐어요.';
@@ -299,7 +299,7 @@ class AppL10nKo extends AppL10n {
   String get homeHourlyFullTitle => '오늘의 12시간 흐름';
 
   @override
-  String get homeStreakTitle => '매일 확인 연속 🔥';
+  String get homeStreakTitle => '매일 확인 연속';
 
   @override
   String homeStreakDays(Object days) {
@@ -384,7 +384,7 @@ class AppL10nKo extends AppL10n {
   String get resultBasisDayBoundaryVal => '자시 (子時, 23:00 이후 다음날)';
 
   @override
-  String get personalCardTitle => '오늘, 당신만을 위한 한 줄 🎯';
+  String get personalCardTitle => '오늘, 당신을 위한 한 줄 · 今 日';
 
   @override
   String get personalHeadlineLabel => '당신은';
@@ -638,40 +638,40 @@ class AppL10nKo extends AppL10n {
   String get devGateInvalid => '인식할 수 없는 코드입니다.';
 
   @override
-  String get resultDayMasterDeepTitle => '당신의 본성 🪨';
+  String get resultDayMasterDeepTitle => '당신의 본성 · 日 干';
 
   @override
   String get resultDayMasterTermHint => '= 일간 (日干) — 사주의 중심';
 
   @override
-  String get resultFiveElementsDetailTitle => '5가지 에너지 균형 🌳🔥🪨⚙️💧';
+  String get resultFiveElementsDetailTitle => '5가지 에너지 균형 · 五 行';
 
   @override
   String get resultFiveElementsTermHint => '= 오행 (五行) — 당신 안의 다섯 기운';
 
   @override
-  String get resultTenGodsTitle => '사람 관계 지도 🤝';
+  String get resultTenGodsTitle => '십신 — 사람 관계 지도 · 十 神';
 
   @override
   String get resultTenGodsTermHint => '= 십신 (十神) — 사람·돈·일이 당신에게 어떻게 보이는지';
 
   @override
-  String get resultLifeThemesTitle => '내 삶의 큰 그림 🎬';
+  String get resultLifeThemesTitle => '삶의 큰 그림 · 主 題';
 
   @override
-  String get resultTenYearLuckTitle => '내 인생의 10년 챕터 📚';
+  String get resultTenYearLuckTitle => '10년 흐름 · 大 運';
 
   @override
   String get resultTenYearLuckTermHint => '= 대운 (大運) — 지금 살고 있는 10년 흐름';
 
   @override
-  String get resultThisYearTitle => '올해의 분위기 🎯';
+  String get resultThisYearTitle => '올해의 흐름 · 歲 運';
 
   @override
   String get resultThisYearTermHint => '= 세운 (歲運)';
 
   @override
-  String get resultLuckyTitle => '오늘의 행운 나침반 ✨';
+  String get resultLuckyTitle => '오늘의 행운 · 吉';
 
   @override
   String get resultIntroLeadIn => '당신은';
@@ -727,7 +727,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String discoverCompareSame(Object pillar) {
-    return '같은 $pillar 타입 🔥';
+    return '같은 $pillar 타입 — 결이 같이 흐릅니다.';
   }
 
   @override

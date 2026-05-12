@@ -209,9 +209,9 @@ class _CardRow extends StatelessWidget {
       onTap: () => context.go(card.route),
       child: Container(
         padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
-        color: highlight ? AppColors.paper : AppColors.bg,
-        decoration: const BoxDecoration(
-          border: Border(
+        decoration: BoxDecoration(
+          color: highlight ? AppColors.paper : AppColors.bg,
+          border: const Border(
             top: BorderSide(color: AppColors.line, width: 1),
           ),
         ),

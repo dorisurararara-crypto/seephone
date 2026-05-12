@@ -265,7 +265,7 @@ class _Celebrity {
       dayPillarName: j['dayPillarName'] as String? ?? '',
       blurbEn: j['blurbEn'] as String? ?? '',
       blurbKo: j['blurbKo'] as String? ?? '',
-      emoji: j['emoji'] as String? ?? '✦',
+      emoji: j['emoji'] as String? ?? '',
     );
   }
 
@@ -563,7 +563,7 @@ class _CelebRow extends ConsumerWidget {
         me.dayPillar.jiJi == celeb.dayPillar[1];
     if (sameElement && sameJi) {
       return useKo
-          ? '같은 일주 — 결의 속도와 표현이 모두 비슷합니다.'
+          ? '같은 일주 — 흐름의 속도와 표현이 모두 비슷합니다.'
           : 'Same day pillar — both pace and expression align.';
     }
     if (sameElement) {

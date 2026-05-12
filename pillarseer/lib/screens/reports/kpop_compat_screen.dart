@@ -97,10 +97,13 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
                   Expanded(
                     child: ListView.separated(
                       padding: EdgeInsets.zero,
-                      itemCount: filtered.length,
+                      itemCount: filtered.length + 1,
                       separatorBuilder: (_, _) => const Divider(
                           height: 1, color: AppColors.line, thickness: 1),
                       itemBuilder: (ctx, i) {
+                        if (i == filtered.length) {
+                          return _Methodology(useKo: useKo);
+                        }
                         final s = filtered[i];
                         final score = _score(me, s);
                         return _StarRow(
@@ -120,9 +123,21 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
     );
   }
 
+  /// 정통 명리학 궁합 점수:
+  /// - 일간 오행 상생/비화/상극 base
+  /// - 같은 일주 / 같은 지지 bonus
+  /// - 천간 합 (甲己·乙庚·丙辛·丁壬·戊癸) +6
+  /// - 지지 육합 (子丑·寅亥·卯戌·辰酉·巳申·午未) +6
+  /// - 삼합 partial (子辰·寅午·巳酉·亥卯) +4
+  /// - 12지 충 -12, 형(刑) -4
   int _score(SajuResult me, _Star star) {
+    if (star.dayPillar.length < 2) return 50;
+    final myGan = me.dayPillar.chunGan;
+    final myJi = me.dayPillar.jiJi;
+    final stGan = star.dayPillar[0];
+    final stJi = star.dayPillar[1];
     final myEl = me.dayPillar.chunGanElement;
-    final stEl = _elementOf(star.dayPillar.isEmpty ? '甲' : star.dayPillar[0]);
+    final stEl = _elementOf(stGan);
     const generates = {
       '木': '火', '火': '土', '土': '金', '金': '水', '水': '木',
     };
@@ -131,27 +146,65 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
     };
     int base;
     if (myEl == stEl) {
-      base = 76;
+      base = 74;
     } else if (generates[myEl] == stEl || generates[stEl] == myEl) {
-      base = 88;
+      base = 86;
     } else if (overcomes[myEl] == stEl || overcomes[stEl] == myEl) {
-      base = 54;
+      base = 52;
     } else {
-      base = 68;
+      base = 66;
     }
+    // Same day pillar (일주 동일)
     if (me.day60ji == star.dayPillar) base += 8;
-    if (star.dayPillar.length >= 2 &&
-        me.dayPillar.jiJi == star.dayPillar[1]) {
-      base += 4;
-    }
+    // Same branch only (일지 동일)
+    if (myJi == stJi) base += 4;
+    // 천간 합 (五合)
+    const ganHap = {
+      '甲': '己', '己': '甲', '乙': '庚', '庚': '乙', '丙': '辛',
+      '辛': '丙', '丁': '壬', '壬': '丁', '戊': '癸', '癸': '戊',
+    };
+    if (ganHap[myGan] == stGan) base += 6;
+    // 지지 육합 (六合)
+    const jiHap6 = {
+      '子': '丑', '丑': '子', '寅': '亥', '亥': '寅', '卯': '戌',
+      '戌': '卯', '辰': '酉', '酉': '辰', '巳': '申', '申': '巳',
+      '午': '未', '未': '午',
+    };
+    if (jiHap6[myJi] == stJi) base += 6;
+    // 삼합 partial pair (子辰水, 寅午火, 巳酉金, 亥卯木 — 2개 결합)
+    const jiSamhapPairs = {
+      '子': ['辰', '申'],
+      '辰': ['子', '申'],
+      '申': ['子', '辰'],
+      '寅': ['午', '戌'],
+      '午': ['寅', '戌'],
+      '戌': ['寅', '午'],
+      '巳': ['酉', '丑'],
+      '酉': ['巳', '丑'],
+      '丑': ['巳', '酉'],
+      '亥': ['卯', '未'],
+      '卯': ['亥', '未'],
+      '未': ['亥', '卯'],
+    };
+    if ((jiSamhapPairs[myJi] ?? const []).contains(stJi)) base += 4;
+    // 충 (沖)
     const ji12clash = {
       '子': '午', '丑': '未', '寅': '申', '卯': '酉', '辰': '戌', '巳': '亥',
       '午': '子', '未': '丑', '申': '寅', '酉': '卯', '戌': '辰', '亥': '巳',
     };
-    if (star.dayPillar.length >= 2 &&
-        ji12clash[me.dayPillar.jiJi] == star.dayPillar[1]) {
-      base -= 12;
-    }
+    if (ji12clash[myJi] == stJi) base -= 12;
+    // 형 (刑) — 寅巳申 / 丑戌未 / 子卯 자형
+    const jiHyeong = {
+      '寅': ['巳', '申'],
+      '巳': ['寅', '申'],
+      '申': ['寅', '巳'],
+      '丑': ['戌', '未'],
+      '戌': ['丑', '未'],
+      '未': ['丑', '戌'],
+      '子': ['卯'],
+      '卯': ['子'],
+    };
+    if ((jiHyeong[myJi] ?? const []).contains(stJi)) base -= 4;
     return base.clamp(18, 99);
   }
 
@@ -191,7 +244,9 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            useKo ? '내 사주와 가장 잘 맞는 K-POP 스타' : 'K-POP stars who match your chart',
+            useKo
+                ? '내 사주와 가장 잘 맞는 K-POP·한국 셀럽'
+                : 'K-POP and Korean stars matched to your chart',
             style: GoogleFonts.notoSerifKr(
               fontSize: 24,
               fontWeight: FontWeight.w300,
@@ -202,13 +257,12 @@ class _Hero extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             useKo
-                ? '오행 공명 + 일주 케미 + 12지 충/합 기준 정통 명리학 점수.'
-                : 'Scored by elemental resonance, day-pillar chemistry, and 12-branch interactions.',
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-              color: AppColors.accent,
-              height: 1.5,
+                ? '오행 상생 · 일주 합 · 천간 五合 · 지지 六合·三合·沖·刑 종합 계산.'
+                : 'Elemental resonance · day-pillar combinations · stem 五合 · branch 六合/三合/沖/刑.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.inkLight,
+              height: 1.6,
             ),
           ),
         ],
@@ -536,6 +590,56 @@ class _StarRow extends StatelessWidget {
           ? '강한 중력의 인연 — 자석처럼 끌리지만 페이스가 다릅니다. 의식적인 동기화가 관계의 빛을 결정합니다.'
           : 'Heavy-gravity pull — magnetic but mismatched pace. Conscious sync decides the light.';
     }
+  }
+}
+
+class _Methodology extends StatelessWidget {
+  final bool useKo;
+  const _Methodology({required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 36),
+      color: AppColors.paper,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? 'METHODOLOGY · 計 算' : 'METHODOLOGY · 計 算',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            useKo
+                ? '점수는 일간 오행 상생/비화/상극, 같은 일주·일지, 천간 합(五合), 지지 육합(六合)·삼합 부분 일치, 12지 충(沖)·형(刑)을 계산합니다. 스타의 출생일은 공개 자료 기반이며 출생 시간을 알 수 없어 일주(日柱) 기준 비교입니다. 시주(時柱)까지 알면 더 정밀합니다.'
+                : 'Score uses day-master element resonance (生/比/剋), same day-pillar/branch, stem combinations (五合), branch combinations (六合, 三合 partial), and 12-branch clash/punishment (沖·刑). Stars\' birth times are not public, so comparison is by day pillar only; including hour pillars would refine the score.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              color: AppColors.inkLight,
+              height: 1.75,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            useKo
+                ? '본 콘텐츠는 정통 명리학(KASI 절기력) 기반 학습·엔터테인먼트 풀이입니다. 실제 인생 결정의 절대 기준은 아닙니다.'
+                : 'This is myeongli-based entertainment scoring (KASI solar terms). Not an absolute basis for life decisions.',
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 12.5,
+              fontStyle: FontStyle.italic,
+              color: AppColors.taupe,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

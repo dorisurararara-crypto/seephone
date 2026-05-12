@@ -260,7 +260,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get homeNotifTitle =>
-      'Every morning at 8 — just what to watch out for ☀️';
+      'Every morning at 8 — just what to watch out for.';
 
   @override
   String get homeNotifSubtitle =>
@@ -277,7 +277,7 @@ class AppL10nEn extends AppL10n {
       'Allow notifications in iOS Settings to enable.';
 
   @override
-  String get homeNotifEnabledSnack => 'Daily 8 AM reading turned on ✨';
+  String get homeNotifEnabledSnack => 'Daily 8 AM reading turned on.';
 
   @override
   String get homeNotifDisabledSnack => 'Daily notification turned off.';
@@ -311,7 +311,7 @@ class AppL10nEn extends AppL10n {
   String get homeHourlyFullTitle => 'Today\'s 12-Hour Flow';
 
   @override
-  String get homeStreakTitle => 'Daily check-in streak 🔥';
+  String get homeStreakTitle => 'Daily check-in streak';
 
   @override
   String homeStreakDays(Object days) {
@@ -399,7 +399,7 @@ class AppL10nEn extends AppL10n {
   String get resultBasisDayBoundaryVal => 'Jashi (子時, 23:00 next-day rule)';
 
   @override
-  String get personalCardTitle => 'Today, for YOU 🎯';
+  String get personalCardTitle => 'For You Today · 今 日';
 
   @override
   String get personalHeadlineLabel => 'Your read';
@@ -668,43 +668,43 @@ class AppL10nEn extends AppL10n {
   String get devGateInvalid => 'Code not recognized.';
 
   @override
-  String get resultDayMasterDeepTitle => 'Your Core Self 🪨';
+  String get resultDayMasterDeepTitle => 'Your Core Self · 日 干';
 
   @override
   String get resultDayMasterTermHint =>
       '= Day Master (日干) — the heart of your chart';
 
   @override
-  String get resultFiveElementsDetailTitle => '5 Energy Balance 🌳🔥🪨⚙️💧';
+  String get resultFiveElementsDetailTitle => 'Five Elements · 五 行';
 
   @override
   String get resultFiveElementsTermHint => '= Five Elements (五行) inside you';
 
   @override
-  String get resultTenGodsTitle => 'Your Relationship Map 🤝';
+  String get resultTenGodsTitle => 'Ten Gods · 十 神';
 
   @override
   String get resultTenGodsTermHint =>
       '= Ten Gods (十神) — how people, money, work appear in your chart';
 
   @override
-  String get resultLifeThemesTitle => 'Big Picture of Your Life 🎬';
+  String get resultLifeThemesTitle => 'Life Themes · 主 題';
 
   @override
-  String get resultTenYearLuckTitle => 'Your 10-Year Chapter 📚';
+  String get resultTenYearLuckTitle => 'Ten-Year Chapter · 大 運';
 
   @override
   String get resultTenYearLuckTermHint =>
       '= Great Luck (大運) — the decade you\'re inside';
 
   @override
-  String get resultThisYearTitle => 'This Year\'s Vibe 🎯';
+  String get resultThisYearTitle => 'This Year · 歲 運';
 
   @override
   String get resultThisYearTermHint => '= Annual Luck (歲運)';
 
   @override
-  String get resultLuckyTitle => 'Today\'s Luck Compass ✨';
+  String get resultLuckyTitle => 'Lucky Compass · 吉';
 
   @override
   String get resultIntroLeadIn => 'You are';
@@ -763,7 +763,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String discoverCompareSame(Object pillar) {
-    return 'Same $pillar type 🔥';
+    return 'Same $pillar type — your grains align.';
   }
 
   @override

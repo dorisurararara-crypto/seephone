@@ -188,12 +188,12 @@ class _HeroGreeting extends StatelessWidget {
           const SizedBox(height: 18),
           Text(
             '${_greeting(l)},',
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 18,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.w400,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 17,
+              fontWeight: FontWeight.w300,
               color: AppColors.inkLight,
               height: 1.2,
+              letterSpacing: 0.2,
             ),
           ),
           const SizedBox(height: 4),
@@ -345,12 +345,12 @@ class _ScoreBlock extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               '"$quote"',
-              style: GoogleFonts.cormorantGaramond(
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w400,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
                 color: AppColors.accent,
                 height: 1.7,
+                letterSpacing: 0.2,
               ),
             ).animate().fadeIn(delay: 300.ms),
           ],
@@ -407,11 +407,11 @@ class _PillarOfTheDay extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     label,
-                    style: GoogleFonts.cormorantGaramond(
-                      fontSize: 17,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w400,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
                       color: AppColors.ink,
+                      letterSpacing: 0.2,
                     ),
                   ),
                 ],

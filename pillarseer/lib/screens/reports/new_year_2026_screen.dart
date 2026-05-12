@@ -152,7 +152,7 @@ class _Hero extends StatelessWidget {
           const SizedBox(height: 18),
           Text(
             useKo
-                ? '병오(丙午)는 한낮의 태양이 말처럼 달리는 결. 2026년은 자유, 추진력, 무대 위의 해입니다. 다만 화기(火氣)가 강한 만큼, 절제와 호흡 조절이 풍요를 결정합니다.'
+                ? '병오(丙午)는 한낮의 태양이 말처럼 달리는 해. 2026년은 자유로움, 추진력, 그리고 주목 받는 한 해입니다. 다만 화기(火氣)가 강한 만큼 절제와 호흡 조절이 풍요를 결정합니다.'
                 : 'Bing Wu (丙午) — midday sun riding a horse. 2026 favors freedom, forward thrust, and the spotlight. Yet the fire is intense; pacing and breath decide what the year leaves you.',
             style: GoogleFonts.notoSansKr(
               fontSize: 14,
@@ -246,27 +246,54 @@ class _MonthlyFlow extends StatelessWidget {
     required this.useKo,
   });
 
-  /// 절기 기준 월건 (간단형: solar month → 月支 매핑).
-  static const _monthBranches = ['寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥', '子', '丑'];
+  /// 절기 기준 12 월건. 각 칸은 (절기 시작일, 月支, 月干, KR 절기명, EN 절기명).
+  /// 절기 boundary 는 2026년 KASI 절기력 ±1일 정밀도. 1월은 동지 후 소한~입춘 직전 (丑月).
+  /// 명리학 정통: 寅月 = 입춘(立春) 시작 → 卯月 = 경칩(驚蟄) → ...
+  /// 丙년 五虎遁: 寅月 천간 = 庚, 卯辛, 辰壬, 巳癸, 午甲, 未乙, 申丙, 酉丁, 戌戊, 亥己, 子庚, 丑辛.
+  static const _slots = <(int, int, String, String, String, String)>[
+    // (절기 시작 month, day, 月支, 月干, KR 절기명, EN 절기명)
+    (1, 5, '丑', '辛', '소한 (1/5)', 'Sohan (Jan 5)'),
+    (2, 4, '寅', '庚', '입춘 (2/4)', 'Ipchun (Feb 4)'),
+    (3, 6, '卯', '辛', '경칩 (3/6)', 'Gyeongchip (Mar 6)'),
+    (4, 5, '辰', '壬', '청명 (4/5)', 'Cheongmyeong (Apr 5)'),
+    (5, 5, '巳', '癸', '입하 (5/5)', 'Ipha (May 5)'),
+    (6, 6, '午', '甲', '망종 (6/6)', 'Mangjong (Jun 6)'),
+    (7, 7, '未', '乙', '소서 (7/7)', 'Soseo (Jul 7)'),
+    (8, 7, '申', '丙', '입추 (8/7)', 'Ipchu (Aug 7)'),
+    (9, 7, '酉', '丁', '백로 (9/7)', 'Baekro (Sep 7)'),
+    (10, 8, '戌', '戊', '한로 (10/8)', 'Hanro (Oct 8)'),
+    (11, 7, '亥', '己', '입동 (11/7)', 'Ipdong (Nov 7)'),
+    (12, 7, '子', '庚', '대설 (12/7)', 'Daeseol (Dec 7)'),
+  ];
 
-  /// 월건 천간 — 년간 (병) 기준 五虎遁: 丙年 → 정월 庚寅.
-  /// 丙·辛 년 → 庚寅 시작. 월간은 子月에 戊가 되는 순서.
-  /// 간단 매핑 (월별): 寅=庚, 卯=辛, 辰=壬, 巳=癸, 午=甲, 未=乙, 申=丙, 酉=丁, 戌=戊, 亥=己, 子=庚, 丑=辛.
-  static const _monthStems = ['庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊', '己', '庚', '辛'];
+  static const _moodsKo = <String>[
+    '동지 직후 — 한 해의 씨앗이 땅속에 봉인된 시기. 큰 결정보다 정돈과 비축.',
+    '입춘 — 새 해의 명리학 시작. 가벼운 시작과 약속의 한 줄.',
+    '경칩 — 잠들었던 사람과 인연이 다시 움직이는 봄의 두 번째 마디.',
+    '청명 — 흙이 풀리고 사람의 결도 풀립니다. 큰 청소·정리에 적합.',
+    '입하 — 여름의 첫 신호. 화 기운이 본격 가동.',
+    '망종 — 병오년 본기 가동. 무대·표현이 커지는 달.',
+    '소서 — 화 기운 정점. 의식적인 휴식이 가을 결실을 결정.',
+    '입추 — 가을의 첫 마디. 결실을 의식하고 마무리 모드.',
+    '백로 — 이슬이 맺히는 달. 약속과 계약을 글로 남기세요.',
+    '한로 — 차가운 이슬. 재정·관계의 점검과 다이어트.',
+    '입동 — 겨울의 시작. 사람을 가깝게, 계획은 깊게.',
+    '대설 — 저장의 달. 다음 해를 위한 비축.',
+  ];
 
-  static const _monthMoods = [
-    ('JAN · 입춘', '겨울이 풀리는 신호. 새 그림을 그리되 서두르지 마세요.', 'Spring stirs. Sketch the new plan, but do not sprint.'),
-    ('FEB · 경칩', '바람이 시작합니다. 사람과 인연이 다시 움직여요.', 'Wind picks up; old contacts re-emerge.'),
-    ('MAR · 청명', '본격 봄. 기획은 가볍게, 실행은 두텁게.', 'Spring proper. Plan light, execute thick.'),
-    ('APR · 입하', '뜨거워지기 직전 — 가장 비싼 결정을 내릴 시기.', 'Heat just before peak — most expensive decisions land well.'),
-    ('MAY · 망종', '병오년 본기 가동. 무대·표현·이름이 커지는 달.', 'The year’s engine roars. Stage and reputation grow.'),
-    ('JUN · 하지', '극지의 정점. 빛이 강한 만큼 그림자도 — 휴식 의식적.', 'Solar zenith. Where light is strong, intentionally rest.'),
-    ('JUL · 입추', '가을 첫 신호. 수확을 의식하고 마무리 모드.', 'Autumn’s first signal. Switch to harvest mode.'),
-    ('AUG · 백로', '결실의 달. 약속을 글로 남기세요.', 'The fruiting month. Put promises in writing.'),
-    ('SEP · 한로', '냉기 진입. 정리·다이어트·재정 점검.', 'Coolness begins. Clear, lighten, audit finances.'),
-    ('OCT · 입동', '겨울 입구. 사람을 가깝게, 계획을 깊게.', 'Winter\'s gate. Keep people close, plans deeper.'),
-    ('NOV · 대설', '저장의 달. 자랑보다 축적.', 'The storing month. Accumulate, do not display.'),
-    ('DEC · 동지', '한 해의 정산. 다음 해의 씨앗을 봉인.', 'Year-end reckoning. Seal the seeds of next year.'),
+  static const _moodsEn = <String>[
+    'After winter solstice — last year\'s seed is sealed in the soil. Tidy, do not decide big.',
+    'Ipchun — the myeongli new year starts here. A light beginning and one written promise.',
+    'Gyeongchip — sleeping ties wake. The second beat of spring.',
+    'Cheongmyeong — earth softens, so do people. Best for clearing and tidying.',
+    'Ipha — first signal of summer. Fire engages.',
+    'Mangjong — the engine of Bing Wu year roars. Stage and expression grow.',
+    'Soseo — fire at its peak. A deliberate rest decides the autumn harvest.',
+    'Ipchu — first beat of autumn. Switch to harvest mode.',
+    'Baekro — month of dew. Put promises and contracts in writing.',
+    'Hanro — cold dew. Audit finances and relationships; lighten the load.',
+    'Ipdong — winter begins. Keep people close, plans deep.',
+    'Daeseol — the storing month. Accumulate for next year.',
   ];
 
   @override
@@ -290,15 +317,27 @@ class _MonthlyFlow extends StatelessWidget {
               color: AppColors.taupe,
             ),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 8),
+          Text(
+            useKo
+                ? '명리학 월건은 절기 기준입니다. 양력 달력이 아닌 입춘·경칩 등 절입일이 한 달의 경계입니다.'
+                : 'Myeongli months follow solar terms — not the Gregorian calendar. Each month begins at its solar-term gate.',
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 13,
+              fontStyle: FontStyle.italic,
+              color: AppColors.inkLight,
+              height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 18),
           Container(
             decoration: const BoxDecoration(
               border: Border(top: BorderSide(color: AppColors.line)),
             ),
             child: Column(
               children: List.generate(12, (i) {
-                final ganji = '${_monthStems[i]}${_monthBranches[i]}';
-                final mood = _monthMoods[i];
+                final slot = _slots[i];
+                final ganji = '${slot.$4}${slot.$3}';
                 return Container(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: const BoxDecoration(
@@ -326,7 +365,7 @@ class _MonthlyFlow extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              mood.$1,
+                              useKo ? slot.$5 : slot.$6,
                               style: GoogleFonts.inter(
                                 fontSize: 9,
                                 letterSpacing: 3,
@@ -336,7 +375,7 @@ class _MonthlyFlow extends StatelessWidget {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              useKo ? mood.$2 : mood.$3,
+                              useKo ? _moodsKo[i] : _moodsEn[i],
                               style: GoogleFonts.notoSansKr(
                                 fontSize: 13,
                                 color: AppColors.ink,
@@ -373,21 +412,33 @@ class _TwelveAreas extends StatelessWidget {
     final areas = useKo
         ? const [
             ('CAREER · 仕事',
-                '병오년은 무대의 해. 실력보다 가시성이 보상되는 한 해. 단, 화기 강한 달(5·6월)은 갈등 조심.'),
+                '병오년은 주목 받는 해. 실력보다 가시성이 먼저 보상됩니다. 화기 강한 5-7월은 갈등 조심.'),
             ('WEALTH · 財',
-                '큰 흐름의 돈이 한 번은 지나갑니다. 정재(고정 수입)보다 편재(기회·투자)의 결.'),
+                '큰 흐름의 돈이 한 번은 지나갑니다. 정재(고정 수입)보다 편재(기회·투자) 성격.'),
             ('LOVE · 緣',
-                '인연이 빠르게 시작·끝납니다. 깊이는 가을(9-10월) 진입 후에. 봄·여름엔 가벼움이 정답.'),
+                '인연이 빠르게 시작·끝납니다. 깊이는 가을(9-10월) 이후. 봄·여름엔 가벼움이 정답.'),
             ('HEALTH · 養生',
-                '심장·혈압·눈 — 화기 항진 영역. 6월·7월 휴식 의식적. 수분·운동·수면의 균형.'),
+                '심장·혈압·눈 — 화기 항진 영역. 6-7월 휴식 의식적. 수분·운동·수면의 균형이 핵심.'),
             ('FAMILY · 家',
-                '가족과의 거리감이 새로 정해지는 해. 명절·생일을 의식적으로 챙기면 그대로 잘 흘러갑니다.'),
+                '가족과의 거리감이 새로 정해지는 해. 명절·생일을 의식적으로 챙기면 자연스럽게 흐릅니다.'),
             ('STUDY · 學',
-                '학습은 폭주력보다 정밀도. 짧은 코스 ✓, 마라톤 X. 5월·11월 시험·자격 시도 좋음.'),
+                '학습은 폭주력보다 정밀도. 짧은 코스가 마라톤보다 답. 5월·11월 시험·자격 시도 좋음.'),
+            ('FRIENDS · 友',
+                '오랜 친구와의 거리감이 봄에 한 번 정리됩니다. 새 인연은 여름 무대에서. 가을엔 자연 정리.'),
+            ('TRAVEL · 行',
+                '봄·여름은 짧고 자주, 가을은 길고 의미 있게. 11월 이후 장기 이동은 보류가 좋아요.'),
+            ('GROWTH · 進',
+                '병오년 본기는 표현·창작. 글쓰기·강의·SNS 등 외부로 나가는 활동이 자원이 됩니다.'),
+            ('LEGAL · 訟',
+                '계약·서류 5-7월 화기 항진기 피하기. 봄(2-4월), 가을 후반(10-11월)이 가장 안정.'),
+            ('SPIRIT · 心',
+                '명상·기도·차분한 시간이 가장 큰 보약. 6-7월 의식적 침묵의 일주일을 한 번 꼭 두세요.'),
+            ('LEGACY · 名',
+                '연말 정산기에 한 해를 한 줄로 적으세요. 그 한 줄이 2027년의 첫 결정을 만듭니다.'),
           ]
         : const [
             ('CAREER',
-                'A year of the stage. Visibility is rewarded more than effort. Mind conflict in May–June.'),
+                'A year of visibility. Attention is rewarded before effort. Mind conflict in May–July.'),
             ('WEALTH',
                 'One large flow of money will pass through. Lean into windfall opportunities over fixed income.'),
             ('LOVE',
@@ -398,6 +449,18 @@ class _TwelveAreas extends StatelessWidget {
                 'A year that resets distances. Show up for birthdays and holidays — the rest flows by itself.'),
             ('STUDY',
                 'Precision over volume. Short courses yes; marathons no. May and November are auspicious for exams.'),
+            ('FRIENDS',
+                'Old ties get sorted in spring. New connections arrive on the summer stage. Autumn does the natural pruning.'),
+            ('TRAVEL',
+                'Short and frequent in spring/summer; long and meaningful in autumn. Defer long-haul plans after November.'),
+            ('GROWTH',
+                'The year favors expression and creation. Writing, speaking, and external presence become your resource.'),
+            ('LEGAL',
+                'Avoid contracts during fire-peak May–July. Spring (Feb–Apr) and late autumn (Oct–Nov) are most stable.'),
+            ('SPIRIT',
+                'Meditation and quiet are the most expensive medicine. Place one silent week in June or July.'),
+            ('LEGACY',
+                "Write the year down in one line at the end. That single line will shape the first decision of 2027."),
           ];
     return Container(
       width: double.infinity,
@@ -505,7 +568,7 @@ class _Counsel extends StatelessWidget {
           const SizedBox(height: 18),
           Text(
             useKo
-                ? '병오년은 추진과 가시성의 해입니다. 다만 명리학에서 화(火)가 한 해의 본기일 때 가장 비싼 결단은 ‘속도 줄이기’입니다. 5월·6월·7월 어딘가에 의식적인 휴식을 한 번 두세요. 그것이 가을의 결실을 결정합니다.'
+                ? '병오년은 추진과 가시성의 해입니다. 명리학에서 화(火)가 한 해의 본기일 때 가장 중요한 결단은 ‘속도 줄이기’입니다. 5월·6월·7월 어딘가에 의식적인 휴식을 한 번 두세요. 그것이 가을의 결실을 좌우합니다.'
                 : 'The Year of Bing Wu rewards thrust and visibility. Yet when fire is the year\'s engine, the most expensive decision is to slow down. Place a deliberate rest somewhere in May, June, or July. That single pause decides what autumn harvests.',
             style: GoogleFonts.notoSansKr(
               fontSize: 14,
