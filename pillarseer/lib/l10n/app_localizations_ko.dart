@@ -542,6 +542,19 @@ class AppL10nKo extends AppL10n {
   String get settingsLateNightZasiSnackOff => '야자시 학파 OFF — 사주를 다시 입력하면 적용돼요';
 
   @override
+  String get settingsApplyTrueSunTime => '진태양시 보정 (서울 -32분 + 균시차 ± 16분)';
+
+  @override
+  String get settingsApplyTrueSunTimeDesc =>
+      '정통 명리학 기본. 끄면 표준시(KST)로 계산.\n출생지 도시명을 입력하면 longitude 자동 보정.';
+
+  @override
+  String get settingsApplyTrueSunTimeSnackOn => '진태양시 ON — 다시 입력하면 적용돼요';
+
+  @override
+  String get settingsApplyTrueSunTimeSnackOff => '진태양시 OFF — 표준시로 계산됩니다';
+
+  @override
   String get resultTrustLine =>
       'KASI 기준 대조 + 입춘·12절 절입 천체 계산 + 진태양시·균시차 + 한국 DST(1948-1988) 자동 보정.';
 

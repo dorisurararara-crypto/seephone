@@ -12,15 +12,26 @@ class SajuSettings {
   /// true = 23h 출생은 같은 날 일주 (야자시 학파).
   final bool useLateNightZasi;
 
-  const SajuSettings({this.useLateNightZasi = false});
+  /// 진태양시 보정 적용 여부.
+  /// true (기본) = 서울/도시별 longitude + 균시차 보정 적용 (정통 명리학).
+  /// false = 표준시(KST) 그대로 사용 (단순 학파).
+  final bool applyTrueSunTime;
 
-  SajuSettings copyWith({bool? useLateNightZasi}) => SajuSettings(
+  const SajuSettings({
+    this.useLateNightZasi = false,
+    this.applyTrueSunTime = true,
+  });
+
+  SajuSettings copyWith({bool? useLateNightZasi, bool? applyTrueSunTime}) =>
+      SajuSettings(
         useLateNightZasi: useLateNightZasi ?? this.useLateNightZasi,
+        applyTrueSunTime: applyTrueSunTime ?? this.applyTrueSunTime,
       );
 }
 
 class SajuSettingsNotifier extends Notifier<SajuSettings> {
   static const _kUseLateNightZasi = 'sajuSettings.useLateNightZasi';
+  static const _kApplyTrueSunTime = 'sajuSettings.applyTrueSunTime';
 
   @override
   SajuSettings build() {
@@ -31,13 +42,21 @@ class SajuSettingsNotifier extends Notifier<SajuSettings> {
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     final lateNight = prefs.getBool(_kUseLateNightZasi) ?? false;
-    state = SajuSettings(useLateNightZasi: lateNight);
+    final tst = prefs.getBool(_kApplyTrueSunTime) ?? true;
+    state = SajuSettings(
+        useLateNightZasi: lateNight, applyTrueSunTime: tst);
   }
 
   Future<void> setUseLateNightZasi(bool value) async {
     state = state.copyWith(useLateNightZasi: value);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kUseLateNightZasi, value);
+  }
+
+  Future<void> setApplyTrueSunTime(bool value) async {
+    state = state.copyWith(applyTrueSunTime: value);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kApplyTrueSunTime, value);
   }
 }
 

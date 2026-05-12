@@ -566,6 +566,22 @@ class AppL10nEn extends AppL10n {
       'Late-night Zashi OFF — recompute saju from input to apply.';
 
   @override
+  String get settingsApplyTrueSunTime =>
+      'True solar time (Seoul -32 min + EoT ±16 min)';
+
+  @override
+  String get settingsApplyTrueSunTimeDesc =>
+      'Orthodox myeongli default. Off uses raw KST.\nEntering a Korean city auto-applies longitude offset.';
+
+  @override
+  String get settingsApplyTrueSunTimeSnackOn =>
+      'True solar time ON — recompute to apply.';
+
+  @override
+  String get settingsApplyTrueSunTimeSnackOff =>
+      'True solar time OFF — using raw KST.';
+
+  @override
   String get resultTrustLine =>
       'Cross-verified vs KASI + astronomical solar-term datetimes + true solar time with equation-of-time + Korean DST (1948-1988) auto-applied.';
 

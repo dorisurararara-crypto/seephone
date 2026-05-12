@@ -55,6 +55,7 @@ class SajuService {
     required bool isMale,
     bool unknownTime = false,
     bool useLateNightZasi = false,
+    bool applyTrueSunTime = true,
     String? birthCity,
   }) async {
     // 만세력 (KASI 표준) + 진태양시 보정 + 음양력 변환을 통합 처리
@@ -68,6 +69,7 @@ class SajuService {
       isMale: isMale,
       unknownTime: unknownTime,
       useLateNightZasi: useLateNightZasi,
+      applyTrueSunTime: applyTrueSunTime,
       birthCity: birthCity,
     );
     final yearP = mans.yearPillar;

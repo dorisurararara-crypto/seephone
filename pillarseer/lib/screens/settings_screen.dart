@@ -206,6 +206,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _NotifToggleTile(),
           const SizedBox(height: 24),
           _sectionHeader(context, l.settingsSajuOptions),
+          _TrueSunTimeTile(),
+          const SizedBox(height: 6),
           _LateNightZasiTile(),
           const SizedBox(height: 24),
           _sectionHeader(context, l.settingsTrust),
@@ -412,6 +414,90 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TrueSunTimeTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final opts = ref.watch(sajuSettingsProvider);
+    final on = opts.applyTrueSunTime;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+        decoration: BoxDecoration(
+          color: AppColors.cardSurface,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: on ? AppColors.cardBorderStrong : AppColors.cardBorder,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.wb_sunny_outlined,
+              size: 18,
+              color: on ? AppColors.celestialGold : AppColors.fadedSilver,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.settingsApplyTrueSunTime,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ghostlyWhite,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.settingsApplyTrueSunTimeDesc,
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      color: AppColors.moonlightGray,
+                      height: 1.45,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Switch(
+              value: on,
+              activeThumbColor: AppColors.celestialGold,
+              activeTrackColor:
+                  AppColors.celestialGold.withValues(alpha: 0.35),
+              onChanged: (v) async {
+                await ref
+                    .read(sajuSettingsProvider.notifier)
+                    .setApplyTrueSunTime(v);
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.spiritIndigo,
+                    content: Text(
+                      v
+                          ? l.settingsApplyTrueSunTimeSnackOn
+                          : l.settingsApplyTrueSunTimeSnackOff,
+                      style: const TextStyle(
+                        color: AppColors.ghostlyWhite,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

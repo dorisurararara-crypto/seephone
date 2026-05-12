@@ -288,6 +288,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         isMale: _gender == Gender.female ? false : true,
         unknownTime: _unknownTime,
         useLateNightZasi: sajuOpts.useLateNightZasi,
+        applyTrueSunTime: sajuOpts.applyTrueSunTime,
         birthCity: _cityController.text.trim().isEmpty
             ? null
             : _cityController.text.trim(),

@@ -1147,6 +1147,30 @@ abstract class AppL10n {
   /// **'Late-night Zashi OFF — recompute saju from input to apply.'**
   String get settingsLateNightZasiSnackOff;
 
+  /// No description provided for @settingsApplyTrueSunTime.
+  ///
+  /// In en, this message translates to:
+  /// **'True solar time (Seoul -32 min + EoT ±16 min)'**
+  String get settingsApplyTrueSunTime;
+
+  /// No description provided for @settingsApplyTrueSunTimeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Orthodox myeongli default. Off uses raw KST.\nEntering a Korean city auto-applies longitude offset.'**
+  String get settingsApplyTrueSunTimeDesc;
+
+  /// No description provided for @settingsApplyTrueSunTimeSnackOn.
+  ///
+  /// In en, this message translates to:
+  /// **'True solar time ON — recompute to apply.'**
+  String get settingsApplyTrueSunTimeSnackOn;
+
+  /// No description provided for @settingsApplyTrueSunTimeSnackOff.
+  ///
+  /// In en, this message translates to:
+  /// **'True solar time OFF — using raw KST.'**
+  String get settingsApplyTrueSunTimeSnackOff;
+
   /// No description provided for @resultTrustLine.
   ///
   /// In en, this message translates to:
