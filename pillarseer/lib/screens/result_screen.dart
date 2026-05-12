@@ -9,6 +9,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
+import '../services/gong_mang_service.dart';
 import '../services/personalization_engine.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
@@ -205,6 +206,11 @@ class ResultScreen extends ConsumerWidget {
               title: l.resultLuckyTitle,
               locked: !isPro,
               child: _LuckyBlock(reading: reading, useKo: useKo),
+            ),
+            _AccordionSection(
+              title: useKo ? '공망 (空亡)' : 'Void Branches (空亡)',
+              locked: false,
+              child: _GongMangBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: l.resultBasisTitle,
@@ -411,6 +417,81 @@ Day Pillar: ${result.dayMasterName} · ${result.day60ji}
         backgroundColor: AppColors.celestialGold,
         duration: const Duration(seconds: 2),
       ));
+  }
+}
+
+// ──────── 공망(空亡) block (Round 36: codex 권고 D — 명리학 디테일)
+
+class _GongMangBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _GongMangBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final gm = GongMangService.forDayPillar(result.day60ji);
+    final areas = GongMangService.affectedAreas(
+      dayPillar: result.day60ji,
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    final interpretation =
+        GongMangService.interpretation(areas, ko: useKo);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              useKo ? '내 일주의 공망 지지: ' : 'Void branches for your day pillar: ',
+              style: const TextStyle(
+                fontSize: 12.5,
+                color: AppColors.moonlightGray,
+              ),
+            ),
+            Text(
+              gm.join(' · '),
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.celestialGold,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.0,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Text(
+          interpretation,
+          style: const TextStyle(
+            fontSize: 13.5,
+            color: AppColors.ghostlyWhite,
+            height: 1.7,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.midnightPurple.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Text(
+            useKo
+                ? '공망(空亡)이란? 60갑자 한 순(旬, 10일)에서 천간 10개에 매칭되지 않는 지지 2개. 사주 원국 (년·월·시) 에 공망 지지가 있으면 해당 영역에 "비어 보이는 결"이 작동합니다.'
+                : 'Void (空亡): 2 branches per 10-day cycle (旬) that don\'t pair with a stem. When they appear in year/month/hour pillars, that life area has a "felt absence" — turned into depth, it becomes a strength.',
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: AppColors.fadedSilver,
+              height: 1.55,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

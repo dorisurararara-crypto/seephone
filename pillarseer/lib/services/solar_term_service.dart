@@ -34,6 +34,85 @@ class SolarTermService {
     285.0, // 소한 (小寒) — 丑월 시작
   ];
 
+  /// 12중기(中氣) — 절기 24개 중 절(節)과 교대로 위치하는 중간점.
+  /// 사주 월주 결정에는 사용하지 않지만, 절기 정보 표시·일일 운세 절기 인식·
+  /// 연중 운세 timing 계산에 사용.
+  static const List<double> jungGiLongitudes = [
+    330.0, // 우수 (雨水) — 입춘 다음
+    0.0,   // 춘분 (春分) — 경칩 다음
+    30.0,  // 곡우 (穀雨) — 청명 다음
+    60.0,  // 소만 (小滿) — 입하 다음
+    90.0,  // 하지 (夏至) — 망종 다음
+    120.0, // 대서 (大暑) — 소서 다음
+    150.0, // 처서 (處暑) — 입추 다음
+    180.0, // 추분 (秋分) — 백로 다음
+    210.0, // 상강 (霜降) — 한로 다음
+    240.0, // 소설 (小雪) — 입동 다음
+    270.0, // 동지 (冬至) — 대설 다음
+    300.0, // 대한 (大寒) — 소한 다음
+  ];
+
+  /// 24절기 (12절 + 12중기) — 1년 흐름 절기 전체.
+  /// 인덱스 0=입춘, 1=우수, 2=경칩, 3=춘분, ..., 23=대한. 각 15°씩.
+  static const List<String> allTermsKo = [
+    '입춘', '우수', '경칩', '춘분',
+    '청명', '곡우', '입하', '소만',
+    '망종', '하지', '소서', '대서',
+    '입추', '처서', '백로', '추분',
+    '한로', '상강', '입동', '소설',
+    '대설', '동지', '소한', '대한',
+  ];
+  static const List<String> allTermsEn = [
+    'Lìchūn', 'Yǔshuǐ', 'Jīngzhé', 'Chūnfēn',
+    'Qīngmíng', 'Gǔyǔ', 'Lìxià', 'Xiǎomǎn',
+    'Mángzhòng', 'Xiàzhì', 'Xiǎoshǔ', 'Dàshǔ',
+    'Lìqiū', 'Chùshǔ', 'Báilù', 'Qiūfēn',
+    'Hánlù', 'Shuāngjiàng', 'Lìdōng', 'Xiǎoxuě',
+    'Dàxuě', 'Dōngzhì', 'Xiǎohán', 'Dàhán',
+  ];
+
+  /// 절기 인덱스 0-23 → 태양 황경 (315°, 330°, 345°, 0°, ...).
+  static double termLongitude(int termIdx) {
+    final wrapped = termIdx % 24;
+    return ((wrapped * 15) + 315) % 360;
+  }
+
+  /// 24절기 datetime — KST.
+  static DateTime termDateTime(int year, int termIdx) =>
+      solarTermDateTime(year, termLongitude(termIdx));
+
+  /// 입력된 datetime 이 어떤 절기 구간에 있는지 반환 (0-23).
+  /// 입춘(0) ~ 우수(1) 직전 = 0.
+  static int currentTermIndex(DateTime kstDt) {
+    // 가장 가까운 이전 절기 찾기.
+    // 시작점: 1월 → 작년 대한이나 소한일 수 있음.
+    final y = kstDt.year;
+    // 작년 소한(termIdx 22) ~ 올해 대한(23) ~ 올해 입춘(0+24) ... 의 datetime 비교.
+    int latest = 22;
+    for (int i = 0; i < 25; i++) {
+      // i=0 → 이번 해 입춘부터, i=1 → 우수 ... i=23 → 대한, i=24 → 다음 해 입춘
+      final tIdx = i % 24;
+      final tYear = i < 24 ? y : y + 1;
+      final t = termDateTime(tYear, tIdx);
+      if (!kstDt.isBefore(t)) {
+        latest = tIdx;
+      } else {
+        break; // 다음 절기는 미래
+      }
+    }
+    // 만약 이번 해 입춘 이전이면 작년 소한·대한 시기.
+    if (kstDt.isBefore(termDateTime(y, 0))) {
+      // 작년 소한 또는 대한.
+      final dahan = termDateTime(y - 1, 23);
+      if (!kstDt.isBefore(dahan)) return 23;
+      final sohan = termDateTime(y - 1, 22);
+      if (!kstDt.isBefore(sohan)) return 22;
+      // 더 이전은 작년 대설(20).
+      return 20;
+    }
+    return latest;
+  }
+
   /// 12절 절입의 KST DateTime 반환.
   /// [jolIndex] 0=입춘 ... 11=소한.
   /// 입춘 이전 (1월) 의 소한 절입은 전년도 12월 말에 발생할 수 있음.
