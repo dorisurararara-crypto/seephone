@@ -12,6 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import '../services/gong_mang_service.dart';
 import '../services/personalization_engine.dart';
 import '../services/shinsa_service.dart';
+import '../services/twelve_unsung_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
@@ -217,6 +218,13 @@ class ResultScreen extends ConsumerWidget {
               title: useKo ? '신살 (神煞)' : 'Shinsa (神煞 — auspicious/inauspicious markers)',
               locked: false,
               child: _ShinsaBlock(result: result, useKo: useKo),
+            ),
+            _AccordionSection(
+              title: useKo
+                  ? '12 운성 (生·旺·墓·絶)'
+                  : '12 Unsung (life cycle stages)',
+              locked: false,
+              child: _TwelveUnsungBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: l.resultBasisTitle,
@@ -562,6 +570,105 @@ class _ShinsaBlock extends StatelessWidget {
             color: AppColors.fadedSilver,
             height: 1.55,
             fontStyle: FontStyle.italic,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────── 12 운성(運星) block (Round 37: codex E content depth)
+
+class _TwelveUnsungBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _TwelveUnsungBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final stages = TwelveUnsungService.chartStages(
+      dayChunGan: result.dayPillar.chunGan,
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    String labelKo(String area) => {
+          'year': '년주',
+          'month': '월주',
+          'day': '일주',
+          'hour': '시주',
+        }[area] ??
+        area;
+    String labelEn(String area) =>
+        {'year': 'Year', 'month': 'Month', 'day': 'Day', 'hour': 'Hour'}[
+            area] ??
+        area;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final entry in stages.entries)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 56,
+                  child: Text(
+                    useKo ? labelKo(entry.key) : labelEn(entry.key),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.moonlightGray,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 60,
+                  child: Text(
+                    useKo
+                        ? entry.value
+                        : (TwelveUnsungService.stagesEn[
+                                TwelveUnsungService.stages.indexOf(entry.value)]),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.celestialGold,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    TwelveUnsungService.interpretation(entry.value, ko: useKo),
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      color: AppColors.ghostlyWhite,
+                      height: 1.6,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.midnightPurple.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Text(
+            useKo
+                ? '12 운성(運星)이란? 일간이 12지지에 따라 가지는 일생 12 단계 (장생→제왕→절→태→...). 각 기둥 지지의 강약을 보여줍니다.'
+                : '12 Unsung: life-cycle stages your day stem moves through across the 12 branches (Birth → Peak → Severed → Womb → ...). It shows the strength of each pillar.',
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: AppColors.fadedSilver,
+              height: 1.55,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ),
       ],
