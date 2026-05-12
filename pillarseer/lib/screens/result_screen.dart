@@ -211,24 +211,26 @@ class ResultScreen extends ConsumerWidget {
               child: _LuckyBlock(reading: reading, useKo: useKo),
             ),
             _AccordionSection(
-              title: useKo ? '공망 (空亡)' : 'Void Branches (空亡)',
+              title: useKo ? '🪐 공망 (空亡)' : '🪐 Void Branches (空亡)',
               locked: false,
               child: _GongMangBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
-              title: useKo ? '신살 (神煞)' : 'Shinsa (神煞 — auspicious/inauspicious markers)',
+              title: useKo
+                  ? '🌸 신살 (神煞)'
+                  : '🌸 Shinsa (神煞)',
               locked: false,
               child: _ShinsaBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: useKo
-                  ? '12 운성 (生·旺·墓·絶)'
-                  : '12 Unsung (life cycle stages)',
+                  ? '🌀 12 운성 (生·旺·墓·絶)'
+                  : '🌀 12 Unsung (life cycle stages)',
               locked: false,
               child: _TwelveUnsungBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
-              title: useKo ? '합·충 (合·沖)' : 'Hap & Chung (合·沖)',
+              title: useKo ? '⚡ 합·충 (合·沖)' : '⚡ Hap & Chung (合·沖)',
               locked: false,
               child: _HapchungBlock(result: result, useKo: useKo),
             ),
