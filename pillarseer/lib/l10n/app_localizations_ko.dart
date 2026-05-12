@@ -39,7 +39,7 @@ class AppL10nKo extends AppL10n {
   String get inputBirthCity => '출생지 (선택)';
 
   @override
-  String get inputBirthCityHelper => '기록용 — 시간대 자동 보정 곧 추가';
+  String get inputBirthCityHelper => '도시명 입력 시 진태양시 경도 자동 보정 (서울/부산/제주 등 18개)';
 
   @override
   String get inputCalendar => '달력:';
@@ -567,7 +567,7 @@ class AppL10nKo extends AppL10n {
   String get resultProHookDatesTeaser => '결정·서명·런칭을 위한 길일/피할 날을 미리 확인하세요.';
 
   @override
-  String get resultProHookCta => '곧 출시';
+  String get resultProHookCta => '자세히 보기';
 
   @override
   String get settingsAbout => '정보';

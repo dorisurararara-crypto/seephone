@@ -40,7 +40,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get inputBirthCityHelper =>
-      'For your records — timezone hook coming soon';
+      'Auto longitude correction for 18 Korean cities (Seoul / Busan / Jeju ...)';
 
   @override
   String get inputCalendar => 'Calendar:';
@@ -594,7 +594,7 @@ class AppL10nEn extends AppL10n {
       'Auspicious vs avoid days for big decisions, signings, launches.';
 
   @override
-  String get resultProHookCta => 'Coming soon';
+  String get resultProHookCta => 'Open →';
 
   @override
   String get settingsAbout => 'About';

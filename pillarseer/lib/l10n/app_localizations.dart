@@ -160,7 +160,7 @@ abstract class AppL10n {
   /// No description provided for @inputBirthCityHelper.
   ///
   /// In en, this message translates to:
-  /// **'For your records — timezone hook coming soon'**
+  /// **'Auto longitude correction for 18 Korean cities (Seoul / Busan / Jeju ...)'**
   String get inputBirthCityHelper;
 
   /// No description provided for @inputCalendar.
@@ -1198,7 +1198,7 @@ abstract class AppL10n {
   /// No description provided for @resultProHookCta.
   ///
   /// In en, this message translates to:
-  /// **'Coming soon'**
+  /// **'Open →'**
   String get resultProHookCta;
 
   /// No description provided for @settingsAbout.
