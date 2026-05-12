@@ -135,6 +135,8 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (me != null) _PillarHero(label: 'YOU · 我', result: me),
+            // Round 14 codex P1 — sample hint 폼 위에 노출 (첫 viewport)
+            if (_score == null) _CompatExampleHint(useKo: useKo),
             _PartnerForm(
               nameCtrl: _partnerNameCtrl,
               date: _partnerDate,
@@ -153,9 +155,7 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
                 _ResonanceSection(me: me, partner: _partner!),
                 _DetailSection(me: me, partner: _partner!),
               ],
-            ] else
-              // codex Round 13 P0 — 입력 전 데모/샘플 hint (빈 화면 X)
-              _CompatExampleHint(useKo: useKo),
+            ],
             const SizedBox(height: 24),
           ],
         ),

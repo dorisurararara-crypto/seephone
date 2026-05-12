@@ -240,9 +240,13 @@ class _TopMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = useKo ? star.nameKo : star.nameEn;
-    // Round 13 codex P0: 캡쳐용 초단문 한 줄 (밈처럼 박힘)
-    final memeKo = '오늘 내 케미픽: $name $score점';
-    final memeEn = "Today's chemistry: $name $score";
+    // 그룹명 괄호 제거 — 한 줄 밈 압축 ('뷔 (방탄소년단)' → '뷔')
+    final shortName = name.contains('(')
+        ? name.split('(').first.trim()
+        : name;
+    // Round 14 codex P0: 진짜 한 줄 밈처럼 박히게.
+    final memeKo = '내 케미픽: $shortName · $score점';
+    final memeEn = 'My pick: $shortName · $score';
     final fullKo = '나랑 제일 케미 터지는 K-POP 스타 — $name ($score점).';
     final fullEn = 'My strongest K-POP chemistry — $name ($score).';
     return Container(
@@ -300,17 +304,18 @@ class _TopMatchCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          // 캡쳐용 초단문 한 줄 — 밈처럼 박힘
+          // 캡쳐용 초단문 한 줄 — 밈처럼 박힘 (maxLines 1, ellipsis safety)
           Text(
             useKo ? memeKo : memeEn,
             style: GoogleFonts.notoSerifKr(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.w400,
               color: AppColors.ink,
               height: 1.3,
-              letterSpacing: -0.2,
+              letterSpacing: -0.3,
             ),
-            maxLines: 2,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 10),
           // 보조 — 풀 문장
