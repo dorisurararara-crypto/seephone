@@ -344,6 +344,77 @@ class PersonalizationEngine {
       enTpl: 'Slot one block of {compEn} into today\'s schedule.',
       condition: (p, t) => true,
     ),
+    // identity 추가 (강한 일간 별)
+    InsightAtom(
+      topic: 'identity',
+      priority: 75,
+      koTpl: '{dm} — 흐름을 만들기보다 흐름의 결을 정확히 짚는 타입.',
+      enTpl: 'Your {dmEn} reads the grain rather than makes the wave.',
+      condition: (p, t) =>
+          p.dayMasterElement == '土' || p.dayMasterElement == '金',
+    ),
+    InsightAtom(
+      topic: 'identity',
+      priority: 75,
+      koTpl: '{dm} — 시작은 빠르고, 표현은 깊은 결의 사주예요.',
+      enTpl: 'Your {dmEn} starts fast, expresses deep — a layered nature.',
+      condition: (p, t) =>
+          p.dayMasterElement == '木' || p.dayMasterElement == '火',
+    ),
+    InsightAtom(
+      topic: 'identity',
+      priority: 70,
+      koTpl: '{dm} — 흐름을 직접 만들지 않아도 결국 가장 깊이 도달하는 결.',
+      enTpl: 'Your {dmEn} reaches the deepest without forcing the current.',
+      condition: (p, t) => p.dayMasterElement == '水',
+    ),
+    // today 추가 (오행 dominant 별)
+    InsightAtom(
+      topic: 'today',
+      priority: 75,
+      koTpl: '오늘은 {dom}이(가) 많은 날이라, 결정은 정리에 두세요.',
+      enTpl: 'A {domEn}-heavy day — orient toward closing, not starting.',
+      condition: (p, t) =>
+          p.dominantEl == '土' || p.dominantEl == '金',
+    ),
+    InsightAtom(
+      topic: 'today',
+      priority: 75,
+      koTpl: '오늘은 {dom} 기운이 짙어 표현을 늘리되 양은 줄이세요.',
+      enTpl: '{domEn} energy runs thick — increase expression, reduce volume.',
+      condition: (p, t) =>
+          p.dominantEl == '木' || p.dominantEl == '火',
+    ),
+    // caution 추가 (요일 + 계절)
+    InsightAtom(
+      topic: 'caution',
+      priority: 70,
+      koTpl: '월요일 — 첫 메시지의 톤이 한 주 전체를 정합니다.',
+      enTpl: 'Monday — the first message you send sets the week\'s tone.',
+      condition: (p, t) => t.weekday == 1,
+    ),
+    InsightAtom(
+      topic: 'caution',
+      priority: 70,
+      koTpl: '금요일 — 결정은 미루고 듣는 데 시간을 더 주세요.',
+      enTpl: 'Friday — postpone decisions; spend the time listening.',
+      condition: (p, t) => t.weekday == 5,
+    ),
+    // action 추가 (계절)
+    InsightAtom(
+      topic: 'action',
+      priority: 65,
+      koTpl: '겨울 — {def} 기운({compKo})을 따뜻한 색·음식으로 보태세요.',
+      enTpl: 'Winter — bring {defEn} ({compEn}) via warm color or warming food.',
+      condition: (p, t) => t.month >= 12 || t.month <= 2,
+    ),
+    InsightAtom(
+      topic: 'action',
+      priority: 65,
+      koTpl: '여름 — {def}을(를) 자연 속에서 흡수 (산책·물·하늘).',
+      enTpl: 'Summer — absorb {defEn} outdoors (walk, water, sky).',
+      condition: (p, t) => t.month >= 6 && t.month <= 8,
+    ),
   ];
 
   /// Full chart hash — 4 pillars + 5 elements + age 조합
