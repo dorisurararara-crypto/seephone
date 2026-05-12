@@ -387,7 +387,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get resultBasisYearBoundaryVal =>
-      'Ipchun (立春) — astronomical, ±15 min accuracy';
+      'Ipchun (立春) — astronomical, ~±20 min accuracy';
 
   @override
   String get resultBasisDayBoundary => 'Day boundary';
@@ -418,7 +418,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get settingsTrustHowCalculatedDesc =>
-      'KASI manseryeok · 立春 year · 23h day rule · True Solar Time';
+      'Cross-verified vs KASI · 立春 year · 23h day rule · True Solar Time · Equation of Time · Korean DST';
 
   @override
   String get settingsTrustDataLocal => 'Your data stays on this device';

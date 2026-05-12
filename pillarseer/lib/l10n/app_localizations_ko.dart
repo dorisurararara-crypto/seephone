@@ -371,7 +371,7 @@ class AppL10nKo extends AppL10n {
   String get resultBasisYearBoundary => '년 기준';
 
   @override
-  String get resultBasisYearBoundaryVal => '입춘 절입시각 (천체 계산, ±15분)';
+  String get resultBasisYearBoundaryVal => '입춘 절입시각 (천체 계산, 약 ±20분)';
 
   @override
   String get resultBasisDayBoundary => '일 기준';
@@ -402,7 +402,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get settingsTrustHowCalculatedDesc =>
-      'KASI 만세력 · 입춘 기준 · 자시 규칙 · 진태양시';
+      'KASI 기준 대조 · 입춘 기준 · 자시 규칙 · 진태양시 · 균시차 · 한국 DST 보정';
 
   @override
   String get settingsTrustDataLocal => '당신의 데이터는 이 기기 안에만';

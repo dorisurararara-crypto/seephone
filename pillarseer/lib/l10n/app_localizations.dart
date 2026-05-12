@@ -814,7 +814,7 @@ abstract class AppL10n {
   /// No description provided for @resultBasisYearBoundaryVal.
   ///
   /// In en, this message translates to:
-  /// **'Ipchun (立春) — astronomical, ±15 min accuracy'**
+  /// **'Ipchun (立春) — astronomical, ~±20 min accuracy'**
   String get resultBasisYearBoundaryVal;
 
   /// No description provided for @resultBasisDayBoundary.
@@ -874,7 +874,7 @@ abstract class AppL10n {
   /// No description provided for @settingsTrustHowCalculatedDesc.
   ///
   /// In en, this message translates to:
-  /// **'KASI manseryeok · 立春 year · 23h day rule · True Solar Time'**
+  /// **'Cross-verified vs KASI · 立春 year · 23h day rule · True Solar Time · Equation of Time · Korean DST'**
   String get settingsTrustHowCalculatedDesc;
 
   /// No description provided for @settingsTrustDataLocal.
