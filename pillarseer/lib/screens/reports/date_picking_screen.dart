@@ -134,12 +134,22 @@ class DatePickingScreen extends ConsumerWidget {
         date: d,
         pillar: pillar.text,
         animal: pillar.jiJiEnglish,
+        animalKo: _jiKoreanAnimal(pillar.jiJi),
         kind: kind,
         reasonEn: reasonEn,
         reasonKo: reasonKo,
       ));
     }
     return results;
+  }
+
+  String _jiKoreanAnimal(String ji) {
+    const map = {
+      '子': '쥐', '丑': '소', '寅': '호랑이', '卯': '토끼',
+      '辰': '용', '巳': '뱀', '午': '말', '未': '양',
+      '申': '원숭이', '酉': '닭', '戌': '개', '亥': '돼지',
+    };
+    return map[ji] ?? ji;
   }
 
   int _dayPillarIndex(int year, int month, int day) {
@@ -168,6 +178,7 @@ class _DateDay {
   final DateTime date;
   final String pillar;
   final String animal;
+  final String animalKo;
   final _DayKind kind;
   final String reasonEn;
   final String reasonKo;
@@ -175,6 +186,7 @@ class _DateDay {
     required this.date,
     required this.pillar,
     required this.animal,
+    required this.animalKo,
     required this.kind,
     required this.reasonEn,
     required this.reasonKo,
@@ -335,7 +347,7 @@ class _Section extends StatelessWidget {
           SizedBox(
             width: 56,
             child: Text(
-              '${d.pillar} · ${d.animal}',
+              '${d.pillar} · ${useKo ? d.animalKo : d.animal}',
               style: const TextStyle(
                 fontSize: 10.5,
                 color: AppColors.moonlightGray,

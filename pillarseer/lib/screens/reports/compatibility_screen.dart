@@ -217,13 +217,21 @@ class _MyPillarCard extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              '${result.dayMasterName} · ${result.day60ji}',
-              style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.ghostlyWhite,
-              ),
-            ),
+            child: Builder(builder: (context) {
+              final useKo =
+                  (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') ==
+                      'ko';
+              final label = useKo
+                  ? '${result.dayPillar.pairKoreanMeaning} · ${result.day60ji}'
+                  : '${result.dayMasterName} · ${result.day60ji}';
+              return Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.ghostlyWhite,
+                ),
+              );
+            }),
           ),
         ],
       ),
@@ -468,21 +476,38 @@ class _ResonanceCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          _row('Day Master',
-              '${me.dayMasterName} (${me.day60ji})',
-              '${partner.dayMasterName} (${partner.day60ji})'),
+          Builder(builder: (context) {
+            final useKo =
+                (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') ==
+                    'ko';
+            String dmLabel(SajuResult r) => useKo
+                ? '${r.dayPillar.pairKoreanMeaning} (${r.day60ji})'
+                : '${r.dayMasterName} (${r.day60ji})';
+            return _row(
+                useKo ? '일간' : 'Day Master', dmLabel(me), dmLabel(partner));
+          }),
           const SizedBox(height: 4),
-          _row(
-            l.resultDominant,
-            _elName(me.elements.dominant),
-            _elName(partner.elements.dominant),
-          ),
-          const SizedBox(height: 4),
-          _row(
-            l.resultDeficit,
-            _elName(me.elements.deficit),
-            _elName(partner.elements.deficit),
-          ),
+          Builder(builder: (context) {
+            final useKo =
+                (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') ==
+                    'ko';
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _row(
+                  l.resultDominant,
+                  _elName(me.elements.dominant, useKo),
+                  _elName(partner.elements.dominant, useKo),
+                ),
+                const SizedBox(height: 4),
+                _row(
+                  l.resultDeficit,
+                  _elName(me.elements.deficit, useKo),
+                  _elName(partner.elements.deficit, useKo),
+                ),
+              ],
+            );
+          }),
         ],
       ),
     );
@@ -528,14 +553,24 @@ class _ResonanceCard extends StatelessWidget {
     );
   }
 
-  String _elName(String han) {
-    const map = {
+  String _elName(String han, bool useKo) {
+    if (useKo) {
+      const koMap = {
+        '木': '나무 (木)',
+        '火': '불 (火)',
+        '土': '흙 (土)',
+        '金': '쇠 (金)',
+        '水': '물 (水)',
+      };
+      return koMap[han] ?? han;
+    }
+    const enMap = {
       '木': 'Wood (木)',
       '火': 'Fire (火)',
       '土': 'Earth (土)',
       '金': 'Metal (金)',
       '水': 'Water (水)',
     };
-    return map[han] ?? han;
+    return enMap[han] ?? han;
   }
 }

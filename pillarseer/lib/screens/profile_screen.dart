@@ -47,14 +47,23 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   if (saju != null) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      '${saju.dayMasterName} · ${saju.day60ji}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.moonlightGray,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Builder(builder: (context) {
+                      final useKo = (Localizations.maybeLocaleOf(context)
+                                  ?.languageCode ??
+                              'en') ==
+                          'ko';
+                      final label = useKo
+                          ? '${saju.dayPillar.pairKorean} · ${saju.dayPillar.pairKoreanMeaning} · ${saju.day60ji}'
+                          : '${saju.dayMasterName} · ${saju.day60ji}';
+                      return Text(
+                        label,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppColors.moonlightGray,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }),
                   ],
                   if (isPro) ...[
                     const SizedBox(height: 10),

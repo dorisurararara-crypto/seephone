@@ -46,7 +46,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             children: [
               // 1. Greeting + streak (single block)
-              _Header(name: birth?.name, dayMasterName: saju.dayMasterName),
+              Builder(builder: (context) {
+                final useKo = (Localizations.maybeLocaleOf(context)
+                            ?.languageCode ??
+                        'en') ==
+                    'ko';
+                final fallback = useKo
+                    ? saju.dayPillar.pairKoreanMeaning
+                    : saju.dayMasterName;
+                return _Header(name: birth?.name, dayMasterName: fallback);
+              }),
               const _StreakChip(),
               // 2. 오늘 날짜
               const SizedBox(height: 6),

@@ -343,7 +343,7 @@ Future<void> _shareChart(BuildContext context, SajuResult result, bool useKo) as
       ? '''✨ 내 사주 — Pillar Seer ✨
 
 당신은 $oneLine 사람이에요.
-일주: ${result.dayMasterName} · ${result.day60ji}
+일주: ${result.dayPillar.pairKorean} · ${result.dayPillar.pairKoreanMeaning} · ${result.day60ji}
 
 🪨 성격: $personality
 🎯 오늘: $today

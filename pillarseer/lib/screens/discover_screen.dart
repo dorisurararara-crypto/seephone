@@ -208,6 +208,38 @@ class _Celebrity {
       emoji: j['emoji'] as String? ?? '✦',
     );
   }
+
+  /// 일주 이름을 사용자 언어에 맞춰 반환.
+  /// useKo=true: 한국어 의미 (예: "화 토끼") + 한국어 음 (예: "정묘")
+  /// useKo=false: 영어 (dayPillarName JSON 필드, 예: "Fire Rabbit")
+  String localizedDayPillarName(bool useKo) {
+    if (!useKo) return dayPillarName;
+    if (dayPillar.length < 2) return dayPillarName;
+    const ganKo = {
+      '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
+      '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+    };
+    const jiKo = {
+      '子': '자', '丑': '축', '寅': '인', '卯': '묘',
+      '辰': '진', '巳': '사', '午': '오', '未': '미',
+      '申': '신', '酉': '유', '戌': '술', '亥': '해',
+    };
+    const elementKo = {
+      '甲': '목', '乙': '목', '丙': '화', '丁': '화',
+      '戊': '토', '己': '토', '庚': '금', '辛': '금',
+      '壬': '수', '癸': '수',
+    };
+    const animalKo = {
+      '子': '쥐', '丑': '소', '寅': '호랑이', '卯': '토끼',
+      '辰': '용', '巳': '뱀', '午': '말', '未': '양',
+      '申': '원숭이', '酉': '닭', '戌': '개', '亥': '돼지',
+    };
+    final g = dayPillar[0];
+    final j = dayPillar[1];
+    final paired = '${ganKo[g] ?? "?"}${jiKo[j] ?? "?"}';
+    final meaning = '${elementKo[g] ?? "?"} ${animalKo[j] ?? "?"}';
+    return '$paired · $meaning';
+  }
 }
 
 class _CelebTile extends ConsumerWidget {
@@ -271,7 +303,7 @@ class _CelebTile extends ConsumerWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${celeb.dayPillarName} · ${celeb.dayPillar}',
+                        '${celeb.localizedDayPillarName(useKo)} · ${celeb.dayPillar}',
                         style: const TextStyle(
                           fontSize: 13,
                           color: AppColors.moonlightGray,
@@ -383,7 +415,7 @@ class _CelebTile extends ConsumerWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${celeb.dayPillarName} · ${celeb.dayPillar}',
+                            '${celeb.localizedDayPillarName(useKo)} · ${celeb.dayPillar}',
                             style: const TextStyle(
                               fontSize: 12.5,
                               color: AppColors.celestialGold,
@@ -410,9 +442,13 @@ class _CelebTile extends ConsumerWidget {
                     ),
                     child: Text(
                       me.day60ji == celeb.dayPillar
-                          ? l.discoverCompareSame(celeb.dayPillarName)
+                          ? l.discoverCompareSame(
+                              celeb.localizedDayPillarName(useKo))
                           : l.discoverCompareDifferent(
-                              me.dayMasterName, celeb.dayPillarName),
+                              useKo
+                                  ? me.dayPillar.pairKoreanMeaning
+                                  : me.dayMasterName,
+                              celeb.localizedDayPillarName(useKo)),
                       style: const TextStyle(
                         fontSize: 14.5,
                         fontWeight: FontWeight.w800,
