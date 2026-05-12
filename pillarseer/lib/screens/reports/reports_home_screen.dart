@@ -61,10 +61,10 @@ class ReportsHomeScreen extends StatelessWidget {
                 child: Text(
                   l.reportsHomeTitle,
                   style: const TextStyle(
-                    fontSize: 26,
+                    fontSize: 24,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.celestialGold,
-                    letterSpacing: 1.2,
+                    color: AppColors.ghostlyWhite,
+                    letterSpacing: 0.2,
                   ),
                 ),
               ),
@@ -119,50 +119,38 @@ class _ReportTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                AppColors.spiritIndigo.withValues(alpha: 0.15),
-                AppColors.midnightPurple.withValues(alpha: 0.4),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: AppColors.cardSurface,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: AppColors.celestialGold.withValues(alpha: 0.3),
-            ),
+            border: Border.all(color: AppColors.cardBorder),
           ),
           child: Row(
             children: [
               Container(
-                width: 76,
-                height: 76,
+                width: 64,
+                height: 64,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.celestialGold.withValues(alpha: 0.14),
+                  color: AppColors.midnightPurple.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.45),
-                  ),
+                  border: Border.all(color: AppColors.cardBorderStrong),
                 ),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     Positioned(
-                      top: 7,
-                      right: 8,
+                      top: 6,
+                      right: 7,
                       child: Text(
                         card.symbol,
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: AppColors.celestialGold
-                              .withValues(alpha: 0.6),
-                          fontWeight: FontWeight.w800,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.fadedSilver,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                     Icon(card.icon,
-                        size: 30, color: AppColors.celestialGold),
+                        size: 28, color: AppColors.mysticViolet),
                   ],
                 ),
               ),

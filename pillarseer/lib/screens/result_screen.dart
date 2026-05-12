@@ -244,18 +244,9 @@ class _PersonalForYouCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.celestialGold.withValues(alpha: 0.18),
-            AppColors.mysticViolet.withValues(alpha: 0.22),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.6),
-        ),
+        border: Border.all(color: AppColors.cardBorderStrong),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -767,41 +758,44 @@ class _ThreeHitCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 22),
+      padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.celestialGold.withValues(alpha: 0.22),
-            AppColors.spiritIndigo.withValues(alpha: 0.2),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.55),
-        ),
+        color: AppColors.cardSurface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.cardBorderStrong),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l.resultThreeHitHeader,
-            style: const TextStyle(
-              fontSize: 11.5,
-              letterSpacing: 1.5,
-              color: AppColors.moonlightGray,
-              fontWeight: FontWeight.w700,
-            ),
+          Row(
+            children: [
+              Container(
+                width: 4,
+                height: 14,
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.celestialGold,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Text(
+                l.resultThreeHitHeader,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.moonlightGray,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           Text(
             whoYouAre,
             style: const TextStyle(
-              fontSize: 23,
+              fontSize: 22,
               fontWeight: FontWeight.w900,
-              color: AppColors.celestialGold,
-              height: 1.35,
+              color: AppColors.ghostlyWhite,
+              height: 1.4,
             ),
           ),
           const SizedBox(height: 4),
@@ -1372,31 +1366,27 @@ class _DayMasterCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.15),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: AppColors.cardBorderStrong),
       ),
       child: Row(
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 60,
+            height: 60,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: AppColors.celestialGold.withValues(alpha: 0.15),
+              color: AppColors.midnightPurple.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.celestialGold.withValues(alpha: 0.5),
-              ),
+              border: Border.all(color: AppColors.cardBorderStrong),
             ),
             child: Text(
               result.day60ji,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.w900,
-                color: AppColors.celestialGold,
+                color: AppColors.ghostlyWhite,
               ),
             ),
           ),
