@@ -66,7 +66,7 @@ class TojeongScreen extends ConsumerWidget {
                       style: const TextStyle(
                         fontSize: 11,
                         letterSpacing: 1.5,
-                        color: AppColors.celestialGold,
+                        color: AppColors.moonlightGray,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -100,7 +100,7 @@ class TojeongScreen extends ConsumerWidget {
                       style: const TextStyle(
                         fontSize: 11,
                         letterSpacing: 1.5,
-                        color: AppColors.celestialGold,
+                        color: AppColors.moonlightGray,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -119,7 +119,7 @@ class TojeongScreen extends ConsumerWidget {
                                       : _monthEn(e.key),
                                   style: const TextStyle(
                                     fontSize: 11,
-                                    color: AppColors.celestialGold,
+                                    color: AppColors.mysticViolet,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -190,16 +190,9 @@ class _HexagramCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.celestialGold.withValues(alpha: 0.18),
-            AppColors.spiritIndigo.withValues(alpha: 0.18),
-          ],
-        ),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: AppColors.cardBorderStrong),
       ),
       child: Column(
         children: [

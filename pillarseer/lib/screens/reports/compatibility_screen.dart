@@ -200,11 +200,9 @@ class _MyPillarCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.18),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppColors.cardBorderStrong),
       ),
       child: Row(
         children: [
@@ -213,7 +211,7 @@ class _MyPillarCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 11,
               letterSpacing: 1.4,
-              color: AppColors.celestialGold,
+              color: AppColors.moonlightGray,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -285,12 +283,11 @@ class _PartnerInput extends StatelessWidget {
                   const TextStyle(color: AppColors.fadedSilver, fontSize: 13),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(
-                    color: AppColors.cardBorder),
+                borderSide: BorderSide(color: AppColors.cardBorder),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AppColors.celestialGold),
+                borderSide: const BorderSide(color: AppColors.mysticViolet),
               ),
             ),
           ),
@@ -317,7 +314,7 @@ class _PartnerInput extends StatelessWidget {
                 value: unknownTime,
                 onChanged: onUnknownTime,
                 fillColor: WidgetStatePropertyAll(
-                    AppColors.celestialGold.withValues(alpha: 0.6)),
+                    AppColors.mysticViolet.withValues(alpha: 0.65)),
               ),
               Text(
                 l.inputUnknownTime,
@@ -357,15 +354,16 @@ class _Field extends StatelessWidget {
           color: AppColors.midnightPurple.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppColors.celestialGold
-                .withValues(alpha: disabled ? 0.1 : 0.25),
+            color: disabled
+                ? AppColors.cardBorder.withValues(alpha: 0.45)
+                : AppColors.cardBorder,
           ),
         ),
         child: Row(
           children: [
             Icon(
               icon,
-              color: disabled ? AppColors.fadedSilver : AppColors.celestialGold,
+              color: disabled ? AppColors.fadedSilver : AppColors.mysticViolet,
               size: 16,
             ),
             const SizedBox(width: 10),
@@ -406,7 +404,7 @@ class _ScoreCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.55),
+          color: AppColors.celestialGold.withValues(alpha: 0.35),
         ),
       ),
       child: Column(
@@ -472,7 +470,7 @@ class _ResonanceCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 11,
               letterSpacing: 1.4,
-              color: AppColors.celestialGold,
+              color: AppColors.moonlightGray,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -527,7 +525,7 @@ class _ResonanceCard extends StatelessWidget {
               theirs,
               style: const TextStyle(
                 fontSize: 11.5,
-                color: AppColors.celestialGold,
+                color: AppColors.moonlightGray,
                 fontWeight: FontWeight.w600,
               ),
             ),

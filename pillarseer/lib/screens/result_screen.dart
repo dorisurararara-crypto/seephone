@@ -44,23 +44,29 @@ class ResultScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _EasyModeBanner(),
-            const SizedBox(height: 8),
-            _TrustLine(),
-            const SizedBox(height: 14),
-            _PersonalForYouCard(result: result, useKo: useKo),
-            const SizedBox(height: 18),
+            // codex Round 19 권고: "그래서 나는 누구인가" 가장 먼저.
+            // 1. 한 줄 정체성 (3-hit card)
             _ThreeHitCard(result: result, reading: reading, useKo: useKo),
+            const SizedBox(height: 14),
+            // 2. 사주 4기둥 (가장 핵심 결과)
+            _PillarGrid(result: result),
+            const SizedBox(height: 12),
+            // 3. 일간 상세 카드
+            _DayMasterCard(result: result),
+            const SizedBox(height: 14),
+            // 4. 오늘 조언 (개인화)
+            _PersonalForYouCard(result: result, useKo: useKo),
+            const SizedBox(height: 12),
+            // 5. 작은 신뢰 + 처음이세요? 보조 영역
+            _TrustLine(),
+            const SizedBox(height: 6),
+            _EasyModeBanner(),
             const SizedBox(height: 22),
             _SectionHeader(
               title: l.resultDayMasterDeepTitle,
               hint: l.resultDayMasterTermHint,
             ),
             const SizedBox(height: 10),
-            _PillarGrid(result: result),
-            const SizedBox(height: 18),
-            _DayMasterCard(result: result),
-            const SizedBox(height: 14),
             _Section(
               locked: false,
               whyLine: reading?.whyReason,

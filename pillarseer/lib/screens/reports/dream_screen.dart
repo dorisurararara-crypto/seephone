@@ -89,7 +89,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
                 style: const TextStyle(color: AppColors.ghostlyWhite),
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search,
-                      color: AppColors.celestialGold),
+                      color: AppColors.mysticViolet),
                   hintText: l.dreamSearchHint,
                   hintStyle: const TextStyle(
                     color: AppColors.fadedSilver,
@@ -98,12 +98,12 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
-                      color: AppColors.celestialGold.withValues(alpha: 0.3),
+                      color: AppColors.cardBorder,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.celestialGold),
+                    borderSide: const BorderSide(color: AppColors.mysticViolet),
                   ),
                 ),
               ),
@@ -123,12 +123,12 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
                     selected: selected,
                     onSelected: (_) => setState(() => _filter = f.id),
                     selectedColor:
-                        AppColors.cardBorder,
+                        AppColors.mysticViolet.withValues(alpha: 0.22),
                     backgroundColor:
                         AppColors.spiritIndigo.withValues(alpha: 0.18),
                     labelStyle: TextStyle(
                       color: selected
-                          ? AppColors.celestialGold
+                          ? AppColors.ghostlyWhite
                           : AppColors.moonlightGray,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -136,8 +136,9 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                       side: BorderSide(
-                        color: AppColors.celestialGold
-                            .withValues(alpha: selected ? 0.6 : 0.2),
+                        color: selected
+                            ? AppColors.cardBorderStrong
+                            : AppColors.cardBorder,
                       ),
                     ),
                   );
@@ -149,7 +150,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
               child: !_loaded
                   ? const Center(
                       child: CircularProgressIndicator(
-                          color: AppColors.celestialGold))
+                          color: AppColors.mysticViolet))
                   : filtered.isEmpty
                       ? Center(
                           child: Text(
@@ -218,7 +219,7 @@ class _DreamTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = dream.auspicious
-        ? AppColors.celestialGold
+        ? AppColors.mysticViolet
         : Colors.redAccent.shade200;
     return Container(
       padding: const EdgeInsets.all(14),

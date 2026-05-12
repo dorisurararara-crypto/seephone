@@ -60,7 +60,7 @@ class DatePickingScreen extends ConsumerWidget {
               const SizedBox(height: 18),
               _Section(
                 title: l.datePickGoodDays,
-                color: AppColors.celestialGold,
+                color: AppColors.mysticViolet,
                 days: good,
                 useKo: useKo,
               ),
@@ -199,7 +199,7 @@ class _SummaryRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: _chip(l.datePickGoodDays, good, AppColors.celestialGold),
+          child: _chip(l.datePickGoodDays, good, AppColors.mysticViolet),
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -217,9 +217,9 @@ class _SummaryRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.45)),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
       ),
       child: Column(
         children: [
@@ -267,7 +267,11 @@ class _Section extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: color == AppColors.fadedSilver
+              ? AppColors.cardBorder
+              : color.withValues(alpha: 0.28),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,7 +327,7 @@ class _Section extends StatelessWidget {
               dateStr,
               style: const TextStyle(
                 fontSize: 11,
-                color: AppColors.celestialGold,
+                color: AppColors.moonlightGray,
                 fontWeight: FontWeight.w700,
               ),
             ),

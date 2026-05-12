@@ -778,23 +778,12 @@ class _ScoreCircle extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 12),
         width: 140,
         height: 140,
+        // codex Round 19: gold gradient/glow 톤다운. 점수 숫자만 gold 유지.
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [
-              AppColors.celestialGold.withValues(alpha: 0.3),
-              Colors.transparent,
-            ],
-            stops: const [0.0, 0.7],
-          ),
+          color: AppColors.cardSurface,
           border: Border.all(
-              color: AppColors.celestialGold.withValues(alpha: 0.6), width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.celestialGold.withValues(alpha: 0.2),
-              blurRadius: 30,
-            ),
-          ],
+              color: AppColors.cardBorderStrong, width: 1.5),
         ),
         child: Center(
           child: RichText(
@@ -802,7 +791,7 @@ class _ScoreCircle extends StatelessWidget {
             text: TextSpan(
               text: '$score',
               style: const TextStyle(
-                fontSize: 46,
+                fontSize: 48,
                 fontWeight: FontWeight.w900,
                 color: AppColors.celestialGold,
                 height: 1,
@@ -813,7 +802,7 @@ class _ScoreCircle extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 13,
                       color: AppColors.moonlightGray,
-                      fontWeight: FontWeight.w400),
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),
