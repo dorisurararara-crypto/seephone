@@ -1239,11 +1239,9 @@ class _PillarGrid extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
       decoration: BoxDecoration(
-        color: AppColors.midnightPurple.withValues(alpha: 0.4),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.25),
-        ),
+        border: Border.all(color: AppColors.cardBorder),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1276,8 +1274,8 @@ class _PillarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isNull = pillar == null;
     final borderColor = highlight
-        ? AppColors.celestialGold
-        : AppColors.celestialGold.withValues(alpha: 0.3);
+        ? AppColors.celestialGold  // day pillar 만 gold 강조 (핵심)
+        : AppColors.cardBorder;
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     final localizedPillarLabel = isNull
@@ -1313,10 +1311,13 @@ class _PillarItem extends StatelessWidget {
             children: [
               Text(
                 isNull ? '?' : pillar!.chunGan,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.celestialGold,
+                  // day pillar 만 gold, 나머지는 white (codex Round 16 권고)
+                  color: highlight
+                      ? AppColors.celestialGold
+                      : AppColors.ghostlyWhite,
                 ),
               ),
               const SizedBox(height: 2),

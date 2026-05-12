@@ -77,12 +77,12 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    l.discoverTitle.toUpperCase(),
+                    l.discoverTitle,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
-                      color: AppColors.celestialGold,
-                      letterSpacing: 2.0,
+                      color: AppColors.ghostlyWhite,
+                      letterSpacing: 0.2,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -112,22 +112,21 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                     label: Text(f.label),
                     selected: selected,
                     onSelected: (_) => setState(() => _filter = f.id),
-                    selectedColor:
-                        AppColors.celestialGold.withValues(alpha: 0.25),
-                    backgroundColor:
-                        AppColors.spiritIndigo.withValues(alpha: 0.18),
+                    selectedColor: AppColors.cardBorderStrong,
+                    backgroundColor: AppColors.cardSurface,
                     labelStyle: TextStyle(
                       color: selected
-                          ? AppColors.celestialGold
+                          ? AppColors.ghostlyWhite
                           : AppColors.moonlightGray,
-                      fontSize: 11,
+                      fontSize: 11.5,
                       fontWeight: FontWeight.w700,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(999),
                       side: BorderSide(
-                        color: AppColors.celestialGold
-                            .withValues(alpha: selected ? 0.6 : 0.2),
+                        color: selected
+                            ? AppColors.cardBorderStrong
+                            : AppColors.cardBorder,
                       ),
                     ),
                   );
@@ -231,18 +230,13 @@ class _CelebTile extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.spiritIndigo.withValues(alpha: 0.2),
-              AppColors.midnightPurple.withValues(alpha: 0.45),
-            ],
-          ),
+          color: AppColors.cardSurface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isMatch
                 ? AppColors.celestialGold
-                : AppColors.celestialGold.withValues(alpha: 0.3),
-            width: isMatch ? 1.8 : 1,
+                : AppColors.cardBorder,
+            width: isMatch ? 1.6 : 1,
           ),
         ),
         child: Column(
@@ -255,11 +249,9 @@ class _CelebTile extends ConsumerWidget {
                   height: 60,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: AppColors.celestialGold.withValues(alpha: 0.15),
+                    color: AppColors.midnightPurple.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.celestialGold.withValues(alpha: 0.5),
-                    ),
+                    border: Border.all(color: AppColors.cardBorderStrong),
                   ),
                   child:
                       Text(celeb.emoji, style: const TextStyle(fontSize: 30)),
@@ -282,8 +274,8 @@ class _CelebTile extends ConsumerWidget {
                         '${celeb.dayPillarName} · ${celeb.dayPillar}',
                         style: const TextStyle(
                           fontSize: 13,
-                          color: AppColors.celestialGold,
-                          fontWeight: FontWeight.w700,
+                          color: AppColors.moonlightGray,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
@@ -333,14 +325,14 @@ class _CelebTile extends ConsumerWidget {
               children: [
                 Icon(Icons.touch_app_outlined,
                     size: 14,
-                    color: AppColors.celestialGold.withValues(alpha: 0.7)),
+                    color: AppColors.moonlightGray),
                 const SizedBox(width: 6),
                 Text(
                   l.discoverShareCompare,
                   style: const TextStyle(
                     fontSize: 12,
-                    color: AppColors.celestialGold,
-                    fontWeight: FontWeight.w700,
+                    color: AppColors.moonlightGray,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
