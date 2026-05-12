@@ -225,46 +225,48 @@ class ResultScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             _AccordionSection(
               title: useKo
-                  ? '🎯 격국 (格局)'
-                  : '🎯 Gyeokguk (chart structure)',
+                  ? '🎯 격국 — 사주의 큰 구조'
+                  : '🎯 Gyeokguk — chart structure',
               locked: false,
               child: _GyeokgukBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: useKo
-                  ? '🔮 용신 (用神)'
-                  : '🔮 Yongsin (most needed element)',
+                  ? '🔮 용신 — 가장 필요한 오행'
+                  : '🔮 Yongsin — most needed element',
               locked: false,
               child: _YongsinBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: useKo
-                  ? '⚖️ 신왕·신약 (身旺·身弱)'
+                  ? '⚖️ 강약 — 일간이 강한가 약한가'
                   : '⚖️ Day-master Strength',
               locked: false,
               child: _StrengthBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
-              title: useKo ? '🪐 공망 (空亡)' : '🪐 Void Branches (空亡)',
+              title: useKo ? '🪐 공망 — 비어 있는 영역' : '🪐 Void Branches (空亡)',
               locked: false,
               child: _GongMangBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: useKo
-                  ? '🌸 신살 (神煞)'
+                  ? '🌸 신살 — 사주의 특별 표지'
                   : '🌸 Shinsa (神煞)',
               locked: false,
               child: _ShinsaBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: useKo
-                  ? '🌀 12 운성 (生·旺·墓·絶)'
+                  ? '🌀 12 운성 — 기둥별 일생 단계'
                   : '🌀 12 Unsung (life cycle stages)',
               locked: false,
               child: _TwelveUnsungBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
-              title: useKo ? '⚡ 합·충 (合·沖)' : '⚡ Hap & Chung (合·沖)',
+              title: useKo
+                  ? '⚡ 합·충 — 기둥 간 관계'
+                  : '⚡ Hap & Chung (合·沖)',
               locked: false,
               child: _HapchungBlock(result: result, useKo: useKo),
             ),
