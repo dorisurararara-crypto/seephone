@@ -96,6 +96,8 @@ class ProfileScreen extends ConsumerWidget {
                       color: AppColors.ink,
                       height: 1.2,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   if (saju != null) ...[
                     const SizedBox(height: 14),
@@ -115,6 +117,8 @@ class ProfileScreen extends ConsumerWidget {
                               fontStyle: FontStyle.italic,
                               color: AppColors.accent,
                             ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                   if (isPro) ...[

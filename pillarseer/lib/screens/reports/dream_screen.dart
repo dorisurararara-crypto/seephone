@@ -82,7 +82,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          'DREAM · 解 夢',
+          useKo ? '해몽 · 解 夢' : 'DREAM · 解 夢',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,

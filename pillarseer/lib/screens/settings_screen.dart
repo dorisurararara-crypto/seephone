@@ -430,10 +430,11 @@ class _LanguageRow extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
-        color: selected ? AppColors.paper : AppColors.bg,
-        decoration: const BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.paper : AppColors.bg,
+          border: const Border(
+            bottom: BorderSide(color: AppColors.line, width: 1),
+          ),
         ),
         child: Row(
           children: [

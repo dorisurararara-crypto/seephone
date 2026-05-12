@@ -104,6 +104,8 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final me = ref.watch(sajuResultProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
@@ -115,7 +117,7 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          'COMPATIBILITY · 宮 合',
+          useKo ? '궁합 · 宮 合' : 'COMPATIBILITY · 宮 合',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,

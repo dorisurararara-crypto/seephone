@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show rootBundle, Clipboard, ClipboardData;
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/saju_result.dart';
@@ -65,7 +66,7 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          'K  P O P  ·  緣',
+          useKo ? 'K-POP 궁합 · 緣' : 'K-POP COMPATIBILITY · 緣',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,
@@ -90,6 +91,13 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
             : Column(
                 children: [
                   _Hero(useKo: useKo),
+                  // 최상위 매치 — "친구에게 캡처해서 보낼 한 줄" (Round 12 codex P0)
+                  if (filtered.isNotEmpty)
+                    _TopMatchCard(
+                      star: filtered.first,
+                      score: _score(me, filtered.first),
+                      useKo: useKo,
+                    ),
                   _FilterRow(
                     current: _filter,
                     onChanged: (id) => setState(() => _filter = id),
@@ -215,6 +223,98 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
       '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
     };
     return map[stem] ?? '木';
+  }
+}
+
+// 최상위 매치 카드 — 친구에게 캡처해서 보낼 한 줄 (Round 12 codex P0).
+class _TopMatchCard extends StatelessWidget {
+  final _Star star;
+  final int score;
+  final bool useKo;
+  const _TopMatchCard({
+    required this.star,
+    required this.score,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final name = useKo ? star.nameKo : star.nameEn;
+    final shareableKo =
+        '나랑 제일 케미 터지는 K-POP 스타: $name ($score점)';
+    final shareableEn =
+        "My top K-POP chemistry: $name ($score)";
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                useKo ? '오늘의 케미 1위 · TOP MATCH' : "Today's top match",
+                style: GoogleFonts.inter(
+                  fontSize: 9,
+                  letterSpacing: 4,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.taupe,
+                ),
+              ),
+              const Spacer(),
+              InkWell(
+                onTap: () async {
+                  final text = useKo ? shareableKo : shareableEn;
+                  try {
+                    await SharePlus.instance.share(ShareParams(text: text));
+                  } catch (_) {
+                    await Clipboard.setData(ClipboardData(text: text));
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.ink, width: 1),
+                  ),
+                  child: Text(
+                    useKo ? '공유 · 緣' : 'SHARE',
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            useKo ? shareableKo : shareableEn,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+              color: AppColors.ink,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            useKo ? star.blurbKo : star.blurbEn,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.inkLight,
+              height: 1.7,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

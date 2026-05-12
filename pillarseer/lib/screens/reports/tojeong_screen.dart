@@ -39,7 +39,7 @@ class TojeongScreen extends ConsumerWidget {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          'TOJEONG · 土 亭',
+          useKo ? '토정비결 · 土 亭' : 'TOJEONG · 土 亭',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,

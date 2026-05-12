@@ -41,7 +41,7 @@ class DatePickingScreen extends ConsumerWidget {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          'DATE PICKING · 擇 日',
+          useKo ? '택일 · 擇 日' : 'DATE PICKING · 擇 日',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,
