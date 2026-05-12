@@ -157,6 +157,9 @@ class ResultScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 22),
+            // ─── 그룹 1: 기본 풀이 ───
+            _GroupHeader(useKo ? '기본 풀이' : 'CORE READING'),
+            const SizedBox(height: 8),
             // 이하 항목 accordion 으로 정리 (codex Round 14 권고 — 너무 길음).
             _AccordionSection(
               title: l.resultTenGodsTitle,
@@ -214,6 +217,10 @@ class ResultScreen extends ConsumerWidget {
               locked: !isPro,
               child: _LuckyBlock(reading: reading, useKo: useKo),
             ),
+            const SizedBox(height: 18),
+            // ─── 그룹 2: 깊은 명리학 ───
+            _GroupHeader(useKo ? '깊은 명리학' : 'DEEP MYEONGLI'),
+            const SizedBox(height: 8),
             _AccordionSection(
               title: useKo
                   ? '⚖️ 신왕·신약 (身旺·身弱)'
@@ -245,6 +252,10 @@ class ResultScreen extends ConsumerWidget {
               locked: false,
               child: _HapchungBlock(result: result, useKo: useKo),
             ),
+            const SizedBox(height: 18),
+            // ─── 그룹 3: 검증·신뢰 ───
+            _GroupHeader(useKo ? '검증·신뢰' : 'VERIFICATION'),
+            const SizedBox(height: 8),
             _AccordionSection(
               title: l.resultBasisTitle,
               locked: false,
@@ -450,6 +461,46 @@ Day Pillar: ${result.dayMasterName} · ${result.day60ji}
         backgroundColor: AppColors.celestialGold,
         duration: const Duration(seconds: 2),
       ));
+  }
+}
+
+// ──────── 그룹 헤더 (Round 48: 사용자 직관성 — 11 accordion 그룹화)
+
+class _GroupHeader extends StatelessWidget {
+  final String label;
+  const _GroupHeader(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 3,
+          height: 16,
+          margin: const EdgeInsets.only(right: 10),
+          decoration: BoxDecoration(
+            color: AppColors.celestialGold,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            letterSpacing: 1.8,
+            color: AppColors.celestialGold,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: AppColors.cardBorder,
+          ),
+        ),
+      ],
+    );
   }
 }
 
