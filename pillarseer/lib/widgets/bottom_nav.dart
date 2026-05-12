@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
-/// 4탭 Bottom Nav — codex Round 13 권고로 5탭 → 4탭 단순화.
-/// 오늘 (Home) / 내 사주 (Result) / 리포트 / 프로필
-/// Discover (셀럽 비교) 는 Reports home 안 카드로 흡수.
+/// Aesop Luxury bottom nav — 4탭, hairline top border, letter-spacing UPPERCASE label.
+/// Active = ink text + 1px underline. Inactive = taupe.
 class PillarBottomNav extends StatelessWidget {
   final int activeIdx;
 
@@ -15,32 +15,20 @@ class PillarBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final items = <_NavItem>[
-      _NavItem(icon: Icons.wb_sunny_outlined, label: l.navHome, route: '/home'),
-      _NavItem(
-          icon: Icons.view_column_outlined,
-          label: l.navReading,
-          route: '/result'),
-      _NavItem(
-          icon: Icons.menu_book_outlined,
-          label: l.navReports,
-          route: '/reports'),
-      _NavItem(
-          icon: Icons.person_outline,
-          label: l.navProfile,
-          route: '/profile'),
+      _NavItem(label: l.navHome, route: '/home', glyph: '日'),
+      _NavItem(label: l.navReading, route: '/result', glyph: '柱'),
+      _NavItem(label: l.navReports, route: '/reports', glyph: '譜'),
+      _NavItem(label: l.navProfile, route: '/profile', glyph: '我'),
     ];
     return Container(
       decoration: const BoxDecoration(
-        color: AppColors.cosmicBlack,
-        border: Border(
-          top: BorderSide(color: AppColors.cardBorder),
-        ),
+        color: AppColors.bg,
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
       ),
-      padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 60,
+          height: 64,
           child: Row(
             children: items.asMap().entries.map((entry) {
               final i = entry.key;
@@ -59,35 +47,35 @@ class PillarBottomNav extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          item.icon,
-                          size: 22,
-                          color: isActive
-                              ? AppColors.ghostlyWhite
-                              : AppColors.fadedSilver,
-                        ),
-                        const SizedBox(height: 3),
                         Text(
-                          item.label,
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            letterSpacing: 0.2,
-                            fontWeight:
-                                isActive ? FontWeight.w800 : FontWeight.w500,
+                          item.glyph,
+                          style: GoogleFonts.notoSerifKr(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w300,
                             color: isActive
-                                ? AppColors.ghostlyWhite
-                                : AppColors.fadedSilver,
+                                ? AppColors.ink
+                                : AppColors.taupe,
+                            height: 1.0,
                           ),
                         ),
-                        const SizedBox(height: 3),
-                        // Active 표시는 작은 underline (gold 살짝)
-                        Container(
-                          width: isActive ? 18 : 0,
-                          height: 2,
-                          decoration: BoxDecoration(
-                            color: AppColors.celestialGold,
-                            borderRadius: BorderRadius.circular(1),
+                        const SizedBox(height: 6),
+                        Text(
+                          item.label.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 8.5,
+                            letterSpacing: 3,
+                            fontWeight: FontWeight.w500,
+                            color: isActive
+                                ? AppColors.ink
+                                : AppColors.taupe,
                           ),
+                        ),
+                        const SizedBox(height: 6),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 220),
+                          width: isActive ? 22 : 0,
+                          height: 1,
+                          color: AppColors.ink,
                         ),
                       ],
                     ),
@@ -103,9 +91,12 @@ class PillarBottomNav extends StatelessWidget {
 }
 
 class _NavItem {
-  final IconData icon;
   final String label;
   final String route;
-  const _NavItem(
-      {required this.icon, required this.label, required this.route});
+  final String glyph;
+  const _NavItem({
+    required this.label,
+    required this.route,
+    required this.glyph,
+  });
 }

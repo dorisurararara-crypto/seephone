@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../services/saju_service.dart';
@@ -45,216 +46,159 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     final l = AppL10n.of(context);
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          // === 별자리 배경 ===
-          const _StarField(),
-          // === 한자 watermark ===
-          const Positioned(
-            top: -40,
-            left: -30,
-            child: _HanWatermark(text: '柱'),
+          // 한자 watermark — 한쪽 코너, 매우 옅게
+          Positioned(
+            top: -60,
+            right: -40,
+            child: IgnorePointer(
+              child: Text(
+                '命',
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 280,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.line.withValues(alpha: 0.35),
+                  height: 0.9,
+                ),
+              ),
+            ),
           ),
-          const Positioned(
-            bottom: -80,
-            right: -30,
-            child: _HanWatermark(text: '命'),
-          ),
-          // === 본 content ===
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 28),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _Header(l: l),
-                    const SizedBox(height: 20),
-                    _IconField(
-                      icon: Icons.person_outline,
-                      label: l.inputName,
-                      child: TextFormField(
-                        controller: _nameController,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColors.ghostlyWhite,
-                        ),
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        validator: (v) => (v == null || v.trim().isEmpty)
-                            ? l.inputErrorNameRequired
-                            : null,
-                        onChanged: (_) => setState(() {}),
-                        textInputAction: TextInputAction.next,
+                    _AppBar(l: l),
+                    const SizedBox(height: 32),
+                    _HeroBlock(l: l),
+                    const SizedBox(height: 36),
+                    _FieldLabel(text: l.inputName),
+                    TextFormField(
+                      controller: _nameController,
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.ink,
                       ),
+                      cursorColor: AppColors.ink,
+                      decoration: _underlineDeco(hint: l.inputName),
+                      validator: (v) => (v == null || v.trim().isEmpty)
+                          ? l.inputErrorNameRequired
+                          : null,
+                      onChanged: (_) => setState(() {}),
+                      textInputAction: TextInputAction.next,
                     ),
-                    _IconField(
-                      icon: Icons.calendar_today_outlined,
-                      label: l.inputBirthday,
-                      onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate:
-                              _selectedDate ?? DateTime(2000, 1, 1),
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
-                          initialDatePickerMode: DatePickerMode.year,
-                          builder: (ctx, child) => Theme(
-                            data: Theme.of(ctx).copyWith(
-                              colorScheme: const ColorScheme.dark(
-                                primary: AppColors.celestialGold,
-                                onPrimary: AppColors.cosmicBlack,
-                                surface: AppColors.midnightPurple,
-                                onSurface: AppColors.ghostlyWhite,
-                              ),
-                              dialogTheme: const DialogThemeData(
-                                backgroundColor: AppColors.cosmicBlack,
-                              ),
+                    const SizedBox(height: 28),
+                    _FieldLabel(text: l.inputBirthday),
+                    _TapField(
+                      value: _selectedDate == null
+                          ? '—'
+                          : _formatDate(_selectedDate!),
+                      placeholder: _selectedDate == null,
+                      onTap: _pickDate,
+                    ),
+                    const SizedBox(height: 28),
+                    _FieldLabel(text: l.inputTime),
+                    _TapField(
+                      value: _unknownTime
+                          ? l.inputUnknownTime
+                          : (_selectedTime?.format(context) ?? '—'),
+                      placeholder: _selectedTime == null && !_unknownTime,
+                      onTap: _unknownTime ? null : _pickTime,
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: Checkbox(
+                            value: _unknownTime,
+                            activeColor: AppColors.ink,
+                            checkColor: AppColors.bg,
+                            side: const BorderSide(color: AppColors.taupe),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
                             ),
-                            child: child!,
+                            onChanged: (v) => setState(() {
+                              _unknownTime = v ?? false;
+                              if (_unknownTime) _selectedTime = null;
+                            }),
                           ),
-                        );
-                        if (picked != null) {
-                          setState(() => _selectedDate = picked);
-                        }
-                      },
-                      child: Text(
-                        _selectedDate == null
-                            ? (l.inputBirthday)
-                            : '${_selectedDate!.year}-${_selectedDate!.month.toString().padLeft(2, '0')}-${_selectedDate!.day.toString().padLeft(2, '0')}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: _selectedDate == null
-                              ? AppColors.fadedSilver
-                              : AppColors.ghostlyWhite,
-                          letterSpacing: 0.8,
-                          fontWeight: FontWeight.w600,
                         ),
-                      ),
-                    ),
-                    _IconField(
-                      icon: Icons.access_time,
-                      label: l.inputTime,
-                      onTap: _unknownTime
-                          ? null
-                          : () async {
-                              final picked = await showTimePicker(
-                                context: context,
-                                initialTime: _selectedTime ??
-                                    const TimeOfDay(hour: 12, minute: 0),
-                              );
-                              if (picked != null) {
-                                setState(() => _selectedTime = picked);
-                              }
-                            },
-                      child: Text(
-                        _unknownTime
-                            ? l.inputUnknownTime
-                            : (_selectedTime?.format(context) ?? '—'),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: _selectedTime == null && !_unknownTime
-                              ? AppColors.fadedSilver
-                              : AppColors.ghostlyWhite,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 4, 0, 12),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Checkbox(
-                              value: _unknownTime,
-                              activeColor: AppColors.celestialGold,
-                              checkColor: AppColors.cosmicBlack,
-                              onChanged: (v) => setState(() {
-                                _unknownTime = v ?? false;
-                                if (_unknownTime) _selectedTime = null;
-                              }),
-                            ),
+                        const SizedBox(width: 10),
+                        Text(
+                          l.inputUnknownTime,
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 3,
+                            color: AppColors.inkLight,
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              l.inputUnknownTime,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppColors.moonlightGray,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    _IconField(
-                      icon: Icons.location_on_outlined,
-                      label: l.inputBirthCity,
-                      sub: l.inputBirthCityHelper,
-                      child: TextFormField(
-                        controller: _cityController,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppColors.ghostlyWhite,
                         ),
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    _ChipRow(
+                    const SizedBox(height: 28),
+                    _FieldLabel(text: l.inputBirthCity),
+                    TextFormField(
+                      controller: _cityController,
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 18,
+                        color: AppColors.ink,
+                      ),
+                      cursorColor: AppColors.ink,
+                      decoration: _underlineDeco(hint: l.inputBirthCityHelper),
+                    ),
+                    const SizedBox(height: 32),
+                    _SegmentPicker(
                       label: l.inputCalendar,
-                      chips: [
-                        _ChipData(l.inputSolar, !_isLunar,
-                            (v) => setState(() => _isLunar = !v)),
-                        _ChipData(l.inputLunar, _isLunar,
-                            (v) => setState(() => _isLunar = v)),
-                      ],
+                      options: [l.inputSolar, l.inputLunar],
+                      selectedIndex: _isLunar ? 1 : 0,
+                      onChanged: (i) => setState(() => _isLunar = i == 1),
                     ),
-                    const SizedBox(height: 8),
-                    _ChipRow(
+                    const SizedBox(height: 22),
+                    _SegmentPicker(
                       label: l.inputGender,
-                      chips: [
-                        _ChipData(l.inputGenderMale, _gender == Gender.male,
-                            (v) => setState(
-                                () => _gender = v ? Gender.male : null)),
-                        _ChipData(l.inputGenderFemale,
-                            _gender == Gender.female,
-                            (v) => setState(
-                                () => _gender = v ? Gender.female : null)),
-                        _ChipData(l.inputGenderOther, _gender == Gender.other,
-                            (v) => setState(
-                                () => _gender = v ? Gender.other : null)),
+                      options: [
+                        l.inputGenderMale,
+                        l.inputGenderFemale,
+                        l.inputGenderOther,
                       ],
+                      selectedIndex: _gender == null
+                          ? -1
+                          : (_gender == Gender.male
+                              ? 0
+                              : (_gender == Gender.female ? 1 : 2)),
+                      onChanged: (i) => setState(() => _gender =
+                          i == 0
+                              ? Gender.male
+                              : (i == 1 ? Gender.female : Gender.other)),
                     ),
-                    const SizedBox(height: 24),
-                    _SubmitButton(
-                      label: l.inputFindMyDestiny,
+                    const SizedBox(height: 40),
+                    _PrimaryCta(
+                      label: l.inputFindMyDestiny.toUpperCase(),
                       enabled: _canSubmit,
                       loading: _isLoading,
                       onPressed: _submit,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      l.inputFreeFourPillar,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 11, color: AppColors.fadedSilver),
+                    const SizedBox(height: 14),
+                    Center(
+                      child: Text(
+                        l.inputFreeFourPillar.toUpperCase(),
+                        style: GoogleFonts.inter(
+                          fontSize: 9,
+                          letterSpacing: 4,
+                          color: AppColors.taupe,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -264,6 +208,85 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       ),
     );
   }
+
+  String _formatDate(DateTime d) =>
+      '${d.year}.${d.month.toString().padLeft(2, '0')}.${d.day.toString().padLeft(2, '0')}';
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime(2000, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      initialDatePickerMode: DatePickerMode.year,
+      builder: (ctx, child) => Theme(
+        data: Theme.of(ctx).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.ink,
+            onPrimary: AppColors.bg,
+            surface: AppColors.bg,
+            onSurface: AppColors.ink,
+          ),
+          dialogTheme: const DialogThemeData(
+            backgroundColor: AppColors.bg,
+          ),
+        ),
+        child: child!,
+      ),
+    );
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
+  }
+
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime ?? const TimeOfDay(hour: 12, minute: 0),
+      builder: (ctx, child) => Theme(
+        data: Theme.of(ctx).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.ink,
+            onPrimary: AppColors.bg,
+            surface: AppColors.bg,
+            onSurface: AppColors.ink,
+          ),
+          dialogTheme: const DialogThemeData(
+            backgroundColor: AppColors.bg,
+          ),
+        ),
+        child: child!,
+      ),
+    );
+    if (picked != null) {
+      setState(() => _selectedTime = picked);
+    }
+  }
+
+  InputDecoration _underlineDeco({String? hint}) => InputDecoration(
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        hintText: hint,
+        hintStyle: GoogleFonts.notoSerifKr(
+          fontSize: 18,
+          color: AppColors.taupe.withValues(alpha: 0.6),
+        ),
+        filled: false,
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.line),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.line),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.ink, width: 1.2),
+        ),
+        errorStyle: GoogleFonts.inter(
+          fontSize: 10,
+          letterSpacing: 1,
+          color: AppColors.fireRed,
+        ),
+      );
 
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
@@ -314,7 +337,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l.inputErrorTimeRequired),
-            backgroundColor: AppColors.fireRed,
+            backgroundColor: AppColors.ink,
           ),
         );
       }
@@ -326,207 +349,229 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   }
 }
 
-class _Header extends StatelessWidget {
+class _AppBar extends StatelessWidget {
   final AppL10n l;
-  const _Header({required this.l});
+  const _AppBar({required this.l});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 22),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'P I L L A R    S E E R',
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 5,
+                  color: AppColors.ink,
+                ),
+              ),
+              Text(
+                'NEW READING',
+                style: GoogleFonts.inter(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 3,
+                  color: AppColors.inkLight,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Container(height: 1, color: AppColors.line),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroBlock extends StatelessWidget {
+  final AppL10n l;
+  const _HeroBlock({required this.l});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 8),
         Text(
-          '運命入力',
-          style: TextStyle(
-            fontSize: 10,
-            color: AppColors.celestialGold.withValues(alpha: 0.7),
-            letterSpacing: 4,
-            fontWeight: FontWeight.w700,
+          'YOUR  CHART · 命  譜',
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            letterSpacing: 5,
+            fontWeight: FontWeight.w500,
+            color: AppColors.taupe,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 22),
         Text(
           l.inputTitle,
-          style: const TextStyle(
-            fontSize: 18,
-            color: AppColors.ghostlyWhite,
-            letterSpacing: 6,
-            fontWeight: FontWeight.w700,
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 32,
+            fontWeight: FontWeight.w300,
+            letterSpacing: -0.5,
+            height: 1.2,
+            color: AppColors.ink,
           ),
         ),
         const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                  height: 1,
-                  color: AppColors.celestialGold.withValues(alpha: 0.2)),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                '✦',
-                style: TextStyle(
-                    color: AppColors.celestialGold, fontSize: 14),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                  height: 1,
-                  color: AppColors.celestialGold.withValues(alpha: 0.2)),
-            ),
-          ],
+        Text(
+          'Four pillars, true-solar-time, solar terms and DST. '
+          '입춘 기준의 절기력으로 사주를 정밀하게 풉니다.',
+          style: GoogleFonts.notoSansKr(
+            fontSize: 12,
+            color: AppColors.inkLight,
+            height: 1.7,
+            letterSpacing: 0.3,
+          ),
         ),
       ],
     );
   }
 }
 
-class _IconField extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String? sub;
-  final Widget child;
-  final VoidCallback? onTap;
-
-  const _IconField({
-    required this.icon,
-    required this.label,
-    required this.child,
-    this.sub,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final tappable = onTap != null;
-    final body = Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
-      decoration: BoxDecoration(
-        color: AppColors.cardSurface,
-        border: Border.all(color: AppColors.cardBorder),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: AppColors.midnightPurple.withValues(alpha: 0.6),
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.cardBorderStrong),
-            ),
-            child: Icon(icon, size: 16, color: AppColors.mysticViolet),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.moonlightGray,
-                    letterSpacing: 0.2,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                child,
-                if (sub != null) ...[
-                  const SizedBox(height: 3),
-                  Text(
-                    sub!,
-                    style: const TextStyle(
-                      fontSize: 9,
-                      color: AppColors.fadedSilver,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          if (tappable)
-            const Padding(
-              padding: EdgeInsets.only(left: 4),
-              child: Icon(Icons.chevron_right,
-                  size: 18, color: AppColors.moonlightGray),
-            ),
-        ],
-      ),
-    );
-
-    if (tappable) {
-      return InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: body,
-      );
-    }
-    return body;
-  }
-}
-
-class _ChipData {
-  final String label;
-  final bool selected;
-  final ValueChanged<bool>? onSelected;
-  const _ChipData(this.label, this.selected, this.onSelected);
-}
-
-class _ChipRow extends StatelessWidget {
-  final String label;
-  final List<_ChipData> chips;
-  const _ChipRow({required this.label, required this.chips});
+class _FieldLabel extends StatelessWidget {
+  final String text;
+  const _FieldLabel({required this.text});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Wrap(
-        spacing: 6,
-        runSpacing: 4,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 11, color: AppColors.moonlightGray)),
-          ...chips.map((c) => ChoiceChip(
-                label: Text(c.label),
-                selected: c.selected,
-                onSelected: c.onSelected,
-                labelStyle: TextStyle(
-                    fontSize: 11,
-                    color: c.selected
-                        ? AppColors.celestialGold
-                        : AppColors.ghostlyWhite),
-                backgroundColor:
-                    AppColors.celestialGold.withValues(alpha: 0.08),
-                selectedColor:
-                    AppColors.celestialGold.withValues(alpha: 0.22),
-                side: BorderSide(
-                    color: c.selected
-                        ? AppColors.celestialGold
-                        : AppColors.celestialGold.withValues(alpha: 0.2)),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              )),
-        ],
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text.toUpperCase(),
+        style: GoogleFonts.inter(
+          fontSize: 9,
+          letterSpacing: 4,
+          fontWeight: FontWeight.w500,
+          color: AppColors.taupe,
+        ),
       ),
     );
   }
 }
 
-class _SubmitButton extends StatelessWidget {
+class _TapField extends StatelessWidget {
+  final String value;
+  final bool placeholder;
+  final VoidCallback? onTap;
+  const _TapField({
+    required this.value,
+    required this.placeholder,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.zero,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                value,
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                  color: placeholder
+                      ? AppColors.taupe.withValues(alpha: 0.6)
+                      : AppColors.ink,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+            if (onTap != null)
+              Icon(Icons.expand_more,
+                  size: 18,
+                  color: AppColors.taupe.withValues(alpha: 0.7)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SegmentPicker extends StatelessWidget {
+  final String label;
+  final List<String> options;
+  final int selectedIndex;
+  final ValueChanged<int> onChanged;
+  const _SegmentPicker({
+    required this.label,
+    required this.options,
+    required this.selectedIndex,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _FieldLabel(text: label),
+        Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppColors.line),
+              bottom: BorderSide(color: AppColors.line),
+            ),
+          ),
+          child: Row(
+            children: List.generate(options.length, (i) {
+              final selected = i == selectedIndex;
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => onChanged(i),
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: selected ? AppColors.ink : Colors.transparent,
+                      border: i < options.length - 1
+                          ? const Border(
+                              right:
+                                  BorderSide(color: AppColors.line, width: 1),
+                            )
+                          : null,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      options[i].toUpperCase(),
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        letterSpacing: 4,
+                        fontWeight: FontWeight.w500,
+                        color: selected ? AppColors.bg : AppColors.ink,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PrimaryCta extends StatelessWidget {
   final String label;
   final bool enabled;
   final bool loading;
   final VoidCallback onPressed;
-  const _SubmitButton({
+  const _PrimaryCta({
     required this.label,
     required this.enabled,
     required this.loading,
@@ -535,114 +580,34 @@ class _SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        // shadow 가 너무 강해 촌스러움 — Round 16 톤다운
-        boxShadow: enabled
-            ? [
-                BoxShadow(
-                  color: AppColors.celestialGold.withValues(alpha: 0.18),
-                  blurRadius: 12,
-                ),
-              ]
-            : null,
-      ),
+    return SizedBox(
+      width: double.infinity,
       child: ElevatedButton(
         onPressed: enabled ? onPressed : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.celestialGold,
-          foregroundColor: AppColors.cosmicBlack,
-          disabledBackgroundColor:
-              AppColors.celestialGold.withValues(alpha: 0.25),
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)),
-          textStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.5),
+          backgroundColor: AppColors.ink,
+          foregroundColor: AppColors.bg,
+          disabledBackgroundColor: AppColors.ink.withValues(alpha: 0.35),
+          disabledForegroundColor: AppColors.bg,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(vertical: 22),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+          textStyle: GoogleFonts.inter(
+            fontSize: 11,
+            letterSpacing: 5,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         child: loading
             ? const SizedBox(
-                width: 22,
-                height: 22,
+                width: 18,
+                height: 18,
                 child: CircularProgressIndicator(
-                    color: AppColors.cosmicBlack, strokeWidth: 2.5),
+                    color: AppColors.bg, strokeWidth: 2),
               )
-            : Text('✦  $label  ✦'),
-      ),
-    );
-  }
-}
-
-class _HanWatermark extends StatelessWidget {
-  final String text;
-  const _HanWatermark({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: 'serif',
-          fontSize: 220,
-          fontWeight: FontWeight.w900,
-          color: AppColors.celestialGold.withValues(alpha: 0.03),
-        ),
-      ),
-    );
-  }
-}
-
-class _StarField extends StatelessWidget {
-  const _StarField();
-
-  // 별 좌표 (정규화: 0~1). 각 별의 (x, y, size, opacity).
-  static const _stars = <List<double>>[
-    [0.10, 0.08, 2.0, 0.7],
-    [0.85, 0.12, 3.0, 0.6],
-    [0.22, 0.22, 2.5, 0.8],
-    [0.78, 0.30, 2.0, 0.5],
-    [0.05, 0.45, 3.0, 0.7],
-    [0.92, 0.50, 2.0, 0.6],
-    [0.15, 0.65, 2.5, 0.5],
-    [0.80, 0.72, 3.0, 0.7],
-    [0.50, 0.05, 2.0, 0.6],
-    [0.45, 0.88, 2.5, 0.5],
-    [0.30, 0.45, 1.8, 0.4],
-    [0.65, 0.55, 2.0, 0.5],
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return IgnorePointer(
-      child: Stack(
-        children: _stars.map((s) {
-          return Positioned(
-            left: size.width * s[0],
-            top: size.height * s[1],
-            child: Container(
-              width: s[2],
-              height: s[2],
-              decoration: BoxDecoration(
-                color:
-                    AppColors.celestialGold.withValues(alpha: s[3]),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color:
-                        AppColors.celestialGold.withValues(alpha: 0.5 * s[3]),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
+            : Text(label),
       ),
     );
   }
