@@ -545,7 +545,7 @@ class AppL10nEn extends AppL10n {
   String get inputBirthdayPickButton => 'Or pick from calendar';
 
   @override
-  String get splashTrust => 'Korean traditional Four Pillars · made easy';
+  String get splashTrust => 'Solar-term · true-solar-time · DST aware';
 
   @override
   String get settingsSajuOptions => 'Saju Computation Options';

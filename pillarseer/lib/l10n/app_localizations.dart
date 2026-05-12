@@ -1114,7 +1114,7 @@ abstract class AppL10n {
   /// No description provided for @splashTrust.
   ///
   /// In en, this message translates to:
-  /// **'Korean traditional Four Pillars · made easy'**
+  /// **'Solar-term · true-solar-time · DST aware'**
   String get splashTrust;
 
   /// No description provided for @settingsSajuOptions.

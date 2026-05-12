@@ -179,7 +179,7 @@
   "inputBirthdayManualInvalid": "날짜 형식이 잘못됐어요 — YYYY-MM-DD",
   "inputBirthdayPickButton": "또는 달력에서 선택",
 
-  "splashTrust": "정통 사주, 누구나 쉽게",
+  "splashTrust": "절기·진태양시·DST 자동 보정",
   "settingsSajuOptions": "사주 계산 옵션",
   "settingsLateNightZasi": "야자시 학파 (23시 이후)",
   "settingsLateNightZasiDesc": "기본 OFF: 23시 출생은 다음 날 일주 (조자시, 한국 mainstream).\nON: 23시 출생도 같은 날 일주 (야자시 학파).",

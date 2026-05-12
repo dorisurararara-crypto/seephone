@@ -522,7 +522,7 @@ class AppL10nKo extends AppL10n {
   String get inputBirthdayPickButton => '또는 달력에서 선택';
 
   @override
-  String get splashTrust => '정통 사주, 누구나 쉽게';
+  String get splashTrust => '절기·진태양시·DST 자동 보정';
 
   @override
   String get settingsSajuOptions => '사주 계산 옵션';

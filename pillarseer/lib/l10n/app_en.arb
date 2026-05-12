@@ -179,7 +179,7 @@
   "inputBirthdayManualInvalid": "Invalid date — use YYYY-MM-DD format",
   "inputBirthdayPickButton": "Or pick from calendar",
 
-  "splashTrust": "Korean traditional Four Pillars · made easy",
+  "splashTrust": "Solar-term · true-solar-time · DST aware",
   "settingsSajuOptions": "Saju Computation Options",
   "settingsLateNightZasi": "Late-night Zashi rule (23:00+)",
   "settingsLateNightZasiDesc": "OFF (default): 23:00 birth uses next-day pillar (early Zashi — Korean mainstream).\nON: 23:00 birth stays same-day pillar (late Zashi school).",
