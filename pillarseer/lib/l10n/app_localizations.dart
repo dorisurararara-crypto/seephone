@@ -784,7 +784,7 @@ abstract class AppL10n {
   /// No description provided for @resultBasisTrueSunOn.
   ///
   /// In en, this message translates to:
-  /// **'Applied (Seoul -32 min)'**
+  /// **'Applied (Seoul -32 min + equation of time ±16 min)'**
   String get resultBasisTrueSunOn;
 
   /// No description provided for @resultBasisTrueSunOff.
@@ -802,7 +802,7 @@ abstract class AppL10n {
   /// No description provided for @resultBasisManseryeokVal.
   ///
   /// In en, this message translates to:
-  /// **'KASI (Korea Astronomy and Space Science Institute)'**
+  /// **'Cross-verified vs KASI (klc package + custom solar terms)'**
   String get resultBasisManseryeokVal;
 
   /// No description provided for @resultBasisYearBoundary.
@@ -814,7 +814,7 @@ abstract class AppL10n {
   /// No description provided for @resultBasisYearBoundaryVal.
   ///
   /// In en, this message translates to:
-  /// **'Ipchun (立春, Feb 4)'**
+  /// **'Ipchun (立春) — astronomical, ±15 min accuracy'**
   String get resultBasisYearBoundaryVal;
 
   /// No description provided for @resultBasisDayBoundary.
@@ -1117,10 +1117,40 @@ abstract class AppL10n {
   /// **'Korean traditional Four Pillars · made easy'**
   String get splashTrust;
 
+  /// No description provided for @settingsSajuOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Saju Computation Options'**
+  String get settingsSajuOptions;
+
+  /// No description provided for @settingsLateNightZasi.
+  ///
+  /// In en, this message translates to:
+  /// **'Late-night Zashi rule (23:00+)'**
+  String get settingsLateNightZasi;
+
+  /// No description provided for @settingsLateNightZasiDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF (default): 23:00 birth uses next-day pillar (early Zashi — Korean mainstream).\nON: 23:00 birth stays same-day pillar (late Zashi school).'**
+  String get settingsLateNightZasiDesc;
+
+  /// No description provided for @settingsLateNightZasiSnackOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Late-night Zashi ON — recompute saju from input to apply.'**
+  String get settingsLateNightZasiSnackOn;
+
+  /// No description provided for @settingsLateNightZasiSnackOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Late-night Zashi OFF — recompute saju from input to apply.'**
+  String get settingsLateNightZasiSnackOff;
+
   /// No description provided for @resultTrustLine.
   ///
   /// In en, this message translates to:
-  /// **'Based on your birth date·time + Five Elements + Ten Gods.'**
+  /// **'Cross-verified vs KASI + astronomical solar-term datetimes + true solar time with equation-of-time + Korean DST (1948-1988) auto-applied.'**
   String get resultTrustLine;
 
   /// No description provided for @resultProHookHeader.

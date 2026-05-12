@@ -396,16 +396,9 @@ class _ScoreCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.cardBorder,
-            AppColors.spiritIndigo.withValues(alpha: 0.2),
-          ],
-        ),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: AppColors.cardBorderStrong),
       ),
       child: Column(
         children: [

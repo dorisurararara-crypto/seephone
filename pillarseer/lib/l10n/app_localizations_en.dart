@@ -369,7 +369,8 @@ class AppL10nEn extends AppL10n {
   String get resultBasisTrueSun => 'True Solar Time';
 
   @override
-  String get resultBasisTrueSunOn => 'Applied (Seoul -32 min)';
+  String get resultBasisTrueSunOn =>
+      'Applied (Seoul -32 min + equation of time ±16 min)';
 
   @override
   String get resultBasisTrueSunOff => 'Standard time only';
@@ -379,13 +380,14 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get resultBasisManseryeokVal =>
-      'KASI (Korea Astronomy and Space Science Institute)';
+      'Cross-verified vs KASI (klc package + custom solar terms)';
 
   @override
   String get resultBasisYearBoundary => 'Year boundary';
 
   @override
-  String get resultBasisYearBoundaryVal => 'Ipchun (立春, Feb 4)';
+  String get resultBasisYearBoundaryVal =>
+      'Ipchun (立春) — astronomical, ±15 min accuracy';
 
   @override
   String get resultBasisDayBoundary => 'Day boundary';
@@ -546,8 +548,26 @@ class AppL10nEn extends AppL10n {
   String get splashTrust => 'Korean traditional Four Pillars · made easy';
 
   @override
+  String get settingsSajuOptions => 'Saju Computation Options';
+
+  @override
+  String get settingsLateNightZasi => 'Late-night Zashi rule (23:00+)';
+
+  @override
+  String get settingsLateNightZasiDesc =>
+      'OFF (default): 23:00 birth uses next-day pillar (early Zashi — Korean mainstream).\nON: 23:00 birth stays same-day pillar (late Zashi school).';
+
+  @override
+  String get settingsLateNightZasiSnackOn =>
+      'Late-night Zashi ON — recompute saju from input to apply.';
+
+  @override
+  String get settingsLateNightZasiSnackOff =>
+      'Late-night Zashi OFF — recompute saju from input to apply.';
+
+  @override
   String get resultTrustLine =>
-      'Based on your birth date·time + Five Elements + Ten Gods.';
+      'Cross-verified vs KASI + astronomical solar-term datetimes + true solar time with equation-of-time + Korean DST (1948-1988) auto-applied.';
 
   @override
   String get resultProHookHeader => 'Want to go deeper?';

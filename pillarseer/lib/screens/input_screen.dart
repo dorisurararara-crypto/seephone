@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../services/saju_service.dart';
 import '../providers/saju_provider.dart';
+import '../providers/saju_settings_provider.dart';
 
 enum Gender { male, female, other }
 
@@ -276,6 +277,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       final svc = SajuService();
       final hour = _unknownTime ? 0 : (_selectedTime?.hour ?? 0);
       final minute = _unknownTime ? 0 : (_selectedTime?.minute ?? 0);
+      final sajuOpts = ref.read(sajuSettingsProvider);
       final result = await svc.calculateSaju(
         year: _selectedDate!.year,
         month: _selectedDate!.month,
@@ -285,6 +287,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         isLunar: _isLunar,
         isMale: _gender == Gender.female ? false : true,
         unknownTime: _unknownTime,
+        useLateNightZasi: sajuOpts.useLateNightZasi,
       );
 
       ref.read(sajuResultProvider.notifier).set(result);

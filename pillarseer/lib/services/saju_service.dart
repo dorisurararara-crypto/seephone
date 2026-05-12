@@ -54,6 +54,7 @@ class SajuService {
     required bool isLunar,
     required bool isMale,
     bool unknownTime = false,
+    bool useLateNightZasi = false,
   }) async {
     // 만세력 (KASI 표준) + 진태양시 보정 + 음양력 변환을 통합 처리
     final mans = ManseryeokService.calculate(
@@ -65,6 +66,7 @@ class SajuService {
       isLunar: isLunar,
       isMale: isMale,
       unknownTime: unknownTime,
+      useLateNightZasi: useLateNightZasi,
     );
     final yearP = mans.yearPillar;
     final monthP = mans.monthPillar;

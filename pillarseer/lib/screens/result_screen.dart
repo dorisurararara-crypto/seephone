@@ -806,7 +806,9 @@ class _ThreeHitCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '${result.dayMasterName} · ${result.day60ji}',
+            useKo
+                ? '${result.dayPillar.pairKorean} · ${result.dayPillar.pairKoreanMeaning} · ${result.day60ji}'
+                : '${result.dayMasterName} · ${result.day60ji}',
             style: const TextStyle(
               fontSize: 12,
               color: AppColors.fadedSilver,

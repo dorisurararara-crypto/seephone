@@ -356,7 +356,7 @@ class AppL10nKo extends AppL10n {
   String get resultBasisTrueSun => '진태양시';
 
   @override
-  String get resultBasisTrueSunOn => '적용됨 (서울 -32분)';
+  String get resultBasisTrueSunOn => '적용됨 (서울 -32분 + 균시차 ±16분)';
 
   @override
   String get resultBasisTrueSunOff => '표준시만 적용';
@@ -365,13 +365,13 @@ class AppL10nKo extends AppL10n {
   String get resultBasisManseryeok => '만세력 출처';
 
   @override
-  String get resultBasisManseryeokVal => '한국천문연구원 (KASI)';
+  String get resultBasisManseryeokVal => 'KASI 발표값 대조 검증 (klc 패키지 + 자체 절기)';
 
   @override
   String get resultBasisYearBoundary => '년 기준';
 
   @override
-  String get resultBasisYearBoundaryVal => '입춘 (立春, 2월 4일)';
+  String get resultBasisYearBoundaryVal => '입춘 절입시각 (천체 계산, ±15분)';
 
   @override
   String get resultBasisDayBoundary => '일 기준';
@@ -525,7 +525,24 @@ class AppL10nKo extends AppL10n {
   String get splashTrust => '정통 사주, 누구나 쉽게';
 
   @override
-  String get resultTrustLine => '당신의 생년월일시와 오행·십신 흐름을 바탕으로 풀이했어요.';
+  String get settingsSajuOptions => '사주 계산 옵션';
+
+  @override
+  String get settingsLateNightZasi => '야자시 학파 (23시 이후)';
+
+  @override
+  String get settingsLateNightZasiDesc =>
+      '기본 OFF: 23시 출생은 다음 날 일주 (조자시, 한국 mainstream).\nON: 23시 출생도 같은 날 일주 (야자시 학파).';
+
+  @override
+  String get settingsLateNightZasiSnackOn => '야자시 학파 ON — 사주를 다시 입력하면 적용돼요';
+
+  @override
+  String get settingsLateNightZasiSnackOff => '야자시 학파 OFF — 사주를 다시 입력하면 적용돼요';
+
+  @override
+  String get resultTrustLine =>
+      'KASI 기준 대조 + 입춘·12절 절입 천체 계산 + 진태양시·균시차 + 한국 DST(1948-1988) 자동 보정.';
 
   @override
   String get resultProHookHeader => '더 깊게 보고 싶다면?';

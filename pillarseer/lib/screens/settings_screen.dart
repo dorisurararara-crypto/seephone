@@ -11,6 +11,7 @@ import '../providers/dev_unlock_provider.dart';
 import '../providers/locale_provider.dart';
 import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
+import '../providers/saju_settings_provider.dart';
 import '../providers/streak_provider.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
@@ -50,7 +51,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: AppColors.celestialGold.withValues(alpha: 0.45),
+            color: AppColors.cardBorderStrong,
           ),
         ),
         child: Padding(
@@ -87,7 +88,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: AppColors.celestialGold.withValues(alpha: 0.25),
+                      color: AppColors.cardBorder,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -204,6 +205,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _sectionHeader(context, l.settingsNotifications),
           _NotifToggleTile(),
           const SizedBox(height: 24),
+          _sectionHeader(context, l.settingsSajuOptions),
+          _LateNightZasiTile(),
+          const SizedBox(height: 24),
           _sectionHeader(context, l.settingsTrust),
           _TrustTile(
             icon: Icons.verified_outlined,
@@ -238,7 +242,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                color: AppColors.celestialGold.withValues(alpha: 0.1),
+                color: AppColors.cardBorder,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                 color: AppColors.cardBorderStrong,
@@ -408,6 +412,90 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LateNightZasiTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final opts = ref.watch(sajuSettingsProvider);
+    final on = opts.useLateNightZasi;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+        decoration: BoxDecoration(
+          color: AppColors.cardSurface,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: on ? AppColors.cardBorderStrong : AppColors.cardBorder,
+          ),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.nightlight_round,
+              size: 18,
+              color: on ? AppColors.mysticViolet : AppColors.fadedSilver,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.settingsLateNightZasi,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ghostlyWhite,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.settingsLateNightZasiDesc,
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      color: AppColors.moonlightGray,
+                      height: 1.45,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Switch(
+              value: on,
+              activeThumbColor: AppColors.mysticViolet,
+              activeTrackColor:
+                  AppColors.mysticViolet.withValues(alpha: 0.35),
+              onChanged: (v) async {
+                await ref
+                    .read(sajuSettingsProvider.notifier)
+                    .setUseLateNightZasi(v);
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.spiritIndigo,
+                    content: Text(
+                      v
+                          ? l.settingsLateNightZasiSnackOn
+                          : l.settingsLateNightZasiSnackOff,
+                      style: const TextStyle(
+                        color: AppColors.ghostlyWhite,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
