@@ -34,27 +34,42 @@ class DailyService {
   }
 
   /// 5행 → 행운의 색 (Water 는 'Deep Ocean Blue' — 'Midnight Purple' 은 앱 배경색이라 혼동 방지)
-  String _luckyColorFor(String element) {
-    const map = {
+  /// locale-aware: ko=true → 한국어, false → 영문.
+  String _luckyColorFor(String element, {bool ko = false}) {
+    const enMap = {
       '木': 'Forest Jade',
       '火': 'Phoenix Red',
       '土': 'Ancient Bronze',
       '金': 'Lunar Silver',
       '水': 'Deep Ocean Blue',
     };
-    return map[element] ?? 'Celestial Gold';
+    const koMap = {
+      '木': '숲의 옥색 (Forest Jade)',
+      '火': '봉황의 붉은빛 (Phoenix Red)',
+      '土': '고대 청동빛 (Ancient Bronze)',
+      '金': '달의 은빛 (Lunar Silver)',
+      '水': '심해의 푸른빛 (Deep Ocean Blue)',
+    };
+    return ko ? (koMap[element] ?? '천계의 황금빛') : (enMap[element] ?? 'Celestial Gold');
   }
 
   /// 5행 → 행운의 방향
-  String _luckyDirectionFor(String element) {
-    const map = {
+  String _luckyDirectionFor(String element, {bool ko = false}) {
+    const enMap = {
       '木': 'East',
       '火': 'South',
       '土': 'Center',
       '金': 'West',
       '水': 'North',
     };
-    return map[element] ?? 'East';
+    const koMap = {
+      '木': '동쪽',
+      '火': '남쪽',
+      '土': '중앙',
+      '金': '서쪽',
+      '水': '북쪽',
+    };
+    return ko ? (koMap[element] ?? '동쪽') : (enMap[element] ?? 'East');
   }
 
   /// 5행 → 행운의 숫자 (河圖洛書 기반)
@@ -167,8 +182,12 @@ class DailyService {
       quoteEn: quote.en,
       quoteKo: quote.ko,
       luckyColor: _luckyColorFor(userElement),
+      luckyColorEn: _luckyColorFor(userElement),
+      luckyColorKo: _luckyColorFor(userElement, ko: true),
       luckyNumber: _luckyNumberFor(userElement),
       luckyDirection: _luckyDirectionFor(userElement),
+      luckyDirectionEn: _luckyDirectionFor(userElement),
+      luckyDirectionKo: _luckyDirectionFor(userElement, ko: true),
       dayPillar: todayPillar.text,
       loveGuideEn: love.en,
       loveGuideKo: love.ko,

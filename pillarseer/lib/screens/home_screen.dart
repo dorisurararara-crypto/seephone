@@ -1068,12 +1068,29 @@ class _LuckyCard extends StatelessWidget {
       ),
       child: Builder(builder: (context) {
         final l = AppL10n.of(context);
+        final useKo = (Localizations.maybeLocaleOf(context)
+                    ?.languageCode ??
+                'en') ==
+            'ko';
+        final color = useKo
+            ? (fortune.luckyColorKo.isEmpty
+                ? fortune.luckyColor
+                : fortune.luckyColorKo)
+            : (fortune.luckyColorEn.isEmpty
+                ? fortune.luckyColor
+                : fortune.luckyColorEn);
+        final direction = useKo
+            ? (fortune.luckyDirectionKo.isEmpty
+                ? fortune.luckyDirection
+                : fortune.luckyDirectionKo)
+            : (fortune.luckyDirectionEn.isEmpty
+                ? fortune.luckyDirection
+                : fortune.luckyDirectionEn);
         return Column(
           children: [
-            _row(Icons.palette_outlined, l.homeLuckyColor, fortune.luckyColor),
+            _row(Icons.palette_outlined, l.homeLuckyColor, color),
             _row(Icons.tag, l.homeLuckyNumber, '${fortune.luckyNumber}'),
-            _row(Icons.explore_outlined, l.homeLuckyDirection,
-                fortune.luckyDirection),
+            _row(Icons.explore_outlined, l.homeLuckyDirection, direction),
           ],
         );
       }),

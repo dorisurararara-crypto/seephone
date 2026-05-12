@@ -10,9 +10,13 @@ class DailyFortune {
   final String quote;          // 한 줄 메시지 (deprecated — quoteEn/Ko 사용)
   final String quoteEn;
   final String quoteKo;
-  final String luckyColor;
+  final String luckyColor; // deprecated — luckyColorEn 사용
+  final String luckyColorEn;
+  final String luckyColorKo;
   final int luckyNumber;
-  final String luckyDirection; // East / West / North / South / NE...
+  final String luckyDirection; // deprecated — luckyDirectionEn 사용
+  final String luckyDirectionEn;
+  final String luckyDirectionKo;
   final String dayPillar;      // 오늘의 일진 (예: 丙午)
   // 카테고리별 한 줄 가이드 (codex Round 3 권장 — 점신 대비 데일리 리텐션)
   final String loveGuideEn;
@@ -35,8 +39,12 @@ class DailyFortune {
     this.quoteEn = '',
     this.quoteKo = '',
     required this.luckyColor,
+    this.luckyColorEn = '',
+    this.luckyColorKo = '',
     required this.luckyNumber,
     required this.luckyDirection,
+    this.luckyDirectionEn = '',
+    this.luckyDirectionKo = '',
     required this.dayPillar,
     this.loveGuideEn = '',
     this.loveGuideKo = '',
