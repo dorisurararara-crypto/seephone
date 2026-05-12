@@ -560,6 +560,22 @@ class _MyeongliSummaryCard extends StatelessWidget {
     );
     final topShinsa = activations.keys.take(3).toList();
 
+    // 4. 격국 — 명리학 핵심 (Round 51)
+    final gyeokguk = GyeokgukService.judge(
+      dayMaster: result.dayPillar.chunGan,
+      monthJi: result.monthPillar.jiJi,
+    );
+
+    // 5. 용신 — 가장 필요한 오행 (Round 51)
+    final yongsin = YongsinService.judge(
+      dayMasterElement: dm,
+      strengthLabel: strength.label,
+      wood: el.wood, fire: el.fire, earth: el.earth,
+      metal: el.metal, water: el.water,
+    );
+    String yongsinKo(String e) =>
+        {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}[e] ?? e;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
@@ -581,15 +597,31 @@ class _MyeongliSummaryCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // 강약 chip
+          // 격국·용신·강약·공망·신살 chips (Round 51 명리학 풀 통합)
           Wrap(
             spacing: 8,
             runSpacing: 6,
             children: [
+              // 격국 — 사주 구조 (가장 큰 핵심)
               _chip(
-                useKo ? '⚖️ ${strength.label}' : '⚖️ ${strength.labelEn}',
+                useKo
+                    ? '🎯 ${gyeokguk.name.split(" ").first}'
+                    : '🎯 ${gyeokguk.nameEn.split(" ").first}',
                 AppColors.celestialGold,
               ),
+              // 용신 — 가장 필요한 오행
+              _chip(
+                useKo
+                    ? '🔮 용신: ${yongsinKo(yongsin.yongsin)}'
+                    : '🔮 Yongsin: ${yongsin.yongsin}',
+                AppColors.celestialGold,
+              ),
+              // 강약
+              _chip(
+                useKo ? '⚖️ ${strength.label}' : '⚖️ ${strength.labelEn}',
+                AppColors.mysticViolet,
+              ),
+              // 공망
               if (gmAreas.isNotEmpty)
                 _chip(
                   useKo
@@ -600,8 +632,8 @@ class _MyeongliSummaryCard extends StatelessWidget {
               if (gmAreas.isEmpty)
                 _chip(useKo ? '🪐 공망 없음' : '🪐 No Void',
                     AppColors.fadedSilver),
-              for (final s in topShinsa)
-                _chip('🌸 $s', AppColors.celestialGold),
+              // 활성 신살 (2개까지로 줄임, 격국+용신 추가로 공간 부족 방지)
+              for (final s in topShinsa.take(2)) _chip('🌸 $s', AppColors.fadedSilver),
             ],
           ),
           const SizedBox(height: 4),
