@@ -246,6 +246,127 @@ class HapchungService {
     return out;
   }
 
+  /// 형(刑) — 지지 충돌 관계. 충 보다 더 깊은 갈등.
+  /// 三刑: 寅巳申 (무은지형), 丑戌未 (지세지형).
+  /// 自刑: 辰辰, 午午, 酉酉, 亥亥.
+  /// 子卯刑 (무례지형).
+  static const List<Set<String>> _samhyungGroups = [
+    {'寅', '巳', '申'}, // 무은지형
+    {'丑', '戌', '未'}, // 지세지형
+  ];
+  static const List<String> _jaHyung = ['辰', '午', '酉', '亥']; // 자형
+  static const List<Set<String>> _twoHyung = [
+    {'子', '卯'}, // 무례지형
+  ];
+
+  /// 사주 4지지에서 형(刑) 활성 검사.
+  static List<({String type, List<String> jis})> findHyung({
+    required String yearJi,
+    required String monthJi,
+    required String dayJi,
+    String? hourJi,
+  }) {
+    final out = <({String type, List<String> jis})>[];
+    final allJi = <String>[yearJi, monthJi, dayJi];
+    if (hourJi != null) allJi.add(hourJi);
+
+    // 三刑: 3개 다 있어야 (분리 검사).
+    for (final group in _samhyungGroups) {
+      final present = allJi.where(group.contains).toSet();
+      if (present.length == 3) {
+        out.add((type: '三刑', jis: present.toList()));
+      }
+    }
+    // 자형: 같은 지지 2번 이상.
+    for (final j in _jaHyung) {
+      final count = allJi.where((x) => x == j).length;
+      if (count >= 2) {
+        out.add((type: '自刑', jis: [j, j]));
+      }
+    }
+    // 子卯刑.
+    for (final group in _twoHyung) {
+      final present = allJi.where(group.contains).toSet();
+      if (present.length == 2) {
+        out.add((type: '子卯刑', jis: present.toList()));
+      }
+    }
+    return out;
+  }
+
+  /// 파(破) — 6쌍 지지 깨짐.
+  static const List<Set<String>> _paPairs = [
+    {'子', '酉'}, {'午', '卯'}, {'巳', '申'},
+    {'寅', '亥'}, {'辰', '丑'}, {'戌', '未'},
+  ];
+
+  static bool isJijiPa(String a, String b) {
+    for (final p in _paPairs) {
+      if (p.contains(a) && p.contains(b) && a != b) return true;
+    }
+    return false;
+  }
+
+  /// 해(害) — 6쌍 지지 해침.
+  static const List<Set<String>> _haePairs = [
+    {'子', '未'}, {'丑', '午'}, {'寅', '巳'},
+    {'卯', '辰'}, {'申', '亥'}, {'酉', '戌'},
+  ];
+
+  static bool isJijiHae(String a, String b) {
+    for (final p in _haePairs) {
+      if (p.contains(a) && p.contains(b) && a != b) return true;
+    }
+    return false;
+  }
+
+  /// 사주 4지지에서 파·해 활성 검사.
+  static ({
+    List<({String area1, String area2})> pa,
+    List<({String area1, String area2})> hae,
+  }) findPaHae({
+    required String yearJi,
+    required String monthJi,
+    required String dayJi,
+    String? hourJi,
+  }) {
+    final pairs = <(String, String)>[
+      ('year', yearJi),
+      ('month', monthJi),
+      ('day', dayJi),
+      if (hourJi != null) ('hour', hourJi),
+    ];
+    final pa = <({String area1, String area2})>[];
+    final hae = <({String area1, String area2})>[];
+    for (int i = 0; i < pairs.length; i++) {
+      for (int j = i + 1; j < pairs.length; j++) {
+        final (a1, j1) = pairs[i];
+        final (a2, j2) = pairs[j];
+        if (isJijiPa(j1, j2)) {
+          pa.add((area1: a1, area2: a2));
+        }
+        if (isJijiHae(j1, j2)) {
+          hae.add((area1: a1, area2: a2));
+        }
+      }
+    }
+    return (pa: pa, hae: hae);
+  }
+
+  /// 형(刑) 한 줄 의미.
+  static String hyungInterpretation({bool ko = false}) {
+    return ko
+        ? '형(刑) 사주 — 충(沖) 보다 깊은 내부 갈등. 三刑은 권력·승부의 결, 自刑은 자기 충돌, 子卯刑은 예의 갈등. 정리·인내가 답.'
+        : 'Hyung (刑) — deeper than chung. 三刑 = power/contest; 自刑 = self-conflict; 子卯刑 = etiquette tension. Patience and refinement help.';
+  }
+
+  /// 파/해 한 줄 의미.
+  static String paHaeInterpretation({bool ko = false}) {
+    return ko
+        ? '파(破)·해(害) — 작은 갈등 신호. 파는 깨짐, 해는 해침. 합·충 보다 약하지만 누적되면 영향.'
+        : 'Pa (破) / Hae (害) — minor friction. 破 breaks alliance, 害 inflicts harm. Subtler than hap/chung but cumulative.';
+  }
+
   /// 충 결과 한 줄 의미.
   static String chungInterpretation({bool ko = false}) {
     return ko

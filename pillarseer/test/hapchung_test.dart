@@ -194,6 +194,64 @@ void main() {
     });
   });
 
+  group('형(刑)', () {
+    test('三刑 寅巳申 3개 모두 있음', () {
+      final r = HapchungService.findHyung(
+        yearJi: '寅', monthJi: '巳', dayJi: '申', hourJi: '子',
+      );
+      expect(r.any((e) => e.type == '三刑'), isTrue);
+    });
+    test('三刑 丑戌未', () {
+      final r = HapchungService.findHyung(
+        yearJi: '丑', monthJi: '戌', dayJi: '未',
+      );
+      expect(r.any((e) => e.type == '三刑'), isTrue);
+    });
+    test('自刑 辰辰', () {
+      final r = HapchungService.findHyung(
+        yearJi: '辰', monthJi: '辰', dayJi: '子',
+      );
+      expect(r.any((e) => e.type == '自刑'), isTrue);
+    });
+    test('子卯刑', () {
+      final r = HapchungService.findHyung(
+        yearJi: '子', monthJi: '卯', dayJi: '辰',
+      );
+      expect(r.any((e) => e.type == '子卯刑'), isTrue);
+    });
+    test('형 없음', () {
+      final r = HapchungService.findHyung(
+        yearJi: '寅', monthJi: '卯', dayJi: '辰',
+      );
+      expect(r, isEmpty);
+    });
+  });
+
+  group('파(破)·해(害)', () {
+    test('子酉 = 파', () {
+      expect(HapchungService.isJijiPa('子', '酉'), isTrue);
+      expect(HapchungService.isJijiPa('酉', '子'), isTrue);
+    });
+    test('子未 = 해', () {
+      expect(HapchungService.isJijiHae('子', '未'), isTrue);
+    });
+    test('파/해 아닌 조합 false', () {
+      expect(HapchungService.isJijiPa('子', '丑'), isFalse); // 합 아닌가? 합이지만 파는 X
+      expect(HapchungService.isJijiHae('子', '子'), isFalse);
+    });
+    test('findPaHae — chart 적용', () {
+      final r = HapchungService.findPaHae(
+        yearJi: '子',
+        monthJi: '酉',
+        dayJi: '未',
+        hourJi: '寅',
+      );
+      // 子-酉 = 파, 子-未 = 해
+      expect(r.pa, isNotEmpty);
+      expect(r.hae, isNotEmpty);
+    });
+  });
+
   group('interpretation', () {
     test('합/충 KO/EN 메시지 비어있지 않음', () {
       expect(HapchungService.hapInterpretation(ko: true), isNotEmpty);
