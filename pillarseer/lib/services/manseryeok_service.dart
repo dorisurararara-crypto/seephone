@@ -25,6 +25,74 @@ class ManseryeokService {
   /// 이 시기 입력 시각은 이미 거의 한국 longitude 기준이므로 longitude 보정 거의 0.
   static const int seoulLongitudeOffsetMinutesKst830 = -2;
 
+  /// 한국 주요 도시 경도 (degrees east).
+  /// codex Round 22/24 권고: 출생지별 진태양시. 사용자 입력 도시 substring 매칭.
+  /// fallback: 서울 (126.98°).
+  static const Map<String, double> _cityLongitudes = {
+    'seoul': 126.98,
+    '서울': 126.98,
+    'incheon': 126.71,
+    '인천': 126.71,
+    'busan': 129.07,
+    '부산': 129.07,
+    'daegu': 128.60,
+    '대구': 128.60,
+    'daejeon': 127.39,
+    '대전': 127.39,
+    'gwangju': 126.85,
+    '광주': 126.85,
+    'ulsan': 129.32,
+    '울산': 129.32,
+    'suwon': 127.03,
+    '수원': 127.03,
+    'changwon': 128.68,
+    '창원': 128.68,
+    'jeju': 126.50,
+    '제주': 126.50,
+    'gangneung': 128.88,
+    '강릉': 128.88,
+    'jeonju': 127.15,
+    '전주': 127.15,
+    'cheongju': 127.49,
+    '청주': 127.49,
+    'pohang': 129.36,
+    '포항': 129.36,
+    'mokpo': 126.39,
+    '목포': 126.39,
+    'andong': 128.73,
+    '안동': 128.73,
+    'chuncheon': 127.73,
+    '춘천': 127.73,
+  };
+
+  /// 도시 이름에서 경도 추정 (substring 매칭, fallback 서울).
+  static double longitudeForCity(String? city) {
+    if (city == null || city.trim().isEmpty) return 126.98; // Seoul default
+    final lower = city.trim().toLowerCase();
+    // exact match
+    if (_cityLongitudes.containsKey(lower)) return _cityLongitudes[lower]!;
+    // substring match (e.g., "서울특별시", "Seoul, Korea")
+    for (final entry in _cityLongitudes.entries) {
+      if (lower.contains(entry.key) ||
+          city.trim().contains(entry.key)) {
+        return entry.value;
+      }
+    }
+    return 126.98; // fallback: Seoul
+  }
+
+  /// 도시·시대 기반 longitude offset (분).
+  /// KST UTC+9 시기: longitude - 135° → 4분/도.
+  /// KST UTC+8:30 시기 (1954-1961): longitude - 127.5° → 4분/도.
+  static int longitudeOffsetMinutes(DateTime dt, String? city) {
+    final lon = longitudeForCity(city);
+    final kst830Start = DateTime(1954, 3, 21);
+    final kst830End = DateTime(1961, 8, 10);
+    final meridian =
+        (!dt.isBefore(kst830Start) && dt.isBefore(kst830End)) ? 127.5 : 135.0;
+    return ((lon - meridian) * 4).round();
+  }
+
   /// (deprecated) 균시차 미포함 단순 longitude offset.
   /// 외부 코드 호환을 위해 유지.
   @Deprecated('Use seoulLongitudeOffsetMinutes; equation of time is now applied automatically.')
@@ -44,19 +112,18 @@ class ManseryeokService {
             0.040849 * sin(2 * b));
   }
 
-  /// 서울 기준 진태양시 총 보정 (분) = era-aware longitude offset + EoT.
-  /// 1954-03-21 ~ 1961-08-09: UTC+8:30 시기, longitude 보정 거의 0 (-2분).
-  /// 그 외: UTC+9, longitude 보정 -32분.
-  static int seoulTrueSunOffsetForDate(DateTime dt) {
+  /// 서울 기준 진태양시 총 보정 (분) = longitude offset + EoT.
+  /// (도시 정보 없을 때 사용. 도시 있으면 [trueSunOffsetForCityDate] 사용.)
+  static int seoulTrueSunOffsetForDate(DateTime dt) =>
+      trueSunOffsetForCityDate(dt, null);
+
+  /// 도시·시대·EoT 기반 진태양시 총 보정 (분).
+  /// [city] null/empty 면 서울 기본.
+  static int trueSunOffsetForCityDate(DateTime dt, String? city) {
     final dayOfYear = dt.difference(DateTime(dt.year, 1, 1)).inDays + 1;
     final eot = equationOfTimeMinutes(dayOfYear);
-    final kst830Start = DateTime(1954, 3, 21);
-    final kst830End = DateTime(1961, 8, 10);
-    final longitudeOffset =
-        (!dt.isBefore(kst830Start) && dt.isBefore(kst830End))
-            ? seoulLongitudeOffsetMinutesKst830
-            : seoulLongitudeOffsetMinutes;
-    return (longitudeOffset + eot).round();
+    final lonOffset = longitudeOffsetMinutes(dt, city);
+    return (lonOffset + eot).round();
   }
 
   /// 한국 서머타임 (DST) 적용 기간 — 출처: timeanddate.com 한국 DST 이력 (12개 시행).
@@ -108,6 +175,7 @@ class ManseryeokService {
     required int hour,
     required int minute,
     required bool isLunar,
+    String? birthCity,
     required bool isMale,
     bool unknownTime = false,
     bool applyTrueSunTime = true,
@@ -153,7 +221,7 @@ class ManseryeokService {
     int adjD = dstD;
     if (applyTrueSunTime && !unknownTime) {
       final dt = DateTime(dstY, dstM, dstD, dstHour, minute);
-      final offsetMin = seoulTrueSunOffsetForDate(dt);
+      final offsetMin = trueSunOffsetForCityDate(dt, birthCity);
       final adj = dt.add(Duration(minutes: offsetMin));
       adjY = adj.year;
       adjM = adj.month;

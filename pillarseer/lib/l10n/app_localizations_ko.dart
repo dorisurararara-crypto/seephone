@@ -356,7 +356,7 @@ class AppL10nKo extends AppL10n {
   String get resultBasisTrueSun => '진태양시';
 
   @override
-  String get resultBasisTrueSunOn => '적용됨 (서울 -32분 + 균시차 ±16분)';
+  String get resultBasisTrueSunOn => '적용됨 (출생지 경도 보정 + 균시차 ±16분)';
 
   @override
   String get resultBasisTrueSunOff => '표준시만 적용';

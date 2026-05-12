@@ -288,6 +288,9 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         isMale: _gender == Gender.female ? false : true,
         unknownTime: _unknownTime,
         useLateNightZasi: sajuOpts.useLateNightZasi,
+        birthCity: _cityController.text.trim().isEmpty
+            ? null
+            : _cityController.text.trim(),
       );
 
       ref.read(sajuResultProvider.notifier).set(result);

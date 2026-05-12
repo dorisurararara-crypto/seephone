@@ -249,6 +249,44 @@ void main() {
       expect(ManseryeokService.isKoreanDst(DateTime(1951, 9, 9, 0)), isFalse);
     });
 
+    test('도시별 longitude offset — 부산 vs 서울 vs 제주', () {
+      // KST UTC+9 (1962+): 135° 기준
+      // 서울 126.98° → -32분, 부산 129.07° → -24분, 제주 126.50° → -34분
+      final dt = DateTime(2000, 6, 15);
+      final seoulOff =
+          ManseryeokService.trueSunOffsetForCityDate(dt, '서울');
+      final busanOff =
+          ManseryeokService.trueSunOffsetForCityDate(dt, '부산');
+      final jejuOff =
+          ManseryeokService.trueSunOffsetForCityDate(dt, '제주');
+      // 부산은 서울보다 동쪽 → offset이 덜 음수 (양수 방향)
+      expect(busanOff - seoulOff, equals(8),
+          reason: '부산은 서울보다 동쪽 (8분 차이)');
+      // 제주는 서울보다 서쪽 → offset이 더 음수
+      expect(jejuOff - seoulOff, equals(-2),
+          reason: '제주는 서울보다 서쪽 (2분 차이)');
+    });
+
+    test('도시 영어 입력 — Seoul/Busan 매칭', () {
+      final dt = DateTime(2000, 6, 15);
+      expect(
+        ManseryeokService.trueSunOffsetForCityDate(dt, 'Seoul'),
+        equals(ManseryeokService.trueSunOffsetForCityDate(dt, '서울')),
+      );
+      expect(
+        ManseryeokService.trueSunOffsetForCityDate(dt, 'Busan'),
+        equals(ManseryeokService.trueSunOffsetForCityDate(dt, '부산')),
+      );
+    });
+
+    test('도시 substring 매칭 — "서울특별시" → 서울', () {
+      final dt = DateTime(2000, 6, 15);
+      expect(
+        ManseryeokService.trueSunOffsetForCityDate(dt, '서울특별시'),
+        equals(ManseryeokService.trueSunOffsetForCityDate(dt, '서울')),
+      );
+    });
+
     test('1954-1961 UTC+8:30 시기 — longitude offset -2분 (not -32분)', () {
       // 1958-07-15: 표준시 UTC+8:30 시기 → longitude offset = -2분
       // DST 적용 (1958/5/4 ~ 9/21) → 시계 -1h → 입력시각 14:30 → 실제 13:30 → 진태양시 13:30 + EoT - 2분 ≈ 13:22

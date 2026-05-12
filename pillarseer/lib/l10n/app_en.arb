@@ -123,7 +123,7 @@
   "resultBasisLunar": "Lunar → Solar (KASI)",
   "resultBasisTimezone": "Timezone",
   "resultBasisTrueSun": "True Solar Time",
-  "resultBasisTrueSunOn": "Applied (Seoul -32 min + equation of time ±16 min)",
+  "resultBasisTrueSunOn": "Applied (birth-city longitude + equation of time ±16 min)",
   "resultBasisTrueSunOff": "Standard time only",
   "resultBasisManseryeok": "Manseryeok source",
   "resultBasisManseryeokVal": "Cross-verified vs KASI (klc package + custom solar terms)",

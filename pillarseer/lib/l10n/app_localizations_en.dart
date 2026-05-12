@@ -370,7 +370,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get resultBasisTrueSunOn =>
-      'Applied (Seoul -32 min + equation of time ±16 min)';
+      'Applied (birth-city longitude + equation of time ±16 min)';
 
   @override
   String get resultBasisTrueSunOff => 'Standard time only';

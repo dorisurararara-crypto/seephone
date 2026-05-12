@@ -123,7 +123,7 @@
   "resultBasisLunar": "음력 → 양력 (KASI)",
   "resultBasisTimezone": "타임존",
   "resultBasisTrueSun": "진태양시",
-  "resultBasisTrueSunOn": "적용됨 (서울 -32분 + 균시차 ±16분)",
+  "resultBasisTrueSunOn": "적용됨 (출생지 경도 보정 + 균시차 ±16분)",
   "resultBasisTrueSunOff": "표준시만 적용",
   "resultBasisManseryeok": "만세력 출처",
   "resultBasisManseryeokVal": "KASI 발표값 대조 검증 (klc 패키지 + 자체 절기)",
