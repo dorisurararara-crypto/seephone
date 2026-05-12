@@ -4,8 +4,6 @@
 // 출처: KASI 월력요항 (천체력 기반, ±20분 정확도).
 // 화면(_NewYear2026Screen) 과 테스트(new_year_2026_test) 가 모두 이 데이터를 참조.
 
-import 'solar_term_service.dart';
-
 /// 한 절기의 모든 메타.
 class JolSlot {
   /// KST 절입 시각.
@@ -153,12 +151,4 @@ class JolCalendar2026 {
   /// 12절 전체 (SolarTermService.jolLongitudes 순서).
   static List<JolSlot> get all => List.unmodifiable(_bySolarTermIndex);
 
-  /// `SolarTermService.jolDateTime` 와 ±20분 이내인지 검증 (테스트 helper).
-  /// solarTermDateTime 은 year-day mod 365 로 wraparound 하므로 소한(285°)도
-  /// year=2026 입력으로 2026-01-05 가 반환됨.
-  static int minutesDiff(int jolIndex) {
-    final kasi = _bySolarTermIndex[jolIndex];
-    final calc = SolarTermService.jolDateTime(2026, jolIndex);
-    return calc.difference(kasi.dateTime).inMinutes.abs();
-  }
 }
