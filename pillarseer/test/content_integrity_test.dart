@@ -71,6 +71,50 @@ void main() {
     });
   });
 
+  group('l10n KO/EN parity 무결성', () {
+    test('주요 한국어 leak 후보 — 한국 모드에서 영어 단어 미노출', () {
+      // 자주 leak 되는 패턴들이 KO arb 안에 직접 영어 표기로 잠겨 있지 않은지.
+      // English 단어가 한국어 strings 안에 들어가 있으면 번역 흔적 의심.
+      final koArb =
+          File('lib/l10n/app_ko.arb').readAsStringSync();
+      // 사주 핵심 용어인데 영어로만 적혀있으면 leak 의심.
+      // 의도적 영어 brand 단어 (KASI, Pillar Seer, K-pop, Phase, Pro, AM, PM) 는 OK.
+      final suspectPatterns = [
+        'Day Master',
+        'Day Pillar',
+        'Yang Wood',
+        'Yin Wood',
+        'Yang Fire',
+        'Yin Fire',
+      ];
+      for (final p in suspectPatterns) {
+        expect(koArb.contains(p), isFalse,
+            reason:
+                'KO arb 에 "$p" 발견 — 한국 모드에서 영어 leak 가능성');
+      }
+    });
+
+    test('주요 영문 leak 후보 — 영어 모드에서 한국 표기 미노출', () {
+      final enArb =
+          File('lib/l10n/app_en.arb').readAsStringSync();
+      // 한국어 brand 단어는 OK ("한국어", 한국어 KASI 보충 표기 등).
+      // 핵심 사주 용어 한국어 음을 영어 strings 에서 단독 노출하면 안 됨.
+      final suspectPatterns = [
+        '나무',
+        '불 (火)',
+        '쇠',
+        '물 (水)',
+        '갑목',
+        '을목',
+      ];
+      for (final p in suspectPatterns) {
+        expect(enArb.contains(p), isFalse,
+            reason:
+                'EN arb 에 "$p" 발견 — 영어 모드에서 한국어 leak 가능성');
+      }
+    });
+  });
+
   group('celebrities.json 무결성', () {
     late List<Map<String, dynamic>> celebs;
     setUpAll(() {
