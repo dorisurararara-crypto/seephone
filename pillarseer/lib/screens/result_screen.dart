@@ -713,7 +713,19 @@ class _HapchungBlock extends StatelessWidget {
         {'year': 'Year', 'month': 'Month', 'day': 'Day', 'hour': 'Hour'}[a] ??
         a;
 
-    if (r.hap.isEmpty && r.chung.isEmpty) {
+    final samhap = HapchungService.findSamhap(
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    final banghap = HapchungService.findBanghap(
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    if (r.hap.isEmpty && r.chung.isEmpty && samhap.isEmpty && banghap.isEmpty) {
       return Text(
         useKo
             ? '원국에 강한 합·충 관계 없음 — 사주 흐름이 직선적이고 안정적입니다.'
@@ -756,6 +768,84 @@ class _HapchungBlock extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             HapchungService.hapInterpretation(ko: useKo),
+            style: const TextStyle(
+              fontSize: 12.5,
+              color: AppColors.fadedSilver,
+              height: 1.6,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 14),
+        ],
+        if (samhap.isNotEmpty) ...[
+          Text(
+            useKo ? '삼합(三合) — 3지지 결합' : 'Samhap (三合) — 3-branch unity',
+            style: const TextStyle(
+              fontSize: 12,
+              letterSpacing: 1.2,
+              color: AppColors.mysticViolet,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (final s in samhap)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Text(
+                useKo
+                    ? '• ${s.areas.map((a) => areaKo(a)).join(" + ")} → 오행 화: ${s.element}'
+                    : '• ${s.areas.map((a) => areaEn(a)).join(" + ")} → element: ${s.element}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.ghostlyWhite,
+                  height: 1.55,
+                ),
+              ),
+            ),
+          const SizedBox(height: 8),
+          Text(
+            useKo
+                ? '삼합 — 3지지가 한 오행으로 강하게 결합. 가장 큰 합. 운기 흐름이 크게 굳어집니다.'
+                : 'Samhap — three branches lock into one element. The biggest combination; flow stabilizes strongly.',
+            style: const TextStyle(
+              fontSize: 12.5,
+              color: AppColors.fadedSilver,
+              height: 1.6,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 14),
+        ],
+        if (banghap.isNotEmpty) ...[
+          Text(
+            useKo ? '방합(方合) — 계절 3지지' : 'Banghap (方合) — Seasonal unity',
+            style: const TextStyle(
+              fontSize: 12,
+              letterSpacing: 1.2,
+              color: AppColors.mysticViolet,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (final b in banghap)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Text(
+                useKo
+                    ? '• ${b.areas.map((a) => areaKo(a)).join(" + ")} → 계절 오행: ${b.element}'
+                    : '• ${b.areas.map((a) => areaEn(a)).join(" + ")} → seasonal element: ${b.element}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.ghostlyWhite,
+                  height: 1.55,
+                ),
+              ),
+            ),
+          const SizedBox(height: 8),
+          Text(
+            useKo
+                ? '방합 — 한 계절의 3지지가 한 오행으로 모임. 계절 기운이 강하게 작동.'
+                : 'Banghap — three branches of one season unite into one element. Seasonal force is amplified.',
             style: const TextStyle(
               fontSize: 12.5,
               color: AppColors.fadedSilver,

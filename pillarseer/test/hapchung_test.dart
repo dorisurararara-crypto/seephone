@@ -103,6 +103,67 @@ void main() {
     });
   });
 
+  group('삼합(三合)', () {
+    test('申子辰 → 수 (3 areas)', () {
+      final r = HapchungService.findSamhap(
+        yearJi: '申',
+        monthJi: '子',
+        dayJi: '辰',
+        hourJi: '寅',
+      );
+      expect(r.length, 1);
+      expect(r[0].element, '水');
+      expect(r[0].areas, containsAll(['year', 'month', 'day']));
+    });
+    test('寅午戌 → 화', () {
+      final r = HapchungService.findSamhap(
+        yearJi: '寅',
+        monthJi: '午',
+        dayJi: '戌',
+      );
+      expect(r.length, 1);
+      expect(r[0].element, '火');
+    });
+    test('일부만 있으면 발견 X (반합 X)', () {
+      final r = HapchungService.findSamhap(
+        yearJi: '申',
+        monthJi: '子',
+        dayJi: '丑', // 辰 없음
+      );
+      expect(r, isEmpty);
+    });
+  });
+
+  group('방합(方合)', () {
+    test('寅卯辰 → 목 (봄방)', () {
+      final r = HapchungService.findBanghap(
+        yearJi: '寅',
+        monthJi: '卯',
+        dayJi: '辰',
+      );
+      expect(r.length, 1);
+      expect(r[0].element, '木');
+    });
+    test('亥子丑 → 수 (겨울방)', () {
+      final r = HapchungService.findBanghap(
+        yearJi: '亥',
+        monthJi: '子',
+        dayJi: '丑',
+        hourJi: '酉',
+      );
+      expect(r.length, 1);
+      expect(r[0].element, '水');
+    });
+    test('일부만 있으면 발견 X', () {
+      final r = HapchungService.findBanghap(
+        yearJi: '寅',
+        monthJi: '卯',
+        dayJi: '巳', // 辰 없음, 巳 = 화방
+      );
+      expect(r, isEmpty);
+    });
+  });
+
   group('interpretation', () {
     test('합/충 KO/EN 메시지 비어있지 않음', () {
       expect(HapchungService.hapInterpretation(ko: true), isNotEmpty);

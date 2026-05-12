@@ -145,6 +145,79 @@ class HapchungService {
         : 'Strong "hap" (合) chart — alliance, harmony, and merging. But too many alliances can blur your own grain; conscious separation matters.';
   }
 
+  /// 삼합(三合) — 3개 지지의 강한 결합. 그룹별 오행 화.
+  /// 申子辰 → 水, 巳酉丑 → 金, 寅午戌 → 火, 亥卯未 → 木.
+  static const Map<String, ({List<String> members, String element})>
+      _samhapGroups = {
+    'water': (members: ['申', '子', '辰'], element: '水'),
+    'metal': (members: ['巳', '酉', '丑'], element: '金'),
+    'fire': (members: ['寅', '午', '戌'], element: '火'),
+    'wood': (members: ['亥', '卯', '未'], element: '木'),
+  };
+
+  /// 방합(方合) — 같은 계절 3개 지지의 결합. 그룹별 오행.
+  /// 寅卯辰 → 木(봄방), 巳午未 → 火(여름방), 申酉戌 → 金(가을방), 亥子丑 → 水(겨울방).
+  static const Map<String, ({List<String> members, String element})>
+      _banghapGroups = {
+    'spring': (members: ['寅', '卯', '辰'], element: '木'),
+    'summer': (members: ['巳', '午', '未'], element: '火'),
+    'autumn': (members: ['申', '酉', '戌'], element: '金'),
+    'winter': (members: ['亥', '子', '丑'], element: '水'),
+  };
+
+  /// 사주 4지지에 삼합 3개 모두 포함되어 있는지 검사 (완전 삼합).
+  /// 또는 2개만 있어도 "반합(半合)" 으로 약한 합. 여기서는 3개 완전합만 검사.
+  static List<({String element, List<String> areas})> findSamhap({
+    required String yearJi,
+    required String monthJi,
+    required String dayJi,
+    String? hourJi,
+  }) {
+    final out = <({String element, List<String> areas})>[];
+    final pairs = <(String, String)>[
+      ('year', yearJi),
+      ('month', monthJi),
+      ('day', dayJi),
+      if (hourJi != null) ('hour', hourJi),
+    ];
+    for (final group in _samhapGroups.values) {
+      final areas = <String>[];
+      for (final (a, j) in pairs) {
+        if (group.members.contains(j)) areas.add(a);
+      }
+      if (areas.length >= 3) {
+        out.add((element: group.element, areas: areas));
+      }
+    }
+    return out;
+  }
+
+  /// 4지지에 방합 3개 모두 포함 검사.
+  static List<({String element, List<String> areas})> findBanghap({
+    required String yearJi,
+    required String monthJi,
+    required String dayJi,
+    String? hourJi,
+  }) {
+    final out = <({String element, List<String> areas})>[];
+    final pairs = <(String, String)>[
+      ('year', yearJi),
+      ('month', monthJi),
+      ('day', dayJi),
+      if (hourJi != null) ('hour', hourJi),
+    ];
+    for (final group in _banghapGroups.values) {
+      final areas = <String>[];
+      for (final (a, j) in pairs) {
+        if (group.members.contains(j)) areas.add(a);
+      }
+      if (areas.length >= 3) {
+        out.add((element: group.element, areas: areas));
+      }
+    }
+    return out;
+  }
+
   /// 충 결과 한 줄 의미.
   static String chungInterpretation({bool ko = false}) {
     return ko
