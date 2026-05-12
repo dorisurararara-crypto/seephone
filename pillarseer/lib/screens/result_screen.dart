@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/gong_mang_service.dart';
+import '../services/hapchung_service.dart';
 import '../services/personalization_engine.dart';
 import '../services/shinsa_service.dart';
 import '../services/twelve_unsung_service.dart';
@@ -225,6 +226,11 @@ class ResultScreen extends ConsumerWidget {
                   : '12 Unsung (life cycle stages)',
               locked: false,
               child: _TwelveUnsungBlock(result: result, useKo: useKo),
+            ),
+            _AccordionSection(
+              title: useKo ? '합·충 (合·沖)' : 'Hap & Chung (合·沖)',
+              locked: false,
+              child: _HapchungBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: l.resultBasisTitle,
@@ -671,6 +677,130 @@ class _TwelveUnsungBlock extends StatelessWidget {
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+// ──────── 합·충(合冲) block (Round 38: 명리학 dynamic relations)
+
+class _HapchungBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _HapchungBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final r = HapchungService.analyzeChart(
+      yearGan: result.yearPillar.chunGan,
+      yearJi: result.yearPillar.jiJi,
+      monthGan: result.monthPillar.chunGan,
+      monthJi: result.monthPillar.jiJi,
+      dayGan: result.dayPillar.chunGan,
+      dayJi: result.dayPillar.jiJi,
+      hourGan: result.hourPillar?.chunGan,
+      hourJi: result.hourPillar?.jiJi,
+    );
+
+    String areaKo(String a) => {
+          'year': '년주',
+          'month': '월주',
+          'day': '일주',
+          'hour': '시주',
+        }[a] ??
+        a;
+    String areaEn(String a) =>
+        {'year': 'Year', 'month': 'Month', 'day': 'Day', 'hour': 'Hour'}[a] ??
+        a;
+
+    if (r.hap.isEmpty && r.chung.isEmpty) {
+      return Text(
+        useKo
+            ? '원국에 강한 합·충 관계 없음 — 사주 흐름이 직선적이고 안정적입니다.'
+            : 'No strong hap (合) or chung (沖) — your chart flows linearly and steadily.',
+        style: const TextStyle(
+          fontSize: 13.5,
+          color: AppColors.ghostlyWhite,
+          height: 1.7,
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (r.hap.isNotEmpty) ...[
+          Text(
+            useKo ? '합(合) — 결합·조화 관계' : 'Hap (合) — Alliance / Harmony',
+            style: const TextStyle(
+              fontSize: 12,
+              letterSpacing: 1.2,
+              color: AppColors.mysticViolet,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (final h in r.hap)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Text(
+                useKo
+                    ? '• ${areaKo(h.area1)} ↔ ${areaKo(h.area2)}${h.element.isEmpty ? "" : " (오행 화: ${h.element})"}'
+                    : '• ${areaEn(h.area1)} ↔ ${areaEn(h.area2)}${h.element.isEmpty ? "" : " (element: ${h.element})"}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.ghostlyWhite,
+                  height: 1.55,
+                ),
+              ),
+            ),
+          const SizedBox(height: 8),
+          Text(
+            HapchungService.hapInterpretation(ko: useKo),
+            style: const TextStyle(
+              fontSize: 12.5,
+              color: AppColors.fadedSilver,
+              height: 1.6,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 14),
+        ],
+        if (r.chung.isNotEmpty) ...[
+          Text(
+            useKo ? '충(沖) — 갈등·변동 관계' : 'Chung (沖) — Friction / Transition',
+            style: const TextStyle(
+              fontSize: 12,
+              letterSpacing: 1.2,
+              color: AppColors.celestialGold,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (final c in r.chung)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Text(
+                useKo
+                    ? '• ${areaKo(c.area1)} ↔ ${areaKo(c.area2)}'
+                    : '• ${areaEn(c.area1)} ↔ ${areaEn(c.area2)}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.ghostlyWhite,
+                  height: 1.55,
+                ),
+              ),
+            ),
+          const SizedBox(height: 8),
+          Text(
+            HapchungService.chungInterpretation(ko: useKo),
+            style: const TextStyle(
+              fontSize: 12.5,
+              color: AppColors.fadedSilver,
+              height: 1.6,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ],
       ],
     );
   }
