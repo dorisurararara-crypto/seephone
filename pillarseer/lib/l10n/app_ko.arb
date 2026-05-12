@@ -12,7 +12,7 @@
   "inputTime": "태어난 시간",
   "inputUnknownTime": "태어난 시간을 모름",
   "inputBirthCity": "출생지 (선택)",
-  "inputBirthCityHelper": "도시명 입력 시 진태양시 경도 자동 보정 (서울/부산/제주 등 18개)",
+  "inputBirthCityHelper": "도시명 입력 시 진태양시 경도 자동 보정 (서울·부산·제주 등 36개 도시)",
   "inputCalendar": "달력:",
   "inputSolar": "양력",
   "inputLunar": "음력",

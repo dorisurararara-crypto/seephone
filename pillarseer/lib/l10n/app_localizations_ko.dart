@@ -39,7 +39,8 @@ class AppL10nKo extends AppL10n {
   String get inputBirthCity => '출생지 (선택)';
 
   @override
-  String get inputBirthCityHelper => '도시명 입력 시 진태양시 경도 자동 보정 (서울/부산/제주 등 18개)';
+  String get inputBirthCityHelper =>
+      '도시명 입력 시 진태양시 경도 자동 보정 (서울·부산·제주 등 36개 도시)';
 
   @override
   String get inputCalendar => '달력:';

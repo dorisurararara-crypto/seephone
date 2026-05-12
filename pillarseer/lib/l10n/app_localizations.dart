@@ -160,7 +160,7 @@ abstract class AppL10n {
   /// No description provided for @inputBirthCityHelper.
   ///
   /// In en, this message translates to:
-  /// **'Auto longitude correction for 18 Korean cities (Seoul / Busan / Jeju ...)'**
+  /// **'Auto longitude correction for 36 Korean cities (Seoul · Busan · Jeju ...)'**
   String get inputBirthCityHelper;
 
   /// No description provided for @inputCalendar.

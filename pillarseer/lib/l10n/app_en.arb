@@ -12,7 +12,7 @@
   "inputTime": "Select Time",
   "inputUnknownTime": "I don't know my birth time",
   "inputBirthCity": "Birth City (optional)",
-  "inputBirthCityHelper": "Auto longitude correction for 18 Korean cities (Seoul / Busan / Jeju ...)",
+  "inputBirthCityHelper": "Auto longitude correction for 36 Korean cities (Seoul · Busan · Jeju ...)",
   "inputCalendar": "Calendar:",
   "inputSolar": "Solar",
   "inputLunar": "Lunar",

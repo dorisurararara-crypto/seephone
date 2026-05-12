@@ -279,6 +279,37 @@ void main() {
       );
     });
 
+    test('음력 입력 시 양력 변환 작동 — 1990 음력 1월 1일 = 양력 1990-1-27', () {
+      // klc package 가 음력 변환 처리. KASI 발표값과 일치하는지 확인.
+      // 1990 음력 1월 1일 (설날) = 양력 1990-01-27.
+      // 따라서 음력 입력으로 들어오면 양력으로 변환 후 사주 계산.
+      // 같은 결과: 음력 1990/1/1 vs 양력 1990/1/27.
+      final lunar = ManseryeokService.calculate(
+        year: 1990,
+        month: 1,
+        day: 1,
+        hour: 12,
+        minute: 0,
+        isLunar: true,
+        isMale: true,
+        unknownTime: true,
+      );
+      final solar = ManseryeokService.calculate(
+        year: 1990,
+        month: 1,
+        day: 27,
+        hour: 12,
+        minute: 0,
+        isLunar: false,
+        isMale: true,
+        unknownTime: true,
+      );
+      // 동일 일주 + 동일 년주 (둘 다 입춘 이전 → 1989 기준).
+      expect(lunar.dayPillar.text, equals(solar.dayPillar.text),
+          reason: '음력 1/1 = 양력 1/27 → 같은 사주여야 함');
+      expect(lunar.yearPillar.text, equals(solar.yearPillar.text));
+    });
+
     test('unknown time + 입춘일 — deterministic 년주 (hour=12 기준)', () {
       // 2024 입춘 = 17:11 (my formula). unknown time hour=12 → 입춘 이전 → 2023 년주.
       final r = ManseryeokService.calculate(

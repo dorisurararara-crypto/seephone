@@ -40,7 +40,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get inputBirthCityHelper =>
-      'Auto longitude correction for 18 Korean cities (Seoul / Busan / Jeju ...)';
+      'Auto longitude correction for 36 Korean cities (Seoul · Busan · Jeju ...)';
 
   @override
   String get inputCalendar => 'Calendar:';
