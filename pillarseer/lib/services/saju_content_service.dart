@@ -26,14 +26,19 @@ class SajuContentService {
     }
   }
 
-  /// summary 한 줄 (없으면 fallback)
-  static Future<String> summaryFor(String ji60) async {
+  /// summary 한 줄 (없으면 locale fallback).
+  /// [useKo] true 면 한국어 fallback, false 면 영어.
+  static Future<String> summaryFor(String ji60, {bool useKo = false}) async {
     final entry = await findByJi60(ji60);
-    return entry?['summary'] as String? ??
-        'Your destiny carries the rhythm of $ji60 — ancient, specific, yours alone.';
+    final raw = entry?['summary'] as String?;
+    if (raw != null && raw.isNotEmpty) return raw;
+    return useKo
+        ? '$ji60 일주는 정통 명리학 기준에서 매우 구체적인 결을 가집니다.'
+        : 'Your destiny carries the rhythm of $ji60 — ancient, specific, yours alone.';
   }
 
   /// 카테고리별 readings (personality / love / money / career)
+  /// JSON 콘텐츠는 영어. Korean 모드는 deep_content_service 의 readings 를 우선 사용.
   static Future<Map<String, String>> readingsFor(String ji60) async {
     final entry = await findByJi60(ji60);
     if (entry == null) {
