@@ -69,26 +69,64 @@ class DailyService {
     return map[element] ?? 7;
   }
 
-  /// 일진별 한 줄 메시지 — ko/en 둘 다 반환
+  /// 일진별 한 줄 메시지 — ko/en 둘 다 반환.
+  /// dayPillar 의 chunGan 첫 코드 + score 로 seed 만들어 variation 5개 중 하나 선택.
+  /// 같은 일주여도 score 와 dayPillar 조합으로 다양한 메시지 노출.
   ({String ko, String en}) _quoteFor(String dayPillar, int score) {
+    final seed = (dayPillar.isEmpty ? 0 : dayPillar.codeUnits.first) % 3;
     if (score >= 85) {
-      return (ko: '먼 곳에서 비밀스러운 인연이 다가오는 날.',
-              en: 'A secret friend arrives from afar.');
+      const pool = [
+        (ko: '먼 곳에서 비밀스러운 인연이 다가오는 날.',
+            en: 'A secret friend arrives from afar.'),
+        (ko: '오늘 만난 한 사람이 다음 1년의 결을 바꿉니다.',
+            en: 'One person you meet today reshapes the next year.'),
+        (ko: '의도 없이 흘려보낸 말이 가장 큰 다리가 됩니다.',
+            en: 'A word you spoke without weight becomes the longest bridge.'),
+      ];
+      return pool[seed];
     }
     if (score >= 70) {
-      return (ko: '아이디어는 점심 전에 말하고, 오후에는 듣는 날.',
-              en: 'Speak your idea before noon. Listen after.');
+      const pool = [
+        (ko: '아이디어는 점심 전에 말하고, 오후에는 듣는 날.',
+            en: 'Speak your idea before noon. Listen after.'),
+        (ko: '오후의 작은 침묵이 오전의 결정보다 큰 결과를 낳습니다.',
+            en: 'An afternoon pause weighs more than a morning decision.'),
+        (ko: '오늘은 빠른 답보다 정확한 질문이 가치 있습니다.',
+            en: 'A precise question is worth more than a quick answer today.'),
+      ];
+      return pool[seed];
     }
     if (score >= 55) {
-      return (ko: '오늘의 고요함이 다음 달의 수확을 심습니다.',
-              en: 'Stillness today plants the harvest of next month.');
+      const pool = [
+        (ko: '오늘의 고요함이 다음 달의 수확을 심습니다.',
+            en: 'Stillness today plants the harvest of next month.'),
+        (ko: '한 번 더 자라가는 길이 정답입니다.',
+            en: 'The longer way around is the right way today.'),
+        (ko: '꾸준한 한 발이 큰 발자국보다 깊습니다.',
+            en: 'A steady step prints deeper than a big leap.'),
+      ];
+      return pool[seed];
     }
     if (score >= 40) {
-      return (ko: '점심 무렵 충동 지출 조심하는 날.',
-              en: 'Watch for impulsive spending mid-day.');
+      const pool = [
+        (ko: '점심 무렵 충동 지출 조심하는 날.',
+            en: 'Watch for impulsive spending mid-day.'),
+        (ko: '오늘 결정은 24시간 보류하는 편이 안전합니다.',
+            en: 'Sit on today\'s decisions for 24 hours before acting.'),
+        (ko: '말의 톤을 한 단계 낮추세요 — 의도가 더 잘 전해집니다.',
+            en: 'Cool your tone by one notch — intent travels better.'),
+      ];
+      return pool[seed];
     }
-    return (ko: '천천히 움직이세요. 얼음 아래의 물은 자기 시간이 있습니다.',
-            en: 'Move slow. The water beneath the ice has its own time.');
+    const pool = [
+      (ko: '천천히 움직이세요. 얼음 아래의 물은 자기 시간이 있습니다.',
+          en: 'Move slow. The water beneath the ice has its own time.'),
+      (ko: '오늘은 안에 머무는 날 — 밖이 아니라 안을 살피세요.',
+          en: 'Stay in today — look inward, not outward.'),
+      (ko: '잠시 멈추는 것도 행동입니다. 결의 결을 다듬으세요.',
+          en: 'Pausing is also action — refine the grain of your grain.'),
+    ];
+    return pool[seed];
   }
 
   /// 메인: 사용자 사주 + 오늘 날짜로 데일리 운세 계산
