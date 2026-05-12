@@ -178,7 +178,7 @@ abstract class AppL10n {
   /// No description provided for @inputLunar.
   ///
   /// In en, this message translates to:
-  /// **'Lunar (soon)'**
+  /// **'Lunar'**
   String get inputLunar;
 
   /// No description provided for @inputGender.
@@ -448,13 +448,13 @@ abstract class AppL10n {
   /// No description provided for @navHome.
   ///
   /// In en, this message translates to:
-  /// **'Home'**
+  /// **'Today'**
   String get navHome;
 
   /// No description provided for @navReading.
   ///
   /// In en, this message translates to:
-  /// **'Reading'**
+  /// **'My Saju'**
   String get navReading;
 
   /// No description provided for @navReports.

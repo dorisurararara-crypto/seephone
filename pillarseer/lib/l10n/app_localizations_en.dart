@@ -49,7 +49,7 @@ class AppL10nEn extends AppL10n {
   String get inputSolar => 'Solar';
 
   @override
-  String get inputLunar => 'Lunar (soon)';
+  String get inputLunar => 'Lunar';
 
   @override
   String get inputGender => 'Gender:';
@@ -189,10 +189,10 @@ class AppL10nEn extends AppL10n {
       'Discover the 144 hexagrams\nthat shape your year ahead.';
 
   @override
-  String get navHome => 'Home';
+  String get navHome => 'Today';
 
   @override
-  String get navReading => 'Reading';
+  String get navReading => 'My Saju';
 
   @override
   String get navReports => 'Reports';

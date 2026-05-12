@@ -40,6 +40,13 @@ class ReportsHomeScreen extends StatelessWidget {
         route: '/reports/dream',
         symbol: '解夢',
       ),
+      _ReportCard(
+        title: l.discoverTitle,
+        desc: l.discoverSubtitle,
+        icon: Icons.nightlight_round,
+        route: '/discover',
+        symbol: 'K-pop',
+      ),
     ];
 
     return Scaffold(

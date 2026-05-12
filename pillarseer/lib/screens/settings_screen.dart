@@ -202,7 +202,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           _disabledTile(context, l.settingsThemeDark),
           const SizedBox(height: 24),
           _sectionHeader(context, l.settingsNotifications),
-          _disabledTile(context, l.settingsNotificationsDesc),
+          _NotifToggleTile(),
           const SizedBox(height: 24),
           _sectionHeader(context, l.settingsTrust),
           _TrustTile(
@@ -410,6 +410,115 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NotifToggleTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final toggle = ref.watch(notificationProvider);
+    final on = toggle.enabled;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
+        decoration: BoxDecoration(
+          color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: AppColors.celestialGold
+                .withValues(alpha: on ? 0.5 : 0.15),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              on
+                  ? Icons.notifications_active
+                  : Icons.notifications_off_outlined,
+              size: 18,
+              color: on ? AppColors.celestialGold : AppColors.fadedSilver,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.homeNotifTitle,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ghostlyWhite,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    on ? l.homeNotifOn : l.homeNotifSubtitle,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      color: on
+                          ? AppColors.celestialGold
+                          : AppColors.moonlightGray,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Switch(
+              value: on,
+              activeThumbColor: AppColors.celestialGold,
+              activeTrackColor:
+                  AppColors.celestialGold.withValues(alpha: 0.4),
+              onChanged: (v) async {
+                final notifier = ref.read(notificationProvider.notifier);
+                final messenger = ScaffoldMessenger.of(context);
+                if (v) {
+                  final saju = ref.read(sajuResultProvider);
+                  final useKo = (Localizations.maybeLocaleOf(context)
+                              ?.languageCode ??
+                          'en') ==
+                      'ko';
+                  final ok = await notifier.enable(
+                    pushTitle: l.homeNotifSampleTitle,
+                    pushBody: l.homeNotifSampleBody,
+                    day60ji: saju?.day60ji,
+                    useKo: useKo,
+                  );
+                  messenger
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: ok
+                          ? AppColors.celestialGold
+                          : Colors.redAccent.shade200,
+                      content: Text(
+                        ok
+                            ? l.homeNotifEnabledSnack
+                            : l.homeNotifPermissionDenied,
+                        style: const TextStyle(
+                          color: AppColors.cosmicBlack,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ));
+                } else {
+                  await notifier.disable();
+                  messenger
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: AppColors.spiritIndigo,
+                      content: Text(l.homeNotifDisabledSnack),
+                    ));
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

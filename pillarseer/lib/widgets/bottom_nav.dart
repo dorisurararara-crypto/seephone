@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
-/// 5탭 Bottom Nav. home/result/placeholder 공유.
-/// 라우트 진입은 Riverpod 전역 상태(sajuResultProvider)로 보호되므로 extra 전달 불필요.
+/// 4탭 Bottom Nav — codex Round 13 권고로 5탭 → 4탭 단순화.
+/// 오늘 (Home) / 내 사주 (Result) / 리포트 / 프로필
+/// Discover (셀럽 비교) 는 Reports home 안 카드로 흡수.
 class PillarBottomNav extends StatelessWidget {
-  final int activeIdx; // 0=Home 1=Reading 2=Reports 3=Discover 4=Profile
+  final int activeIdx;
 
   const PillarBottomNav({super.key, required this.activeIdx});
 
@@ -14,17 +15,26 @@ class PillarBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final items = <_NavItem>[
-      _NavItem(icon: Icons.auto_awesome, label: l.navHome, route: '/home'),
-      _NavItem(icon: Icons.view_column_outlined, label: l.navReading, route: '/result'),
-      _NavItem(icon: Icons.menu_book_outlined, label: l.navReports, route: '/reports'),
-      _NavItem(icon: Icons.nightlight_round, label: l.navDiscover, route: '/discover'),
-      _NavItem(icon: Icons.person_outline, label: l.navProfile, route: '/profile'),
+      _NavItem(icon: Icons.wb_sunny_outlined, label: l.navHome, route: '/home'),
+      _NavItem(
+          icon: Icons.view_column_outlined,
+          label: l.navReading,
+          route: '/result'),
+      _NavItem(
+          icon: Icons.menu_book_outlined,
+          label: l.navReports,
+          route: '/reports'),
+      _NavItem(
+          icon: Icons.person_outline,
+          label: l.navProfile,
+          route: '/profile'),
     ];
     return Container(
       decoration: BoxDecoration(
         color: AppColors.cosmicBlack.withValues(alpha: 0.95),
         border: Border(
-          top: BorderSide(color: AppColors.celestialGold.withValues(alpha: 0.15)),
+          top: BorderSide(
+              color: AppColors.celestialGold.withValues(alpha: 0.12)),
         ),
       ),
       padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
@@ -61,8 +71,8 @@ class PillarBottomNav extends StatelessWidget {
                         Text(
                           item.label,
                           style: TextStyle(
-                            fontSize: 11,
-                            letterSpacing: 0.3,
+                            fontSize: 11.5,
+                            letterSpacing: 0.2,
                             fontWeight:
                                 isActive ? FontWeight.w700 : FontWeight.w500,
                             color: isActive
@@ -87,5 +97,6 @@ class _NavItem {
   final IconData icon;
   final String label;
   final String route;
-  const _NavItem({required this.icon, required this.label, required this.route});
+  const _NavItem(
+      {required this.icon, required this.label, required this.route});
 }

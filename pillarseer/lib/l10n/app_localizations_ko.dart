@@ -48,7 +48,7 @@ class AppL10nKo extends AppL10n {
   String get inputSolar => '양력';
 
   @override
-  String get inputLunar => '음력 (준비 중)';
+  String get inputLunar => '음력';
 
   @override
   String get inputGender => '성별:';
@@ -183,10 +183,10 @@ class AppL10nKo extends AppL10n {
   String get homePromoDesc => '한 해를 좌우할\n144괘 풀이를 만나보세요.';
 
   @override
-  String get navHome => '홈';
+  String get navHome => '오늘';
 
   @override
-  String get navReading => '사주';
+  String get navReading => '내 사주';
 
   @override
   String get navReports => '리포트';

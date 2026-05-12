@@ -160,7 +160,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 3),
+      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 }

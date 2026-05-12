@@ -1,3 +1,4 @@
+// ignore_for_file: unused_element
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,25 +45,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: Column(
             children: [
+              // 1. Greeting + streak (single block)
               _Header(name: birth?.name, dayMasterName: saju.dayMasterName),
-              const SizedBox(height: 4),
               const _StreakChip(),
-              const SizedBox(height: 4),
-              const _NotifToggleCard(),
-              _HourlyFlowCard(saju: saju),
+              // 2. 오늘 날짜
+              const SizedBox(height: 6),
               _Date(date: fortune.date),
-              const SizedBox(height: 10),
-              const _MoonDeco(),
+              // 3. 오늘의 점수 + 한 줄 (가장 큰 시각 임팩트)
+              const SizedBox(height: 8),
               _ScoreCircle(score: fortune.totalScore),
               _ScoreExplanation(score: fortune.totalScore),
               _Quote(quoteEn: fortune.quoteEn, quoteKo: fortune.quoteKo),
+              // 4. 오늘의 일진 한 줄 pill
               _TodayPillarRow(
                 dayPillar: fortune.dayPillar,
                 localizedLabel:
                     _localizedGanjiLabel(context, fortune.dayPillar),
               ),
+              // 5. 시간대별 흐름 (지금/다음/저녁)
+              const SizedBox(height: 4),
+              _HourlyFlowCard(saju: saju),
+              // 6. 카테고리 4종 점수 + 가이드 한 줄씩
               _CategoryGrid(fortune: fortune),
               _CategoryGuidesCard(fortune: fortune),
+              // 7. 행운 (색·숫자·방향)
               _LuckyCard(fortune: fortune),
               const _PromoCard(),
               const SizedBox(height: 16),
@@ -718,20 +724,28 @@ class _Date extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.maybeLocaleOf(context)?.toString();
-    final fmt = DateFormat('EEE · MMM d, y', locale);
+    final locale = Localizations.maybeLocaleOf(context);
+    final useKo = locale?.languageCode == 'ko';
+    final text = useKo
+        ? '${date.year}년 ${date.month}월 ${date.day}일 ${_weekdayKo(date.weekday)}요일'
+        : DateFormat('EEE · MMM d, y', locale?.toString()).format(date);
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Text(
-        fmt.format(date).toUpperCase(),
-        style: const TextStyle(
-          fontSize: 10,
+        text,
+        style: TextStyle(
+          fontSize: 12.5,
           color: AppColors.moonlightGray,
-          letterSpacing: 2.0,
+          letterSpacing: useKo ? 0 : 1.5,
           fontWeight: FontWeight.w600,
         ),
       ),
     );
+  }
+
+  String _weekdayKo(int w) {
+    const map = {1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토', 7: '일'};
+    return map[w] ?? '';
   }
 }
 
