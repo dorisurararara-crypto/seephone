@@ -85,6 +85,9 @@ class ResultScreen extends ConsumerWidget {
             // codex Round 19 권고: "그래서 나는 누구인가" 가장 먼저.
             // 1. 한 줄 정체성 (3-hit card)
             _ThreeHitCard(result: result, reading: reading, useKo: useKo),
+            const SizedBox(height: 12),
+            // 1.5. 사주 코어 프로필 — 명리학 features 한 카드 종합 (Round 45)
+            _MyeongliSummaryCard(result: result, useKo: useKo),
             const SizedBox(height: 14),
             // 2. 사주 4기둥 (가장 핵심 결과)
             _PillarGrid(result: result),
@@ -448,6 +451,132 @@ Day Pillar: ${result.dayMasterName} · ${result.day60ji}
         duration: const Duration(seconds: 2),
       ));
   }
+}
+
+// ──────── 사주 코어 프로필 (Round 45: 모든 명리 features 한 카드 종합)
+
+class _MyeongliSummaryCard extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _MyeongliSummaryCard({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    // 1. 강약 한 단어.
+    final el = result.elements;
+    final dm = result.dayPillar.chunGanElement;
+    final strength = StrengthService.judge(
+      dayMasterElement: dm,
+      monthJi: result.monthPillar.jiJi,
+      wood: el.wood,
+      fire: el.fire,
+      earth: el.earth,
+      metal: el.metal,
+      water: el.water,
+    );
+
+    // 2. 공망 영역.
+    final gmAreas = GongMangService.affectedAreas(
+      dayPillar: result.day60ji,
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+
+    // 3. 활성 신살 (3개까지).
+    final activations = ShinsaService.analyzeChart(
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      dayChunGan: result.dayPillar.chunGan,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    final topShinsa = activations.keys.take(3).toList();
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: AppColors.cardSurface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.cardBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? '사주 코어 프로필' : 'Myeongli Snapshot',
+            style: const TextStyle(
+              fontSize: 11,
+              letterSpacing: 1.4,
+              color: AppColors.moonlightGray,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          // 강약 chip
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              _chip(
+                useKo ? '⚖️ ${strength.label}' : '⚖️ ${strength.labelEn}',
+                AppColors.celestialGold,
+              ),
+              if (gmAreas.isNotEmpty)
+                _chip(
+                  useKo
+                      ? '🪐 공망: ${gmAreas.map((a) => _areaKo(a)).join("·")}'
+                      : '🪐 Void: ${gmAreas.map((a) => _areaEn(a)).join("·")}',
+                  AppColors.mysticViolet,
+                ),
+              if (gmAreas.isEmpty)
+                _chip(useKo ? '🪐 공망 없음' : '🪐 No Void',
+                    AppColors.fadedSilver),
+              for (final s in topShinsa)
+                _chip('🌸 $s', AppColors.celestialGold),
+            ],
+          ),
+          const SizedBox(height: 4),
+        ],
+      ),
+    );
+  }
+
+  Widget _chip(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 11.5,
+          color: color,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.3,
+        ),
+      ),
+    );
+  }
+
+  String _areaKo(String a) => {
+        'year': '년',
+        'month': '월',
+        'day': '일',
+        'hour': '시',
+      }[a] ??
+      a;
+  String _areaEn(String a) => {
+        'year': 'Yr',
+        'month': 'Mo',
+        'day': 'Day',
+        'hour': 'Hr',
+      }[a] ??
+      a;
 }
 
 // ──────── 신왕·신약(身旺·身弱) block (Round 42: 일간 강약 판단)
