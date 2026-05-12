@@ -10,6 +10,7 @@ import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
 import '../services/daily_service.dart';
 import '../services/hourly_service.dart';
+import '../services/today_deep_service.dart';
 import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
 import '../providers/streak_provider.dart';
@@ -69,11 +70,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 dayPillar: fortune.dayPillar,
                 label: _localizedGanjiLabel(context, fortune.dayPillar),
               ),
+              // 신규 — 사주 깊이 기반 오늘 풀이 (codex Round 11+)
+              _TodayDeepReadingSection(
+                reading: TodayDeepService.build(
+                  userDayStem: saju.dayPillar.chunGan,
+                  userDayBranch: saju.dayPillar.jiJi,
+                  userMonthBranch: saju.monthPillar.jiJi,
+                  userDominantEl: saju.elements.dominant,
+                  userDeficitEl: saju.elements.deficit,
+                  todayPillar: fortune.dayPillar,
+                  todayScore: fortune.totalScore,
+                ),
+              ),
               _HourlyFlowSection(saju: saju),
               _CategorySection(fortune: fortune),
               _CategoryGuides(fortune: fortune),
               _LuckySection(fortune: fortune),
-              _PromoCard(),
               const SizedBox(height: 8),
             ],
           ),
@@ -1082,7 +1094,183 @@ class _LuckySection extends StatelessWidget {
   }
 }
 
-// ──────────── Promo card ────────────
+// ──────────── Today Deep Reading (사주 깊이 오늘 풀이) ────────────
+
+class _TodayDeepReadingSection extends StatelessWidget {
+  final TodayDeepReading reading;
+  const _TodayDeepReadingSection({required this.reading});
+
+  @override
+  Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final headline = useKo ? reading.headlineKo : reading.headlineEn;
+    final body = useKo ? reading.bodyKo : reading.bodyEn;
+    final actions = useKo ? reading.actionsKo : reading.actionsEn;
+    final caution = useKo ? reading.cautionKo : reading.cautionEn;
+    final bestTime = useKo ? reading.bestTimeKo : reading.bestTimeEn;
+    final moodTag = useKo ? reading.moodTagKo : reading.moodTagEn;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // section meta
+          Row(
+            children: [
+              Text(
+                useKo ? '오늘 내 사주 풀이' : "Today's deep reading",
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12,
+                  letterSpacing: 0.4,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.taupe,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                decoration:
+                    BoxDecoration(border: Border.all(color: AppColors.accent, width: 1)),
+                child: Text(
+                  moodTag.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 8.5,
+                    letterSpacing: 2,
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          // headline — 한국어 메인
+          Text(
+            headline,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 22,
+              fontWeight: FontWeight.w400,
+              color: AppColors.ink,
+              height: 1.35,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Container(width: 36, height: 1, color: AppColors.line),
+          const SizedBox(height: 14),
+          // body — 4-6 sentences
+          Text(
+            body,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.85,
+            ),
+          ),
+          const SizedBox(height: 22),
+          // recommended actions
+          Text(
+            useKo ? '오늘 추천 · 行' : 'Try today · 行',
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 3,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 10),
+          ...actions.map((a) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6, right: 10),
+                      child: Container(
+                          width: 4, height: 4, color: AppColors.accent),
+                    ),
+                    Expanded(
+                      child: Text(
+                        a,
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 13.5,
+                          color: AppColors.ink,
+                          height: 1.75,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+          const SizedBox(height: 18),
+          // caution
+          Container(
+            padding: const EdgeInsets.only(top: 14),
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  useKo ? '조심할 점 · 戒' : 'Watch out · 戒',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  caution,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13.5,
+                    color: AppColors.ink,
+                    height: 1.7,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
+          // best time row
+          Row(
+            children: [
+              Text(
+                useKo ? '운 좋은 시간' : 'Best time',
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  letterSpacing: 3,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.taupe,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                bestTime,
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.accent,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Promo card (deprecated — kept for ref) ────────────
 
 class _PromoCard extends StatelessWidget {
   @override

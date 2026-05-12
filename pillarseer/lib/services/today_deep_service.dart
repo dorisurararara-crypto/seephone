@@ -1,0 +1,476 @@
+// Pillar Seer — 오늘 운세 깊이 풀이 서비스 (Round 11+).
+//
+// 사용자 사주 + 오늘 일진 → 5-7문장 narrative + 행동 추천 + 조심 + 시간대.
+// 중학생도 5초 안에 이해할 톤. 명리 jargon은 괄호 안에만.
+//
+// 입력:
+//   - userSaju.dayPillar.chunGan (사용자 일간)
+//   - userSaju.dayPillar.jiJi (사용자 일지)
+//   - userSaju.monthPillar.jiJi (사용자 월지 — 계절 보정)
+//   - userSaju.elements.dominant / deficit (5행 균형)
+//   - 오늘 일진 (60갑자) — DailyService 로부터
+//
+// 출력 (TodayDeepReading):
+//   - headlineKo / headlineEn: 한 줄 분위기 (예: "오늘은 '깊은 물 같은 사람'에게 따스한 바람이 부는 날.")
+//   - bodyKo / bodyEn: 4-6 문장 narrative
+//   - actionsKo[] / actionsEn[]: 추천 행동 2-3개 (구체적)
+//   - cautionKo / cautionEn: 조심할 일 한 줄
+//   - bestTimeKo / bestTimeEn: 시간대 추천 (예: "오전 9-11시")
+//
+// 알고리즘:
+//   1) 오늘 천간 × 사용자 일간 → 십신 (TenGodsService)
+//   2) 오늘 지지 vs 사용자 일지 → 합/충/형/파
+//   3) 5행 강약 변화 (오늘 element가 사용자 dominant/deficit과 어떤 관계)
+//   4) 시간대 = 오늘 지지 가 활성화되는 12시진 매핑
+
+import '../models/saju_result.dart';
+import 'ten_gods_service.dart';
+
+class TodayDeepReading {
+  final String headlineKo;
+  final String headlineEn;
+  final String bodyKo;
+  final String bodyEn;
+  final List<String> actionsKo;
+  final List<String> actionsEn;
+  final String cautionKo;
+  final String cautionEn;
+  final String bestTimeKo;
+  final String bestTimeEn;
+  final String moodTagKo;  // 한 단어 — 화면 chip
+  final String moodTagEn;
+
+  const TodayDeepReading({
+    required this.headlineKo,
+    required this.headlineEn,
+    required this.bodyKo,
+    required this.bodyEn,
+    required this.actionsKo,
+    required this.actionsEn,
+    required this.cautionKo,
+    required this.cautionEn,
+    required this.bestTimeKo,
+    required this.bestTimeEn,
+    required this.moodTagKo,
+    required this.moodTagEn,
+  });
+}
+
+class TodayDeepService {
+  /// 메인: 사용자 사주 + 오늘 일진 → 깊은 풀이.
+  static TodayDeepReading build({
+    required String userDayStem,        // 사용자 일간 (천간)
+    required String userDayBranch,      // 사용자 일지
+    required String userMonthBranch,    // 사용자 월지
+    required String userDominantEl,     // 사용자 5행 강함
+    required String userDeficitEl,      // 사용자 5행 약함
+    required String todayPillar,        // 오늘 60갑자 (예: '丙戌')
+    required int todayScore,            // 0-100
+  }) {
+    final todayStem = todayPillar.isNotEmpty ? todayPillar[0] : '甲';
+    final todayBranch = todayPillar.length >= 2 ? todayPillar[1] : '子';
+
+    // 1. 십신 — 오늘 천간이 사용자 일간 기준 무엇인가
+    final god = TenGodsService.godFor(userDayStem, todayStem);
+
+    // 2. 사용자 vs 오늘 지지 관계
+    final branchRelation = _branchRelation(userDayBranch, todayBranch);
+
+    // 3. 5행 풀이
+    final todayEl = _elementOfStem(todayStem);
+    final elementMood = _elementMood(userDominantEl, userDeficitEl, todayEl);
+
+    // 4. 12시진 best time
+    final bestTime = _bestTimeFor(todayBranch);
+
+    // narrative 조합
+    final godKo = god == null ? '' : _godPhraseKo(god);
+    final godEn = god == null ? '' : _godPhraseEn(god);
+    final brKo = _branchRelationKo(branchRelation);
+    final brEn = _branchRelationEn(branchRelation);
+
+    final hooks = _hooksByScore(todayScore);
+
+    final headlineKo = '오늘은 ${hooks.moodKo} 분위기의 하루.';
+    final headlineEn = "Today's mood: ${hooks.moodEn}.";
+
+    final bodyKo = _composeBodyKo(
+      godKo: godKo,
+      branchKo: brKo,
+      elementKo: elementMood.ko,
+      moodHookKo: hooks.bodyHookKo,
+    );
+    final bodyEn = _composeBodyEn(
+      godEn: godEn,
+      branchEn: brEn,
+      elementEn: elementMood.en,
+      moodHookEn: hooks.bodyHookEn,
+    );
+
+    final actionsKo = _actionsKo(god, branchRelation, todayScore);
+    final actionsEn = _actionsEn(god, branchRelation, todayScore);
+
+    final cautionKo = _cautionKo(god, branchRelation, todayScore);
+    final cautionEn = _cautionEn(god, branchRelation, todayScore);
+
+    return TodayDeepReading(
+      headlineKo: headlineKo,
+      headlineEn: headlineEn,
+      bodyKo: bodyKo,
+      bodyEn: bodyEn,
+      actionsKo: actionsKo,
+      actionsEn: actionsEn,
+      cautionKo: cautionKo,
+      cautionEn: cautionEn,
+      bestTimeKo: bestTime.ko,
+      bestTimeEn: bestTime.en,
+      moodTagKo: hooks.moodKo,
+      moodTagEn: hooks.moodEn,
+    );
+  }
+
+  // ───────── helpers ─────────
+
+  static String _elementOfStem(String stem) {
+    const map = {
+      '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+      '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+    };
+    return map[stem] ?? '木';
+  }
+
+  static String _godPhraseKo(TenGod g) {
+    switch (g) {
+      case TenGod.bigyeon:
+        return '오늘 들어오는 기운은 친구나 동료처럼 같은 위치의 사람';
+      case TenGod.geopjae:
+        return '오늘은 경쟁자나 비슷한 자리의 사람과 부딪칠 수 있는 결';
+      case TenGod.siksin:
+        return '표현·창작 기운이 들어와 말과 글이 가벼워지는 결';
+      case TenGod.sanggwan:
+        return '재능이 빛나지만 규칙·권위와 부딪힐 수 있는 결';
+      case TenGod.pyeonjae:
+        return '뜻밖의 기회나 큰 돈의 신호가 들어오는 결';
+      case TenGod.jeongjae:
+        return '안정된 수입·약속이 자리 잡는 결';
+      case TenGod.pyeongwan:
+        return '강한 책임이나 도전이 갑자기 다가오는 결';
+      case TenGod.jeonggwan:
+        return '인정·승진·공식 자리 같은 기운이 들어오는 결';
+      case TenGod.pyeonin:
+        return '깊은 공부·직관·종교적인 기운이 들어오는 결';
+      case TenGod.jeongin:
+        return '배움·멘토·도움이 자연스럽게 오는 결';
+    }
+  }
+
+  static String _godPhraseEn(TenGod g) {
+    switch (g) {
+      case TenGod.bigyeon:
+        return 'an arrival of peers — friends or colleagues at your level';
+      case TenGod.geopjae:
+        return 'a rival energy — someone at the same level may collide';
+      case TenGod.siksin:
+        return 'expression flowing freely — your words land light';
+      case TenGod.sanggwan:
+        return 'talent shines, but watch for friction with authority';
+      case TenGod.pyeonjae:
+        return 'an unexpected windfall — a doorway to bigger money';
+      case TenGod.jeongjae:
+        return 'steady income and promises settling in place';
+      case TenGod.pyeongwan:
+        return 'a sudden responsibility or challenge arrives';
+      case TenGod.jeonggwan:
+        return 'recognition, promotion, or formal authority';
+      case TenGod.pyeonin:
+        return 'deep study, intuition, or spiritual signals';
+      case TenGod.jeongin:
+        return 'learning, mentors, and natural help';
+    }
+  }
+
+  static _BranchRelation _branchRelation(String userJi, String todayJi) {
+    if (userJi == todayJi) return _BranchRelation.same;
+    const hap6 = {
+      '子': '丑', '丑': '子', '寅': '亥', '亥': '寅', '卯': '戌',
+      '戌': '卯', '辰': '酉', '酉': '辰', '巳': '申', '申': '巳',
+      '午': '未', '未': '午',
+    };
+    if (hap6[userJi] == todayJi) return _BranchRelation.hap;
+    const chung = {
+      '子': '午', '丑': '未', '寅': '申', '卯': '酉', '辰': '戌', '巳': '亥',
+      '午': '子', '未': '丑', '申': '寅', '酉': '卯', '戌': '辰', '亥': '巳',
+    };
+    if (chung[userJi] == todayJi) return _BranchRelation.chung;
+    return _BranchRelation.neutral;
+  }
+
+  static String _branchRelationKo(_BranchRelation r) {
+    switch (r) {
+      case _BranchRelation.same:
+        return '오늘 일진이 내 일지와 같아서 평소 습관이 강하게 드러나요';
+      case _BranchRelation.hap:
+        return '오늘 일진이 내 일지와 잘 맞아서 인연이 자연스럽게 풀려요';
+      case _BranchRelation.chung:
+        return '오늘 일진이 내 일지와 부딪쳐서 마음이 흔들리거나 결정이 어렵습니다';
+      case _BranchRelation.neutral:
+        return '오늘 일진은 내 일지와 큰 충돌 없이 잔잔하게 흐릅니다';
+    }
+  }
+
+  static String _branchRelationEn(_BranchRelation r) {
+    switch (r) {
+      case _BranchRelation.same:
+        return 'today shares your day-branch — your habits show up strongly';
+      case _BranchRelation.hap:
+        return "today's branch harmonizes with yours — connections flow naturally";
+      case _BranchRelation.chung:
+        return "today's branch clashes with yours — decisions feel unsteady";
+      case _BranchRelation.neutral:
+        return "today's branch is neutral — things move quietly";
+    }
+  }
+
+  static ({String ko, String en}) _elementMood(String dominant, String deficit, String todayEl) {
+    const koEl = {'木':'나무','火':'불','土':'흙','金':'쇠','水':'물'};
+    const enEl = {'木':'wood','火':'fire','土':'earth','金':'metal','水':'water'};
+    if (todayEl == dominant) {
+      return (
+        ko: '평소 강한 ${koEl[dominant]} 기운이 오늘 더 짙어집니다',
+        en: 'your strong $todayEl ${enEl[todayEl]} energy gets even stronger today',
+      );
+    }
+    if (todayEl == deficit) {
+      return (
+        ko: '평소 부족한 ${koEl[deficit]} 기운이 오늘 보충됩니다',
+        en: 'your weak ${enEl[deficit]} energy gets a boost today',
+      );
+    }
+    return (
+      ko: '${koEl[todayEl]} 기운이 하루를 채워줍니다',
+      en: '${enEl[todayEl]} energy fills the day',
+    );
+  }
+
+  static ({String ko, String en}) _bestTimeFor(String todayJi) {
+    const map = {
+      '子': (ko: '밤 11시 ~ 새벽 1시', en: '11 PM – 1 AM'),
+      '丑': (ko: '새벽 1시 ~ 3시', en: '1 AM – 3 AM'),
+      '寅': (ko: '새벽 3시 ~ 5시', en: '3 AM – 5 AM'),
+      '卯': (ko: '아침 5시 ~ 7시', en: '5 AM – 7 AM'),
+      '辰': (ko: '아침 7시 ~ 9시', en: '7 AM – 9 AM'),
+      '巳': (ko: '오전 9시 ~ 11시', en: '9 AM – 11 AM'),
+      '午': (ko: '낮 11시 ~ 1시', en: '11 AM – 1 PM'),
+      '未': (ko: '낮 1시 ~ 3시', en: '1 PM – 3 PM'),
+      '申': (ko: '오후 3시 ~ 5시', en: '3 PM – 5 PM'),
+      '酉': (ko: '저녁 5시 ~ 7시', en: '5 PM – 7 PM'),
+      '戌': (ko: '저녁 7시 ~ 9시', en: '7 PM – 9 PM'),
+      '亥': (ko: '밤 9시 ~ 11시', en: '9 PM – 11 PM'),
+    };
+    return map[todayJi] ?? (ko: '낮 11시 ~ 1시', en: '11 AM – 1 PM');
+  }
+
+  static ({String moodKo, String moodEn, String bodyHookKo, String bodyHookEn}) _hooksByScore(int score) {
+    if (score >= 85) {
+      return (
+        moodKo: '활짝 열린',
+        moodEn: 'wide open',
+        bodyHookKo: '평소 못 하던 일을 시작해도 운이 받쳐줍니다',
+        bodyHookEn: 'a great day to start what you usually delay',
+      );
+    }
+    if (score >= 70) {
+      return (
+        moodKo: '따스한',
+        moodEn: 'warm',
+        bodyHookKo: '큰 일은 안 일어나도 작은 결실이 차분히 쌓입니다',
+        bodyHookEn: 'no fireworks, but small wins quietly accumulate',
+      );
+    }
+    if (score >= 55) {
+      return (
+        moodKo: '잔잔한',
+        moodEn: 'calm',
+        bodyHookKo: '큰 결정은 미루고 정리·확인 위주로 가는 게 좋습니다',
+        bodyHookEn: 'defer big calls; review and confirm instead',
+      );
+    }
+    if (score >= 40) {
+      return (
+        moodKo: '조심스러운',
+        moodEn: 'careful',
+        bodyHookKo: '말과 행동을 한 번 더 다듬으면 흐름을 지킬 수 있어요',
+        bodyHookEn: 'pause once before speaking — preserve the flow',
+      );
+    }
+    return (
+      moodKo: '쉬어가는',
+      moodEn: 'restful',
+      bodyHookKo: '오늘은 에너지를 아끼고 회복에 집중하는 게 정답입니다',
+      bodyHookEn: 'conserve energy and prioritize recovery',
+    );
+  }
+
+  static String _composeBodyKo({
+    required String godKo,
+    required String branchKo,
+    required String elementKo,
+    required String moodHookKo,
+  }) {
+    final parts = <String>[];
+    if (godKo.isNotEmpty) parts.add('$godKo입니다.');
+    parts.add('$branchKo.');
+    parts.add('$elementKo.');
+    parts.add('$moodHookKo.');
+    return parts.join(' ');
+  }
+
+  static String _composeBodyEn({
+    required String godEn,
+    required String branchEn,
+    required String elementEn,
+    required String moodHookEn,
+  }) {
+    final parts = <String>[];
+    if (godEn.isNotEmpty) parts.add('Today brings $godEn.');
+    parts.add('Also, $branchEn.');
+    parts.add('Element-wise, $elementEn.');
+    parts.add('In short, $moodHookEn.');
+    return parts.join(' ');
+  }
+
+  static List<String> _actionsKo(TenGod? god, _BranchRelation rel, int score) {
+    final out = <String>[];
+    // 1) 십신 기반
+    if (god != null) {
+      out.add(_actionForGodKo(god));
+    }
+    // 2) 지지 관계 기반
+    if (rel == _BranchRelation.hap) {
+      out.add('미뤘던 약속·연락을 오늘 정리하면 잘 풀립니다.');
+    } else if (rel == _BranchRelation.chung) {
+      out.add('중요한 통화·계약은 내일로 미루는 편이 안전합니다.');
+    } else if (rel == _BranchRelation.same) {
+      out.add('평소 루틴(운동·정리·습관)을 한 번 더 의식하면 큰 보상이 따라옵니다.');
+    } else {
+      out.add('짧은 산책이나 정리 한 가지로 하루 흐름을 잡으세요.');
+    }
+    // 3) 점수 기반
+    if (score >= 75) {
+      out.add('자기 분야의 한 사람에게 먼저 연락하세요. 작은 신호가 큰 인연이 됩니다.');
+    } else if (score < 50) {
+      out.add('오늘 만든 결과보다 오늘 회복한 에너지가 내일을 정합니다.');
+    }
+    return out;
+  }
+
+  static List<String> _actionsEn(TenGod? god, _BranchRelation rel, int score) {
+    final out = <String>[];
+    if (god != null) out.add(_actionForGodEn(god));
+    if (rel == _BranchRelation.hap) {
+      out.add('Close postponed promises and calls today — they flow.');
+    } else if (rel == _BranchRelation.chung) {
+      out.add('Defer big contracts and important calls to tomorrow.');
+    } else if (rel == _BranchRelation.same) {
+      out.add('Push your usual routine harder — workout, tidy, habit.');
+    } else {
+      out.add('A short walk or one tidy task sets the day right.');
+    }
+    if (score >= 75) {
+      out.add('Reach out to one person in your field first — small signal, big result.');
+    } else if (score < 50) {
+      out.add("Today's recovered energy matters more than today's output.");
+    }
+    return out;
+  }
+
+  static String _actionForGodKo(TenGod g) {
+    switch (g) {
+      case TenGod.bigyeon:
+        return '같은 팀·동료와 짧은 점심이나 차 한 잔 — 정보 한 줄이 답이 됩니다.';
+      case TenGod.geopjae:
+        return '비교 대신 협력으로 — 경쟁심 잠시 내려두면 양쪽 다 이깁니다.';
+      case TenGod.siksin:
+        return '글·SNS·강의 등 표현 한 가지를 오늘 만들어 보세요.';
+      case TenGod.sanggwan:
+        return '재능 보여주기 좋은 날 — 단, 윗사람에겐 톤 한 단계 부드럽게.';
+      case TenGod.pyeonjae:
+        return '큰 돈의 기회 신호 — 정보 듣고, 계약 전에 한 번 더 확인.';
+      case TenGod.jeongjae:
+        return '꾸준한 일·고정 수입 점검 — 작게 쌓는 결정이 빛납니다.';
+      case TenGod.pyeongwan:
+        return '도전·승부 받기 좋은 날 — 단, 끝맺음까지 책임 끝까지.';
+      case TenGod.jeonggwan:
+        return '공식 자리·발표·승진 신청에 좋은 날 — 격식 한 단계 올리세요.';
+      case TenGod.pyeonin:
+        return '깊은 책·강의·명상 한 가지 — 직관이 가장 깊어지는 날.';
+      case TenGod.jeongin:
+        return '오래된 멘토·선생님께 연락 한 통 — 답이 빠릅니다.';
+    }
+  }
+
+  static String _actionForGodEn(TenGod g) {
+    switch (g) {
+      case TenGod.bigyeon:
+        return 'A short lunch or coffee with a peer — one line of info is the answer.';
+      case TenGod.geopjae:
+        return 'Cooperate, do not compete — both sides win when ego rests.';
+      case TenGod.siksin:
+        return 'Write, post, or teach one thing today — expression flows.';
+      case TenGod.sanggwan:
+        return 'Showcase talent — but soften your tone with authority.';
+      case TenGod.pyeonjae:
+        return 'A signal of bigger money — listen, then double-check before contract.';
+      case TenGod.jeongjae:
+        return 'Audit steady income and fixed work — small accumulations shine.';
+      case TenGod.pyeongwan:
+        return 'A day to accept the challenge — but follow through end-to-end.';
+      case TenGod.jeonggwan:
+        return 'Strong for formal settings, presentations, promotion asks.';
+      case TenGod.pyeonin:
+        return 'One deep book, lecture, or meditation — intuition deepens.';
+      case TenGod.jeongin:
+        return 'Reach out to an old mentor — replies come fast.';
+    }
+  }
+
+  static String _cautionKo(TenGod? god, _BranchRelation rel, int score) {
+    if (rel == _BranchRelation.chung) {
+      return '오늘은 큰 결정·서명·이별 같은 결단은 미루는 게 안전합니다.';
+    }
+    if (score < 50) {
+      return '에너지를 다 쓰지 마세요 — 내일 복구가 힘들어집니다.';
+    }
+    if (god == TenGod.geopjae) {
+      return '돈 거래·동업 이야기는 한 번 더 확인 — 신뢰만으로 진행 X.';
+    }
+    if (god == TenGod.sanggwan) {
+      return '권위 있는 사람과 말 한 마디 — 톤이 너무 세지 않게.';
+    }
+    if (god == TenGod.pyeongwan) {
+      return '갑작스러운 책임에 휘말리지 마세요 — 받기 전 한 박자 쉬기.';
+    }
+    return '말의 톤을 한 단계 부드럽게 — 오늘은 작은 표현이 큰 차이를 만듭니다.';
+  }
+
+  static String _cautionEn(TenGod? god, _BranchRelation rel, int score) {
+    if (rel == _BranchRelation.chung) {
+      return 'Defer big decisions, signatures, and breakups — clash day.';
+    }
+    if (score < 50) {
+      return 'Do not burn the whole battery — tomorrow gets harder to recover.';
+    }
+    if (god == TenGod.geopjae) {
+      return 'Double-check money or partnership talks — trust alone is not enough.';
+    }
+    if (god == TenGod.sanggwan) {
+      return 'A word with authority — soften your tone one notch.';
+    }
+    if (god == TenGod.pyeongwan) {
+      return 'Avoid being swept into sudden responsibility — pause before accepting.';
+    }
+    return 'Soften the tone one notch — small expression makes the big difference.';
+  }
+}
+
+enum _BranchRelation { same, hap, chung, neutral }
