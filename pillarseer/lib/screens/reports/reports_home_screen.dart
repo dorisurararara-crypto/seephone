@@ -15,16 +15,22 @@ class ReportsHomeScreen extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    final featured = <_Card>[
+    // 추천 1 — 가장 시즌성 강한 콘텐츠 (지금 시점 보너스)
+    final recommended = <_Card>[
       _Card(
         symbol: '丙午',
         title: useKo ? '2026 신년운세' : 'New Year 2026',
         subtitle: useKo
-            ? '병오년 1년 흐름 + 12달 + 12 영역'
-            : 'Year of Fire Horse · 12 months · 12 areas',
+            ? '병오년 1년 흐름 · 매달 분위기 · 12가지 생활 영역'
+            : 'Year of Fire Horse · monthly flow · 12 life areas',
         route: '/reports/new-year-2026',
-        badge: useKo ? 'NEW · 신년' : 'NEW · 2026',
+        badge: useKo ? '추천' : 'PICK',
+        size: _CardSize.large,
       ),
+    ];
+
+    // 가볍게 보기 2 — 재미 + 빠른 소비
+    final light = <_Card>[
       _Card(
         symbol: '韓 流',
         title: useKo ? 'K-POP 스타 궁합' : 'K-POP Star Compatibility',
@@ -32,39 +38,50 @@ class ReportsHomeScreen extends StatelessWidget {
             ? '20+ K-POP 스타와 나의 사주 일치율'
             : 'Saju matching with 20+ K-POP stars',
         route: '/reports/kpop-compat',
-        badge: useKo ? 'NEW · K-POP' : 'NEW · K-POP',
+        badge: useKo ? 'NEW' : 'NEW',
+      ),
+      _Card(
+        symbol: '解 夢',
+        title: l.reportsCardDream,
+        subtitle: useKo
+            ? '꿈으로 보는 길흉 — 1,000+ 사전'
+            : 'Dream omens — 1,000+ entries',
+        route: '/reports/dream',
       ),
     ];
 
-    final chapters = <_Card>[
+    // 깊게 보기 4 — 정통 명리 깊은 풀이
+    final deep = <_Card>[
       _Card(
         symbol: '宮 合',
         title: l.reportsCardCompatibility,
-        subtitle: l.reportsCardCompatibilityDesc,
+        subtitle: useKo
+            ? '두 사람의 사주 일치율 · 끌림과 갈등'
+            : l.reportsCardCompatibilityDesc,
         route: '/reports/compatibility',
       ),
       _Card(
         symbol: '土 亭',
         title: l.reportsCardTojeong,
-        subtitle: l.reportsCardTojeongDesc,
+        subtitle: useKo
+            ? '올해 한 줄 운세 · 12달 흐름'
+            : l.reportsCardTojeongDesc,
         route: '/reports/tojeong',
       ),
       _Card(
         symbol: '擇 日',
         title: l.reportsCardDatePicking,
-        subtitle: l.reportsCardDatePickingDesc,
+        subtitle: useKo
+            ? '앞으로 30일 길일 · 평일 · 흉일'
+            : l.reportsCardDatePickingDesc,
         route: '/reports/date-picking',
-      ),
-      _Card(
-        symbol: '解 夢',
-        title: l.reportsCardDream,
-        subtitle: l.reportsCardDreamDesc,
-        route: '/reports/dream',
       ),
       _Card(
         symbol: '名 譜',
         title: l.discoverTitle,
-        subtitle: l.discoverSubtitle,
+        subtitle: useKo
+            ? '유명인 사주 둘러보기 · 일주 비교'
+            : l.discoverSubtitle,
         route: '/discover',
       ),
     ];
@@ -157,10 +174,12 @@ class ReportsHomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _GroupHeader(useKo ? '신규 · NEW' : 'NEW'),
-            ...featured.map((c) => _CardRow(card: c, highlight: true)),
-            _GroupHeader(useKo ? '깊은 풀이 · DEEP' : 'DEEP'),
-            ...chapters.map((c) => _CardRow(card: c)),
+            _GroupHeader(useKo ? '추천 · 지금 보세요' : 'PICK FOR YOU'),
+            ...recommended.map((c) => _CardRow(card: c, highlight: true)),
+            _GroupHeader(useKo ? '가볍게 보기' : 'QUICK READS'),
+            ...light.map((c) => _CardRow(card: c)),
+            _GroupHeader(useKo ? '깊게 보기' : 'DEEP READS'),
+            ...deep.map((c) => _CardRow(card: c)),
             const SizedBox(height: 32),
           ],
         ),
@@ -191,18 +210,22 @@ class _GroupHeader extends StatelessWidget {
   }
 }
 
+enum _CardSize { normal, large }
+
 class _Card {
   final String symbol;
   final String title;
   final String subtitle;
   final String route;
   final String? badge;
+  final _CardSize size;
   const _Card({
     required this.symbol,
     required this.title,
     required this.subtitle,
     required this.route,
     this.badge,
+    this.size = _CardSize.normal,
   });
 }
 
@@ -213,10 +236,11 @@ class _CardRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLarge = card.size == _CardSize.large;
     return InkWell(
       onTap: () => context.go(card.route),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+        padding: EdgeInsets.fromLTRB(24, isLarge ? 28 : 22, 24, isLarge ? 28 : 22),
         decoration: BoxDecoration(
           color: highlight ? AppColors.paper : AppColors.bg,
           border: const Border(
@@ -226,20 +250,6 @@ class _CardRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: 56,
-              child: Text(
-                card.symbol,
-                style: GoogleFonts.notoSerifKr(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w300,
-                  color: AppColors.accent,
-                  height: 1.0,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,10 +260,10 @@ class _CardRow extends StatelessWidget {
                         child: Text(
                           card.title,
                           style: GoogleFonts.notoSerifKr(
-                            fontSize: 18,
+                            fontSize: isLarge ? 22 : 17,
                             fontWeight: FontWeight.w400,
                             color: AppColors.ink,
-                            height: 1.2,
+                            height: 1.25,
                           ),
                         ),
                       ),
@@ -268,7 +278,7 @@ class _CardRow extends StatelessWidget {
                           child: Text(
                             card.badge!,
                             style: GoogleFonts.inter(
-                              fontSize: 8.5,
+                              fontSize: 9,
                               letterSpacing: 3,
                               fontWeight: FontWeight.w500,
                               color: AppColors.accent,
@@ -277,11 +287,22 @@ class _CardRow extends StatelessWidget {
                         ),
                     ],
                   ),
+                  const SizedBox(height: 6),
+                  // 한자는 작은 sub-accent (장식)
+                  Text(
+                    card.symbol,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w300,
+                      letterSpacing: 1.5,
+                      color: AppColors.accent,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     card.subtitle,
                     style: GoogleFonts.notoSansKr(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       color: AppColors.inkLight,
                       height: 1.7,
                     ),

@@ -284,9 +284,35 @@ class _ScoreBlock extends StatelessWidget {
     final explanation = score < 50
         ? l.homeExplanationLow
         : (score < 75 ? l.homeExplanationMid : l.homeExplanationHigh);
+    final ({String label, String hint, Color accent}) status;
+    if (score >= 75) {
+      status = (
+        label: useKo ? '오늘은 좋은 날' : 'A good day',
+        hint: useKo
+            ? '평소보다 흐름이 잘 풀립니다. 미뤘던 일을 시작해보세요.'
+            : 'Flow is on your side. Start what you delayed.',
+        accent: AppColors.woodJade,
+      );
+    } else if (score >= 50) {
+      status = (
+        label: useKo ? '오늘은 보통보다 조심' : 'Steady — proceed with care',
+        hint: useKo
+            ? '큰 결정은 미루고, 확인이 필요한 일을 처리하기 좋아요.'
+            : 'Defer big calls. Handle the checklists.',
+        accent: AppColors.accent,
+      );
+    } else {
+      status = (
+        label: useKo ? '오늘은 쉬어가는 날' : 'A resting day',
+        hint: useKo
+            ? '에너지를 아끼세요. 새 시작보다 정리·휴식이 더 도움됩니다.'
+            : 'Conserve energy. Today rewards tidying and rest.',
+        accent: AppColors.fireRed,
+      );
+    }
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 40, 24, 36),
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
       decoration: const BoxDecoration(
         color: AppColors.paper,
         border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
@@ -294,59 +320,95 @@ class _ScoreBlock extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 한국어 메인 라벨
           Text(
-            useKo ? "TODAY'S ENERGY · 日 氣" : "TODAY'S ENERGY · 日 氣",
-            style: GoogleFonts.inter(
-              fontSize: 9,
-              letterSpacing: 5,
+            useKo ? '오늘의 기운 점수' : "Today's energy score",
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.4,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 4),
+          // 영문 + 한자는 작은 sub
+          Text(
+            "Today's energy · 日 氣",
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 3,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 18),
+          // 상태명 — 사용자가 즉시 이해
+          Text(
+            status.label,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 26,
+              fontWeight: FontWeight.w400,
+              color: status.accent,
+              height: 1.3,
+            ),
+          ).animate().fadeIn(duration: 500.ms),
+          const SizedBox(height: 10),
+          // 행동 hint — 무엇을 해야 하는지
+          Text(
+            status.hint,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.7,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Container(width: 36, height: 1, color: AppColors.line),
+          const SizedBox(height: 14),
+          // 점수 — 작게 sub (참고용)
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '$score',
+                '$score점',
                 style: GoogleFonts.notoSerifKr(
-                  fontSize: 72,
+                  fontSize: 32,
                   fontWeight: FontWeight.w300,
-                  height: 1.0,
                   color: AppColors.ink,
+                  height: 1.0,
                 ),
               ),
               const SizedBox(width: 8),
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
-                  ' / 100',
+                  useKo ? '/ 100' : '/ 100',
                   style: GoogleFonts.inter(
-                    fontSize: 14,
+                    fontSize: 12,
                     color: AppColors.taupe,
-                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(
+                  explanation,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 12,
+                    color: AppColors.inkLight,
+                    height: 1.5,
                   ),
                 ),
               ),
             ],
-          ).animate().fadeIn(duration: 500.ms),
-          const SizedBox(height: 14),
-          Container(width: 48, height: 1, color: AppColors.line),
-          const SizedBox(height: 14),
-          Text(
-            explanation,
-            style: GoogleFonts.notoSansKr(
-              fontSize: 13.5,
-              color: AppColors.inkLight,
-              height: 1.8,
-            ),
           ),
           if (quote.isNotEmpty) ...[
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             Text(
               '"$quote"',
               style: GoogleFonts.notoSerifKr(
-                fontSize: 15,
+                fontSize: 14,
                 fontWeight: FontWeight.w300,
                 color: AppColors.accent,
                 height: 1.7,
@@ -370,52 +432,49 @@ class _PillarOfTheDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
+      padding: const EdgeInsets.fromLTRB(24, 26, 24, 26),
       decoration: const BoxDecoration(
         color: AppColors.bg,
         border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 한국어 메인 라벨
           Text(
-            dayPillar,
-            style: GoogleFonts.notoSerifKr(
-              fontSize: 40,
-              fontWeight: FontWeight.w300,
-              letterSpacing: 4,
-              height: 1.0,
-              color: AppColors.accent,
+            l.homeTodaysPillar,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
             ),
           ),
-          const SizedBox(width: 18),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l.homeTodaysPillar.toUpperCase(),
-                  style: GoogleFonts.inter(
-                    fontSize: 9,
-                    letterSpacing: 4,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.taupe,
-                  ),
-                ),
-                if (label.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    label,
-                    style: GoogleFonts.notoSerifKr(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w300,
-                      color: AppColors.ink,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                ],
-              ],
+          const SizedBox(height: 14),
+          // 한국어 의미 메인 (예: '화 개' = fire dog)
+          if (label.isNotEmpty)
+            Text(
+              label,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
+                color: AppColors.ink,
+                letterSpacing: 0.3,
+              ),
+            ),
+          const SizedBox(height: 6),
+          // 한자 60갑자는 작은 sub-accent
+          Text(
+            useKo ? '$dayPillar · 오늘의 60갑자' : '$dayPillar · today\'s ganji',
+            style: GoogleFonts.inter(
+              fontSize: 11,
+              letterSpacing: 1.2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.accent,
             ),
           ),
         ],

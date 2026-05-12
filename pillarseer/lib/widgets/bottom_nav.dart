@@ -47,27 +47,31 @@ class PillarBottomNav extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // 한국어 메인 (큼, 명확)
+                        Text(
+                          item.label,
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 12,
+                            fontWeight: isActive
+                                ? FontWeight.w500
+                                : FontWeight.w400,
+                            letterSpacing: 0.3,
+                            color: isActive
+                                ? AppColors.ink
+                                : AppColors.taupe,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        // 한자는 작은 sub-accent (장식)
                         Text(
                           item.glyph,
                           style: GoogleFonts.notoSerifKr(
-                            fontSize: 18,
+                            fontSize: 10,
                             fontWeight: FontWeight.w300,
                             color: isActive
-                                ? AppColors.ink
-                                : AppColors.taupe,
+                                ? AppColors.accent
+                                : AppColors.taupe.withValues(alpha: 0.55),
                             height: 1.0,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          item.label.toUpperCase(),
-                          style: GoogleFonts.inter(
-                            fontSize: 8.5,
-                            letterSpacing: 3,
-                            fontWeight: FontWeight.w500,
-                            color: isActive
-                                ? AppColors.ink
-                                : AppColors.taupe,
                           ),
                         ),
                         const SizedBox(height: 6),

@@ -309,69 +309,89 @@ class _DayMasterHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pair = result.dayPillar.pairKorean;
+    final pair = result.dayPillar.pairKorean; // 예: 임오
     final meaning = useKo
-        ? result.dayPillar.pairKoreanMeaning
+        ? result.dayPillar.pairKoreanMeaning   // 예: 수 말
         : result.dayMasterName;
+    final han = result.day60ji;                // 예: 壬午
     final element = result.dayPillar.chunGanElement;
     final elementKo = const {
       '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
     }[element] ?? element;
     final subAccent = reading?.oneLineYouAre.trim() ?? '';
+    // 한 줄 답 — 사용자가 5초 안에 이해할 문장.
+    final oneLineAnswer = useKo
+        ? (subAccent.isEmpty
+            ? '$elementKo의 기운을 가진 사람입니다.'
+            : '$subAccent 사람입니다.')
+        : (subAccent.isEmpty
+            ? 'A person carrying the grain of $element.'
+            : 'A $subAccent person.');
 
     return _SectionFrame(
       background: AppColors.bg,
-      meta: useKo ? 'DAY MASTER · 日 柱' : 'DAY MASTER · 日 柱',
+      meta: useKo ? '나는 어떤 사람? · 日 柱' : 'Who am I? · 日 柱',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 답 먼저 — 5초 안에 이해되는 한 줄.
           Text(
-            '$pair — $meaning',
+            oneLineAnswer,
             style: GoogleFonts.notoSerifKr(
-              fontSize: 34,
-              fontWeight: FontWeight.w300,
-              letterSpacing: -0.5,
-              height: 1.2,
+              fontSize: 28,
+              fontWeight: FontWeight.w400,
+              letterSpacing: -0.3,
+              height: 1.35,
               color: AppColors.ink,
             ),
-          ),
+          ).animate().fadeIn(duration: 600.ms),
+          const SizedBox(height: 18),
+          Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 14),
-          if (subAccent.isNotEmpty)
-            RichText(
-              text: TextSpan(
-                style: GoogleFonts.notoSansKr(
-                  fontSize: 12,
-                  color: AppColors.inkLight,
-                  height: 1.75,
-                  letterSpacing: 0.4,
-                ),
-                children: [
-                  TextSpan(
-                    text: useKo ? '한 단어로 — ' : 'In a word — ',
-                  ),
-                  TextSpan(
-                    text: subAccent,
-                    style: useKo
-                        ? GoogleFonts.notoSerifKr(
-                            fontSize: 14,
-                            color: AppColors.accent,
-                            fontWeight: FontWeight.w400,
-                          )
-                        : GoogleFonts.cormorantGaramond(
-                            fontSize: 15,
-                            fontStyle: FontStyle.italic,
-                            color: AppColors.accent,
-                            fontWeight: FontWeight.w400,
-                          ),
-                  ),
-                  TextSpan(
-                    text: useKo
-                        ? '. $elementKo의 성질을 가진 일주입니다.'
-                        : '. A pillar carrying the grain of $element.',
-                  ),
-                ],
+          // 보조 — '일주' 풀이 + 한자 sub-accent
+          RichText(
+            text: TextSpan(
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                color: AppColors.inkLight,
+                height: 1.7,
+                letterSpacing: 0.2,
               ),
-            ).animate().fadeIn(duration: 600.ms),
+              children: [
+                TextSpan(
+                  text: useKo
+                      ? '$pair 일주 — '
+                      : 'Day pillar — ',
+                ),
+                TextSpan(
+                  text: useKo ? meaning : meaning,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 14,
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                TextSpan(
+                  text: useKo
+                      ? '의 기운\n(태어난 날의 60갑자: $han)'
+                      : '\n(60-ganji of birth day: $han)',
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          // 작은 hint — 용어 풀이
+          Text(
+            useKo
+                ? '※ 일주 = 사주의 중심, 나의 본성을 보여주는 두 글자.'
+                : '※ Day pillar = the core of your saju, two characters that show your nature.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 11,
+              color: AppColors.taupe,
+              height: 1.5,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
         ],
       ),
     );
@@ -403,7 +423,7 @@ class _ReadingSection extends StatelessWidget {
 
     return _SectionFrame(
       background: AppColors.paper,
-      meta: 'A READING',
+      meta: useKo ? '내 사주 한눈에 · A READING' : 'A READING',
       child: RichText(
         text: TextSpan(
           style: GoogleFonts.notoSansKr(
@@ -500,17 +520,19 @@ class _ChartAttributesSection extends ConsumerWidget {
 
     return _SectionFrame(
       background: AppColors.bg,
-      meta: 'CHART  ATTRIBUTES',
+      meta: useKo ? '핵심 4가지 · CHART ATTRIBUTES' : 'CHART ATTRIBUTES',
       child: _AttributeGrid(rows: [
         [
           _Attribute(
-            label: 'FORMAT',
+            label: useKo ? '사주 유형' : 'FORMAT',
+            subLabel: useKo ? '= 큰 그림' : '',
             han: hanForFormat,
             ko: useKo ? koForFormat : '',
             en: useKo ? '' : gyeokguk.nameEn,
           ),
           _Attribute(
-            label: 'YONGSIN',
+            label: useKo ? '필요한 기운' : 'YONGSIN',
+            subLabel: useKo ? '= 보충 추천' : '',
             han: yongsin.yongsin,
             ko: useKo ? elKo(yongsin.yongsin) : '',
             en: useKo ? '' : '',
@@ -518,7 +540,8 @@ class _ChartAttributesSection extends ConsumerWidget {
         ],
         [
           _Attribute(
-            label: 'STRENGTH',
+            label: useKo ? '기운 세기' : 'STRENGTH',
+            subLabel: useKo ? '= 강함/약함' : '',
             han: hanForStrength.length > 4
                 ? hanForStrength.substring(0, 2)
                 : hanForStrength,
@@ -530,7 +553,8 @@ class _ChartAttributesSection extends ConsumerWidget {
             en: useKo ? '' : strength.labelEn,
           ),
           _Attribute(
-            label: 'VOID',
+            label: useKo ? '비어있는 곳' : 'VOID',
+            subLabel: useKo ? '= 깊이의 자리' : '',
             han: voidValue,
             ko: voidKo,
             en: useKo ? '' : '',
@@ -544,12 +568,14 @@ class _ChartAttributesSection extends ConsumerWidget {
 
 class _Attribute {
   final String label;
+  final String subLabel;
   final String han;
   final String ko;
   final String en;
   final bool small;
   const _Attribute({
     required this.label,
+    this.subLabel = '',
     required this.han,
     this.ko = '',
     this.en = '',
@@ -590,13 +616,24 @@ class _AttributeGrid extends StatelessWidget {
                       children: [
                         Text(
                           a.label,
-                          style: GoogleFonts.inter(
-                            fontSize: 9,
-                            letterSpacing: 3,
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 12,
+                            letterSpacing: 0.3,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.taupe,
+                            color: AppColors.ink,
                           ),
                         ),
+                        if (a.subLabel.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            a.subLabel,
+                            style: GoogleFonts.notoSansKr(
+                              fontSize: 10,
+                              color: AppColors.taupe,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: 10),
                         Wrap(
                           crossAxisAlignment: WrapCrossAlignment.end,
@@ -665,7 +702,7 @@ class _FourPillarsSection extends StatelessWidget {
     ];
     return _SectionFrame(
       background: AppColors.paper,
-      meta: 'FOUR  PILLARS · 四  柱',
+      meta: useKo ? '네 기둥 · 四 柱' : 'FOUR PILLARS · 四 柱',
       child: Row(
         children: pillars.asMap().entries.map((e) {
           final isLast = e.key == pillars.length - 1;
@@ -773,7 +810,7 @@ class _ThreeStrokesSection extends StatelessWidget {
     ];
     return _SectionFrame(
       background: AppColors.bg,
-      meta: useKo ? 'THREE STROKES · 三 筆' : 'THREE STROKES · 三 筆',
+      meta: useKo ? '세 가지 핵심 · 三 筆' : 'THREE STROKES · 三 筆',
       child: Column(
         children: items.where((i) => i.text.isNotEmpty).map((i) {
           final isLast = i == items.last;
@@ -934,7 +971,7 @@ class _FiveElementsSection extends StatelessWidget {
     ];
     return _SectionFrame(
       background: AppColors.bg,
-      meta: useKo ? 'FIVE ELEMENTS · 五 行' : 'FIVE ELEMENTS · 五 行',
+      meta: useKo ? '내 안의 5가지 기운 · 五 行' : 'FIVE ELEMENTS · 五 行',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
