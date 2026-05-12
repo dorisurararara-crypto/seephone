@@ -279,6 +279,36 @@ void main() {
       );
     });
 
+    test('진태양시 OFF — 표준시(KST) 그대로 사용', () {
+      // 1990-02-04 17:00 (KASI 입춘 11:14 후): 표준시 그대로면 입춘 후 → 1990 庚午
+      // 진태양시 ON: 17:00 - ~46분 (EoT 포함) = ~16:14, 입춘 후 → 1990 庚午 (same in this case)
+      // boundary 비슷, 결과 거의 같음. 확인용 test.
+      final off = ManseryeokService.calculate(
+        year: 1990,
+        month: 2,
+        day: 4,
+        hour: 17,
+        minute: 0,
+        isLunar: false,
+        isMale: true,
+        applyTrueSunTime: false,
+      );
+      final on = ManseryeokService.calculate(
+        year: 1990,
+        month: 2,
+        day: 4,
+        hour: 17,
+        minute: 0,
+        isLunar: false,
+        isMale: true,
+        applyTrueSunTime: true,
+      );
+      // 둘 다 입춘 후 → 1990 庚午
+      expect(off.yearPillar.text, '庚午');
+      expect(on.yearPillar.text, '庚午');
+      // 시주는 다를 수 있음 (boundary)
+    });
+
     test('음력 입력 시 양력 변환 작동 — 1990 음력 1월 1일 = 양력 1990-1-27', () {
       // klc package 가 음력 변환 처리. KASI 발표값과 일치하는지 확인.
       // 1990 음력 1월 1일 (설날) = 양력 1990-01-27.
