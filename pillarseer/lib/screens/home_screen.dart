@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
@@ -15,7 +16,8 @@ import '../providers/streak_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
 
-/// Home (Today's Energy). 사용자 사주 + 오늘 일진 → 종합 점수 + 4 카테고리 + Lucky.
+/// Aesop Luxury home — 텍스트 위주 magazine editorial.
+/// 그라데이션 X, 카드 그림자 X, 둥근 모서리 X. 모든 강조는 letter-spacing UPPERCASE + 한자 + italic accent.
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -27,7 +29,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // 매일 첫 진입 시 streak tick
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(streakProvider.notifier).tick();
     });
@@ -38,49 +39,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final saju = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
     final birth = ref.watch(userBirthInfoProvider);
     final fortune = DailyService().calculate(saju);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+          padding: EdgeInsets.zero,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 1. Greeting + streak (single block)
-              Builder(builder: (context) {
-                final useKo = (Localizations.maybeLocaleOf(context)
-                            ?.languageCode ??
-                        'en') ==
-                    'ko';
-                final fallback = useKo
+              _AppBarBlock(),
+              _HeroGreeting(
+                name: birth?.name,
+                dayMaster: useKo
                     ? saju.dayPillar.pairKoreanMeaning
-                    : saju.dayMasterName;
-                return _Header(name: birth?.name, dayMasterName: fallback);
-              }),
-              const _StreakChip(),
-              // 2. 오늘 날짜
-              const SizedBox(height: 6),
-              _Date(date: fortune.date),
-              // 3. 오늘의 점수 + 한 줄 (가장 큰 시각 임팩트)
-              const SizedBox(height: 8),
-              _ScoreCircle(score: fortune.totalScore),
-              _ScoreExplanation(score: fortune.totalScore),
-              _Quote(quoteEn: fortune.quoteEn, quoteKo: fortune.quoteKo),
-              // 4. 오늘의 일진 한 줄 pill
-              _TodayPillarRow(
-                dayPillar: fortune.dayPillar,
-                localizedLabel:
-                    _localizedGanjiLabel(context, fortune.dayPillar),
+                    : saju.dayMasterName,
+                date: fortune.date,
               ),
-              // 5. 시간대별 흐름 (지금/다음/저녁)
-              const SizedBox(height: 4),
-              _HourlyFlowCard(saju: saju),
-              // 6. 카테고리 4종 점수 + 가이드 한 줄씩
-              _CategoryGrid(fortune: fortune),
-              _CategoryGuidesCard(fortune: fortune),
-              // 7. 행운 (색·숫자·방향)
-              _LuckyCard(fortune: fortune),
-              const _PromoCard(),
-              const SizedBox(height: 16),
+              _StreakLine(),
+              _ScoreBlock(
+                score: fortune.totalScore,
+                quote: useKo
+                    ? (fortune.quoteKo.isEmpty ? fortune.quoteEn : fortune.quoteKo)
+                    : fortune.quoteEn,
+              ),
+              _PillarOfTheDay(
+                dayPillar: fortune.dayPillar,
+                label: _localizedGanjiLabel(context, fortune.dayPillar),
+              ),
+              _HourlyFlowSection(saju: saju),
+              _CategorySection(fortune: fortune),
+              _CategoryGuides(fortune: fortune),
+              _LuckySection(fortune: fortune),
+              _PromoCard(),
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -89,7 +83,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  /// 60갑자 텍스트 → locale 라벨 (예: 丙午 → "Fire Horse" / "화 말").
   String _localizedGanjiLabel(BuildContext context, String ganji) {
     if (ganji.length != 2) return '';
     final p = Pillar(chunGan: ganji[0], jiJi: ganji[1]);
@@ -98,6 +91,1006 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return useKo ? p.pairKoreanMeaning : p.pairEnglish;
   }
 }
+
+// ──────────── App bar ────────────
+
+class _AppBarBlock extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'P I L L A R    S E E R',
+            style: GoogleFonts.inter(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 5,
+              color: AppColors.ink,
+            ),
+          ),
+          Text(
+            'TODAY · 今 日',
+            style: GoogleFonts.inter(
+              fontSize: 8,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 3,
+              color: AppColors.inkLight,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Hero greeting ────────────
+
+class _HeroGreeting extends StatelessWidget {
+  final String? name;
+  final String dayMaster;
+  final DateTime date;
+  const _HeroGreeting({
+    required this.name,
+    required this.dayMaster,
+    required this.date,
+  });
+
+  String _greeting(AppL10n l) {
+    final h = DateTime.now().hour;
+    if (h < 5) return l.homeGreetingNight;
+    if (h < 12) return l.homeGreetingMorning;
+    if (h < 18) return l.homeGreetingAfternoon;
+    return l.homeGreetingEvening;
+  }
+
+  String _dateText(BuildContext context) {
+    final locale = Localizations.maybeLocaleOf(context);
+    final useKo = locale?.languageCode == 'ko';
+    if (useKo) {
+      const wd = {1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토', 7: '일'};
+      return '${date.year}년 ${date.month}월 ${date.day}일 ${wd[date.weekday] ?? ''}요일';
+    }
+    return DateFormat('EEEE · MMMM d, y', locale?.toString()).format(date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final displayName = (name != null && name!.trim().isNotEmpty)
+        ? name!.trim()
+        : dayMaster;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            _dateText(context).toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            '${_greeting(l)},',
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 18,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w400,
+              color: AppColors.inkLight,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            displayName,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 32,
+              fontWeight: FontWeight.w300,
+              letterSpacing: -0.5,
+              height: 1.2,
+              color: AppColors.ink,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Streak line ────────────
+
+class _StreakLine extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final streak = ref.watch(streakProvider);
+    if (streak.current <= 0) return const SizedBox.shrink();
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Row(
+        children: [
+          Text(
+            l.homeStreakDays(streak.current).toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.accent,
+            ),
+          ),
+          if (streak.celebrate) ...[
+            const SizedBox(width: 12),
+            Text(
+              l.homeStreakNewDay.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 3,
+                color: AppColors.inkLight,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+          const Spacer(),
+          if (streak.longest > streak.current)
+            Text(
+              l.homeStreakLongest(streak.longest).toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 3,
+                color: AppColors.taupe,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Score block ────────────
+
+class _ScoreBlock extends StatelessWidget {
+  final int score;
+  final String quote;
+  const _ScoreBlock({required this.score, required this.quote});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final explanation = score < 50
+        ? l.homeExplanationLow
+        : (score < 75 ? l.homeExplanationMid : l.homeExplanationHigh);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 40, 24, 36),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? "TODAY'S ENERGY · 日 氣" : "TODAY'S ENERGY · 日 氣",
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '$score',
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 72,
+                  fontWeight: FontWeight.w300,
+                  height: 1.0,
+                  color: AppColors.ink,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  ' / 100',
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: AppColors.taupe,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ).animate().fadeIn(duration: 500.ms),
+          const SizedBox(height: 14),
+          Container(width: 48, height: 1, color: AppColors.line),
+          const SizedBox(height: 14),
+          Text(
+            explanation,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13.5,
+              color: AppColors.inkLight,
+              height: 1.8,
+            ),
+          ),
+          if (quote.isNotEmpty) ...[
+            const SizedBox(height: 18),
+            Text(
+              '"$quote"',
+              style: GoogleFonts.cormorantGaramond(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w400,
+                color: AppColors.accent,
+                height: 1.7,
+              ),
+            ).animate().fadeIn(delay: 300.ms),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Pillar of the day ────────────
+
+class _PillarOfTheDay extends StatelessWidget {
+  final String dayPillar;
+  final String label;
+  const _PillarOfTheDay({required this.dayPillar, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Row(
+        children: [
+          Text(
+            dayPillar,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 40,
+              fontWeight: FontWeight.w300,
+              letterSpacing: 4,
+              height: 1.0,
+              color: AppColors.accent,
+            ),
+          ),
+          const SizedBox(width: 18),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.homeTodaysPillar.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
+                ),
+                if (label.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    style: GoogleFonts.cormorantGaramond(
+                      fontSize: 17,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Hourly flow ────────────
+
+class _HourlyFlowSection extends ConsumerWidget {
+  final SajuResult saju;
+  const _HourlyFlowSection({required this.saju});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final slots = HourlyService.twelveSlots(saju);
+    final currentIdx = slots.indexWhere((s) => s.isCurrent);
+    final base = currentIdx >= 0 ? currentIdx : 0;
+    final picks = [
+      slots[base % 12],
+      slots[(base + 1) % 12],
+      slots[(base + 2) % 12],
+    ];
+    final labels = [l.homeHourlyNow, l.homeHourlyNext, l.homeHourlyLater];
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.homeHourlyTitle.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 22),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(color: AppColors.line),
+                left: BorderSide(color: AppColors.line),
+              ),
+            ),
+            child: Row(
+              children: picks.asMap().entries.map((e) {
+                return Expanded(
+                  child: _HourlyCell(
+                    slot: e.value,
+                    label: labels[e.key],
+                    useKo: useKo,
+                    isFirst: e.key == 0,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 18),
+          InkWell(
+            onTap: () => _showAll(context, l, slots, useKo),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  l.homeHourlySeeAll.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  '→',
+                  style: TextStyle(color: AppColors.ink),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAll(
+      BuildContext context, AppL10n l, List<HourlySlot> slots, bool useKo) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.bg,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.78,
+        maxChildSize: 0.94,
+        minChildSize: 0.5,
+        expand: false,
+        builder: (ctx2, scroll) => Container(
+          color: AppColors.bg,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                alignment: Alignment.center,
+                child: Container(
+                  width: 36,
+                  height: 1,
+                  color: AppColors.line,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 14, 24, 22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'TWELVE  HOURS · 十 二 時',
+                      style: GoogleFonts.inter(
+                        fontSize: 9,
+                        letterSpacing: 5,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.taupe,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l.homeHourlyFullTitle,
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w300,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, color: AppColors.line),
+              Expanded(
+                child: ListView.separated(
+                  controller: scroll,
+                  padding: EdgeInsets.zero,
+                  itemCount: slots.length,
+                  separatorBuilder: (_, _) => const Divider(
+                      height: 1, color: AppColors.line, thickness: 0.6),
+                  itemBuilder: (ctx3, i) => _HourlyRow(slot: slots[i], useKo: useKo),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HourlyCell extends StatelessWidget {
+  final HourlySlot slot;
+  final String label;
+  final bool useKo;
+  final bool isFirst;
+  const _HourlyCell({
+    required this.slot,
+    required this.label,
+    required this.useKo,
+    required this.isFirst,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isPeak = slot.mood == 'peak';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      decoration: const BoxDecoration(
+        border: Border(
+          right: BorderSide(color: AppColors.line),
+          bottom: BorderSide(color: AppColors.line),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 8.5,
+              letterSpacing: 3,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '${slot.score}',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 26,
+              fontWeight: FontWeight.w300,
+              color: isPeak ? AppColors.accent : AppColors.ink,
+              height: 1.0,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            slot.label(useKo),
+            style: GoogleFonts.notoSansKr(
+              fontSize: 10.5,
+              color: AppColors.inkLight,
+              height: 1.3,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HourlyRow extends StatelessWidget {
+  final HourlySlot slot;
+  final bool useKo;
+  const _HourlyRow({required this.slot, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+      color: slot.isCurrent ? AppColors.paper : AppColors.bg,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 56,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  slot.jiJi,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w300,
+                    color: slot.isCurrent ? AppColors.accent : AppColors.ink,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${slot.score}',
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  slot.label(useKo).toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  useKo ? slot.guideKo : slot.guideEn,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    color: AppColors.ink,
+                    height: 1.7,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Category 4종 ────────────
+
+class _CategorySection extends StatelessWidget {
+  final DailyFortune fortune;
+  const _CategorySection({required this.fortune});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final rows = [
+      (l.homeCategoryLove, '愛', fortune.loveScore),
+      (l.homeCategoryWork, '事', fortune.workScore),
+      (l.homeCategoryWealth, '財', fortune.wealthScore),
+      (l.homeCategoryEnergy, '氣', fortune.energyScore),
+    ];
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'FOUR  AREAS · 四 域',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 22),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(color: AppColors.line),
+                left: BorderSide(color: AppColors.line),
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: rows
+                      .sublist(0, 2)
+                      .map((r) => Expanded(
+                          child: _CategoryCell(
+                              name: r.$1, glyph: r.$2, score: r.$3)))
+                      .toList(),
+                ),
+                Row(
+                  children: rows
+                      .sublist(2, 4)
+                      .map((r) => Expanded(
+                          child: _CategoryCell(
+                              name: r.$1, glyph: r.$2, score: r.$3)))
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryCell extends StatelessWidget {
+  final String name;
+  final String glyph;
+  final int score;
+  const _CategoryCell({
+    required this.name,
+    required this.glyph,
+    required this.score,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
+      decoration: const BoxDecoration(
+        border: Border(
+          right: BorderSide(color: AppColors.line),
+          bottom: BorderSide(color: AppColors.line),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                glyph,
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.accent,
+                  height: 1.0,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                name.toUpperCase(),
+                style: GoogleFonts.inter(
+                  fontSize: 9,
+                  letterSpacing: 3,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.taupe,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            '$score',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 28,
+              fontWeight: FontWeight.w300,
+              color: AppColors.ink,
+              height: 1.0,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Container(width: 24, height: 1, color: AppColors.line),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Category guides ────────────
+
+class _CategoryGuides extends StatelessWidget {
+  final DailyFortune fortune;
+  const _CategoryGuides({required this.fortune});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final rows = [
+      (l.homeCategoryLove, useKo ? fortune.loveGuideKo : fortune.loveGuideEn),
+      (l.homeCategoryWork, useKo ? fortune.workGuideKo : fortune.workGuideEn),
+      (l.homeCategoryWealth, useKo ? fortune.wealthGuideKo : fortune.wealthGuideEn),
+      (l.homeCategoryEnergy, useKo ? fortune.energyGuideKo : fortune.energyGuideEn),
+    ].where((r) => r.$2.isNotEmpty).toList();
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "TODAY'S  GUIDANCE",
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 22),
+          ...rows.asMap().entries.map((e) {
+            final isLast = e.key == rows.length - 1;
+            return Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
+              child: Container(
+                padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: isLast
+                        ? BorderSide.none
+                        : const BorderSide(color: AppColors.line, width: 0.6),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      e.value.$1.toUpperCase(),
+                      style: GoogleFonts.inter(
+                        fontSize: 9,
+                        letterSpacing: 4,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.taupe,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      e.value.$2,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 14,
+                        color: AppColors.ink,
+                        height: 1.75,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Lucky ────────────
+
+class _LuckySection extends StatelessWidget {
+  final DailyFortune fortune;
+  const _LuckySection({required this.fortune});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final color = useKo
+        ? (fortune.luckyColorKo.isEmpty ? fortune.luckyColor : fortune.luckyColorKo)
+        : (fortune.luckyColorEn.isEmpty ? fortune.luckyColor : fortune.luckyColorEn);
+    final direction = useKo
+        ? (fortune.luckyDirectionKo.isEmpty
+            ? fortune.luckyDirection
+            : fortune.luckyDirectionKo)
+        : (fortune.luckyDirectionEn.isEmpty
+            ? fortune.luckyDirection
+            : fortune.luckyDirectionEn);
+    final rows = [
+      (l.homeLuckyColor, color),
+      (l.homeLuckyNumber, '${fortune.luckyNumber}'),
+      (l.homeLuckyDirection, direction),
+    ];
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'TODAY  AUSPICIOUS · 吉',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+            ),
+            child: Column(
+              children: rows.map((r) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                        bottom:
+                            BorderSide(color: AppColors.line, width: 0.6)),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          r.$1.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 3,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.taupe,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        r.$2,
+                        style: GoogleFonts.notoSerifKr(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Promo card ────────────
+
+class _PromoCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return InkWell(
+      onTap: () => showComingSoonModal(context),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(24, 32, 24, 36),
+        decoration: const BoxDecoration(
+          color: AppColors.paper,
+          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l.homePromoLimited.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 5,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              l.homePromoTitle,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 22,
+                fontWeight: FontWeight.w400,
+                color: AppColors.ink,
+                height: 1.3,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              l.homePromoDesc,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                color: AppColors.inkLight,
+                height: 1.7,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Text(
+                  'READ  MORE',
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Text('→', style: TextStyle(color: AppColors.ink)),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ──────────── Notification toggle (legacy retained for future) ────────────
 
 class _NotifToggleCard extends ConsumerWidget {
   const _NotifToggleCard();
@@ -120,1060 +1113,77 @@ class _NotifToggleCard extends ConsumerWidget {
             );
       });
     }
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 14, 14, 14),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.celestialGold.withValues(alpha: on ? 0.25 : 0.12),
-              AppColors.spiritIndigo.withValues(alpha: 0.2),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: AppColors.celestialGold
-                .withValues(alpha: on ? 0.7 : 0.3),
-          ),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.notifications_active_outlined,
-                color: AppColors.celestialGold, size: 24),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l.homeNotifTitle,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.ghostlyWhite,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    on ? l.homeNotifOn : l.homeNotifSubtitle,
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      color: on
-                          ? AppColors.celestialGold
-                          : AppColors.moonlightGray,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Switch(
-              value: on,
-              activeThumbColor: AppColors.celestialGold,
-              activeTrackColor:
-                  AppColors.celestialGold.withValues(alpha: 0.4),
-              onChanged: (v) async {
-                final notifier = ref.read(notificationProvider.notifier);
-                final messenger = ScaffoldMessenger.of(context);
-                if (v) {
-                  final ok = await notifier.enable(
-                    pushTitle: l.homeNotifSampleTitle,
-                    pushBody: l.homeNotifSampleBody,
-                    day60ji: saju?.day60ji,
-                    useKo: useKo,
-                  );
-                  messenger
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: ok
-                          ? AppColors.celestialGold
-                          : Colors.redAccent.shade200,
-                      content: Text(
-                        ok
-                            ? l.homeNotifEnabledSnack
-                            : l.homeNotifPermissionDenied,
-                        style: const TextStyle(
-                          color: AppColors.cosmicBlack,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ));
-                } else {
-                  await notifier.disable();
-                  messenger
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: AppColors.spiritIndigo,
-                      content: Text(l.homeNotifDisabledSnack),
-                    ));
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StreakChip extends ConsumerWidget {
-  const _StreakChip();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppL10n.of(context);
-    final streak = ref.watch(streakProvider);
-    if (streak.current <= 0) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 6, 24, 0),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
-            decoration: BoxDecoration(
-              color: AppColors.fireRed.withValues(alpha: 0.18),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: AppColors.fireRed.withValues(alpha: 0.45),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('🔥', style: TextStyle(fontSize: 13)),
-                const SizedBox(width: 5),
-                Text(
-                  l.homeStreakDays(streak.current),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.fireRed,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (streak.celebrate) ...[
-            const SizedBox(width: 8),
-            Text(
-              l.homeStreakNewDay,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.celestialGold,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-          const Spacer(),
-          if (streak.longest > streak.current)
-            Text(
-              l.homeStreakLongest(streak.longest),
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.fadedSilver,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HourlyFlowCard extends ConsumerWidget {
-  final SajuResult saju;
-  const _HourlyFlowCard({required this.saju});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = AppL10n.of(context);
-    final localeCode = Localizations.maybeLocaleOf(context)?.languageCode ?? 'en';
-    final useKo = localeCode == 'ko';
-    final slots = HourlyService.twelveSlots(saju);
-    // 현재 + 다음 2 슬롯 (3개) — codex 권고
-    final currentIdx = slots.indexWhere((s) => s.isCurrent);
-    final base = currentIdx >= 0 ? currentIdx : 0;
-    final picks = [
-      slots[base % 12],
-      slots[(base + 1) % 12],
-      slots[(base + 2) % 12],
-    ];
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-        decoration: BoxDecoration(
-          color: AppColors.spiritIndigo.withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.3),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    l.homeHourlyTitle,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.celestialGold,
-                    ),
-                  ),
-                ),
-                Text(
-                  l.homeHourlySubtitle,
-                  style: const TextStyle(
-                    fontSize: 11.5,
-                    color: AppColors.moonlightGray,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                    child: _HourlySlotTile(
-                        slot: picks[0],
-                        labelOverride: l.homeHourlyNow,
-                        accent: true,
-                        useKo: useKo)),
-                const SizedBox(width: 8),
-                Expanded(
-                    child: _HourlySlotTile(
-                        slot: picks[1],
-                        labelOverride: l.homeHourlyNext,
-                        useKo: useKo)),
-                const SizedBox(width: 8),
-                Expanded(
-                    child: _HourlySlotTile(
-                        slot: picks[2],
-                        labelOverride: l.homeHourlyLater,
-                        useKo: useKo)),
-              ],
-            ),
-            const SizedBox(height: 10),
-            InkWell(
-              onTap: () => _showAll(context, l, slots, useKo),
-              borderRadius: BorderRadius.circular(8),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                child: Row(
-                  children: [
-                    const Icon(Icons.schedule,
-                        size: 14, color: AppColors.celestialGold),
-                    const SizedBox(width: 6),
-                    Text(
-                      l.homeHourlySeeAll,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.celestialGold,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.chevron_right,
-                        size: 16, color: AppColors.celestialGold),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showAll(
-      BuildContext context, AppL10n l, List<HourlySlot> slots, bool useKo) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: AppColors.cosmicBlack,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.75,
-        maxChildSize: 0.92,
-        minChildSize: 0.5,
-        expand: false,
-        builder: (ctx2, scroll) => Container(
-          decoration: BoxDecoration(
-            color: AppColors.cosmicBlack,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            border: Border.all(
-              color: AppColors.celestialGold.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.celestialGold.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 6, 20, 14),
-                child: Text(
-                  l.homeHourlyFullTitle,
-                  style: const TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.celestialGold,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListView.separated(
-                  controller: scroll,
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                  itemCount: slots.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 10),
-                  itemBuilder: (ctx3, i) {
-                    final s = slots[i];
-                    return _HourlySlotRow(slot: s, useKo: useKo);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HourlySlotTile extends StatelessWidget {
-  final HourlySlot slot;
-  final String labelOverride;
-  final bool accent;
-  final bool useKo;
-  const _HourlySlotTile({
-    required this.slot,
-    required this.labelOverride,
-    this.accent = false,
-    required this.useKo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final moodColor = _moodColor(slot.mood);
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      decoration: BoxDecoration(
-        color: accent
-            ? AppColors.celestialGold.withValues(alpha: 0.15)
-            : AppColors.midnightPurple.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: accent
-              ? AppColors.celestialGold
-              : AppColors.celestialGold.withValues(alpha: 0.25),
-          width: accent ? 1.6 : 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            labelOverride.toUpperCase(),
-            style: TextStyle(
-              fontSize: 10,
-              letterSpacing: 1.0,
-              color: accent
-                  ? AppColors.celestialGold
-                  : AppColors.moonlightGray,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: moodColor,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                '${slot.score}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.ghostlyWhite,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            slot.label(useKo),
-            style: const TextStyle(
-              fontSize: 9.5,
-              color: AppColors.fadedSilver,
-              letterSpacing: 0.3,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _moodColor(String mood) {
-    switch (mood) {
-      case 'peak':
-        return AppColors.celestialGold;
-      case 'good':
-        return AppColors.woodJade;
-      case 'neutral':
-        return AppColors.fadedSilver;
-      case 'avoid':
-        return AppColors.fireRed.withValues(alpha: 0.8);
-      default:
-        return AppColors.moonlightGray;
-    }
-  }
-}
-
-class _HourlySlotRow extends StatelessWidget {
-  final HourlySlot slot;
-  final bool useKo;
-  const _HourlySlotRow({required this.slot, required this.useKo});
-
-  @override
-  Widget build(BuildContext context) {
-    final moodColor = _moodColor(slot.mood);
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: slot.isCurrent
-            ? AppColors.celestialGold.withValues(alpha: 0.12)
-            : AppColors.spiritIndigo.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: slot.isCurrent
-              ? AppColors.celestialGold
-              : AppColors.celestialGold.withValues(alpha: 0.2),
-          width: slot.isCurrent ? 1.5 : 1,
-        ),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 56,
-            alignment: Alignment.center,
-            padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-            decoration: BoxDecoration(
-              color: AppColors.midnightPurple.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: moodColor.withValues(alpha: 0.55),
-              ),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  slot.jiJi,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
-                    color: moodColor,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '${slot.score}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.ghostlyWhite,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  slot.label(useKo),
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.celestialGold,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  useKo ? slot.guideKo : slot.guideEn,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.ghostlyWhite,
-                    height: 1.6,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _moodColor(String mood) {
-    switch (mood) {
-      case 'peak':
-        return AppColors.celestialGold;
-      case 'good':
-        return AppColors.woodJade;
-      case 'neutral':
-        return AppColors.fadedSilver;
-      case 'avoid':
-        return AppColors.fireRed.withValues(alpha: 0.8);
-      default:
-        return AppColors.moonlightGray;
-    }
-  }
-}
-
-class _Header extends StatelessWidget {
-  final String? name;
-  final String dayMasterName;
-  const _Header({required this.name, required this.dayMasterName});
-
-  String _greeting(AppL10n l) {
-    final h = DateTime.now().hour;
-    if (h < 5) return '${l.homeGreetingNight},';
-    if (h < 12) return '${l.homeGreetingMorning},';
-    if (h < 18) return '${l.homeGreetingAfternoon},';
-    return '${l.homeGreetingEvening},';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final displayName = (name != null && name!.trim().isNotEmpty)
-        ? name!.trim()
-        : dayMasterName;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _greeting(l),
-                  style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.moonlightGray,
-                      fontStyle: FontStyle.italic),
+                  l.homeNotifTitle.toUpperCase(),
+                  style: GoogleFonts.inter(
+                    fontSize: 10,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
+                  ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 6),
                 Text(
-                  '$displayName  ✦',
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.ghostlyWhite,
+                  on ? l.homeNotifOn : l.homeNotifSubtitle,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 12.5,
+                    color: AppColors.taupe,
                   ),
                 ),
               ],
             ),
           ),
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const Icon(Icons.notifications_none,
-                  size: 22, color: AppColors.moonlightGray),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                  width: 7,
-                  height: 7,
-                  decoration: const BoxDecoration(
-                    color: AppColors.celestialGold,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
+          Switch(
+            value: on,
+            activeThumbColor: AppColors.ink,
+            activeTrackColor: AppColors.ink.withValues(alpha: 0.35),
+            onChanged: (v) async {
+              final notifier = ref.read(notificationProvider.notifier);
+              final messenger = ScaffoldMessenger.of(context);
+              if (v) {
+                final ok = await notifier.enable(
+                  pushTitle: l.homeNotifSampleTitle,
+                  pushBody: l.homeNotifSampleBody,
+                  day60ji: saju?.day60ji,
+                  useKo: useKo,
+                );
+                messenger
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.ink,
+                    content: Text(
+                      ok
+                          ? l.homeNotifEnabledSnack
+                          : l.homeNotifPermissionDenied,
+                      style: const TextStyle(color: AppColors.bg),
+                    ),
+                  ));
+              } else {
+                await notifier.disable();
+                messenger
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: AppColors.ink,
+                    content: Text(l.homeNotifDisabledSnack),
+                  ));
+              }
+            },
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Date extends StatelessWidget {
-  final DateTime date;
-  const _Date({required this.date});
-
-  @override
-  Widget build(BuildContext context) {
-    final locale = Localizations.maybeLocaleOf(context);
-    final useKo = locale?.languageCode == 'ko';
-    final text = useKo
-        ? '${date.year}년 ${date.month}월 ${date.day}일 ${_weekdayKo(date.weekday)}요일'
-        : DateFormat('EEE · MMM d, y', locale?.toString()).format(date);
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 12.5,
-          color: AppColors.moonlightGray,
-          letterSpacing: useKo ? 0 : 1.5,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  String _weekdayKo(int w) {
-    const map = {1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토', 7: '일'};
-    return map[w] ?? '';
-  }
-}
-
-class _MoonDeco extends StatelessWidget {
-  const _MoonDeco();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Text(
-        '✦  ✦  ✦',
-        style: TextStyle(
-            fontSize: 12, color: AppColors.celestialGold, letterSpacing: 8),
-      ),
-    );
-  }
-}
-
-class _ScoreCircle extends StatelessWidget {
-  final int score;
-  const _ScoreCircle({required this.score});
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: 'Today\'s energy score: $score out of 100',
-      excludeSemantics: true,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 12),
-        width: 140,
-        height: 140,
-        // codex Round 19: gold gradient/glow 톤다운. 점수 숫자만 gold 유지.
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.cardSurface,
-          border: Border.all(
-              color: AppColors.cardBorderStrong, width: 1.5),
-        ),
-        child: Center(
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              text: '$score',
-              style: const TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.w900,
-                color: AppColors.celestialGold,
-                height: 1,
-              ),
-              children: const [
-                TextSpan(
-                  text: '\n/100',
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: AppColors.moonlightGray,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ).animate().scale(duration: 600.ms).fadeIn(),
-    );
-  }
-}
-
-class _ScoreExplanation extends StatelessWidget {
-  final int score;
-  const _ScoreExplanation({required this.score});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final String msg;
-    if (score < 50) {
-      msg = l.homeExplanationLow;
-    } else if (score < 75) {
-      msg = l.homeExplanationMid;
-    } else {
-      msg = l.homeExplanationHigh;
-    }
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 8),
-      child: Text(
-        msg,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 12,
-          color: AppColors.moonlightGray,
-          height: 1.5,
-        ),
-      ),
-    ).animate().fadeIn(delay: 200.ms);
-  }
-}
-
-class _Quote extends StatelessWidget {
-  final String quoteEn;
-  final String quoteKo;
-  const _Quote({required this.quoteEn, required this.quoteKo});
-
-  @override
-  Widget build(BuildContext context) {
-    final useKo =
-        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final text = useKo ? (quoteKo.isEmpty ? quoteEn : quoteKo) : quoteEn;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(36, 0, 36, 14),
-      child: Text(
-        '"$text"',
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 14,
-          color: AppColors.ghostlyWhite,
-          fontStyle: FontStyle.italic,
-          height: 1.5,
-        ),
-      ),
-    ).animate().fadeIn(delay: 400.ms);
-  }
-}
-
-class _TodayPillarRow extends StatelessWidget {
-  final String dayPillar;
-  final String localizedLabel;
-  const _TodayPillarRow({
-    required this.dayPillar,
-    required this.localizedLabel,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final hasLabel = localizedLabel.isNotEmpty;
-    final text = hasLabel
-        ? '${l.homeTodaysPillar} · $localizedLabel ($dayPillar)'
-        : '${l.homeTodaysPillar} · $dayPillar';
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-        decoration: BoxDecoration(
-          color: AppColors.spiritIndigo.withValues(alpha: 0.18),
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(
-              color: AppColors.celestialGold.withValues(alpha: 0.25)),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 11,
-            color: AppColors.celestialGold,
-            letterSpacing: 0.6,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CategoryGrid extends StatelessWidget {
-  final DailyFortune fortune;
-  const _CategoryGrid({required this.fortune});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final cats = [
-      _CatItem(icon: Icons.favorite, name: l.homeCategoryLove, score: fortune.loveScore),
-      _CatItem(icon: Icons.work_outline, name: l.homeCategoryWork, score: fortune.workScore),
-      _CatItem(
-          icon: Icons.savings_outlined,
-          name: l.homeCategoryWealth,
-          score: fortune.wealthScore),
-      _CatItem(icon: Icons.bolt, name: l.homeCategoryEnergy, score: fortune.energyScore),
-    ];
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: cats.map((c) {
-          return Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.cardSurface,
-                border: Border.all(color: AppColors.cardBorder),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Icon(c.icon, size: 18, color: AppColors.mysticViolet),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${c.score}',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: AppColors.ghostlyWhite,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    c.name,
-                    style: const TextStyle(
-                      fontSize: 10.5,
-                      color: AppColors.moonlightGray,
-                      letterSpacing: 0.2,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class _CatItem {
-  final IconData icon;
-  final String name;
-  final int score;
-  const _CatItem({required this.icon, required this.name, required this.score});
-}
-
-class _CategoryGuidesCard extends StatelessWidget {
-  final DailyFortune fortune;
-  const _CategoryGuidesCard({required this.fortune});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    final useKo = (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final entries = [
-      (icon: Icons.favorite, label: l.homeCategoryLove, emoji: '💞',
-          text: useKo ? fortune.loveGuideKo : fortune.loveGuideEn),
-      (icon: Icons.work_outline, label: l.homeCategoryWork, emoji: '💼',
-          text: useKo ? fortune.workGuideKo : fortune.workGuideEn),
-      (icon: Icons.savings_outlined, label: l.homeCategoryWealth, emoji: '💰',
-          text: useKo ? fortune.wealthGuideKo : fortune.wealthGuideEn),
-      (icon: Icons.bolt, label: l.homeCategoryEnergy, emoji: '⚡',
-          text: useKo ? fortune.energyGuideKo : fortune.energyGuideEn),
-    ];
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 14, 20, 4),
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.celestialGold.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Column(
-        children: entries.where((e) => e.text.isNotEmpty).map((e) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(e.emoji, style: const TextStyle(fontSize: 16)),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: 52,
-                    child: Text(
-                      e.label.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        letterSpacing: 0.8,
-                        color: AppColors.celestialGold,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      e.text,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: AppColors.ghostlyWhite,
-                        height: 1.55,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )).toList(),
-      ),
-    );
-  }
-}
-
-class _LuckyCard extends StatelessWidget {
-  final DailyFortune fortune;
-  const _LuckyCard({required this.fortune});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(24, 14, 24, 14),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
-        border:
-            Border.all(color: AppColors.celestialGold.withValues(alpha: 0.15)),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Builder(builder: (context) {
-        final l = AppL10n.of(context);
-        final useKo = (Localizations.maybeLocaleOf(context)
-                    ?.languageCode ??
-                'en') ==
-            'ko';
-        final color = useKo
-            ? (fortune.luckyColorKo.isEmpty
-                ? fortune.luckyColor
-                : fortune.luckyColorKo)
-            : (fortune.luckyColorEn.isEmpty
-                ? fortune.luckyColor
-                : fortune.luckyColorEn);
-        final direction = useKo
-            ? (fortune.luckyDirectionKo.isEmpty
-                ? fortune.luckyDirection
-                : fortune.luckyDirectionKo)
-            : (fortune.luckyDirectionEn.isEmpty
-                ? fortune.luckyDirection
-                : fortune.luckyDirectionEn);
-        return Column(
-          children: [
-            _row(Icons.palette_outlined, l.homeLuckyColor, color),
-            _row(Icons.tag, l.homeLuckyNumber, '${fortune.luckyNumber}'),
-            _row(Icons.explore_outlined, l.homeLuckyDirection, direction),
-          ],
-        );
-      }),
-    );
-  }
-
-  Widget _row(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Row(
-        children: [
-          Icon(icon, size: 14, color: AppColors.moonlightGray),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(label,
-                style: const TextStyle(
-                    fontSize: 11, color: AppColors.moonlightGray)),
-          ),
-          Text(value,
-              style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.celestialGold,
-                fontWeight: FontWeight.w600,
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-class _PromoCard extends StatelessWidget {
-  const _PromoCard();
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    return InkWell(
-      onTap: () => showComingSoonModal(context),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.celestialGold.withValues(alpha: 0.15),
-              AppColors.spiritIndigo.withValues(alpha: 0.15),
-            ],
-          ),
-          border:
-              Border.all(color: AppColors.celestialGold.withValues(alpha: 0.3)),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l.homePromoLimited,
-              style: const TextStyle(
-                fontSize: 9,
-                color: AppColors.celestialGold,
-                letterSpacing: 1.5,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l.homePromoTitle,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: AppColors.ghostlyWhite,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l.homePromoDesc,
-              style: const TextStyle(
-                  fontSize: 11,
-                  color: AppColors.moonlightGray,
-                  height: 1.5),
-            ),
-          ],
-        ),
       ),
     );
   }

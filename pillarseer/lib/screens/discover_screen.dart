@@ -1,10 +1,10 @@
-// Pillar Seer — Discover (유명인 사주). K-pop/배우/스포츠 인물.
-
+// Pillar Seer — Discover (Aesop Luxury). 유명인 사주 + 한자 hero, 일주별 비교.
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../models/saju_result.dart';
 import '../providers/locale_provider.dart';
@@ -63,92 +63,152 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
       _F('athlete', l.discoverFilterAthlete),
       _F('icon', l.discoverFilterIcon),
     ];
-    final filtered = _all
-        .where((c) => _filter == 'all' || c.kind == _filter)
-        .toList();
+    final filtered =
+        _all.where((c) => _filter == 'all' || c.kind == _filter).toList();
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Container(
+              padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+              decoration: const BoxDecoration(
+                color: AppColors.bg,
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    l.discoverTitle,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.ghostlyWhite,
-                      letterSpacing: 0.2,
+                    'P I L L A R    S E E R',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 5,
+                      color: AppColors.ink,
                     ),
                   ),
-                  const SizedBox(height: 4),
                   Text(
-                    l.discoverSubtitle,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.moonlightGray,
-                      fontStyle: FontStyle.italic,
+                    'DISCOVER · 譜',
+                    style: GoogleFonts.inter(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 3,
+                      color: AppColors.inkLight,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 38,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                separatorBuilder: (_, _) => const SizedBox(width: 6),
-                itemCount: filters.length,
-                itemBuilder: (ctx, i) {
-                  final f = filters[i];
-                  final selected = f.id == _filter;
-                  return ChoiceChip(
-                    label: Text(f.label),
-                    selected: selected,
-                    onSelected: (_) => setState(() => _filter = f.id),
-                    selectedColor: AppColors.cardBorderStrong,
-                    backgroundColor: AppColors.cardSurface,
-                    labelStyle: TextStyle(
-                      color: selected
-                          ? AppColors.ghostlyWhite
-                          : AppColors.moonlightGray,
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w700,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(24, 30, 24, 26),
+              decoration: const BoxDecoration(
+                color: AppColors.bg,
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'CELEBRITY CHARTS · 名 譜',
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 5,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(999),
-                      side: BorderSide(
-                        color: selected
-                            ? AppColors.cardBorderStrong
-                            : AppColors.cardBorder,
-                      ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l.discoverTitle,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.ink,
+                      height: 1.2,
                     ),
-                  );
-                },
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l.discoverSubtitle,
+                    style: GoogleFonts.cormorantGaramond(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.accent,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 8),
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
+              child: SizedBox(
+                height: 46,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  itemCount: filters.length,
+                  itemBuilder: (ctx, i) {
+                    final f = filters[i];
+                    final selected = f.id == _filter;
+                    return GestureDetector(
+                      onTap: () => setState(() => _filter = f.id),
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 24),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: selected
+                                  ? AppColors.ink
+                                  : Colors.transparent,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          f.label.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 3,
+                            fontWeight: FontWeight.w500,
+                            color: selected
+                                ? AppColors.ink
+                                : AppColors.taupe,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
             Expanded(
               child: !_loaded
                   ? const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.celestialGold))
+                      child: SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                              color: AppColors.ink, strokeWidth: 1.5)),
+                    )
                   : ListView.separated(
-                      padding:
-                          const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                      padding: EdgeInsets.zero,
                       itemCount: filtered.length,
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(height: 12),
+                      separatorBuilder: (_, _) => const Divider(
+                          height: 1, color: AppColors.line, thickness: 1),
                       itemBuilder: (ctx, i) {
                         final c = filtered[i];
                         final isMatch = mySaju?.day60ji == c.dayPillar;
-                        return _CelebTile(
+                        return _CelebRow(
                           celeb: c,
                           useKo: useKo,
                           isMatch: isMatch,
@@ -209,9 +269,6 @@ class _Celebrity {
     );
   }
 
-  /// 일주 이름을 사용자 언어에 맞춰 반환.
-  /// useKo=true: 한국어 의미 (예: "화 토끼") + 한국어 음 (예: "정묘")
-  /// useKo=false: 영어 (dayPillarName JSON 필드, 예: "Fire Rabbit")
   String localizedDayPillarName(bool useKo) {
     if (!useKo) return dayPillarName;
     if (dayPillar.length < 2) return dayPillarName;
@@ -242,11 +299,11 @@ class _Celebrity {
   }
 }
 
-class _CelebTile extends ConsumerWidget {
+class _CelebRow extends ConsumerWidget {
   final _Celebrity celeb;
   final bool useKo;
   final bool isMatch;
-  const _CelebTile({
+  const _CelebRow({
     required this.celeb,
     required this.useKo,
     required this.isMatch,
@@ -258,116 +315,93 @@ class _CelebTile extends ConsumerWidget {
     final mySaju = ref.watch(sajuResultProvider);
     return InkWell(
       onTap: () => _showCompare(context, l, mySaju, useKo),
-      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-        decoration: BoxDecoration(
-          color: AppColors.cardSurface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isMatch
-                ? AppColors.celestialGold
-                : AppColors.cardBorder,
-            width: isMatch ? 1.6 : 1,
-          ),
-        ),
-        child: Column(
+        padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+        color: isMatch ? AppColors.paper : AppColors.bg,
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: AppColors.midnightPurple.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.cardBorderStrong),
-                  ),
-                  child:
-                      Text(celeb.emoji, style: const TextStyle(fontSize: 30)),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        useKo ? celeb.nameKo : celeb.nameEn,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.ghostlyWhite,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${celeb.localizedDayPillarName(useKo)} · ${celeb.dayPillar}',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppColors.moonlightGray,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        celeb.birth,
-                        style: const TextStyle(
-                          fontSize: 11.5,
-                          color: AppColors.fadedSilver,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (isMatch)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.celestialGold.withValues(alpha: 0.28),
-                      borderRadius: BorderRadius.circular(999),
-                      border: Border.all(
-                        color: AppColors.celestialGold.withValues(alpha: 0.75),
-                      ),
-                    ),
-                    child: Text(
-                      useKo ? '내 일주!' : 'YOUR PILLAR!',
-                      style: const TextStyle(
-                        fontSize: 10.5,
-                        color: AppColors.celestialGold,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.8,
-                      ),
+            SizedBox(
+              width: 56,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    celeb.dayPillar.isNotEmpty ? celeb.dayPillar[0] : '?',
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.accent,
+                      height: 1.0,
                     ),
                   ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              useKo ? celeb.blurbKo : celeb.blurbEn,
-              style: const TextStyle(
-                fontSize: 13.5,
-                color: AppColors.moonlightGray,
-                height: 1.65,
+                  const SizedBox(height: 2),
+                  Text(
+                    celeb.dayPillar.length >= 2 ? celeb.dayPillar[1] : '?',
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.ink,
+                      height: 1.0,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Icon(Icons.touch_app_outlined,
-                    size: 14,
-                    color: AppColors.moonlightGray),
-                const SizedBox(width: 6),
-                Text(
-                  l.discoverShareCompare,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.moonlightGray,
-                    fontWeight: FontWeight.w600,
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    useKo ? celeb.nameKo : celeb.nameEn,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 6),
+                  Text(
+                    celeb.localizedDayPillarName(useKo).toUpperCase(),
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    useKo ? celeb.blurbKo : celeb.blurbEn,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.inkLight,
+                      height: 1.7,
+                    ),
+                  ),
+                  if (isMatch) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.accent, width: 1),
+                      ),
+                      child: Text(
+                        useKo ? 'YOUR PILLAR · 同' : 'YOUR PILLAR · 同',
+                        style: GoogleFonts.inter(
+                          fontSize: 8.5,
+                          letterSpacing: 3,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ],
         ),
@@ -379,67 +413,57 @@ class _CelebTile extends ConsumerWidget {
       BuildContext context, AppL10n l, SajuResult? me, bool useKo) {
     showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.78),
+      barrierColor: AppColors.ink.withValues(alpha: 0.36),
       builder: (ctx) => Dialog(
-        backgroundColor: AppColors.cosmicBlack,
+        backgroundColor: AppColors.bg,
+        surfaceTintColor: AppColors.bg,
+        elevation: 0,
         insetPadding: const EdgeInsets.all(20),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-              color: AppColors.celestialGold.withValues(alpha: 0.55)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: BorderSide(color: AppColors.line, width: 1),
         ),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 480),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(22, 24, 22, 20),
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(celeb.emoji,
-                        style: const TextStyle(fontSize: 34)),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${l.discoverCompareTitle}${useKo ? celeb.nameKo : celeb.nameEn}',
-                            style: const TextStyle(
-                              fontSize: 19,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.ghostlyWhite,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '${celeb.localizedDayPillarName(useKo)} · ${celeb.dayPillar}',
-                            style: const TextStyle(
-                              fontSize: 12.5,
-                              color: AppColors.celestialGold,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                Text(
+                  'COMPATIBILITY · 緣',
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    letterSpacing: 5,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
+                Text(
+                  useKo ? celeb.nameKo : celeb.nameEn,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.ink,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  celeb.localizedDayPillarName(useKo),
+                  style: GoogleFonts.cormorantGaramond(
+                    fontSize: 15,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.accent,
+                  ),
+                ),
+                const SizedBox(height: 22),
                 if (me != null) ...[
                   Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color:
-                          AppColors.celestialGold.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.celestialGold
-                            .withValues(alpha: 0.45),
-                      ),
-                    ),
+                    padding: const EdgeInsets.all(16),
+                    color: AppColors.paper,
+                    width: double.infinity,
                     child: Text(
                       me.day60ji == celeb.dayPillar
                           ? l.discoverCompareSame(
@@ -449,73 +473,72 @@ class _CelebTile extends ConsumerWidget {
                                   ? me.dayPillar.pairKoreanMeaning
                                   : me.dayMasterName,
                               celeb.localizedDayPillarName(useKo)),
-                      style: const TextStyle(
-                        fontSize: 14.5,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.celestialGold,
-                        height: 1.5,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 13.5,
+                        color: AppColors.ink,
+                        height: 1.7,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  _compareRow(l.discoverCompareSimilar,
-                      _similarities(me, useKo)),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 22),
+                  _compareRow(
+                      l.discoverCompareSimilar, _similarities(me, useKo)),
+                  const SizedBox(height: 16),
                   _compareRow(
                       l.discoverCompareContrast, _contrasts(me, useKo)),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 22),
                 ],
                 Text(
                   useKo ? celeb.blurbKo : celeb.blurbEn,
-                  style: const TextStyle(
-                    fontSize: 13.5,
-                    color: AppColors.moonlightGray,
-                    height: 1.7,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    color: AppColors.inkLight,
+                    height: 1.75,
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 22),
+                Container(height: 1, color: AppColors.line),
                 Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton.icon(
+                      child: TextButton(
                         onPressed: () => Navigator.of(ctx).pop(),
-                        icon: const Icon(Icons.close,
-                            size: 16, color: AppColors.moonlightGray),
-                        label: Text(
-                          l.discoverCompareClose,
-                          style: const TextStyle(
-                            color: AppColors.moonlightGray,
-                            fontSize: 13,
-                          ),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.taupe,
+                          minimumSize: const Size(0, 52),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
                         ),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: AppColors.celestialGold
-                                .withValues(alpha: 0.3),
+                        child: Text(
+                          l.discoverCompareClose.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 4,
+                            color: AppColors.taupe,
                           ),
-                          minimumSize: const Size(0, 46),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    Container(width: 1, height: 52, color: AppColors.line),
                     Expanded(
-                      child: ElevatedButton.icon(
+                      child: TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
                           GoRouter.of(context).go('/reports/compatibility');
                         },
-                        icon: const Icon(Icons.favorite, size: 16),
-                        label: Text(
-                          l.discoverCompareSeeChart,
-                          style: const TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.ink,
+                          minimumSize: const Size(0, 52),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.celestialGold,
-                          foregroundColor: AppColors.cosmicBlack,
-                          minimumSize: const Size(0, 46),
+                        child: Text(
+                          l.discoverCompareSeeChart.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 4,
+                            color: AppColors.ink,
+                          ),
                         ),
                       ),
                     ),
@@ -536,7 +559,6 @@ class _CelebTile extends ConsumerWidget {
     const generates = {
       '木': '火', '火': '土', '土': '金', '金': '水', '水': '木',
     };
-    // 일지 같으면 비슷한 표현
     final sameJi = celeb.dayPillar.length >= 2 &&
         me.dayPillar.jiJi == celeb.dayPillar[1];
     if (sameElement && sameJi) {
@@ -605,34 +627,25 @@ class _CelebTile extends ConsumerWidget {
   }
 
   Widget _compareRow(String label, String text) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.spiritIndigo.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(6),
-          ),
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 10.5,
-              color: AppColors.celestialGold,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.6,
-            ),
+        Text(
+          label.toUpperCase(),
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            letterSpacing: 4,
+            fontWeight: FontWeight.w500,
+            color: AppColors.taupe,
           ),
         ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.ghostlyWhite,
-              height: 1.6,
-            ),
+        const SizedBox(height: 8),
+        Text(
+          text,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 13.5,
+            color: AppColors.ink,
+            height: 1.75,
           ),
         ),
       ],
