@@ -1,5 +1,5 @@
 // Pillar Seer — Coming Soon 모달.
-// Promo / Premium / Share 등 Phase 2 기능 클릭 시 노출.
+// Round 16: gold tone-down. CTA gold 1곳만 유지.
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
@@ -8,13 +8,12 @@ Future<void> showComingSoonModal(BuildContext context) {
   final l = AppL10n.of(context);
   return showDialog<void>(
     context: context,
-    barrierColor: Colors.black.withValues(alpha: 0.7),
+    barrierColor: Colors.black.withValues(alpha: 0.72),
     builder: (ctx) => Dialog(
-      backgroundColor: AppColors.cosmicBlack,
+      backgroundColor: AppColors.cardSurface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(
-            color: AppColors.celestialGold.withValues(alpha: 0.4), width: 1),
+        borderRadius: BorderRadius.circular(18),
+        side: const BorderSide(color: AppColors.cardBorderStrong),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
@@ -22,28 +21,23 @@ Future<void> showComingSoonModal(BuildContext context) {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.celestialGold.withValues(alpha: 0.2),
-                    AppColors.spiritIndigo.withValues(alpha: 0.2),
-                  ],
-                ),
+                color: AppColors.midnightPurple.withValues(alpha: 0.6),
                 shape: BoxShape.circle,
+                border: Border.all(color: AppColors.cardBorderStrong),
               ),
               child: const Icon(Icons.auto_awesome,
-                  size: 36, color: AppColors.celestialGold),
+                  size: 32, color: AppColors.mysticViolet),
             ),
             const SizedBox(height: 16),
             Text(
               l.modalComingSoonTitle,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.celestialGold,
-                letterSpacing: 1.0,
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: AppColors.ghostlyWhite,
               ),
             ),
             const SizedBox(height: 10),
@@ -51,8 +45,8 @@ Future<void> showComingSoonModal(BuildContext context) {
               l.modalComingSoonDesc,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.ghostlyWhite,
+                fontSize: 13.5,
+                color: AppColors.moonlightGray,
                 height: 1.5,
               ),
             ),
@@ -83,6 +77,7 @@ Future<void> showComingSoonModal(BuildContext context) {
                           duration: const Duration(seconds: 2),
                         ));
                     },
+                    // CTA = gold (codex 권고: CTA + 핵심 숫자만 gold)
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.celestialGold,
                       foregroundColor: AppColors.cosmicBlack,

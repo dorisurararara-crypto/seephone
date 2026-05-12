@@ -397,9 +397,8 @@ class _IconField extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(12, 10, 14, 10),
       decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.15),
-        border:
-            Border.all(color: AppColors.celestialGold.withValues(alpha: 0.25)),
+        color: AppColors.cardSurface,
+        border: Border.all(color: AppColors.cardBorder),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -408,10 +407,11 @@ class _IconField extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: AppColors.celestialGold.withValues(alpha: 0.15),
+              color: AppColors.midnightPurple.withValues(alpha: 0.6),
               shape: BoxShape.circle,
+              border: Border.all(color: AppColors.cardBorderStrong),
             ),
-            child: Icon(icon, size: 16, color: AppColors.celestialGold),
+            child: Icon(icon, size: 16, color: AppColors.mysticViolet),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -419,12 +419,12 @@ class _IconField extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  label.toUpperCase(),
+                  label,
                   style: const TextStyle(
-                    fontSize: 9,
-                    color: AppColors.celestialGold,
-                    letterSpacing: 1.5,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 11,
+                    color: AppColors.moonlightGray,
+                    letterSpacing: 0.2,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -532,12 +532,12 @@ class _SubmitButton extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
+        // shadow 가 너무 강해 촌스러움 — Round 16 톤다운
         boxShadow: enabled
             ? [
                 BoxShadow(
-                  color: AppColors.celestialGold.withValues(alpha: 0.35),
-                  blurRadius: 24,
-                  spreadRadius: 1,
+                  color: AppColors.celestialGold.withValues(alpha: 0.18),
+                  blurRadius: 12,
                 ),
               ]
             : null,
