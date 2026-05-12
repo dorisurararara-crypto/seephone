@@ -12,6 +12,8 @@ import 'screens/reports/compatibility_screen.dart';
 import 'screens/reports/tojeong_screen.dart';
 import 'screens/reports/date_picking_screen.dart';
 import 'screens/reports/dream_screen.dart';
+import 'screens/reports/new_year_2026_screen.dart';
+import 'screens/reports/kpop_compat_screen.dart';
 import 'providers/saju_provider.dart';
 
 /// 전역 라우터. extra 의존 제거.
@@ -30,6 +32,8 @@ GoRouter buildRouter(WidgetRef ref) {
         '/reports/tojeong',
         '/reports/date-picking',
         '/reports/dream',
+        '/reports/new-year-2026',
+        '/reports/kpop-compat',
         '/discover',
         '/profile',
       ];
@@ -74,6 +78,14 @@ GoRouter buildRouter(WidgetRef ref) {
       GoRoute(
         path: '/reports/dream',
         builder: (context, state) => const DreamScreen(),
+      ),
+      GoRoute(
+        path: '/reports/new-year-2026',
+        builder: (context, state) => const NewYear2026Screen(),
+      ),
+      GoRoute(
+        path: '/reports/kpop-compat',
+        builder: (context, state) => const KpopCompatScreen(),
       ),
       GoRoute(
         path: '/discover',

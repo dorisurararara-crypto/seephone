@@ -1,6 +1,7 @@
-// Pillar Seer — Reports 메뉴 화면. 4 카드 grid 진입.
+// Pillar Seer — Reports home (Aesop Luxury). 7 chapters in editorial layout.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
@@ -11,78 +12,149 @@ class ReportsHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    final cards = <_ReportCard>[
-      _ReportCard(
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+
+    final featured = <_Card>[
+      _Card(
+        symbol: '丙午',
+        title: useKo ? '2026 신년운세' : 'New Year 2026',
+        subtitle: useKo
+            ? '병오년 1년 흐름 + 12달 + 12 영역'
+            : 'Year of Fire Horse · 12 months · 12 areas',
+        route: '/reports/new-year-2026',
+        badge: useKo ? 'NEW · 신년' : 'NEW · 2026',
+      ),
+      _Card(
+        symbol: '韓 流',
+        title: useKo ? 'K-POP 스타 궁합' : 'K-POP Star Compatibility',
+        subtitle: useKo
+            ? '20+ K-POP 스타와 나의 사주 일치율'
+            : 'Saju matching with 20+ K-POP stars',
+        route: '/reports/kpop-compat',
+        badge: useKo ? 'NEW · K-POP' : 'NEW · K-POP',
+      ),
+    ];
+
+    final chapters = <_Card>[
+      _Card(
+        symbol: '宮 合',
         title: l.reportsCardCompatibility,
-        desc: l.reportsCardCompatibilityDesc,
-        icon: Icons.favorite,
+        subtitle: l.reportsCardCompatibilityDesc,
         route: '/reports/compatibility',
-        symbol: '宮合',
       ),
-      _ReportCard(
+      _Card(
+        symbol: '土 亭',
         title: l.reportsCardTojeong,
-        desc: l.reportsCardTojeongDesc,
-        icon: Icons.menu_book_outlined,
+        subtitle: l.reportsCardTojeongDesc,
         route: '/reports/tojeong',
-        symbol: '土亭',
       ),
-      _ReportCard(
+      _Card(
+        symbol: '擇 日',
         title: l.reportsCardDatePicking,
-        desc: l.reportsCardDatePickingDesc,
-        icon: Icons.event_available,
+        subtitle: l.reportsCardDatePickingDesc,
         route: '/reports/date-picking',
-        symbol: '擇日',
       ),
-      _ReportCard(
+      _Card(
+        symbol: '解 夢',
         title: l.reportsCardDream,
-        desc: l.reportsCardDreamDesc,
-        icon: Icons.nights_stay_outlined,
+        subtitle: l.reportsCardDreamDesc,
         route: '/reports/dream',
-        symbol: '解夢',
       ),
-      _ReportCard(
+      _Card(
+        symbol: '名 譜',
         title: l.discoverTitle,
-        desc: l.discoverSubtitle,
-        icon: Icons.nightlight_round,
+        subtitle: l.discoverSubtitle,
         route: '/discover',
-        symbol: 'K-pop',
       ),
     ];
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 4, left: 4),
-                child: Text(
-                  l.reportsHomeTitle,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.ghostlyWhite,
-                    letterSpacing: 0.2,
-                  ),
-                ),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+              decoration: const BoxDecoration(
+                color: AppColors.bg,
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(4, 0, 4, 20),
-                child: Text(
-                  l.reportsHomeSubtitle,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.moonlightGray,
-                    fontStyle: FontStyle.italic,
-                    height: 1.5,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'P I L L A R    S E E R',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 5,
+                      color: AppColors.ink,
+                    ),
                   ),
-                ),
+                  Text(
+                    'REPORTS · 譜',
+                    style: GoogleFonts.inter(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 3,
+                      color: AppColors.inkLight,
+                    ),
+                  ),
+                ],
               ),
-              ...cards.map((c) => _ReportTile(card: c)),
-            ],
-          ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+              decoration: const BoxDecoration(
+                color: AppColors.bg,
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'DEEP CHAPTERS · 深 章',
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 5,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l.reportsHomeTitle,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.ink,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l.reportsHomeSubtitle,
+                    style: GoogleFonts.cormorantGaramond(
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.accent,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _GroupHeader(useKo ? '신규 · NEW' : 'NEW'),
+            ...featured.map((c) => _CardRow(card: c, highlight: true)),
+            _GroupHeader(useKo ? '깊은 풀이 · DEEP' : 'DEEP'),
+            ...chapters.map((c) => _CardRow(card: c)),
+            const SizedBox(height: 32),
+          ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
@@ -90,98 +162,137 @@ class ReportsHomeScreen extends StatelessWidget {
   }
 }
 
-class _ReportCard {
-  final String title;
-  final String desc;
-  final IconData icon;
-  final String route;
-  final String symbol;
-  const _ReportCard({
-    required this.title,
-    required this.desc,
-    required this.icon,
-    required this.route,
-    required this.symbol,
-  });
-}
-
-class _ReportTile extends StatelessWidget {
-  final _ReportCard card;
-  const _ReportTile({required this.card});
+class _GroupHeader extends StatelessWidget {
+  final String label;
+  const _GroupHeader(this.label);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: () => context.go(card.route),
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.cardSurface,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.cardBorder),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 14),
+      child: Text(
+        label.toUpperCase(),
+        style: GoogleFonts.inter(
+          fontSize: 9,
+          letterSpacing: 5,
+          fontWeight: FontWeight.w500,
+          color: AppColors.taupe,
+        ),
+      ),
+    );
+  }
+}
+
+class _Card {
+  final String symbol;
+  final String title;
+  final String subtitle;
+  final String route;
+  final String? badge;
+  const _Card({
+    required this.symbol,
+    required this.title,
+    required this.subtitle,
+    required this.route,
+    this.badge,
+  });
+}
+
+class _CardRow extends StatelessWidget {
+  final _Card card;
+  final bool highlight;
+  const _CardRow({required this.card, this.highlight = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => context.go(card.route),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
+        color: highlight ? AppColors.paper : AppColors.bg,
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.line, width: 1),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.midnightPurple.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.cardBorderStrong),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 56,
+              child: Text(
+                card.symbol,
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.accent,
+                  height: 1.0,
+                  letterSpacing: 2,
                 ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      top: 6,
-                      right: 7,
-                      child: Text(
-                        card.symbol,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppColors.fadedSilver,
-                          fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          card.title,
+                          style: GoogleFonts.notoSerifKr(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.ink,
+                            height: 1.2,
+                          ),
                         ),
                       ),
+                      if (card.badge != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: AppColors.accent, width: 1),
+                          ),
+                          child: Text(
+                            card.badge!,
+                            style: GoogleFonts.inter(
+                              fontSize: 8.5,
+                              letterSpacing: 3,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.accent,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    card.subtitle,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 12.5,
+                      color: AppColors.inkLight,
+                      height: 1.7,
                     ),
-                    Icon(card.icon,
-                        size: 28, color: AppColors.mysticViolet),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                '→',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  color: AppColors.taupe,
                 ),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      card.title,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.ghostlyWhite,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      card.desc,
-                      style: const TextStyle(
-                        fontSize: 13.5,
-                        color: AppColors.moonlightGray,
-                        height: 1.55,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right, color: AppColors.fadedSilver),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
