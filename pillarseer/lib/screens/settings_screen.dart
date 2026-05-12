@@ -720,10 +720,16 @@ class _LinkTile extends StatelessWidget {
               // codex Round 9 fix: silent catch 대신 사용자 fallback (clipboard copy + snackbar)
               await Clipboard.setData(ClipboardData(text: url));
               if (!context.mounted) return;
+              final useKo = (Localizations.maybeLocaleOf(context)
+                          ?.languageCode ??
+                      'en') ==
+                  'ko';
               messenger
                 ..hideCurrentSnackBar()
                 ..showSnackBar(SnackBar(
-                  content: Text('URL copied: $value'),
+                  content: Text(useKo
+                      ? '주소를 복사했어요: $value'
+                      : 'URL copied: $value'),
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: AppColors.spiritIndigo,
                   duration: const Duration(seconds: 3),
