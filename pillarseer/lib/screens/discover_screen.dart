@@ -530,27 +530,66 @@ class _CelebTile extends ConsumerWidget {
   }
 
   String _similarities(SajuResult me, bool useKo) {
-    final sameElement = me.dayPillar.chunGanElement == _celebElement();
+    final myEl = me.dayPillar.chunGanElement;
+    final celebEl = _celebElement();
+    final sameElement = myEl == celebEl;
+    const generates = {
+      '木': '火', '火': '土', '土': '金', '金': '水', '水': '木',
+    };
+    // 일지 같으면 비슷한 표현
+    final sameJi = celeb.dayPillar.length >= 2 &&
+        me.dayPillar.jiJi == celeb.dayPillar[1];
+    if (sameElement && sameJi) {
+      return useKo
+          ? '같은 일주 — 결의 속도와 표현이 모두 비슷합니다.'
+          : 'Same day pillar — both pace and expression align.';
+    }
     if (sameElement) {
       return useKo
-          ? '같은 오행 기운 · 비슷한 추진력 결'
-          : 'Same elemental base · similar momentum signature';
+          ? '같은 오행 기운 — 추진력 결이 비슷하고, 동기 부여 방식이 닮았어요.'
+          : 'Same elemental base — similar momentum and motivation grain.';
+    }
+    if (generates[myEl] == celebEl) {
+      return useKo
+          ? '당신이 키워주는 결 — 셀럽의 흐름을 자연스럽게 받쳐 줍니다.'
+          : "You nourish their grain — your energy naturally supports their flow.";
+    }
+    if (generates[celebEl] == myEl) {
+      return useKo
+          ? '당신을 키워주는 결 — 셀럽의 결이 당신을 살려주는 관계 구조.'
+          : 'They nourish yours — their grain feeds your direction.';
     }
     return useKo
-        ? '다른 오행이지만 보완 관계 · 서로의 결핍을 채울 수 있음'
-        : "Different elements, complementary roles · you fill each other's gaps";
+        ? '다른 오행 — 보완 관계로 서로의 결핍을 채울 가능성이 큽니다.'
+        : "Different elements but complementary — high potential to fill each other's gaps.";
   }
 
   String _contrasts(SajuResult me, bool useKo) {
-    if (celeb.dayPillar.length >= 2 &&
-        me.dayPillar.jiJi == celeb.dayPillar[1]) {
+    final myEl = me.dayPillar.chunGanElement;
+    final celebEl = _celebElement();
+    const overcomes = {
+      '木': '土', '土': '水', '水': '火', '火': '金', '金': '木',
+    };
+    final sameJi = celeb.dayPillar.length >= 2 &&
+        me.dayPillar.jiJi == celeb.dayPillar[1];
+    if (overcomes[myEl] == celebEl) {
       return useKo
-          ? '비슷한 베이스지만 표현 방식이 다름'
-          : 'Similar base, different expression style';
+          ? '당신이 누르는 결 — 충고가 통제처럼 느껴질 수 있어 표현 톤이 중요합니다.'
+          : 'You control their grain — your advice can read as pressure; mind the tone.';
+    }
+    if (overcomes[celebEl] == myEl) {
+      return useKo
+          ? '셀럽이 당신을 누르는 결 — 자극이 되지만 페이스를 빼앗기지 마세요.'
+          : 'Their grain pressures yours — stimulating, but guard your pace.';
+    }
+    if (sameJi && myEl != celebEl) {
+      return useKo
+          ? '비슷한 베이스지만 표현 방식이 다름 — 같은 무대에서 다른 색을 냅니다.'
+          : 'Similar base, different expression — same stage, different colors.';
     }
     return useKo
-        ? '리듬·페이스가 다름 — 한쪽이 빠를 때 다른 쪽은 느리게'
-        : 'Different rhythms — one pushes, the other paces';
+        ? '리듬·페이스가 다름 — 한쪽이 빠를 때 다른 쪽이 느리게, 의식적 동기화 필요.'
+        : 'Different rhythms — one pushes while the other paces; conscious sync helps.';
   }
 
   String _celebElement() {
