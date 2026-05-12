@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>07 Muji Minimal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Noto+Sans+KR:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#F5F4EF; --bg2:#EDECE6; --text:#3A3A3A; --muted:#888; --line:#D8D6CE; --accent:#5A5046; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#888;font-family:'Inter','Noto Sans KR',sans-serif;color:var(--text);font-weight:300;line-height:1.5;display:flex;justify-content:center;min-height:100vh}
+.phone{width:390px;min-height:100vh;background:var(--bg);padding:0}
+.appbar{padding:24px 24px 18px;display:flex;justify-content:space-between;align-items:center}
+.appbar .logo{font-size:11px;letter-spacing:4px;color:var(--text);font-weight:400}
+.appbar .chip{font-size:9px;color:var(--muted);letter-spacing:2px}
+.h1{padding:32px 24px 0;font-size:11px;letter-spacing:4px;color:var(--muted);font-weight:400}
+.hero{padding:14px 24px 36px}
+.hero .name{font-family:'Noto Sans KR';font-size:64px;font-weight:200;letter-spacing:-2px;line-height:1;color:var(--text);margin-bottom:10px}
+.hero .sub{font-size:13px;color:var(--muted);letter-spacing:1px}
+.sep{height:1px;background:var(--line);margin:0 24px}
+.block{padding:32px 24px}
+.block .label{font-size:10px;letter-spacing:4px;color:var(--muted);margin-bottom:18px;font-weight:400}
+.profile-rows .row{display:flex;justify-content:space-between;padding:13px 0;font-size:14px}
+.profile-rows .row .k{color:var(--muted);font-weight:400;letter-spacing:1px;font-size:12px}
+.profile-rows .row .v{color:var(--text);font-weight:400}
+.profile-rows .row .v .ch{color:var(--accent);margin-right:5px}
+.pillars-block{background:var(--bg2);padding:28px 24px;margin:0 24px;border-radius:0}
+.pillars-block .label{font-size:10px;letter-spacing:4px;color:var(--muted);margin-bottom:20px;text-align:center}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px}
+.p{background:var(--bg2);padding:14px 0;text-align:center}
+.p .l{font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:10px}
+.p .h{font-family:'Noto Sans KR';font-size:22px;font-weight:300;line-height:1.2;color:var(--text)}
+.p.day .h{color:var(--accent);font-weight:400}
+.note{padding:32px 24px;border-top:1px solid var(--line);font-size:14px;line-height:1.85;color:var(--text);font-weight:300}
+.cta{margin:0 24px 24px;padding:18px;background:var(--text);color:var(--bg);text-align:center;letter-spacing:3px;font-size:12px;font-weight:400;cursor:pointer}
+.foot{padding:14px 24px 28px;text-align:center;font-size:9px;letter-spacing:2px;color:var(--muted)}
+</style></head>
+<body><div class="phone">
+<div class="appbar">
+  <div class="logo">필 러 시 어</div>
+  <div class="chip">정밀 모드</div>
+</div>
+<div class="h1">DAY MASTER</div>
+<div class="hero">
+  <div class="name">丁卯</div>
+  <div class="sub">Fire Rabbit · 화 토끼</div>
+</div>
+<div class="sep"></div>
+<div class="pillars-block">
+  <div class="label">FOUR PILLARS</div>
+  <div class="pillars">
+    <div class="p"><div class="l">YR</div><div class="h">癸<br>酉</div></div>
+    <div class="p"><div class="l">MO</div><div class="h">丁<br>巳</div></div>
+    <div class="p day"><div class="l">DAY</div><div class="h">丁<br>卯</div></div>
+    <div class="p"><div class="l">HR</div><div class="h">—<br>—</div></div>
+  </div>
+</div>
+<div class="block">
+  <div class="label">PROFILE</div>
+  <div class="profile-rows">
+    <div class="row"><span class="k">격국</span><span class="v"><span class="ch">偏印</span>편인격</span></div>
+    <div class="row"><span class="k">용신</span><span class="v"><span class="ch">木</span>나무</span></div>
+    <div class="row"><span class="k">강약</span><span class="v">신왕</span></div>
+    <div class="row"><span class="k">공망</span><span class="v"><span class="ch">戌 · 亥</span></span></div>
+  </div>
+</div>
+<div class="note">한결같은 사람.<br>속도보다 깊이로 흐르고, 오랜 시간 속에서 본질이 드러나는 사주.</div>
+<div class="cta">계속 읽기</div>
+<div class="foot">KASI · 입춘·12절 · 진태양시</div>
+</div></body></html>

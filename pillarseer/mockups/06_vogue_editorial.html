@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>06 Vogue Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#FFFFFF; --ink:#0A0A0A; --ink-light:#5A5A5A; --muted:#A0A0A0; --gold:#A88A4E; --line:#E5E5E5; --accent-bg:#F8F4ED; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:'Inter','Noto Sans KR',sans-serif;color:var(--ink);display:flex;justify-content:center;min-height:100vh}
+.phone{width:390px;min-height:100vh;background:var(--bg)}
+.masthead{padding:24px 24px 16px;text-align:center;border-bottom:3px solid var(--ink)}
+.masthead .logo{font-family:'Playfair Display';font-weight:900;font-size:28px;letter-spacing:8px;color:var(--ink);line-height:1}
+.masthead .issue{font-size:9px;letter-spacing:4px;color:var(--ink-light);margin-top:8px;font-weight:500}
+.section{padding:32px 24px;border-bottom:0.5px solid var(--line)}
+.editorial-tag{font-family:'Playfair Display';font-style:italic;font-size:13px;color:var(--gold);margin-bottom:14px;letter-spacing:1px}
+.editorial-tag::before{content:'— '}
+.headline{font-family:'Noto Serif KR';font-weight:900;font-size:48px;line-height:0.95;letter-spacing:-1px;color:var(--ink);margin-bottom:14px}
+.headline .accent{font-family:'Playfair Display';font-style:italic;font-weight:400;color:var(--gold);display:block;font-size:32px;margin-top:6px}
+.deck{font-family:'Playfair Display';font-style:italic;font-size:17px;line-height:1.5;color:var(--ink-light);font-weight:400;margin-bottom:20px;padding-left:14px;border-left:2px solid var(--gold)}
+.byline{font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px}
+.byline strong{color:var(--ink);font-weight:700}
+.profile-card{background:var(--accent-bg);padding:28px 24px;border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line)}
+.profile-card .meta{font-family:'Playfair Display';font-style:italic;font-size:14px;color:var(--ink-light);margin-bottom:18px}
+.profile-card .ji60{font-family:'Noto Serif KR';font-size:96px;font-weight:900;line-height:0.9;color:var(--ink);text-align:center;margin:8px 0 14px;letter-spacing:6px}
+.profile-card .ko-name{text-align:center;font-family:'Playfair Display';font-style:italic;font-size:18px;color:var(--gold)}
+.attrs{padding:28px 24px}
+.attrs .header{font-family:'Playfair Display';font-style:italic;font-size:20px;font-weight:400;color:var(--ink);margin-bottom:18px;border-bottom:1px solid var(--ink);padding-bottom:8px}
+.attrs .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 14px}
+.attrs .item .k{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.attrs .item .v{font-family:'Noto Serif KR';font-size:22px;font-weight:500;color:var(--ink);line-height:1.2}
+.attrs .item .v .ch{color:var(--gold);font-weight:700;margin-right:6px}
+.pillars-section{padding:32px 24px;border-top:0.5px solid var(--line)}
+.pillars-section .header{font-family:'Playfair Display';font-style:italic;font-size:14px;color:var(--ink-light);margin-bottom:18px;text-align:center}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:18px 0}
+.pillars .col .l{font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:14px;font-weight:600}
+.pillars .col .h{font-family:'Noto Serif KR';font-size:28px;font-weight:700;line-height:1.2;color:var(--ink)}
+.pillars .col.day .h{color:var(--gold);font-weight:900}
+.cta-row{padding:24px;display:flex;gap:10px}
+.cta-row .btn{flex:1;padding:16px;text-align:center;font-size:11px;letter-spacing:3px;font-weight:700;text-transform:uppercase;cursor:pointer}
+.cta-row .primary{background:var(--ink);color:var(--bg)}
+.cta-row .secondary{border:1px solid var(--ink);color:var(--ink)}
+.foot{padding:14px 24px 28px;text-align:center;font-family:'Playfair Display';font-style:italic;font-size:11px;color:var(--muted)}
+</style></head>
+<body><div class="phone">
+<div class="masthead">
+  <div class="logo">PILLAR<br>SEER</div>
+  <div class="issue">VOL. I · MAY 2026 · ISSUE №25</div>
+</div>
+<div class="section">
+  <div class="editorial-tag">YOUR DAY MASTER</div>
+  <div class="headline">한결같은,<span class="accent">a steady-energy soul.</span></div>
+  <div class="deck">"속도보다 깊이로 흐르고, 오랜 시간 속에서 본질이 드러난다."</div>
+  <div class="byline">A READING FOR <strong>LEE JI-EUN</strong> · BORN 1993.05.16</div>
+</div>
+<div class="profile-card">
+  <div class="meta">The Day Pillar</div>
+  <div class="ji60">丁卯</div>
+  <div class="ko-name">Fire Rabbit · 화 토끼</div>
+</div>
+<div class="attrs">
+  <div class="header">The Chart at a Glance</div>
+  <div class="grid">
+    <div class="item"><div class="k">FORMAT · 格局</div><div class="v"><span class="ch">偏印</span>편인격</div></div>
+    <div class="item"><div class="k">YONGSIN · 用神</div><div class="v"><span class="ch">木</span>나무</div></div>
+    <div class="item"><div class="k">STRENGTH · 身</div><div class="v">신왕</div></div>
+    <div class="item"><div class="k">VOID · 空亡</div><div class="v"><span class="ch">戌 · 亥</span></div></div>
+  </div>
+</div>
+<div class="pillars-section">
+  <div class="header">FOUR PILLARS · 四柱八字</div>
+  <div class="pillars">
+    <div class="col"><div class="l">YEAR</div><div class="h">癸<br>酉</div></div>
+    <div class="col"><div class="l">MONTH</div><div class="h">丁<br>巳</div></div>
+    <div class="col day"><div class="l">DAY</div><div class="h">丁<br>卯</div></div>
+    <div class="col"><div class="l">HOUR</div><div class="h">—<br>—</div></div>
+  </div>
+</div>
+<div class="cta-row">
+  <div class="btn secondary">Save</div>
+  <div class="btn primary">Read in Full</div>
+</div>
+<div class="foot">KASI · 入春 · 眞太陽時 · est. 2026</div>
+</div></body></html>

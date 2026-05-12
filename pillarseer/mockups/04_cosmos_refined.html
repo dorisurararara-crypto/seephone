@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 Cosmos Refined</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Noto+Serif+KR:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg1:#0A0420; --bg2:#1A0B3A; --text:#EAE5FF; --muted:#9B95C9; --gold:#E8C77A; --gold2:#A88A4E; --line:rgba(232,199,122,0.15); }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:'Cormorant Garamond','Noto Serif KR',serif;color:var(--text);display:flex;justify-content:center;min-height:100vh}
+.phone{width:390px;min-height:100vh;background:radial-gradient(ellipse at 50% 0%, #2A1660 0%, var(--bg2) 30%, var(--bg1) 70%, #000 100%);position:relative;overflow:hidden}
+.stars{position:absolute;inset:0;pointer-events:none}
+.star{position:absolute;width:1px;height:1px;background:white;border-radius:50%;box-shadow:0 0 4px rgba(255,255,255,0.6);animation:twinkle 3s ease-in-out infinite}
+.star.big{width:2px;height:2px;box-shadow:0 0 6px var(--gold)}
+@keyframes twinkle{0%,100%{opacity:0.3}50%{opacity:1}}
+.phone>*{position:relative;z-index:1}
+.appbar{padding:24px;display:flex;justify-content:center;align-items:center;flex-direction:column}
+.appbar .logo{font-family:'Cormorant Garamond';font-style:italic;font-weight:300;font-size:24px;color:var(--gold);letter-spacing:6px}
+.appbar .sub{font-size:9px;letter-spacing:5px;color:var(--muted);margin-top:6px}
+.divider-dot{display:flex;justify-content:center;gap:10px;align-items:center;margin:8px 0 24px}
+.divider-dot span{width:3px;height:3px;background:var(--gold);border-radius:50%}
+.divider-dot span:nth-child(2){width:5px;height:5px}
+.body{padding:0 28px 40px}
+.hero{text-align:center;padding:32px 0 28px;border-top:0.5px solid var(--line);border-bottom:0.5px solid var(--line);position:relative}
+.hero::before, .hero::after{content:'✦';position:absolute;left:50%;transform:translateX(-50%);color:var(--gold);font-size:14px}
+.hero::before{top:-7px;background:var(--bg1);padding:0 12px}
+.hero::after{bottom:-7px;background:var(--bg1);padding:0 12px}
+.hero .label{font-size:10px;letter-spacing:6px;color:var(--muted);margin-bottom:18px;text-transform:uppercase}
+.hero .name{font-family:'Noto Serif KR';font-size:80px;font-weight:300;color:var(--gold);line-height:1;letter-spacing:8px;margin-bottom:14px}
+.hero .ko{font-family:'Cormorant Garamond';font-style:italic;font-size:18px;color:var(--text);letter-spacing:2px}
+.constellation{margin:32px 0;text-align:center;font-size:11px;letter-spacing:4px;color:var(--muted)}
+.constellation .line{display:inline-block;width:30px;height:0.5px;background:var(--line);vertical-align:middle;margin:0 8px}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:32px}
+.p{padding:18px 6px;text-align:center;border:0.5px solid var(--line);background:rgba(232,199,122,0.03)}
+.p.day{background:rgba(232,199,122,0.12);border-color:var(--gold2)}
+.p .l{font-size:9px;letter-spacing:3px;color:var(--muted);margin-bottom:10px;font-family:'Cormorant Garamond'}
+.p .h{font-family:'Noto Serif KR';font-size:24px;font-weight:400;line-height:1.2;color:var(--text)}
+.p.day .h{color:var(--gold)}
+.profile{padding:0 8px}
+.profile .row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:0.5px solid var(--line);font-family:'Noto Serif KR'}
+.profile .row:last-child{border:0}
+.profile .k{font-size:11px;letter-spacing:3px;color:var(--muted);font-family:'Cormorant Garamond'}
+.profile .v{font-size:15px;color:var(--text);font-weight:400}
+.profile .v .gold{color:var(--gold);margin-right:4px}
+.quote{margin:36px 0;text-align:center;font-family:'Cormorant Garamond';font-style:italic;font-size:16px;line-height:1.8;color:var(--text);padding:0 16px}
+.quote::before{content:'❝';display:block;font-size:32px;color:var(--gold);margin-bottom:8px;line-height:0.5}
+.cta{margin-top:32px;padding:20px;text-align:center;border:1px solid var(--gold2);color:var(--gold);font-family:'Cormorant Garamond';font-style:italic;font-size:15px;letter-spacing:5px;cursor:pointer;background:linear-gradient(180deg, rgba(232,199,122,0.06), transparent)}
+.foot{margin-top:28px;text-align:center;font-size:9px;letter-spacing:3px;color:var(--muted);opacity:0.7}
+</style></head>
+<body><div class="phone">
+<div class="stars">
+  <div class="star" style="left:10%;top:6%"></div>
+  <div class="star big" style="left:85%;top:8%;animation-delay:0.5s"></div>
+  <div class="star" style="left:25%;top:15%;animation-delay:1s"></div>
+  <div class="star" style="left:70%;top:20%;animation-delay:1.5s"></div>
+  <div class="star big" style="left:50%;top:4%;animation-delay:2s"></div>
+  <div class="star" style="left:15%;top:30%;animation-delay:0.3s"></div>
+  <div class="star" style="left:90%;top:35%;animation-delay:0.8s"></div>
+</div>
+<div class="appbar">
+  <div class="logo">Pillar Seer</div>
+  <div class="sub">命 · DESTINY READ</div>
+</div>
+<div class="divider-dot"><span></span><span></span><span></span></div>
+<div class="body">
+  <div class="hero">
+    <div class="label">YOUR DAY MASTER</div>
+    <div class="name">丁卯</div>
+    <div class="ko">Fire Rabbit</div>
+  </div>
+  <div class="constellation"><span class="line"></span>四 柱 PILLARS<span class="line"></span></div>
+  <div class="pillars">
+    <div class="p"><div class="l">年</div><div class="h">癸<br>酉</div></div>
+    <div class="p"><div class="l">月</div><div class="h">丁<br>巳</div></div>
+    <div class="p day"><div class="l">日</div><div class="h">丁<br>卯</div></div>
+    <div class="p"><div class="l">時</div><div class="h">—<br>—</div></div>
+  </div>
+  <div class="profile">
+    <div class="row"><span class="k">FORMAT</span><span class="v"><span class="gold">偏印格</span>편인격</span></div>
+    <div class="row"><span class="k">YONGSIN</span><span class="v"><span class="gold">木</span>나무</span></div>
+    <div class="row"><span class="k">STRENGTH</span><span class="v">신왕</span></div>
+    <div class="row"><span class="k">VOID</span><span class="v"><span class="gold">戌·亥</span></span></div>
+  </div>
+  <div class="quote">속도보다 깊이로 흐르고,<br>오랜 시간 속에 본질이 드러난다.</div>
+  <div class="cta">전체 풀이 보기 ✦</div>
+  <div class="foot">KASI · 入春 · 眞太陽時 · 均時差</div>
+</div>
+</div></body></html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>08 K-Beauty Modern</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@200;300;400;500;700&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#FAF3F0; --bg2:#F4E8E2; --bg-card:#FFFFFF; --text:#2B2421; --muted:#9B8A82; --rose:#C49F8F; --rose2:#A87E6D; --line:#E8D7CE; --gold:#B89968; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#3A2F2A;font-family:'Inter','Noto Sans KR',sans-serif;color:var(--text);display:flex;justify-content:center;min-height:100vh}
+.phone{width:390px;min-height:100vh;background:var(--bg);padding-bottom:24px}
+.appbar{padding:20px 24px;display:flex;justify-content:space-between;align-items:center}
+.appbar .logo{font-size:14px;letter-spacing:5px;font-weight:300;color:var(--text)}
+.appbar .chip{font-size:9px;letter-spacing:2px;color:var(--rose2);background:var(--bg2);padding:6px 12px;border-radius:99px}
+.hero-card{margin:14px 18px 18px;background:linear-gradient(135deg, var(--bg-card), var(--bg2));border-radius:28px;padding:32px 24px;text-align:center;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-20%;right:-20%;width:60%;height:60%;background:radial-gradient(circle, rgba(196,159,143,0.3), transparent);border-radius:50%}
+.hero-card>*{position:relative}
+.hero-card .label{font-size:10px;letter-spacing:4px;color:var(--muted);margin-bottom:18px;text-transform:uppercase;font-weight:500}
+.hero-card .name{font-family:'Noto Sans KR';font-size:54px;font-weight:300;letter-spacing:-1px;line-height:1;color:var(--text);margin-bottom:10px}
+.hero-card .sub{font-family:'Cormorant Garamond';font-style:italic;font-size:18px;color:var(--rose2);letter-spacing:1px;margin-bottom:18px}
+.hero-card .ko{font-size:13px;color:var(--muted);letter-spacing:2px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.chips .c{font-size:10px;letter-spacing:1.5px;padding:6px 11px;background:var(--bg);border:1px solid var(--line);border-radius:99px;color:var(--rose2);font-weight:500}
+.chips .c.gold{color:var(--gold);border-color:rgba(184,153,104,0.4)}
+.pillars-card{margin:0 18px 18px;background:var(--bg-card);border-radius:24px;padding:20px;box-shadow:0 1px 0 var(--line)}
+.pillars-card .header{font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px;font-weight:500}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.p{background:var(--bg2);border-radius:14px;padding:14px 4px;text-align:center}
+.p.day{background:linear-gradient(180deg, var(--rose), var(--rose2));color:white}
+.p .l{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px}
+.p.day .l{color:rgba(255,255,255,0.7)}
+.p .h{font-family:'Noto Sans KR';font-size:22px;font-weight:300;line-height:1.2}
+.p.day .h{color:white;font-weight:400}
+.detail-card{margin:0 18px 18px;background:var(--bg-card);border-radius:24px;padding:22px 22px 18px;box-shadow:0 1px 0 var(--line)}
+.detail-card .header{font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px}
+.detail-card .row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.detail-card .row:last-child{border:0}
+.detail-card .k{color:var(--muted);font-size:12px;letter-spacing:1px}
+.detail-card .v{font-weight:500}
+.detail-card .v .ch{color:var(--rose2);margin-right:5px}
+.poem-card{margin:0 18px 18px;background:linear-gradient(135deg, var(--rose), var(--rose2));border-radius:24px;padding:24px;color:white;text-align:center}
+.poem-card .q{font-family:'Cormorant Garamond';font-style:italic;font-size:17px;line-height:1.7;font-weight:300}
+.cta{margin:0 18px;padding:18px;background:var(--text);color:white;text-align:center;border-radius:99px;letter-spacing:3px;font-size:13px;font-weight:500;cursor:pointer}
+.foot{padding:18px 24px 0;text-align:center;font-size:9px;letter-spacing:2px;color:var(--muted)}
+</style></head>
+<body><div class="phone">
+<div class="appbar"><div class="logo">PILLAR SEER</div><div class="chip">정밀 모드</div></div>
+<div class="hero-card">
+  <div class="label">YOUR DAY MASTER</div>
+  <div class="name">丁卯</div>
+  <div class="sub">Fire Rabbit</div>
+  <div class="ko">화 토끼 · 정묘</div>
+  <div class="chips">
+    <span class="c gold">🎯 편인격</span>
+    <span class="c">🔮 용신 木</span>
+    <span class="c">⚖️ 신왕</span>
+  </div>
+</div>
+<div class="pillars-card">
+  <div class="header">FOUR PILLARS · 四柱</div>
+  <div class="pillars">
+    <div class="p"><div class="l">YEAR</div><div class="h">癸<br>酉</div></div>
+    <div class="p"><div class="l">MONTH</div><div class="h">丁<br>巳</div></div>
+    <div class="p day"><div class="l">DAY</div><div class="h">丁<br>卯</div></div>
+    <div class="p"><div class="l">HOUR</div><div class="h">—<br>—</div></div>
+  </div>
+</div>
+<div class="detail-card">
+  <div class="header">CHART</div>
+  <div class="row"><span class="k">격국</span><span class="v"><span class="ch">偏印</span>편인격</span></div>
+  <div class="row"><span class="k">용신</span><span class="v"><span class="ch">木</span>나무</span></div>
+  <div class="row"><span class="k">강약</span><span class="v">身旺 신왕</span></div>
+  <div class="row"><span class="k">공망</span><span class="v">戌 · 亥</span></div>
+</div>
+<div class="poem-card">
+  <div class="q">"속도보다 깊이로 흐르고,<br>오랜 시간 속에 본질이 드러난다."</div>
+</div>
+<div class="cta">전체 풀이 보기</div>
+<div class="foot">KASI · 입춘·12절 · 진태양시</div>
+</div></body></html>

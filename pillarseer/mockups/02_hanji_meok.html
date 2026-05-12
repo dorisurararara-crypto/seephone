@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 한지·먹</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#F0E8D6; --bg2:#E8DFCB; --ink:#1A1410; --ink-light:#3D332B; --dojang:#8C2A1F; --line:#C4B59D; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#4A3F30;font-family:'Nanum Myeongjo','Noto Serif KR',serif;color:var(--ink);display:flex;justify-content:center;min-height:100vh}
+.phone{width:390px;background:var(--bg);min-height:100vh;position:relative;background-image:
+  radial-gradient(ellipse at 30% 20%, rgba(180,160,120,0.15) 0%, transparent 50%),
+  radial-gradient(ellipse at 70% 80%, rgba(180,160,120,0.1) 0%, transparent 50%);
+}
+.appbar{padding:20px 28px;display:flex;justify-content:space-between;align-items:center}
+.appbar .logo{font-size:22px;letter-spacing:4px;font-weight:700;color:var(--ink)}
+.appbar .seal{width:32px;height:32px;background:var(--dojang);color:var(--bg);font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;border-radius:3px;transform:rotate(-3deg)}
+.divider{height:1px;background:var(--line);margin:0 28px;opacity:0.5}
+.divider.thick{height:2px;background:var(--ink-light);opacity:0.3}
+.body{padding:36px 28px 40px}
+.hanja-block{text-align:center;margin-bottom:36px}
+.hanja-block .title{font-size:11px;letter-spacing:6px;color:var(--ink-light);margin-bottom:24px;font-weight:300}
+.hanja-block .big{font-size:90px;font-weight:300;color:var(--ink);line-height:1;letter-spacing:8px;margin-bottom:16px;font-family:'Nanum Myeongjo'}
+.hanja-block .ko{font-size:14px;color:var(--ink-light);letter-spacing:3px}
+.scroll{margin:32px 0;padding:24px 22px;border:1px solid var(--line);background:rgba(255,255,255,0.2);border-radius:1px}
+.scroll .label{font-size:10px;letter-spacing:5px;color:var(--ink-light);margin-bottom:18px;text-align:center}
+.scroll .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center}
+.scroll .p{padding:8px 4px;border-right:0.5px solid var(--line)}
+.scroll .p:last-child{border:0}
+.scroll .p .l{font-size:9px;letter-spacing:2px;color:var(--ink-light);margin-bottom:10px;opacity:0.7}
+.scroll .p .h{font-size:28px;font-weight:400;line-height:1.2;color:var(--ink);font-family:'Nanum Myeongjo'}
+.scroll .p.day .h{color:var(--dojang)}
+.poem{margin:36px 28px;padding:20px 0;text-align:center;font-family:'Nanum Myeongjo'}
+.poem .line{font-size:17px;color:var(--ink);line-height:2;font-weight:400}
+.poem .line.s{font-size:13px;color:var(--ink-light);font-style:italic;margin-top:14px;letter-spacing:2px}
+.profile-list{margin:36px 28px}
+.profile-list .item{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:0.5px dotted var(--line)}
+.profile-list .k{font-size:11px;letter-spacing:3px;color:var(--ink-light)}
+.profile-list .v{font-size:15px;color:var(--ink);font-weight:500}
+.profile-list .v .ch{color:var(--dojang);font-weight:700;margin-right:4px}
+.cta{margin:40px 28px 28px;padding:18px;text-align:center;border:1px solid var(--ink);color:var(--ink);letter-spacing:5px;font-size:13px;font-weight:500;cursor:pointer;background:rgba(255,255,255,0.3)}
+.cta:hover{background:var(--ink);color:var(--bg)}
+.foot{padding:16px 28px 24px;text-align:center;font-size:9px;letter-spacing:3px;color:var(--ink-light);opacity:0.6}
+</style></head>
+<body><div class="phone">
+<div class="appbar">
+  <div class="logo">필러시어</div>
+  <div class="seal">命</div>
+</div>
+<div class="divider thick"></div>
+<div class="body">
+  <div class="hanja-block">
+    <div class="title">日 柱</div>
+    <div class="big">丁卯</div>
+    <div class="ko">화 토끼 · 정묘</div>
+  </div>
+  <div class="scroll">
+    <div class="label">四柱八字</div>
+    <div class="pillars">
+      <div class="p"><div class="l">年</div><div class="h">癸<br>酉</div></div>
+      <div class="p"><div class="l">月</div><div class="h">丁<br>巳</div></div>
+      <div class="p day"><div class="l">日</div><div class="h">丁<br>卯</div></div>
+      <div class="p"><div class="l">時</div><div class="h">—<br>—</div></div>
+    </div>
+  </div>
+</div>
+<div class="poem">
+  <div class="line">촛불이 봄 가지를 만나</div>
+  <div class="line">속도와 깊이가 함께 흐른다.</div>
+  <div class="line s">— 丁卯 日柱</div>
+</div>
+<div class="profile-list">
+  <div class="item"><span class="k">격국</span><span class="v"><span class="ch">偏印格</span>편인격</span></div>
+  <div class="item"><span class="k">용신</span><span class="v"><span class="ch">木</span>나무</span></div>
+  <div class="item"><span class="k">신강신약</span><span class="v">신왕</span></div>
+  <div class="item"><span class="k">공망</span><span class="v"><span class="ch">戌·亥</span></span></div>
+</div>
+<div class="cta">전 체 풀 이 보 기</div>
+<div class="foot">KASI 기준 대조 · 入春·十二節 · 眞太陽時</div>
+</div></body></html>

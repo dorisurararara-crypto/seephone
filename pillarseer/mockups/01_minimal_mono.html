@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 Minimal Mono</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#0A0A0A; --bg2:#141414; --line:#222; --text:#F5F5F5; --muted:#888; --accent:#C9B37D; --accent2:#7E7167; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:'Inter','Noto Sans KR',sans-serif;color:var(--text);line-height:1.5;display:flex;justify-content:center;min-height:100vh}
+.phone{width:390px;background:var(--bg);min-height:100vh;padding:0;position:relative}
+.appbar{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--line)}
+.appbar .t{font-size:13px;letter-spacing:3px;font-weight:500;color:var(--muted)}
+.appbar .chip{font-size:9px;letter-spacing:2px;color:var(--accent);border:0.5px solid var(--accent2);padding:4px 10px;border-radius:0}
+.body{padding:28px 24px 40px}
+.hero{margin-bottom:32px}
+.hero .label{font-size:10px;letter-spacing:3px;color:var(--muted);font-weight:500;margin-bottom:14px}
+.hero .name{font-family:'Noto Sans KR';font-size:42px;font-weight:200;letter-spacing:-1px;line-height:1.1;margin-bottom:8px}
+.hero .sub{font-size:11px;letter-spacing:2px;color:var(--accent2);text-transform:uppercase}
+.divider{height:1px;background:var(--line);margin:24px 0}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:32px}
+.p{background:var(--bg);padding:18px 8px;text-align:center}
+.p.day{background:var(--bg2)}
+.p .lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
+.p .ch{font-family:'Noto Sans KR';font-size:24px;font-weight:300;line-height:1.2}
+.p.day .ch{color:var(--accent)}
+.profile{padding:20px 0}
+.profile .lbl{font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px}
+.profile .row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--line);font-size:13px}
+.profile .row:last-child{border:0}
+.profile .row .k{color:var(--muted);letter-spacing:1px;font-size:11px}
+.profile .row .v{color:var(--text);font-family:'Noto Sans KR'}
+.section{margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}
+.section .header{font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:14px}
+.section .body-text{font-size:14px;line-height:1.75;color:var(--text);font-weight:300}
+.cta{margin-top:40px;padding:18px;border:0.5px solid var(--accent);text-align:center;letter-spacing:3px;font-size:12px;color:var(--accent);cursor:pointer;text-transform:uppercase}
+.cta:hover{background:var(--accent);color:#000}
+.foot{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);font-size:10px;letter-spacing:2px;color:var(--muted);text-align:center}
+</style></head>
+<body><div class="phone">
+<div class="appbar">
+  <div class="t">PILLAR SEER</div>
+  <div class="chip">정밀 모드</div>
+</div>
+<div class="body">
+  <div class="hero">
+    <div class="label">DAY MASTER</div>
+    <div class="name">丁卯</div>
+    <div class="sub">Fire Rabbit · 화 토끼</div>
+  </div>
+  <div class="pillars">
+    <div class="p"><div class="lbl">YR</div><div class="ch">癸<br>酉</div></div>
+    <div class="p"><div class="lbl">MO</div><div class="ch">丁<br>巳</div></div>
+    <div class="p day"><div class="lbl">DAY</div><div class="ch">丁<br>卯</div></div>
+    <div class="p"><div class="lbl">HR</div><div class="ch">—<br>—</div></div>
+  </div>
+  <div class="profile">
+    <div class="lbl">PROFILE</div>
+    <div class="row"><span class="k">격국</span><span class="v">편인격</span></div>
+    <div class="row"><span class="k">용신</span><span class="v">목 (木)</span></div>
+    <div class="row"><span class="k">강약</span><span class="v">신왕</span></div>
+    <div class="row"><span class="k">공망</span><span class="v">戌 · 亥</span></div>
+  </div>
+  <div class="section">
+    <div class="header">YOU ARE</div>
+    <div class="body-text">한결같은 사람.<br>속도보다 깊이, 격찬보다 정확함을 신뢰합니다.<br>오랜 시간 속에서 본질이 드러나는 사주.</div>
+  </div>
+  <div class="cta">계속 읽기 →</div>
+  <div class="foot">KASI · 입춘·12절 · 진태양시·균시차</div>
+</div>
+</div></body></html>
