@@ -1437,17 +1437,37 @@ class _DayMasterCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  result.summary,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontStyle: FontStyle.italic,
-                    color: AppColors.moonlightGray,
-                    height: 1.5,
-                  ),
-                ),
+                Builder(builder: (context) {
+                  final useKo = (Localizations.maybeLocaleOf(context)
+                              ?.languageCode ??
+                          'en') ==
+                      'ko';
+                  // Korean 모드: deepKo.dayMasterDeep 첫 문장 또는 personality 첫 줄
+                  // English: result.summary (asset 가 영어라서 자연스러움)
+                  final reading = useKo ? result.deepKo : result.deepEn;
+                  String text;
+                  if (useKo && reading != null) {
+                    final src = reading.personalityHook.isNotEmpty
+                        ? reading.personalityHook
+                        : (reading.dayMasterDeep.isNotEmpty
+                            ? reading.dayMasterDeep.split('. ').first
+                            : result.summary);
+                    text = src;
+                  } else {
+                    text = result.summary;
+                  }
+                  return Text(
+                    text,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.moonlightGray,
+                      height: 1.5,
+                    ),
+                  );
+                }),
               ],
             ),
           ),
