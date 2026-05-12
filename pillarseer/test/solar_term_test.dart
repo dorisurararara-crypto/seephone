@@ -279,6 +279,25 @@ void main() {
       );
     });
 
+    test('unknown time + 입춘일 — deterministic 년주 (hour=12 기준)', () {
+      // 2024 입춘 = 17:11 (my formula). unknown time hour=12 → 입춘 이전 → 2023 년주.
+      final r = ManseryeokService.calculate(
+        year: 2024,
+        month: 2,
+        day: 4,
+        hour: 12,
+        minute: 0,
+        isLunar: false,
+        isMale: true,
+        unknownTime: true,
+      );
+      // unknown time 이면 시주 미계산.
+      expect(r.hourPillar, isNull);
+      // 12시 < 입춘 17:11 → 2023 (癸卯) 년주.
+      expect(r.yearPillar.text, '癸卯',
+          reason: 'unknown time hour=12 가 입춘 이전이라 전년도 년주');
+    });
+
     test('1988 DST 종료일 03:00 boundary — half-open 정확성', () {
       // 1988-10-09 02:59 → DST 적용 중
       // 1988-10-09 03:00 → DST 종료 (half-open)
