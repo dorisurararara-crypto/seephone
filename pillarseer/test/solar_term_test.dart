@@ -309,6 +309,57 @@ void main() {
       // 시주는 다를 수 있음 (boundary)
     });
 
+    test('24절기 — 입춘 인덱스 0 = lipchun 같음', () {
+      // termDateTime(year, 0) == lipchun(year)
+      for (final y in [1990, 2000, 2010, 2020, 2024]) {
+        expect(
+          SolarTermService.termDateTime(y, 0),
+          equals(SolarTermService.lipchun(y)),
+        );
+      }
+    });
+
+    test('24절기 — 12 중기 우수(idx 1) 입춘 직후 (Feb 18-20)', () {
+      // 우수 = 황경 330° ≈ Feb 18-20.
+      final usu2024 = SolarTermService.termDateTime(2024, 1);
+      expect(usu2024.month, 2);
+      expect(usu2024.day, greaterThanOrEqualTo(17));
+      expect(usu2024.day, lessThanOrEqualTo(20));
+    });
+
+    test('24절기 — 추분 (idx 15) 9월 22-24', () {
+      // 추분 = 180° ≈ Sep 22-24.
+      final chubun2024 = SolarTermService.termDateTime(2024, 15);
+      expect(chubun2024.month, 9);
+      expect(chubun2024.day, greaterThanOrEqualTo(21));
+      expect(chubun2024.day, lessThanOrEqualTo(24));
+    });
+
+    test('24절기 — 동지 (idx 21) 12월 21-23', () {
+      // 동지 = 270° ≈ Dec 21-23.
+      final dongji2024 = SolarTermService.termDateTime(2024, 21);
+      expect(dongji2024.month, 12);
+      expect(dongji2024.day, greaterThanOrEqualTo(20));
+      expect(dongji2024.day, lessThanOrEqualTo(23));
+    });
+
+    test('currentTermIndex — 1월 중순 = 소한(22) 또는 대한(23)', () {
+      final r = SolarTermService.currentTermIndex(DateTime(2024, 1, 15));
+      expect(r, anyOf(equals(22), equals(23), equals(20), equals(21)));
+    });
+
+    test('currentTermIndex — 7월 = 하지(9) 또는 소서(10) 또는 대서(11)', () {
+      final r = SolarTermService.currentTermIndex(DateTime(2024, 7, 15));
+      expect(r, anyOf(equals(9), equals(10), equals(11)));
+    });
+
+    test('allTermsKo/En 길이 24', () {
+      expect(SolarTermService.allTermsKo.length, 24);
+      expect(SolarTermService.allTermsEn.length, 24);
+      expect(SolarTermService.allTermsKo[0], '입춘');
+      expect(SolarTermService.allTermsKo[23], '대한');
+    });
+
     test('음력 입력 시 양력 변환 작동 — 1990 음력 1월 1일 = 양력 1990-1-27', () {
       // klc package 가 음력 변환 처리. KASI 발표값과 일치하는지 확인.
       // 1990 음력 1월 1일 (설날) = 양력 1990-01-27.

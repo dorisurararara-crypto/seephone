@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/gong_mang_service.dart';
 import '../services/personalization_engine.dart';
+import '../services/shinsa_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
@@ -211,6 +212,11 @@ class ResultScreen extends ConsumerWidget {
               title: useKo ? '공망 (空亡)' : 'Void Branches (空亡)',
               locked: false,
               child: _GongMangBlock(result: result, useKo: useKo),
+            ),
+            _AccordionSection(
+              title: useKo ? '신살 (神煞)' : 'Shinsa (神煞 — auspicious/inauspicious markers)',
+              locked: false,
+              child: _ShinsaBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: l.resultBasisTitle,
@@ -488,6 +494,74 @@ class _GongMangBlock extends StatelessWidget {
               height: 1.55,
               fontStyle: FontStyle.italic,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────── 신살(神煞) block (Round 36-37: codex E content depth)
+
+class _ShinsaBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _ShinsaBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final activations = ShinsaService.analyzeChart(
+      yearJi: result.yearPillar.jiJi,
+      monthJi: result.monthPillar.jiJi,
+      dayChunGan: result.dayPillar.chunGan,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
+    );
+    if (activations.isEmpty) {
+      return Text(
+        useKo
+            ? '원국에 강한 신살 활성화 없음 — 사주 결이 균형 잡혀 있어 부수 요소에 휘둘리지 않습니다.'
+            : 'No strong shinsa activation — your chart is balanced and not pulled by auxiliary forces.',
+        style: const TextStyle(
+          fontSize: 13.5,
+          color: AppColors.ghostlyWhite,
+          height: 1.7,
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final entry in activations.entries)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: AppColors.midnightPurple.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.cardBorder),
+              ),
+              child: Text(
+                ShinsaService.interpretation(entry.key, entry.value, ko: useKo),
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.ghostlyWhite,
+                  height: 1.65,
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(height: 4),
+        Text(
+          useKo
+              ? '신살(神煞)이란? 사주 원국 지지가 일간/일지의 특정 패턴과 일치할 때 활성화되는 명리학 부수 요소. 운명을 결정하지는 않지만 결의 톤을 알려줍니다.'
+              : 'Shinsa: auxiliary myeongli markers activated when chart branches match certain stem/branch patterns. They don\'t decide fate — they tone the grain.',
+          style: const TextStyle(
+            fontSize: 11.5,
+            color: AppColors.fadedSilver,
+            height: 1.55,
+            fontStyle: FontStyle.italic,
           ),
         ),
       ],
