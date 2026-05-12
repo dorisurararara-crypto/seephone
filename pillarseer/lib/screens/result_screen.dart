@@ -13,6 +13,7 @@ import '../services/gong_mang_service.dart';
 import '../services/hapchung_service.dart';
 import '../services/personalization_engine.dart';
 import '../services/shinsa_service.dart';
+import '../services/strength_service.dart';
 import '../services/twelve_unsung_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
@@ -209,6 +210,13 @@ class ResultScreen extends ConsumerWidget {
               title: l.resultLuckyTitle,
               locked: !isPro,
               child: _LuckyBlock(reading: reading, useKo: useKo),
+            ),
+            _AccordionSection(
+              title: useKo
+                  ? '⚖️ 신왕·신약 (身旺·身弱)'
+                  : '⚖️ Day-master Strength',
+              locked: false,
+              child: _StrengthBlock(result: result, useKo: useKo),
             ),
             _AccordionSection(
               title: useKo ? '🪐 공망 (空亡)' : '🪐 Void Branches (空亡)',
@@ -439,6 +447,102 @@ Day Pillar: ${result.dayMasterName} · ${result.day60ji}
         backgroundColor: AppColors.celestialGold,
         duration: const Duration(seconds: 2),
       ));
+  }
+}
+
+// ──────── 신왕·신약(身旺·身弱) block (Round 42: 일간 강약 판단)
+
+class _StrengthBlock extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _StrengthBlock({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final dm = result.dayPillar.chunGanElement;
+    final el = result.elements;
+    final j = StrengthService.judge(
+      dayMasterElement: dm,
+      monthJi: result.monthPillar.jiJi,
+      wood: el.wood,
+      fire: el.fire,
+      earth: el.earth,
+      metal: el.metal,
+      water: el.water,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              useKo ? '강약 판단:' : 'Strength:',
+              style: const TextStyle(
+                fontSize: 12.5,
+                color: AppColors.moonlightGray,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.celestialGold.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: AppColors.celestialGold.withValues(alpha: 0.45)),
+              ),
+              child: Text(
+                useKo ? j.label : j.labelEn,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.celestialGold,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              useKo ? '(강도 ${j.score}/100)' : '(score ${j.score}/100)',
+              style: const TextStyle(
+                fontSize: 11.5,
+                color: AppColors.fadedSilver,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Text(
+          StrengthService.guide(j.label, ko: useKo),
+          style: const TextStyle(
+            fontSize: 13.5,
+            color: AppColors.ghostlyWhite,
+            height: 1.7,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: AppColors.midnightPurple.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.cardBorder),
+          ),
+          child: Text(
+            useKo
+                ? '신왕/신약 — 일간(日干)이 사주 원국에서 강한지 약한지 판단. 인성·비겁이 강하면 신왕, 식상·재성·관성이 강하면 신약. 월령(월지)이 일간 도와주면 통근(通根)으로 강도 boost.'
+                : 'Day-master strength balance. Resource + Peer = supports; Output + Wealth + Officer = drains. Month-branch alignment (通根) boosts strength.',
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: AppColors.fadedSilver,
+              height: 1.55,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
