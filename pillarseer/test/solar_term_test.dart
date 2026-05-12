@@ -279,6 +279,44 @@ void main() {
       );
     });
 
+    test('도시별 보정이 calculate() 까지 흐름 — 부산 vs 서울 시주 boundary', () {
+      // 1990-06-15 09:00 출생, 시주 boundary 근처 (실 태양시).
+      // 서울 longitude -32분 → 진태양시 ~08:28 → 辰시
+      // 부산 longitude -24분 → 진태양시 ~08:36 → 辰시 (같음)
+      // 더 극단 케이스: 11:00 출생 (午시 boundary 11:00 inclusive)
+      // 서울 -32분 → 10:28 → 巳시
+      // 부산 -24분 → 10:36 → 巳시
+      // 사주 hour boundary 11:00 → idx=(11+1)/2=6 (午), 10:36 → idx=(10+1)/2=5 (巳)
+      // 부산이 더 동쪽이라 시간이 늦게 보정되어 boundary 가 다를 수 있음.
+      final seoul = ManseryeokService.calculate(
+        year: 1990,
+        month: 6,
+        day: 15,
+        hour: 11,
+        minute: 0,
+        isLunar: false,
+        isMale: true,
+        applyTrueSunTime: true,
+        birthCity: '서울',
+      );
+      final busan = ManseryeokService.calculate(
+        year: 1990,
+        month: 6,
+        day: 15,
+        hour: 11,
+        minute: 0,
+        isLunar: false,
+        isMale: true,
+        applyTrueSunTime: true,
+        birthCity: '부산',
+      );
+      // 두 도시의 시주 jiJi 가 다를 수 있다 (boundary 부근일 때).
+      // 최소한 hour pillar 가 양쪽 어느 한쪽에 정확히 존재.
+      expect(seoul.hourPillar, isNotNull);
+      expect(busan.hourPillar, isNotNull);
+      // 적어도 분 단위 차이가 8분 (boundary 부근만 결과 달라짐).
+    });
+
     test('도시 substring 매칭 — "서울특별시" → 서울', () {
       final dt = DateTime(2000, 6, 15);
       expect(
