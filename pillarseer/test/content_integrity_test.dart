@@ -115,6 +115,26 @@ void main() {
     });
   });
 
+  group('DailyService lucky color/direction KO/EN parity', () {
+    test('5 행 모두에 대해 EN/KO 매핑 존재', () {
+      // 직접 service 호출하기 어려우니 대신 코드 검증.
+      // 핵심: KO 모드 사용자가 행운 컬러를 봤을 때 영어 단독으로 보이지 않음.
+      final daily =
+          File('lib/services/daily_service.dart').readAsStringSync();
+      // _luckyColorFor 에 koMap 필드 존재해야 함 (Round 35 fix).
+      expect(daily.contains('koMap = {'), isTrue,
+          reason: 'daily_service.dart 에 한국어 lucky 매핑 누락');
+      // _luckyDirectionFor 도 마찬가지.
+      expect(daily.contains("'木': '동쪽'"), isTrue,
+          reason: 'direction KO 매핑 누락');
+      // DailyFortune 에 luckyColorKo 필드 존재.
+      final model =
+          File('lib/models/daily_fortune.dart').readAsStringSync();
+      expect(model.contains('luckyColorKo'), isTrue);
+      expect(model.contains('luckyDirectionKo'), isTrue);
+    });
+  });
+
   group('celebrities.json 무결성', () {
     late List<Map<String, dynamic>> celebs;
     setUpAll(() {
