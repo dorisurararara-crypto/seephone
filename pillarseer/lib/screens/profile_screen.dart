@@ -28,36 +28,31 @@ class ProfileScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.celestialGold.withValues(alpha: 0.15),
-                    AppColors.spiritIndigo.withValues(alpha: 0.15),
-                  ],
-                ),
+                color: AppColors.cardSurface,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.3)),
+                border: Border.all(color: AppColors.cardBorderStrong),
               ),
               child: Column(
                 children: [
                   const Icon(Icons.person_outline,
-                      size: 48, color: AppColors.celestialGold),
+                      size: 48, color: AppColors.mysticViolet),
                   const SizedBox(height: 12),
                   Text(
                     info?.name.isNotEmpty == true ? info!.name : '—',
                     style: const TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.ghostlyWhite,
                     ),
                   ),
                   if (saju != null) ...[
                     const SizedBox(height: 4),
                     Text(
-                      '${saju.dayMasterName} (${saju.day60ji})',
+                      '${saju.dayMasterName} · ${saju.day60ji}',
                       style: const TextStyle(
                         fontSize: 14,
-                        color: AppColors.celestialGold,
+                        color: AppColors.moonlightGray,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -132,14 +127,13 @@ class ProfileScreen extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
-            color: AppColors.spiritIndigo.withValues(alpha: 0.1),
+            color: AppColors.cardSurface,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-                color: AppColors.celestialGold.withValues(alpha: 0.15)),
+            border: Border.all(color: AppColors.cardBorder),
           ),
           child: Row(
             children: [
-              Icon(icon, size: 18, color: AppColors.celestialGold),
+              Icon(icon, size: 18, color: AppColors.mysticViolet),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(

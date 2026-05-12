@@ -52,10 +52,10 @@ class TojeongScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.spiritIndigo.withValues(alpha: 0.1),
+                  color: AppColors.cardSurface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.25),
+                    color: AppColors.cardBorder,
                   ),
                 ),
                 child: Column(
@@ -86,10 +86,10 @@ class TojeongScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+                  color: AppColors.cardSurface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppColors.celestialGold.withValues(alpha: 0.2),
+                    color: AppColors.cardBorder,
                   ),
                 ),
                 child: Column(

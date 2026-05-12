@@ -241,7 +241,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 color: AppColors.celestialGold.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: AppColors.celestialGold.withValues(alpha: 0.5),
+                color: AppColors.cardBorderStrong,
                 ),
               ),
               child: Row(
@@ -297,7 +297,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         style: const TextStyle(
           fontSize: 10,
           letterSpacing: 1.5,
-          color: AppColors.celestialGold,
+          color: AppColors.moonlightGray,
           fontWeight: FontWeight.w700,
         ),
       ),
@@ -309,10 +309,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       margin: const EdgeInsets.only(bottom: 6),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.05),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.08)),
+        border: Border.all(color: AppColors.cardBorder),
       ),
       child: Row(
         children: [
@@ -386,10 +385,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       margin: const EdgeInsets.only(bottom: 6),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-            color: AppColors.celestialGold.withValues(alpha: 0.1)),
+        border: Border.all(color: AppColors.cardBorder),
       ),
       child: Row(
         children: [
@@ -426,11 +424,10 @@ class _NotifToggleTile extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
         decoration: BoxDecoration(
-          color: AppColors.spiritIndigo.withValues(alpha: 0.08),
+          color: AppColors.cardSurface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColors.celestialGold
-                .withValues(alpha: on ? 0.5 : 0.15),
+            color: on ? AppColors.cardBorderStrong : AppColors.cardBorder,
           ),
         ),
         child: Row(
@@ -440,7 +437,7 @@ class _NotifToggleTile extends ConsumerWidget {
                   ? Icons.notifications_active
                   : Icons.notifications_off_outlined,
               size: 18,
-              color: on ? AppColors.celestialGold : AppColors.fadedSilver,
+              color: on ? AppColors.mysticViolet : AppColors.fadedSilver,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -461,7 +458,7 @@ class _NotifToggleTile extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 11.5,
                       color: on
-                          ? AppColors.celestialGold
+                          ? AppColors.moonlightGray
                           : AppColors.moonlightGray,
                     ),
                   ),
@@ -470,9 +467,9 @@ class _NotifToggleTile extends ConsumerWidget {
             ),
             Switch(
               value: on,
-              activeThumbColor: AppColors.celestialGold,
+              activeThumbColor: AppColors.mysticViolet,
               activeTrackColor:
-                  AppColors.celestialGold.withValues(alpha: 0.4),
+                  AppColors.mysticViolet.withValues(alpha: 0.35),
               onChanged: (v) async {
                 final notifier = ref.read(notificationProvider.notifier);
                 final messenger = ScaffoldMessenger.of(context);
@@ -493,14 +490,14 @@ class _NotifToggleTile extends ConsumerWidget {
                     ..showSnackBar(SnackBar(
                       behavior: SnackBarBehavior.floating,
                       backgroundColor: ok
-                          ? AppColors.celestialGold
+                          ? AppColors.spiritIndigo
                           : Colors.redAccent.shade200,
                       content: Text(
                         ok
                             ? l.homeNotifEnabledSnack
                             : l.homeNotifPermissionDenied,
                         style: const TextStyle(
-                          color: AppColors.cosmicBlack,
+                          color: AppColors.ghostlyWhite,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -554,7 +551,7 @@ class _LinkTile extends StatelessWidget {
                 ..showSnackBar(SnackBar(
                   content: Text('URL copied: $value'),
                   behavior: SnackBarBehavior.floating,
-                  backgroundColor: AppColors.celestialGold,
+                  backgroundColor: AppColors.spiritIndigo,
                   duration: const Duration(seconds: 3),
                 ));
             }
@@ -565,7 +562,7 @@ class _LinkTile extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: AppColors.celestialGold.withValues(alpha: 0.1),
+                  color: AppColors.cardBorder,
               ),
             ),
             child: Row(
@@ -583,14 +580,14 @@ class _LinkTile extends StatelessWidget {
                   value,
                   style: const TextStyle(
                     fontSize: 11.5,
-                    color: AppColors.celestialGold,
+                    color: AppColors.moonlightGray,
                     decoration: TextDecoration.underline,
-                    decorationColor: AppColors.celestialGold,
+                    decorationColor: AppColors.fadedSilver,
                   ),
                 ),
                 const SizedBox(width: 6),
                 const Icon(Icons.open_in_new,
-                    size: 12, color: AppColors.celestialGold),
+                    size: 12, color: AppColors.fadedSilver),
               ],
             ),
           ),
@@ -618,11 +615,11 @@ class _TrustTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = destructive
         ? Colors.redAccent.shade200
-        : AppColors.celestialGold;
+        : AppColors.mysticViolet;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.1),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           onTap: onTap,
@@ -632,7 +629,9 @@ class _TrustTile extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: accent.withValues(alpha: 0.3),
+                color: destructive
+                    ? accent.withValues(alpha: 0.35)
+                    : AppColors.cardBorder,
               ),
             ),
             child: Row(
@@ -702,13 +701,13 @@ class _LanguageTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
             color: selected
-                ? AppColors.celestialGold.withValues(alpha: 0.15)
-                : AppColors.spiritIndigo.withValues(alpha: 0.1),
+                ? AppColors.mysticViolet.withValues(alpha: 0.22)
+                : AppColors.cardSurface,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: selected
-                  ? AppColors.celestialGold.withValues(alpha: 0.6)
-                  : AppColors.celestialGold.withValues(alpha: 0.15),
+                  ? AppColors.cardBorderStrong
+                  : AppColors.cardBorder,
             ),
           ),
           child: Row(
@@ -719,7 +718,7 @@ class _LanguageTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     color: selected
-                        ? AppColors.celestialGold
+                        ? AppColors.ghostlyWhite
                         : AppColors.ghostlyWhite,
                     fontWeight:
                         selected ? FontWeight.w600 : FontWeight.normal,
@@ -728,7 +727,7 @@ class _LanguageTile extends StatelessWidget {
               ),
               if (selected)
                 const Icon(Icons.check,
-                    size: 18, color: AppColors.celestialGold),
+                    size: 18, color: AppColors.mysticViolet),
             ],
           ),
         ),

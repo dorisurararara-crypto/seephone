@@ -123,7 +123,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
                     selected: selected,
                     onSelected: (_) => setState(() => _filter = f.id),
                     selectedColor:
-                        AppColors.celestialGold.withValues(alpha: 0.25),
+                        AppColors.cardBorder,
                     backgroundColor:
                         AppColors.spiritIndigo.withValues(alpha: 0.18),
                     labelStyle: TextStyle(
@@ -223,7 +223,7 @@ class _DreamTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.spiritIndigo.withValues(alpha: 0.1),
+        color: AppColors.cardSurface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: accent.withValues(alpha: 0.3)),
       ),
