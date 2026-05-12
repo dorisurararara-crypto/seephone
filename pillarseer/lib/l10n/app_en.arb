@@ -129,6 +129,8 @@
   "resultBasisManseryeokVal": "Cross-verified vs KASI (klc package + custom solar terms)",
   "resultBasisYearBoundary": "Year boundary",
   "resultBasisYearBoundaryVal": "Ipchun (立春) — astronomical, ~±20 min accuracy",
+  "resultPrecisionBadge": "Precision",
+
   "resultBasisDayBoundary": "Day boundary",
   "resultBasisDayBoundaryVal": "Jashi (子時, 23:00 next-day rule)",
   "personalCardTitle": "Today, for YOU 🎯",

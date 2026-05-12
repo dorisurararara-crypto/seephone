@@ -817,6 +817,12 @@ abstract class AppL10n {
   /// **'Ipchun (立春) — astronomical, ~±20 min accuracy'**
   String get resultBasisYearBoundaryVal;
 
+  /// No description provided for @resultPrecisionBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Precision'**
+  String get resultPrecisionBadge;
+
   /// No description provided for @resultBasisDayBoundary.
   ///
   /// In en, this message translates to:

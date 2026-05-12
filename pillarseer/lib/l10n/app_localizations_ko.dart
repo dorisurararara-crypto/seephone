@@ -375,6 +375,9 @@ class AppL10nKo extends AppL10n {
   String get resultBasisYearBoundaryVal => '입춘 절입시각 (천체 계산, 약 ±20분)';
 
   @override
+  String get resultPrecisionBadge => '정밀 모드';
+
+  @override
   String get resultBasisDayBoundary => '일 기준';
 
   @override

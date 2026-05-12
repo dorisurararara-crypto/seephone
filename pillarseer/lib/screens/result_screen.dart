@@ -57,7 +57,7 @@ class ResultScreen extends ConsumerWidget {
                         size: 12, color: AppColors.celestialGold),
                     const SizedBox(width: 4),
                     Text(
-                      useKo ? '정밀 모드' : 'Precision',
+                      l.resultPrecisionBadge,
                       style: const TextStyle(
                         fontSize: 10.5,
                         color: AppColors.celestialGold,

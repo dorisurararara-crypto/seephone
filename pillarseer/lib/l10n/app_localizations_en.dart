@@ -390,6 +390,9 @@ class AppL10nEn extends AppL10n {
       'Ipchun (立春) — astronomical, ~±20 min accuracy';
 
   @override
+  String get resultPrecisionBadge => 'Precision';
+
+  @override
   String get resultBasisDayBoundary => 'Day boundary';
 
   @override
