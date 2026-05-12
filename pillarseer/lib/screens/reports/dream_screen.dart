@@ -194,10 +194,17 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
                       ? Center(
                           child: Text(
                             useKo ? '검색 결과 없음' : 'No matches',
-                            style: GoogleFonts.cormorantGaramond(
-                                fontStyle: FontStyle.italic,
-                                color: AppColors.taupe,
-                                fontSize: 14),
+                            style: useKo
+                                ? GoogleFonts.notoSerifKr(
+                                    fontWeight: FontWeight.w300,
+                                    color: AppColors.taupe,
+                                    fontSize: 14,
+                                  )
+                                : GoogleFonts.cormorantGaramond(
+                                    fontStyle: FontStyle.italic,
+                                    color: AppColors.taupe,
+                                    fontSize: 14,
+                                  ),
                           ),
                         )
                       : ListView.separated(
@@ -305,11 +312,19 @@ class _DreamRow extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             useKo ? dream.en : dream.ko,
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 13,
-              fontStyle: FontStyle.italic,
-              color: AppColors.inkLight,
-            ),
+            // useKo → secondary text is English → Cormorant italic OK
+            // !useKo → secondary text is Korean → Noto Serif KR weight 300
+            style: useKo
+                ? GoogleFonts.cormorantGaramond(
+                    fontSize: 13,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.inkLight,
+                  )
+                : GoogleFonts.notoSerifKr(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.inkLight,
+                  ),
           ),
           const SizedBox(height: 12),
           Text(

@@ -1139,6 +1139,8 @@ class _AccordionRowState extends State<_AccordionRow> {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       decoration: const BoxDecoration(
         border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
@@ -1214,12 +1216,20 @@ class _AccordionRowState extends State<_AccordionRow> {
                       ),
                       child: Text(
                         widget.note!,
-                        style: GoogleFonts.cormorantGaramond(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                          color: AppColors.accent,
-                          height: 1.7,
-                        ),
+                        style: useKo
+                            ? GoogleFonts.notoSerifKr(
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w300,
+                                color: AppColors.accent,
+                                height: 1.75,
+                                letterSpacing: 0.2,
+                              )
+                            : GoogleFonts.cormorantGaramond(
+                                fontSize: 14,
+                                fontStyle: FontStyle.italic,
+                                color: AppColors.accent,
+                                height: 1.7,
+                              ),
                       ),
                     ),
                   ],
@@ -1782,7 +1792,15 @@ class _HapchungBlock extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 note,
-                style: GoogleFonts.cormorantGaramond(
+                style: useKo
+                    ? GoogleFonts.notoSerifKr(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w300,
+                        color: AppColors.accent,
+                        height: 1.7,
+                        letterSpacing: 0.2,
+                      )
+                    : GoogleFonts.cormorantGaramond(
                   fontSize: 13,
                   fontStyle: FontStyle.italic,
                   color: AppColors.accent,

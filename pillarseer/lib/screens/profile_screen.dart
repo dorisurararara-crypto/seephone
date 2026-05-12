@@ -103,11 +103,18 @@ class ProfileScreen extends ConsumerWidget {
                       useKo
                           ? '${saju.dayPillar.pairKorean} · ${saju.dayPillar.pairKoreanMeaning} · ${saju.day60ji}'
                           : '${saju.dayMasterName} · ${saju.day60ji}',
-                      style: GoogleFonts.cormorantGaramond(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        color: AppColors.accent,
-                      ),
+                      style: useKo
+                          ? GoogleFonts.notoSerifKr(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                              color: AppColors.accent,
+                              letterSpacing: 0.3,
+                            )
+                          : GoogleFonts.cormorantGaramond(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              color: AppColors.accent,
+                            ),
                     ),
                   ],
                   if (isPro) ...[

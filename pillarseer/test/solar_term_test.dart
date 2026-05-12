@@ -20,6 +20,7 @@ void main() {
       2015: DateTime(2015, 2, 4, 12, 58),
       2020: DateTime(2020, 2, 4, 18, 3),
       2024: DateTime(2024, 2, 4, 17, 27),
+      2026: DateTime(2026, 2, 4, 5, 2),
     };
 
     for (final entry in kasi.entries) {

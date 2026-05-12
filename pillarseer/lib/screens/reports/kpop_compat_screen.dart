@@ -506,10 +506,11 @@ class _StarRow extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   '${star.dayPillar} · ${star.dayPillarName}',
-                  style: GoogleFonts.cormorantGaramond(
+                  style: GoogleFonts.notoSerifKr(
                     fontSize: 15,
-                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w300,
                     color: AppColors.accent,
+                    letterSpacing: 0.5,
                   ),
                 ),
                 const SizedBox(height: 22),
@@ -630,12 +631,18 @@ class _Methodology extends StatelessWidget {
             useKo
                 ? '본 콘텐츠는 정통 명리학(KASI 절기력) 기반 학습·엔터테인먼트 풀이입니다. 실제 인생 결정의 절대 기준은 아닙니다.'
                 : 'This is myeongli-based entertainment scoring (KASI solar terms). Not an absolute basis for life decisions.',
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 12.5,
-              fontStyle: FontStyle.italic,
-              color: AppColors.taupe,
-              height: 1.6,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 12.5,
+                    color: AppColors.taupe,
+                    height: 1.65,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 12.5,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.taupe,
+                    height: 1.6,
+                  ),
           ),
         ],
       ),

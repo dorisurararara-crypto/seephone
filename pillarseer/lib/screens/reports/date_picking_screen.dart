@@ -199,6 +199,8 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
@@ -221,12 +223,20 @@ class _HeroSection extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             subtitle,
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 17,
-              fontStyle: FontStyle.italic,
-              color: AppColors.accent,
-              height: 1.6,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.accent,
+                    height: 1.6,
+                    letterSpacing: 0.3,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 17,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.accent,
+                    height: 1.6,
+                  ),
           ),
         ],
       ),

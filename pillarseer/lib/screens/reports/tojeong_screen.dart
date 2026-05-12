@@ -192,12 +192,20 @@ class _HexagramHero extends StatelessWidget {
         const SizedBox(height: 14),
         Text(
           useKo ? hex.taglineKo : hex.taglineEn,
-          style: GoogleFonts.cormorantGaramond(
-            fontSize: 15,
-            fontStyle: FontStyle.italic,
-            color: AppColors.accent,
-            height: 1.6,
-          ),
+          style: useKo
+              ? GoogleFonts.notoSerifKr(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.accent,
+                  height: 1.6,
+                  letterSpacing: 0.3,
+                )
+              : GoogleFonts.cormorantGaramond(
+                  fontSize: 15,
+                  fontStyle: FontStyle.italic,
+                  color: AppColors.accent,
+                  height: 1.6,
+                ),
         ),
       ],
     );

@@ -238,11 +238,18 @@ class _PillarHero extends StatelessWidget {
                   useKo
                       ? result.dayPillar.pairKoreanMeaning
                       : result.dayMasterName,
-                  style: GoogleFonts.cormorantGaramond(
-                    fontSize: 15,
-                    fontStyle: FontStyle.italic,
-                    color: AppColors.ink,
-                  ),
+                  style: useKo
+                      ? GoogleFonts.notoSerifKr(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: AppColors.ink,
+                          letterSpacing: 0.3,
+                        )
+                      : GoogleFonts.cormorantGaramond(
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                          color: AppColors.ink,
+                        ),
                 ),
               ),
             ],
@@ -472,6 +479,8 @@ class _ScoreSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 40, 24, 36),
@@ -522,12 +531,20 @@ class _ScoreSection extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             verdict,
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
-              color: AppColors.ink,
-              height: 1.7,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.ink,
+                    height: 1.75,
+                    letterSpacing: 0.3,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.ink,
+                    height: 1.7,
+                  ),
           ),
         ],
       ),

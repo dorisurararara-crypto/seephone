@@ -140,11 +140,18 @@ class _Hero extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
                   useKo ? '병오년 · 火 馬' : 'Year of Fire Horse',
-                  style: GoogleFonts.cormorantGaramond(
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                    color: AppColors.ink,
-                  ),
+                  style: useKo
+                      ? GoogleFonts.notoSerifKr(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                          color: AppColors.ink,
+                          letterSpacing: 0.3,
+                        )
+                      : GoogleFonts.cormorantGaramond(
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                          color: AppColors.ink,
+                        ),
                 ),
               ),
             ],
@@ -223,12 +230,20 @@ class _AnnualThemeSection extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             advice,
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 15,
-              fontStyle: FontStyle.italic,
-              color: AppColors.accent,
-              height: 1.75,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.accent,
+                    height: 1.75,
+                    letterSpacing: 0.3,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 15,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.accent,
+                    height: 1.75,
+                  ),
           ),
         ],
       ),
@@ -246,24 +261,23 @@ class _MonthlyFlow extends StatelessWidget {
     required this.useKo,
   });
 
-  /// 절기 기준 12 월건. 각 칸은 (절기 시작일, 月支, 月干, KR 절기명, EN 절기명).
-  /// 절기 boundary 는 2026년 KASI 절기력 ±1일 정밀도. 1월은 동지 후 소한~입춘 직전 (丑月).
-  /// 명리학 정통: 寅月 = 입춘(立春) 시작 → 卯月 = 경칩(驚蟄) → ...
-  /// 丙년 五虎遁: 寅月 천간 = 庚, 卯辛, 辰壬, 巳癸, 午甲, 未乙, 申丙, 酉丁, 戌戊, 亥己, 子庚, 丑辛.
+  /// 2026년 KASI 절기 12 월건 (KST 절입시각 기준).
+  /// 명리학 정통: 寅月 = 입춘 시작 → 卯月 = 경칩 → ...
+  /// 丙년 五虎遁 月干: 寅 庚, 卯 辛, 辰 壬, 巳 癸, 午 甲, 未 乙, 申 丙, 酉 丁, 戌 戊, 亥 己, 子 庚, 丑 辛.
+  /// 절입시각 출처: 2026년 KASI 천체력.
   static const _slots = <(int, int, String, String, String, String)>[
-    // (절기 시작 month, day, 月支, 月干, KR 절기명, EN 절기명)
-    (1, 5, '丑', '辛', '소한 (1/5)', 'Sohan (Jan 5)'),
-    (2, 4, '寅', '庚', '입춘 (2/4)', 'Ipchun (Feb 4)'),
-    (3, 6, '卯', '辛', '경칩 (3/6)', 'Gyeongchip (Mar 6)'),
-    (4, 5, '辰', '壬', '청명 (4/5)', 'Cheongmyeong (Apr 5)'),
-    (5, 5, '巳', '癸', '입하 (5/5)', 'Ipha (May 5)'),
-    (6, 6, '午', '甲', '망종 (6/6)', 'Mangjong (Jun 6)'),
-    (7, 7, '未', '乙', '소서 (7/7)', 'Soseo (Jul 7)'),
-    (8, 7, '申', '丙', '입추 (8/7)', 'Ipchu (Aug 7)'),
-    (9, 7, '酉', '丁', '백로 (9/7)', 'Baekro (Sep 7)'),
-    (10, 8, '戌', '戊', '한로 (10/8)', 'Hanro (Oct 8)'),
-    (11, 7, '亥', '己', '입동 (11/7)', 'Ipdong (Nov 7)'),
-    (12, 7, '子', '庚', '대설 (12/7)', 'Daeseol (Dec 7)'),
+    (1, 5, '丑', '辛', '소한 1/5 17:23', 'Sohan · Jan 5 17:23'),
+    (2, 4, '寅', '庚', '입춘 2/4 05:02', 'Ipchun · Feb 4 05:02'),
+    (3, 5, '卯', '辛', '경칩 3/5 22:58', 'Gyeongchip · Mar 5 22:58'),
+    (4, 5, '辰', '壬', '청명 4/5 03:39', 'Cheongmyeong · Apr 5 03:39'),
+    (5, 5, '巳', '癸', '입하 5/5 20:48', 'Ipha · May 5 20:48'),
+    (6, 6, '午', '甲', '망종 6/6 00:48', 'Mangjong · Jun 6 00:48'),
+    (7, 7, '未', '乙', '소서 7/7 10:56', 'Soseo · Jul 7 10:56'),
+    (8, 7, '申', '丙', '입추 8/7 20:42', 'Ipchu · Aug 7 20:42'),
+    (9, 7, '酉', '丁', '백로 9/7 23:41', 'Baekro · Sep 7 23:41'),
+    (10, 8, '戌', '戊', '한로 10/8 15:29', 'Hanro · Oct 8 15:29'),
+    (11, 7, '亥', '己', '입동 11/7 18:52', 'Ipdong · Nov 7 18:52'),
+    (12, 7, '子', '庚', '대설 12/7 11:52', 'Daeseol · Dec 7 11:52'),
   ];
 
   static const _moodsKo = <String>[
@@ -322,12 +336,18 @@ class _MonthlyFlow extends StatelessWidget {
             useKo
                 ? '명리학 월건은 절기 기준입니다. 양력 달력이 아닌 입춘·경칩 등 절입일이 한 달의 경계입니다.'
                 : 'Myeongli months follow solar terms — not the Gregorian calendar. Each month begins at its solar-term gate.',
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 13,
-              fontStyle: FontStyle.italic,
-              color: AppColors.inkLight,
-              height: 1.6,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 12.5,
+                    color: AppColors.inkLight,
+                    height: 1.65,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 13,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.inkLight,
+                    height: 1.6,
+                  ),
           ),
           const SizedBox(height: 18),
           Container(
@@ -557,13 +577,21 @@ class _Counsel extends StatelessWidget {
             useKo
                 ? '"빛이 강한 해는 그림자도 함께 자랍니다."'
                 : '"In a year of strong light, the shadow grows alongside."',
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 20,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.w400,
-              color: AppColors.accent,
-              height: 1.5,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.accent,
+                    height: 1.5,
+                    letterSpacing: 0.3,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 20,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.accent,
+                    height: 1.5,
+                  ),
           ),
           const SizedBox(height: 18),
           Text(

@@ -135,12 +135,20 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                   const SizedBox(height: 8),
                   Text(
                     l.discoverSubtitle,
-                    style: GoogleFonts.cormorantGaramond(
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                      color: AppColors.accent,
-                      height: 1.5,
-                    ),
+                    style: useKo
+                        ? GoogleFonts.notoSerifKr(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                            color: AppColors.accent,
+                            height: 1.55,
+                            letterSpacing: 0.3,
+                          )
+                        : GoogleFonts.cormorantGaramond(
+                            fontSize: 14,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.accent,
+                            height: 1.5,
+                          ),
                   ),
                 ],
               ),
@@ -452,11 +460,18 @@ class _CelebRow extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(
                   celeb.localizedDayPillarName(useKo),
-                  style: GoogleFonts.cormorantGaramond(
-                    fontSize: 15,
-                    fontStyle: FontStyle.italic,
-                    color: AppColors.accent,
-                  ),
+                  style: useKo
+                      ? GoogleFonts.notoSerifKr(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w300,
+                          color: AppColors.accent,
+                          letterSpacing: 0.3,
+                        )
+                      : GoogleFonts.cormorantGaramond(
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                          color: AppColors.accent,
+                        ),
                 ),
                 const SizedBox(height: 22),
                 if (me != null) ...[

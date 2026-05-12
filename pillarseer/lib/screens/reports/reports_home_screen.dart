@@ -139,12 +139,20 @@ class ReportsHomeScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     l.reportsHomeSubtitle,
-                    style: GoogleFonts.cormorantGaramond(
-                      fontSize: 16,
-                      fontStyle: FontStyle.italic,
-                      color: AppColors.accent,
-                      height: 1.5,
-                    ),
+                    style: useKo
+                        ? GoogleFonts.notoSerifKr(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                            color: AppColors.accent,
+                            height: 1.55,
+                            letterSpacing: 0.3,
+                          )
+                        : GoogleFonts.cormorantGaramond(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.accent,
+                            height: 1.5,
+                          ),
                   ),
                 ],
               ),
