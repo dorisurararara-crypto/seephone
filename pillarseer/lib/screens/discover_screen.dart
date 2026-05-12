@@ -68,7 +68,29 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
+      appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.ink),
+          onPressed: () => context.go('/reports'),
+        ),
+        title: Text(
+          useKo ? '둘러보기 · 譜' : 'DISCOVER · 譜',
+          style: GoogleFonts.inter(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 5,
+            color: AppColors.ink,
+          ),
+        ),
+        shape: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
+      ),
       body: SafeArea(
+        top: false,
         child: Column(
           children: [
             Container(
@@ -208,7 +230,38 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                           child: CircularProgressIndicator(
                               color: AppColors.ink, strokeWidth: 1.5)),
                     )
-                  : ListView.separated(
+                  : filtered.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(32, 24, 32, 24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  useKo ? '결과가 없어요' : 'No matches',
+                                  style: GoogleFonts.notoSerifKr(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppColors.ink,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  useKo
+                                      ? '다른 카테고리를 골라 보세요.'
+                                      : 'Try another category.',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.notoSansKr(
+                                    fontSize: 13,
+                                    color: AppColors.taupe,
+                                    height: 1.6,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
                       padding: EdgeInsets.zero,
                       itemCount: filtered.length,
                       separatorBuilder: (_, _) => const Divider(

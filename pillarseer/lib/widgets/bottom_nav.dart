@@ -41,7 +41,10 @@ class PillarBottomNav extends StatelessWidget {
                   label: item.label,
                   child: InkWell(
                     onTap: () {
-                      if (i == activeIdx) return;
+                      // codex nav fix: 같은 탭이라도 sub-route 에 있을 때는
+                      // 탭 루트로 가야 함 (예: /discover 에서 리포트 탭 → /reports).
+                      final loc = GoRouterState.of(context).matchedLocation;
+                      if (loc == item.route) return;
                       context.go(item.route);
                     },
                     child: Column(

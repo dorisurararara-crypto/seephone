@@ -611,26 +611,38 @@ class _HourlyFlowSection extends ConsumerWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 14, 24, 22),
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'TWELVE  HOURS · 十 二 時',
-                      style: GoogleFonts.inter(
-                        fontSize: 9,
-                        letterSpacing: 5,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.taupe,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            useKo ? '12 시간 흐름 · 十 二 時' : 'TWELVE  HOURS · 十 二 時',
+                            style: GoogleFonts.inter(
+                              fontSize: 9,
+                              letterSpacing: 5,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.taupe,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            l.homeHourlyFullTitle,
+                            style: GoogleFonts.notoSerifKr(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w300,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      l.homeHourlyFullTitle,
-                      style: GoogleFonts.notoSerifKr(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w300,
-                        color: AppColors.ink,
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: AppColors.ink),
+                      tooltip: useKo ? '닫기' : 'Close',
+                      onPressed: () => Navigator.of(ctx2).pop(),
                     ),
                   ],
                 ),

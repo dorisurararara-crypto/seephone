@@ -194,7 +194,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go('/profile');
+            }
+          },
         ),
         title: Text(
           l.settingsTitle.toUpperCase(),
@@ -647,6 +653,7 @@ class _LinkRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
+              flex: 2,
               child: Text(
                 label.toUpperCase(),
                 style: GoogleFonts.inter(
@@ -657,13 +664,20 @@ class _LinkRow extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              value,
-              style: GoogleFonts.inter(
-                fontSize: 11,
-                color: AppColors.inkLight,
-                decoration: TextDecoration.underline,
-                decorationColor: AppColors.taupe,
+            const SizedBox(width: 12),
+            Flexible(
+              flex: 3,
+              child: Text(
+                value,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  color: AppColors.inkLight,
+                  decoration: TextDecoration.underline,
+                  decorationColor: AppColors.taupe,
+                ),
               ),
             ),
             const SizedBox(width: 8),

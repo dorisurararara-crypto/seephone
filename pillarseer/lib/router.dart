@@ -36,6 +36,7 @@ GoRouter buildRouter(WidgetRef ref) {
         '/reports/kpop-compat',
         '/discover',
         '/profile',
+        '/settings',
       ];
       if (result == null && protected.contains(loc)) {
         return '/input';
