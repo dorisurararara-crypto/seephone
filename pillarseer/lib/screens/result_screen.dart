@@ -103,7 +103,12 @@ class ResultScreen extends ConsumerWidget {
             _Section(
               locked: false,
               whyLine: reading?.whyReason,
-              child: _LongText(text: reading?.dayMasterDeep ?? result.summary),
+              // KO 모드 fallback: result.summary 영어이므로 안전한 generic Korean.
+              child: _LongText(
+                  text: reading?.dayMasterDeep ??
+                      (useKo
+                          ? '당신의 일주 ${result.day60ji}는 정통 명리학 기준으로 매우 구체적인 결을 가집니다. 자세한 풀이는 곧 갱신됩니다.'
+                          : result.summary)),
             ),
             const SizedBox(height: 22),
             _SectionHeader(
