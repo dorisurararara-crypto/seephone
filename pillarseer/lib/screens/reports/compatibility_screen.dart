@@ -153,7 +153,9 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
                 _ResonanceSection(me: me, partner: _partner!),
                 _DetailSection(me: me, partner: _partner!),
               ],
-            ],
+            ] else
+              // codex Round 13 P0 — 입력 전 데모/샘플 hint (빈 화면 X)
+              _CompatExampleHint(useKo: useKo),
             const SizedBox(height: 24),
           ],
         ),
@@ -256,6 +258,91 @@ class _PillarHero extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Round 13 codex P0 — 입력 전 hint (빈 화면 X)
+class _CompatExampleHint extends StatelessWidget {
+  final bool useKo;
+  const _CompatExampleHint({required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? '결과 예시 · SAMPLE' : 'SAMPLE',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 22),
+          // 샘플 점수 87 — 시각 예시
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '87',
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 56,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.accent.withValues(alpha: 0.4),
+                  height: 1.0,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  useKo ? '점 / 100' : '/ 100',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: AppColors.taupe,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Container(width: 36, height: 1, color: AppColors.line),
+          const SizedBox(height: 14),
+          Text(
+            useKo
+                ? '"자력처럼 끌리는 결합 — 오행이 서로를 살리는 사이클."'
+                : '"A magnetic alignment — your elements feed each other in cycles of growth."',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w300,
+              color: AppColors.inkLight,
+              height: 1.7,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            useKo
+                ? '위는 샘플입니다. 상대방 생년월일을 입력하면 두 사람의 사주 일치율 + 끌림과 갈등 + 3가지 행동 제안을 받습니다.'
+                : 'Sample shown above. Enter the other person\'s birth date to receive your match score, attraction/friction insights, and 3 actions.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              color: AppColors.taupe,
+              height: 1.7,
+            ),
           ),
         ],
       ),
