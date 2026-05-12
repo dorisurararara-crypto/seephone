@@ -1,4 +1,5 @@
 // Pillar Seer — K-POP Compatibility Lab.
+import 'package:go_router/go_router.dart';
 // 20+ K-POP 스타와 내 사주 궁합을 비교 → 일주 케미 + 오행 공명 점수 + 매니지먼트 인사이트.
 
 import 'dart:convert';
@@ -61,7 +62,7 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/reports'),
         ),
         title: Text(
           'K  P O P  ·  緣',

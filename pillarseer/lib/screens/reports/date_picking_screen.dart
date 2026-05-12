@@ -1,4 +1,5 @@
 // Pillar Seer — Date Picking (擇日) Report. Aesop Luxury tone.
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,7 +38,7 @@ class DatePickingScreen extends ConsumerWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/reports'),
         ),
         title: Text(
           'DATE PICKING · 擇 日',

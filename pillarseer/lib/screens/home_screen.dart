@@ -379,7 +379,7 @@ class _ScoreBlock extends StatelessWidget {
           const SizedBox(height: 18),
           Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 14),
-          // 점수 — 작게 sub (참고용)
+          // 점수 — 작게 sub (참고용). 한 행에 점수 + / 100 만 (overflow 방지).
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -396,26 +396,24 @@ class _ScoreBlock extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
-                  useKo ? '/ 100' : '/ 100',
+                  '/ 100',
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     color: AppColors.taupe,
                   ),
                 ),
               ),
-              const SizedBox(width: 14),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Text(
-                  explanation,
-                  style: GoogleFonts.notoSansKr(
-                    fontSize: 12,
-                    color: AppColors.inkLight,
-                    height: 1.5,
-                  ),
-                ),
-              ),
             ],
+          ),
+          // 점수 풀이 — 다음 줄에 (overflow 안 나도록)
+          const SizedBox(height: 6),
+          Text(
+            explanation,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              color: AppColors.inkLight,
+              height: 1.6,
+            ),
           ),
           if (quote.isNotEmpty) ...[
             const SizedBox(height: 20),

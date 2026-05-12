@@ -32,9 +32,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   /// Screenshot 모드 — --dart-define=SCREENSHOT_MODE=true 빌드 시
-  /// 더미 사주를 seed 하고 /result 로 바로 이동. App Store screenshot 캡쳐용.
+  /// 더미 사주를 seed 하고 SCREENSHOT_ROUTE 로 이동. App Store screenshot 캡쳐용.
   static const _screenshotMode =
       bool.fromEnvironment('SCREENSHOT_MODE', defaultValue: false);
+  /// 어느 라우트로 점프할지 (기본 /result)
+  static const _screenshotRoute =
+      String.fromEnvironment('SCREENSHOT_ROUTE', defaultValue: '/result');
 
   void _go() async {
     if (_navigated || !mounted) return;
@@ -55,7 +58,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             isLunar: false,
           ));
       if (!mounted) return;
-      context.go('/result');
+      context.go(_screenshotRoute);
       return;
     }
     final hasSaju = ref.read(sajuResultProvider) != null;

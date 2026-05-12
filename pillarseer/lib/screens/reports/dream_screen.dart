@@ -1,4 +1,5 @@
 // Pillar Seer — Dream (解夢) Report. Aesop Luxury tone.
+import 'package:go_router/go_router.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -78,7 +79,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/reports'),
         ),
         title: Text(
           'DREAM · 解 夢',

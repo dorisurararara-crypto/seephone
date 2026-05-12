@@ -1,4 +1,5 @@
 // Pillar Seer — 2026 신년운세 (병오년).
+import 'package:go_router/go_router.dart';
 //
 // 사주 원국 + 2026 세운 → 12달 흐름 + 12 영역 풀이.
 // 정통 명리학: yearGanji (丙午) + 일간 기준 십신 매핑 + 월별 60갑자 조합.
@@ -54,7 +55,7 @@ class NewYear2026Screen extends ConsumerWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/reports'),
         ),
         title: Text(
           useKo ? 'NEW  YEAR  2026' : 'NEW  YEAR  2026',

@@ -1,4 +1,5 @@
 // Pillar Seer — Compatibility (Aesop Luxury).
+import 'package:go_router/go_router.dart';
 // 두 사주의 오행 공명 + 일주 케미 → 점수 + verdict + relationship texture.
 
 import 'package:flutter/material.dart';
@@ -111,7 +112,7 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/reports'),
         ),
         title: Text(
           'COMPATIBILITY · 宮 合',

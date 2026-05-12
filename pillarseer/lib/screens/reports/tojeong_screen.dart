@@ -1,4 +1,5 @@
 // Pillar Seer — Tojeong-bigyeol (土亭祕訣) Report.
+import 'package:go_router/go_router.dart';
 // 사용자 생년월일 → 144 hexagram 중 1개 매핑 + 월별 흐름.
 
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class TojeongScreen extends ConsumerWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/reports'),
         ),
         title: Text(
           'TOJEONG · 土 亭',
