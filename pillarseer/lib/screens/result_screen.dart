@@ -1444,14 +1444,21 @@ class _ElementsBar extends StatelessWidget {
     final el = result.elements;
     final dom = el.dominant;
     final def = el.deficit;
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final names = useKo
+        ? const {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}
+        : const {
+            '木': 'Wood', '火': 'Fire', '土': 'Earth', '金': 'Metal', '水': 'Water',
+          };
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _row('Wood 나무', '木', el.wood, dom, def),
-        _row('Fire 불', '火', el.fire, dom, def),
-        _row('Earth 흙', '土', el.earth, dom, def),
-        _row('Metal 쇠', '金', el.metal, dom, def),
-        _row('Water 물', '水', el.water, dom, def),
+        _row(names['木']!, '木', el.wood, dom, def),
+        _row(names['火']!, '火', el.fire, dom, def),
+        _row(names['土']!, '土', el.earth, dom, def),
+        _row(names['金']!, '金', el.metal, dom, def),
+        _row(names['水']!, '水', el.water, dom, def),
       ],
     );
   }
