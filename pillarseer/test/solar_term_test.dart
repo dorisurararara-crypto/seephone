@@ -11,8 +11,8 @@ import 'package:pillarseer/services/solar_term_service.dart';
 
 void main() {
   group('SolarTermService.lipchun — KASI 발표값과 비교', () {
-    // KASI 월력요항 published 입춘 KST datetime.
-    // 검증 데이터: 1990, 1995, 2000, 2015, 2020, 2024 (다른 해는 자료 미확보).
+    // KASI 월력요항 published 입춘 KST datetime — 검증 가능한 연도만.
+    // 추가 연도는 확실한 KASI source 확보 후에 추가.
     final Map<int, DateTime> kasi = {
       1990: DateTime(1990, 2, 4, 11, 14),
       1995: DateTime(1995, 2, 4, 16, 12),
