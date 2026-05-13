@@ -19,6 +19,7 @@ import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
 import '../services/life_stage_service.dart';
 import '../services/personalization_engine.dart';
+import '../services/sipsin_persona_service.dart';
 import '../services/shinsa_service.dart';
 import '../services/strength_service.dart';
 import '../services/twelve_unsung_service.dart';
@@ -119,6 +120,8 @@ class ResultScreen extends ConsumerWidget {
                   ? (DateTime.now().year - birth.birthDate.year)
                   : null,
             ),
+            // 2.7 SIPSIN PERSONA — 8글자 십신 인격 풀이 (Round 73 sprint 3)
+            _SipsinPersonaSection(result: result, useKo: useKo),
             // 3. CHART ATTRIBUTES — 2x2 grid (bg)
             _ChartAttributesSection(result: result, useKo: useKo),
             // 4. FOUR PILLARS — 4-column hairline (paper bg)
@@ -3360,6 +3363,134 @@ class _LifeStageCard extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           useKo ? phase.ko : phase.en,
+          style: useKo
+              ? GoogleFonts.notoSansKr(
+                  fontSize: 13.5,
+                  height: 1.75,
+                  color: AppColors.inkLight,
+                  letterSpacing: 0.1,
+                )
+              : GoogleFonts.inter(
+                  fontSize: 12.5,
+                  height: 1.65,
+                  color: AppColors.inkLight,
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────────── SIPSIN PERSONA — Round 73 sprint 3 ────────────
+// 8글자 십신 인격 풀이 — TenGodsService.tableFor 결과 위 4 카테고리 phrase.
+// 8글자 십신 분포 기반 차별화 (같은 일주 다른 8글자 = phrase ≥30% 차별).
+
+class _SipsinPersonaSection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _SipsinPersonaSection({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<SipsinPersonaReading>(
+      future: SipsinPersonaService.compute(result),
+      builder: (context, snap) {
+        if (!snap.hasData) return const SizedBox(height: 0);
+        final r = snap.data!;
+        return _SectionFrame(
+          background: AppColors.paper,
+          meta: useKo ? '8글자 풀이 · EIGHT-CHARACTER READ' : 'EIGHT-CHARACTER READ · 八 字',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                useKo
+                    ? '8글자 깊게 푼 풀이'
+                    : 'A DEEPER EIGHT-CHARACTER READ',
+                style: useKo
+                    ? GoogleFonts.notoSerifKr(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        height: 1.35,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      )
+                    : GoogleFonts.cormorantGaramond(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      ),
+              ),
+              const SizedBox(height: 12),
+              Container(width: 36, height: 1, color: AppColors.line),
+              const SizedBox(height: 18),
+              for (var i = 0; i < SipsinPersonaService.categories.length; i++) ...[
+                _SipsinPersonaRow(
+                  category: SipsinPersonaService.categories[i],
+                  reading: r,
+                  useKo: useKo,
+                ),
+                if (i < SipsinPersonaService.categories.length - 1)
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 16),
+                    height: 1,
+                    color: AppColors.line,
+                  ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _SipsinPersonaRow extends StatelessWidget {
+  final String category;
+  final SipsinPersonaReading reading;
+  final bool useKo;
+  const _SipsinPersonaRow({
+    required this.category,
+    required this.reading,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final body = useKo ? reading.ko[category]! : reading.en[category]!;
+    final label = useKo
+        ? SipsinPersonaService.labelKo[category]!
+        : SipsinPersonaService.labelEn[category]!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(child: Container(height: 1, color: AppColors.line)),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Text(
+          body,
           style: useKo
               ? GoogleFonts.notoSansKr(
                   fontSize: 13.5,
