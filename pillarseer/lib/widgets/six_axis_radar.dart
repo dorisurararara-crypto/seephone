@@ -1,6 +1,6 @@
 // Pillar Seer — 6 각 Radar Widget.
 //
-// 1등 운세 앱 시그니처 (6 축) + 우리 차별점 (사주∩자미두수 ✨ 일치 배지).
+// 1등 운세 앱 시그니처 (6 축) + 우리 차별점 (깊이 풀이 ✨ 일치 배지).
 // Aesop Luxury 톤: ink line · accent fill (반투명) · taupe axis · 6 축 라벨 ko.
 
 import 'dart:math' as math;
@@ -15,7 +15,7 @@ class SixAxisRadar extends StatelessWidget {
   /// radar 한 변 픽셀.
   final double size;
 
-  /// true → "사주랑 자미두수에서 같이 잡힌 결: N/6 ✨" 작은 카드도 같이 보여줌.
+  /// true → "깊게 봐도 다시 잡힌 핵심: N/6 ✨" 작은 카드도 같이 보여줌.
   final bool showMatchBadge;
 
   const SixAxisRadar({
@@ -63,7 +63,7 @@ class _MatchBadge extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            '사주랑 자미두수에서 같이 잡힌 결',
+            '깊게 봐도 다시 잡힌 핵심',
             style: GoogleFonts.notoSansKr(
               fontSize: 11,
               fontWeight: FontWeight.w500,

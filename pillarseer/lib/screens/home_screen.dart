@@ -49,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    // 자미두수 — birth info 있을 때만 계산. 없으면 dummy date.
+    // 깊은 풀이 레이어 — birth info 있을 때만 계산. 없으면 dummy date.
     ZiweiResult? ziwei;
     try {
       final by = birth?.birthDate.year ?? 1995;
@@ -1477,7 +1477,7 @@ class _NotifToggleCard extends ConsumerWidget {
   }
 }
 
-// ──────────── 6 각 Radar 카드 (사주 ∩ 자미두수 시그니처) ────────────
+// ──────────── 6 각 Radar 카드 (깊이 풀이에서 같이 잡힌 결 시그니처) ────────────
 
 class _SixAxisCard extends StatelessWidget {
   final SixAxisScore score;
@@ -1519,8 +1519,8 @@ class _SixAxisCard extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             score.matchedAxes.isEmpty
-                ? '사주랑 자미두수가 다른 결을 가리켜요. 오늘은 다양한 결로 풀려나갈 거예요.'
-                : '✨ 같이 잡힌 결: ${score.matchedAxes.join(" · ")} (${score.matchCount}/6)',
+                ? '오늘은 흐름이 골고루 풀려요. 한쪽에 치우치지 않고 다양한 방향으로 풀려나갈 거예요.'
+                : '✨ 깊게 봐도 다시 잡힌 핵심: ${score.matchedAxes.join(" · ")} (${score.matchCount}/6)',
             style: GoogleFonts.notoSerifKr(
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -1531,10 +1531,10 @@ class _SixAxisCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             score.matchCount >= 3
-                ? '사주랑 자미두수가 같이 가리킨 부분이라 그만큼 단단해요. 본인이 평소에도 자주 느끼는 강점이에요.'
+                ? '한 번 더 봐도 같은 방향으로 잡힌 포인트라 그만큼 단단해요. 본인이 평소에도 자주 느끼는 강점이에요.'
                 : score.matchCount >= 1
-                    ? '사주랑 자미두수가 같이 가리킨 ${score.matchCount}개 축이 본인 결의 핵심이에요. 그 부분 위주로 풀어 가세요.'
-                    : '두 시스템이 다른 결을 보여줘요. 오히려 변화가 많은 시기라는 뜻이에요.',
+                    ? '깊게 봐도 다시 잡힌 ${score.matchCount}개 축이 본인 기질의 핵심이에요. 그 부분 위주로 풀어 가세요.'
+                    : '오늘은 흐름이 골고루 풀려요. 한쪽 강점만 쓰는 게 아니라 변화가 많은 시기라는 뜻이에요.',
             style: GoogleFonts.notoSansKr(
               fontSize: 13,
               color: AppColors.inkLight,

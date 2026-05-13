@@ -42,7 +42,7 @@ class ResultScreen extends ConsumerWidget {
     final useKo = lang == 'ko';
     final reading = useKo ? result.deepKo : result.deepEn;
 
-    // 자미두수 — 사용자 입력 있을 때만 계산. 없으면 null 처리.
+    // 깊은 풀이 레이어 — 사용자 입력 있을 때만 계산. 없으면 null 처리.
     final birth = ref.watch(userBirthInfoProvider);
     final ZiweiResult? ziwei = birth != null
         ? ZiweiService.calculate(
@@ -95,7 +95,7 @@ class ResultScreen extends ConsumerWidget {
             _DayMasterHero(result: result, reading: reading, useKo: useKo),
             // 2. A READING — magazine body (paper bg)
             _ReadingSection(result: result, reading: reading, useKo: useKo),
-            // 2.5 TWIN-LENS — 사주 + 자미두수 공통 결론 (차별점)
+            // 2.5 TWIN-LENS — 깊이 풀이에서 같이 잡힌 결 (차별점)
             if (crossmatches.isNotEmpty)
               _CrossmatchSection(matches: crossmatches, useKo: useKo),
             // 3. CHART ATTRIBUTES — 2x2 grid (bg)
@@ -108,7 +108,7 @@ class ResultScreen extends ConsumerWidget {
             _ForYouTodaySection(result: result, useKo: useKo),
             // 7. FIVE ELEMENTS — bar chart (bg)
             _FiveElementsSection(result: result, reading: reading, useKo: useKo),
-            // 7.5 자미두수 명반 — 12궁 풀이 (accordion 그룹, paper bg)
+            // 7.5 인생 12 영역 풀이 (accordion 그룹, paper bg)
             if (ziwei != null)
               _ZiweiPalaceGroup(ziwei: ziwei, useKo: useKo),
             // 8. CORE READING accordion group (paper bg)
@@ -2573,7 +2573,7 @@ Open Pillar Seer for the full reading.''';
   }
 }
 
-// ──────────── 2.5 TWIN-LENS — 사주 + 자미두수 공통 결론 ────────────
+// ──────────── 2.5 TWIN-LENS — 깊이 풀이에서도 같이 잡힌 결 (차별점) ────────────
 
 class _CrossmatchSection extends StatelessWidget {
   final List<CrossMatch> matches;
@@ -2583,15 +2583,15 @@ class _CrossmatchSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final headline = useKo
-        ? '사주랑 자미두수에서 똑같이 잡힌 포인트'
-        : 'WHAT BOTH SYSTEMS AGREE ON';
+        ? '깊게 봐도 다시 잡힌 핵심'
+        : 'WHAT THE DEEP READ CONFIRMS';
     final intro = useKo
-        ? '사주랑 자미두수가 따로 봤는데도 같은 포인트가 딱 잡혔어요.\n그래서 중요하게 봐도 되는 핵심이에요.'
-        : 'Where Saju and Ziwei Doushu — two independent fortune systems — '
-            'reach the same conclusion. These are the most trustworthy lines.';
+        ? '사주를 한 번 더 깊게 봐도 같은 결론이 나온 부분이에요.\n그래서 제일 단단하게 잡고 가도 되는 포인트예요.'
+        : 'Even when read at a deeper layer, these points stay the same. '
+            'The most trustworthy lines in your chart.';
     return _SectionFrame(
       background: AppColors.paper,
-      meta: useKo ? '쌍안경 · TWIN LENS' : 'TWIN LENS · 雙 鏡',
+      meta: useKo ? '깊은 포인트 · DEEP POINT' : 'DEEP POINT · 深 點',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2727,16 +2727,16 @@ class _CrossmatchTile extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        // 두 시스템 근거 — 2-row layout
+        // 두 풀이 깊이 근거 — 2-row layout
         _TwinEvidenceRow(
-          labelKo: '사주',
-          labelEn: 'SAJU',
+          labelKo: '기본 흐름',
+          labelEn: 'BASE',
           body: match.sajuSide,
         ),
         const SizedBox(height: 6),
         _TwinEvidenceRow(
-          labelKo: '자미',
-          labelEn: 'ZIWEI',
+          labelKo: '깊은 흐름',
+          labelEn: 'DEEP',
           body: match.ziweiSide,
         ),
       ],
@@ -2787,7 +2787,7 @@ class _TwinEvidenceRow extends StatelessWidget {
   }
 }
 
-// ──────────── 7.5 자미두수 12궁 풀이 그룹 (accordion) ────────────
+// ──────────── 7.5 인생 12 영역 풀이 그룹 (accordion) ────────────
 
 class _ZiweiPalaceGroup extends StatelessWidget {
   final ZiweiResult ziwei;
@@ -2796,8 +2796,39 @@ class _ZiweiPalaceGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // gungKo (내부 키) → 사용자 노출용 우회 라벨.
+    // 내부 키는 그대로 유지하되 화면에는 우회 표현만 노출.
     final labels = useKo
-        ? {
+        ? const {
+            '명궁': '본성 결',
+            '형제궁': '친구 결',
+            '부처궁': '인연 결',
+            '자녀궁': '창작·후배 결',
+            '재백궁': '돈 결',
+            '질액궁': '건강 결',
+            '천이궁': '바깥 활동 결',
+            '노복궁': '사람망 결',
+            '관록궁': '일 결',
+            '전택궁': '사는 공간 결',
+            '복덕궁': '마음 결',
+            '부모궁': '어른·상사 결',
+          }
+        : const {
+            '명궁': 'Core nature',
+            '형제궁': 'Friends & peers',
+            '부처궁': 'Love & partner',
+            '자녀궁': 'Creation & juniors',
+            '재백궁': 'Money',
+            '질액궁': 'Health & body',
+            '천이궁': 'Outside world',
+            '노복궁': 'Network',
+            '관록궁': 'Work & purpose',
+            '전택궁': 'Home space',
+            '복덕궁': 'Inner peace',
+            '부모궁': 'Elders & parents',
+          };
+    final subtitles = useKo
+        ? const {
             '명궁': '나는 어떤 사람',
             '형제궁': '형제·친구·동료',
             '부처궁': '연애·결혼 인연',
@@ -2811,7 +2842,7 @@ class _ZiweiPalaceGroup extends StatelessWidget {
             '복덕궁': '마음·취향·힐링',
             '부모궁': '부모·윗사람',
           }
-        : {
+        : const {
             '명궁': 'Self · core nature',
             '형제궁': 'Siblings · peers',
             '부처궁': 'Marriage · love',
@@ -2827,20 +2858,20 @@ class _ZiweiPalaceGroup extends StatelessWidget {
           };
     return _GroupSection(
       groupLabel: useKo
-          ? '자미두수 명반 · ZIWEI DOUSHU'
-          : 'ZIWEI DOUSHU · 紫 微 斗 數',
+          ? '삶의 12가지 결 풀이'
+          : 'LIFE AREAS',
       background: AppColors.paper,
       children: [
-        // 헤더 — 명주/신주 + 명궁/신궁 위치
+        // 헤더 — 중심 결 / 바깥 결 + 본성 자리 / 활동 자리
         _ZiweiHeader(ziwei: ziwei, useKo: useKo),
         for (final p in ziwei.by12Gung)
           _AccordionRow(
             title: useKo
-                ? '${p.gungKo} · ${labels[p.gungKo] ?? ''}'
+                ? '${labels[p.gungKo] ?? ''} · ${subtitles[p.gungKo] ?? ''}'
                     .toUpperCase()
-                : '${p.gungKo.toUpperCase()} · ${labels[p.gungKo] ?? ''}',
+                : '${(labels[p.gungKo] ?? '').toUpperCase()} · ${subtitles[p.gungKo] ?? ''}',
             hint: useKo
-                ? '${p.branchKo}(${p.branchAnimalKo})궁'
+                ? '${p.branchKo}(${p.branchAnimalKo}) 결'
                 : '${p.branchEn.toUpperCase()} branch',
             locked: false,
             child: _ZiweiPalaceBlock(palace: p, useKo: useKo),
@@ -2855,6 +2886,58 @@ class _ZiweiHeader extends StatelessWidget {
   final bool useKo;
   const _ZiweiHeader({required this.ziwei, required this.useKo});
 
+  // 중심 흐름 / 바깥 흐름 — 별 이름 노출 X, 풀이 한 줄만.
+  static const Map<String, String> _coreReadKo = {
+    'lucun': '안정과 재물 기질',
+    'tianji': '머리 빠른 분석 기질',
+    'wenchang': '글·공부 재능 기질',
+    'tianxiang': '균형 잡힌 중재 기질',
+    'tianliang': '신중한 어른 기질',
+    'ziwei': '리더십 카리스마 기질',
+    'wuqu': '단단한 추진 기질',
+    'pojun': '변화를 만드는 기질',
+    'lianzhen': '원칙·정의감 기질',
+    'taiyang': '환한 적극성 기질',
+    'tanlang': '다재다능한 매력 기질',
+    'jumen': '말로 끄는 힘 기질',
+    'tianfu': '안정감 있는 든든 기질',
+    'taiyin': '섬세한 감성 기질',
+    'tiantong': '다정한 분위기 기질',
+    'qisha': '결단력 강한 추진 기질',
+  };
+
+  static const Map<String, String> _coreReadEn = {
+    'lucun': 'Stable & wealthy',
+    'tianji': 'Sharp analyst',
+    'wenchang': 'Words & study',
+    'tianxiang': 'Balanced mediator',
+    'tianliang': 'Wise elder',
+    'ziwei': 'Leader presence',
+    'wuqu': 'Solid drive',
+    'pojun': 'Change maker',
+    'lianzhen': 'Principled justice',
+    'taiyang': 'Bright energy',
+    'tanlang': 'Versatile charm',
+    'jumen': 'Voice that moves',
+    'tianfu': 'Steady & dependable',
+    'taiyin': 'Gentle sensitivity',
+    'tiantong': 'Warm presence',
+    'qisha': 'Bold decisive drive',
+  };
+
+  String _coreOf(String key) =>
+      (useKo ? _coreReadKo[key] : _coreReadEn[key]) ??
+      (useKo ? '본인만의 결' : 'Unique signature');
+
+  String _selfHeader(ZiweiPalace p) {
+    // 외부 노출에서 "명궁"/"신궁" 흔적 제거 → 12지지(자/축/...) 결만.
+    final selfLabel = useKo ? '결' : 'BRANCH';
+    if (useKo) {
+      return '${p.branchKo}(${p.branchAnimalKo}) $selfLabel';
+    }
+    return '${p.branchEn.toUpperCase()} $selfLabel';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -2864,8 +2947,8 @@ class _ZiweiHeader extends StatelessWidget {
         children: [
           Text(
             useKo
-                ? '정통 만세력과 태어난 시간 기준으로 본 12궁 명반이에요.'
-                : 'A 12-palace chart drawn from the classical lunar almanac and hour pillar.',
+                ? '만세력과 태어난 시간을 같이 보고 풀어낸, 삶의 12가지 결이에요.'
+                : 'A 12-area life reading drawn from the classical lunar almanac and hour pillar.',
             style: GoogleFonts.notoSansKr(
               fontSize: 12.5,
               height: 1.75,
@@ -2879,15 +2962,15 @@ class _ZiweiHeader extends StatelessWidget {
             children: [
               Expanded(
                 child: _HeaderCell(
-                  label: useKo ? '명주 · MING ZHU' : 'MING ZHU',
-                  value: ziwei.mingZhuKo,
+                  label: useKo ? '중심 기질' : 'CORE READ',
+                  value: _coreOf(ziwei.mingZhuKey),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: _HeaderCell(
-                  label: useKo ? '신주 · SHEN ZHU' : 'SHEN ZHU',
-                  value: ziwei.shenZhuKo,
+                  label: useKo ? '바깥 기질' : 'OUTER READ',
+                  value: _coreOf(ziwei.shenZhuKey),
                 ),
               ),
             ],
@@ -2898,15 +2981,15 @@ class _ZiweiHeader extends StatelessWidget {
             children: [
               Expanded(
                 child: _HeaderCell(
-                  label: useKo ? '명궁 · SELF' : 'SELF PALACE',
-                  value: ziwei.mingPalace.headerKo,
+                  label: useKo ? '본성 결' : 'SELF',
+                  value: _selfHeader(ziwei.mingPalace),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: _HeaderCell(
-                  label: useKo ? '신궁 · BODY' : 'BODY PALACE',
-                  value: ziwei.shenPalace.headerKo,
+                  label: useKo ? '활동 결' : 'BODY',
+                  value: _selfHeader(ziwei.shenPalace),
                 ),
               ),
             ],
@@ -2968,27 +3051,34 @@ class _ZiweiPalaceBlock extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 주성 — 한 줄 정렬 칩들
+        // 핵심 결 풀이 — 별 이름 노출 X, 풀이 한 줄만 나열.
         if (palace.majorStars.isNotEmpty) ...[
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: [
-              for (final s in palace.majorStars)
-                _StarChip(label: s.nameKo, accent: true),
-            ],
-          ),
-          const SizedBox(height: 14),
           for (final s in palace.majorStars)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                s.oneLineKo,
-                style: GoogleFonts.notoSansKr(
-                  fontSize: 14,
-                  height: 1.8,
-                  color: AppColors.ink,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 8, right: 10),
+                    width: 4,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      s.oneLineKo,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 14,
+                        height: 1.8,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
         ] else
@@ -2996,8 +3086,8 @@ class _ZiweiPalaceBlock extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 6),
             child: Text(
               useKo
-                  ? '이 궁은 주성이 비어 있어요. 그래서 반대편 궁의 별을 빌려와서 풀어요.'
-                  : 'No major star in this palace — read the opposing palace as proxy.',
+                  ? '이 결은 직접 드러난 기운이 약해서, 연결된 흐름까지 같이 봐요.'
+                  : 'This area is open — read the opposing area as proxy.',
               style: GoogleFonts.notoSansKr(
                 fontSize: 13.5,
                 height: 1.8,
@@ -3005,21 +3095,27 @@ class _ZiweiPalaceBlock extends StatelessWidget {
               ),
             ),
           ),
-        // 길성 / 흉성 — 한 줄씩
+        // 도와주는 흐름 / 살짝 걸리는 흐름 — 개수만, 별 이름 노출 X.
         if (palace.luckyStars.isNotEmpty) ...[
-          const SizedBox(height: 6),
-          _StarRow(
-            label: useKo ? '길성' : 'LUCKY',
-            items: palace.luckyStars,
+          const SizedBox(height: 8),
+          _SupportSummaryRow(
+            labelKo: '도와주는 흐름',
+            countKo: '${palace.luckyStars.length}가지 기운이 받쳐줘요',
+            countEn:
+                '${palace.luckyStars.length} supportive flow${palace.luckyStars.length == 1 ? '' : 's'}',
             color: AppColors.accent,
+            useKo: useKo,
           ),
         ],
         if (palace.badStars.isNotEmpty) ...[
           const SizedBox(height: 4),
-          _StarRow(
-            label: useKo ? '흉성' : 'TENSE',
-            items: palace.badStars,
+          _SupportSummaryRow(
+            labelKo: '살짝 걸리는 흐름',
+            countKo: '${palace.badStars.length}가지 기운이 살짝 걸려요',
+            countEn:
+                '${palace.badStars.length} tense flow${palace.badStars.length == 1 ? '' : 's'}',
             color: AppColors.taupe,
+            useKo: useKo,
           ),
         ],
       ],
@@ -3027,52 +3123,32 @@ class _ZiweiPalaceBlock extends StatelessWidget {
   }
 }
 
-class _StarChip extends StatelessWidget {
-  final String label;
-  final bool accent;
-  const _StarChip({required this.label, this.accent = false});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: accent ? AppColors.accent : AppColors.line,
-          width: 1,
-        ),
-        color: AppColors.bg,
-      ),
-      child: Text(
-        label,
-        style: GoogleFonts.notoSerifKr(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          color: accent ? AppColors.accent : AppColors.ink,
-          letterSpacing: 0.3,
-        ),
-      ),
-    );
-  }
-}
-
-class _StarRow extends StatelessWidget {
-  final String label;
-  final List<String> items;
+class _SupportSummaryRow extends StatelessWidget {
+  final String labelKo;
+  final String countKo;
+  final String countEn;
   final Color color;
-  const _StarRow({required this.label, required this.items, required this.color});
+  final bool useKo;
+  const _SupportSummaryRow({
+    required this.labelKo,
+    required this.countKo,
+    required this.countEn,
+    required this.color,
+    required this.useKo,
+  });
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 42,
-          padding: const EdgeInsets.only(top: 4),
+          width: 96,
+          padding: const EdgeInsets.only(top: 3),
           child: Text(
-            label.toUpperCase(),
-            style: GoogleFonts.inter(
-              fontSize: 8,
-              letterSpacing: 3,
+            labelKo,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 11,
+              letterSpacing: 0.2,
               fontWeight: FontWeight.w500,
               color: color,
             ),
@@ -3080,7 +3156,7 @@ class _StarRow extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            items.join(' · '),
+            useKo ? countKo : countEn,
             style: GoogleFonts.notoSerifKr(
               fontSize: 13,
               height: 1.6,
@@ -3092,3 +3168,6 @@ class _StarRow extends StatelessWidget {
     );
   }
 }
+
+// _StarChip / _StarRow 제거: 별 이름 노출하던 컴포넌트로, 필살기 보호 위해 삭제.
+// 대체: _SupportSummaryRow (개수 풀이만 노출).
