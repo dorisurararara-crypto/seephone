@@ -17,6 +17,7 @@ import 'package:share_plus/share_plus.dart';
 import '../services/gong_mang_service.dart';
 import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
+import '../services/life_stage_service.dart';
 import '../services/personalization_engine.dart';
 import '../services/shinsa_service.dart';
 import '../services/strength_service.dart';
@@ -109,6 +110,15 @@ class ResultScreen extends ConsumerWidget {
             // 2.5 TWIN-LENS — 깊이 풀이에서 같이 잡힌 결 (차별점)
             if (crossmatches.isNotEmpty)
               _CrossmatchSection(matches: crossmatches, useKo: useKo),
+            // 2.6 LIFE STAGE — 초년/중년/말년 (Round 73 sprint 2 — DaewoonService wire)
+            _LifeStageSection(
+              result: result,
+              useKo: useKo,
+              isMale: birth?.isMale ?? true,
+              userAge: birth != null
+                  ? (DateTime.now().year - birth.birthDate.year)
+                  : null,
+            ),
             // 3. CHART ATTRIBUTES — 2x2 grid (bg)
             _ChartAttributesSection(result: result, useKo: useKo),
             // 4. FOUR PILLARS — 4-column hairline (paper bg)
@@ -3220,3 +3230,150 @@ class _SupportSummaryRow extends StatelessWidget {
 
 // _StarChip / _StarRow 제거: 별 이름 노출하던 컴포넌트로, 필살기 보호 위해 삭제.
 // 대체: _SupportSummaryRow (개수 풀이만 노출).
+
+// ──────────── LIFE STAGE — Round 73 sprint 2 ────────────
+// 초년/중년/말년 3 phase paragraph (DaewoonService.chain wire).
+// 운세의신 17 섹션 중 "초년운/중년운/말년운" 매핑.
+
+class _LifeStageSection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  final bool isMale;
+  final int? userAge;
+  const _LifeStageSection({
+    required this.result,
+    required this.useKo,
+    required this.isMale,
+    required this.userAge,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<LifeStageResult>(
+      future: LifeStageService.compute(
+        result,
+        isMale: isMale,
+        userAge: userAge,
+      ),
+      builder: (context, snap) {
+        if (!snap.hasData) {
+          // loading — empty placeholder (UI 깜빡임 방지).
+          return const SizedBox(height: 0);
+        }
+        final r = snap.data!;
+        return _SectionFrame(
+          background: AppColors.bg,
+          meta: useKo ? '인생 흐름 · LIFE STAGE' : 'LIFE STAGE · 三 段',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                useKo
+                    ? '초년 · 중년 · 말년 흐름'
+                    : 'EARLY · MID · LATE FLOW',
+                style: useKo
+                    ? GoogleFonts.notoSerifKr(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        height: 1.35,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      )
+                    : GoogleFonts.cormorantGaramond(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      ),
+              ),
+              const SizedBox(height: 12),
+              Container(width: 36, height: 1, color: AppColors.line),
+              const SizedBox(height: 18),
+              for (var i = 0; i < r.all.length; i++) ...[
+                _LifeStageCard(phase: r.all[i], useKo: useKo),
+                if (i < r.all.length - 1)
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 18),
+                    height: 1,
+                    color: AppColors.line,
+                  ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LifeStageCard extends StatelessWidget {
+  final LifeStagePhase phase;
+  final bool useKo;
+  const _LifeStageCard({required this.phase, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = phase.isCurrent ? AppColors.accent : AppColors.taupe;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              useKo ? phase.labelKo : phase.labelEn,
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                letterSpacing: 3,
+                fontWeight: FontWeight.w600,
+                color: accent,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(width: 14, height: 1, color: AppColors.line),
+            const SizedBox(width: 8),
+            Text(
+              useKo
+                  ? '${phase.startAge}세~'
+                  : 'AGE ${phase.startAge}+',
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                letterSpacing: 1.5,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+            if (phase.isCurrent) ...[
+              const SizedBox(width: 8),
+              Text(
+                useKo ? '· 지금' : '· NOW',
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.accent,
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 10),
+        Text(
+          useKo ? phase.ko : phase.en,
+          style: useKo
+              ? GoogleFonts.notoSansKr(
+                  fontSize: 13.5,
+                  height: 1.75,
+                  color: AppColors.inkLight,
+                  letterSpacing: 0.1,
+                )
+              : GoogleFonts.inter(
+                  fontSize: 12.5,
+                  height: 1.65,
+                  color: AppColors.inkLight,
+                ),
+        ),
+      ],
+    );
+  }
+}
