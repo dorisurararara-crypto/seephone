@@ -9,13 +9,19 @@ import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
 import '../services/daily_service.dart';
+import '../services/five_day_trend_service.dart';
 import '../services/hourly_service.dart';
+import '../services/lucky_chips_service.dart';
+import '../services/six_axis_score_service.dart';
 import '../services/today_deep_service.dart';
+import '../services/ziwei_service.dart';
 import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
 import '../providers/streak_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
+import '../widgets/five_day_trend_chart.dart';
+import '../widgets/six_axis_radar.dart';
 
 /// Aesop Luxury home — 텍스트 위주 magazine editorial.
 /// 그라데이션 X, 카드 그림자 X, 둥근 모서리 X. 모든 강조는 letter-spacing UPPERCASE + 한자 + italic accent.
@@ -43,6 +49,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
+    // 자미두수 — birth info 있을 때만 계산. 없으면 dummy date.
+    ZiweiResult? ziwei;
+    try {
+      final by = birth?.birthDate.year ?? 1995;
+      final bm = birth?.birthDate.month ?? 10;
+      final bd = birth?.birthDate.day ?? 27;
+      final bh = birth?.birthHour ?? 15;
+      final bmin = birth?.birthMinute ?? 43;
+      final male = birth?.isMale ?? true;
+      ziwei = ZiweiService.calculate(
+        year: by, month: bm, day: bd,
+        hour: bh, minute: bmin,
+        isMale: male,
+      );
+    } catch (_) {
+      ziwei = null;
+    }
+
+    final sixAxis = ziwei == null
+        ? null
+        : SixAxisScoreService.compute(saju, ziwei);
+    final fiveDay = FiveDayTrendService.compute(saju);
+    final chips = ziwei == null
+        ? null
+        : LuckyChipsService.compute(saju, ziwei);
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -60,32 +92,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 date: fortune.date,
               ),
               _StreakLine(),
+              // ── 5초 파악 first-fold (codex 9.9+ 흡수 1등 앱 강점 4종) ──
               _ScoreBlock(
                 score: fortune.totalScore,
                 quote: useKo
                     ? (fortune.quoteKo.isEmpty ? fortune.quoteEn : fortune.quoteKo)
                     : fortune.quoteEn,
               ),
-              _PillarOfTheDay(
-                dayPillar: fortune.dayPillar,
-                label: _localizedGanjiLabel(context, fortune.dayPillar),
+              if (sixAxis != null) _SixAxisCard(score: sixAxis),
+              _FiveDayTrendCard(points: fiveDay),
+              if (chips != null) _LuckyChipsCard(chips: chips),
+              // ── 더 깊이 보기 (collapsible) ──
+              _DeepDiveSection(
+                children: [
+                  _PillarOfTheDay(
+                    dayPillar: fortune.dayPillar,
+                    label: _localizedGanjiLabel(context, fortune.dayPillar),
+                  ),
+                  _TodayDeepReadingSection(
+                    reading: TodayDeepService.build(
+                      userDayStem: saju.dayPillar.chunGan,
+                      userDayBranch: saju.dayPillar.jiJi,
+                      userMonthBranch: saju.monthPillar.jiJi,
+                      userDominantEl: saju.elements.dominant,
+                      userDeficitEl: saju.elements.deficit,
+                      todayPillar: fortune.dayPillar,
+                      todayScore: fortune.totalScore,
+                    ),
+                  ),
+                  _HourlyFlowSection(saju: saju),
+                  _CategorySection(fortune: fortune),
+                  _CategoryGuides(fortune: fortune),
+                  _LuckySection(fortune: fortune),
+                ],
               ),
-              // 신규 — 사주 깊이 기반 오늘 풀이 (codex Round 11+)
-              _TodayDeepReadingSection(
-                reading: TodayDeepService.build(
-                  userDayStem: saju.dayPillar.chunGan,
-                  userDayBranch: saju.dayPillar.jiJi,
-                  userMonthBranch: saju.monthPillar.jiJi,
-                  userDominantEl: saju.elements.dominant,
-                  userDeficitEl: saju.elements.deficit,
-                  todayPillar: fortune.dayPillar,
-                  todayScore: fortune.totalScore,
-                ),
-              ),
-              _HourlyFlowSection(saju: saju),
-              _CategorySection(fortune: fortune),
-              _CategoryGuides(fortune: fortune),
-              _LuckySection(fortune: fortune),
               const SizedBox(height: 8),
             ],
           ),
@@ -130,7 +170,7 @@ class _AppBarBlock extends StatelessWidget {
             ),
           ),
           Text(
-            useKo ? '오늘 · 今 日' : 'TODAY · 今 日',
+            useKo ? '오늘' : 'TODAY',
             style: GoogleFonts.inter(
               fontSize: 8,
               fontWeight: FontWeight.w500,
@@ -342,17 +382,6 @@ class _ScoreBlock extends StatelessWidget {
               letterSpacing: 0.4,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
-            ),
-          ),
-          const SizedBox(height: 4),
-          // 영문 + 한자는 작은 sub
-          Text(
-            "Today's energy · 日 氣",
-            style: GoogleFonts.inter(
-              fontSize: 9,
-              letterSpacing: 3,
-              fontWeight: FontWeight.w400,
-              color: AppColors.taupe.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 18),
@@ -1443,6 +1472,395 @@ class _NotifToggleCard extends ConsumerWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ──────────── 6 각 Radar 카드 (사주 ∩ 자미두수 시그니처) ────────────
+
+class _SixAxisCard extends StatelessWidget {
+  final SixAxisScore score;
+  const _SixAxisCard({required this.score});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '여섯 결로 본 오늘',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '본성 · 연애 · 일 · 돈 · 건강 · 평판',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 18),
+          SixAxisRadar(score: score, size: 240),
+          const SizedBox(height: 14),
+          Text(
+            score.matchedAxes.isEmpty
+                ? '사주랑 자미두수가 다른 결을 가리켜요. 오늘은 다양한 결로 풀려나갈 거예요.'
+                : '✨ 같이 잡힌 결: ${score.matchedAxes.join(" · ")} (${score.matchCount}/6)',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.accent,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            score.matchCount >= 3
+                ? '사주랑 자미두수가 같이 가리킨 부분이라 그만큼 단단해요. 본인이 평소에도 자주 느끼는 강점이에요.'
+                : score.matchCount >= 1
+                    ? '사주랑 자미두수가 같이 가리킨 ${score.matchCount}개 축이 본인 결의 핵심이에요. 그 부분 위주로 풀어 가세요.'
+                    : '두 시스템이 다른 결을 보여줘요. 오히려 변화가 많은 시기라는 뜻이에요.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.inkLight,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── 5 일 trend 카드 ────────────
+
+class _FiveDayTrendCard extends StatelessWidget {
+  final List<FiveDayPoint> points;
+  const _FiveDayTrendCard({required this.points});
+
+  @override
+  Widget build(BuildContext context) {
+    final today = points.firstWhere((p) => p.isToday);
+    final tomorrow = points.length > 3 ? points[3] : today;
+    final diff = tomorrow.score - today.score;
+    final hint = diff > 5
+        ? '내일은 오늘보다 더 풀려요. 오늘 미뤄둔 결정 한 가지가 내일 쉽게 풀릴 거예요.'
+        : diff < -5
+            ? '내일은 살짝 가라앉아요. 오늘 끝낼 수 있는 건 오늘 마무리하는 게 편해요.'
+            : '내일도 비슷한 결이에요. 오늘 흐름 그대로 이어가도 괜찮아요.';
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 30, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '5일 흐름',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '그제 · 어제 · 오늘 · 내일 · 모레',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 18),
+          FiveDayTrendChart(points: points),
+          const SizedBox(height: 12),
+          Text(
+            hint,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.inkLight,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── 행운 chip 6 개 + 탭 popup ────────────
+
+class _LuckyChipsCard extends StatelessWidget {
+  final List<LuckyChip> chips;
+  const _LuckyChipsCard({required this.chips});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 30, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '오늘의 행운',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '하나 누르면 왜 행운인지 알려줘요',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 11,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.8),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: chips
+                .map((c) => _LuckyChipButton(chip: c))
+                .toList(growable: false),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LuckyChipButton extends StatelessWidget {
+  final LuckyChip chip;
+  const _LuckyChipButton({required this.chip});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => _showReason(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.paper,
+          border: Border.all(color: AppColors.line, width: 1),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(chip.icon, style: const TextStyle(fontSize: 14)),
+            const SizedBox(width: 6),
+            Text(
+              '${chip.category} · ${chip.value}',
+              style: GoogleFonts.notoSansKr(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showReason(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.bg,
+      isScrollControlled: false,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      builder: (ctx) {
+        return SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(chip.icon, style: const TextStyle(fontSize: 22)),
+                    const SizedBox(width: 10),
+                    Text(
+                      '${chip.category} · ${chip.value}',
+                      style: GoogleFonts.notoSerifKr(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Container(width: 36, height: 1, color: AppColors.line),
+                const SizedBox(height: 14),
+                Text(
+                  '이게 왜 행운이야?',
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 11,
+                    letterSpacing: 0.5,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  chip.reasonKo,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 14,
+                    color: AppColors.ink,
+                    height: 1.7,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.ink,
+                    ),
+                    child: Text(
+                      '닫기',
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ──────────── 더 깊이 보기 — collapsible section ────────────
+
+class _DeepDiveSection extends StatefulWidget {
+  final List<Widget> children;
+  const _DeepDiveSection({required this.children});
+
+  @override
+  State<_DeepDiveSection> createState() => _DeepDiveSectionState();
+}
+
+class _DeepDiveSectionState extends State<_DeepDiveSection> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InkWell(
+          onTap: () => setState(() => _expanded = !_expanded),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+            decoration: const BoxDecoration(
+              color: AppColors.bg,
+              border: Border(
+                bottom: BorderSide(color: AppColors.line, width: 1),
+              ),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  _expanded ? '간단히 보기' : '더 깊이 보기 — 사주 풀이',
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.ink,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  _expanded ? '▲' : '▼',
+                  style: const TextStyle(
+                    color: AppColors.accent,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_expanded) ...[
+          ...widget.children,
+          _FullSajuCTA(),
+        ],
+      ],
+    );
+  }
+}
+
+/// "내 사주 풀이 전체 보기" → /result 이동 CTA.
+class _FullSajuCTA extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed('/result'),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+        decoration: const BoxDecoration(
+          color: AppColors.paper,
+          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Row(
+          children: [
+            Text(
+              '내 사주 풀이 전체 보기',
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              '→',
+              style: GoogleFonts.notoSansKr(
+                fontSize: 14,
+                color: AppColors.accent,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

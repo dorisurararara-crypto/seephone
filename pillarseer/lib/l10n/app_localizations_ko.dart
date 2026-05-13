@@ -145,13 +145,13 @@ class AppL10nKo extends AppL10n {
   String get homeScoreOutOf => '/100';
 
   @override
-  String get homeExplanationLow => '오늘 일진이 일간을 극합니다. 천천히 움직이고 중심을 지키세요.';
+  String get homeExplanationLow => '오늘은 에너지가 살짝 부딪혀요. 천천히 가면 괜찮아요.';
 
   @override
-  String get homeExplanationMid => '평온한 하루입니다. 꾸준한 행동이 최선의 결과를 가져옵니다.';
+  String get homeExplanationMid => '평온한 하루예요. 꾸준한 한 발이 큰 결과로 와요.';
 
   @override
-  String get homeExplanationHigh => '오늘 기운이 본성과 어울립니다. 과감하게 움직이세요.';
+  String get homeExplanationHigh => '오늘 기운이 본인 결이랑 잘 맞아요. 미루던 거 한 번 시도해 봐요.';
 
   @override
   String get homeCategoryLove => '애정';
