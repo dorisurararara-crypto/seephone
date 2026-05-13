@@ -30,11 +30,11 @@
     "en": "Early years are shaped most by your friends. You find your colors fast inside the group. Your voice is clear, so you draw attention, but small clashes come with that. A bigger collision lands around mid-teens. Sort out who stays then and the next circle holds. Stay clear of overly dominant cliques."
   },
   "bigyeon_early_weak": {
-    "ko": "초년에 친구 따라가는 일이 많아요. 본인 색이 또렷하지만 무리 안에서는 잘 숨겨요. 어울리는 듯 살짝 외로워요. 10세 전후로 한 명의 단짝이 오래 갑니다. 그 친구가 본인 색을 살려줘요. 너무 한 사람한테만 기대지는 마세요.",
+    "ko": "초년에 친구 따라가는 일이 많아요. 본인 색이 또렷하지만 무리 안에서는 잘 숨겨요. 어울리는 듯 살짝 외로워요. 10세 전후로 한 명의 단짝이 오래 가요. 그 친구가 본인 색을 살려줘요. 너무 한 사람한테만 기대지는 마세요.",
     "en": "In your early years you often follow others' lead. Your color is sharp, but you hide it inside the group. You blend in yet feel a quiet loneliness. Around age ten, one close friend arrives and stays long. That friend brings your edge back out. Do not lean on just one person, though."
   },
   "bigyeon_mid_strong": {
-    "ko": "중년은 본인 사업·창업·독립의 시기예요. 동료·동업자 만나는 운이 강해요. 자기 색이 또렷해서 리더 자리가 자연스럽게 와요. 단, 동업은 돈 문제가 한 번 터져요. 30대 중반에 정리해야 할 사람이 보입니다. 그때 단호하게 끊으세요. 망설이면 본인 손해예요.",
+    "ko": "중년은 본인 사업·창업·독립의 시기예요. 동료·동업자 만나는 운이 강해요. 자기 색이 또렷해서 리더 자리가 자연스럽게 와요. 단, 동업은 돈 문제가 한 번 터져요. 30대 중반에 정리해야 할 사람이 보여요. 그때 단호하게 끊으세요. 망설이면 본인 손해예요.",
     "en": "Your mid-years are about your own venture, founding, or going independent. The pull toward partners is strong. Your color stands out so leadership lands on you naturally. One partner clash over money will hit. Around mid-thirties someone needs to be let go. Cut cleanly then. Hesitation costs you."
   },
   "bigyeon_mid_weak": {
@@ -66,7 +66,7 @@
     "en": "Mid-years find you giving up too much. A friend takes your seat once. Even so, your core stays intact. In early forties take on one project under your own name. Hold steady and finish it. Do not chase peer approval."
   },
   "geopjae_late_strong": {
-    "ko": "말년은 후배들 사이에서 본인의 자리를 만드는 시기예요. 라이벌이 동료로 바뀝니다. 본인 손에 무엇이 남았는지 또렷이 보여요. 단, 60대 초반에 한 번 돈 잃는 시기 와요. 그때 욕심부리지 마세요. 본인을 위해 쓰는 시간을 늘리세요.",
+    "ko": "말년은 후배들 사이에서 본인의 자리를 만드는 시기예요. 라이벌이 동료로 바뀌어요. 본인 손에 무엇이 남았는지 또렷이 보여요. 단, 60대 초반에 한 번 돈 잃는 시기 와요. 그때 욕심부리지 마세요. 본인을 위해 쓰는 시간을 늘리세요.",
     "en": "Late years build your seat among the younger crew. Rivals turn into peers. What stayed in your hand becomes visible. In early sixties one money loss will land. Do not chase return then. Spend more time on yourself."
   },
   "geopjae_late_weak": {
@@ -122,7 +122,7 @@
     "en": "Late years your writing quietly helps people. Your texture reaches without a big stage. Around sixty-five your writings gather into form. Do not feel shy then. Your depth is real. Carve out writing time on purpose."
   },
   "pyeonjae_early_strong": {
-    "ko": "초년에 돈 보는 눈이 일찍 트여요. 친구들 사이에서 본인이 거래 중심이에요. 어른들 사이에서도 본인 셈은 빨라요. 단, 본인 돈을 친구가 한 번 잃게 만들어요. 10대 중반에 그 일이 옵니다. 그때 친구 사이 돈 거래는 끊으세요.",
+    "ko": "초년에 돈 보는 눈이 일찍 트여요. 친구들 사이에서 본인이 거래 중심이에요. 어른들 사이에서도 본인 셈은 빨라요. 단, 본인 돈을 친구가 한 번 잃게 만들어요. 10대 중반에 그 일이 와요. 그때 친구 사이 돈 거래는 끊으세요.",
     "en": "Early on you have an eye for money. You sit at the center of trades among friends. Your math is fast even with adults. A friend will cost you money once. That hits in mid-teens. Cut money out of friendships from then on."
   },
   "pyeonjae_early_weak": {
@@ -142,7 +142,7 @@
     "en": "Late years your circled money settles. Real estate and assets clarify. In mid-sixties a child or junior will ask for money. Giving it all out of love puts you at risk. Give a part, keep the rest. Hold control of your own money to the end."
   },
   "pyeonjae_late_weak": {
-    "ko": "말년에는 큰 돈은 안 모여도 의외의 부수입 한 번 와요. 65세 전후로 본인이 잊고 있던 곳에서 돈 한 번 나옵니다. 본인 강점은 돈이 아니라 사람한테 있습니다. 자녀한테 돈 빌려주지 마세요. 본인 노년 자금은 따로 두세요.",
+    "ko": "말년에는 큰 돈은 안 모여도 의외의 부수입 한 번 와요. 65세 전후로 본인이 잊고 있던 곳에서 돈 한 번 나와요. 본인 강점은 돈이 아니라 사람한테 있습니다. 자녀한테 돈 빌려주지 마세요. 본인 노년 자금은 따로 두세요.",
     "en": "Late years no large pile gathers, but one unexpected windfall comes. Around sixty-five money surfaces from a place you forgot. Your real wealth sits in people, not money. Do not lend to your children. Keep your retirement fund separate."
   },
   "jeongjae_early_strong": {
@@ -166,7 +166,7 @@
     "en": "Late years what you saved for a lifetime supports family. Your assets sit firm. Holding only for yourself gets lonely. In late sixties give once. Let your hand reach family and close ties. Do not be tight-fisted."
   },
   "jeongjae_late_weak": {
-    "ko": "말년에 큰 자산은 없어도 평생 본인 자리는 단단해요. 65세 전후로 사회보장·연금이 본인 받쳐줍니다. 자식한테 의지하기보다 본인 자리 지키세요. 작은 가게·소일거리가 잘 맞아요. 가족 행사에 너무 돈 쓰지 마세요.",
+    "ko": "말년에 큰 자산은 없어도 평생 본인 자리는 단단해요. 65세 전후로 사회보장·연금이 본인 받쳐줘요. 자식한테 의지하기보다 본인 자리 지키세요. 작은 가게·소일거리가 잘 맞아요. 가족 행사에 너무 돈 쓰지 마세요.",
     "en": "Late years no large estate but your character stays solid. Around sixty-five pensions and social security hold you. Hold your own seat rather than lean on children. A small shop or side work fits you. Do not overspend on family events."
   },
   "pyeongwan_early_strong": {
@@ -174,11 +174,11 @@
     "en": "Early on pressure lands early. Parents' and teachers' expectations press hard. That weight makes you stronger. In mid-teens one big exam comes. What matters is not the score but that you endured. Do not push yourself past your limit."
   },
   "pyeongwan_early_weak": {
-    "ko": "초년에 본인은 압력에 약해요. 작은 비난에도 흔들려요. 10세 경 본인을 다그치는 어른 한 명 옵니다. 그 사람 때문에 본인이 일찍 단단해져요. 그래도 본인을 너무 미워하지 마세요. 본인 강단은 천천히 살아나요.",
+    "ko": "초년에 본인은 압력에 약해요. 작은 비난에도 흔들려요. 10세 경 본인을 다그치는 어른 한 명 와요. 그 사람 때문에 본인이 일찍 단단해져요. 그래도 본인을 너무 미워하지 마세요. 본인 강단은 천천히 살아나요.",
     "en": "Early on pressure breaks you. Small criticism shakes you. Around ten a harsh adult arrives. Through that person you toughen up early. Do not hate yourself for it. Your edge wakes slowly."
   },
   "pyeongwan_mid_strong": {
-    "ko": "중년은 본인이 큰 책임을 지는 시기예요. 조직 안에서 리더 자리가 와요. 강하게 밀어붙이는 본인 추진력이 살아나요. 단, 30대 후반에 한 번 건강 잃습니다. 너무 밀어붙이지 마세요. 본인을 위한 휴식 시간을 강제로 만드세요.",
+    "ko": "중년은 본인이 큰 책임을 지는 시기예요. 조직 안에서 리더 자리가 와요. 강하게 밀어붙이는 본인 추진력이 살아나요. 단, 30대 후반에 한 번 몸이 닳습니다. 너무 밀어붙이지 마세요. 본인을 위한 휴식 시간을 강제로 만드세요.",
     "en": "Mid-years carry big responsibility. A leader's seat lands inside the organization. Your strong-push edge lights up. Around late thirties health takes a hit once. Stop pushing past the line. Force rest into your calendar."
   },
   "pyeongwan_mid_weak": {
@@ -198,7 +198,7 @@
     "en": "Early on you carry the honor-student grain. The school catches it fast. You receive adults' expectations well. Suppressing the rebel inside too long makes it explode. In late teens decide one thing by your own grain. Do not only follow adult answers."
   },
   "jeonggwan_early_weak": {
-    "ko": "초년에 규율 안에서 답답함을 느껴요. 본인은 정직한데 인정이 늦게 와요. 10세 경 본인을 알아봐주는 어른 한 명 옵니다. 그 사람이 본인의 길을 가르쳐줘요. 너무 본인을 작게 보지 마세요. 어른 한 마디가 본인을 살려요.",
+    "ko": "초년에 규율 안에서 답답함을 느껴요. 본인은 정직한데 인정이 늦게 와요. 10세 경 본인을 알아봐주는 어른 한 명 와요. 그 사람이 본인의 길을 가르쳐줘요. 너무 본인을 작게 보지 마세요. 어른 한 마디가 본인을 살려요.",
     "en": "Early on rules feel suffocating. You are honest but recognition comes late. Around ten one adult truly sees you. That person teaches you the road. Do not call yourself small. One adult's word saves you."
   },
   "jeonggwan_mid_strong": {
@@ -210,7 +210,7 @@
     "en": "Mid-years honest yet slow to rise. Someone faster takes the seat you wanted. Around thirty-five move once for your own grain. You suit your own name more than one company. Do not settle in too long."
   },
   "jeonggwan_late_strong": {
-    "ko": "말년은 본인 평판이 영구히 자리잡는 시기예요. 본인이 만든 자리는 다음 세대가 이어요. 단, 60대 중반에 본인을 시험하는 일이 한 번 더 와요. 그때 본인이 평생 지킨 신념으로 결정하세요. 흔들리지 마세요. 마지막까지 정직하면 본인이 이깁니다.",
+    "ko": "말년은 본인 평판이 영구히 자리잡는 시기예요. 본인이 만든 자리는 다음 세대가 이어요. 단, 60대 중반에 본인을 시험하는 일이 한 번 더 와요. 그때 본인이 평생 지킨 신념으로 결정하세요. 흔들리지 마세요. 마지막까지 정직하면 본인이 이겨요.",
     "en": "Late years your standing settles for good. The seat you built passes to the next generation. In mid-sixties one more test comes. Decide by the grain you held all your life. Do not waver. Honest to the end, you come out ahead."
   },
   "jeonggwan_late_weak": {
@@ -230,11 +230,11 @@
     "en": "Mid-years your expertise reaches the market. Your own angle pulls people in. Consulting, research, and planning fit you. Insisting only your view is right gets lonely. In late thirties question your own grain once. Take in other grains too."
   },
   "pyeonin_mid_weak": {
-    "ko": "중년에 본인 지식은 많은데 활용이 약해요. 머리에는 있는데 손이 안 따라가요. 35세 전후로 본인의 멘토 한 명 옵니다. 그 사람을 통해 본인 시야가 풀려나가요. 본인을 폐쇄적으로 만들지 마세요. 사람한테 본인 생각을 풀어놓으세요.",
+    "ko": "중년에 본인 지식은 많은데 활용이 약해요. 머리에는 있는데 손이 안 따라가요. 35세 전후로 본인의 멘토 한 명 와요. 그 사람을 통해 본인 시야가 풀려나가요. 본인을 폐쇄적으로 만들지 마세요. 사람한테 본인 생각을 풀어놓으세요.",
     "en": "Mid-years your knowledge is wide but the doing is thin. The head has it; the hand lags. Around thirty-five one mentor arrives. Through that person your grain opens up. Do not close yourself off. Let people see what you carry."
   },
   "pyeonin_late_strong": {
-    "ko": "말년은 본인이 평생 모은 지식을 정리하는 시기예요. 글·강의·아카이브로 정리하세요. 본인 글이 책 한 권이 돼요. 단, 60대 중반에 본인을 알아줄 사람이 줄어들어요. 그래도 본인 길을 계속 가세요. 본인을 알아줄 한 명은 마지막까지 옵니다.",
+    "ko": "말년은 본인이 평생 모은 지식을 정리하는 시기예요. 글·강의·아카이브로 정리하세요. 본인 글이 책 한 권이 돼요. 단, 60대 중반에 본인을 알아줄 사람이 줄어들어요. 그래도 본인 길을 계속 가세요. 본인을 알아줄 한 명은 마지막까지 와요.",
     "en": "Late years gather a lifetime of knowledge. Writing, lectures, archive — bring it together. Your grain becomes one book. In mid-sixties fewer people understand you. Keep going on your own road. One who truly sees you arrives to the end."
   },
   "pyeonin_late_weak": {
@@ -246,7 +246,7 @@
     "en": "Early on a mother or a female adult shields you closely. Study luck arrives early. You grow up near books. Heavy shielding slows your own grain. In late teens stand alone once. Do not lean only on your protector."
   },
   "jeongin_early_weak": {
-    "ko": "초년에 본인 받쳐주는 사람이 부족해요. 학문은 좋아하는데 환경이 안 따라줘요. 10세 경 본인을 알아주는 선생님 한 명 옵니다. 그 선생님 덕분에 본인 길이 보여요. 본인을 작게 보지 마세요. 책을 본인의 학문 색으로 만들어 가세요.",
+    "ko": "초년에 본인 받쳐주는 사람이 부족해요. 학문은 좋아하는데 환경이 안 따라줘요. 10세 경 본인을 알아주는 선생님 한 명 와요. 그 선생님 덕분에 본인 길이 보여요. 본인을 작게 보지 마세요. 책을 본인의 학문 색으로 만들어 가세요.",
     "en": "Early years lack a supporter for you. You love study but the environment lags. Around ten one teacher truly sees you. Through that teacher your road becomes visible. Do not call yourself small. Make books your grain."
   },
   "jeongin_mid_strong": {
@@ -254,7 +254,7 @@
     "en": "Mid-years your study and expertise shine publicly. Degrees, certifications, and research fit your grain. Staying only with books keeps the market away. In late thirties step outside with your work once. Show yourself to people."
   },
   "jeongin_mid_weak": {
-    "ko": "중년에 본인 공부는 길게 가는데 결과가 늦어요. 본인이 안 자랑하니 자리도 안 와요. 35세 전후로 본인을 끌어주는 어른 한 명 옵니다. 그 사람한테 본인 학문 결과를 보여주세요. 너무 겸손만 하지 마세요. 본인을 한 번은 꺼내세요.",
+    "ko": "중년에 본인 공부는 길게 가는데 결과가 늦어요. 본인이 안 자랑하니 자리도 안 와요. 35세 전후로 본인을 끌어주는 어른 한 명 와요. 그 사람한테 본인 학문 결과를 보여주세요. 너무 겸손만 하지 마세요. 본인을 한 번은 꺼내세요.",
     "en": "Mid-years study runs long but results arrive late. You do not boast, so seats do not come either. Around thirty-five an elder pulls you up. Show your grain to that person. Do not stay only humble. Step forward once."
   },
   "jeongin_late_strong": {

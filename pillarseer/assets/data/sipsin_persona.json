@@ -33,7 +33,7 @@
     "en": "Your color is sharp but you hide it inside the group. You lean on friends a lot. In late teens your color shows itself once. Stop following friends so much."
   },
   "bigyeon_2_persona": {
-    "ko": "자기 주장이 또렷한 타입이에요. 친구 무리 안에서도 본인 색이 보입니다. 단, 자기 고집이 한 번 충돌을 만들어요. 20대 후반에 친구 한 명을 정리할 일 와요. 단호하게 끊으세요. 본인 강점도 또렷합니다.",
+    "ko": "자기 주장이 또렷한 타입이에요. 친구 무리 안에서도 본인 색이 보여요. 단, 자기 고집이 한 번 충돌을 만들어요. 20대 후반에 친구 한 명을 정리할 일 와요. 단호하게 끊으세요. 본인 강점도 또렷합니다.",
     "en": "You hold your own clearly. Even inside a friend group, your color shows. Your stubbornness will trigger one clash. In late twenties one friend needs to be let go. Cut cleanly."
   },
   "bigyeon_3+_persona": {
@@ -49,7 +49,7 @@
     "en": "The pull toward peers and partners is strong. Your own venture suits you. Co-founding will hit a money clash once. Sort it cleanly in mid-thirties."
   },
   "bigyeon_3+_career": {
-    "ko": "본인이 한 팀의 중심이 돼요. 리더 자리가 자연스럽게 와요. 단, 본인이 너무 다 쥐면 팀이 무너져요. 35세 전후로 권한 나눠주세요. 한 번 단점이 됩니다.",
+    "ko": "본인이 한 팀의 중심이 돼요. 리더 자리가 자연스럽게 와요. 단, 본인이 너무 다 쥐면 팀이 무너져요. 35세 전후로 권한 나눠주세요. 한 번 단점이 돼요.",
     "en": "You become the center of any team. Leadership lands naturally. Holding everything tight collapses the team. Around thirty-five share authority."
   },
   "bigyeon_1_wealth": {
@@ -57,11 +57,11 @@
     "en": "You spend money following friends. Your own account lags behind theirs. In late twenties you finally guard your own account. Avoid spending you only do because friends do."
   },
   "bigyeon_2_wealth": {
-    "ko": "돈은 본인 일과 묶여 들어와요. 큰 한 방보다 본인이 굴리는 자산이 자라요. 30대 후반에 한 번 본인 사업 종잣돈이 모입니다. 큰 빚은 피하세요.",
+    "ko": "돈은 본인 일과 묶여 들어와요. 큰 한 방보다 본인이 굴리는 자산이 자라요. 30대 후반에 한 번 본인 사업 종잣돈이 모여요. 큰 빚은 피하세요.",
     "en": "Money flows with your work. Steady building beats one big shot. In late thirties your seed money for your own work gathers. Avoid heavy debt."
   },
   "bigyeon_3+_wealth": {
-    "ko": "본인이 만든 일이 돈을 끌어요. 큰 사람 모으는 자리에서 돈이 나옵니다. 단, 친구·동업자 돈 거래 한 번 터져요. 40대 초반에 단호하게 정리하세요. 한 번 단점이 됩니다.",
+    "ko": "본인이 만든 일이 돈을 끌어요. 큰 사람 모으는 자리에서 돈이 나와요. 단, 친구·동업자 돈 거래 한 번 터져요. 40대 초반에 단호하게 정리하세요. 한 번 단점이 돼요.",
     "en": "Work you create pulls money in. Money arrives where you gather people. One partner-money clash will land. In early forties sort it cleanly."
   },
   "bigyeon_1_love": {
@@ -77,11 +77,11 @@
     "en": "You take the lead in the relationship. You sit above the partner in decisions. That wears the partner down. Around thirty-five a big crisis lands. Hand over half the decisions."
   },
   "geopjae_1_persona": {
-    "ko": "본인은 정직한데 라이벌이 본인을 키워요. 비교에 약해 흔들립니다. 20대 초반에 본인보다 빠른 친구 한 명 옵니다. 비교하지 말고 본인 페이스 잡으세요.",
+    "ko": "본인은 정직한데 라이벌이 본인을 키워요. 비교에 약해 흔들려요. 20대 초반에 본인보다 빠른 친구 한 명 와요. 비교하지 말고 본인 페이스 잡으세요.",
     "en": "You are honest but rivals shape you. Comparison shakes you. In early twenties a friend running faster than you arrives. Hold your pace, do not compare."
   },
   "geopjae_2_persona": {
-    "ko": "승부욕이 또렷해서 학교·직장에서 눈에 띄어요. 단, 경쟁 한 번에 친구 잃습니다. 25세 전후로 그 일 옵니다. 라이벌은 동료로 만드세요.",
+    "ko": "승부욕이 또렷해서 학교·직장에서 눈에 띄어요. 단, 경쟁 한 번에 친구 잃습니다. 25세 전후로 그 일 와요. 라이벌은 동료로 만드세요.",
     "en": "Drive is visible at school or work. One competition will cost you a friend. Around twenty-five it lands. Turn rivals into peers."
   },
   "geopjae_3+_persona": {
@@ -105,7 +105,7 @@
     "en": "Money keeps going through friends. Money trades with friends cost you. Around twenty-five one lent-and-lost moment lands. Do not lend to friends."
   },
   "geopjae_2_wealth": {
-    "ko": "본인 돈을 친구가 한 번 가져갑니다. 30대 초반에 동업 제안 오면 거절하세요. 손은 빌려도 지갑은 따로 두세요. 한 번 단점이 됩니다.",
+    "ko": "본인 돈을 친구가 한 번 가져가요. 30대 초반에 동업 제안 오면 거절하세요. 손은 빌려도 지갑은 따로 두세요. 한 번 단점이 돼요.",
     "en": "A friend will take money from you once. In early thirties decline the partnership offer. Share hands, keep wallets separate."
   },
   "geopjae_3+_wealth": {
@@ -113,7 +113,7 @@
     "en": "You become the one holding the whole bag. Friends and partners spin on your money. One big loss lands. Around thirty-five sort cleanly."
   },
   "geopjae_1_love": {
-    "ko": "인연에서 본인이 너무 양보해요. 파트너 라이벌이 본인 자리를 위협하는 일 와요. 25세 전후로 그 위기 옵니다. 본인 자리는 본인이 지키세요.",
+    "ko": "인연에서 본인이 너무 양보해요. 파트너 라이벌이 본인 자리를 위협하는 일 와요. 25세 전후로 그 위기 와요. 본인 자리는 본인이 지키세요.",
     "en": "In love you give up too much. A partner-rival will threaten your spot. Around twenty-five that crisis hits. Hold your own ground."
   },
   "geopjae_2_love": {
@@ -121,23 +121,23 @@
     "en": "You are drawn to love with competition. A rival showing up wakes you. Watching only the contest misses the real feeling. Around thirty stop once."
   },
   "geopjae_3+_love": {
-    "ko": "본인은 늘 경쟁 안의 인연만 만나요. 본인보다 강한 파트너랑 부딪힙니다. 단, 그 부딪힘이 본인을 키워요. 35세 전후로 동등한 파트너 한 명 옵니다. 한 번 단점이 됩니다.",
+    "ko": "본인은 늘 경쟁 안의 인연만 만나요. 본인보다 강한 파트너랑 부딪힙니다. 단, 그 부딪힘이 본인을 키워요. 35세 전후로 동등한 파트너 한 명 와요. 한 번 단점이 돼요.",
     "en": "You only meet partners inside a contest. You clash with stronger ones than you. Those clashes raise you. Around thirty-five one equal partner arrives."
   },
   "siksin_1_persona": {
-    "ko": "안에는 풍부한데 표현이 늦어요. 글·그림·노래 중 하나가 본인 통로예요. 20대 초반에 본인 작품 한 번 보여줄 자리 옵니다. 부끄러워하지 마세요.",
+    "ko": "안에는 풍부한데 표현이 늦어요. 글·그림·노래 중 하나가 본인 통로예요. 20대 초반에 본인 작품 한 번 보여줄 자리 와요. 부끄러워하지 마세요.",
     "en": "You hold richness inside but expression lags. Writing, drawing, or singing — one becomes your channel. In early twenties one show-yourself moment comes. Do not hide."
   },
   "siksin_2_persona": {
-    "ko": "표현력이 강해서 친구들이 본인 작품을 기다려요. 단, 칭찬에 약해 한 번 휘둘려요. 25세 전후로 매니지먼트 잘못 만나면 손해입니다. 본인 톤을 끝까지 지키세요.",
+    "ko": "표현력이 강해서 친구들이 본인 작품을 기다려요. 단, 칭찬에 약해 한 번 휘둘려요. 25세 전후로 매니지먼트 잘못 만나면 손해예요. 본인 톤을 끝까지 지키세요.",
     "en": "Your expression is strong; friends wait for your work. You are weak to praise — one push lands. In late twenties wrong management costs you. Hold your tone to the end."
   },
   "siksin_3+_persona": {
-    "ko": "본인 표현이 곧 직업이 돼요. 콘텐츠·예술·요리 같은 창작이 본인 색이에요. 단, 본인 작품에 너무 동일시하면 비판에 무너져요. 30대 초반에 한 번 거리 두는 법 배우세요. 그 길로 가면 잘 풀려요. 한 번 단점이 됩니다.",
+    "ko": "본인 표현이 곧 직업이 돼요. 콘텐츠·예술·요리 같은 창작이 본인 색이에요. 단, 본인 작품에 너무 동일시하면 비판에 무너져요. 30대 초반에 한 번 거리 두는 법 배우세요. 그 길로 가면 잘 풀려요. 한 번 단점이 돼요.",
     "en": "Your expression becomes your work. Creation — content, art, cooking — is your shape. Identifying too tight with your work breaks you under criticism. In early thirties learn distance."
   },
   "siksin_1_career": {
-    "ko": "안정적인 사무·기획이 본인을 받쳐줘요. 창작은 부업으로 시작하세요. 30대 초반에 본업 외 첫 부수입 와요. 그때 작은 것부터 키우세요. 한 번 단점이 됩니다.",
+    "ko": "안정적인 사무·기획이 본인을 받쳐줘요. 창작은 부업으로 시작하세요. 30대 초반에 본업 외 첫 부수입 와요. 그때 작은 것부터 키우세요. 한 번 단점이 돼요.",
     "en": "Stable desk or planning work supports you. Start creation as a side. In early thirties your first side income lands. Grow it from small."
   },
   "siksin_2_career": {
@@ -157,7 +157,7 @@
     "en": "Your content becomes money. Stage, talks, and media income diversify. One copyright dispute will land. Around thirty-five register your work first."
   },
   "siksin_3+_wealth": {
-    "ko": "본인 이름이 곧 자산이 됩니다. IP·콘텐츠가 평생 본인을 먹여 살려요. 단, 매니저·법인 한 번 잘못 만나면 큰 손실 와요. 40대 초반에 본인 직접 계약 챙기세요.",
+    "ko": "본인 이름이 곧 자산이 돼요. IP·콘텐츠가 평생 본인을 먹여 살려요. 단, 매니저·법인 한 번 잘못 만나면 큰 손실 와요. 40대 초반에 본인 직접 계약 챙기세요.",
     "en": "Your name becomes an asset. IP and content feed you for life. One wrong manager or company costs heavily. In early forties handle your contracts directly."
   },
   "siksin_1_love": {
@@ -169,7 +169,7 @@
     "en": "You match best with artistic, creative partners. Making together is your love grain. Putting work first makes the partner lonely. Around thirty rework your time split."
   },
   "siksin_3+_love": {
-    "ko": "본인은 늘 본인 표현 안에 살아요. 파트너가 본인의 뮤즈가 되거나, 본인이 파트너의 뮤즈가 돼요. 단, 한 번 큰 권태기 옵니다. 35세 전후로 표현 외 시간 만드세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 늘 본인 표현 안에 살아요. 파트너가 본인의 뮤즈가 되거나, 본인이 파트너의 뮤즈가 돼요. 단, 한 번 큰 권태기 와요. 35세 전후로 표현 외 시간 만드세요. 그 길로 가면 잘 풀려요.",
     "en": "You live inside your expression. The partner becomes your muse or you become theirs. One big plateau will land. Around thirty-five carve out time outside your work."
   },
   "sanggwan_1_persona": {
@@ -177,11 +177,11 @@
     "en": "You have wit but normally hold it. Writing pulls your truth out better than speech. Around twenty your first praised piece lands. Stop watching adults' faces."
   },
   "sanggwan_2_persona": {
-    "ko": "머리 회전이 빠르고 입담이 셉니다. 어른한테도 본인 할 말 다 해요. 단, 한 번 SNS에서 시끄러워져요. 25세 전후로 침묵하는 법 배우세요. 한 번 단점이 됩니다.",
+    "ko": "머리 회전이 빠르고 입담이 셉니다. 어른한테도 본인 할 말 다 해요. 단, 한 번 SNS에서 시끄러워져요. 25세 전후로 침묵하는 법 배우세요. 한 번 단점이 돼요.",
     "en": "Fast mind, sharp tongue. Even to adults you speak your mind. One online flare will land. In late twenties learn silence."
   },
   "sanggwan_3+_persona": {
-    "ko": "본인 입은 본인 무기인데 본인 무덤이 됩니다. 천재성과 반항심이 함께 강해요. 단, 30대 초반에 한 번 큰 입 손해 와요. 그 뒤 본인 말이 깊어집니다.",
+    "ko": "본인 입은 본인 무기인데 본인 무덤이 돼요. 천재성과 반항심이 함께 강해요. 단, 30대 초반에 한 번 큰 입 손해 와요. 그 뒤 본인 말이 깊어집니다.",
     "en": "Your mouth is your weapon and could be your grave. Genius and rebel sit together. In early thirties one big slip lands. Your speech deepens after."
   },
   "sanggwan_1_career": {
@@ -201,11 +201,11 @@
     "en": "Small income comes from your writing. Not boasting delays the seat. In early thirties a chance to show your writing arrives. Do not feel shy."
   },
   "sanggwan_2_wealth": {
-    "ko": "본인 콘텐츠가 돈을 끌어요. 광고·협찬·강연 수입 다 본인 입에서 나옵니다. 단, 한 번 본인 입으로 큰 광고 떨어집니다. 35세 전후로 그 일 옵니다. 입조심하세요.",
+    "ko": "본인 콘텐츠가 돈을 끌어요. 광고·협찬·강연 수입 다 본인 입에서 나와요. 단, 한 번 본인 입으로 큰 광고 떨어져요. 35세 전후로 그 일 와요. 입을 한 번 더 다물어요.",
     "en": "Your content pulls money. Ads, sponsorships, talk fees — all from your mouth. One big deal will fall over a slip. Around thirty-five it lands. Watch your mouth."
   },
   "sanggwan_3+_wealth": {
-    "ko": "본인 이름이 곧 브랜드가 됩니다. 큰 강연료·미디어 출연료가 본인 자산이에요. 단, 한 번 본인 입 때문에 평판 손실 옵니다. 40대 초반에 위기관리팀 만드세요.",
+    "ko": "본인 이름이 곧 브랜드가 돼요. 큰 강연료·미디어 출연료가 본인 자산이에요. 단, 한 번 본인 입 때문에 평판 손실 와요. 40대 초반에 위기관리팀 만드세요.",
     "en": "Your name becomes a brand. Big talk fees and media payouts are your assets. One reputation hit lands from your mouth. In early forties build a crisis team."
   },
   "sanggwan_1_love": {
@@ -213,7 +213,7 @@
     "en": "You are quiet day-to-day but write love through text. Speaking is awkward. Around twenty-five a partner pulled in by your texts arrives. Your writing is your weapon."
   },
   "sanggwan_2_love": {
-    "ko": "대화가 잘 통하는 빠릿한 파트너랑 잘 맞아요. 너무 무뚝뚝한 타입은 본인이 답답해해요. 단, 본인 말이 파트너 상처 주는 일 한 번 와요. 30세 전후로 말 거르세요. 한 번 단점이 됩니다.",
+    "ko": "대화가 잘 통하는 빠릿한 파트너랑 잘 맞아요. 너무 무뚝뚝한 타입은 본인이 답답해해요. 단, 본인 말이 파트너 상처 주는 일 한 번 와요. 30세 전후로 말 거르세요. 한 번 단점이 돼요.",
     "en": "You match best with quick, witty partners. Quiet, blunt types make you suffocate. One sharp word will hurt the partner once. Around thirty filter what you say."
   },
   "sanggwan_3+_love": {
@@ -221,15 +221,15 @@
     "en": "Your love is built on words. Debate and argument are love language for you. One big break will land over words. Around thirty-five learn to hold the partner in silence."
   },
   "pyeonjae_1_persona": {
-    "ko": "돈 보는 눈은 있는데 본인 손에 안 잡혀요. 친구들 사이에서 셈은 빨라요. 25세 전후로 본인 첫 부수입 와요. 작은 거래부터 챙기세요. 한 번 단점이 됩니다.",
+    "ko": "돈 보는 눈은 있는데 본인 손에 안 잡혀요. 친구들 사이에서 셈은 빨라요. 25세 전후로 본인 첫 부수입 와요. 작은 거래부터 챙기세요. 한 번 단점이 돼요.",
     "en": "You have an eye for money but it slips through your hand. Your math is fast among friends. In late twenties your first side income lands. Build from small trades."
   },
   "pyeonjae_2_persona": {
-    "ko": "활동적이고 외향적이에요. 사람 통해 돈 돈길이 보입니다. 단, 술·도박·과소비 한 번 빠집니다. 30대 초반에 본인을 한 번 멈추세요. 그 길로 가면 잘 풀려요.",
+    "ko": "활동적이고 외향적이에요. 사람 통해 돈 돈길이 보여요. 단, 술·도박·과소비 한 번 빠져요. 30대 초반에 본인을 한 번 멈추세요. 그 길로 가면 잘 풀려요.",
     "en": "Active and outgoing. You see money lanes through people. One slip into drinking, gambling, or overspend lands. In early thirties stop yourself once."
   },
   "pyeonjae_3+_persona": {
-    "ko": "본인 색은 화려하고 외향적이에요. 사람 모으는 자리에서 살아납니다. 단, 한 번에 다 가지려 해서 큰 손실 와요. 35세 전후로 욕심을 한 번 꺾으세요.",
+    "ko": "본인 색은 화려하고 외향적이에요. 사람 모으는 자리에서 살아나요. 단, 한 번에 다 가지려 해서 큰 손실 와요. 35세 전후로 욕심을 한 번 꺾으세요.",
     "en": "Your color is bright and outgoing. People-gathering rooms wake you. Trying to grab it all brings one big loss. Around thirty-five rein in greed."
   },
   "pyeonjae_1_career": {
@@ -237,15 +237,15 @@
     "en": "A stable main job plus side income fits you. Start a venture or invest small. In early thirties your first side work lands. Do not drop the main job."
   },
   "pyeonjae_2_career": {
-    "ko": "본인은 사업·세일즈·중개 직업이 잘 맞아요. 사람 통해 돈이 흘러요. 단, 한 번 큰 클라이언트 잃어요. 35세 전후로 그 일 옵니다. 한 거래에 너무 의존 마세요.",
+    "ko": "본인은 사업·세일즈·중개 직업이 잘 맞아요. 사람 통해 돈이 흘러요. 단, 한 번 큰 클라이언트 잃어요. 35세 전후로 그 일 와요. 한 거래에 너무 의존 마세요.",
     "en": "Sales, brokering, founder work fit you. Money flows through people. One major client lost will land. Around thirty-five it hits. Do not depend on one deal."
   },
   "pyeonjae_3+_career": {
-    "ko": "본인은 큰 시장 만드는 사업가 쪽이에요. 부동산·금융·유통 같은 일이 잘 풀려요. 단, 너무 크게 벌이면 한 번 무너집니다. 40대 초반에 한 번 다운사이즈 와요. 그때 단호하게 줄이세요.",
+    "ko": "본인은 큰 시장 만드는 사업가 쪽이에요. 부동산·금융·유통 같은 일이 잘 풀려요. 단, 너무 크게 벌이면 한 번 무너져요. 40대 초반에 한 번 다운사이즈 와요. 그때 단호하게 줄이세요.",
     "en": "You are a market-making founder type. Real estate, finance, distribution flow well. Going too big triggers one collapse. In early forties a downsize lands. Cut cleanly then."
   },
   "pyeonjae_1_wealth": {
-    "ko": "돈은 본업 외부에서 들어와요. 보너스·선물·뜻밖 수입이 잘 들어와요. 25세 전후로 처음 큰 돈 한 번 만져요. 모으는 습관을 그때 잡으세요. 한 번 단점이 됩니다.",
+    "ko": "돈은 본업 외부에서 들어와요. 보너스·선물·뜻밖 수입이 잘 들어와요. 25세 전후로 처음 큰 돈 한 번 만져요. 모으는 습관을 그때 잡으세요. 한 번 단점이 돼요.",
     "en": "Money arrives outside the main job. Bonuses, gifts, surprise income flow well. Around twenty-five you first touch a real sum. Build the saving habit then."
   },
   "pyeonjae_2_wealth": {
@@ -257,7 +257,7 @@
     "en": "Money flows in from outside all your life. Big deals and M&A are your seat. One scam or partner fraud lands. In early forties handle contracts directly."
   },
   "pyeonjae_1_love": {
-    "ko": "인연은 모임·여행·외부 활동에서 만나요. 본인 일터에서는 잘 안 만나요. 25세 전후로 한 모임에서 인연 한 명 와요. 외부 활동 늘리세요. 한 번 단점이 됩니다.",
+    "ko": "인연은 모임·여행·외부 활동에서 만나요. 본인 일터에서는 잘 안 만나요. 25세 전후로 한 모임에서 인연 한 명 와요. 외부 활동 늘리세요. 한 번 단점이 돼요.",
     "en": "Love arrives through gatherings, travel, outside activities. Not from the workplace. Around twenty-five a meeting brings one partner. Increase outside activity."
   },
   "pyeonjae_2_love": {
@@ -269,7 +269,7 @@
     "en": "You stay in attraction mode. Popular but slow to settle on one. Around thirty-five one real partner arrives. Decide to settle then. Anchor yourself to one."
   },
   "jeongjae_1_persona": {
-    "ko": "본인은 정직하고 꾸준해요. 안정 자리에서 본인이 살아요. 25세 전후로 본인 첫 적금이 채워져요. 안 큰 돈을 작게 모으는 게 본인 색이에요. 한 번 단점이 됩니다.",
+    "ko": "본인은 정직하고 꾸준해요. 안정 자리에서 본인이 살아요. 25세 전후로 본인 첫 적금이 채워져요. 안 큰 돈을 작게 모으는 게 본인 색이에요. 한 번 단점이 돼요.",
     "en": "Honest, steady. Stable seats keep you alive. Around twenty-five your first saving plan completes. Small steady saving is your shape."
   },
   "jeongjae_2_persona": {
@@ -281,7 +281,7 @@
     "en": "You are a money-management master. A big-asset seat arrives. Running it too tight wears you down. Around thirty-five splurge on yourself once."
   },
   "jeongjae_1_career": {
-    "ko": "본인은 공무원·은행·회계 같은 안정 직업이 잘 맞아요. 큰 도전은 늦게 와도 본인은 단단해요. 30대 초반에 본인 자리가 안정됩니다. 큰 빚 만들지 마세요.",
+    "ko": "본인은 공무원·은행·회계 같은 안정 직업이 잘 맞아요. 큰 도전은 늦게 와도 본인은 단단해요. 30대 초반에 본인 자리가 안정돼요. 큰 빚 만들지 마세요.",
     "en": "Civil service, banking, accounting fit you. Big challenges come late but you stay solid. In early thirties your seat stabilizes. Avoid heavy debt."
   },
   "jeongjae_2_career": {
@@ -289,7 +289,7 @@
     "en": "You manage the home well. Company finance, executive support seats fit. Staying too long in one company stalls you. Around thirty-five weigh a move."
   },
   "jeongjae_3+_career": {
-    "ko": "본인은 큰 자산을 다루는 직업이 자리예요. 자산운용·회계·금융 임원 같은 자리에 오릅니다. 단, 한 번 큰 책임 떨어지는 시기 와요. 40대 초반에 그 일 옵니다. 그때 단호하게 처리하세요. 한 번 단점이 됩니다.",
+    "ko": "본인은 큰 자산을 다루는 직업이 자리예요. 자산운용·회계·금융 임원 같은 자리에 오릅니다. 단, 한 번 큰 책임 떨어지는 시기 와요. 40대 초반에 그 일 와요. 그때 단호하게 처리하세요. 한 번 단점이 돼요.",
     "en": "A big-asset role is your seat. Asset management, accounting, finance leadership rise to you. One major responsibility drops once. In early forties it lands. Handle it cleanly."
   },
   "jeongjae_1_wealth": {
@@ -301,7 +301,7 @@
     "en": "Steady income — salary, pension, rent — flows in. Assets stay solid. Sitting still costs you one chance. In late thirties invest once."
   },
   "jeongjae_3+_wealth": {
-    "ko": "본인 평생 돈은 본인이 컨트롤해요. 큰 자산·부동산을 손에 쥐어요. 단, 한 번 큰 결정 와요. 40대 중반에 가족 자산 분배 정리하세요. 가족 분쟁 막으세요. 한 번 단점이 됩니다.",
+    "ko": "본인 평생 돈은 본인이 컨트롤해요. 큰 자산·부동산을 손에 쥐어요. 단, 한 번 큰 결정 와요. 40대 중반에 가족 자산 분배 정리하세요. 가족 분쟁 막으세요. 한 번 단점이 돼요.",
     "en": "You control your money for life. Big assets and property rest in your hand. One big decision lands. In mid-forties sort family asset division. Prevent family disputes."
   },
   "jeongjae_1_love": {
@@ -309,15 +309,15 @@
     "en": "Steady partners pull you in, not flashy ones. Around twenty-five a serious match arrives. Do not hesitate then."
   },
   "jeongjae_2_love": {
-    "ko": "본인은 결혼 성향이 또렷해요. 책임감 있는 파트너랑 오래 갑니다. 단, 너무 안정만 챙겨 설렘이 약해져요. 30세 전후로 새로운 자극 한 번 만드세요.",
+    "ko": "본인은 결혼 성향이 또렷해요. 책임감 있는 파트너랑 오래 가요. 단, 너무 안정만 챙겨 설렘이 약해져요. 30세 전후로 새로운 자극 한 번 만드세요.",
     "en": "You carry a clear marriage grain. Responsible partners last with you long. Chasing only safety dims the spark. Around thirty add one new stimulus."
   },
   "jeongjae_3+_love": {
-    "ko": "본인은 가정의 중심이에요. 파트너·자녀·부모 모두 본인 돈으로 굴러요. 단, 본인이 다 짊어져 한 번 번아웃 옵니다. 40대 초반에 짐 나누세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 가정의 중심이에요. 파트너·자녀·부모 모두 본인 돈으로 굴러요. 단, 본인이 다 짊어져 한 번 번아웃 와요. 40대 초반에 짐 나누세요. 그 길로 가면 잘 풀려요.",
     "en": "You are the household center. Partner, kids, parents — all run on your money. Carrying all alone brings burnout once. In early forties share the load."
   },
   "pyeongwan_1_persona": {
-    "ko": "본인은 압력에 약해 흔들립니다. 작은 비난에도 본인이 움츠러들어요. 20대 초반에 본인 다그치는 어른 한 명 옵니다. 그래도 본인을 너무 미워하지 마세요.",
+    "ko": "본인은 압력에 약해 흔들려요. 작은 비난에도 본인이 움츠러들어요. 20대 초반에 본인 다그치는 어른 한 명 와요. 그래도 본인을 너무 미워하지 마세요.",
     "en": "You break under pressure. Small criticism shrinks you. In early twenties a harsh adult arrives. Do not hate yourself for it."
   },
   "pyeongwan_2_persona": {
@@ -329,19 +329,19 @@
     "en": "You carry strong drive and charisma. Military, police, athletics fit your shape. One power loss lands. In early forties it hits. Accept it cleanly."
   },
   "pyeongwan_1_career": {
-    "ko": "본인은 권한 없는 자리에서 책임만 떠안아요. 너무 부담되는 직업은 본인이 닳아요. 30대 초반에 한 번 자리 바꾸세요. 한 자리에 너무 오래 머물지 마세요. 한 번 단점이 됩니다.",
+    "ko": "본인은 권한 없는 자리에서 책임만 떠안아요. 너무 부담되는 직업은 본인이 닳아요. 30대 초반에 한 번 자리 바꾸세요. 한 자리에 너무 오래 머물지 마세요. 한 번 단점이 돼요.",
     "en": "You hold responsibility without authority. Heavy jobs wear you. In early thirties move once. Do not stay too long in one seat."
   },
   "pyeongwan_2_career": {
-    "ko": "본인은 조직 안에서 리더 자리가 와요. 강하게 밀어붙이는 본인 추진력이 살아납니다. 단, 30대 후반에 한 번 몸이 닳습니다. 휴식 시간을 강제로 만드세요.",
+    "ko": "본인은 조직 안에서 리더 자리가 와요. 강하게 밀어붙이는 본인 추진력이 살아나요. 단, 30대 후반에 한 번 몸이 닳습니다. 휴식 시간을 강제로 만드세요.",
     "en": "Leadership lands in your organization. Your push wakes up. In late thirties health takes a hit. Force rest into your calendar."
   },
   "pyeongwan_3+_career": {
-    "ko": "본인은 권력 자리의 사람이에요. 군대·법조·정치·대기업 임원이 본인 자리입니다. 단, 한 번 큰 정치 싸움 와요. 45세 전후로 그 일 옵니다. 미리 본인 라인을 만드세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 권력 자리의 사람이에요. 군대·법조·정치·대기업 임원이 본인 자리예요. 단, 한 번 큰 정치 싸움 와요. 45세 전후로 그 일 와요. 미리 본인 라인을 만드세요. 그 길로 가면 잘 풀려요.",
     "en": "You are a power-seat person. Military, law, politics, executive seats are yours. One political fight lands. Around forty-five it hits. Build your line in advance."
   },
   "pyeongwan_1_wealth": {
-    "ko": "본인 돈은 자주 위태로워요. 큰 책임 떨어지면 자산이 빠집니다. 25세 전후로 본인 첫 비상자금 만드세요. 그 길로 가면 잘 풀려요. 비상금 없으면 본인이 무너져요.",
+    "ko": "본인 돈은 자주 위태로워요. 큰 책임 떨어지면 자산이 빠져요. 25세 전후로 본인 첫 비상자금 만드세요. 그 길로 가면 잘 풀려요. 비상금 없으면 본인이 무너져요.",
     "en": "Your money sits at risk often. Big duties drain assets. In late twenties build your first emergency fund. Without it you collapse."
   },
   "pyeongwan_2_wealth": {
@@ -349,23 +349,23 @@
     "en": "Your money drains often to big duties — kids' fees, parents' care. Your drive refills it. Around thirty-five park your retirement money separately."
   },
   "pyeongwan_3+_wealth": {
-    "ko": "본인은 큰 자산을 큰 책임 안에서 굴립니다. 정치자금·법인 자산 같은 무거운 돈이 본인 손에 들어와요. 단, 한 번 법적 다툼 와요. 40대 중반에 변호사 미리 챙기세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 큰 자산을 큰 책임 안에서 굴려요. 정치자금·법인 자산 같은 무거운 돈이 본인 손에 들어와요. 단, 한 번 법적 다툼 와요. 40대 중반에 변호사 미리 챙기세요. 그 길로 가면 잘 풀려요.",
     "en": "You move big money inside big duties. Political funds, corporate assets sit in your hand. One legal dispute lands. In mid-forties retain a lawyer in advance."
   },
   "pyeongwan_1_love": {
-    "ko": "본인은 강한 파트너 앞에서 흔들립니다. 자존감 약해지는 인연 옵니다. 25세 전후로 그 일 와요. 본인을 깎는 사람은 피하세요.",
+    "ko": "본인은 강한 파트너 앞에서 흔들려요. 자존감 약해지는 인연 와요. 25세 전후로 그 일 와요. 본인을 깎는 사람은 피하세요.",
     "en": "You shake before strong partners. A self-eroding match lands. Around twenty-five it hits. Avoid people who shrink you."
   },
   "pyeongwan_2_love": {
-    "ko": "본인은 강한 파트너에 끌려요. 본인을 다그치는 사람한테 빠집니다. 단, 그 관계가 본인을 키우거나 무너뜨립니다. 30세 전후로 본인 자리 챙기세요. 한 번 단점이 됩니다.",
+    "ko": "본인은 강한 파트너에 끌려요. 본인을 다그치는 사람한테 빠져요. 단, 그 관계가 본인을 키우거나 무너뜨립니다. 30세 전후로 본인 자리 챙기세요. 한 번 단점이 돼요.",
     "en": "Strong partners pull you in. You fall for the one who pushes you. That bond can build or break you. Around thirty hold your own ground."
   },
   "pyeongwan_3+_love": {
-    "ko": "본인 사랑은 늘 전쟁터예요. 강한 파트너랑 부딪히며 살아납니다. 단, 한 번 깊은 이별 와요. 35세 전후로 그 일 옵니다. 그 뒤 본인이 더 단단해져요.",
+    "ko": "본인 사랑은 늘 전쟁터예요. 강한 파트너랑 부딪히며 살아나요. 단, 한 번 깊은 이별 와요. 35세 전후로 그 일 와요. 그 뒤 본인이 더 단단해져요.",
     "en": "Your love is a battlefield. You wake up clashing with strong partners. One deep break lands. Around thirty-five it hits. You harden after."
   },
   "jeonggwan_1_persona": {
-    "ko": "본인은 정직한데 인정이 늦게 와요. 규율 안에서 답답해해요. 20대 초반에 본인을 알아주는 어른 한 명 옵니다. 그 사람한테 본인 꺼내 보이세요.",
+    "ko": "본인은 정직한데 인정이 늦게 와요. 규율 안에서 답답해해요. 20대 초반에 본인을 알아주는 어른 한 명 와요. 그 사람한테 본인 꺼내 보이세요.",
     "en": "Honest but recognition lags. You suffocate inside rules. In early twenties one adult truly sees you. Show yourself to that person."
   },
   "jeonggwan_2_persona": {
@@ -377,7 +377,7 @@
     "en": "Honor and reputation matter to you for life. Morality and honesty are your color. Holding face too tight gets lonely. Around thirty-five speak your true feeling once."
   },
   "jeonggwan_1_career": {
-    "ko": "본인은 정직한데 출세 늦어요. 본인 자리를 빠른 사람이 먼저 가져갑니다. 30대 초반에 본인 이름 거는 일 옮기세요. 한 회사에 너무 안주하지 마세요.",
+    "ko": "본인은 정직한데 출세 늦어요. 본인 자리를 빠른 사람이 먼저 가져가요. 30대 초반에 본인 이름 거는 일 옮기세요. 한 회사에 너무 안주하지 마세요.",
     "en": "Honest but slow to rise. Faster people take your seat first. In early thirties move once for your own name. Do not settle in too long."
   },
   "jeonggwan_2_career": {
@@ -385,7 +385,7 @@
     "en": "An honor seat lands in your organization. Civil service, teaching, law fit you. In late thirties you almost lose your color. Keep your inner voice alive."
   },
   "jeonggwan_3+_career": {
-    "ko": "본인은 평판이 곧 자산이 됩니다. 큰 사람들 앞에서 본인 이름이 단단해요. 단, 한 번 평판 위기 와요. 40대 초반에 그 일 옵니다. 그때 본인이 평생 지킨 신념으로 결정하세요.",
+    "ko": "본인은 평판이 곧 자산이 돼요. 큰 사람들 앞에서 본인 이름이 단단해요. 단, 한 번 평판 위기 와요. 40대 초반에 그 일 와요. 그때 본인이 평생 지킨 신념으로 결정하세요.",
     "en": "Your reputation becomes your asset. Your name stands solid before big rooms. One reputation crisis lands. In early forties it hits. Decide by the principles you held all your life."
   },
   "jeonggwan_1_wealth": {
@@ -393,7 +393,7 @@
     "en": "Your money is salary-driven. Side income is thin. In early thirties your first home arrives. Avoid stretched loans then."
   },
   "jeonggwan_2_wealth": {
-    "ko": "본인 자산은 명예 자산이에요. 직장 연차·연금·자가가 본인 자산이에요. 단, 한 번 큰 결정 와요. 35세 전후로 이직·창업 사이 본인이 고민합니다. 안정 쪽을 잡으세요. 한 번 단점이 됩니다.",
+    "ko": "본인 자산은 명예 자산이에요. 직장 연차·연금·자가가 본인 자산이에요. 단, 한 번 큰 결정 와요. 35세 전후로 이직·창업 사이 본인이 고민합니다. 안정 쪽을 잡으세요. 한 번 단점이 돼요.",
     "en": "Honor assets — tenure, pension, home — are yours. One big decision lands. Around thirty-five you weigh switch versus stay. Choose stability."
   },
   "jeonggwan_3+_wealth": {
@@ -405,15 +405,15 @@
     "en": "You are pulled in by serious partners. Solid people are your shape. Around twenty-five a marriage-grain match arrives. Speak your real feeling then."
   },
   "jeonggwan_2_love": {
-    "ko": "본인은 결혼 일찍 결정해요. 책임감 있는 파트너랑 오래 갑니다. 단, 너무 체면 챙겨 파트너가 답답해해요. 30세 전후로 본인 진심 한 번 꺼내세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 결혼 일찍 결정해요. 책임감 있는 파트너랑 오래 가요. 단, 너무 체면 챙겨 파트너가 답답해해요. 30세 전후로 본인 진심 한 번 꺼내세요. 그 길로 가면 잘 풀려요.",
     "en": "You decide marriage early. Responsible partners last long with you. Holding face too tight makes the partner suffocate. Around thirty open up your truth once."
   },
   "jeonggwan_3+_love": {
-    "ko": "본인 사랑은 평생 가는 결혼 쪽이에요. 한 번 정한 파트너랑 끝까지 갑니다. 단, 너무 정직만 챙겨 파트너 감정 놓치는 일 와요. 35세 전후로 감정 표현 늘리세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인 사랑은 평생 가는 결혼 쪽이에요. 한 번 정한 파트너랑 끝까지 가요. 단, 너무 정직만 챙겨 파트너 감정 놓치는 일 와요. 35세 전후로 감정 표현 늘리세요. 그 길로 가면 잘 풀려요.",
     "en": "Your love is a lifetime marriage grain. With the partner you chose, you stay to the end. Holding only honesty misses the partner's feeling. Around thirty-five express more."
   },
   "pyeonin_1_persona": {
-    "ko": "본인은 호기심은 많은데 한 분야에 오래 못 머물러요. 흥미는 많은데 깊이 들어가는 게 어려워요. 20대 초반에 본인이 진심으로 빠지는 분야 한 번 옵니다. 그때 본인을 묶어두세요. 한 번 단점이 됩니다.",
+    "ko": "본인은 호기심은 많은데 한 분야에 오래 못 머물러요. 흥미는 많은데 깊이 들어가는 게 어려워요. 20대 초반에 본인이 진심으로 빠지는 분야 한 번 와요. 그때 본인을 묶어두세요. 한 번 단점이 돼요.",
     "en": "Curious but cannot stay long in one field. Many interests, little depth. In early twenties one field truly pulls you in. Anchor yourself there."
   },
   "pyeonin_2_persona": {
@@ -433,7 +433,7 @@
     "en": "Consulting, research, planning fit you. Your own angle pulls people. In late thirties someone questions your view. Stay in your color."
   },
   "pyeonin_3+_career": {
-    "ko": "본인은 평생 본인 분야의 거장이 됩니다. 비주류 지식이 본인을 키워요. 단, 시장이 본인을 알아주는 데 오래 걸려요. 40대 초반에 본인 첫 큰 인정 와요. 끝까지 본인 길 가세요. 한 번 단점이 됩니다.",
+    "ko": "본인은 평생 본인 분야의 거장이 돼요. 비주류 지식이 본인을 키워요. 단, 시장이 본인을 알아주는 데 오래 걸려요. 40대 초반에 본인 첫 큰 인정 와요. 끝까지 본인 길 가세요. 한 번 단점이 돼요.",
     "en": "You become a master in your niche. The off-the-beaten knowledge raises you. The market recognizes you slowly. In early forties first big recognition lands. Stay on your road to the end."
   },
   "pyeonin_1_wealth": {
@@ -441,11 +441,11 @@
     "en": "Side income flows sometimes. No big one shot. In early thirties your niche turns into small money. Save the small bits."
   },
   "pyeonin_2_wealth": {
-    "ko": "본인 지식이 돈이 됩니다. 강의·컨설팅·책 같은 본인 색 수입 와요. 단, 큰 자산은 늦게 모입니다. 35세 전후로 작은 사업 자리 잡으세요.",
+    "ko": "본인 지식이 돈이 돼요. 강의·컨설팅·책 같은 본인 색 수입 와요. 단, 큰 자산은 늦게 모여요. 35세 전후로 작은 사업 자리 잡으세요.",
     "en": "Your knowledge becomes money. Talks, consulting, books bring income. Big assets gather late. Around thirty-five settle a small business."
   },
   "pyeonin_3+_wealth": {
-    "ko": "본인 평생 자산은 본인 머리 안에 있습니다. 본인 지식·IP가 곧 자산입니다. 단, 한 번 본인 작품 빼앗기는 일 와요. 40대 초반에 저작권·계약 직접 챙기세요.",
+    "ko": "본인 평생 자산은 본인 머리 안에 있습니다. 본인 지식·IP가 곧 자산이에요. 단, 한 번 본인 작품 빼앗기는 일 와요. 40대 초반에 저작권·계약 직접 챙기세요.",
     "en": "Your lifelong asset is in your head. Your knowledge and IP are wealth. One theft of your work lands. In early forties handle copyright and contracts directly."
   },
   "pyeonin_1_love": {
@@ -457,11 +457,11 @@
     "en": "Intellectual partners suit you. Reading, exhibitions, learning together is your love. Around thirty being too closed makes the partner lonely. Increase social activity."
   },
   "pyeonin_3+_love": {
-    "ko": "본인 사랑은 깊고 무거워요. 평범한 파트너는 본인 색 못 견딥니다. 단, 35세 전후로 본인 색 알아주는 한 사람 옵니다. 그 사람한테 본인을 다 보여주세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인 사랑은 깊고 무거워요. 평범한 파트너는 본인 색 못 견딥니다. 단, 35세 전후로 본인 색 알아주는 한 사람 와요. 그 사람한테 본인을 다 보여주세요. 그 길로 가면 잘 풀려요.",
     "en": "Your love runs deep and heavy. Ordinary partners cannot hold your color. Around thirty-five one who truly sees you arrives. Show everything to that person."
   },
   "jeongin_1_persona": {
-    "ko": "본인은 받쳐주는 사람이 약해요. 공부는 좋아하는데 환경이 안 따라줘요. 20대 초반에 본인을 알아봐주는 선생님 한 명 옵니다. 그 사람한테 본인 꺼내세요.",
+    "ko": "본인은 받쳐주는 사람이 약해요. 공부는 좋아하는데 환경이 안 따라줘요. 20대 초반에 본인을 알아봐주는 선생님 한 명 와요. 그 사람한테 본인 꺼내세요.",
     "en": "Your support is thin. You love study but the environment lags. In early twenties one teacher sees you. Open up to that person."
   },
   "jeongin_2_persona": {
@@ -469,11 +469,11 @@
     "en": "You grew up near books. A mother or female adult shielded you. Heavy shielding delays your spine. In late twenties stand alone once."
   },
   "jeongin_3+_persona": {
-    "ko": "본인은 평생 학자·연구자 쪽이에요. 책·지식·문화가 본인 색이에요. 단, 너무 책에만 빠지면 시장이 안 옵니다. 30대 초반에 본인 색 바깥에 꺼내세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 평생 학자·연구자 쪽이에요. 책·지식·문화가 본인 색이에요. 단, 너무 책에만 빠지면 시장이 안 와요. 30대 초반에 본인 색 바깥에 꺼내세요. 그 길로 가면 잘 풀려요.",
     "en": "A scholar shape for life. Books, knowledge, culture are your color. Buried only in books, the market does not arrive. In early thirties step outside once."
   },
   "jeongin_1_career": {
-    "ko": "본인은 학문·교육 자리가 잘 맞아요. 단, 결과가 늦게 와요. 30대 초반에 본인을 끌어주는 어른 한 명 옵니다. 그 사람한테 결과물 보이세요.",
+    "ko": "본인은 학문·교육 자리가 잘 맞아요. 단, 결과가 늦게 와요. 30대 초반에 본인을 끌어주는 어른 한 명 와요. 그 사람한테 결과물 보이세요.",
     "en": "Study and teaching seats fit you. Results come late. In early thirties one elder pulls you up. Show your work to that person."
   },
   "jeongin_2_career": {
@@ -481,7 +481,7 @@
     "en": "Degrees, certifications, research are your channel. On a stable job your study deepens. In late thirties step outside once. Show yourself to people."
   },
   "jeongin_3+_career": {
-    "ko": "본인은 평생 본인 분야의 권위자가 됩니다. 학자·전문가·교수 같은 직업이 본인 자리예요. 단, 한 번 본인을 알아주는 자리가 줄어드는 시기 와요. 50대 초반에 그 일 옵니다. 본인 길 계속 가세요. 그 길로 가면 잘 풀려요.",
+    "ko": "본인은 평생 본인 분야의 권위자가 돼요. 학자·전문가·교수 같은 직업이 본인 자리예요. 단, 한 번 본인을 알아주는 자리가 줄어드는 시기 와요. 50대 초반에 그 일 와요. 본인 길 계속 가세요. 그 길로 가면 잘 풀려요.",
     "en": "You become a lifelong authority in your field. Scholar, expert, professor is your seat. One stretch where recognition shrinks lands. In early fifties it hits. Keep going on your road."
   },
   "jeongin_1_wealth": {
@@ -489,11 +489,11 @@
     "en": "Money comes through parents or elders. Your own building lags. In late twenties your first scholarship or job money lands. Build with your own hand from then."
   },
   "jeongin_2_wealth": {
-    "ko": "본인 자산은 학력·자격증이 본인 자산이에요. 안정 월급·연금이 본인 자리예요. 단, 큰 자산은 늦게 모입니다. 35세 전후로 본인 명의 자가 마련하세요.",
+    "ko": "본인 자산은 학력·자격증이 본인 자산이에요. 안정 월급·연금이 본인 자리예요. 단, 큰 자산은 늦게 모여요. 35세 전후로 본인 명의 자가 마련하세요.",
     "en": "Degrees and certifications are your wealth. Steady salary and pension are your seat. Big assets gather late. Around thirty-five secure a home in your name."
   },
   "jeongin_3+_wealth": {
-    "ko": "본인은 평생 학자 자산을 굴려요. 강의·저작·지식 콘텐츠가 본인 평생 자산이에요. 단, 큰 돈 욕심 부리면 본인 색 무너집니다. 40대 후반에 한 번 그 위기 옵니다. 본인 색 그대로 가세요.",
+    "ko": "본인은 평생 학자 자산을 굴려요. 강의·저작·지식 콘텐츠가 본인 평생 자산이에요. 단, 큰 돈 욕심 부리면 본인 색 무너져요. 40대 후반에 한 번 그 위기 와요. 본인 색 그대로 가세요.",
     "en": "You move scholar-style assets for life. Lectures, books, knowledge content are your wealth. Chasing big money breaks your color. In late forties that crisis lands. Stay in your color."
   },
   "jeongin_1_love": {
@@ -505,7 +505,7 @@
     "en": "Intellectual, scholarly partners suit you. Reading and lecturing together is your love. Around thirty buried in books makes the partner lonely. Make social time together."
   },
   "jeongin_3+_love": {
-    "ko": "본인 사랑은 평생 한 사람한테 깊습니다. 어머니·아내·딸 중 한 명이 본인을 평생 받쳐줍니다. 단, 너무 받기만 하면 본인이 잃습니다. 40대 초반에 본인이 한 번 베푸세요.",
+    "ko": "본인 사랑은 평생 한 사람한테 깊습니다. 어머니·아내·딸 중 한 명이 본인을 평생 받쳐줘요. 단, 너무 받기만 하면 본인이 잃습니다. 40대 초반에 본인이 한 번 베푸세요.",
     "en": "Your love runs deep to one person for life. Mother, wife, or daughter holds you up for life. Receiving only costs you. In early forties give once yourself."
   }
 }
