@@ -24,6 +24,14 @@ void main() {
       expect(points[3].label, '내일');
       expect(points[4].label, '모레');
       expect(points[2].isToday, true);
+      // Round 73: labelEn 1:1 대응 검증 — 영문 모드 한글 leak 0건
+      expect(points[0].labelEn, '−2D');
+      expect(points[1].labelEn, '−1D');
+      expect(points[2].labelEn, 'TODAY');
+      expect(points[3].labelEn, '+1D');
+      expect(points[4].labelEn, '+2D');
+      expect(points[2].labelFor(useKo: true), '오늘');
+      expect(points[2].labelFor(useKo: false), 'TODAY');
     });
 
     test('일관성 — 같은 날 두 번 호출 = 같은 5 점', () async {

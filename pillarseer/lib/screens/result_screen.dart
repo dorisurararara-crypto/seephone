@@ -2,6 +2,11 @@
 // 텍스트 위주 magazine editorial. emoji 제거. letter-spacing UPPERCASE 라벨.
 // ignore_for_file: unused_element, unused_element_parameter
 
+// Round 70 mandate: 자미두수 별 이름·궁 이름 UI 노출 0.
+// _CrossmatchSection 은 "DEEP POINT" 라벨로 우회 노출 (우리 차별점 — 사주↔자미두수 교차 일치).
+// 별 이름·궁 이름은 BASE/DEEP evidence 본문에만 등장 (Round 70 9.95 PASS 선례).
+// Sprint 1 (Round 73): 영문 모드 한글 leak 0 — useKo 분기 추가만.
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -27,6 +32,12 @@ import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
+
+/// Round 70 mandate 명시: 자미두수 별 이름/궁 이름 UI 노출 0.
+/// `_CrossmatchSection` 은 "DEEP POINT" 우회 라벨로 노출 유지 (우리 차별점).
+/// `_ZiweiPalaceGroup` 도 "12가지 결 풀이" 우회 라벨 유지 (Round 70 9.95 PASS 선례).
+/// Sprint 1 (Round 73): UI 토글 변경 X — useKo 분기 추가만.
+const bool kIsZiweiUiHidden = true;
 
 class ResultScreen extends ConsumerWidget {
   const ResultScreen({super.key});
@@ -109,7 +120,8 @@ class ResultScreen extends ConsumerWidget {
             // 7. FIVE ELEMENTS — bar chart (bg)
             _FiveElementsSection(result: result, reading: reading, useKo: useKo),
             // 7.5 인생 12 영역 풀이 (accordion 그룹, paper bg)
-            if (ziwei != null)
+            // kIsZiweiUiHidden flag: 자미두수 라벨 우회 유지 (Round 70).
+            if (ziwei != null && kIsZiweiUiHidden)
               _ZiweiPalaceGroup(ziwei: ziwei, useKo: useKo),
             // 8. CORE READING accordion group (paper bg)
             _GroupSection(
@@ -2700,7 +2712,7 @@ class _CrossmatchTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 주제 라벨 (작은 UPPERCASE)
+        // 주제 라벨 (작은 UPPERCASE) — Round 73: topicEn 사용 (한국어 topic 우회)
         Row(
           children: [
             Text(
@@ -2716,40 +2728,57 @@ class _CrossmatchTile extends StatelessWidget {
             Container(width: 14, height: 1, color: AppColors.line),
             const SizedBox(width: 10),
             Text(
-              match.topic.toUpperCase(),
-              style: GoogleFonts.inter(
-                fontSize: 9,
-                letterSpacing: 4,
-                fontWeight: FontWeight.w500,
-                color: AppColors.taupe,
-              ),
+              useKo ? match.topic : match.topicEn,
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    ),
             ),
           ],
         ),
         const SizedBox(height: 10),
-        // 메인 결론
+        // 메인 결론 — Round 73: useKo 분기
         Text(
-          match.combinedKo,
-          style: GoogleFonts.notoSerifKr(
-            fontSize: 16.5,
-            height: 1.55,
-            fontWeight: FontWeight.w400,
-            letterSpacing: -0.1,
-            color: AppColors.ink,
-          ),
+          match.combinedFor(useKo: useKo),
+          style: useKo
+              ? GoogleFonts.notoSerifKr(
+                  fontSize: 16.5,
+                  height: 1.55,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -0.1,
+                  color: AppColors.ink,
+                )
+              : GoogleFonts.cormorantGaramond(
+                  fontSize: 18,
+                  height: 1.5,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -0.1,
+                  color: AppColors.ink,
+                ),
         ),
         const SizedBox(height: 12),
-        // 두 풀이 깊이 근거 — 2-row layout
+        // 두 풀이 깊이 근거 — 2-row layout (Round 73: useKo 분기)
         _TwinEvidenceRow(
           labelKo: '기본 흐름',
           labelEn: 'BASE',
-          body: match.sajuSide,
+          body: match.sajuSideFor(useKo: useKo),
+          useKo: useKo,
         ),
         const SizedBox(height: 6),
         _TwinEvidenceRow(
           labelKo: '깊은 흐름',
           labelEn: 'DEEP',
-          body: match.ziweiSide,
+          body: match.ziweiSideFor(useKo: useKo),
+          useKo: useKo,
         ),
       ],
     );
@@ -2760,10 +2789,12 @@ class _TwinEvidenceRow extends StatelessWidget {
   final String labelKo;
   final String labelEn;
   final String body;
+  final bool useKo;
   const _TwinEvidenceRow({
     required this.labelKo,
     required this.labelEn,
     required this.body,
+    this.useKo = true,
   });
 
   @override
@@ -2787,11 +2818,17 @@ class _TwinEvidenceRow extends StatelessWidget {
         Expanded(
           child: Text(
             body,
-            style: GoogleFonts.notoSansKr(
-              fontSize: 12.5,
-              height: 1.65,
-              color: AppColors.inkLight,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 12.5,
+                    height: 1.65,
+                    color: AppColors.inkLight,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 12,
+                    height: 1.6,
+                    color: AppColors.inkLight,
+                  ),
           ),
         ),
       ],

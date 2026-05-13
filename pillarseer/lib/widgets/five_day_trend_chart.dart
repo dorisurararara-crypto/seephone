@@ -19,6 +19,8 @@ class FiveDayTrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return SizedBox(
       height: height + 38,
       child: Column(
@@ -39,14 +41,28 @@ class FiveDayTrendChart extends StatelessWidget {
             children: points
                 .map((p) => Expanded(
                       child: Text(
-                        p.label,
+                        p.labelFor(useKo: useKo),
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.notoSansKr(
-                          fontSize: 11,
-                          fontWeight:
-                              p.isToday ? FontWeight.w600 : FontWeight.w500,
-                          color: p.isToday ? AppColors.accent : AppColors.taupe,
-                        ),
+                        style: useKo
+                            ? GoogleFonts.notoSansKr(
+                                fontSize: 11,
+                                fontWeight: p.isToday
+                                    ? FontWeight.w600
+                                    : FontWeight.w500,
+                                color: p.isToday
+                                    ? AppColors.accent
+                                    : AppColors.taupe,
+                              )
+                            : GoogleFonts.inter(
+                                fontSize: 10,
+                                letterSpacing: 1.4,
+                                fontWeight: p.isToday
+                                    ? FontWeight.w600
+                                    : FontWeight.w500,
+                                color: p.isToday
+                                    ? AppColors.accent
+                                    : AppColors.taupe,
+                              ),
                       ),
                     ))
                 .toList(),

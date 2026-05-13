@@ -23,8 +23,18 @@ class SixAxisScore {
   /// 두 score 차이 ≤ 20 → true (✨ 표시 대상).
   final Map<String, bool> crossMatches;
 
-  /// 축 라벨 순서 (radar 시계 12시부터 시계방향).
+  /// 축 라벨 순서 (radar 시계 12시부터 시계방향) — 한글 (내부 key).
   static const axes = ['본성', '연애', '일', '돈', '건강', '평판'];
+
+  /// 한글 라벨 (UI 노출 — useKo == true).
+  static const axesKo = axes;
+
+  /// 영문 라벨 (UI 노출 — useKo == false). axes 순서와 1:1 대응.
+  static const axesEn = ['Nature', 'Love', 'Work', 'Money', 'Health', 'Fame'];
+
+  /// useKo flag → 노출용 라벨 list.
+  static List<String> axesFor({required bool useKo}) =>
+      useKo ? axesKo : axesEn;
 
   const SixAxisScore({
     required this.sajuScores,
@@ -42,9 +52,22 @@ class SixAxisScore {
     return n;
   }
 
-  /// 일치한 축 라벨 list (순서 = axes 순).
+  /// 일치한 축 라벨 list (순서 = axes 순, 한글 key).
   List<String> get matchedAxes =>
       axes.where((a) => crossMatches[a] == true).toList(growable: false);
+
+  /// 일치한 축의 영문 라벨 list (순서 = axes 순).
+  List<String> get matchedAxesEn {
+    final out = <String>[];
+    for (var i = 0; i < axes.length; i++) {
+      if (crossMatches[axes[i]] == true) out.add(axesEn[i]);
+    }
+    return out;
+  }
+
+  /// useKo flag → 일치한 축 라벨 list.
+  List<String> matchedAxesFor({required bool useKo}) =>
+      useKo ? matchedAxes : matchedAxesEn;
 
   /// 통합 평균 (사용자에게 보여줄 단일 점수 후보).
   int get combinedAverage {

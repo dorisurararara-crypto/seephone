@@ -27,22 +27,25 @@ class SixAxisRadar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (showMatchBadge) _MatchBadge(matchCount: score.matchCount),
+        if (showMatchBadge)
+          _MatchBadge(matchCount: score.matchCount, useKo: useKo),
         const SizedBox(height: 12),
         Center(
           child: SizedBox(
             width: size,
             height: size,
             child: CustomPaint(
-              painter: _RadarPainter(score: score),
+              painter: _RadarPainter(score: score, useKo: useKo),
             ),
           ),
         ),
         const SizedBox(height: 8),
-        _AxisLegend(score: score),
+        _AxisLegend(score: score, useKo: useKo),
       ],
     );
   }
@@ -50,7 +53,8 @@ class SixAxisRadar extends StatelessWidget {
 
 class _MatchBadge extends StatelessWidget {
   final int matchCount;
-  const _MatchBadge({required this.matchCount});
+  final bool useKo;
+  const _MatchBadge({required this.matchCount, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +67,21 @@ class _MatchBadge extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            '깊게 봐도 다시 잡힌 핵심',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-              color: AppColors.inkLight,
-            ),
+            useKo
+                ? '깊게 봐도 다시 잡힌 핵심'
+                : 'CONFIRMED AT THE DEEP LAYER',
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.inkLight,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 10,
+                    letterSpacing: 2.5,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.inkLight,
+                  ),
           ),
           const Spacer(),
           Text(
@@ -95,27 +108,39 @@ class _MatchBadge extends StatelessWidget {
 
 class _AxisLegend extends StatelessWidget {
   final SixAxisScore score;
-  const _AxisLegend({required this.score});
+  final bool useKo;
+  const _AxisLegend({required this.score, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
+    final keys = SixAxisScore.axes;
+    final labels = SixAxisScore.axesFor(useKo: useKo);
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 12,
       runSpacing: 6,
-      children: SixAxisScore.axes.map((axis) {
-        final s = score.combinedScores[axis] ?? 0;
-        final matched = score.crossMatches[axis] ?? false;
+      children: List.generate(keys.length, (i) {
+        final key = keys[i];
+        final label = labels[i];
+        final s = score.combinedScores[key] ?? 0;
+        final matched = score.crossMatches[key] ?? false;
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              axis,
-              style: GoogleFonts.notoSansKr(
-                fontSize: 11,
-                fontWeight: FontWeight.w500,
-                color: AppColors.inkLight,
-              ),
+              label,
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.inkLight,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 1.4,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.inkLight,
+                    ),
             ),
             const SizedBox(width: 4),
             Text(
@@ -138,21 +163,24 @@ class _AxisLegend extends StatelessWidget {
             ],
           ],
         );
-      }).toList(),
+      }),
     );
   }
 }
 
 class _RadarPainter extends CustomPainter {
   final SixAxisScore score;
-  _RadarPainter({required this.score});
+  final bool useKo;
+  _RadarPainter({required this.score, required this.useKo});
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     // 라벨 영역 확보 위해 radius 는 size 의 35%.
     final radius = math.min(size.width, size.height) * 0.35;
+    // axes = 내부 키 (Map 조회용, 한글), axisLabels = UI 노출용 (useKo 분기).
     final axes = SixAxisScore.axes;
+    final axisLabels = SixAxisScore.axesFor(useKo: useKo);
 
     // 12시 방향에서 시작, 시계방향.
     final angles = List.generate(
@@ -246,22 +274,30 @@ class _RadarPainter extends CustomPainter {
       }
     }
 
-    // 4) 축 라벨
+    // 4) 축 라벨 — useKo 분기 (Round 73)
     for (var i = 0; i < axes.length; i++) {
       final matched = score.crossMatches[axes[i]] ?? false;
       final labelOffset = Offset(
         center.dx + (radius + 18) * math.cos(angles[i]),
         center.dy + (radius + 18) * math.sin(angles[i]),
       );
-      final label = matched ? '${axes[i]} ✨' : axes[i];
+      final baseLabel = axisLabels[i];
+      final label = matched ? '$baseLabel ✨' : baseLabel;
       final tp = TextPainter(
         text: TextSpan(
           text: label,
-          style: GoogleFonts.notoSansKr(
-            fontSize: 11,
-            fontWeight: matched ? FontWeight.w600 : FontWeight.w500,
-            color: matched ? AppColors.accent : AppColors.ink,
-          ),
+          style: useKo
+              ? GoogleFonts.notoSansKr(
+                  fontSize: 11,
+                  fontWeight: matched ? FontWeight.w600 : FontWeight.w500,
+                  color: matched ? AppColors.accent : AppColors.ink,
+                )
+              : GoogleFonts.inter(
+                  fontSize: 10,
+                  letterSpacing: 1.2,
+                  fontWeight: matched ? FontWeight.w600 : FontWeight.w500,
+                  color: matched ? AppColors.accent : AppColors.ink,
+                ),
         ),
         textDirection: TextDirection.ltr,
         textAlign: TextAlign.center,
@@ -280,5 +316,6 @@ class _RadarPainter extends CustomPainter {
   @override
   bool shouldRepaint(_RadarPainter old) =>
       old.score.combinedScores != score.combinedScores ||
-      old.score.crossMatches != score.crossMatches;
+      old.score.crossMatches != score.crossMatches ||
+      old.useKo != useKo;
 }

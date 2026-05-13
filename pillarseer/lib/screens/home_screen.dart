@@ -1610,6 +1610,31 @@ class _SixAxisCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final headline = useKo ? '여섯 결로 본 오늘' : 'TODAY ON SIX AXES';
+    final axesLine = useKo
+        ? '본성 · 연애 · 일 · 돈 · 건강 · 평판'
+        : 'NATURE · LOVE · WORK · MONEY · HEALTH · FAME';
+    final matched = score.matchedAxesFor(useKo: useKo);
+    final mainLine = matched.isEmpty
+        ? (useKo
+            ? '오늘은 흐름이 골고루 풀려요. 한쪽에 치우치지 않고 다양한 방향으로 풀려나갈 거예요.'
+            : 'Today the flow is even. Nothing leans hard one way — many directions stay open.')
+        : useKo
+            ? '✨ 깊게 봐도 다시 잡힌 핵심: ${matched.join(" · ")} (${score.matchCount}/6)'
+            : '✨ Confirmed at the deep layer: ${matched.join(" · ")} (${score.matchCount}/6)';
+    final subLine = score.matchCount >= 3
+        ? (useKo
+            ? '한 번 더 봐도 같은 방향으로 잡힌 포인트라 그만큼 단단해요. 본인이 평소에도 자주 느끼는 강점이에요.'
+            : 'These points stay the same when read again. That is the strength you already feel day to day.')
+        : score.matchCount >= 1
+            ? (useKo
+                ? '깊게 봐도 다시 잡힌 ${score.matchCount}개 축이 본인 기질의 핵심이에요. 그 부분 위주로 풀어 가세요.'
+                : 'The ${score.matchCount} axes confirmed at the deep layer are your real core. Lean into them.')
+            : (useKo
+                ? '오늘은 흐름이 골고루 풀려요. 한쪽 강점만 쓰는 게 아니라 변화가 많은 시기라는 뜻이에요.'
+                : 'The flow is even today. You are in a phase of change, not single-axis push.');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
@@ -1621,17 +1646,24 @@ class _SixAxisCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '여섯 결로 본 오늘',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 12,
-              letterSpacing: 0.4,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
-            ),
+            headline,
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 12,
+                    letterSpacing: 0.4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 11,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
           ),
           const SizedBox(height: 4),
           Text(
-            '본성 · 연애 · 일 · 돈 · 건강 · 평판',
+            axesLine,
             style: GoogleFonts.inter(
               fontSize: 9,
               letterSpacing: 2,
@@ -1643,28 +1675,35 @@ class _SixAxisCard extends StatelessWidget {
           SixAxisRadar(score: score, size: 240),
           const SizedBox(height: 14),
           Text(
-            score.matchedAxes.isEmpty
-                ? '오늘은 흐름이 골고루 풀려요. 한쪽에 치우치지 않고 다양한 방향으로 풀려나갈 거예요.'
-                : '✨ 깊게 봐도 다시 잡힌 핵심: ${score.matchedAxes.join(" · ")} (${score.matchCount}/6)',
-            style: GoogleFonts.notoSerifKr(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.accent,
-              height: 1.5,
-            ),
+            mainLine,
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.accent,
+                    height: 1.5,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.accent,
+                    height: 1.45,
+                  ),
           ),
           const SizedBox(height: 8),
           Text(
-            score.matchCount >= 3
-                ? '한 번 더 봐도 같은 방향으로 잡힌 포인트라 그만큼 단단해요. 본인이 평소에도 자주 느끼는 강점이에요.'
-                : score.matchCount >= 1
-                    ? '깊게 봐도 다시 잡힌 ${score.matchCount}개 축이 본인 기질의 핵심이에요. 그 부분 위주로 풀어 가세요.'
-                    : '오늘은 흐름이 골고루 풀려요. 한쪽 강점만 쓰는 게 아니라 변화가 많은 시기라는 뜻이에요.',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 13,
-              color: AppColors.inkLight,
-              height: 1.6,
-            ),
+            subLine,
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    color: AppColors.inkLight,
+                    height: 1.6,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 12.5,
+                    color: AppColors.inkLight,
+                    height: 1.55,
+                  ),
           ),
         ],
       ),
@@ -1680,14 +1719,26 @@ class _FiveDayTrendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     final today = points.firstWhere((p) => p.isToday);
     final tomorrow = points.length > 3 ? points[3] : today;
     final diff = tomorrow.score - today.score;
+    final headline = useKo ? '5일 흐름' : 'FIVE-DAY FLOW';
+    final axisLine = useKo
+        ? '그제 · 어제 · 오늘 · 내일 · 모레'
+        : '−2D · −1D · TODAY · +1D · +2D';
     final hint = diff > 5
-        ? '내일은 오늘보다 더 풀려요. 오늘 미뤄둔 결정 한 가지가 내일 쉽게 풀릴 거예요.'
+        ? (useKo
+            ? '내일은 오늘보다 더 풀려요. 오늘 미뤄둔 결정 한 가지가 내일 쉽게 풀릴 거예요.'
+            : 'Tomorrow opens up more than today. A decision you have been putting off will go through easier then.')
         : diff < -5
-            ? '내일은 살짝 가라앉아요. 오늘 끝낼 수 있는 건 오늘 마무리하는 게 편해요.'
-            : '내일도 비슷한 결이에요. 오늘 흐름 그대로 이어가도 괜찮아요.';
+            ? (useKo
+                ? '내일은 살짝 가라앉아요. 오늘 끝낼 수 있는 건 오늘 마무리하는 게 편해요.'
+                : 'Tomorrow dips a little. Close what you can today; it will be easier than waiting.')
+            : (useKo
+                ? '내일도 비슷한 결이에요. 오늘 흐름 그대로 이어가도 괜찮아요.'
+                : 'Tomorrow runs in the same key as today. Keep the current flow going.');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 30, 24, 28),
@@ -1699,17 +1750,24 @@ class _FiveDayTrendCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '5일 흐름',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 12,
-              letterSpacing: 0.4,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
-            ),
+            headline,
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 12,
+                    letterSpacing: 0.4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 11,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.taupe,
+                  ),
           ),
           const SizedBox(height: 4),
           Text(
-            '그제 · 어제 · 오늘 · 내일 · 모레',
+            axisLine,
             style: GoogleFonts.inter(
               fontSize: 9,
               letterSpacing: 2,
@@ -1722,11 +1780,17 @@ class _FiveDayTrendCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             hint,
-            style: GoogleFonts.notoSansKr(
-              fontSize: 13,
-              color: AppColors.inkLight,
-              height: 1.6,
-            ),
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    color: AppColors.inkLight,
+                    height: 1.6,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 12.5,
+                    color: AppColors.inkLight,
+                    height: 1.55,
+                  ),
           ),
         ],
       ),
