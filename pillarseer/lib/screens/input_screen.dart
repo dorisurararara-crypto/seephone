@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,8 +22,21 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _cityController = TextEditingController();
+
+  // Round 71 사용자 불만 #1 — 달력/휠 UI 제거. 4 TextField (YYYY/MM/DD/HHMM).
+  final _yearCtl = TextEditingController();
+  final _monthCtl = TextEditingController();
+  final _dayCtl = TextEditingController();
+  final _timeCtl = TextEditingController();
+  final _yearFocus = FocusNode();
+  final _monthFocus = FocusNode();
+  final _dayFocus = FocusNode();
+  final _timeFocus = FocusNode();
+  // raw text → 파생값. submit 시 _selectedDate / _selectedTime 채움.
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  String? _dateError;
+  String? _timeError;
   bool _isLunar = false;
   bool _unknownTime = false;
   Gender? _gender;
@@ -32,6 +46,14 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   void dispose() {
     _nameController.dispose();
     _cityController.dispose();
+    _yearCtl.dispose();
+    _monthCtl.dispose();
+    _dayCtl.dispose();
+    _timeCtl.dispose();
+    _yearFocus.dispose();
+    _monthFocus.dispose();
+    _dayFocus.dispose();
+    _timeFocus.dispose();
     super.dispose();
   }
 
@@ -39,7 +61,119 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       _nameController.text.trim().isNotEmpty &&
       _selectedDate != null &&
       (_selectedTime != null || _unknownTime) &&
+      _dateError == null &&
+      _timeError == null &&
       !_isLoading;
+
+  /// 윤년 포함 월별 일수. 1900~2100 범위.
+  int _daysInMonth(int year, int month) {
+    if (month == 2) {
+      final leap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+      return leap ? 29 : 28;
+    }
+    const month31 = {1, 3, 5, 7, 8, 10, 12};
+    return month31.contains(month) ? 31 : 30;
+  }
+
+  /// YYYY/MM/DD 각각의 raw text 가 다 차면 DateTime 검증.
+  void _recomputeDate() {
+    final yt = _yearCtl.text;
+    final mt = _monthCtl.text;
+    final dt = _dayCtl.text;
+    if (yt.length != 4 || mt.isEmpty || dt.isEmpty) {
+      setState(() {
+        _selectedDate = null;
+        _dateError = null;
+      });
+      return;
+    }
+    final y = int.tryParse(yt);
+    final m = int.tryParse(mt);
+    final d = int.tryParse(dt);
+    final nowYear = DateTime.now().year;
+    if (y == null || m == null || d == null) {
+      setState(() {
+        _selectedDate = null;
+        _dateError = '숫자만 입력하라.';
+      });
+      return;
+    }
+    if (y < 1900 || y > nowYear) {
+      setState(() {
+        _selectedDate = null;
+        _dateError = '연도는 1900~$nowYear 사이로 입력하라.';
+      });
+      return;
+    }
+    if (m < 1 || m > 12) {
+      setState(() {
+        _selectedDate = null;
+        _dateError = '월은 1~12 사이로 입력하라.';
+      });
+      return;
+    }
+    final maxDay = _daysInMonth(y, m);
+    if (d < 1 || d > maxDay) {
+      setState(() {
+        _selectedDate = null;
+        _dateError = '$m월은 1~$maxDay 일까지만 입력하라.';
+      });
+      return;
+    }
+    setState(() {
+      _selectedDate = DateTime(y, m, d);
+      _dateError = null;
+    });
+  }
+
+  /// HHMM (4자리 24h) → TimeOfDay.
+  /// 1~3 자리 중에는 error 안 보여줌 (UX — 입력 중 빨간 에러 X).
+  /// 4 자리 도달했을 때만 검증해서 error / 성공.
+  void _recomputeTime() {
+    if (_unknownTime) {
+      setState(() {
+        _selectedTime = null;
+        _timeError = null;
+      });
+      return;
+    }
+    final raw = _timeCtl.text;
+    if (raw.length < 4) {
+      // 입력 중 — error 숨김, submit 만 막음.
+      setState(() {
+        _selectedTime = null;
+        _timeError = null;
+      });
+      return;
+    }
+    final h = int.tryParse(raw.substring(0, 2));
+    final m = int.tryParse(raw.substring(2, 4));
+    if (h == null || m == null) {
+      setState(() {
+        _selectedTime = null;
+        _timeError = '숫자만 입력하라.';
+      });
+      return;
+    }
+    if (h < 0 || h > 23) {
+      setState(() {
+        _selectedTime = null;
+        _timeError = '시는 00~23 사이로 입력하라.';
+      });
+      return;
+    }
+    if (m < 0 || m > 59) {
+      setState(() {
+        _selectedTime = null;
+        _timeError = '분은 00~59 사이로 입력하라.';
+      });
+      return;
+    }
+    setState(() {
+      _selectedTime = TimeOfDay(hour: h, minute: m);
+      _timeError = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,22 +229,83 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                     ),
                     const SizedBox(height: 28),
                     _FieldLabel(text: l.inputBirthday),
-                    _TapField(
-                      value: _selectedDate == null
-                          ? '—'
-                          : _formatDate(_selectedDate!),
-                      placeholder: _selectedDate == null,
-                      onTap: _pickDate,
+                    // Round 71 사용자 불만 #1 — 달력 dialog 제거. YYYY / MM / DD 숫자 입력.
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: _NumberField(
+                            controller: _yearCtl,
+                            focusNode: _yearFocus,
+                            hint: 'YYYY',
+                            maxLen: 4,
+                            autofocus: true,
+                            onLengthReached: () => _monthFocus.requestFocus(),
+                            onChanged: (_) => _recomputeDate(),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          flex: 2,
+                          child: _NumberField(
+                            controller: _monthCtl,
+                            focusNode: _monthFocus,
+                            hint: 'MM',
+                            maxLen: 2,
+                            onLengthReached: () => _dayFocus.requestFocus(),
+                            onChanged: (_) => _recomputeDate(),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          flex: 2,
+                          child: _NumberField(
+                            controller: _dayCtl,
+                            focusNode: _dayFocus,
+                            hint: 'DD',
+                            maxLen: 2,
+                            onLengthReached: () {
+                              if (!_unknownTime) _timeFocus.requestFocus();
+                            },
+                            onChanged: (_) => _recomputeDate(),
+                          ),
+                        ),
+                      ],
                     ),
+                    if (_dateError != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        _dateError!,
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 12,
+                          color: AppColors.fireRed,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 28),
                     _FieldLabel(text: l.inputTime),
-                    _TapField(
-                      value: _unknownTime
-                          ? l.inputUnknownTime
-                          : (_selectedTime?.format(context) ?? '—'),
-                      placeholder: _selectedTime == null && !_unknownTime,
-                      onTap: _unknownTime ? null : _pickTime,
+                    _NumberField(
+                      controller: _timeCtl,
+                      focusNode: _timeFocus,
+                      hint: 'HHMM (예: 0830)',
+                      maxLen: 4,
+                      enabled: !_unknownTime,
+                      onChanged: (_) => _recomputeTime(),
+                      onLengthReached: null,
                     ),
+                    if (_timeError != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        _timeError!,
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 12,
+                          color: AppColors.fireRed,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -126,10 +321,16 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
-                            onChanged: (v) => setState(() {
-                              _unknownTime = v ?? false;
-                              if (_unknownTime) _selectedTime = null;
-                            }),
+                            onChanged: (v) {
+                              setState(() {
+                                _unknownTime = v ?? false;
+                                if (_unknownTime) {
+                                  _selectedTime = null;
+                                  _timeCtl.clear();
+                                  _timeError = null;
+                                }
+                              });
+                            },
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -207,60 +408,6 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         ],
       ),
     );
-  }
-
-  String _formatDate(DateTime d) =>
-      '${d.year}.${d.month.toString().padLeft(2, '0')}.${d.day.toString().padLeft(2, '0')}';
-
-  Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime(2000, 1, 1),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      initialDatePickerMode: DatePickerMode.year,
-      builder: (ctx, child) => Theme(
-        data: Theme.of(ctx).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppColors.ink,
-            onPrimary: AppColors.bg,
-            surface: AppColors.bg,
-            onSurface: AppColors.ink,
-          ),
-          dialogTheme: const DialogThemeData(
-            backgroundColor: AppColors.bg,
-          ),
-        ),
-        child: child!,
-      ),
-    );
-    if (picked != null) {
-      setState(() => _selectedDate = picked);
-    }
-  }
-
-  Future<void> _pickTime() async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime ?? const TimeOfDay(hour: 12, minute: 0),
-      builder: (ctx, child) => Theme(
-        data: Theme.of(ctx).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppColors.ink,
-            onPrimary: AppColors.bg,
-            surface: AppColors.bg,
-            onSurface: AppColors.ink,
-          ),
-          dialogTheme: const DialogThemeData(
-            backgroundColor: AppColors.bg,
-          ),
-        ),
-        child: child!,
-      ),
-    );
-    if (picked != null) {
-      setState(() => _selectedTime = picked);
-    }
   }
 
   InputDecoration _underlineDeco({String? hint}) => InputDecoration(
@@ -459,48 +606,76 @@ class _FieldLabel extends StatelessWidget {
   }
 }
 
-class _TapField extends StatelessWidget {
-  final String value;
-  final bool placeholder;
-  final VoidCallback? onTap;
-  const _TapField({
-    required this.value,
-    required this.placeholder,
-    required this.onTap,
+/// Round 71 사용자 불만 #1 — 숫자 직접 입력용 underline TextField.
+/// keyboardType=number, digitsOnly, maxLen 도달 시 다음 focusNode 로 이동.
+class _NumberField extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final String hint;
+  final int maxLen;
+  final bool autofocus;
+  final bool enabled;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onLengthReached;
+  const _NumberField({
+    required this.controller,
+    required this.focusNode,
+    required this.hint,
+    required this.maxLen,
+    this.autofocus = false,
+    this.enabled = true,
+    this.onChanged,
+    this.onLengthReached,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.zero,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      enabled: enabled,
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(maxLen),
+      ],
+      style: GoogleFonts.notoSerifKr(
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+        color: enabled ? AppColors.ink : AppColors.taupe.withValues(alpha: 0.5),
+        letterSpacing: 0.8,
+      ),
+      cursorColor: AppColors.ink,
+      decoration: InputDecoration(
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        hintText: hint,
+        hintStyle: GoogleFonts.notoSerifKr(
+          fontSize: 16,
+          color: AppColors.taupe.withValues(alpha: 0.6),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                value,
-                style: GoogleFonts.notoSerifKr(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  color: placeholder
-                      ? AppColors.taupe.withValues(alpha: 0.6)
-                      : AppColors.ink,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
-            if (onTap != null)
-              Icon(Icons.expand_more,
-                  size: 18,
-                  color: AppColors.taupe.withValues(alpha: 0.7)),
-          ],
+        filled: false,
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.line),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.line),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.ink, width: 1.2),
+        ),
+        disabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.line),
         ),
       ),
+      onChanged: (v) {
+        onChanged?.call(v);
+        if (v.length == maxLen && onLengthReached != null) {
+          onLengthReached!();
+        }
+      },
     );
   }
 }
