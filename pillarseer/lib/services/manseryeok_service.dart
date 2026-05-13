@@ -7,6 +7,7 @@ import 'dart:math';
 import 'package:klc/klc.dart' as klc;
 import '../models/saju_result.dart';
 import 'solar_term_service.dart';
+import 'thong_geun_service.dart';
 
 class _DstRange {
   final DateTime start;
@@ -15,6 +16,10 @@ class _DstRange {
 }
 
 class ManseryeokService {
+  /// 월령 가중 배수 — 전통 명리학 적천수·자평진전 표준 (2.0~3.0 사이).
+  /// 월지(月支)의 지장간 점수에 곱하여 사주 element 분포에 반영.
+  static const double monthBranchBoost = 2.5;
+
   /// 진태양시 longitude 보정 (분 단위) — 서울 기준 -32분 (KST UTC+9 시기).
   /// 동경 135° (KST) → 서울 126.98° 적용 시 표준시보다 32분 늦게 떠/짐.
   /// 사주 명리학에서 절대시간(진태양시) 채택이 정통.
@@ -431,19 +436,45 @@ class ManseryeokService {
     return Pillar(chunGan: chunGan[i % 10], jiJi: jiJi[i % 12]);
   }
 
-  static FiveElements _calculateElements(List<Pillar> pillars) {
-    int wood = 0, fire = 0, earth = 0, metal = 0, water = 0;
-    for (final p in pillars) {
-      for (final el in [p.chunGanElement, p.jiJiElement]) {
-        switch (el) {
-          case '木': wood++; break;
-          case '火': fire++; break;
-          case '土': earth++; break;
-          case '金': metal++; break;
-          case '水': water++; break;
-        }
+  /// 5행 분포 계산 — 지장간 비율 + 월령 가중치 (전통 명리학 표준).
+  ///
+  /// 한 기둥 가중:
+  /// - 천간: 1.0 (그대로 자기 오행에 +1.0)
+  /// - 지지 지장간: 본기 0.6 / 중기 0.3 / 여기 0.1 (각 지장간 천간 → 자기 오행에 +ratio)
+  /// - **월령 가중**: 월지(月支) 지장간 점수에 ×monthBoost (기본 2.5 — 적천수·자평진전 표준).
+  ///
+  /// [monthIdx]: pillars 중 월주 index (보통 `[year, month, day, hour]` 의 1).
+  /// [monthBoost]: 월령 가중 배수 (기본 [monthBranchBoost] = 2.5).
+  static FiveElements _calculateElements(
+    List<Pillar> pillars, {
+    int monthIdx = 1,
+    double monthBoost = monthBranchBoost,
+  }) {
+    double wood = 0, fire = 0, earth = 0, metal = 0, water = 0;
+
+    void add(String el, double w) {
+      switch (el) {
+        case '木': wood += w; break;
+        case '火': fire += w; break;
+        case '土': earth += w; break;
+        case '金': metal += w; break;
+        case '水': water += w; break;
       }
     }
+
+    for (int i = 0; i < pillars.length; i++) {
+      final p = pillars[i];
+      // 1. 천간 1.0 가중 (월령 boost 미적용 — 표준)
+      add(p.chunGanElement, 1.0);
+      // 2. 지지 지장간 비율 가중 (월지면 ×monthBoost)
+      final ratios =
+          ThongGeunService.jijangGanRatio[p.jiJi] ?? const <String, double>{};
+      final boost = (i == monthIdx) ? monthBoost : 1.0;
+      ratios.forEach((gan, r) {
+        add(ThongGeunService.ganElement(gan), r * boost);
+      });
+    }
+
     final total = wood + fire + earth + metal + water;
     if (total == 0) {
       return const FiveElements(wood: 20, fire: 20, earth: 20, metal: 20, water: 20);

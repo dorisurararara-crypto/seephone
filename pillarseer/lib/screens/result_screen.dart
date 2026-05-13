@@ -498,6 +498,10 @@ class _ChartAttributesSection extends ConsumerWidget {
       monthJi: result.monthPillar.jiJi,
       wood: el.wood, fire: el.fire, earth: el.earth,
       metal: el.metal, water: el.water,
+      dayMaster: result.dayPillar.chunGan,
+      yearJi: result.yearPillar.jiJi,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
     );
     final gmAreas = GongMangService.affectedAreas(
       dayPillar: result.day60ji,
@@ -1407,6 +1411,10 @@ class _YongsinBlock extends StatelessWidget {
       monthJi: result.monthPillar.jiJi,
       wood: el.wood, fire: el.fire, earth: el.earth,
       metal: el.metal, water: el.water,
+      dayMaster: result.dayPillar.chunGan,
+      yearJi: result.yearPillar.jiJi,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
     );
     final y = YongsinService.judge(
       dayMasterElement: dm,
@@ -1500,6 +1508,10 @@ class _StrengthBlock extends StatelessWidget {
       monthJi: result.monthPillar.jiJi,
       wood: el.wood, fire: el.fire, earth: el.earth,
       metal: el.metal, water: el.water,
+      dayMaster: result.dayPillar.chunGan,
+      yearJi: result.yearPillar.jiJi,
+      dayJi: result.dayPillar.jiJi,
+      hourJi: result.hourPillar?.jiJi,
     );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

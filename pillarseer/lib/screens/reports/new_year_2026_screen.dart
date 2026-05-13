@@ -39,6 +39,10 @@ class NewYear2026Screen extends ConsumerWidget {
       monthJi: saju.monthPillar.jiJi,
       wood: el.wood, fire: el.fire, earth: el.earth,
       metal: el.metal, water: el.water,
+      dayMaster: saju.dayPillar.chunGan,
+      yearJi: saju.yearPillar.jiJi,
+      dayJi: saju.dayPillar.jiJi,
+      hourJi: saju.hourPillar?.jiJi,
     );
     final yongsin = YongsinService.judge(
       dayMasterElement: saju.dayPillar.chunGanElement,

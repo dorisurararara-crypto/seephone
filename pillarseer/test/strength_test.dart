@@ -5,18 +5,21 @@ import 'package:pillarseer/services/strength_service.dart';
 
 void main() {
   group('StrengthService 신강/신약 판단', () {
-    test('일간 木 + 木火 가득 + 寅월 → 신강 (월령 통근)', () {
+    test('일간 甲(木) + 寅월 + 사주 木 다수 통근 → 신강', () {
+      // 신모델: element % 는 이미 지장간 비율 + 월령 ×2.5 반영된 값으로 입력.
+      // 추가로 일간 천간 + 4지지 제공하면 일간 통근 점수 가산.
       final r = StrengthService.judge(
         dayMasterElement: '木',
-        monthJi: '寅', // 木 통근
-        wood: 40,
-        fire: 20,
-        earth: 10,
-        metal: 10,
-        water: 20,
+        monthJi: '寅', // 木 본기
+        wood: 40, fire: 20, earth: 10, metal: 10, water: 20,
+        dayMaster: '甲', // 일간 天干
+        yearJi: '寅', // 甲 본기 → +6
+        dayJi: '卯',  // 乙(木) 본기 → 甲의 木 같음 +6
+        hourJi: '辰', // 乙 중기 → +3 (木 통근)
       );
-      // 강도 = 木(40) + 水(20) = 60, 월령 통근으로 ×1.5 → 90 → 100 clamp.
-      // label = 신강 (score >= 70)
+      // base = 木(40) + 水(20) = 60
+      // root bonus = year寅 6 + month寅 6×1.5=9 + day卯 6 + hour辰 3 = 24 → clamp 20
+      // total 60+20 = 80 → 신강
       expect(r.label, '신강');
       expect(r.labelEn, 'Very Strong');
     });
@@ -54,17 +57,20 @@ void main() {
       expect(r.label, anyOf(equals('중화'), equals('신약')));
     });
 
-    test('월령 통근 시 강도 boost — 일간 水 + 子월', () {
+    test('일간 壬(水) + 子월 + 申子 水 통근 → 신강', () {
+      // 신모델: 일간 통근 점수로 신강 달성.
       final r = StrengthService.judge(
         dayMasterElement: '水',
-        monthJi: '子', // 水 통근
-        wood: 20,
-        fire: 10,
-        earth: 20,
-        metal: 20,
-        water: 30,
+        monthJi: '子', // 癸(水) 본기
+        wood: 20, fire: 10, earth: 20, metal: 20, water: 30,
+        dayMaster: '壬', // 일간 天干 (水)
+        yearJi: '申', // 壬 중기(水) → +3
+        dayJi: '子',  // 癸 본기(水) → +6
+        hourJi: '亥', // 壬 본기(水) → +6
       );
-      // 강도 = 水(30) + 金(20) = 50, ×1.5 = 75 → 신강.
+      // base = 水(30) + 金(20) = 50
+      // root bonus = year申 3 + month子 6×1.5=9 + day子 6 + hour亥 6 = 24 → clamp 20
+      // total 50+20 = 70 → 신강 (≥70)
       expect(r.label, '신강');
     });
 
