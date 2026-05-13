@@ -1255,3 +1255,24 @@ PATH에 ComfyUI/A1111 없어서 사용자에게 물으려 했으나, 자율 mand
 ### 2026-04-28 23:00 (Mac → Windows) — 셋업 완료, 통신 가능 ✅ [처리 완료]
 
 GitHub repo 생성 + 푸시 완료. Windows clone + 폴링 시작.
+
+## 2026-05-13 Build #32 업로드 완료 (자동)
+
+### 콘텐츠 확장 Round 62~64
+- **콜드리딩 주입** (Round 62): 60일주 × 7 fields × 2 lang = 840 fields. v3 pair/triple combinator로 60일주 unique 보장 (중복 0). Barnum/Forer 기법.
+- **K-POP 셀럽 확장** (Round 63): 20 → 62명 (310% 증가). NewJeans/IVE/LE SSERAFIM/ITZY/aespa/ENHYPEN/SEVENTEEN/TXT/RIIZE 42명 추가. 일주 klc 자동 계산.
+- **해몽 사전 확장** (Round 64): 50 → 509 entries (10×). 11 카테고리, 한국 전통 해몽 + 길흉 분류.
+
+### Build #32 ASC 상태
+- IPA 업로드 SUCCEEDED + BUILD-STATUS: VALID
+- 외부 그룹 (ganzitester) 할당 완료
+- whatsNew KO+EN PATCH 완료
+- Beta Review: `ANOTHER_BUILD_IN_REVIEW` (Build #31 가 아직 심사 중 → #31 통과 후 #32 자동 진입)
+
+### 검증
+- flutter analyze: clean
+- flutter test: 288/288 통과 (content_integrity 중복 검사 포함)
+
+### 다음 자동 단계
+Build #31 review 완료 (보통 24h) → `ruby pillarseer/scripts/submit_b32.rb` 재실행하면 #32 review 자동 진입.
+
