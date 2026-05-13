@@ -84,27 +84,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppBarBlock(),
-              _HeroGreeting(
-                name: birth?.name,
-                dayMaster: useKo
-                    ? saju.dayPillar.pairKoreanMeaning
-                    : saju.dayMasterName,
-                date: fortune.date,
+              // Round 71 사용자 불만 #8 — first-fold 도파민. _OracleHero 한 줄 단정
+              // 예언 (font ≥24, 2~3 line) 이 화면 상단 첫 250px 안에 위치.
+              _OracleHero(
+                dayPillarChunGan: saju.dayPillar.chunGan,
+                dayEnergy: classifyDayEnergy(fortune.totalScore),
               ),
-              _StreakLine(),
               // ── 5초 파악 first-fold (codex 9.9+ 흡수 1등 앱 강점 4종) ──
+              if (sixAxis != null) _SixAxisCard(score: sixAxis),
+              _FiveDayTrendCard(points: fiveDay),
               _ScoreBlock(
                 score: fortune.totalScore,
                 quote: useKo
                     ? (fortune.quoteKo.isEmpty ? fortune.quoteEn : fortune.quoteKo)
                     : fortune.quoteEn,
               ),
-              if (sixAxis != null) _SixAxisCard(score: sixAxis),
-              _FiveDayTrendCard(points: fiveDay),
               if (chips != null) _LuckyChipsCard(chips: chips),
               // ── 더 깊이 보기 (collapsible) ──
+              // Round 71 — _HeroGreeting / _StreakLine 은 first-fold 도파민 트리거가
+              // 아니라 정보 (인사·streak). _DeepDiveSection 안으로 이동.
               _DeepDiveSection(
                 children: [
+                  _HeroGreeting(
+                    name: birth?.name,
+                    dayMaster: useKo
+                        ? saju.dayPillar.pairKoreanMeaning
+                        : saju.dayMasterName,
+                    date: fortune.date,
+                  ),
+                  _StreakLine(),
                   _PillarOfTheDay(
                     dayPillar: fortune.dayPillar,
                     label: _localizedGanjiLabel(context, fortune.dayPillar),
@@ -176,6 +184,120 @@ class _AppBarBlock extends StatelessWidget {
               fontWeight: FontWeight.w500,
               letterSpacing: 3,
               color: AppColors.inkLight,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── Oracle hero (Round 71 first-fold 도파민) ────────────
+
+/// 사용자 불만 #8 — home 진입 첫 5초 안에 화면 상단 ~250px 안에 박히는 단정 예언.
+/// DayEnergyKind × 천간(10) 30 ment pool 에서 결정적 hash 로 한 줄 선택.
+///
+/// 톤 (Round 67/71): 단정 평서 한다체. "오늘 너는 ~ 한다 / 너는 ~ 다."
+/// Sprint 3 사용자 불만 #3 invariant: restDay 에 "공식 자리·발표·승진·도전·승부" 0 / actionDay 에 "쉬어가·아끼" 0.
+class _OracleHero extends StatelessWidget {
+  final String dayPillarChunGan;
+  final DayEnergyKind dayEnergy;
+  const _OracleHero({
+    required this.dayPillarChunGan,
+    required this.dayEnergy,
+  });
+
+  /// 천간 10 × dayEnergy 3 = 30 ment pool.
+  /// restDay: "오늘 너는 한 번 멈춰야 한다 / 새로 시작하지 마라 / 묵은 정리 한 가지가 정답이다" 류.
+  /// actionDay: "오늘 너는 한 명한테 먼저 연락한다 / 그 한 줄이 분기점이다" 류.
+  /// mixedDay: "오늘 너는 큰 결정 한 번 미룬다 / 확인 한 가지로 분위기를 잡는다" 류.
+  static const _pool = <DayEnergyKind, Map<String, String>>{
+    DayEnergyKind.restDay: {
+      '甲': '오늘 너는 한 번 멈춰야 한다.\n새로 시작하지 마라.\n묵은 정리 한 가지가 정답이다.',
+      '乙': '오늘 너는 한 박자 늦춰라.\n새 약속 잡지 마라.\n잠 한 시간이 너에게 가장 큰 회복이다.',
+      '丙': '오늘 너는 자기 자리를 데우지 마라.\n새 자리에 나가지 마라.\n묵은 카톡 한 줄만 정리한다.',
+      '丁': '오늘 너는 빛을 줄여라.\n새 사람 만나지 마라.\n익숙한 한 사람과 짧은 한 줄이 정답이다.',
+      '戊': '오늘 너는 결정 한 번 미뤄라.\n새 책임 받지 마라.\n오늘 자리 지키는 게 정답이다.',
+      '己': '오늘 너는 받쳐주지 마라.\n남 일에 끼지 말고 자기 회복부터 한다.\n오늘은 자기 한 사람만 챙긴다.',
+      '庚': '오늘 너는 자르지 마라.\n결단 한 번 미뤄라.\n한 박자 더 보고 가는 게 정답이다.',
+      '辛': '오늘 너는 깎이지 마라.\n새 충돌 만들지 마라.\n오늘은 깎인 데를 회복한다.',
+      '壬': '오늘 너는 멈춘 자리를 지킨다.\n새 방향 잡지 마라.\n묵은 흐름 한 줄만 정리한다.',
+      '癸': '오늘 너는 스며들지 마라.\n새 자리에 빠지지 마라.\n오늘은 자기 한 자리에 머문다.',
+    },
+    DayEnergyKind.mixedDay: {
+      '甲': '오늘 너는 큰 결정 한 번 미룬다.\n확인 한 가지로 분위기를 잡는다.\n그게 오늘의 정답이다.',
+      '乙': '오늘 너는 한 박자 늦게 움직인다.\n작은 약속 한 줄 지키는 게 정답이다.\n그 한 줄이 내일을 결정한다.',
+      '丙': '오늘 너는 한 자리만 데운다.\n사람 한 명한테 짧게 한마디 보낸다.\n그 한마디가 분기점이다.',
+      '丁': '오늘 너는 한 사람만 비춘다.\n오래된 한 명한테 한 줄 보낸다.\n그게 오늘의 분기점이다.',
+      '戊': '오늘 너는 자리만 지킨다.\n큰 결정은 한 박자 늦춘다.\n그게 분기점이다.',
+      '己': '오늘 너는 한 사람만 받친다.\n묵은 약속 한 줄 끝낸다.\n그 한 줄이 분기점이다.',
+      '庚': '오늘 너는 큰 결단 한 번 미룬다.\n작은 정확함 한 가지가 정답이다.\n그게 너의 평판을 만든다.',
+      '辛': '오늘 너는 자기 색만 지킨다.\n흔들리지 마라.\n그 자리에서 분기점이 시작된다.',
+      '壬': '오늘 너는 분위기만 읽는다.\n다음 한 수를 정한다.\n그게 분기점이다.',
+      '癸': '오늘 너는 빈 자리 한 곳에만 스며든다.\n묵은 한 명한테 한 줄 보낸다.\n그게 분기점이다.',
+    },
+    DayEnergyKind.actionDay: {
+      '甲': '오늘 너는 한 명한테 먼저 연락한다.\n그 한 줄이 분기점이다.\n망설이면 그 타이밍이 닫힌다.',
+      '乙': '오늘 너는 미뤘던 한 가지를 시작한다.\n분위기가 너 편이다.\n그 한 발이 내일을 결정한다.',
+      '丙': '오늘 너는 한 자리를 데운다.\n사람들이 너에게 모인다.\n그 자리에서 너의 한 해가 시작된다.',
+      '丁': '오늘 너는 한 사람을 길게 비춘다.\n그 사람이 너의 다음 한 해를 바꾼다.\n먼저 손을 내미는 쪽이 너다.',
+      '戊': '오늘 너는 한 결정을 끝까지 간다.\n결과 한 줄이 네 이름으로 남는다.\n그게 분기점이다.',
+      '己': '오늘 너는 한 사람을 받친다.\n그 사람이 너에게 한 줄로 돌아온다.\n그 한 줄이 분기점이다.',
+      '庚': '오늘 너는 결정 한 번에 자른다.\n그 한 번이 네 평판을 만든다.\n망설이지 마라.',
+      '辛': '오늘 너는 자기 색으로 빛난다.\n사람들 머릿속에 한 줄로 박힌다.\n그게 분기점이다.',
+      '壬': '오늘 너는 새 방향으로 움직인다.\n다음 한 수를 다른 사람보다 먼저 본다.\n그게 너의 무기다.',
+      '癸': '오늘 너는 깊이 한 줄로 스며든다.\n한 사람 머릿속에 너의 이름이 남는다.\n그게 분기점이다.',
+    },
+  };
+
+  String _pickMent() {
+    final m = _pool[dayEnergy]!;
+    return m[dayPillarChunGan] ?? m['甲']!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    // en 블록 NON-GOAL — Co-Star 글로벌 별도 라운드. ko 만 단정 단어 풀.
+    final ment = useKo
+        ? _pickMent()
+        : "Today you take one step.\nOne quiet line decides the rest.";
+    final accent = switch (dayEnergy) {
+      DayEnergyKind.actionDay => AppColors.woodJade,
+      DayEnergyKind.mixedDay => AppColors.accent,
+      DayEnergyKind.restDay => AppColors.fireRed,
+    };
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 작은 라벨 — Round 70 톤 (한자 + 영문 letter-spacing).
+          Text(
+            useKo ? '오늘의 한 줄' : "TODAY'S ORACLE",
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 14),
+          // Oracle 단정 예언 — font ≥24, 2~3 line.
+          Text(
+            ment,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+              color: accent,
+              height: 1.45,
+              letterSpacing: -0.1,
             ),
           ),
         ],
