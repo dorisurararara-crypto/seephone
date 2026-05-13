@@ -162,5 +162,72 @@ void main() {
         expect((c['blurbEn'] as String).trim(), isNotEmpty);
       }
     });
+
+    test('blurbKo 문법 오류 — "불와/물와/흙와/결 결" 없음', () {
+      final bad = <String>[];
+      for (final c in celebs) {
+        final ko = c['blurbKo'] as String;
+        for (final p in ['불와 ', '물와 ', '흙와 ', '결 결', ' 결.']) {
+          if (ko.contains(p)) {
+            bad.add('${c['id']}: "$p" in "$ko"');
+            break;
+          }
+        }
+      }
+      expect(bad, isEmpty,
+          reason: 'celeb blurbKo 한국어 문법/반복 오류:\n${bad.join("\n")}');
+    });
+  });
+
+  group('saju_deep_slice 본문 품질', () {
+    // codex Round 65 권고 — 같은 슬라이스 안에서 body text 가 모든 entries 에
+    // 동일하게 반복되는 패턴 (Barnum 변주 전) 을 회귀 방지.
+    test('동일 문장 60일주 cross 반복 ≤ 10× (KO body 본문)', () {
+      final files = [
+        'assets/data/saju_deep_slice_0_19.json',
+        'assets/data/saju_deep_slice_20_39.json',
+        'assets/data/saju_deep_slice_40_59.json',
+      ];
+      final phraseCount = <String, int>{};
+      for (final f in files) {
+        final data = (jsonDecode(File(f).readAsStringSync()) as List)
+            .cast<Map<String, dynamic>>();
+        for (final e in data) {
+          final ko = e['ko'] as Map<String, dynamic>?;
+          if (ko == null) continue;
+          for (final fld in [
+            'love',
+            'career',
+            'wealth',
+            'health',
+            'family',
+            'fame',
+            'dayMasterDeep'
+          ]) {
+            final v = ko[fld];
+            if (v is! String) continue;
+            // sentence split
+            final sents = v.split(RegExp(r'(?<=[.!?])\s+'));
+            for (final s in sents) {
+              final t = s.trim();
+              if (t.length >= 20 && t.length <= 200) {
+                phraseCount[t] = (phraseCount[t] ?? 0) + 1;
+              }
+            }
+          }
+        }
+      }
+      // 슬라이스 구조 (20 entries / slice) 이므로 같은 슬라이스의 base body 가
+      // 20× 까지는 정상 — 21× 이상이면 cross-slice 중복.
+      // 또한 cold reading 변주가 들어간 카테고리는 NC2 pair 로 분산되어 ≤10.
+      final overRepeated = phraseCount.entries
+          .where((e) => e.value > 20)
+          .map((e) =>
+              '${e.value}× | ${e.key.substring(0, e.key.length > 60 ? 60 : e.key.length)}')
+          .toList();
+      expect(overRepeated, isEmpty,
+          reason:
+              'KO body 본문 sentence 21+ cross-slice 반복 (회귀 방지):\n${overRepeated.join("\n")}');
+    });
   });
 }
