@@ -1,0 +1,751 @@
+{
+  "_meta": {
+    "schema": "sipsinMix (dominant + secondary) → careers (5-7 직업)",
+    "matching": "1995-10-27 신묘 case: 정관×2 + 정인 + 상관 + 편재 + 겁재 → 정인+상관 우선 → 언론/기고/방송 매칭",
+    "tone": "Round 73 — 직업 list + 단정 한 줄 설명"
+  },
+  "jeongin_sanggwan": {
+    "primaryKo": "정인 + 상관",
+    "primaryEn": "Jeongin + Sanggwan (study + wit)",
+    "noteKo": "박식한 머리에 입담이 살아 있어요. 보고 익힌 것을 본인 언어로 풀어내는 길이 잘 맞아요.",
+    "noteEn": "A learned head paired with a sharp tongue. The road that turns what you absorbed into your own words fits you well.",
+    "careersKo": [
+      "언론인",
+      "기고가",
+      "작가",
+      "방송 PD",
+      "교사·강사",
+      "큐레이터",
+      "유튜브·콘텐츠 크리에이터"
+    ],
+    "careersEn": [
+      "Journalist",
+      "Columnist",
+      "Author",
+      "TV/Film producer",
+      "Teacher / lecturer",
+      "Curator",
+      "YouTuber / content creator"
+    ]
+  },
+  "jeongin_pyeonjae": {
+    "primaryKo": "정인 + 편재",
+    "primaryEn": "Jeongin + Pyeonjae",
+    "noteKo": "지식 위에서 사업·중개를 굴려요. 머리로 돈 만드는 자리가 어울려요.",
+    "noteEn": "You spin business and brokering on top of knowledge. A money-from-the-head seat suits you.",
+    "careersKo": [
+      "출판 기획자",
+      "교육 사업가",
+      "지식 IP 사업",
+      "컨설턴트",
+      "에이전시 대표",
+      "투자 분석가",
+      "리서치 기반 마케터"
+    ],
+    "careersEn": [
+      "Publishing planner",
+      "Education entrepreneur",
+      "Knowledge IP business",
+      "Consultant",
+      "Agency owner",
+      "Investment analyst",
+      "Research-based marketer"
+    ]
+  },
+  "jeonggwan_jeongin": {
+    "primaryKo": "정관 + 정인",
+    "primaryEn": "Jeonggwan + Jeongin",
+    "noteKo": "명예와 학문이 동시에 단단해요. 공직·교육·법조 쪽 정통 길이 어울려요.",
+    "noteEn": "Honor and study both stand solid. Civil service, education, and law are your orthodox lanes.",
+    "careersKo": [
+      "판사·검사",
+      "변호사",
+      "고위 공무원",
+      "대학교수",
+      "연구원",
+      "정책 기획자",
+      "감사·회계사"
+    ],
+    "careersEn": [
+      "Judge / prosecutor",
+      "Lawyer",
+      "Senior civil servant",
+      "Professor",
+      "Researcher",
+      "Policy planner",
+      "Auditor / CPA"
+    ]
+  },
+  "jeonggwan_sanggwan": {
+    "primaryKo": "정관 + 상관",
+    "primaryEn": "Jeonggwan + Sanggwan",
+    "noteKo": "체면과 입담이 같이 강해요. 명예 무대 위에서 말로 사람 끄는 길이 길이에요.",
+    "noteEn": "Reputation and wit are both strong. The lane where you pull a room on a public stage suits you.",
+    "careersKo": [
+      "정치인",
+      "방송 진행자",
+      "변호사",
+      "대변인",
+      "전문가 패널",
+      "유튜브 시사 채널 운영자",
+      "기업 임원"
+    ],
+    "careersEn": [
+      "Politician",
+      "Broadcaster / anchor",
+      "Lawyer",
+      "Spokesperson",
+      "Expert panelist",
+      "Current-affairs YouTuber",
+      "Corporate executive"
+    ]
+  },
+  "jeonggwan_pyeonjae": {
+    "primaryKo": "정관 + 편재",
+    "primaryEn": "Jeonggwan + Pyeonjae",
+    "noteKo": "명예와 돈 길이 함께 들어와요. 큰 조직 임원·사업가가 본인 자리예요.",
+    "noteEn": "Honor and money flow in together. Executive seats and founder roles suit you.",
+    "careersKo": [
+      "대기업 임원",
+      "스타트업 대표",
+      "투자은행 임원",
+      "법조 파트너",
+      "공기업 대표",
+      "외교관",
+      "글로벌 비즈니스 컨설턴트"
+    ],
+    "careersEn": [
+      "Corporate executive",
+      "Startup founder",
+      "Investment bank exec",
+      "Law firm partner",
+      "State-enterprise head",
+      "Diplomat",
+      "Global business consultant"
+    ]
+  },
+  "pyeongwan_sanggwan": {
+    "primaryKo": "편관 + 상관",
+    "primaryEn": "Pyeongwan + Sanggwan",
+    "noteKo": "추진력과 반골 정신이 강해요. 부조리에 맞서는 일이 본인을 살려요.",
+    "noteEn": "Strong drive and a rebel streak. Standing against the wrong wakes you up.",
+    "careersKo": [
+      "검사·변호사",
+      "탐사 기자",
+      "운동선수",
+      "특수부대 / 군 장교",
+      "스타트업 CEO",
+      "현장 PD",
+      "구급·소방"
+    ],
+    "careersEn": [
+      "Prosecutor / lawyer",
+      "Investigative reporter",
+      "Athlete",
+      "Special forces / officer",
+      "Startup CEO",
+      "On-site producer",
+      "EMT / firefighter"
+    ]
+  },
+  "pyeongwan_pyeonjae": {
+    "primaryKo": "편관 + 편재",
+    "primaryEn": "Pyeongwan + Pyeonjae",
+    "noteKo": "강한 추진력으로 큰 돈을 굴려요. 위험 감수형 사업이 잘 어울려요.",
+    "noteEn": "You drive big money with strong push. Risk-taking ventures fit you.",
+    "careersKo": [
+      "부동산 개발자",
+      "금융 트레이더",
+      "사업가",
+      "건설업 대표",
+      "벤처 캐피털",
+      "스포츠 에이전트",
+      "수출입 사업"
+    ],
+    "careersEn": [
+      "Real estate developer",
+      "Financial trader",
+      "Founder",
+      "Construction owner",
+      "VC",
+      "Sports agent",
+      "Import-export business"
+    ]
+  },
+  "siksin_pyeonjae": {
+    "primaryKo": "식신 + 편재",
+    "primaryEn": "Siksin + Pyeonjae",
+    "noteKo": "표현력 위에 돈 감각이 붙어요. 본인이 만든 콘텐츠로 시장에 닿는 길이 길이에요.",
+    "noteEn": "Money sense rides on your expression. The lane where your creation meets the market suits you.",
+    "careersKo": [
+      "요리사·셰프",
+      "예술가",
+      "디자이너",
+      "유튜버",
+      "콘텐츠 사업가",
+      "굿즈 브랜드 대표",
+      "F&B 창업자"
+    ],
+    "careersEn": [
+      "Chef",
+      "Artist",
+      "Designer",
+      "YouTuber",
+      "Content entrepreneur",
+      "Merch brand owner",
+      "F&B founder"
+    ]
+  },
+  "siksin_jeongjae": {
+    "primaryKo": "식신 + 정재",
+    "primaryEn": "Siksin + Jeongjae",
+    "noteKo": "꾸준한 창작이 안정 자산으로 바뀌어요. 본인 색을 길게 쌓아 가는 길이 어울려요.",
+    "noteEn": "Steady creation turns into steady assets. The slow-build lane in your own color suits you.",
+    "careersKo": [
+      "일러스트레이터",
+      "출판사 운영",
+      "교육 콘텐츠 사업",
+      "공예가",
+      "사진작가",
+      "정기 칼럼니스트",
+      "전시 기획자"
+    ],
+    "careersEn": [
+      "Illustrator",
+      "Publishing house owner",
+      "Educational content business",
+      "Craftsperson",
+      "Photographer",
+      "Regular columnist",
+      "Exhibition planner"
+    ]
+  },
+  "siksin_jeongin": {
+    "primaryKo": "식신 + 정인",
+    "primaryEn": "Siksin + Jeongin",
+    "noteKo": "공부와 표현이 함께 길어요. 깊은 지식을 쉽게 풀어내는 자리가 어울려요.",
+    "noteEn": "Study and expression both run long. The seat where you make deep knowledge approachable suits you.",
+    "careersKo": [
+      "과학 커뮤니케이터",
+      "에듀테크 강사",
+      "다큐멘터리 작가",
+      "박물관 큐레이터",
+      "대중 교양서 작가",
+      "대학 강사",
+      "지식 유튜버"
+    ],
+    "careersEn": [
+      "Science communicator",
+      "Edu-tech lecturer",
+      "Documentary writer",
+      "Museum curator",
+      "Pop-science author",
+      "University lecturer",
+      "Knowledge YouTuber"
+    ]
+  },
+  "sanggwan_pyeonjae": {
+    "primaryKo": "상관 + 편재",
+    "primaryEn": "Sanggwan + Pyeonjae",
+    "noteKo": "말과 돈이 같이 풀려요. 본인이 직접 무대에 서서 돈을 만드는 길이 길이에요.",
+    "noteEn": "Words and money open together. The lane where you stand on stage and make money fits you.",
+    "careersEn": [
+      "MC / host",
+      "Live commerce host",
+      "Stand-up comedian",
+      "Show producer",
+      "Performance founder",
+      "Talent agent",
+      "Influencer brand owner"
+    ],
+    "careersKo": [
+      "방송 MC",
+      "라이브 커머스 진행자",
+      "스탠드업 코미디언",
+      "쇼 프로듀서",
+      "공연 사업가",
+      "연예 매니저",
+      "인플루언서 브랜드 대표"
+    ]
+  },
+  "sanggwan_jeonggwan": {
+    "primaryKo": "상관 + 정관",
+    "primaryEn": "Sanggwan + Jeonggwan",
+    "noteKo": "공식 무대 위 입담이 강해요. 법조·정치·언론처럼 명예 자리에서 말로 사는 길이 어울려요.",
+    "noteEn": "Sharp speech sits on a public stage. Law, politics, journalism — honor seats where words live fit you.",
+    "careersKo": [
+      "변호사",
+      "기자",
+      "정치 평론가",
+      "방송 진행자",
+      "토론 전문가",
+      "외교관",
+      "공무원 대변인"
+    ],
+    "careersEn": [
+      "Lawyer",
+      "Journalist",
+      "Political commentator",
+      "Broadcaster",
+      "Debate professional",
+      "Diplomat",
+      "Civil-service spokesperson"
+    ]
+  },
+  "pyeonjae_jeongjae": {
+    "primaryKo": "편재 + 정재",
+    "primaryEn": "Pyeonjae + Jeongjae",
+    "noteKo": "외부 거래와 안정 자산이 같이 굴러가요. 본인은 자산형 사업이 길이에요.",
+    "noteEn": "Outside deals and steady assets roll together. Asset-style business is your lane.",
+    "careersKo": [
+      "부동산 자산가",
+      "임대 사업자",
+      "투자 자문",
+      "프랜차이즈 운영자",
+      "유통업 대표",
+      "자산 운용 매니저",
+      "세무사·회계사"
+    ],
+    "careersEn": [
+      "Property owner",
+      "Rental landlord",
+      "Investment advisor",
+      "Franchise owner",
+      "Distribution business head",
+      "Asset manager",
+      "Tax accountant / CPA"
+    ]
+  },
+  "pyeonjae_pyeongwan": {
+    "primaryKo": "편재 + 편관",
+    "primaryEn": "Pyeonjae + Pyeongwan",
+    "noteKo": "돈과 권력이 같이 들어와요. 큰 자본을 강하게 굴리는 길이 어울려요.",
+    "noteEn": "Money and power arrive together. The lane where big capital moves hard suits you.",
+    "careersKo": [
+      "사모펀드 운용자",
+      "헤지펀드 매니저",
+      "M&A 전문가",
+      "건설 시행사 대표",
+      "선물·옵션 트레이더",
+      "벤처 캐피털 파트너",
+      "정치 자금 코디네이터"
+    ],
+    "careersEn": [
+      "Private equity manager",
+      "Hedge fund manager",
+      "M&A specialist",
+      "Construction developer",
+      "Futures / options trader",
+      "VC partner",
+      "Political fund coordinator"
+    ]
+  },
+  "pyeonin_sanggwan": {
+    "primaryKo": "편인 + 상관",
+    "primaryEn": "Pyeonin + Sanggwan",
+    "noteKo": "비주류 지식과 입담이 본인 무기예요. 남이 안 보는 영역에서 본인 톤을 만드는 길이 어울려요.",
+    "noteEn": "Niche knowledge and a sharp tongue are your weapon. The lane where you shape your tone where no one else looks suits you.",
+    "careersKo": [
+      "서브컬처 평론가",
+      "테크 칼럼니스트",
+      "팟캐스터",
+      "독립 영화감독",
+      "전문 번역가",
+      "리뷰어",
+      "독립 출판인"
+    ],
+    "careersEn": [
+      "Subculture critic",
+      "Tech columnist",
+      "Podcaster",
+      "Independent film director",
+      "Specialist translator",
+      "Reviewer",
+      "Independent publisher"
+    ]
+  },
+  "bigyeon_jeongjae": {
+    "primaryKo": "비견 + 정재",
+    "primaryEn": "Bigyeon + Jeongjae",
+    "noteKo": "자기 색이 또렷한데 살림도 단단해요. 본인 이름으로 안정 자산을 만드는 길이 어울려요.",
+    "noteEn": "Sharp color, solid books. The lane where you build steady assets in your own name suits you.",
+    "careersKo": [
+      "1인 브랜드 대표",
+      "프리랜서 디자이너·작가",
+      "공방·아틀리에 운영자",
+      "독립 카페·식당",
+      "유튜브 채널 운영자",
+      "자영업 사장",
+      "퍼스널 트레이너"
+    ],
+    "careersEn": [
+      "Solo brand owner",
+      "Freelance designer / writer",
+      "Atelier owner",
+      "Independent cafe / restaurant",
+      "YouTube channel owner",
+      "Self-employed",
+      "Personal trainer"
+    ]
+  },
+  "geopjae_pyeongwan": {
+    "primaryKo": "겁재 + 편관",
+    "primaryEn": "Geopjae + Pyeongwan",
+    "noteKo": "경쟁과 추진력이 함께 폭발해요. 토너먼트형 무대에서 본인이 살아나요.",
+    "noteEn": "Competition and drive erupt together. Tournament-shape stages wake you up.",
+    "careersKo": [
+      "프로 운동선수",
+      "특수부대 장교",
+      "스타트업 대표",
+      "경매 사업자",
+      "현장 영업 책임자",
+      "프로 게이머",
+      "주식 트레이더"
+    ],
+    "careersEn": [
+      "Pro athlete",
+      "Special forces officer",
+      "Startup founder",
+      "Auction house owner",
+      "Field sales lead",
+      "Pro gamer",
+      "Stock trader"
+    ]
+  },
+  "bigyeon_sanggwan": {
+    "primaryKo": "비견 + 상관",
+    "primaryEn": "Bigyeon + Sanggwan",
+    "noteKo": "자기 색이 또렷한데 입담까지 강해요. 본인 채널·콘텐츠로 1인 운영하는 길이 잘 맞아요.",
+    "noteEn": "Sharp color, sharp tongue. The solo channel and content lane suits you.",
+    "careersKo": [
+      "1인 유튜버",
+      "팟캐스트 호스트",
+      "독립 작가",
+      "스트리머",
+      "콘텐츠 디렉터",
+      "토크쇼 진행자",
+      "솔로 강연자"
+    ],
+    "careersEn": [
+      "Solo YouTuber",
+      "Podcast host",
+      "Independent author",
+      "Streamer",
+      "Content director",
+      "Talk show host",
+      "Solo lecturer"
+    ]
+  },
+  "bigyeon_pyeongwan": {
+    "primaryKo": "비견 + 편관",
+    "primaryEn": "Bigyeon + Pyeongwan",
+    "noteKo": "자기 색이 강하고 추진력도 폭발해요. 본인 사업·창업 무대에서 빛나는 자리예요.",
+    "noteEn": "Strong self-color paired with explosive drive. Your own venture stage suits you.",
+    "careersKo": [
+      "창업가",
+      "프리랜서 컨설턴트",
+      "리스크 매니저",
+      "지점장",
+      "프로젝트 리더",
+      "현장 감독",
+      "독립 PD"
+    ],
+    "careersEn": [
+      "Founder",
+      "Freelance consultant",
+      "Risk manager",
+      "Branch manager",
+      "Project lead",
+      "On-site director",
+      "Independent PD"
+    ]
+  },
+  "geopjae_jeongjae": {
+    "primaryKo": "겁재 + 정재",
+    "primaryEn": "Geopjae + Jeongjae",
+    "noteKo": "경쟁 안에서 단단한 자산이 쌓여요. 영업·세일즈로 정기 수익을 만드는 자리가 어울려요.",
+    "noteEn": "Steady assets pile up inside competition. Sales-driven steady-revenue seats suit you.",
+    "careersKo": [
+      "영업 관리자",
+      "보험·증권 영업",
+      "B2B 세일즈",
+      "프랜차이즈 점주",
+      "지점 관리자",
+      "팀장",
+      "리테일 매니저"
+    ],
+    "careersEn": [
+      "Sales manager",
+      "Insurance / securities sales",
+      "B2B sales",
+      "Franchise owner",
+      "Branch lead",
+      "Team lead",
+      "Retail manager"
+    ]
+  },
+  "geopjae_siksin": {
+    "primaryKo": "겁재 + 식신",
+    "primaryEn": "Geopjae + Siksin",
+    "noteKo": "라이벌 무대 위에서 본인 표현이 살아나요. 경쟁형 예술·스포츠 자리가 어울려요.",
+    "noteEn": "Your expression wakes up on a rival stage. Competitive arts and sports seats suit you.",
+    "careersKo": [
+      "프로 댄서",
+      "오디션 가수",
+      "프로 게이머",
+      "스타 셰프",
+      "스포츠 코치",
+      "오디션 도전자",
+      "경쟁 PD"
+    ],
+    "careersEn": [
+      "Pro dancer",
+      "Audition singer",
+      "Pro gamer",
+      "Star chef",
+      "Sports coach",
+      "Audition challenger",
+      "Competition PD"
+    ]
+  },
+  "siksin_sanggwan": {
+    "primaryKo": "식신 + 상관",
+    "primaryEn": "Siksin + Sanggwan",
+    "noteKo": "표현력과 입담이 함께 폭발해요. 본인이 곧 브랜드 되는 무대가 어울려요.",
+    "noteEn": "Expression and wit erupt together. The stage where you become the brand suits you.",
+    "careersKo": [
+      "배우",
+      "쇼호스트",
+      "유튜브 크리에이터",
+      "라디오 DJ",
+      "스탠드업 코미디언",
+      "광고 카피라이터",
+      "콘텐츠 PD"
+    ],
+    "careersEn": [
+      "Actor",
+      "Show host",
+      "YouTube creator",
+      "Radio DJ",
+      "Stand-up comedian",
+      "Ad copywriter",
+      "Content PD"
+    ]
+  },
+  "siksin_pyeonin": {
+    "primaryKo": "식신 + 편인",
+    "primaryEn": "Siksin + Pyeonin",
+    "noteKo": "독특한 표현 색이 본인 무기예요. 남이 안 하는 영역에서 본인 톤이 살아나요.",
+    "noteEn": "A unique expression is your weapon. Your tone lights up where no one else goes.",
+    "careersKo": [
+      "서브컬처 작가",
+      "독립 영화감독",
+      "실험 음악가",
+      "테마 카페·바 운영자",
+      "아트 디렉터",
+      "독립 출판인",
+      "수집가·큐레이터"
+    ],
+    "careersEn": [
+      "Subculture writer",
+      "Indie film director",
+      "Experimental musician",
+      "Theme cafe owner",
+      "Art director",
+      "Indie publisher",
+      "Collector / curator"
+    ]
+  },
+  "pyeonjae_jeongin": {
+    "primaryKo": "편재 + 정인",
+    "primaryEn": "Pyeonjae + Jeongin",
+    "noteKo": "지식 위에서 외부 거래를 굴려요. 교육·연구·지식 콘텐츠로 돈 만드는 자리가 어울려요.",
+    "noteEn": "Outside deals on top of knowledge. Education, research, and knowledge content seats suit you.",
+    "careersKo": [
+      "인강 강사",
+      "교육 출판 사업",
+      "리서치 컨설턴트",
+      "데이터 분석가",
+      "강연 에이전시 대표",
+      "지식 IP 사업가",
+      "학원 운영자"
+    ],
+    "careersEn": [
+      "Online lecturer",
+      "Education publisher",
+      "Research consultant",
+      "Data analyst",
+      "Lecture agency head",
+      "Knowledge IP entrepreneur",
+      "Academy owner"
+    ]
+  },
+  "pyeongwan_jeongin": {
+    "primaryKo": "편관 + 정인",
+    "primaryEn": "Pyeongwan + Jeongin",
+    "noteKo": "추진력 위에 학문이 받쳐줘요. 강한 자리에서 전문성을 쓰는 길이 어울려요.",
+    "noteEn": "Knowledge supports your drive. The strong-seat lane where you use expertise suits you.",
+    "careersKo": [
+      "검사",
+      "외과 의사",
+      "검찰 수사관",
+      "법학·정치학 교수",
+      "정부 정책 연구원",
+      "감사관",
+      "공안 전문가"
+    ],
+    "careersEn": [
+      "Prosecutor",
+      "Surgeon",
+      "Criminal investigator",
+      "Law / political science professor",
+      "Government policy researcher",
+      "Auditor",
+      "Public security specialist"
+    ]
+  },
+  "jeonggwan_jeongjae": {
+    "primaryKo": "정관 + 정재",
+    "primaryEn": "Jeonggwan + Jeongjae",
+    "noteKo": "명예와 안정 자산이 동시에 단단해요. 정통 화이트칼라 자리가 평생 어울려요.",
+    "noteEn": "Honor and steady assets both stand solid. Traditional white-collar seats fit you for life.",
+    "careersKo": [
+      "은행·증권 임원",
+      "공무원",
+      "회계법인 파트너",
+      "보험 본사 임원",
+      "공기업 부서장",
+      "기업 법무팀장",
+      "교사·교수"
+    ],
+    "careersEn": [
+      "Bank / securities executive",
+      "Civil servant",
+      "Accounting firm partner",
+      "Insurance HQ executive",
+      "State enterprise dept head",
+      "Corporate legal lead",
+      "Teacher / professor"
+    ]
+  },
+  "pyeonin_jeongin": {
+    "primaryKo": "편인 + 정인",
+    "primaryEn": "Pyeonin + Jeongin",
+    "noteKo": "정통과 비주류 지식이 함께 강해요. 깊이 파는 학자 자리가 잘 맞아요.",
+    "noteEn": "Orthodox and niche knowledge both strong. The deep-digging scholar seat suits you.",
+    "careersKo": [
+      "대학교수",
+      "박물관 학예사",
+      "고서·고문서 연구자",
+      "심리분석가",
+      "철학 연구자",
+      "한의사",
+      "역사 다큐 작가"
+    ],
+    "careersEn": [
+      "Professor",
+      "Museum researcher",
+      "Ancient text researcher",
+      "Psychoanalyst",
+      "Philosophy researcher",
+      "Korean medicine doctor",
+      "Historical documentarian"
+    ]
+  },
+  "sanggwan_pyeonin": {
+    "primaryKo": "상관 + 편인",
+    "primaryEn": "Sanggwan + Pyeonin",
+    "noteKo": "비주류 시각에 입담까지 받쳐줘요. 평론·해석·풍자 같은 본인 톤 무대가 어울려요.",
+    "noteEn": "Niche angles backed by sharp speech. Critique, interpretation, satire — your tone stages suit you.",
+    "careersKo": [
+      "문화평론가",
+      "영화·드라마 평론가",
+      "풍자 작가",
+      "패러디 콘텐츠 제작자",
+      "독립 다큐멘터리 감독",
+      "디스토피아 SF 작가",
+      "심층 인터뷰어"
+    ],
+    "careersEn": [
+      "Cultural critic",
+      "Film / drama critic",
+      "Satirist",
+      "Parody content creator",
+      "Independent documentary director",
+      "Dystopian sci-fi writer",
+      "In-depth interviewer"
+    ]
+  },
+  "pyeonjae_pyeonin": {
+    "primaryKo": "편재 + 편인",
+    "primaryEn": "Pyeonjae + Pyeonin",
+    "noteKo": "비주류 시각으로 시장을 봐요. 남이 안 보는 자리에서 큰 돈 만드는 길이 어울려요.",
+    "noteEn": "You read the market through a niche lens. The lane where you make big money where others do not look suits you.",
+    "careersKo": [
+      "스타트업 창업자",
+      "벤처 캐피털 파트너",
+      "암호화폐 트레이더",
+      "신생 시장 개척자",
+      "테크 큐레이터",
+      "임팩트 투자자",
+      "비주류 자산 운용가"
+    ],
+    "careersEn": [
+      "Startup founder",
+      "VC partner",
+      "Crypto trader",
+      "New-market opener",
+      "Tech curator",
+      "Impact investor",
+      "Alt-asset manager"
+    ]
+  },
+  "geopjae_jeongin": {
+    "primaryKo": "겁재 + 정인",
+    "primaryEn": "Geopjae + Jeongin",
+    "noteKo": "경쟁 안에서 학문이 본인을 키워요. 시험·자격증 무대에서 본인이 빛나요.",
+    "noteEn": "Inside competition study raises you up. Exam and certification stages light you up.",
+    "careersKo": [
+      "고시 합격자 (사법·행시·기시)",
+      "회계사",
+      "변리사",
+      "감정평가사",
+      "공인중개사",
+      "변호사",
+      "전문 자격사"
+    ],
+    "careersEn": [
+      "Civil exam top scorer",
+      "CPA",
+      "Patent attorney",
+      "Appraiser",
+      "Real estate agent",
+      "Lawyer",
+      "Licensed specialist"
+    ]
+  },
+  "_fallback": {
+    "primaryKo": "균형 분포",
+    "primaryEn": "Balanced distribution",
+    "noteKo": "본인 사주는 한 가지로 한 가지에 묶이지 않는 균형형이에요. 평생 한 길에 묶이지 않고 여러 직업을 거치는 분포예요.",
+    "noteEn": "Your chart sits in balance. Many lanes mix instead of one fixed road.",
+    "careersKo": [
+      "기획자",
+      "프로젝트 매니저",
+      "마케터",
+      "리서처",
+      "프리랜서 종합",
+      "교육 강사",
+      "콘텐츠 PM"
+    ],
+    "careersEn": [
+      "Planner",
+      "Project manager",
+      "Marketer",
+      "Researcher",
+      "Freelance generalist",
+      "Education instructor",
+      "Content PM"
+    ]
+  }
+}

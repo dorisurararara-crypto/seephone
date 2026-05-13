@@ -19,7 +19,9 @@ import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
 import '../services/life_stage_service.dart';
 import '../services/personalization_engine.dart';
+import '../services/career_recommend_service.dart';
 import '../services/sipsin_persona_service.dart';
+import '../services/wealth_strategy_service.dart';
 import '../services/shinsa_service.dart';
 import '../services/strength_service.dart';
 import '../services/twelve_unsung_service.dart';
@@ -122,6 +124,9 @@ class ResultScreen extends ConsumerWidget {
             ),
             // 2.7 SIPSIN PERSONA — 8글자 십신 인격 풀이 (Round 73 sprint 3)
             _SipsinPersonaSection(result: result, useKo: useKo),
+            // 2.8 CAREER + WEALTH — 직업 추천 + 재테크 3 phase (Round 73 sprint 6)
+            _CareerSection(result: result, useKo: useKo),
+            _WealthStrategySection(result: result, useKo: useKo),
             // 3. CHART ATTRIBUTES — 2x2 grid (bg)
             _ChartAttributesSection(result: result, useKo: useKo),
             // 4. FOUR PILLARS — 4-column hairline (paper bg)
@@ -3266,7 +3271,7 @@ class _LifeStageSection extends StatelessWidget {
         final r = snap.data!;
         return _SectionFrame(
           background: AppColors.bg,
-          meta: useKo ? '인생 흐름 · LIFE STAGE' : 'LIFE STAGE · 三 段',
+          meta: useKo ? '인생 흐름 · LIFE STAGE' : 'LIFE STAGE',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -3399,7 +3404,7 @@ class _SipsinPersonaSection extends StatelessWidget {
         final r = snap.data!;
         return _SectionFrame(
           background: AppColors.paper,
-          meta: useKo ? '8글자 풀이 · EIGHT-CHARACTER READ' : 'EIGHT-CHARACTER READ · 八 字',
+          meta: useKo ? '8글자 풀이 · EIGHT-CHARACTER READ' : 'EIGHT-CHARACTER READ',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -3491,6 +3496,256 @@ class _SipsinPersonaRow extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           body,
+          style: useKo
+              ? GoogleFonts.notoSansKr(
+                  fontSize: 13.5,
+                  height: 1.75,
+                  color: AppColors.inkLight,
+                  letterSpacing: 0.1,
+                )
+              : GoogleFonts.inter(
+                  fontSize: 12.5,
+                  height: 1.65,
+                  color: AppColors.inkLight,
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────────── CAREER — Round 73 sprint 6 ────────────
+// 8글자 십신 분포 → 직업 추천 (5-7) + 한 줄 설명.
+
+class _CareerSection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _CareerSection({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<CareerRecommendation>(
+      future: CareerRecommendService.compute(result),
+      builder: (context, snap) {
+        if (!snap.hasData) return const SizedBox(height: 0);
+        final c = snap.data!;
+        final careers = useKo ? c.careersKo : c.careersEn;
+        return _SectionFrame(
+          background: AppColors.bg,
+          meta: useKo ? '재테크 비법 · CAREER PATH' : 'CAREER PATH',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                useKo
+                    ? '본인에게 어울리는 직업'
+                    : 'CAREERS THAT FIT YOU',
+                style: useKo
+                    ? GoogleFonts.notoSerifKr(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        height: 1.35,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      )
+                    : GoogleFonts.cormorantGaramond(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                useKo ? c.primaryKo : c.primaryEn,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.accent,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(width: 36, height: 1, color: AppColors.line),
+              const SizedBox(height: 14),
+              Text(
+                useKo ? c.noteKo : c.noteEn,
+                style: useKo
+                    ? GoogleFonts.notoSansKr(
+                        fontSize: 13.5,
+                        height: 1.75,
+                        color: AppColors.inkLight,
+                        letterSpacing: 0.1,
+                      )
+                    : GoogleFonts.inter(
+                        fontSize: 12.5,
+                        height: 1.65,
+                        color: AppColors.inkLight,
+                      ),
+              ),
+              const SizedBox(height: 18),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final career in careers)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.line, width: 1),
+                        color: AppColors.paper,
+                      ),
+                      child: Text(
+                        career,
+                        style: useKo
+                            ? GoogleFonts.notoSansKr(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.ink,
+                              )
+                            : GoogleFonts.inter(
+                                fontSize: 11.5,
+                                letterSpacing: 0.5,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.ink,
+                              ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ──────────── WEALTH — Round 73 sprint 6 ────────────
+// 재성 분포 + 일간 강약 → 3 phase paragraph
+// (모으는 법 / 손실 막는 법 / 재테크 비법).
+
+class _WealthStrategySection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _WealthStrategySection({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<WealthStrategy>(
+      future: WealthStrategyService.compute(result),
+      builder: (context, snap) {
+        if (!snap.hasData) return const SizedBox(height: 0);
+        final w = snap.data!;
+        return _SectionFrame(
+          background: AppColors.paper,
+          meta: useKo ? '재물 흐름 · WEALTH STRATEGY' : 'WEALTH STRATEGY',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                useKo
+                    ? '재물 모으는 법 · 손실 막는 법 · 재테크 비법'
+                    : 'BUILD · PROTECT · GROW',
+                style: useKo
+                    ? GoogleFonts.notoSerifKr(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        height: 1.4,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      )
+                    : GoogleFonts.cormorantGaramond(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      ),
+              ),
+              const SizedBox(height: 12),
+              Container(width: 36, height: 1, color: AppColors.line),
+              const SizedBox(height: 18),
+              _WealthPhaseRow(
+                  labelKo: '재물 모으는 법',
+                  labelEn: 'BUILD',
+                  ko: w.accumKo,
+                  en: w.accumEn,
+                  useKo: useKo),
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  height: 1,
+                  color: AppColors.line),
+              _WealthPhaseRow(
+                  labelKo: '재물 손실 막는 법',
+                  labelEn: 'PROTECT',
+                  ko: w.lossKo,
+                  en: w.lossEn,
+                  useKo: useKo),
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  height: 1,
+                  color: AppColors.line),
+              _WealthPhaseRow(
+                  labelKo: '재테크 비법',
+                  labelEn: 'GROW',
+                  ko: w.techKo,
+                  en: w.techEn,
+                  useKo: useKo),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _WealthPhaseRow extends StatelessWidget {
+  final String labelKo;
+  final String labelEn;
+  final String ko;
+  final String en;
+  final bool useKo;
+  const _WealthPhaseRow({
+    required this.labelKo,
+    required this.labelEn,
+    required this.ko,
+    required this.en,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              useKo ? labelKo : labelEn,
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 11,
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(child: Container(height: 1, color: AppColors.line)),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Text(
+          useKo ? ko : en,
           style: useKo
               ? GoogleFonts.notoSansKr(
                   fontSize: 13.5,
