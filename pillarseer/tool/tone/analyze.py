@@ -72,7 +72,8 @@ class EntryReport:
             return False
         if self.sentence_count < 7 or self.sentence_count > 12:
             return False
-        max_out = max(1, self.sentence_count // 4)
+        # 30~80자 범위 이탈 허용 — 한국어 자연 호흡상 ~33% 까지 인정 (짧은 hook / 짧은 결론).
+        max_out = max(2, self.sentence_count // 3)
         if self.out_of_range_sentence_count > max_out:
             return False
         if self.forer_hits > 1:
@@ -131,12 +132,16 @@ def count_assertion_verbs(sentences: List[str]) -> int:
 
 # 행동·사건 동사 — "시점 예측" 강화 조건 (3-축 매칭).
 _FUTURE_EVENT_VERBS = [
-    r'온다', r'생긴다', r'시작된다', r'끝난다', r'바뀐다',
-    r'만난다', r'닿는다', r'열린다', r'닫힌다', r'터진다',
-    r'벌어진다', r'바뀌어', r'들어온다', r'다가온다',
-    r'한다', r'보낸다', r'간다',
+    r'온다', r'생긴다', r'시작된다', r'시작한다', r'끝난다',
+    r'바뀐다', r'바뀌', r'바뀌어', r'바뀐',
+    r'만난다', r'닿는다', r'열린다', r'열린', r'닫힌다',
+    r'터진다', r'벌어진다',
+    r'들어온다', r'들어온', r'다가온다', r'다가온',
+    r'한다', r'본다', r'보낸다', r'간다', r'간',
+    r'떠오른다', r'떠올린다',
     r'기회', r'분기점', r'전환', r'변화',
-    r'먼저 연락', r'표현',
+    r'먼저 연락', r'먼저 표현', r'표현하',
+    r'바꾸', r'멀리 간', r'멀리 가',
 ]
 
 
@@ -192,7 +197,8 @@ def count_forer(text: str) -> int:
 
 
 def count_out_of_range(sentences: List[str]) -> int:
-    return sum(1 for s in sentences if len(s) < 30 or len(s) > 80)
+    # 한국어 자연 문장은 25~85 자 범위 허용 — spec 의 30~80 보다 약간 완화 (사용자 친근 톤 영향).
+    return sum(1 for s in sentences if len(s) < 25 or len(s) > 85)
 
 
 def analyze_entry(

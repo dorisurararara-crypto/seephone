@@ -93,9 +93,10 @@ def t_cold_reading_missing_assertion() -> None:
 
 
 def t_out_of_range() -> None:
+    # 25~85 자 범위 — 짧음(3자), 50자, 100자(>85), 35자
     sents = ['짧음.', 'b' * 50, 'c' * 100, 'd' * 35]
     n = count_out_of_range(sents)
-    assert n == 2, f'expected 2 out-of-range (5자, 100자), got {n}'
+    assert n == 2, f'expected 2 out-of-range (<25, >85), got {n}'
 
 
 def t_forer() -> None:
