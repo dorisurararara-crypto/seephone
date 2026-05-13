@@ -1,52 +1,4074 @@
 [
-  {"en": "snake", "ko": "뱀", "cat": "wealth", "auspicious": true, "meaningEn": "A snake dream often signals incoming wealth, especially a hidden source or unexpected windfall. Multiple snakes mean the gain is collective.", "meaningKo": "뱀 꿈은 재물운, 특히 숨은 수입이나 예상치 못한 횡재를 알립니다. 여러 마리면 공동의 이득입니다."},
-  {"en": "pig", "ko": "돼지", "cat": "wealth", "auspicious": true, "meaningEn": "Pigs symbolize prosperity and stable income. A clean pig brings business gain; a dirty pig warns of waste.", "meaningKo": "돼지는 재물과 안정된 수입을 상징합니다. 깨끗한 돼지는 사업 이득, 더러운 돼지는 낭비를 경고합니다."},
-  {"en": "dragon", "ko": "용", "cat": "auspicious", "auspicious": true, "meaningEn": "Dragons announce public recognition, a leap in status, or a major project breakthrough. A flying dragon is the strongest sign.", "meaningKo": "용은 공적인 인정, 지위 상승, 큰 프로젝트의 도약을 알립니다. 승천하는 용이 가장 강한 길조입니다."},
-  {"en": "tiger", "ko": "호랑이", "cat": "auspicious", "auspicious": true, "meaningEn": "A tiger signifies authority and protection. Riding a tiger means you will lead; being chased means a challenge requires courage.", "meaningKo": "호랑이는 권위와 보호를 상징합니다. 호랑이를 타면 리더가 되고, 쫓기면 도전에 용기가 필요합니다."},
-  {"en": "water", "ko": "물", "cat": "wealth", "auspicious": true, "meaningEn": "Clear water brings prosperity and emotional renewal. Muddy water warns of stuck plans or relationship strain.", "meaningKo": "맑은 물은 재물과 감정의 회복을 알립니다. 흙탕물은 정체된 계획이나 관계 긴장을 경고합니다."},
-  {"en": "fire", "ko": "불", "cat": "warning", "auspicious": false, "meaningEn": "Fire dreams demand attention to stress and over-extension. A controlled fire signals passion; a wildfire warns of burnout.", "meaningKo": "불 꿈은 스트레스와 과부하에 대한 주의를 요구합니다. 통제된 불은 열정, 산불은 번아웃을 경고합니다."},
-  {"en": "baby", "ko": "아기", "cat": "auspicious", "auspicious": true, "meaningEn": "Dreaming of a baby often signals a new project, idea, or chapter — something needing care to grow.", "meaningKo": "아기 꿈은 새 프로젝트, 아이디어, 새 장의 시작을 알립니다 — 돌봐야 자라는 것입니다."},
-  {"en": "teeth falling", "ko": "이빨 빠짐", "cat": "warning", "auspicious": false, "meaningEn": "Teeth falling out warns of loss — energy, position, or relationship strain. Strengthen what feels insecure.", "meaningKo": "이빨 빠지는 꿈은 손실을 경고합니다 — 에너지, 지위, 관계 긴장. 불안한 것을 보강하세요."},
-  {"en": "flying", "ko": "하늘 나는 꿈", "cat": "auspicious", "auspicious": true, "meaningEn": "Flying signals freedom, breakthrough, or rising influence. The higher you fly, the bigger the leap ahead.", "meaningKo": "하늘 나는 꿈은 자유, 돌파구, 영향력 상승을 상징합니다. 높이 날수록 더 큰 도약입니다."},
-  {"en": "running", "ko": "달리는 꿈", "cat": "warning", "auspicious": false, "meaningEn": "Running in a dream — especially being chased — points to avoided issues. Face what you fled.", "meaningKo": "달리는 꿈, 특히 쫓기는 꿈은 회피한 문제를 가리킵니다. 피한 것을 마주하세요."},
-  {"en": "blood", "ko": "피", "cat": "wealth", "auspicious": true, "meaningEn": "Blood in dreams, despite shock, often predicts windfall — especially fresh red blood seen openly.", "meaningKo": "피 꿈은 놀라움에도 횡재를 자주 예고합니다 — 특히 선명한 붉은 피를 본 경우입니다."},
-  {"en": "hair cut", "ko": "머리 자름", "cat": "warning", "auspicious": false, "meaningEn": "Cutting hair in a dream warns of energy loss or impending breakup — protect what is essential.", "meaningKo": "머리 자르는 꿈은 에너지 손실이나 이별을 경고합니다 — 중요한 것을 지키세요."},
-  {"en": "ancestor", "ko": "조상", "cat": "auspicious", "auspicious": true, "meaningEn": "Ancestor visits often carry guidance. Listen to their message — it may decide a current dilemma.", "meaningKo": "조상의 방문은 안내를 전합니다. 그들의 메시지를 듣세요 — 현재의 딜레마를 결정할 수 있습니다."},
-  {"en": "horse", "ko": "말", "cat": "auspicious", "auspicious": true, "meaningEn": "A horse signals movement and momentum — career change, travel, or a swift opportunity.", "meaningKo": "말은 움직임과 추진력을 상징합니다 — 진로 변경, 여행, 빠른 기회입니다."},
-  {"en": "fish", "ko": "물고기", "cat": "wealth", "auspicious": true, "meaningEn": "Fish point to wealth and harvest. Catching fish predicts gain; releasing fish brings karmic return later.", "meaningKo": "물고기는 재물과 수확을 가리킵니다. 잡으면 이득, 놓아주면 나중에 카르마로 돌아옵니다."},
-  {"en": "car", "ko": "자동차", "cat": "warning", "auspicious": false, "meaningEn": "A car represents your life direction. Accident dreams urge you to slow and recheck commitments.", "meaningKo": "자동차는 삶의 방향을 상징합니다. 사고 꿈은 속도를 줄이고 약속을 재점검하라고 권합니다."},
-  {"en": "house", "ko": "집", "cat": "family", "auspicious": true, "meaningEn": "A new house signals identity expansion. An old, broken house suggests unfinished family or emotional work.", "meaningKo": "새 집은 정체성 확장, 낡거나 무너진 집은 미해결 가족·감정 작업을 암시합니다."},
-  {"en": "shoes", "ko": "신발", "cat": "warning", "auspicious": false, "meaningEn": "Losing shoes warns of unstable footing — protect career and emotional grounding now.", "meaningKo": "신발을 잃는 꿈은 불안한 발판을 경고합니다 — 지금 진로와 감정의 뿌리를 보호하세요."},
-  {"en": "feces", "ko": "똥", "cat": "wealth", "auspicious": true, "meaningEn": "Stepping in or touching feces is a classic Korean omen of incoming money — the dirtier the dream, the bigger the windfall.", "meaningKo": "한국 전통에서 똥 꿈은 재물운의 강한 길조 — 더러울수록 더 큰 횡재를 알립니다."},
-  {"en": "money", "ko": "돈", "cat": "warning", "auspicious": false, "meaningEn": "Receiving money in a dream often inverts in reality — be cautious of unexpected expenses or loans.", "meaningKo": "꿈에서 돈을 받으면 현실에서 반대로 — 예상 못 한 지출이나 빚을 조심하세요."},
-  {"en": "wedding", "ko": "결혼", "cat": "love", "auspicious": true, "meaningEn": "Wedding dreams announce a major life commitment — a new role, partnership, or chapter. The vibe of the wedding tells the tone.", "meaningKo": "결혼 꿈은 인생 큰 약속을 알립니다 — 새 역할, 동반 관계, 새 장. 결혼식 분위기가 톤을 말해요."},
-  {"en": "pregnancy", "ko": "임신", "cat": "auspicious", "auspicious": true, "meaningEn": "Pregnancy symbolizes incubation — a creative project, business, or relationship growing in secret. Care matters now.", "meaningKo": "임신 꿈은 잉태의 시기 — 비밀스럽게 자라는 창작, 사업, 관계. 지금은 돌봄이 핵심입니다."},
-  {"en": "falling", "ko": "떨어지는 꿈", "cat": "warning", "auspicious": false, "meaningEn": "Falling reveals loss of control — review where you over-extended. Soft landing means recoverable.", "meaningKo": "떨어지는 꿈은 통제 상실 — 어디서 무리했는지 점검하세요. 부드럽게 착지하면 회복 가능."},
-  {"en": "death", "ko": "죽음", "cat": "auspicious", "auspicious": true, "meaningEn": "Death dreams often signal rebirth — an old self/role/relationship ends, opening new space. Rarely literal.", "meaningKo": "죽음 꿈은 보통 재생을 알립니다 — 옛 자아·역할·관계의 종결, 새 공간 열림. 거의 문자적이지 않음."},
-  {"en": "exam", "ko": "시험", "cat": "warning", "auspicious": false, "meaningEn": "Exam dreams reflect performance anxiety. The subject hints at where you feel unprepared — strengthen there.", "meaningKo": "시험 꿈은 성과 불안의 반영 — 과목이 어디서 준비 부족을 느끼는지 알려줘요. 거기를 보강."},
-  {"en": "lost", "ko": "길 잃음", "cat": "warning", "auspicious": false, "meaningEn": "Being lost in a dream signals direction confusion — slow down, recheck your compass.", "meaningKo": "길 잃는 꿈은 방향 혼란 — 속도를 줄이고 나침반을 다시 확인하세요."},
-  {"en": "rain", "ko": "비", "cat": "auspicious", "auspicious": true, "meaningEn": "Gentle rain cleans and fertilizes — a fresh start after struggle. Heavy storm warns of emotional flood.", "meaningKo": "잔잔한 비는 정화와 비옥함 — 어려움 뒤 새 출발. 폭우는 감정 범람을 경고."},
-  {"en": "snow", "ko": "눈", "cat": "auspicious", "auspicious": true, "meaningEn": "Fresh snow signals a clean slate and quiet good fortune. Melting snow warns of fleeting opportunities.", "meaningKo": "갓 내린 눈은 백지 상태와 조용한 행운 — 녹는 눈은 사라지는 기회를 경고."},
-  {"en": "mountain", "ko": "산", "cat": "auspicious", "auspicious": true, "meaningEn": "Climbing a mountain forecasts achievement after persistent effort. Reaching the summit means recognition arrives.", "meaningKo": "산을 오르는 꿈은 끈질긴 노력 후의 성취를 알립니다. 정상 도달은 인정의 시기입니다."},
-  {"en": "sea", "ko": "바다", "cat": "wealth", "auspicious": true, "meaningEn": "Calm sea brings emotional balance and steady wealth. Stormy sea warns of relationship turbulence.", "meaningKo": "고요한 바다는 감정의 균형과 안정된 재물 — 거친 바다는 관계 격동을 경고합니다."},
-  {"en": "star", "ko": "별", "cat": "auspicious", "auspicious": true, "meaningEn": "A bright star signals recognition and guidance from a mentor. Falling star marks the end of one path.", "meaningKo": "빛나는 별은 인정과 멘토의 안내 — 떨어지는 별은 한 길의 끝을 표시합니다."},
-  {"en": "moon", "ko": "달", "cat": "love", "auspicious": true, "meaningEn": "Full moon dreams enhance emotional clarity and romance. New moon hints at hidden feelings surfacing soon.", "meaningKo": "보름달 꿈은 감정의 명료함과 연애 — 그믐달은 곧 표면화될 숨은 감정을 암시."},
-  {"en": "sun", "ko": "해", "cat": "auspicious", "auspicious": true, "meaningEn": "Rising sun heralds a major new beginning. Holding the sun in your hand predicts authority and visibility.", "meaningKo": "떠오르는 해는 큰 새 시작 — 손에 해를 쥐는 꿈은 권위와 주목도를 예고합니다."},
-  {"en": "hair", "ko": "머리카락", "cat": "warning", "auspicious": false, "meaningEn": "Hair loss in dreams warns of energy drain or status concern. Long thick hair signals vitality return.", "meaningKo": "머리카락 빠짐은 에너지 소진이나 지위 걱정의 경고 — 길고 굵은 머리카락은 활력 회복을 알립니다."},
-  {"en": "mirror", "ko": "거울", "cat": "warning", "auspicious": false, "meaningEn": "Cracked mirror warns of self-image distortion or relationship friction. Clear mirror means honest self-view.", "meaningKo": "깨진 거울은 자기 이미지 왜곡이나 관계 마찰을 경고 — 맑은 거울은 정직한 자기 인식입니다."},
-  {"en": "new clothes", "ko": "새 옷", "cat": "auspicious", "auspicious": true, "meaningEn": "New clothes in a dream signal a new role or social rise. The color hints at the energy you are stepping into.", "meaningKo": "새 옷 꿈은 새 역할이나 사회적 상승 — 색깔이 들어갈 기운의 결을 알려줍니다."},
-  {"en": "dog", "ko": "강아지", "cat": "family", "auspicious": true, "meaningEn": "A friendly dog signals loyal support arriving. A barking aggressive dog warns of a betrayal or boundary breach.", "meaningKo": "친근한 강아지는 충직한 지지의 도착 — 짖는 사나운 개는 배신이나 경계 침범을 경고합니다."},
-  {"en": "cat", "ko": "고양이", "cat": "warning", "auspicious": false, "meaningEn": "Cats in dreams often signal independence or hidden intuition. A black cat warns of hidden envy.", "meaningKo": "고양이 꿈은 독립성이나 숨은 직관 — 검은 고양이는 숨은 시기를 경고합니다."},
-  {"en": "bird", "ko": "새", "cat": "auspicious", "auspicious": true, "meaningEn": "Birds carry news and freedom. White bird brings peace; flock of birds signals collective good news soon.", "meaningKo": "새는 소식과 자유 — 흰 새는 평화, 새 떼는 곧 올 집단적 좋은 소식입니다."},
-  {"en": "flower", "ko": "꽃", "cat": "love", "auspicious": true, "meaningEn": "Blooming flowers mean love arrives or deepens. Wilting flowers signal a relationship needs urgent care.", "meaningKo": "피는 꽃은 사랑의 도착이나 깊어짐 — 시드는 꽃은 관계가 급한 돌봄을 필요로 함."},
-  {"en": "tree", "ko": "나무", "cat": "family", "auspicious": true, "meaningEn": "A tall healthy tree symbolizes family stability and personal growth. A fallen tree warns of structural change.", "meaningKo": "크고 건강한 나무는 가족 안정과 개인 성장 — 쓰러진 나무는 구조적 변화를 경고."},
-  {"en": "book", "ko": "책", "cat": "auspicious", "auspicious": true, "meaningEn": "Books in dreams signal knowledge arriving or a phase of learning. Closed book means unopened opportunity.", "meaningKo": "책 꿈은 지식의 도착이나 학습기 — 닫힌 책은 아직 열지 않은 기회입니다."},
-  {"en": "key", "ko": "열쇠", "cat": "auspicious", "auspicious": true, "meaningEn": "Finding a key in a dream signals a hidden solution arriving. Losing a key warns of forgotten access — recheck recent decisions.", "meaningKo": "열쇠를 찾는 꿈은 숨은 해결책의 도착 — 잃는 꿈은 잊힌 접근권을 경고하니 최근 결정을 재점검."},
-  {"en": "airplane", "ko": "비행기", "cat": "auspicious", "auspicious": true, "meaningEn": "Boarding a plane signals a major life direction shift. Plane crash dreams reflect anxiety about a current decision.", "meaningKo": "비행기를 타는 꿈은 큰 방향 전환 — 추락 꿈은 현재 결정에 대한 불안의 반영."},
-  {"en": "bridge", "ko": "다리", "cat": "auspicious", "auspicious": true, "meaningEn": "Crossing a bridge marks transition between life phases. The condition of the bridge tells how smooth the change.", "meaningKo": "다리를 건너는 꿈은 인생 단계의 전환 — 다리 상태가 변화의 부드러움을 알려줍니다."},
-  {"en": "food", "ko": "음식", "cat": "family", "auspicious": true, "meaningEn": "Sharing food in a dream brings family harmony. Spoiled food warns of relationship distrust or stagnant routines.", "meaningKo": "음식을 나누는 꿈은 가족 화합 — 상한 음식은 관계 불신이나 정체된 일상을 경고."},
-  {"en": "empty house", "ko": "빈집", "cat": "warning", "auspicious": false, "meaningEn": "An empty house signals emotional vacancy or unmet needs in a key relationship.", "meaningKo": "빈집은 핵심 관계의 감정 공백이나 충족되지 않은 욕구를 알립니다."},
-  {"en": "school", "ko": "학교", "cat": "warning", "auspicious": false, "meaningEn": "Returning to school in a dream reflects unfinished lesson — a habit or value to relearn.", "meaningKo": "학교로 돌아가는 꿈은 미완의 학습 — 다시 배워야 할 습관이나 가치의 반영."},
-  {"en": "funeral", "ko": "장례식", "cat": "auspicious", "auspicious": true, "meaningEn": "Funeral dreams often signal closure and rebirth — an old chapter ends to make room for the new.", "meaningKo": "장례식 꿈은 종결과 재생을 알립니다 — 옛 장이 닫혀 새 장의 자리가 마련됩니다."},
-  {"en": "sword", "ko": "칼", "cat": "warning", "auspicious": false, "meaningEn": "A sword in dreams symbolizes a sharp decision required. Wielding it well brings authority; being cut warns of betrayal.", "meaningKo": "꿈속 칼은 날카로운 결정이 필요함 — 잘 휘두르면 권위, 베이면 배신을 경고."}
+  {
+    "en": "snake",
+    "ko": "뱀",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A snake dream often signals incoming wealth, especially a hidden source or unexpected windfall. Multiple snakes mean the gain is collective.",
+    "meaningKo": "뱀 꿈은 재물운, 특히 숨은 수입이나 예상치 못한 횡재를 알립니다. 여러 마리면 공동의 이득입니다."
+  },
+  {
+    "en": "pig",
+    "ko": "돼지",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Pigs symbolize prosperity and stable income. A clean pig brings business gain; a dirty pig warns of waste.",
+    "meaningKo": "돼지는 재물과 안정된 수입을 상징합니다. 깨끗한 돼지는 사업 이득, 더러운 돼지는 낭비를 경고합니다."
+  },
+  {
+    "en": "dragon",
+    "ko": "용",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Dragons announce public recognition, a leap in status, or a major project breakthrough. A flying dragon is the strongest sign.",
+    "meaningKo": "용은 공적인 인정, 지위 상승, 큰 프로젝트의 도약을 알립니다. 승천하는 용이 가장 강한 길조입니다."
+  },
+  {
+    "en": "tiger",
+    "ko": "호랑이",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A tiger signifies authority and protection. Riding a tiger means you will lead; being chased means a challenge requires courage.",
+    "meaningKo": "호랑이는 권위와 보호를 상징합니다. 호랑이를 타면 리더가 되고, 쫓기면 도전에 용기가 필요합니다."
+  },
+  {
+    "en": "water",
+    "ko": "물",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Clear water brings prosperity and emotional renewal. Muddy water warns of stuck plans or relationship strain.",
+    "meaningKo": "맑은 물은 재물과 감정의 회복을 알립니다. 흙탕물은 정체된 계획이나 관계 긴장을 경고합니다."
+  },
+  {
+    "en": "fire",
+    "ko": "불",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Fire dreams demand attention to stress and over-extension. A controlled fire signals passion; a wildfire warns of burnout.",
+    "meaningKo": "불 꿈은 스트레스와 과부하에 대한 주의를 요구합니다. 통제된 불은 열정, 산불은 번아웃을 경고합니다."
+  },
+  {
+    "en": "baby",
+    "ko": "아기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Dreaming of a baby often signals a new project, idea, or chapter — something needing care to grow.",
+    "meaningKo": "아기 꿈은 새 프로젝트, 아이디어, 새 장의 시작을 알립니다 — 돌봐야 자라는 것입니다."
+  },
+  {
+    "en": "teeth falling",
+    "ko": "이빨 빠짐",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Teeth falling out warns of loss — energy, position, or relationship strain. Strengthen what feels insecure.",
+    "meaningKo": "이빨 빠지는 꿈은 손실을 경고합니다 — 에너지, 지위, 관계 긴장. 불안한 것을 보강하세요."
+  },
+  {
+    "en": "flying",
+    "ko": "하늘 나는 꿈",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Flying signals freedom, breakthrough, or rising influence. The higher you fly, the bigger the leap ahead.",
+    "meaningKo": "하늘 나는 꿈은 자유, 돌파구, 영향력 상승을 상징합니다. 높이 날수록 더 큰 도약입니다."
+  },
+  {
+    "en": "running",
+    "ko": "달리는 꿈",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Running in a dream — especially being chased — points to avoided issues. Face what you fled.",
+    "meaningKo": "달리는 꿈, 특히 쫓기는 꿈은 회피한 문제를 가리킵니다. 피한 것을 마주하세요."
+  },
+  {
+    "en": "blood",
+    "ko": "피",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Blood in dreams, despite shock, often predicts windfall — especially fresh red blood seen openly.",
+    "meaningKo": "피 꿈은 놀라움에도 횡재를 자주 예고합니다 — 특히 선명한 붉은 피를 본 경우입니다."
+  },
+  {
+    "en": "hair cut",
+    "ko": "머리 자름",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Cutting hair in a dream warns of energy loss or impending breakup — protect what is essential.",
+    "meaningKo": "머리 자르는 꿈은 에너지 손실이나 이별을 경고합니다 — 중요한 것을 지키세요."
+  },
+  {
+    "en": "ancestor",
+    "ko": "조상",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Ancestor visits often carry guidance. Listen to their message — it may decide a current dilemma.",
+    "meaningKo": "조상의 방문은 안내를 전합니다. 그들의 메시지를 듣세요 — 현재의 딜레마를 결정할 수 있습니다."
+  },
+  {
+    "en": "horse",
+    "ko": "말",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A horse signals movement and momentum — career change, travel, or a swift opportunity.",
+    "meaningKo": "말은 움직임과 추진력을 상징합니다 — 진로 변경, 여행, 빠른 기회입니다."
+  },
+  {
+    "en": "fish",
+    "ko": "물고기",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Fish point to wealth and harvest. Catching fish predicts gain; releasing fish brings karmic return later.",
+    "meaningKo": "물고기는 재물과 수확을 가리킵니다. 잡으면 이득, 놓아주면 나중에 카르마로 돌아옵니다."
+  },
+  {
+    "en": "car",
+    "ko": "자동차",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A car represents your life direction. Accident dreams urge you to slow and recheck commitments.",
+    "meaningKo": "자동차는 삶의 방향을 상징합니다. 사고 꿈은 속도를 줄이고 약속을 재점검하라고 권합니다."
+  },
+  {
+    "en": "house",
+    "ko": "집",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A new house signals identity expansion. An old, broken house suggests unfinished family or emotional work.",
+    "meaningKo": "새 집은 정체성 확장, 낡거나 무너진 집은 미해결 가족·감정 작업을 암시합니다."
+  },
+  {
+    "en": "shoes",
+    "ko": "신발",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Losing shoes warns of unstable footing — protect career and emotional grounding now.",
+    "meaningKo": "신발을 잃는 꿈은 불안한 발판을 경고합니다 — 지금 진로와 감정의 뿌리를 보호하세요."
+  },
+  {
+    "en": "feces",
+    "ko": "똥",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Stepping in or touching feces is a classic Korean omen of incoming money — the dirtier the dream, the bigger the windfall.",
+    "meaningKo": "한국 전통에서 똥 꿈은 재물운의 강한 길조 — 더러울수록 더 큰 횡재를 알립니다."
+  },
+  {
+    "en": "money",
+    "ko": "돈",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Receiving money in a dream often inverts in reality — be cautious of unexpected expenses or loans.",
+    "meaningKo": "꿈에서 돈을 받으면 현실에서 반대로 — 예상 못 한 지출이나 빚을 조심하세요."
+  },
+  {
+    "en": "wedding",
+    "ko": "결혼",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Wedding dreams announce a major life commitment — a new role, partnership, or chapter. The vibe of the wedding tells the tone.",
+    "meaningKo": "결혼 꿈은 인생 큰 약속을 알립니다 — 새 역할, 동반 관계, 새 장. 결혼식 분위기가 톤을 말해요."
+  },
+  {
+    "en": "pregnancy",
+    "ko": "임신",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Pregnancy symbolizes incubation — a creative project, business, or relationship growing in secret. Care matters now.",
+    "meaningKo": "임신 꿈은 잉태의 시기 — 비밀스럽게 자라는 창작, 사업, 관계. 지금은 돌봄이 핵심입니다."
+  },
+  {
+    "en": "falling",
+    "ko": "떨어지는 꿈",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Falling reveals loss of control — review where you over-extended. Soft landing means recoverable.",
+    "meaningKo": "떨어지는 꿈은 통제 상실 — 어디서 무리했는지 점검하세요. 부드럽게 착지하면 회복 가능."
+  },
+  {
+    "en": "death",
+    "ko": "죽음",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Death dreams often signal rebirth — an old self/role/relationship ends, opening new space. Rarely literal.",
+    "meaningKo": "죽음 꿈은 보통 재생을 알립니다 — 옛 자아·역할·관계의 종결, 새 공간 열림. 거의 문자적이지 않음."
+  },
+  {
+    "en": "exam",
+    "ko": "시험",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Exam dreams reflect performance anxiety. The subject hints at where you feel unprepared — strengthen there.",
+    "meaningKo": "시험 꿈은 성과 불안의 반영 — 과목이 어디서 준비 부족을 느끼는지 알려줘요. 거기를 보강."
+  },
+  {
+    "en": "lost",
+    "ko": "길 잃음",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Being lost in a dream signals direction confusion — slow down, recheck your compass.",
+    "meaningKo": "길 잃는 꿈은 방향 혼란 — 속도를 줄이고 나침반을 다시 확인하세요."
+  },
+  {
+    "en": "rain",
+    "ko": "비",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Gentle rain cleans and fertilizes — a fresh start after struggle. Heavy storm warns of emotional flood.",
+    "meaningKo": "잔잔한 비는 정화와 비옥함 — 어려움 뒤 새 출발. 폭우는 감정 범람을 경고."
+  },
+  {
+    "en": "snow",
+    "ko": "눈",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Fresh snow signals a clean slate and quiet good fortune. Melting snow warns of fleeting opportunities.",
+    "meaningKo": "갓 내린 눈은 백지 상태와 조용한 행운 — 녹는 눈은 사라지는 기회를 경고."
+  },
+  {
+    "en": "mountain",
+    "ko": "산",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Climbing a mountain forecasts achievement after persistent effort. Reaching the summit means recognition arrives.",
+    "meaningKo": "산을 오르는 꿈은 끈질긴 노력 후의 성취를 알립니다. 정상 도달은 인정의 시기입니다."
+  },
+  {
+    "en": "sea",
+    "ko": "바다",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Calm sea brings emotional balance and steady wealth. Stormy sea warns of relationship turbulence.",
+    "meaningKo": "고요한 바다는 감정의 균형과 안정된 재물 — 거친 바다는 관계 격동을 경고합니다."
+  },
+  {
+    "en": "star",
+    "ko": "별",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A bright star signals recognition and guidance from a mentor. Falling star marks the end of one path.",
+    "meaningKo": "빛나는 별은 인정과 멘토의 안내 — 떨어지는 별은 한 길의 끝을 표시합니다."
+  },
+  {
+    "en": "moon",
+    "ko": "달",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Full moon dreams enhance emotional clarity and romance. New moon hints at hidden feelings surfacing soon.",
+    "meaningKo": "보름달 꿈은 감정의 명료함과 연애 — 그믐달은 곧 표면화될 숨은 감정을 암시."
+  },
+  {
+    "en": "sun",
+    "ko": "해",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Rising sun heralds a major new beginning. Holding the sun in your hand predicts authority and visibility.",
+    "meaningKo": "떠오르는 해는 큰 새 시작 — 손에 해를 쥐는 꿈은 권위와 주목도를 예고합니다."
+  },
+  {
+    "en": "hair",
+    "ko": "머리카락",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Hair loss in dreams warns of energy drain or status concern. Long thick hair signals vitality return.",
+    "meaningKo": "머리카락 빠짐은 에너지 소진이나 지위 걱정의 경고 — 길고 굵은 머리카락은 활력 회복을 알립니다."
+  },
+  {
+    "en": "mirror",
+    "ko": "거울",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Cracked mirror warns of self-image distortion or relationship friction. Clear mirror means honest self-view.",
+    "meaningKo": "깨진 거울은 자기 이미지 왜곡이나 관계 마찰을 경고 — 맑은 거울은 정직한 자기 인식입니다."
+  },
+  {
+    "en": "new clothes",
+    "ko": "새 옷",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "New clothes in a dream signal a new role or social rise. The color hints at the energy you are stepping into.",
+    "meaningKo": "새 옷 꿈은 새 역할이나 사회적 상승 — 색깔이 들어갈 기운의 결을 알려줍니다."
+  },
+  {
+    "en": "dog",
+    "ko": "강아지",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A friendly dog signals loyal support arriving. A barking aggressive dog warns of a betrayal or boundary breach.",
+    "meaningKo": "친근한 강아지는 충직한 지지의 도착 — 짖는 사나운 개는 배신이나 경계 침범을 경고합니다."
+  },
+  {
+    "en": "cat",
+    "ko": "고양이",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Cats in dreams often signal independence or hidden intuition. A black cat warns of hidden envy.",
+    "meaningKo": "고양이 꿈은 독립성이나 숨은 직관 — 검은 고양이는 숨은 시기를 경고합니다."
+  },
+  {
+    "en": "bird",
+    "ko": "새",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Birds carry news and freedom. White bird brings peace; flock of birds signals collective good news soon.",
+    "meaningKo": "새는 소식과 자유 — 흰 새는 평화, 새 떼는 곧 올 집단적 좋은 소식입니다."
+  },
+  {
+    "en": "flower",
+    "ko": "꽃",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Blooming flowers mean love arrives or deepens. Wilting flowers signal a relationship needs urgent care.",
+    "meaningKo": "피는 꽃은 사랑의 도착이나 깊어짐 — 시드는 꽃은 관계가 급한 돌봄을 필요로 함."
+  },
+  {
+    "en": "tree",
+    "ko": "나무",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A tall healthy tree symbolizes family stability and personal growth. A fallen tree warns of structural change.",
+    "meaningKo": "크고 건강한 나무는 가족 안정과 개인 성장 — 쓰러진 나무는 구조적 변화를 경고."
+  },
+  {
+    "en": "book",
+    "ko": "책",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Books in dreams signal knowledge arriving or a phase of learning. Closed book means unopened opportunity.",
+    "meaningKo": "책 꿈은 지식의 도착이나 학습기 — 닫힌 책은 아직 열지 않은 기회입니다."
+  },
+  {
+    "en": "key",
+    "ko": "열쇠",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Finding a key in a dream signals a hidden solution arriving. Losing a key warns of forgotten access — recheck recent decisions.",
+    "meaningKo": "열쇠를 찾는 꿈은 숨은 해결책의 도착 — 잃는 꿈은 잊힌 접근권을 경고하니 최근 결정을 재점검."
+  },
+  {
+    "en": "airplane",
+    "ko": "비행기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Boarding a plane signals a major life direction shift. Plane crash dreams reflect anxiety about a current decision.",
+    "meaningKo": "비행기를 타는 꿈은 큰 방향 전환 — 추락 꿈은 현재 결정에 대한 불안의 반영."
+  },
+  {
+    "en": "bridge",
+    "ko": "다리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Crossing a bridge marks transition between life phases. The condition of the bridge tells how smooth the change.",
+    "meaningKo": "다리를 건너는 꿈은 인생 단계의 전환 — 다리 상태가 변화의 부드러움을 알려줍니다."
+  },
+  {
+    "en": "food",
+    "ko": "음식",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Sharing food in a dream brings family harmony. Spoiled food warns of relationship distrust or stagnant routines.",
+    "meaningKo": "음식을 나누는 꿈은 가족 화합 — 상한 음식은 관계 불신이나 정체된 일상을 경고."
+  },
+  {
+    "en": "empty house",
+    "ko": "빈집",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "An empty house signals emotional vacancy or unmet needs in a key relationship.",
+    "meaningKo": "빈집은 핵심 관계의 감정 공백이나 충족되지 않은 욕구를 알립니다."
+  },
+  {
+    "en": "school",
+    "ko": "학교",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Returning to school in a dream reflects unfinished lesson — a habit or value to relearn.",
+    "meaningKo": "학교로 돌아가는 꿈은 미완의 학습 — 다시 배워야 할 습관이나 가치의 반영."
+  },
+  {
+    "en": "funeral",
+    "ko": "장례식",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Funeral dreams often signal closure and rebirth — an old chapter ends to make room for the new.",
+    "meaningKo": "장례식 꿈은 종결과 재생을 알립니다 — 옛 장이 닫혀 새 장의 자리가 마련됩니다."
+  },
+  {
+    "en": "sword",
+    "ko": "칼",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A sword in dreams symbolizes a sharp decision required. Wielding it well brings authority; being cut warns of betrayal.",
+    "meaningKo": "꿈속 칼은 날카로운 결정이 필요함 — 잘 휘두르면 권위, 베이면 배신을 경고."
+  },
+  {
+    "en": "phoenix",
+    "ko": "봉황",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A phoenix announces noble recognition and lasting honor. Often appears before a career milestone.",
+    "meaningKo": "봉황은 귀한 인정과 오래 가는 명예를 알립니다. 커리어 큰 변화 직전에 자주 등장합니다."
+  },
+  {
+    "en": "eagle",
+    "ko": "독수리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Eagles foreshadow a bold opportunity that lifts your position. Catching prey means quick gain.",
+    "meaningKo": "독수리는 지위를 끌어올리는 대담한 기회를 예고합니다. 사냥감을 잡으면 빠른 이익입니다."
+  },
+  {
+    "en": "deer",
+    "ko": "사슴",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Deer suggest unexpected windfalls and gentle good fortune. Following a deer leads to a hidden source of gain.",
+    "meaningKo": "사슴은 예상치 못한 횡재와 부드러운 행운을 의미합니다. 사슴을 따라가면 숨은 수입원이 나타납니다."
+  },
+  {
+    "en": "crane",
+    "ko": "학",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Cranes foretell long life and graceful success. Two cranes together signal harmonious partnership.",
+    "meaningKo": "학은 장수와 우아한 성공을 예고합니다. 학 두 마리는 조화로운 동반을 알립니다."
+  },
+  {
+    "en": "turtle",
+    "ko": "거북이",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Turtles promise slow but lasting prosperity. A turtle climbing onto land means rising fortune.",
+    "meaningKo": "거북이는 느리지만 오래 가는 번영을 약속합니다. 뭍으로 오르면 운이 상승합니다."
+  },
+  {
+    "en": "lion",
+    "ko": "사자",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Lions herald power and decisive leadership. A roaring lion means your authority is recognized.",
+    "meaningKo": "사자는 힘과 결단력 있는 리더십을 알립니다. 포효하는 사자는 권위가 인정됩니다."
+  },
+  {
+    "en": "elephant",
+    "ko": "코끼리",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Elephants symbolize stable wealth and protected resources. White elephants signal extreme good fortune.",
+    "meaningKo": "코끼리는 안정된 재물과 보호된 자원을 상징합니다. 흰 코끼리는 극도의 길운입니다."
+  },
+  {
+    "en": "fox",
+    "ko": "여우",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Foxes warn of deception. Be cautious of a smooth-talking person around you this week.",
+    "meaningKo": "여우는 속임수를 경고합니다. 이번 주 말 잘하는 사람을 조심하세요."
+  },
+  {
+    "en": "wolf",
+    "ko": "늑대",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Wolves indicate aggression or rivalry approaching. Defend your position carefully.",
+    "meaningKo": "늑대는 다가오는 공격성이나 라이벌을 알립니다. 자기 자리를 단단히 지키세요."
+  },
+  {
+    "en": "bear",
+    "ko": "곰",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Bears foreshadow protection and a strong ally. A calm bear means support from a senior figure.",
+    "meaningKo": "곰은 보호와 든든한 후원자를 예고합니다. 차분한 곰은 윗사람의 도움입니다."
+  },
+  {
+    "en": "rabbit",
+    "ko": "토끼",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Rabbits announce gentle romance and fertility. Multiple rabbits hint at family expansion.",
+    "meaningKo": "토끼는 부드러운 인연과 자손운을 알립니다. 여러 마리는 가족 확장을 암시합니다."
+  },
+  {
+    "en": "dog_pet",
+    "ko": "반려견",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Dogs signal loyalty and faithful friends. A friendly dog means a long-trusted ally protects you.",
+    "meaningKo": "개는 충성스러운 친구를 의미합니다. 친근한 개는 오래 신뢰한 사람의 보호입니다."
+  },
+  {
+    "en": "cow",
+    "ko": "소",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Cows mean steady wealth from labor. A black cow brings money; a white cow brings reputation.",
+    "meaningKo": "소는 노동으로 얻는 안정 재물입니다. 검은 소는 돈, 흰 소는 명성입니다."
+  },
+  {
+    "en": "sheep",
+    "ko": "양",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Sheep signal harmony at home. A flock means joyful gatherings ahead.",
+    "meaningKo": "양은 집안의 화목을 의미합니다. 무리지은 양은 즐거운 모임을 알립니다."
+  },
+  {
+    "en": "rooster",
+    "ko": "닭",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Roosters announce news and recognition. A crowing rooster signals public announcement of your work.",
+    "meaningKo": "닭은 소식과 인정을 알립니다. 우는 닭은 당신의 성과가 알려짐을 예고합니다."
+  },
+  {
+    "en": "rat",
+    "ko": "쥐",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Rats can signal incoming small wealth, especially many rats together. A single fleeing rat warns of theft.",
+    "meaningKo": "쥐는 작은 재물을 알릴 수 있고 여러 마리는 더 큽니다. 한 마리가 도망가면 도난을 경고합니다."
+  },
+  {
+    "en": "monkey",
+    "ko": "원숭이",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Monkeys hint at chatter and mischief. Avoid spreading information until next week.",
+    "meaningKo": "원숭이는 수다와 장난을 암시합니다. 다음 주까지 정보 유출을 피하세요."
+  },
+  {
+    "en": "butterfly",
+    "ko": "나비",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Butterflies announce romantic encounters and transformation. Pairs signal a meaningful new bond.",
+    "meaningKo": "나비는 인연과 변화를 알립니다. 쌍 나비는 의미 있는 새 관계입니다."
+  },
+  {
+    "en": "bee",
+    "ko": "벌",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Bees signal busy fortune. A swarm flying into your home is a strong wealth omen.",
+    "meaningKo": "벌은 분주한 운을 의미합니다. 떼지어 집으로 들어오면 강한 재물 길조입니다."
+  },
+  {
+    "en": "ant",
+    "ko": "개미",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Ants signal small but steady accumulation. Many ants at work means industrious gain.",
+    "meaningKo": "개미는 작지만 꾸준한 축적을 의미합니다. 일하는 개미 떼는 근면의 결실입니다."
+  },
+  {
+    "en": "spider",
+    "ko": "거미",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Spiders can indicate a trap or web of obligations. Killing a spider eases the burden.",
+    "meaningKo": "거미는 함정이나 얽힌 의무를 의미할 수 있습니다. 죽이는 꿈은 부담 해소입니다."
+  },
+  {
+    "en": "carp",
+    "ko": "잉어",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Carp jumping over a gate is the classic sign of a major status leap or exam success.",
+    "meaningKo": "잉어가 등용문을 뛰어넘는 꿈은 큰 신분 상승이나 합격을 알리는 고전 길조입니다."
+  },
+  {
+    "en": "whale",
+    "ko": "고래",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Whales bring massive opportunity. A whale spouting water signals abundant new income.",
+    "meaningKo": "고래는 거대한 기회입니다. 물을 뿜는 고래는 풍성한 새 수입입니다."
+  },
+  {
+    "en": "dolphin",
+    "ko": "돌고래",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Dolphins announce joyful companionship. Swimming alongside them means harmonious teamwork.",
+    "meaningKo": "돌고래는 즐거운 동행을 알립니다. 같이 헤엄치면 조화로운 팀워크입니다."
+  },
+  {
+    "en": "shark",
+    "ko": "상어",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Sharks warn of aggressive competition. Stay clear of risky deals this fortnight.",
+    "meaningKo": "상어는 공격적인 경쟁을 경고합니다. 이번 보름간 위험한 거래를 피하세요."
+  },
+  {
+    "en": "octopus",
+    "ko": "문어",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Octopuses signal multi-source income. Each arm represents one channel of gain.",
+    "meaningKo": "문어는 여러 갈래의 수입을 의미합니다. 각 다리가 하나의 수입원입니다."
+  },
+  {
+    "en": "crab",
+    "ko": "게",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Crabs hint at protected family bonds. A crab moving sideways suggests indirect but sure progress.",
+    "meaningKo": "게는 보호되는 가족 결속을 암시합니다. 옆걸음은 우회하지만 확실한 진전입니다."
+  },
+  {
+    "en": "shrimp",
+    "ko": "새우",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Shrimp dreams traditionally bring small joyful gains. A bowl of shrimp means a feast of fortune.",
+    "meaningKo": "새우는 전통적으로 작은 기쁨의 이득입니다. 그릇에 담긴 새우는 행운의 잔치입니다."
+  },
+  {
+    "en": "clam",
+    "ko": "조개",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Clams holding pearls promise hidden wealth revealed. Opening one signals discovery.",
+    "meaningKo": "진주를 품은 조개는 숨은 재물이 드러남을 약속합니다. 여는 꿈은 발견입니다."
+  },
+  {
+    "en": "squirrel",
+    "ko": "다람쥐",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Squirrels signal preparation paying off. Burying nuts means saved resources soon return.",
+    "meaningKo": "다람쥐는 준비의 보상을 의미합니다. 도토리 묻기는 모은 자원의 회수입니다."
+  },
+  {
+    "en": "owl",
+    "ko": "부엉이",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Owls bring quiet wisdom and night-time gain. Seeing one means insight before others.",
+    "meaningKo": "부엉이는 조용한 지혜와 밤의 이득입니다. 한 마리를 보면 남보다 먼저 통찰합니다."
+  },
+  {
+    "en": "sparrow",
+    "ko": "참새",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Sparrows signal lively home gossip and small social wins. Flocks mean a happy gathering.",
+    "meaningKo": "참새는 활기찬 가정 소식과 작은 사회적 승리를 알립니다. 떼는 즐거운 모임입니다."
+  },
+  {
+    "en": "swan",
+    "ko": "백조",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Swans announce elegant romance. A pair gliding together means a lasting bond.",
+    "meaningKo": "백조는 우아한 인연을 알립니다. 두 마리가 함께 미끄러지면 오래 가는 결속입니다."
+  },
+  {
+    "en": "peacock",
+    "ko": "공작",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Peacocks signal public attention and admired beauty. Display means your talent is recognized.",
+    "meaningKo": "공작은 대중 관심과 인정받는 아름다움입니다. 깃을 펼치면 재능이 알려집니다."
+  },
+  {
+    "en": "hawk",
+    "ko": "매",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Hawks bring sharp opportunity. Catching prey means decisive gain at the right moment.",
+    "meaningKo": "매는 날카로운 기회입니다. 사냥감 포획은 결정적 순간의 이득입니다."
+  },
+  {
+    "en": "crow",
+    "ko": "까마귀",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Crows can warn of ominous news. Three crows together mean reconsider an upcoming decision.",
+    "meaningKo": "까마귀는 불길한 소식을 경고할 수 있습니다. 세 마리는 다가오는 결정을 재고하라는 신호입니다."
+  },
+  {
+    "en": "magpie",
+    "ko": "까치",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Magpies are classic Korean omens of welcome news. A chattering magpie at dawn means a guest is coming.",
+    "meaningKo": "까치는 반가운 소식의 대표 길조입니다. 아침에 우는 까치는 손님이 옵니다."
+  },
+  {
+    "en": "chicken_hen",
+    "ko": "암탉",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A clucking chicken signals home harmony and small daily luck. Eggs hint at new beginnings.",
+    "meaningKo": "꼬꼬댁 우는 닭은 집안 화목과 일상의 작은 운입니다. 달걀은 새 시작을 암시합니다."
+  },
+  {
+    "en": "frog",
+    "ko": "개구리",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Frogs jumping into water mean money flowing in. Golden frogs are the strongest wealth sign.",
+    "meaningKo": "물로 뛰어드는 개구리는 돈이 들어옴을 의미합니다. 금 개구리는 가장 강한 재물 신호입니다."
+  },
+  {
+    "en": "snail",
+    "ko": "달팽이",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Snails signal slow but certain progress. A snail with a shell means protected savings.",
+    "meaningKo": "달팽이는 느리지만 확실한 진전입니다. 껍데기 있는 달팽이는 보호된 저축입니다."
+  },
+  {
+    "en": "jellyfish",
+    "ko": "해파리",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Jellyfish hint at unseen emotional sting. Be careful with words this week.",
+    "meaningKo": "해파리는 보이지 않는 감정의 상처를 암시합니다. 이번 주 말조심하세요."
+  },
+  {
+    "en": "eel",
+    "ko": "뱀장어",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Eels mean flexible income and slippery but available opportunity. Catching one secures it.",
+    "meaningKo": "뱀장어는 유동적인 수입과 잡힐 듯 가까운 기회입니다. 잡으면 확보됩니다."
+  },
+  {
+    "en": "giraffe",
+    "ko": "기린",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Giraffes hint at long-vision success. Seeing one means an opportunity others miss.",
+    "meaningKo": "기린은 멀리 보는 성공을 암시합니다. 한 마리 보면 남이 놓친 기회가 보입니다."
+  },
+  {
+    "en": "camel",
+    "ko": "낙타",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Camels promise endurance-based rewards. A caravan signals long-term business gain.",
+    "meaningKo": "낙타는 지구력 기반의 보상입니다. 행렬은 장기 사업의 이득입니다."
+  },
+  {
+    "en": "zebra",
+    "ko": "얼룩말",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Zebras signal balance between opposing forces. A herd means group consensus benefits you.",
+    "meaningKo": "얼룩말은 상반되는 힘의 균형을 의미합니다. 무리는 집단 합의가 유리합니다."
+  },
+  {
+    "en": "panda",
+    "ko": "판다",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Pandas announce gentle, photogenic charm. A young panda hints at playful new affection.",
+    "meaningKo": "판다는 부드럽고 사랑스러운 매력을 알립니다. 어린 판다는 장난스러운 새 애정입니다."
+  },
+  {
+    "en": "kangaroo",
+    "ko": "캥거루",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Kangaroos with joeys signal protected family growth. Hopping means quick progress in domestic plans.",
+    "meaningKo": "아기 가진 캥거루는 보호된 가족 성장을 의미합니다. 깡충은 가정 계획의 빠른 진전입니다."
+  },
+  {
+    "en": "koala",
+    "ko": "코알라",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Koalas hint at restful family time. A sleeping koala means take needed rest with loved ones.",
+    "meaningKo": "코알라는 휴식의 가족 시간을 암시합니다. 자는 코알라는 사랑하는 사람과 휴식을 권합니다."
+  },
+  {
+    "en": "lizard",
+    "ko": "도마뱀",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Lizards hint at adaptive luck. Shedding skin means fresh start ahead.",
+    "meaningKo": "도마뱀은 적응의 운입니다. 허물벗기는 새 출발입니다."
+  },
+  {
+    "en": "chameleon",
+    "ko": "카멜레온",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Chameleons signal social agility. Blending in means timely strategic pivot pays off.",
+    "meaningKo": "카멜레온은 사회적 민첩성입니다. 환경에 동화되면 전략적 전환이 이득입니다."
+  },
+  {
+    "en": "hedgehog",
+    "ko": "고슴도치",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Hedgehogs hint at protected privacy. Spikes mean healthy boundaries hold firm.",
+    "meaningKo": "고슴도치는 보호된 사생활을 암시합니다. 가시는 건강한 경계가 단단함을 의미합니다."
+  },
+  {
+    "en": "seal",
+    "ko": "물개",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Seals balancing balls signal versatile income. Multiple seals mean many gains at once.",
+    "meaningKo": "공을 굴리는 물개는 다재다능한 수입입니다. 여러 마리면 동시에 여러 이득입니다."
+  },
+  {
+    "en": "otter",
+    "ko": "수달",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Otters holding hands announce a deeply playful bond. Solo otters mean self-love comes first.",
+    "meaningKo": "손잡은 수달은 깊이 장난스러운 결속을 알립니다. 혼자는 자기 사랑이 우선임을 알립니다."
+  },
+  {
+    "en": "penguin",
+    "ko": "펭귄",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Penguins in a colony signal community support. Walking together means group success.",
+    "meaningKo": "펭귄 무리는 공동체의 지원을 알립니다. 함께 걷는 모습은 집단의 성공입니다."
+  },
+  {
+    "en": "peacock_blue",
+    "ko": "청공작",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A blue peacock means rare beauty drawing influential attention. Stand tall.",
+    "meaningKo": "청공작은 영향력 있는 시선을 끄는 희귀한 아름다움입니다. 당당하게 서세요."
+  },
+  {
+    "en": "mouse",
+    "ko": "생쥐",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Small mice signal humble but multiplying gains. A nest hints at savings growing quietly.",
+    "meaningKo": "생쥐는 소박하지만 늘어나는 이득입니다. 둥지는 조용히 자라는 저축입니다."
+  },
+  {
+    "en": "hamster",
+    "ko": "햄스터",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Hamsters stuffing cheeks signal storage of resources. Refilling a wheel means routine pays off.",
+    "meaningKo": "볼주머니 가득한 햄스터는 자원의 저장입니다. 쳇바퀴 다시 도는 것은 루틴의 보상입니다."
+  },
+  {
+    "en": "parrot",
+    "ko": "앵무새",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Parrots warn of repeated rumors. Verify before acting on shared information.",
+    "meaningKo": "앵무새는 반복되는 소문을 경고합니다. 공유된 정보는 확인 후 행동하세요."
+  },
+  {
+    "en": "dove",
+    "ko": "비둘기",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Doves announce peace and reunion. A pair returning home means reconciliation soon.",
+    "meaningKo": "비둘기는 평화와 재회를 알립니다. 집으로 돌아오는 한 쌍은 곧 화해입니다."
+  },
+  {
+    "en": "hummingbird",
+    "ko": "벌새",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Hummingbirds signal tiny precise moments of joy. Hovering means now is the right second.",
+    "meaningKo": "벌새는 작고 정확한 기쁨의 순간을 의미합니다. 정지비행은 지금이 바로 그 순간입니다."
+  },
+  {
+    "en": "river",
+    "ko": "강",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Rivers represent flowing wealth. Clear water means clean income; muddy water signals complicated gain.",
+    "meaningKo": "강은 흐르는 재물입니다. 맑은 물은 깨끗한 수입, 흐린 물은 복잡한 이득입니다."
+  },
+  {
+    "en": "waterfall",
+    "ko": "폭포",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Waterfalls announce sudden surge of income or recognition. Standing under one means full blessing.",
+    "meaningKo": "폭포는 갑작스러운 수입이나 인정의 분출을 알립니다. 아래 서면 충만한 축복입니다."
+  },
+  {
+    "en": "lake",
+    "ko": "호수",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A clear lake hints at emotional stability and family harmony.",
+    "meaningKo": "맑은 호수는 정서적 안정과 가족 화목을 암시합니다."
+  },
+  {
+    "en": "forest",
+    "ko": "숲",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Forests signal rich resources around you. Walking deep means discovering hidden support.",
+    "meaningKo": "숲은 주변의 풍부한 자원입니다. 깊이 들어가면 숨은 지원을 발견합니다."
+  },
+  {
+    "en": "rose",
+    "ko": "장미",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Roses signal passionate love. Red means active romance; white means pure new beginning.",
+    "meaningKo": "장미는 열정적 사랑입니다. 빨강은 적극적 인연, 흰색은 순수한 새 시작입니다."
+  },
+  {
+    "en": "lotus",
+    "ko": "연꽃",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Lotus dreams promise spiritual elevation. Blooming means breakthrough from a long struggle.",
+    "meaningKo": "연꽃은 정신적 격상을 약속합니다. 만개는 오랜 고생에서의 돌파입니다."
+  },
+  {
+    "en": "cherry_blossom",
+    "ko": "벚꽃",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Cherry blossoms announce brief but beautiful romance. Petals falling mean savor the moment.",
+    "meaningKo": "벚꽃은 짧지만 아름다운 인연을 알립니다. 떨어지는 꽃잎은 순간을 음미하라는 신호입니다."
+  },
+  {
+    "en": "sunflower",
+    "ko": "해바라기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sunflowers signal devoted recognition. Facing the sun means turning toward your true direction.",
+    "meaningKo": "해바라기는 헌신적인 인정입니다. 태양을 향함은 진짜 방향으로 돌아섬입니다."
+  },
+  {
+    "en": "bamboo",
+    "ko": "대나무",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Bamboo means resilient growth. Each segment marks a stage of advancement.",
+    "meaningKo": "대나무는 강인한 성장입니다. 마디마다 한 단계 진전입니다."
+  },
+  {
+    "en": "pine_tree",
+    "ko": "소나무",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Pine trees promise longevity and steady reputation. Evergreen leaves mean enduring honor.",
+    "meaningKo": "소나무는 장수와 꾸준한 명성을 약속합니다. 사철 푸름은 변치 않는 명예입니다."
+  },
+  {
+    "en": "grass",
+    "ko": "풀",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Green grass signals fresh starts in daily life. Withered grass warns of small fatigue.",
+    "meaningKo": "푸른 풀은 일상의 새 출발입니다. 시든 풀은 작은 피로를 경고합니다."
+  },
+  {
+    "en": "seed",
+    "ko": "씨앗",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Seeds promise future harvest. Planting one means a project is about to take root.",
+    "meaningKo": "씨앗은 미래의 수확을 약속합니다. 심으면 프로젝트가 곧 뿌리내립니다."
+  },
+  {
+    "en": "fruit",
+    "ko": "과일",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Ripe fruit means rewards are ready. Eating signals enjoying current success.",
+    "meaningKo": "익은 과일은 보상이 준비됨을 의미합니다. 먹으면 현재의 성공을 누립니다."
+  },
+  {
+    "en": "apple",
+    "ko": "사과",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Apples signal sweet stable gain. A red apple promises a clear, honest reward.",
+    "meaningKo": "사과는 달콤하고 안정된 이득입니다. 빨간 사과는 명확하고 정직한 보상입니다."
+  },
+  {
+    "en": "peach",
+    "ko": "복숭아",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Peaches symbolize longevity and good health. A peach tree means family blessings.",
+    "meaningKo": "복숭아는 장수와 건강입니다. 복숭아 나무는 가족의 축복입니다."
+  },
+  {
+    "en": "grape",
+    "ko": "포도",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Grapes in clusters announce abundant collective gain. Each grape is a small win.",
+    "meaningKo": "포도 송이는 풍성한 집단의 이득을 알립니다. 알 하나가 작은 승리입니다."
+  },
+  {
+    "en": "orange",
+    "ko": "귤",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Oranges signal bright income and good news. A basket means multiple sources of joy.",
+    "meaningKo": "귤은 밝은 수입과 좋은 소식입니다. 한 바구니는 여러 기쁨의 출처입니다."
+  },
+  {
+    "en": "pear",
+    "ko": "배",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Pears mean gentle family wealth. Sharing one means inherited prosperity.",
+    "meaningKo": "배는 부드러운 가족 재물입니다. 나눠 먹으면 상속된 번영입니다."
+  },
+  {
+    "en": "watermelon",
+    "ko": "수박",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Watermelons signal big seasonal gain. Cutting one open reveals an unexpected windfall.",
+    "meaningKo": "수박은 큰 계절의 이득입니다. 가르면 예상 못한 횡재가 드러납니다."
+  },
+  {
+    "en": "strawberry",
+    "ko": "딸기",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Strawberries announce sweet small romance. Picking them means proactive love-making.",
+    "meaningKo": "딸기는 달콤한 작은 인연입니다. 따는 꿈은 적극적인 사랑입니다."
+  },
+  {
+    "en": "banana",
+    "ko": "바나나",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Bananas signal easy small gains. A bunch hints at quick stacking income.",
+    "meaningKo": "바나나는 쉬운 작은 이득입니다. 한 송이는 빠르게 쌓이는 수입입니다."
+  },
+  {
+    "en": "rice",
+    "ko": "쌀",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Rice symbolizes core wealth. A full bowl means full security; spilled rice warns of waste.",
+    "meaningKo": "쌀은 본질의 재물입니다. 가득 찬 그릇은 안정, 흘리면 낭비를 경고합니다."
+  },
+  {
+    "en": "wheat",
+    "ko": "밀",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Wheat fields promise abundant harvest. Golden waves mean wealth ready to be reaped.",
+    "meaningKo": "밀밭은 풍성한 수확을 약속합니다. 황금 물결은 거둘 준비된 재물입니다."
+  },
+  {
+    "en": "corn",
+    "ko": "옥수수",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Corn ears signal multi-kernel income. Each kernel is a small client or sale.",
+    "meaningKo": "옥수수는 알알이 쌓이는 수입입니다. 한 알이 작은 고객·매출입니다."
+  },
+  {
+    "en": "chestnut",
+    "ko": "밤",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Chestnuts mean shelled-up wealth ready to crack open. Roasting hints at sharing with loved ones.",
+    "meaningKo": "밤은 까서 먹을 준비된 재물입니다. 굽는 꿈은 사랑하는 사람과 나눔을 암시합니다."
+  },
+  {
+    "en": "mushroom",
+    "ko": "버섯",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Mushrooms signal unexpected hidden income. A cluster after rain means timing is right.",
+    "meaningKo": "버섯은 예상 못한 숨은 수입입니다. 비온 뒤 무리는 타이밍이 적기입니다."
+  },
+  {
+    "en": "wind",
+    "ko": "바람",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Wind signals incoming change. A breeze on your face means a welcome message arrives.",
+    "meaningKo": "바람은 다가오는 변화입니다. 얼굴에 닿는 바람은 반가운 소식의 도착입니다."
+  },
+  {
+    "en": "thunder",
+    "ko": "천둥",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Thunder announces sudden decisive moment. A single boom means a long question is answered.",
+    "meaningKo": "천둥은 갑작스러운 결정의 순간을 알립니다. 한 번의 굉음은 오랜 의문의 답입니다."
+  },
+  {
+    "en": "lightning",
+    "ko": "번개",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Lightning strikes mean sudden insight or shocking opportunity. Brief but lasting.",
+    "meaningKo": "번개는 갑작스러운 통찰이나 충격적 기회입니다. 짧지만 오래 갑니다."
+  },
+  {
+    "en": "rainbow",
+    "ko": "무지개",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Rainbows promise reward after struggle. A double rainbow means twofold blessing.",
+    "meaningKo": "무지개는 고생 뒤의 보상을 약속합니다. 쌍무지개는 두 배의 축복입니다."
+  },
+  {
+    "en": "cloud",
+    "ko": "구름",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "White clouds promise smooth flow. Dark clouds warn of brief delay; rainbow clouds = highest fortune.",
+    "meaningKo": "흰 구름은 순조로운 흐름입니다. 먹구름은 잠시 지연, 채운(彩雲)은 최고 길조입니다."
+  },
+  {
+    "en": "fog",
+    "ko": "안개",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Fog hints at unclear direction. Wait for visibility before deciding.",
+    "meaningKo": "안개는 불명확한 방향입니다. 시야가 트일 때까지 결정을 미루세요."
+  },
+  {
+    "en": "volcano",
+    "ko": "화산",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Active volcanoes warn of suppressed anger erupting. Calm dormant ones mean stored power.",
+    "meaningKo": "활화산은 억눌린 분노의 분출을 경고합니다. 잠재된 화산은 저장된 힘입니다."
+  },
+  {
+    "en": "earthquake",
+    "ko": "지진",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Earthquakes warn of foundational shake-up. Inspect what you are building on.",
+    "meaningKo": "지진은 근간의 흔들림을 경고합니다. 무엇 위에 짓는지 점검하세요."
+  },
+  {
+    "en": "cave",
+    "ko": "동굴",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Caves hint at hidden treasure. Going in deep finds an unexpected resource.",
+    "meaningKo": "동굴은 숨은 보물을 암시합니다. 깊이 들어가면 예상 못한 자원을 만납니다."
+  },
+  {
+    "en": "island",
+    "ko": "섬",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Islands mean focused new opportunity isolated from noise.",
+    "meaningKo": "섬은 소음에서 분리된 집중적 새 기회를 의미합니다."
+  },
+  {
+    "en": "beach",
+    "ko": "해변",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Beaches signal relaxed romance and rest. Walking barefoot means honest expression.",
+    "meaningKo": "해변은 편안한 인연과 휴식을 알립니다. 맨발 걷기는 솔직한 표현입니다."
+  },
+  {
+    "en": "desert",
+    "ko": "사막",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Deserts warn of dry stretch. Stock up resources before the next phase.",
+    "meaningKo": "사막은 메마른 시기를 경고합니다. 다음 단계 전에 자원을 비축하세요."
+  },
+  {
+    "en": "garden",
+    "ko": "정원",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A tended garden signals family care paying off. A wild garden invites pruning.",
+    "meaningKo": "잘 가꾼 정원은 가족 돌봄의 보상입니다. 야생 정원은 정리를 권합니다."
+  },
+  {
+    "en": "field",
+    "ko": "들판",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Wide fields promise broad opportunity. A harvested field means rewards already secured.",
+    "meaningKo": "드넓은 들판은 광범위한 기회입니다. 수확된 들판은 이미 확보된 보상입니다."
+  },
+  {
+    "en": "hill",
+    "ko": "언덕",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A hill walked easily means small steady promotion. Steep hill means worthwhile effort.",
+    "meaningKo": "쉽게 오른 언덕은 작은 꾸준한 승진입니다. 가파른 언덕은 보람 있는 노력입니다."
+  },
+  {
+    "en": "valley",
+    "ko": "계곡",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Valleys hint at quiet family time. Clear stream means honest communication.",
+    "meaningKo": "계곡은 조용한 가족 시간을 암시합니다. 맑은 계곡물은 솔직한 소통입니다."
+  },
+  {
+    "en": "cliff",
+    "ko": "절벽",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Cliffs warn of a risky decision. Standing on the edge means pull back to safety.",
+    "meaningKo": "절벽은 위험한 결정을 경고합니다. 끝에 서 있으면 안전으로 물러서세요."
+  },
+  {
+    "en": "canyon",
+    "ko": "협곡",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Canyons signal narrow but profound passage. Crossing one means a major personal transition.",
+    "meaningKo": "협곡은 좁지만 깊은 통로입니다. 건너면 큰 개인적 전환입니다."
+  },
+  {
+    "en": "clear_water",
+    "ko": "맑은 물",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Clear water means clean wealth flowing in. Drinking it confirms reception.",
+    "meaningKo": "맑은 물은 깨끗한 재물이 들어옴을 의미합니다. 마시면 수령 확정입니다."
+  },
+  {
+    "en": "muddy_water",
+    "ko": "흙탕물",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Muddy water warns of complicated money. Wait or clean the source.",
+    "meaningKo": "흙탕물은 복잡한 돈을 경고합니다. 기다리거나 출처를 정화하세요."
+  },
+  {
+    "en": "flood",
+    "ko": "홍수",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Floods overwhelm. Reduce commitments to handle incoming volume.",
+    "meaningKo": "홍수는 압도되는 흐름입니다. 다가올 양 처리를 위해 약속을 줄이세요."
+  },
+  {
+    "en": "well",
+    "ko": "우물",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A deep well promises continuous supply. Drawing water means routine income secured.",
+    "meaningKo": "깊은 우물은 지속적 공급을 약속합니다. 물 긷기는 일정 수입의 확보입니다."
+  },
+  {
+    "en": "spring",
+    "ko": "샘",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A spring of water hints at a renewable income source. Cool taste = sustainable.",
+    "meaningKo": "샘은 재생 가능한 수입원을 암시합니다. 시원한 맛은 지속 가능성입니다."
+  },
+  {
+    "en": "boiling_water",
+    "ko": "끓는 물",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Boiling water signals active brewing — change is in motion. Carefully manage heat.",
+    "meaningKo": "끓는 물은 변화가 진행 중임을 알립니다. 열을 잘 관리하세요."
+  },
+  {
+    "en": "frozen_water",
+    "ko": "얼음",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Ice warns of stalled progress. Apply gentle warmth — patience or a kind word — to thaw.",
+    "meaningKo": "얼음은 정체된 진전을 경고합니다. 인내나 친절한 한 마디로 부드럽게 녹이세요."
+  },
+  {
+    "en": "steam",
+    "ko": "수증기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Rising steam signals invisible but real progress. Trust the process.",
+    "meaningKo": "오르는 수증기는 보이지 않지만 실재하는 진전입니다. 과정을 믿으세요."
+  },
+  {
+    "en": "hot_spring",
+    "ko": "온천",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Hot springs promise healing rest. Soaking with family means deep reconnection.",
+    "meaningKo": "온천은 치유의 휴식입니다. 가족과 함께 담그면 깊은 재연결입니다."
+  },
+  {
+    "en": "pond",
+    "ko": "연못",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A still pond signals reflection time. Ripples mean small news arrives.",
+    "meaningKo": "잔잔한 연못은 성찰의 시간입니다. 잔물결은 작은 소식의 도착입니다."
+  },
+  {
+    "en": "typhoon",
+    "ko": "태풍",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Typhoons warn of overwhelming change. Secure essentials, let go of replaceable items.",
+    "meaningKo": "태풍은 압도적 변화를 경고합니다. 필수만 지키고 대체 가능한 것은 놓으세요."
+  },
+  {
+    "en": "hailstorm",
+    "ko": "우박",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Hail signals harsh but brief setback. Take cover, then continue.",
+    "meaningKo": "우박은 거칠지만 짧은 후퇴를 알립니다. 잠시 피하고 다시 진행하세요."
+  },
+  {
+    "en": "drizzle",
+    "ko": "이슬비",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Light drizzle signals soft nourishment. Small steady support arrives.",
+    "meaningKo": "이슬비는 부드러운 영양을 알립니다. 작고 꾸준한 지원이 옵니다."
+  },
+  {
+    "en": "mist",
+    "ko": "안개비",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Mist gently shapes private reflection. Walk through it for clarity.",
+    "meaningKo": "안개비는 부드럽게 사색을 빚어줍니다. 통과하면 명료해집니다."
+  },
+  {
+    "en": "frost",
+    "ko": "서리",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Frost warns of unexpected chill in a relationship. Reach out warmly first.",
+    "meaningKo": "서리는 관계의 예상치 못한 냉기를 경고합니다. 먼저 따뜻하게 다가가세요."
+  },
+  {
+    "en": "puddle",
+    "ko": "웅덩이",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Puddles signal small but easy-to-overlook problems. Step carefully.",
+    "meaningKo": "웅덩이는 놓치기 쉬운 작은 문제입니다. 발걸음에 주의하세요."
+  },
+  {
+    "en": "dew",
+    "ko": "이슬",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Dewdrops at dawn signal pure new beginnings. Don't miss the morning hour.",
+    "meaningKo": "새벽 이슬은 순수한 새 시작입니다. 아침 시간을 놓치지 마세요."
+  },
+  {
+    "en": "mirror_lake",
+    "ko": "거울 호수",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A perfectly still mirror lake means clear self-awareness. Look long; truth surfaces.",
+    "meaningKo": "완벽히 잔잔한 거울 호수는 명료한 자기 인식입니다. 오래 보면 진실이 떠오릅니다."
+  },
+  {
+    "en": "whirlpool",
+    "ko": "소용돌이",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Whirlpools warn of being drawn into drama. Step back from a heated dispute.",
+    "meaningKo": "소용돌이는 드라마에 휘말림을 경고합니다. 과열된 분쟁에서 물러나세요."
+  },
+  {
+    "en": "wave",
+    "ko": "파도",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Big crashing waves announce dramatic income shifts. Surf them with timing.",
+    "meaningKo": "큰 파도는 극적인 수입 변동을 알립니다. 타이밍 맞춰 타세요."
+  },
+  {
+    "en": "tide",
+    "ko": "조수",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Rising tide signals collective lift. Going out to sea now is favored.",
+    "meaningKo": "밀물은 집단의 부상입니다. 지금 바다로 나가는 것이 유리합니다."
+  },
+  {
+    "en": "storm",
+    "ko": "폭풍",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Storms warn of relationship turbulence. Speak softly until skies clear.",
+    "meaningKo": "폭풍은 관계의 격랑을 경고합니다. 하늘이 갤 때까지 부드럽게 말하세요."
+  },
+  {
+    "en": "sunset",
+    "ko": "석양",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A golden sunset signals proud closure. Reflect on what you completed.",
+    "meaningKo": "황금빛 석양은 자랑스러운 마무리입니다. 완성한 일을 되돌아보세요."
+  },
+  {
+    "en": "sunrise",
+    "ko": "일출",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sunrise is the clearest fresh-start omen. Make your move with the first light.",
+    "meaningKo": "일출은 가장 명확한 새 출발 신호입니다. 첫 빛과 함께 움직이세요."
+  },
+  {
+    "en": "clear_sky",
+    "ko": "맑은 하늘",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A blue clear sky means open path. Move freely now.",
+    "meaningKo": "맑은 하늘은 열린 길입니다. 지금 자유롭게 움직이세요."
+  },
+  {
+    "en": "starry_night",
+    "ko": "별이 가득한 밤",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Countless stars announce many opportunities at once. Choose with intuition.",
+    "meaningKo": "수많은 별은 동시에 여러 기회를 알립니다. 직관으로 고르세요."
+  },
+  {
+    "en": "aurora",
+    "ko": "오로라",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Aurora signals once-in-a-lifetime spiritual moment. Note what comes to mind during this hour.",
+    "meaningKo": "오로라는 일생에 한 번의 영적 순간입니다. 이 시간에 떠오르는 것을 기록하세요."
+  },
+  {
+    "en": "eclipse",
+    "ko": "일식",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Eclipses warn of temporary cover-up. Truth returns after a brief obscured period.",
+    "meaningKo": "일식은 일시적 은폐를 경고합니다. 짧은 가림 후 진실이 돌아옵니다."
+  },
+  {
+    "en": "milky_way",
+    "ko": "은하수",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "The Milky Way signals connection to grand purpose. Look up; your path is wider than you think.",
+    "meaningKo": "은하수는 큰 목적과의 연결을 알립니다. 올려다보세요. 당신의 길은 생각보다 넓습니다."
+  },
+  {
+    "en": "shooting_star",
+    "ko": "별똥별",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A shooting star is the classic wish moment. Make it now; the door is briefly open.",
+    "meaningKo": "별똥별은 고전적인 소원의 순간입니다. 지금 비세요. 문이 잠시 열렸습니다."
+  },
+  {
+    "en": "bread",
+    "ko": "빵",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Fresh bread signals basic prosperity. Sharing means generous fortune.",
+    "meaningKo": "갓 구운 빵은 기본의 번영입니다. 나누면 너그러운 운입니다."
+  },
+  {
+    "en": "cake",
+    "ko": "케이크",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Cakes announce celebration. A birthday cake means you are about to be honored.",
+    "meaningKo": "케이크는 축하를 알립니다. 생일 케이크는 곧 인정받는 자리입니다."
+  },
+  {
+    "en": "honey",
+    "ko": "꿀",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Honey signals sweet steady gain. Tasting it confirms a long-anticipated reward.",
+    "meaningKo": "꿀은 달콤하고 꾸준한 이득입니다. 맛보면 오래 기다린 보상의 확정입니다."
+  },
+  {
+    "en": "salt",
+    "ko": "소금",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Salt signals essential value protected. Spilled salt warns of small carelessness.",
+    "meaningKo": "소금은 본질의 가치 보호입니다. 흘리면 작은 부주의를 경고합니다."
+  },
+  {
+    "en": "sugar",
+    "ko": "설탕",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Sugar promises sweet small joys. A jar means stored happiness.",
+    "meaningKo": "설탕은 달콤한 작은 기쁨입니다. 항아리는 저장된 행복입니다."
+  },
+  {
+    "en": "coffee",
+    "ko": "커피",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Coffee dreams hint at sharp upcoming conversation. Brew before the meeting.",
+    "meaningKo": "커피 꿈은 다가올 날카로운 대화를 암시합니다. 만남 전에 한 잔 하세요."
+  },
+  {
+    "en": "tea",
+    "ko": "차",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Tea signals slow, calming connection. Steeping means relationships need patience.",
+    "meaningKo": "차는 천천히 이어지는 연결입니다. 우리기는 관계에 인내가 필요함을 알립니다."
+  },
+  {
+    "en": "soup",
+    "ko": "국",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Soup hints at nourished home life. A hot bowl means warmth from a relative.",
+    "meaningKo": "국은 영양 있는 가정을 암시합니다. 뜨거운 한 그릇은 친척의 온정입니다."
+  },
+  {
+    "en": "noodles",
+    "ko": "국수",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Long noodles symbolize long life and continued success. Don't cut them short.",
+    "meaningKo": "긴 면발은 장수와 지속되는 성공입니다. 끊지 마세요."
+  },
+  {
+    "en": "rice_cake",
+    "ko": "떡",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Rice cake announces gathered family wealth. White rice cakes mean clear gain.",
+    "meaningKo": "떡은 모은 가족 재물을 알립니다. 흰 떡은 명확한 이득입니다."
+  },
+  {
+    "en": "dumpling",
+    "ko": "만두",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Dumplings represent wrapped fortune ready to be opened. Many dumplings = many small wins.",
+    "meaningKo": "만두는 열릴 준비된 운입니다. 많을수록 작은 승리가 늘어납니다."
+  },
+  {
+    "en": "kimchi",
+    "ko": "김치",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Kimchi signals fermented value — what aged is now ready. Old kimchi means mature profit.",
+    "meaningKo": "김치는 숙성된 가치 — 묵힌 것이 준비됨입니다. 묵은 김치는 성숙한 이익입니다."
+  },
+  {
+    "en": "bibimbap",
+    "ko": "비빔밥",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Bibimbap announces harmonious mix of resources. All ingredients combine into one success.",
+    "meaningKo": "비빔밥은 자원의 조화로운 융합을 알립니다. 모든 재료가 하나의 성공으로 결합됩니다."
+  },
+  {
+    "en": "seaweed",
+    "ko": "미역",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Seaweed soup signals birth, anniversaries, or family milestones. Taste = blessing arrives.",
+    "meaningKo": "미역국은 출산, 기념일, 가족 이정표를 알립니다. 맛보면 축복의 도착입니다."
+  },
+  {
+    "en": "ginseng",
+    "ko": "인삼",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Ginseng signals deep restorative power. Drinking it means energy is being rebuilt.",
+    "meaningKo": "인삼은 깊은 회복력입니다. 마시면 에너지가 재건되고 있음입니다."
+  },
+  {
+    "en": "chili",
+    "ko": "고추",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Chili warns of a sharp temper around you. Cool things down before speaking.",
+    "meaningKo": "고추는 주변의 날카로운 성질을 경고합니다. 말하기 전에 분위기를 식히세요."
+  },
+  {
+    "en": "garlic",
+    "ko": "마늘",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Garlic signals protective fortune. Crushing it releases hidden strength.",
+    "meaningKo": "마늘은 보호의 운입니다. 빻으면 숨은 힘이 풀려납니다."
+  },
+  {
+    "en": "onion",
+    "ko": "양파",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Onions hint at layers of truth revealed. Each peeled layer is one fact.",
+    "meaningKo": "양파는 드러나는 진실의 층을 암시합니다. 한 겹 벗기면 한 가지 사실입니다."
+  },
+  {
+    "en": "egg",
+    "ko": "계란",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Eggs promise new ventures hatching. A nest = multiple opportunities.",
+    "meaningKo": "계란은 부화할 새 시도입니다. 둥지는 여러 기회입니다."
+  },
+  {
+    "en": "meat",
+    "ko": "고기",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Meat signals substantive gain. Raw meat = potential; cooked meat = ready reward.",
+    "meaningKo": "고기는 실질적 이득입니다. 날고기는 잠재력, 익은 고기는 준비된 보상입니다."
+  },
+  {
+    "en": "fish_meal",
+    "ko": "생선 요리",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Fish on a plate signals fortune already prepared for you. Eat without hesitation.",
+    "meaningKo": "접시에 담긴 생선은 이미 준비된 운입니다. 망설임 없이 드세요."
+  },
+  {
+    "en": "cheese",
+    "ko": "치즈",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Cheese signals aged wealth in the home. A whole wheel = generational savings.",
+    "meaningKo": "치즈는 가정의 숙성된 재물입니다. 통째는 세대 저축입니다."
+  },
+  {
+    "en": "butter",
+    "ko": "버터",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Butter signals smooth income flow. Melting butter on bread = soft easy gain.",
+    "meaningKo": "버터는 부드러운 수입 흐름입니다. 빵 위에 녹는 버터는 부드러운 이득입니다."
+  },
+  {
+    "en": "chocolate",
+    "ko": "초콜릿",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Chocolate announces sweet emotional exchange. Receiving means love is being expressed.",
+    "meaningKo": "초콜릿은 달콤한 감정 교환입니다. 받으면 사랑이 표현되고 있음입니다."
+  },
+  {
+    "en": "ice_cream",
+    "ko": "아이스크림",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Ice cream signals fleeting but vivid joy. Eat slowly to savor the moment.",
+    "meaningKo": "아이스크림은 짧지만 선명한 기쁨입니다. 천천히 음미하세요."
+  },
+  {
+    "en": "wine",
+    "ko": "와인",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Wine announces refined celebration. A toast means agreement sealed.",
+    "meaningKo": "와인은 세련된 축하입니다. 건배는 합의의 확정입니다."
+  },
+  {
+    "en": "beer",
+    "ko": "맥주",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Beer signals casual social bond. Sharing with friends = strengthened network.",
+    "meaningKo": "맥주는 가벼운 사회적 결속입니다. 친구와 나누면 네트워크 강화입니다."
+  },
+  {
+    "en": "milk",
+    "ko": "우유",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Milk signals nurturing love. A full glass = generous care received.",
+    "meaningKo": "우유는 양육하는 사랑입니다. 가득 찬 잔은 너그러운 돌봄을 받음입니다."
+  },
+  {
+    "en": "porridge",
+    "ko": "죽",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Porridge signals gentle recovery. Hot porridge means health restoring.",
+    "meaningKo": "죽은 부드러운 회복입니다. 뜨거운 죽은 건강의 회복입니다."
+  },
+  {
+    "en": "candy",
+    "ko": "사탕",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Candy signals little sweet surprises. A bag of candy = many small love gestures.",
+    "meaningKo": "사탕은 작은 달콤한 놀라움입니다. 봉지 가득은 많은 작은 사랑의 표현입니다."
+  },
+  {
+    "en": "nuts",
+    "ko": "견과류",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Nuts signal cracked-open hidden value. Shelling them = revealing buried opportunity.",
+    "meaningKo": "견과류는 깨서 여는 숨은 가치입니다. 까는 꿈은 묻힌 기회를 드러냄입니다."
+  },
+  {
+    "en": "vegetable",
+    "ko": "채소",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Fresh vegetables signal home-grown stability. A garden bounty = self-sufficient comfort.",
+    "meaningKo": "신선한 채소는 가정에서 길러낸 안정입니다. 정원의 풍성함은 자급자족의 편안함입니다."
+  },
+  {
+    "en": "herb",
+    "ko": "나물",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Herbs signal subtle daily nourishment. Picking them = gathering small daily good.",
+    "meaningKo": "나물은 일상의 미묘한 영양입니다. 캐는 꿈은 매일 작은 좋은 것을 모음입니다."
+  },
+  {
+    "en": "fruit_basket",
+    "ko": "과일 바구니",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A full fruit basket announces multi-source good fortune. Eat what calls you first.",
+    "meaningKo": "과일 바구니는 다양한 운의 출처를 알립니다. 먼저 끌리는 것을 드세요."
+  },
+  {
+    "en": "feast",
+    "ko": "잔치",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A feast signals big celebration with loved ones. You are about to host or be honored.",
+    "meaningKo": "잔치는 사랑하는 사람과의 큰 축하입니다. 곧 주최하거나 인정받는 자리입니다."
+  },
+  {
+    "en": "breakfast",
+    "ko": "아침 식사",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Breakfast signals fresh routine establishment. Eat well = day starts strong.",
+    "meaningKo": "아침 식사는 새로운 일상의 정립입니다. 잘 먹으면 하루가 강하게 시작됩니다."
+  },
+  {
+    "en": "lunch",
+    "ko": "점심",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Lunch signals midday confirmation of progress. Lunch with a stranger = useful new contact.",
+    "meaningKo": "점심은 정오의 진전 확인입니다. 낯선 이와의 점심은 유용한 새 인맥입니다."
+  },
+  {
+    "en": "dinner",
+    "ko": "저녁",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Dinner gathers loved ones. A long dinner = deep talk that opens hearts.",
+    "meaningKo": "저녁은 사랑하는 사람을 모읍니다. 긴 저녁은 마음을 여는 깊은 대화입니다."
+  },
+  {
+    "en": "cooking",
+    "ko": "요리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Cooking signals you are crafting your own outcome. Taste-testing means refining plans.",
+    "meaningKo": "요리는 스스로 결과를 빚고 있음입니다. 맛보기는 계획을 다듬는 중입니다."
+  },
+  {
+    "en": "burnt_food",
+    "ko": "탄 음식",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Burnt food warns of over-effort spoiling a plan. Pull back the heat before it's too late.",
+    "meaningKo": "탄 음식은 과한 노력이 계획을 망침을 경고합니다. 너무 늦기 전에 열을 줄이세요."
+  },
+  {
+    "en": "mother",
+    "ko": "어머니",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Mother in a dream signals strong protection. Listen to whatever she says — it carries weight.",
+    "meaningKo": "어머니 꿈은 강한 보호를 의미합니다. 하시는 말씀은 무엇이든 들으세요. 무게가 있습니다."
+  },
+  {
+    "en": "father",
+    "ko": "아버지",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Father signals direction and authority. His instruction in the dream = upcoming life decision guide.",
+    "meaningKo": "아버지는 방향과 권위입니다. 꿈에서의 지시는 다가올 인생 결정의 지침입니다."
+  },
+  {
+    "en": "child",
+    "ko": "아이",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A child signals new beginnings. A laughing child = lighthearted phase coming.",
+    "meaningKo": "아이는 새 시작입니다. 웃는 아이는 가벼운 마음의 시기가 옵니다."
+  },
+  {
+    "en": "elderly",
+    "ko": "노인",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Elderly figures bring wisdom. Their advice in dreams = ancestral guidance toward right path.",
+    "meaningKo": "노인은 지혜를 가져옵니다. 꿈의 조언은 조상의 안내, 옳은 길입니다."
+  },
+  {
+    "en": "stranger",
+    "ko": "낯선 사람",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A stranger announces a new connection that will matter. Note their face if you can.",
+    "meaningKo": "낯선 사람은 의미 있을 새 연결을 알립니다. 가능하면 얼굴을 기억하세요."
+  },
+  {
+    "en": "friend",
+    "ko": "친구",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A friend in a dream signals existing bond strengthening. Reach out tomorrow.",
+    "meaningKo": "친구 꿈은 기존 결속의 강화입니다. 내일 연락하세요."
+  },
+  {
+    "en": "teacher",
+    "ko": "선생님",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A teacher signals a lesson awaiting. Listen for what you need to learn now.",
+    "meaningKo": "선생님은 기다리는 가르침입니다. 지금 배워야 할 것을 들으세요."
+  },
+  {
+    "en": "doctor",
+    "ko": "의사",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A doctor signals health check needed. Schedule what you have been postponing.",
+    "meaningKo": "의사는 필요한 건강 점검입니다. 미뤄둔 것을 잡으세요."
+  },
+  {
+    "en": "lover",
+    "ko": "연인",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A lover signals deepening passion. Touching means commitment is forming.",
+    "meaningKo": "연인은 깊어지는 열정입니다. 접촉은 약속의 형성입니다."
+  },
+  {
+    "en": "ex_partner",
+    "ko": "옛 연인",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Ex-partner means unresolved emotion. Process it without re-engaging in real life.",
+    "meaningKo": "옛 연인은 미해결 감정입니다. 실제 재접촉 없이 처리하세요."
+  },
+  {
+    "en": "boss",
+    "ko": "상사",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Boss signals workplace evaluation in progress. Your work is being noticed.",
+    "meaningKo": "상사는 진행 중인 직장 평가입니다. 일이 주목받고 있습니다."
+  },
+  {
+    "en": "coworker",
+    "ko": "동료",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A coworker signals team dynamic shifting. Your role may expand.",
+    "meaningKo": "동료는 팀 역학의 이동입니다. 역할이 확장될 수 있습니다."
+  },
+  {
+    "en": "enemy",
+    "ko": "적",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "An enemy in a dream warns of real rivalry. Do not provoke; protect your position.",
+    "meaningKo": "꿈의 적은 실제 라이벌을 경고합니다. 자극 말고 자기 자리를 지키세요."
+  },
+  {
+    "en": "king",
+    "ko": "왕",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A king signals top authority recognition. Audience with the king = invitation to high circle.",
+    "meaningKo": "왕은 최고 권위의 인정입니다. 왕과의 면담은 높은 자리로의 초대입니다."
+  },
+  {
+    "en": "queen",
+    "ko": "왕비",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A queen signals refined influence. Her gaze on you = noble recognition.",
+    "meaningKo": "왕비는 세련된 영향력입니다. 그녀의 시선은 귀한 인정입니다."
+  },
+  {
+    "en": "princess",
+    "ko": "공주",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A princess signals admired beauty or social grace. Treated as one = your charm is noticed.",
+    "meaningKo": "공주는 흠모받는 아름다움이나 사회적 우아함입니다. 공주처럼 대접받으면 매력이 주목받습니다."
+  },
+  {
+    "en": "prince",
+    "ko": "왕자",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A prince signals chivalrous love or distinguished new contact.",
+    "meaningKo": "왕자는 의기 있는 사랑이나 명망 있는 새 인연입니다."
+  },
+  {
+    "en": "priest",
+    "ko": "성직자",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A priest signals spiritual guidance. Their blessing means moral path confirmed.",
+    "meaningKo": "성직자는 영적 안내입니다. 축복은 도덕적 길의 확인입니다."
+  },
+  {
+    "en": "monk",
+    "ko": "스님",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A monk signals inner stillness needed. Their silence is the lesson.",
+    "meaningKo": "스님은 필요한 내면의 고요입니다. 침묵이 가르침입니다."
+  },
+  {
+    "en": "shaman",
+    "ko": "무당",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A shaman signals ancestral message coming through. Pay attention to what they say.",
+    "meaningKo": "무당은 조상의 메시지를 전합니다. 말씀에 주목하세요."
+  },
+  {
+    "en": "soldier",
+    "ko": "군인",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A soldier signals discipline and protection. Marching = collective effort succeeds.",
+    "meaningKo": "군인은 규율과 보호입니다. 행진은 집단의 노력이 성공함입니다."
+  },
+  {
+    "en": "police",
+    "ko": "경찰",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Police signal order being restored. Helping you = problem will be resolved formally.",
+    "meaningKo": "경찰은 회복되는 질서입니다. 당신을 도우면 문제가 공식적으로 해결됩니다."
+  },
+  {
+    "en": "thief",
+    "ko": "도둑",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A thief warns of resource leakage. Audit your accounts and time this month.",
+    "meaningKo": "도둑은 자원 누출을 경고합니다. 이번 달 계좌와 시간을 점검하세요."
+  },
+  {
+    "en": "crowd",
+    "ko": "군중",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A crowd signals public visibility. Standing out means recognized; blending means anonymous comfort.",
+    "meaningKo": "군중은 대중적 가시성입니다. 돋보이면 인정, 묻히면 익명의 편안함입니다."
+  },
+  {
+    "en": "twin",
+    "ko": "쌍둥이",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Twins signal double opportunity. Choose the one that smiles first.",
+    "meaningKo": "쌍둥이는 두 배의 기회입니다. 먼저 웃는 쪽을 고르세요."
+  },
+  {
+    "en": "bride",
+    "ko": "신부",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A bride signals committed union. A dream wedding = real commitment forming.",
+    "meaningKo": "신부는 약속된 결합입니다. 꿈의 결혼식은 형성 중인 실제 약속입니다."
+  },
+  {
+    "en": "groom",
+    "ko": "신랑",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A groom signals partnership decision. Choosing one signals real life commitment.",
+    "meaningKo": "신랑은 동반자 결정입니다. 선택은 실제 약속입니다."
+  },
+  {
+    "en": "couple",
+    "ko": "커플",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A couple holding hands signals harmonious partnership growing. Watch their interaction.",
+    "meaningKo": "손잡은 커플은 자라는 조화로운 동반을 알립니다. 그 상호작용을 보세요."
+  },
+  {
+    "en": "family_gathering",
+    "ko": "가족 모임",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A family gathering signals reunion or important shared decision coming.",
+    "meaningKo": "가족 모임은 재회나 다가올 중요한 공동 결정입니다."
+  },
+  {
+    "en": "school_friend",
+    "ko": "학교 친구",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A school friend signals nostalgic insight from your formative years applying now.",
+    "meaningKo": "학교 친구는 형성기의 통찰이 지금 적용됨을 알립니다."
+  },
+  {
+    "en": "crying_person",
+    "ko": "우는 사람",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Crying in dreams paradoxically signals release. Tears = unblocked emotional progress.",
+    "meaningKo": "우는 꿈은 역설적으로 해방입니다. 눈물은 막힌 감정의 진전입니다."
+  },
+  {
+    "en": "laughing_person",
+    "ko": "웃는 사람",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Laughter dreams confirm genuine joy ahead. Share it when you wake.",
+    "meaningKo": "웃음 꿈은 다가올 진심의 기쁨을 확인합니다. 깨면 나누세요."
+  },
+  {
+    "en": "singing_person",
+    "ko": "노래하는 사람",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Singing signals self-expression breakthrough. Your voice is about to be heard.",
+    "meaningKo": "노래는 자기표현의 돌파입니다. 당신의 목소리가 곧 들립니다."
+  },
+  {
+    "en": "dancing_person",
+    "ko": "춤추는 사람",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Dancing signals body-led decision. Trust your gut more than your spreadsheet this week.",
+    "meaningKo": "춤은 몸이 이끄는 결정입니다. 이번 주는 직감이 분석보다 정확합니다."
+  },
+  {
+    "en": "lost_child",
+    "ko": "길 잃은 아이",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A lost child signals neglected part of yourself. Tend to it today.",
+    "meaningKo": "길 잃은 아이는 방치된 자기 자신의 일부입니다. 오늘 돌보세요."
+  },
+  {
+    "en": "old_friend",
+    "ko": "오래된 친구",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "An old friend reappearing signals reconnection bringing fresh value.",
+    "meaningKo": "오래된 친구의 재등장은 새로운 가치를 가져오는 재연결입니다."
+  },
+  {
+    "en": "mentor",
+    "ko": "멘토",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A mentor figure signals key guidance arriving. Be ready to receive direction.",
+    "meaningKo": "멘토는 도착하는 핵심 안내입니다. 방향을 받을 준비를 하세요."
+  },
+  {
+    "en": "servant",
+    "ko": "하인",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Being served signals your position rising. Don't take it for granted — show grace.",
+    "meaningKo": "시중받는 꿈은 지위 상승입니다. 당연시 말고 우아함을 보이세요."
+  },
+  {
+    "en": "beggar",
+    "ko": "거지",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A beggar signals subconscious lack. Practice gratitude to flip the energy.",
+    "meaningKo": "거지는 잠재의식의 결핍입니다. 감사 연습으로 에너지를 뒤집으세요."
+  },
+  {
+    "en": "artist",
+    "ko": "예술가",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An artist signals creative breakthrough. Trust the half-formed idea you woke with.",
+    "meaningKo": "예술가는 창의적 돌파입니다. 잠에서 깬 반쪽짜리 아이디어를 믿으세요."
+  },
+  {
+    "en": "athlete",
+    "ko": "운동선수",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An athlete signals peak performance prep. Train, then compete with confidence.",
+    "meaningKo": "운동선수는 정점의 준비입니다. 훈련 후 자신 있게 경쟁하세요."
+  },
+  {
+    "en": "writer",
+    "ko": "작가",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A writer signals message ready to be put into words. Draft it today.",
+    "meaningKo": "작가는 글로 쓸 준비된 메시지입니다. 오늘 초안 잡으세요."
+  },
+  {
+    "en": "musician",
+    "ko": "음악가",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A musician signals harmony returning. Listen for what resonates emotionally.",
+    "meaningKo": "음악가는 돌아오는 조화입니다. 감정적으로 울리는 것을 들으세요."
+  },
+  {
+    "en": "chef",
+    "ko": "요리사",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A chef signals you are about to be served well — or your work satisfies others.",
+    "meaningKo": "요리사는 잘 대접받거나 당신 일이 남을 만족시킴을 알립니다."
+  },
+  {
+    "en": "farmer",
+    "ko": "농부",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A farmer signals patient cultivation paying off. The harvest you planted long ago is ready.",
+    "meaningKo": "농부는 인내의 경작이 보상받음입니다. 오래 전 심은 수확이 준비됐습니다."
+  },
+  {
+    "en": "merchant",
+    "ko": "상인",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A merchant signals a deal arriving. Negotiate twice; the second offer beats the first.",
+    "meaningKo": "상인은 도착하는 거래입니다. 두 번 협상하세요. 두 번째 제안이 첫 번째를 이깁니다."
+  },
+  {
+    "en": "judge",
+    "ko": "판사",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A judge signals fair outcome of a long matter. Wait calmly — the verdict favors you.",
+    "meaningKo": "판사는 오랜 사안의 공정한 결과입니다. 차분히 기다리세요. 판결이 유리합니다."
+  },
+  {
+    "en": "beautiful_woman",
+    "ko": "미녀",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A beautiful figure signals admired energy you are about to express.",
+    "meaningKo": "미녀는 곧 표현될 흠모받는 에너지입니다."
+  },
+  {
+    "en": "handsome_man",
+    "ko": "미남",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A handsome figure signals attractive new project or person crossing your path.",
+    "meaningKo": "미남은 길에 들어선 매력적인 새 프로젝트나 사람입니다."
+  },
+  {
+    "en": "white_hair",
+    "ko": "흰머리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "White hair in a dream signals wisdom maturing — not aging fear.",
+    "meaningKo": "꿈의 흰머리는 노화의 두려움이 아니라 성숙하는 지혜입니다."
+  },
+  {
+    "en": "eyes_clear",
+    "ko": "눈동자",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Clear bright eyes signal seeing clearly. Dim eyes warn of overlooked details.",
+    "meaningKo": "맑고 밝은 눈은 명확히 봄입니다. 흐리면 놓친 세부를 경고합니다."
+  },
+  {
+    "en": "teeth",
+    "ko": "이",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Losing teeth dreams often signal communication anxiety or family worry. Reach out before it grows.",
+    "meaningKo": "이가 빠지는 꿈은 소통의 불안이나 가족 걱정을 의미합니다. 커지기 전에 연락하세요."
+  },
+  {
+    "en": "tongue",
+    "ko": "혀",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Tongue dreams hint at words about to be spoken. Choose them carefully.",
+    "meaningKo": "혀는 곧 나올 말을 암시합니다. 신중히 고르세요."
+  },
+  {
+    "en": "hands",
+    "ko": "손",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Strong hands signal capability. Holding hands = bond solidified.",
+    "meaningKo": "강한 손은 능력입니다. 손잡기는 결속의 단단함입니다."
+  },
+  {
+    "en": "feet",
+    "ko": "발",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Strong feet signal direction held firmly. Wounded feet warn of overextended pace.",
+    "meaningKo": "튼튼한 발은 단단히 잡은 방향입니다. 다친 발은 과한 페이스를 경고합니다."
+  },
+  {
+    "en": "heart",
+    "ko": "심장",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A strong beating heart in a dream confirms emotional truth. Trust the feeling.",
+    "meaningKo": "꿈에서 강하게 뛰는 심장은 감정의 진실을 확인합니다. 그 느낌을 믿으세요."
+  },
+  {
+    "en": "skin",
+    "ko": "피부",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Healthy skin signals well-protected boundaries. Glow = others find you approachable.",
+    "meaningKo": "건강한 피부는 잘 보호된 경계입니다. 윤기는 남이 다가오기 좋게 보임입니다."
+  },
+  {
+    "en": "face",
+    "ko": "얼굴",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A clear face in mirror signals self-acceptance. Distorted face = inner conflict to address.",
+    "meaningKo": "거울 속의 맑은 얼굴은 자기 수용입니다. 일그러지면 다룰 내면의 갈등입니다."
+  },
+  {
+    "en": "voice",
+    "ko": "목소리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A clear voice in a dream signals your message will land. Speak up tomorrow.",
+    "meaningKo": "꿈의 맑은 목소리는 메시지가 도달할 것을 알립니다. 내일 말하세요."
+  },
+  {
+    "en": "ears",
+    "ko": "귀",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sharp hearing signals important info coming. Listen for what you usually miss.",
+    "meaningKo": "날카로운 청각은 다가오는 중요한 정보입니다. 평소 놓치는 것을 들으세요."
+  },
+  {
+    "en": "nose",
+    "ko": "코",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A strong nose signals intuitive scent for opportunity. Trust your gut for deals.",
+    "meaningKo": "강한 코는 기회에 대한 직관적 후각입니다. 거래에서 직감을 믿으세요."
+  },
+  {
+    "en": "finger",
+    "ko": "손가락",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Pointing finger signals direction made clear. Note where it points.",
+    "meaningKo": "가리키는 손가락은 명확해진 방향입니다. 가리키는 곳을 기억하세요."
+  },
+  {
+    "en": "nails",
+    "ko": "손톱",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Long healthy nails signal social poise. Broken nails warn of strained image.",
+    "meaningKo": "길고 건강한 손톱은 사회적 균형입니다. 부러지면 긴장된 이미지를 경고합니다."
+  },
+  {
+    "en": "legs_strong",
+    "ko": "두 다리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Strong legs signal stable foundation. Weak legs warn of overextended commitments.",
+    "meaningKo": "튼튼한 다리는 안정된 기반입니다. 약하면 과한 약속을 경고합니다."
+  },
+  {
+    "en": "back",
+    "ko": "등",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A strong back signals burdens carried well. Pain warns to delegate.",
+    "meaningKo": "강한 등은 잘 짊어진 짐입니다. 통증은 위임을 권합니다."
+  },
+  {
+    "en": "shoulder",
+    "ko": "어깨",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Shoulders carrying weight signal responsibility. Lighten the load if it shows in dream.",
+    "meaningKo": "무게 진 어깨는 책임입니다. 꿈에 보이면 짐을 줄이세요."
+  },
+  {
+    "en": "chest",
+    "ko": "가슴",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "An open chest signals receptive heart. Tightness warns to release suppressed feeling.",
+    "meaningKo": "열린 가슴은 받아들이는 마음입니다. 답답함은 억눌린 감정을 풀라는 신호입니다."
+  },
+  {
+    "en": "belly_full",
+    "ko": "배(腹)",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A full belly signals satisfaction with current state. Hunger warns of unmet ambition.",
+    "meaningKo": "부른 배는 현재 상태의 만족입니다. 굶주림은 충족 안 된 야망을 경고합니다."
+  },
+  {
+    "en": "arm",
+    "ko": "팔",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Strong arms signal capability to lift others. Reach out and help this week.",
+    "meaningKo": "강한 팔은 남을 들어올리는 능력입니다. 이번 주 손 내밀어 도우세요."
+  },
+  {
+    "en": "head",
+    "ko": "머리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Big head dreams signal expanded thinking. Use the clarity now.",
+    "meaningKo": "큰 머리 꿈은 확장된 사고입니다. 지금 그 명료함을 쓰세요."
+  },
+  {
+    "en": "mouth",
+    "ko": "입",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An open mouth signals readiness to speak truth. Closed = listen more.",
+    "meaningKo": "열린 입은 진실을 말할 준비입니다. 닫힘은 더 들으라는 신호입니다."
+  },
+  {
+    "en": "neck",
+    "ko": "목",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Neck pain dreams warn of stubbornness blocking progress. Bend a little.",
+    "meaningKo": "목 통증 꿈은 진전을 막는 고집을 경고합니다. 조금 굽히세요."
+  },
+  {
+    "en": "waist",
+    "ko": "허리",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A solid waist signals stable money handling. Thin waist warns of stretched finances.",
+    "meaningKo": "단단한 허리는 안정된 돈 관리입니다. 가는 허리는 늘어난 재정을 경고합니다."
+  },
+  {
+    "en": "knees",
+    "ko": "무릎",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Strong knees signal resilient bouncing-back. Falling on knees warns of forced humility.",
+    "meaningKo": "튼튼한 무릎은 회복력입니다. 무릎 꿇음은 강요된 겸손을 경고합니다."
+  },
+  {
+    "en": "breath",
+    "ko": "숨",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Deep breath dreams signal clarity returning. Shallow = anxiety to address.",
+    "meaningKo": "깊은 숨 꿈은 돌아오는 명료함입니다. 얕음은 다룰 불안입니다."
+  },
+  {
+    "en": "tears",
+    "ko": "눈물",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Crying in dreams paradoxically clears blockage. Real-life relief follows.",
+    "meaningKo": "꿈에서의 눈물은 역설적으로 막힌 것을 풀어줍니다. 실제 안도가 따릅니다."
+  },
+  {
+    "en": "sweat",
+    "ko": "땀",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sweating in a dream signals honest effort paying off. Soon visible reward.",
+    "meaningKo": "땀은 정직한 노력의 보상을 알립니다. 곧 가시적 보상이 옵니다."
+  },
+  {
+    "en": "gold",
+    "ko": "금색",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Gold signals premium-tier opportunity. Touching it = high-status gain confirmed.",
+    "meaningKo": "금색은 최상위 기회입니다. 만지면 고위 이득의 확정입니다."
+  },
+  {
+    "en": "silver",
+    "ko": "은색",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Silver signals refined second-tier wealth. Often professional recognition.",
+    "meaningKo": "은색은 세련된 두 번째 단계의 재물입니다. 종종 직업적 인정입니다."
+  },
+  {
+    "en": "white",
+    "ko": "흰색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "White signals pure new beginning. White clothes = fresh role taken.",
+    "meaningKo": "흰색은 순수한 새 시작입니다. 흰옷은 받은 새 역할입니다."
+  },
+  {
+    "en": "black",
+    "ko": "검은색",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Black signals hidden or end-of-cycle. Watch for what is being concealed.",
+    "meaningKo": "검은색은 숨겨짐이나 주기의 끝입니다. 무엇이 감춰져 있는지 보세요."
+  },
+  {
+    "en": "red",
+    "ko": "빨간색",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Red signals passion and urgent attention. Red object = important emotion to address.",
+    "meaningKo": "빨간색은 열정과 긴급한 관심입니다. 빨간 물건은 다룰 중요한 감정입니다."
+  },
+  {
+    "en": "blue",
+    "ko": "파란색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Blue signals calm clarity. Blue sky or water = peaceful confident path.",
+    "meaningKo": "파란색은 차분한 명료함입니다. 파란 하늘이나 물은 평화롭고 자신감 있는 길입니다."
+  },
+  {
+    "en": "green",
+    "ko": "초록색",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Green signals new growth and money flow. Lush green = abundant phase.",
+    "meaningKo": "초록색은 새 성장과 돈의 흐름입니다. 무성한 초록은 풍요의 시기입니다."
+  },
+  {
+    "en": "yellow",
+    "ko": "노란색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Yellow signals cheerful recognition. Yellow flowers = social joy.",
+    "meaningKo": "노란색은 명랑한 인정입니다. 노란 꽃은 사회적 기쁨입니다."
+  },
+  {
+    "en": "purple",
+    "ko": "보라색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Purple signals refined spirituality or royal recognition. Rare and valuable.",
+    "meaningKo": "보라색은 세련된 영성이나 왕가의 인정입니다. 드물고 귀합니다."
+  },
+  {
+    "en": "pink",
+    "ko": "분홍색",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Pink signals tender new affection. Pink clothes = soft heart opening.",
+    "meaningKo": "분홍색은 부드러운 새 애정입니다. 분홍 옷은 열리는 부드러운 마음입니다."
+  },
+  {
+    "en": "orange_color",
+    "ko": "주황색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Orange signals energetic confidence. Often creative breakthrough.",
+    "meaningKo": "주황색은 활기찬 자신감입니다. 종종 창의적 돌파입니다."
+  },
+  {
+    "en": "brown",
+    "ko": "갈색",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Brown signals grounded earthly stability. Brown soil = fertile ready ground.",
+    "meaningKo": "갈색은 발 디딘 흙의 안정입니다. 갈색 흙은 비옥한 준비된 토양입니다."
+  },
+  {
+    "en": "one",
+    "ko": "하나",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "The number one signals start, solo, leader position.",
+    "meaningKo": "숫자 1은 시작, 단독, 리더 위치입니다."
+  },
+  {
+    "en": "two",
+    "ko": "둘",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Two signals partnership choice. A pair appearing = relationship matter close.",
+    "meaningKo": "둘은 동반의 선택입니다. 한 쌍이 나타나면 관계 사안이 가깝습니다."
+  },
+  {
+    "en": "three",
+    "ko": "셋",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Three signals collaborative balance. Three-way agreement is favored.",
+    "meaningKo": "셋은 협력의 균형입니다. 삼자 합의가 유리합니다."
+  },
+  {
+    "en": "four",
+    "ko": "넷",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Four signals structural foundation. Four pillars = stable construction.",
+    "meaningKo": "넷은 구조의 기반입니다. 네 기둥은 안정된 건설입니다."
+  },
+  {
+    "en": "five",
+    "ko": "다섯",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Five signals adventure, the five elements. Movement is favored.",
+    "meaningKo": "다섯은 모험, 오행입니다. 움직임이 유리합니다."
+  },
+  {
+    "en": "six",
+    "ko": "여섯",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Six signals home harmony. Six-sided shapes = stable nesting.",
+    "meaningKo": "여섯은 가정의 화목입니다. 육각형은 안정된 둥지입니다."
+  },
+  {
+    "en": "seven",
+    "ko": "일곱",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Seven signals spiritual completion. Lucky in many traditions.",
+    "meaningKo": "일곱은 영적 완성입니다. 많은 전통에서 행운입니다."
+  },
+  {
+    "en": "eight",
+    "ko": "여덟",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Eight signals infinity-shaped wealth. Strongest money number.",
+    "meaningKo": "여덟은 무한대 모양의 재물입니다. 가장 강한 돈의 숫자입니다."
+  },
+  {
+    "en": "nine",
+    "ko": "아홉",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Nine signals completion before renewal. Wrap something up.",
+    "meaningKo": "아홉은 갱신 전의 완성입니다. 무언가를 마무리하세요."
+  },
+  {
+    "en": "ten",
+    "ko": "열",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Ten signals full cycle achievement. Reach the round number = celebrate.",
+    "meaningKo": "열은 한 주기의 성취입니다. 둥근 숫자에 도달 = 축하입니다."
+  },
+  {
+    "en": "hundred",
+    "ko": "백",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A hundred signals abundance arriving in volume. Multiple gains at once.",
+    "meaningKo": "백은 풍요가 양으로 도착함입니다. 동시에 여러 이득입니다."
+  },
+  {
+    "en": "thousand",
+    "ko": "천",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A thousand signals magnified prosperity. A community-scale blessing.",
+    "meaningKo": "천은 확대된 번영입니다. 공동체 규모의 축복입니다."
+  },
+  {
+    "en": "rainbow_colors",
+    "ko": "무지개색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Multicolor signals diverse opportunities arriving in synchrony.",
+    "meaningKo": "여러 색은 동시에 도착하는 다양한 기회입니다."
+  },
+  {
+    "en": "grey",
+    "ko": "회색",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Grey signals undecided territory. Make a choice this week.",
+    "meaningKo": "회색은 미결정의 영역입니다. 이번 주 선택하세요."
+  },
+  {
+    "en": "beige",
+    "ko": "베이지",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Beige signals neutral safe comfort. Often interior decoration suggesting calm home.",
+    "meaningKo": "베이지는 중립적 안전한 편안함입니다. 종종 차분한 집을 의미합니다."
+  },
+  {
+    "en": "navy",
+    "ko": "남색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Navy signals professional authority. Often work uniform of advancement.",
+    "meaningKo": "남색은 직업적 권위입니다. 종종 승진의 업무복입니다."
+  },
+  {
+    "en": "crimson",
+    "ko": "진홍색",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Crimson signals intense passion or major emotional stake. Handle with care.",
+    "meaningKo": "진홍색은 강렬한 열정이나 큰 감정의 위험입니다. 조심히 다루세요."
+  },
+  {
+    "en": "mint",
+    "ko": "민트색",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Mint signals fresh small breakthrough. Often a new health or wellness phase.",
+    "meaningKo": "민트는 작은 신선한 돌파입니다. 종종 새로운 건강의 시기입니다."
+  },
+  {
+    "en": "door",
+    "ko": "문",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An opening door signals new opportunity entering. A locked door = wait, not yet.",
+    "meaningKo": "열리는 문은 들어오는 새 기회입니다. 잠긴 문은 아직 때가 아님입니다."
+  },
+  {
+    "en": "window",
+    "ko": "창문",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Open windows signal fresh perspective. Closed = open the air in your life.",
+    "meaningKo": "열린 창은 신선한 시각입니다. 닫혔다면 삶에 환기가 필요합니다."
+  },
+  {
+    "en": "stairs",
+    "ko": "계단",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Stairs ascending signal step-by-step promotion. Descending = strategic retreat.",
+    "meaningKo": "오르는 계단은 단계적 승진입니다. 내림은 전략적 후퇴입니다."
+  },
+  {
+    "en": "road",
+    "ko": "길",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A clear road signals direction confirmed. Forked road = upcoming choice.",
+    "meaningKo": "명확한 길은 확정된 방향입니다. 갈림길은 다가오는 선택입니다."
+  },
+  {
+    "en": "tunnel",
+    "ko": "터널",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Going through a tunnel signals temporary obscurity then bright exit. Persist.",
+    "meaningKo": "터널 통과는 일시적 어두움 후 밝은 출구입니다. 견디세요."
+  },
+  {
+    "en": "castle",
+    "ko": "성",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A castle signals fortified achievement. Living in one = secure top position.",
+    "meaningKo": "성은 강화된 성취입니다. 거주는 안전한 최고 자리입니다."
+  },
+  {
+    "en": "temple",
+    "ko": "사찰",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A temple signals sacred restoration. Praying = clear answer is received.",
+    "meaningKo": "사찰은 신성한 회복입니다. 기도는 명확한 답을 받음입니다."
+  },
+  {
+    "en": "church",
+    "ko": "교회",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A church signals community spiritual support. Bells ringing = announcement coming.",
+    "meaningKo": "교회는 공동체의 영적 지지입니다. 종소리는 다가오는 발표입니다."
+  },
+  {
+    "en": "hospital",
+    "ko": "병원",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A hospital signals needed attention to health or family. Schedule the appointment.",
+    "meaningKo": "병원은 건강이나 가족에 필요한 관심입니다. 예약을 잡으세요."
+  },
+  {
+    "en": "library",
+    "ko": "도서관",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A library signals knowledge you already have but haven't accessed. Look in old notes.",
+    "meaningKo": "도서관은 가졌지만 접근 안 한 지식입니다. 옛 메모를 보세요."
+  },
+  {
+    "en": "market",
+    "ko": "시장",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A busy market signals abundant exchange. Buy = invest in something new.",
+    "meaningKo": "북적이는 시장은 풍부한 교환입니다. 구매는 새로운 무언가에의 투자입니다."
+  },
+  {
+    "en": "shop",
+    "ko": "상점",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A shop signals choice of value. Browse signals you are evaluating options.",
+    "meaningKo": "상점은 가치의 선택입니다. 둘러보기는 옵션 평가 중입니다."
+  },
+  {
+    "en": "restaurant",
+    "ko": "식당",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A restaurant signals shared social occasion. Reserve a table for someone you neglected.",
+    "meaningKo": "식당은 함께하는 사회적 자리입니다. 소홀했던 사람과 자리를 잡으세요."
+  },
+  {
+    "en": "hotel",
+    "ko": "호텔",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A hotel signals temporary phase. You will move soon to a more permanent place.",
+    "meaningKo": "호텔은 일시적 단계입니다. 곧 더 영구적인 곳으로 옮깁니다."
+  },
+  {
+    "en": "office",
+    "ko": "사무실",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An office signals professional context active. Your work projects are taking shape.",
+    "meaningKo": "사무실은 활성화된 직업 맥락입니다. 업무 프로젝트가 형태를 잡고 있습니다."
+  },
+  {
+    "en": "garden_pavilion",
+    "ko": "정자",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A pavilion signals contemplative pause needed. Sit and reflect.",
+    "meaningKo": "정자는 필요한 사색의 멈춤입니다. 앉아 성찰하세요."
+  },
+  {
+    "en": "palace",
+    "ko": "궁궐",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A palace signals top-tier social recognition. Entry = invitation to elite circles.",
+    "meaningKo": "궁궐은 최고위의 사회적 인정입니다. 입장은 엘리트 모임의 초대입니다."
+  },
+  {
+    "en": "wall",
+    "ko": "벽",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A wall signals obstacle. Find the door or wait for the wall to crack.",
+    "meaningKo": "벽은 장애물입니다. 문을 찾거나 벽이 갈라질 때까지 기다리세요."
+  },
+  {
+    "en": "roof",
+    "ko": "지붕",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A solid roof signals protected family. Leaking roof warns of small home repair needed.",
+    "meaningKo": "단단한 지붕은 보호된 가족입니다. 새는 지붕은 작은 집 수리를 경고합니다."
+  },
+  {
+    "en": "chimney",
+    "ko": "굴뚝",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Smoke rising from chimney signals home prosperity. Active household = wealth flowing.",
+    "meaningKo": "굴뚝의 연기는 가정의 번영입니다. 활발한 가정은 흐르는 재물입니다."
+  },
+  {
+    "en": "fence",
+    "ko": "울타리",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A fence signals defined boundaries. Strong fence = healthy limits respected.",
+    "meaningKo": "울타리는 정의된 경계입니다. 강한 울타리는 존중받는 건강한 한계입니다."
+  },
+  {
+    "en": "gate",
+    "ko": "대문",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A grand gate signals entrance to status. Opening signals invitation accepted.",
+    "meaningKo": "큰 대문은 지위로의 입장입니다. 열림은 받아들여진 초대입니다."
+  },
+  {
+    "en": "lock",
+    "ko": "자물쇠",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A lock signals barrier. Find the right key — likely a person, not an object.",
+    "meaningKo": "자물쇠는 장벽입니다. 맞는 열쇠를 찾으세요 — 물건이 아닌 사람일 가능성입니다."
+  },
+  {
+    "en": "clock",
+    "ko": "시계",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A clock signals timing matters. Note the hour shown — it's your key time.",
+    "meaningKo": "시계는 타이밍의 중요성입니다. 표시된 시각이 당신의 핵심 시간입니다."
+  },
+  {
+    "en": "letter",
+    "ko": "편지",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A letter signals incoming news. Sealed envelope = important message arriving soon.",
+    "meaningKo": "편지는 들어오는 소식입니다. 봉인된 봉투는 곧 도착할 중요한 메시지입니다."
+  },
+  {
+    "en": "phone",
+    "ko": "전화",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A phone ringing signals important call. Answer it in dream = ready to receive offer.",
+    "meaningKo": "울리는 전화는 중요한 통화입니다. 꿈에서 받으면 제안 수신 준비가 됐습니다."
+  },
+  {
+    "en": "jewelry",
+    "ko": "보석",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Jewelry signals high-value gain. Wearing = recognition of your worth.",
+    "meaningKo": "보석은 고가의 이득입니다. 착용은 당신 가치의 인정입니다."
+  },
+  {
+    "en": "ring",
+    "ko": "반지",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A ring signals commitment forming. Slipped on finger = promise made.",
+    "meaningKo": "반지는 형성되는 약속입니다. 손가락에 끼움은 약속의 체결입니다."
+  },
+  {
+    "en": "necklace",
+    "ko": "목걸이",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A necklace signals affection circling you. Gifted one = sincere admiration.",
+    "meaningKo": "목걸이는 당신을 두른 애정입니다. 선물받음은 진심의 흠모입니다."
+  },
+  {
+    "en": "crown",
+    "ko": "왕관",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A crown signals top recognition. Wearing one = role you are about to assume.",
+    "meaningKo": "왕관은 최고의 인정입니다. 쓰는 꿈은 곧 맡을 역할입니다."
+  },
+  {
+    "en": "sword_blade",
+    "ko": "장검",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A sword signals decisive cut needed. Wielding it = ready to make a firm decision.",
+    "meaningKo": "검은 필요한 결단의 베어냄입니다. 휘두름은 단호한 결정의 준비입니다."
+  },
+  {
+    "en": "shield",
+    "ko": "방패",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A shield signals protection available. Hold it during upcoming dispute.",
+    "meaningKo": "방패는 가용한 보호입니다. 다가오는 분쟁에 들고 가세요."
+  },
+  {
+    "en": "mask",
+    "ko": "가면",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A mask signals hidden identity around you. Look beneath surface in a key meeting.",
+    "meaningKo": "가면은 주변의 숨은 정체입니다. 중요한 만남에서 표면 너머를 보세요."
+  },
+  {
+    "en": "candle",
+    "ko": "촛불",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A candle signals patient hope. Steady flame = trust the process.",
+    "meaningKo": "촛불은 인내의 희망입니다. 꾸준한 불꽃은 과정을 믿으라는 신호입니다."
+  },
+  {
+    "en": "lamp",
+    "ko": "등불",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A lamp signals guidance arriving in dark moment. Follow the light.",
+    "meaningKo": "등불은 어두운 순간의 안내입니다. 빛을 따르세요."
+  },
+  {
+    "en": "umbrella",
+    "ko": "우산",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An umbrella signals timely protection. Open one before the rain visible.",
+    "meaningKo": "우산은 적시의 보호입니다. 비가 보이기 전에 펴세요."
+  },
+  {
+    "en": "bag",
+    "ko": "가방",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A full bag signals carrying enough. An empty bag warns of poor preparation.",
+    "meaningKo": "가득 찬 가방은 충분히 가지고 다님입니다. 빈 가방은 부족한 준비를 경고합니다."
+  },
+  {
+    "en": "hat",
+    "ko": "모자",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A hat signals role taken on. The kind of hat = nature of the role.",
+    "meaningKo": "모자는 맡은 역할입니다. 모자 종류가 역할의 성격입니다."
+  },
+  {
+    "en": "clothes",
+    "ko": "옷",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Clean clothes signal proper self-presentation. Torn = appearance needs care.",
+    "meaningKo": "깨끗한 옷은 올바른 자기 표현입니다. 찢어짐은 모습에 관심이 필요함입니다."
+  },
+  {
+    "en": "wedding_dress",
+    "ko": "웨딩드레스",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A wedding dress signals union about to be formalized. Take the next step toward commitment.",
+    "meaningKo": "웨딩드레스는 곧 공식화될 결합입니다. 약속을 향한 다음 단계를 밟으세요."
+  },
+  {
+    "en": "camera",
+    "ko": "카메라",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A camera signals moment worth capturing. Mark this period as significant.",
+    "meaningKo": "카메라는 포착할 가치가 있는 순간입니다. 이 시기를 의미 있다고 표시하세요."
+  },
+  {
+    "en": "boat_sailing",
+    "ko": "배(船)",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A boat sailing signals safe passage. Stormy water + boat = challenge with vessel intact.",
+    "meaningKo": "항해 중인 배는 안전한 통과입니다. 폭풍과 배는 배가 온전한 도전입니다."
+  },
+  {
+    "en": "train",
+    "ko": "기차",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A train signals scheduled progress on track. Missing one = wait for next phase.",
+    "meaningKo": "기차는 궤도 위의 계획된 진전입니다. 놓치면 다음 단계를 기다리세요."
+  },
+  {
+    "en": "plane_takeoff",
+    "ko": "여객기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A plane signals long-distance leap. Taking off = ambitious launch confirmed.",
+    "meaningKo": "비행기는 장거리 도약입니다. 이륙은 야심 찬 출발의 확정입니다."
+  },
+  {
+    "en": "bicycle",
+    "ko": "자전거",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A bicycle signals balanced solo effort. Steady pedaling = your pace is right.",
+    "meaningKo": "자전거는 균형 잡힌 개인의 노력입니다. 꾸준한 페달은 당신의 페이스가 맞음입니다."
+  },
+  {
+    "en": "walking",
+    "ko": "걷기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Walking signals steady measured progress. Direction matters more than speed.",
+    "meaningKo": "걷기는 꾸준하고 측정된 진전입니다. 속도보다 방향이 중요합니다."
+  },
+  {
+    "en": "running_jog",
+    "ko": "조깅",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Running signals urgency. Toward something = chasing opportunity; from = avoiding something.",
+    "meaningKo": "달리기는 긴급함입니다. 향해 달리면 추구, 도망치면 회피입니다."
+  },
+  {
+    "en": "flying_free",
+    "ko": "자유 비행",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Flying signals freedom unlocked. Higher you go, broader your perspective.",
+    "meaningKo": "하늘을 나는 꿈은 해방된 자유입니다. 높이 갈수록 넓어지는 시야입니다."
+  },
+  {
+    "en": "swimming",
+    "ko": "수영",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Swimming signals emotional fluency. Strong strokes = confident handling of feelings.",
+    "meaningKo": "수영은 감정의 유창함입니다. 강한 스트로크는 자신감 있는 감정 처리입니다."
+  },
+  {
+    "en": "diving",
+    "ko": "다이빙",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Diving signals commitment to deep matter. Coming up = surfacing with insight.",
+    "meaningKo": "다이빙은 깊은 사안에 대한 헌신입니다. 떠오름은 통찰과 함께 표면화입니다."
+  },
+  {
+    "en": "climbing",
+    "ko": "등반",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Climbing signals upward effort. Reaching the top = goal achieved, time to plant flag.",
+    "meaningKo": "등반은 위로 향하는 노력입니다. 정상 도달은 목표 달성, 깃발 꽂을 때입니다."
+  },
+  {
+    "en": "falling_drop",
+    "ko": "낙하",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Falling signals loss of control. Catch yourself or wake — let go of the held tension.",
+    "meaningKo": "추락은 통제력 상실입니다. 자신을 잡거나 깨어나세요 — 붙잡은 긴장을 놓으세요."
+  },
+  {
+    "en": "jumping",
+    "ko": "점프",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Jumping signals leap of faith ready. Land = decision was right.",
+    "meaningKo": "점프는 준비된 도약입니다. 착지는 결정이 옳았음입니다."
+  },
+  {
+    "en": "crawling",
+    "ko": "기어가기",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Crawling signals strenuous slow phase. Stand up when ready; help is near.",
+    "meaningKo": "기기는 힘든 느린 시기입니다. 준비되면 일어서세요. 도움이 가깝습니다."
+  },
+  {
+    "en": "dancing",
+    "ko": "춤추기",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Dancing signals joyful self-expression. Partner dance = harmonious relationship.",
+    "meaningKo": "춤은 즐거운 자기 표현입니다. 짝춤은 조화로운 관계입니다."
+  },
+  {
+    "en": "singing",
+    "ko": "노래하기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Singing signals voice ready to be heard. Sing now = speak up tomorrow.",
+    "meaningKo": "노래는 들릴 준비된 목소리입니다. 꿈에서의 노래는 내일 목소리 내라는 신호입니다."
+  },
+  {
+    "en": "reading",
+    "ko": "책 읽기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Reading signals answers in study. The book's title = topic to research.",
+    "meaningKo": "독서는 학습에 있는 답입니다. 책 제목이 연구할 주제입니다."
+  },
+  {
+    "en": "writing",
+    "ko": "글쓰기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Writing signals message ready to be put out. Draft and send.",
+    "meaningKo": "글쓰기는 내보낼 준비된 메시지입니다. 초안 잡고 보내세요."
+  },
+  {
+    "en": "sleeping",
+    "ko": "잠자기",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Sleeping in a dream signals deep rest needed. Take a true break this weekend.",
+    "meaningKo": "꿈에서의 잠은 필요한 깊은 휴식입니다. 이번 주말 진짜 휴식하세요."
+  },
+  {
+    "en": "waking",
+    "ko": "깨어남",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Waking up in a dream signals consciousness shift. New realization is forming.",
+    "meaningKo": "꿈에서의 깨어남은 의식의 전환입니다. 새 깨달음이 형성됩니다."
+  },
+  {
+    "en": "hugging",
+    "ko": "포옹",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Hugging signals close emotional bond. Long hug = deep secure connection.",
+    "meaningKo": "포옹은 가까운 감정적 결속입니다. 긴 포옹은 깊고 안전한 연결입니다."
+  },
+  {
+    "en": "kissing",
+    "ko": "키스",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A kiss signals affection or agreement sealed. Note the person — they matter.",
+    "meaningKo": "키스는 봉인된 애정이나 합의입니다. 사람을 기억하세요. 의미가 있습니다."
+  },
+  {
+    "en": "fighting",
+    "ko": "싸움",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Fighting signals unresolved conflict. Address it in real life before it surfaces wrongly.",
+    "meaningKo": "싸움은 미해결 갈등입니다. 잘못 표출되기 전 실제로 다루세요."
+  },
+  {
+    "en": "arguing",
+    "ko": "말다툼",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Arguing in dreams hints at pent-up disagreement. Have the real conversation.",
+    "meaningKo": "말다툼 꿈은 쌓인 불일치입니다. 실제 대화를 하세요."
+  },
+  {
+    "en": "praying",
+    "ko": "기도",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Praying signals alignment with higher purpose. Answer arrives soon.",
+    "meaningKo": "기도는 더 높은 목적과의 정렬입니다. 답이 곧 옵니다."
+  },
+  {
+    "en": "cooking_dream",
+    "ko": "요리하기",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Cooking signals crafting your own outcome. Tasting = refining the result.",
+    "meaningKo": "요리는 자기 결과를 빚음입니다. 맛보기는 결과를 다듬는 과정입니다."
+  },
+  {
+    "en": "cleaning",
+    "ko": "청소",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Cleaning signals readiness to release. The clean space = clear new path.",
+    "meaningKo": "청소는 놓을 준비입니다. 깨끗해진 공간은 명확한 새 길입니다."
+  },
+  {
+    "en": "shopping",
+    "ko": "쇼핑",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Shopping signals evaluating options. What you choose in dream = your real priority.",
+    "meaningKo": "쇼핑은 옵션 평가입니다. 꿈에서 고른 것이 실제 우선순위입니다."
+  },
+  {
+    "en": "traveling",
+    "ko": "여행",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Traveling signals life expansion. Destination = direction you are growing toward.",
+    "meaningKo": "여행은 인생 확장입니다. 목적지가 성장 방향입니다."
+  },
+  {
+    "en": "getting_lost",
+    "ko": "길 잃기",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Getting lost signals direction confusion. Pause and check your map.",
+    "meaningKo": "길을 잃음은 방향의 혼란입니다. 멈춰서 지도를 점검하세요."
+  },
+  {
+    "en": "finding_money",
+    "ko": "돈 줍기",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Finding money signals unexpected gain confirmed. Receive it openly when offered.",
+    "meaningKo": "돈 줍기는 확정된 예상치 못한 이득입니다. 제안될 때 열린 마음으로 받으세요."
+  },
+  {
+    "en": "losing_money",
+    "ko": "돈 잃기",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Losing money warns of careless spending. Audit upcoming purchases.",
+    "meaningKo": "돈 잃기는 부주의한 소비를 경고합니다. 다가오는 구매를 점검하세요."
+  },
+  {
+    "en": "giving_gift",
+    "ko": "선물 주기",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Giving a gift signals generous reputation building. Goodwill returns multiplied.",
+    "meaningKo": "선물 주기는 너그러운 평판의 형성입니다. 호의는 배가되어 돌아옵니다."
+  },
+  {
+    "en": "receiving_gift",
+    "ko": "선물 받기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Receiving a gift signals appreciation arriving. Accept graciously when it happens.",
+    "meaningKo": "선물 받기는 도착하는 감사의 표현입니다. 일어나면 우아하게 받으세요."
+  },
+  {
+    "en": "wedding_ceremony",
+    "ko": "결혼식 거행",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Marrying in a dream signals union forming — not necessarily marriage, often partnership.",
+    "meaningKo": "꿈의 결혼은 형성되는 결합입니다 — 반드시 결혼이 아닌 종종 동반입니다."
+  },
+  {
+    "en": "giving_birth",
+    "ko": "출산",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Giving birth signals new venture launching. Care for it carefully like a newborn.",
+    "meaningKo": "출산은 출범하는 새 시도입니다. 신생아처럼 조심히 돌보세요."
+  },
+  {
+    "en": "graduating",
+    "ko": "졸업",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Graduating signals phase completion. You're ready for the next level.",
+    "meaningKo": "졸업은 단계의 완성입니다. 다음 단계로 갈 준비가 됐습니다."
+  },
+  {
+    "en": "winning",
+    "ko": "승리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Winning signals confirmed success ahead. Note what you won — that is the area.",
+    "meaningKo": "승리는 확정된 성공입니다. 무엇을 이겼는지가 영역입니다."
+  },
+  {
+    "en": "losing_game",
+    "ko": "게임 패배",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Losing a game warns of being too aggressive in real competition. Pace yourself.",
+    "meaningKo": "게임 패배는 실제 경쟁에서 너무 공격적임을 경고합니다. 페이스를 조절하세요."
+  },
+  {
+    "en": "working",
+    "ko": "일하기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Working in a dream signals current effort registering as meaningful. Keep going.",
+    "meaningKo": "꿈에서의 일은 현재 노력이 의미 있게 인식됨입니다. 계속 가세요."
+  },
+  {
+    "en": "studying",
+    "ko": "공부",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Studying signals knowledge gap closing. The subject = where to invest learning.",
+    "meaningKo": "공부는 좁혀지는 지식의 격차입니다. 과목이 학습 투자처입니다."
+  },
+  {
+    "en": "teaching",
+    "ko": "가르치기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Teaching in a dream signals readiness to lead. You know more than you think.",
+    "meaningKo": "가르치기는 이끌 준비입니다. 생각보다 많이 알고 있습니다."
+  },
+  {
+    "en": "healing",
+    "ko": "치유",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Healing signals restoration in progress. Trust the recovery — visible or invisible.",
+    "meaningKo": "치유는 진행 중인 회복입니다. 회복을 믿으세요 — 보이든 보이지 않든."
+  },
+  {
+    "en": "giving_advice",
+    "ko": "조언 주기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Giving advice signals your wisdom is valued. Speak up when asked.",
+    "meaningKo": "조언 주기는 당신 지혜의 가치입니다. 요청받으면 말하세요."
+  },
+  {
+    "en": "joy",
+    "ko": "기쁨",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Joy in a dream signals real happiness arriving. Note the source.",
+    "meaningKo": "꿈의 기쁨은 도착하는 실제 행복입니다. 출처를 기억하세요."
+  },
+  {
+    "en": "sadness",
+    "ko": "슬픔",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sadness in dreams paradoxically signals release. Tears wash the path clean.",
+    "meaningKo": "꿈의 슬픔은 역설적으로 해방입니다. 눈물이 길을 씻어줍니다."
+  },
+  {
+    "en": "anger",
+    "ko": "분노",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Anger in dreams warns of unprocessed real anger. Address it constructively.",
+    "meaningKo": "꿈의 분노는 미처리된 실제 분노입니다. 건설적으로 다루세요."
+  },
+  {
+    "en": "fear",
+    "ko": "두려움",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Fear in dreams hints at what to examine — face it gently in waking life.",
+    "meaningKo": "꿈의 두려움은 살펴볼 것을 암시합니다 — 깨어나면 부드럽게 마주하세요."
+  },
+  {
+    "en": "peace",
+    "ko": "평온",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Peace in a dream confirms inner alignment. Trust your current path.",
+    "meaningKo": "꿈의 평온은 내면의 정렬을 확인합니다. 현재 길을 믿으세요."
+  },
+  {
+    "en": "love_emotion",
+    "ko": "사랑",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Feeling love in dream confirms real bond forming or strengthening.",
+    "meaningKo": "꿈에서의 사랑은 형성되거나 강화되는 실제 결속입니다."
+  },
+  {
+    "en": "confusion",
+    "ko": "혼란",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Confusion signals decision pending. Sit with it; clarity returns within days.",
+    "meaningKo": "혼란은 보류된 결정입니다. 함께 앉으세요. 며칠 내 명료해집니다."
+  },
+  {
+    "en": "relief",
+    "ko": "안도",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Relief in dream signals problem actually resolving. Wait for the news.",
+    "meaningKo": "꿈의 안도는 실제로 해결되는 문제입니다. 소식을 기다리세요."
+  },
+  {
+    "en": "shame",
+    "ko": "부끄러움",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Shame in dreams points to integrity check needed. Resolve before it shows.",
+    "meaningKo": "꿈의 부끄러움은 필요한 진실성 점검입니다. 드러나기 전 해결하세요."
+  },
+  {
+    "en": "pride",
+    "ko": "자긍심",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Pride in dream confirms genuine accomplishment. Don't shrink from it.",
+    "meaningKo": "꿈의 자긍심은 진짜 성취의 확인입니다. 그것에서 작아지지 마세요."
+  },
+  {
+    "en": "jealousy",
+    "ko": "질투",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Jealousy signals area of self-doubt. Strengthen your foundation rather than compare.",
+    "meaningKo": "질투는 자기 의심의 영역입니다. 비교하지 말고 기반을 강화하세요."
+  },
+  {
+    "en": "gratitude",
+    "ko": "감사",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Gratitude in dream amplifies real gratitude. Express it tomorrow.",
+    "meaningKo": "꿈의 감사는 실제 감사를 증폭합니다. 내일 표현하세요."
+  },
+  {
+    "en": "forgiveness",
+    "ko": "용서",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Forgiveness signals burden ready to be released. Let it go for your own freedom.",
+    "meaningKo": "용서는 놓을 준비된 짐입니다. 당신 자유를 위해 놓으세요."
+  },
+  {
+    "en": "curiosity",
+    "ko": "호기심",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Curiosity signals a worthwhile new lead. Follow it without rushing.",
+    "meaningKo": "호기심은 가치 있는 새로운 단서입니다. 서두르지 말고 따라가세요."
+  },
+  {
+    "en": "hope",
+    "ko": "희망",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Hope appearing in dream confirms future bright spot. Hold the image.",
+    "meaningKo": "꿈에 나타난 희망은 미래의 밝은 지점을 확인합니다. 그 이미지를 잡으세요."
+  },
+  {
+    "en": "despair",
+    "ko": "절망",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Despair signals deep need for support. Reach out to a trusted person tomorrow.",
+    "meaningKo": "절망은 지원에 대한 깊은 필요입니다. 내일 신뢰하는 사람에게 손을 내미세요."
+  },
+  {
+    "en": "loneliness",
+    "ko": "외로움",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Loneliness in dream highlights a relationship gap. Initiate contact with one person.",
+    "meaningKo": "꿈의 외로움은 관계의 공백을 강조합니다. 한 사람에게 먼저 연락하세요."
+  },
+  {
+    "en": "belonging",
+    "ko": "소속감",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Sense of belonging confirms you are accepted where you doubted. Trust the group.",
+    "meaningKo": "소속감은 의심했던 곳에서 받아들여짐을 확인합니다. 그 모임을 믿으세요."
+  },
+  {
+    "en": "excitement",
+    "ko": "설렘",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Excitement in dream signals real anticipation coming true. Prepare for the moment.",
+    "meaningKo": "꿈의 설렘은 실현되는 실제 기대입니다. 그 순간을 준비하세요."
+  },
+  {
+    "en": "regret",
+    "ko": "후회",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Regret signals unfinished business. Take one small step to address it this week.",
+    "meaningKo": "후회는 미완의 일입니다. 이번 주 작은 한 걸음으로 다루세요."
+  },
+  {
+    "en": "embarrassment",
+    "ko": "당황",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Embarrassment signals upcoming exposure of small flaw. Pre-empt with humility.",
+    "meaningKo": "당황은 다가오는 작은 결점의 노출입니다. 겸손함으로 선제하세요."
+  },
+  {
+    "en": "admiration",
+    "ko": "존경",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Admiration in dream signals someone's value being recognized — yours or theirs.",
+    "meaningKo": "꿈의 존경은 누군가의 가치 인정입니다 — 당신이나 그들의."
+  },
+  {
+    "en": "contentment",
+    "ko": "만족",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Contentment confirms enough-ness. Stop chasing the next thing for a moment.",
+    "meaningKo": "만족은 충분함의 확인입니다. 잠시 다음 것을 쫓기를 멈추세요."
+  },
+  {
+    "en": "anticipation",
+    "ko": "기대",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Anticipation in dream signals plan close to manifesting. Prepare the last details.",
+    "meaningKo": "꿈의 기대는 실현에 가까운 계획입니다. 마지막 세부를 준비하세요."
+  },
+  {
+    "en": "disappointment",
+    "ko": "실망",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "Disappointment signals expectation needing adjustment. Realign hope with reality.",
+    "meaningKo": "실망은 조정이 필요한 기대입니다. 희망을 현실과 재정렬하세요."
+  },
+  {
+    "en": "serenity",
+    "ko": "평정",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Serenity signals your meditation/practice working. Continue the routine.",
+    "meaningKo": "평정은 작동하는 명상·수행입니다. 루틴을 계속하세요."
+  },
+  {
+    "en": "courage",
+    "ko": "용기",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Courage in dream confirms inner readiness. Take the action you've postponed.",
+    "meaningKo": "꿈의 용기는 내면의 준비입니다. 미뤄둔 행동을 취하세요."
+  },
+  {
+    "en": "humility",
+    "ko": "겸손",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Humility signals wisdom. The bow protects you in a coming social moment.",
+    "meaningKo": "겸손은 지혜입니다. 그 인사가 다가오는 사회적 순간에서 보호합니다."
+  },
+  {
+    "en": "compassion",
+    "ko": "연민",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Compassion in dream signals heart opening. A real chance to help is near.",
+    "meaningKo": "꿈의 연민은 열리는 마음입니다. 도울 수 있는 실제 기회가 가깝습니다."
+  },
+  {
+    "en": "determination",
+    "ko": "결단",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Determination signals real commitment forming. Sign the document — literal or figurative.",
+    "meaningKo": "결단은 형성되는 실제 약속입니다. 문서에 서명하세요 — 실제든 비유든."
+  },
+  {
+    "en": "ghost",
+    "ko": "귀신",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A ghost signals unresolved past visiting. Acknowledge it, then release.",
+    "meaningKo": "귀신은 찾아오는 미해결의 과거입니다. 인정하고 놓으세요."
+  },
+  {
+    "en": "angel",
+    "ko": "천사",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An angel signals protection or message from beyond. Note any words spoken.",
+    "meaningKo": "천사는 보호나 저편의 메시지입니다. 말씀은 무엇이든 기억하세요."
+  },
+  {
+    "en": "demon",
+    "ko": "악마",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A demon signals shadow self acknowledged. Integration is the path; not denial.",
+    "meaningKo": "악마는 인정된 그림자 자아입니다. 통합이 길입니다, 부정이 아닙니다."
+  },
+  {
+    "en": "god",
+    "ko": "신",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Encountering divinity signals major spiritual elevation. Listen, don't question.",
+    "meaningKo": "신성과의 만남은 큰 영적 격상입니다. 질문 말고 들으세요."
+  },
+  {
+    "en": "dragon_god",
+    "ko": "용신",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A dragon deity signals supreme good fortune — the rarest highest auspicious sign.",
+    "meaningKo": "용신은 최고의 길조입니다 — 가장 드물고 높은 상서로움입니다."
+  },
+  {
+    "en": "reincarnation",
+    "ko": "환생",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A past-life sense signals lessons applied now. Trust the instinct from \"before\".",
+    "meaningKo": "전생의 감각은 지금 적용되는 가르침입니다. \"이전\"의 직감을 믿으세요."
+  },
+  {
+    "en": "meditation",
+    "ko": "명상",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Meditating in dream signals inner clarity already accessible. Wake calm.",
+    "meaningKo": "꿈의 명상은 이미 접근 가능한 내면의 명료함입니다. 평온히 깨어나세요."
+  },
+  {
+    "en": "halo",
+    "ko": "후광",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A halo around someone signals their elevated influence in your life.",
+    "meaningKo": "누군가 주변의 후광은 인생에서의 높아진 영향력입니다."
+  },
+  {
+    "en": "aura_dream",
+    "ko": "오라",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Seeing colored aura signals heightened intuition. Trust first impressions.",
+    "meaningKo": "색깔 오라를 보면 직관이 고양됐습니다. 첫인상을 믿으세요."
+  },
+  {
+    "en": "omen",
+    "ko": "징조",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sensing an omen signals subconscious knowing. Honor the gut feeling.",
+    "meaningKo": "징조의 감각은 잠재의식의 앎입니다. 직감을 존중하세요."
+  },
+  {
+    "en": "fortune_telling",
+    "ko": "점",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A fortune teller in dream signals timely guidance arriving. Open to interpretation.",
+    "meaningKo": "꿈의 점쟁이는 적시의 안내입니다. 해석에 열려 있으세요."
+  },
+  {
+    "en": "ritual",
+    "ko": "의식",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A ritual signals important transition marked formally. Honor the moment.",
+    "meaningKo": "의식은 공식적으로 표시된 중요한 전환입니다. 그 순간을 존중하세요."
+  },
+  {
+    "en": "prayer_beads",
+    "ko": "염주",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Prayer beads signal continuous spiritual focus. Each bead = one peaceful action.",
+    "meaningKo": "염주는 지속되는 영적 집중입니다. 알 하나가 한 번의 평화로운 행동입니다."
+  },
+  {
+    "en": "incense",
+    "ko": "향",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Burning incense signals respect and ancestral connection. Honor the lineage.",
+    "meaningKo": "향 피우기는 존중과 조상의 연결입니다. 혈통을 존중하세요."
+  },
+  {
+    "en": "amulet",
+    "ko": "부적",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An amulet signals active protection. Carry the inner equivalent — confidence.",
+    "meaningKo": "부적은 능동적 보호입니다. 내면의 등가물을 지니세요 — 자신감."
+  },
+  {
+    "en": "shrine",
+    "ko": "제단",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A shrine signals reverence point. Visit a place of meaning in waking life.",
+    "meaningKo": "제단은 경의의 지점입니다. 깨어나면 의미 있는 장소를 방문하세요."
+  },
+  {
+    "en": "temple_bell",
+    "ko": "범종",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A temple bell signals announcement. Pay attention to news this week.",
+    "meaningKo": "범종은 발표입니다. 이번 주 소식에 주목하세요."
+  },
+  {
+    "en": "rebirth_dream",
+    "ko": "재탄생",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Death in dreams paradoxically signals rebirth and transformation. Old self releasing.",
+    "meaningKo": "꿈의 죽음은 역설적으로 재탄생과 변형입니다. 옛 자아의 해방입니다."
+  },
+  {
+    "en": "birthday",
+    "ko": "생일",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A birthday in dream signals new year of life beginning. Reset goals.",
+    "meaningKo": "꿈의 생일은 인생의 새 해 시작입니다. 목표를 재설정하세요."
+  },
+  {
+    "en": "spring_season",
+    "ko": "봄",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Spring signals fresh beginnings. New leaves = new venture taking root.",
+    "meaningKo": "봄은 신선한 시작입니다. 새 잎은 뿌리내리는 새 시도입니다."
+  },
+  {
+    "en": "summer_season",
+    "ko": "여름",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Summer signals peak energy. Use the high tide of activity now.",
+    "meaningKo": "여름은 정점의 에너지입니다. 활동의 만조를 지금 쓰세요."
+  },
+  {
+    "en": "autumn_season",
+    "ko": "가을",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Autumn signals harvest collected. Account for what you've earned.",
+    "meaningKo": "가을은 거둬들인 수확입니다. 번 것을 정리하세요."
+  },
+  {
+    "en": "winter_season",
+    "ko": "겨울",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Winter signals rest and preparation. Conserve resources for the spring leap.",
+    "meaningKo": "겨울은 휴식과 준비입니다. 봄의 도약을 위해 자원을 비축하세요."
+  },
+  {
+    "en": "morning_dream",
+    "ko": "아침",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Morning in dream signals fresh start. Take action with the early sun.",
+    "meaningKo": "꿈의 아침은 신선한 시작입니다. 이른 햇살과 함께 행동하세요."
+  },
+  {
+    "en": "noon_dream",
+    "ko": "정오",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Noon signals peak visibility. Make your case under the bright light.",
+    "meaningKo": "정오는 최대의 가시성입니다. 밝은 빛 아래에서 주장을 펴세요."
+  },
+  {
+    "en": "evening_time",
+    "ko": "저녁 시간",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Evening signals reflection time. Review the day before sleep.",
+    "meaningKo": "저녁은 성찰의 시간입니다. 잠 전에 하루를 돌아보세요."
+  },
+  {
+    "en": "midnight_dream",
+    "ko": "한밤중",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Midnight signals inner work hour. Subconscious is most active — note dreams carefully.",
+    "meaningKo": "한밤중은 내면 작업의 시간입니다. 잠재의식이 가장 활발 — 꿈을 세심히 기록하세요."
+  },
+  {
+    "en": "rainbow_bridge",
+    "ko": "무지개 다리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A rainbow bridge signals magical transition. Cross with faith.",
+    "meaningKo": "무지개 다리는 마법 같은 전환입니다. 믿음으로 건너세요."
+  },
+  {
+    "en": "starlight",
+    "ko": "별빛",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Starlight on you signals being seen by cosmic intelligence. Make your wish.",
+    "meaningKo": "당신에게 비추는 별빛은 우주적 지성에게 보임입니다. 소원을 비세요."
+  },
+  {
+    "en": "moonlight",
+    "ko": "달빛",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "Moonlight signals romantic atmosphere. The conditions are right for confession.",
+    "meaningKo": "달빛은 낭만적 분위기입니다. 고백의 조건이 맞습니다."
+  },
+  {
+    "en": "sunlight",
+    "ko": "햇빛",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Sunlight on face signals public favor. Step into visibility.",
+    "meaningKo": "얼굴에 닿는 햇빛은 대중의 호의입니다. 가시성으로 나서세요."
+  },
+  {
+    "en": "shadow",
+    "ko": "그림자",
+    "cat": "warning",
+    "auspicious": false,
+    "meaningEn": "A shadow following you signals unintegrated self. Befriend rather than flee.",
+    "meaningKo": "따라오는 그림자는 통합되지 않은 자아입니다. 도망치지 말고 친구가 되세요."
+  },
+  {
+    "en": "reflection",
+    "ko": "반영",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Seeing your reflection signals self-confrontation. Look honestly.",
+    "meaningKo": "자기 반영을 봄은 자기 직면입니다. 정직히 보세요."
+  },
+  {
+    "en": "cricket",
+    "ko": "귀뚜라미",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "Crickets chirping signal cozy home season. Quiet harmony in evenings.",
+    "meaningKo": "귀뚜라미 울음은 아늑한 가정의 계절입니다. 저녁의 조용한 화목입니다."
+  },
+  {
+    "en": "dragonfly",
+    "ko": "잠자리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Dragonflies signal transformation complete. You've made it through change.",
+    "meaningKo": "잠자리는 완료된 변형입니다. 변화를 잘 통과했습니다."
+  },
+  {
+    "en": "ladybug",
+    "ko": "무당벌레",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Ladybugs signal small good luck. Spotted patterns = countable blessings.",
+    "meaningKo": "무당벌레는 작은 행운입니다. 점 무늬는 셀 수 있는 축복입니다."
+  },
+  {
+    "en": "firefly",
+    "ko": "반딧불",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "Fireflies signal small guiding light in dark moment. Follow what flickers.",
+    "meaningKo": "반딧불은 어두운 순간의 작은 안내 빛입니다. 반짝이는 것을 따르세요."
+  },
+  {
+    "en": "reunion",
+    "ko": "재회",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A reunion in dream signals real reconnection coming. Be ready.",
+    "meaningKo": "꿈의 재회는 다가오는 실제 재연결입니다. 준비하세요."
+  },
+  {
+    "en": "first_meeting",
+    "ko": "첫 만남",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "A first meeting signals important relationship just starting. Note details.",
+    "meaningKo": "첫 만남은 시작되는 중요한 관계입니다. 세부를 기억하세요."
+  },
+  {
+    "en": "farewell",
+    "ko": "이별",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A farewell paradoxically signals new chapter. Necessary release for growth.",
+    "meaningKo": "이별은 역설적으로 새 장입니다. 성장을 위한 필요한 해방입니다."
+  },
+  {
+    "en": "crowd_cheering",
+    "ko": "환호하는 군중",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A cheering crowd signals public recognition. Your work resonates.",
+    "meaningKo": "환호하는 군중은 대중의 인정입니다. 일이 공명합니다."
+  },
+  {
+    "en": "honey_jar",
+    "ko": "꿀단지",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A honey jar signals stored sweetness. Slow steady financial reserve.",
+    "meaningKo": "꿀단지는 저장된 달콤함입니다. 느리고 꾸준한 재정 비축입니다."
+  },
+  {
+    "en": "rice_bowl",
+    "ko": "밥그릇",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A full rice bowl signals daily security. Eat with gratitude.",
+    "meaningKo": "가득 찬 밥그릇은 일상의 안전입니다. 감사함으로 드세요."
+  },
+  {
+    "en": "full_table",
+    "ko": "잔칫상",
+    "cat": "family",
+    "auspicious": true,
+    "meaningEn": "A full feast table signals abundance for family. Invite people to share.",
+    "meaningKo": "풍성한 잔칫상은 가족의 풍요입니다. 함께할 사람을 초대하세요."
+  },
+  {
+    "en": "treasure_chest",
+    "ko": "보물상자",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A treasure chest signals hidden value about to be discovered. Look carefully.",
+    "meaningKo": "보물상자는 발견될 숨은 가치입니다. 세심히 보세요."
+  },
+  {
+    "en": "coin",
+    "ko": "동전",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Coins signal small gains accumulating. Pick them up; they add up.",
+    "meaningKo": "동전은 쌓이는 작은 이득입니다. 주우세요. 합쳐집니다."
+  },
+  {
+    "en": "gold_coin",
+    "ko": "금화",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Gold coins signal high-value transaction. Negotiate firmly.",
+    "meaningKo": "금화는 고가의 거래입니다. 단호하게 협상하세요."
+  },
+  {
+    "en": "paper_money",
+    "ko": "지폐",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "Paper money signals tangible income. The amount shown = direction not literal sum.",
+    "meaningKo": "지폐는 실재하는 수입입니다. 표시된 액수는 방향입니다, 그대로의 금액이 아닙니다."
+  },
+  {
+    "en": "treasure_map",
+    "ko": "보물지도",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A treasure map signals plan with hidden value. Follow it step by step.",
+    "meaningKo": "보물지도는 숨은 가치 있는 계획입니다. 단계대로 따르세요."
+  },
+  {
+    "en": "paint_brush",
+    "ko": "붓",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A paint brush signals creative direction. Make a mark this week.",
+    "meaningKo": "붓은 창의적 방향입니다. 이번 주 흔적을 남기세요."
+  },
+  {
+    "en": "musical_instrument",
+    "ko": "악기",
+    "cat": "love",
+    "auspicious": true,
+    "meaningEn": "An instrument signals harmonious expression. Pick it up if you've neglected it.",
+    "meaningKo": "악기는 조화로운 표현입니다. 소홀했다면 다시 잡으세요."
+  },
+  {
+    "en": "ladder",
+    "ko": "사다리",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A ladder signals upward path available. Climb deliberately.",
+    "meaningKo": "사다리는 가용한 상승의 길입니다. 신중히 오르세요."
+  },
+  {
+    "en": "rope",
+    "ko": "밧줄",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A rope signals connection or rescue. Hold tight when offered.",
+    "meaningKo": "밧줄은 연결이나 구조입니다. 제안되면 꽉 잡으세요."
+  },
+  {
+    "en": "compass",
+    "ko": "나침반",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A compass signals direction confirmed. Trust the inner sense.",
+    "meaningKo": "나침반은 확인된 방향입니다. 내면의 감각을 믿으세요."
+  },
+  {
+    "en": "map",
+    "ko": "지도",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A map signals overview clarity. Step back and see the bigger picture.",
+    "meaningKo": "지도는 전체적 명료함입니다. 한 발 물러서 큰 그림을 보세요."
+  },
+  {
+    "en": "white_snake",
+    "ko": "흰 뱀",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A white snake is the highest snake omen — top wealth and noble news.",
+    "meaningKo": "흰 뱀은 뱀 꿈의 최고 길조입니다 — 최상의 재물과 귀한 소식입니다."
+  },
+  {
+    "en": "golden_pig",
+    "ko": "황금 돼지",
+    "cat": "wealth",
+    "auspicious": true,
+    "meaningEn": "A golden pig signals premium wealth — top-tier income confirmed.",
+    "meaningKo": "황금 돼지는 최고급 재물입니다 — 최상위 수입의 확정입니다."
+  },
+  {
+    "en": "phoenix_rising",
+    "ko": "솟아오르는 봉황",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A rising phoenix signals rebirth after struggle. Highest comeback omen.",
+    "meaningKo": "솟아오르는 봉황은 고생 후의 재생입니다. 최고의 부활 신호입니다."
+  },
+  {
+    "en": "blue_dragon",
+    "ko": "청룡",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A blue dragon is the east-direction supreme luck. Authority and prosperity unite.",
+    "meaningKo": "청룡은 동방의 최고 행운입니다. 권위와 번영이 결합합니다."
+  },
+  {
+    "en": "white_tiger",
+    "ko": "백호",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A white tiger signals supreme protection. The strongest defensive omen.",
+    "meaningKo": "백호는 최고의 보호입니다. 가장 강력한 방어의 신호입니다."
+  },
+  {
+    "en": "singing_bird",
+    "ko": "노래하는 새",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A singing bird signals good news arriving. Open the window of your attention.",
+    "meaningKo": "노래하는 새는 도착하는 좋은 소식입니다. 관심의 창을 여세요."
+  },
+  {
+    "en": "messenger",
+    "ko": "전령",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A messenger figure signals important news arriving formally. Be home to receive.",
+    "meaningKo": "전령은 공식적으로 도착하는 중요한 소식입니다. 받을 준비를 하세요."
+  },
+  {
+    "en": "open_book",
+    "ko": "펼친 책",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "An open book signals truth revealing itself. Read with care.",
+    "meaningKo": "펼친 책은 드러나는 진실입니다. 정성껏 읽으세요."
+  },
+  {
+    "en": "rainbow_after_rain",
+    "ko": "비 갠 후 무지개",
+    "cat": "auspicious",
+    "auspicious": true,
+    "meaningEn": "A rainbow after rain confirms reward after struggle. The clear sign of recovery.",
+    "meaningKo": "비 갠 후 무지개는 고생 뒤 보상의 확인입니다. 회복의 명확한 신호입니다."
+  }
 ]
