@@ -24,6 +24,7 @@
 //   4) 시간대 = 오늘 지지 가 활성화되는 12시진 매핑
 
 import '../models/saju_result.dart';
+import 'daily_service.dart' show DayEnergyKind, classifyDayEnergy;
 import 'ten_gods_service.dart';
 
 class TodayDeepReading {
@@ -83,13 +84,15 @@ class TodayDeepService {
     // 4. 12시진 best time
     final bestTime = _bestTimeFor(todayBranch);
 
-    // narrative 조합
-    final godKo = god == null ? '' : _godPhraseKo(god);
-    final godEn = god == null ? '' : _godPhraseEn(god);
+    // Round 71 — `DayEnergyKind` 단일 source-of-truth. body / headline 도 같은 분기.
+    final dayEnergy = classifyDayEnergy(todayScore);
+    // narrative 조합 — godPhrase 와 hook 모두 dayEnergy 기반.
+    final godKo = god == null ? '' : _godPhraseKoByEnergy(god, dayEnergy);
+    final godEn = god == null ? '' : _godPhraseEnByEnergy(god, dayEnergy);
     final brKo = _branchRelationKo(branchRelation);
     final brEn = _branchRelationEn(branchRelation);
 
-    final hooks = _hooksByScore(todayScore);
+    final hooks = _hooksByEnergy(dayEnergy);
 
     final headlineKo = '오늘은 ${hooks.moodKo} 분위기의 하루.';
     final headlineEn = "Today's mood: ${hooks.moodEn}.";
@@ -139,28 +142,78 @@ class TodayDeepService {
     return map[stem] ?? '木';
   }
 
+  // Round 71 — restDay 일 때 "승진/공식 자리/도전" 류 단어가 bodyKo 에 등장하면
+  // 사용자 불만 #3 (모순) 재발. dayEnergy 별 godPhrase 변주로 차단.
+  static String _godPhraseKoByEnergy(TenGod g, DayEnergyKind energy) {
+    if (energy == DayEnergyKind.restDay) {
+      switch (g) {
+        case TenGod.jeonggwan:
+          return '평소 권위·자리 신호가 오늘은 잠시 가라앉는 분위기';
+        case TenGod.pyeongwan:
+          return '책임 받기 좋은 분위기는 오늘 아니다 — 한 박자 쉬는 분위기';
+        case TenGod.sanggwan:
+          return '표현 욕구가 평소보다 조용히 가라앉는 분위기';
+        case TenGod.pyeonjae:
+          return '큰 돈 신호가 오늘은 멀리 흐르는 분위기';
+        case TenGod.geopjae:
+          return '경쟁심이 평소보다 가라앉는 분위기';
+        case TenGod.bigyeon:
+        case TenGod.siksin:
+        case TenGod.jeongjae:
+        case TenGod.pyeonin:
+        case TenGod.jeongin:
+          return _godPhraseKo(g);
+      }
+    }
+    return _godPhraseKo(g);
+  }
+
+  static String _godPhraseEnByEnergy(TenGod g, DayEnergyKind energy) {
+    if (energy == DayEnergyKind.restDay) {
+      switch (g) {
+        case TenGod.jeonggwan:
+          return 'formal authority signals fade quietly today';
+        case TenGod.pyeongwan:
+          return 'today is not the day to take on new challenges';
+        case TenGod.sanggwan:
+          return 'expression urges quiet down today';
+        case TenGod.pyeonjae:
+          return 'big-money signals stay far away today';
+        case TenGod.geopjae:
+          return 'rivalry energy settles down today';
+        case TenGod.bigyeon:
+        case TenGod.siksin:
+        case TenGod.jeongjae:
+        case TenGod.pyeonin:
+        case TenGod.jeongin:
+          return _godPhraseEn(g);
+      }
+    }
+    return _godPhraseEn(g);
+  }
+
   static String _godPhraseKo(TenGod g) {
     switch (g) {
       case TenGod.bigyeon:
-        return '오늘 들어오는 기운은 친구나 동료처럼 같은 위치의 사람';
+        return '오늘 들어오는 분위기는 친구나 동료처럼 같은 위치의 사람';
       case TenGod.geopjae:
-        return '오늘은 경쟁자나 비슷한 자리의 사람과 부딪칠 수 있는 결';
+        return '오늘은 경쟁자나 비슷한 자리의 사람과 부딪칠 분위기';
       case TenGod.siksin:
-        return '표현·창작 기운이 들어와 말과 글이 가벼워지는 결';
+        return '표현·창작 분위기가 들어와 말과 글이 가벼워지는 분위기';
       case TenGod.sanggwan:
-        return '재능이 빛나지만 규칙·권위와 부딪힐 수 있는 결';
+        return '재능이 빛나는 자리 — 권위와 부딪히지 않게 톤만 한 단계 부드럽게';
       case TenGod.pyeonjae:
-        return '뜻밖의 기회나 큰 돈의 신호가 들어오는 결';
+        return '뜻밖의 기회나 큰 돈 신호가 들어오는 분위기';
       case TenGod.jeongjae:
-        return '안정된 수입·약속이 자리 잡는 결';
+        return '안정된 수입·약속이 자리 잡는 분위기';
       case TenGod.pyeongwan:
-        return '강한 책임이나 도전이 갑자기 다가오는 결';
+        return '강한 책임이나 새 도전이 갑자기 다가오는 분위기';
       case TenGod.jeonggwan:
-        return '인정·승진·공식 자리 같은 기운이 들어오는 결';
+        return '인정·승진·공식 자리 신호가 들어오는 분위기';
       case TenGod.pyeonin:
-        return '깊은 공부·직관·종교적인 기운이 들어오는 결';
+        return '깊은 공부·직관 신호가 들어오는 분위기';
       case TenGod.jeongin:
-        return '배움·멘토·도움이 자연스럽게 오는 결';
+        return '배움·멘토·도움이 자연스럽게 오는 분위기';
     }
   }
 
@@ -270,45 +323,33 @@ class TodayDeepService {
     return map[todayJi] ?? (ko: '낮 11시 ~ 1시', en: '11 AM – 1 PM');
   }
 
-  static ({String moodKo, String moodEn, String bodyHookKo, String bodyHookEn}) _hooksByScore(int score) {
-    if (score >= 85) {
-      return (
-        moodKo: '활짝 열린',
-        moodEn: 'wide open',
-        bodyHookKo: '평소 못 하던 일을 시작해도 운이 받쳐줍니다',
-        bodyHookEn: 'a great day to start what you usually delay',
-      );
+  // Round 71 — `DayEnergyKind` 기반 hook 변주. actionDay 에 "쉬어가/아끼" 단어 0회,
+  // restDay 에 "공식/도전/승진" 단어 0회 (사용자 불만 #3).
+  static ({String moodKo, String moodEn, String bodyHookKo, String bodyHookEn})
+      _hooksByEnergy(DayEnergyKind energy) {
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        return (
+          moodKo: '활짝 열린',
+          moodEn: 'wide open',
+          bodyHookKo: '평소 못 하던 일을 오늘 시작하면 분위기가 너 편이다',
+          bodyHookEn: 'a great day to start what you usually delay',
+        );
+      case DayEnergyKind.mixedDay:
+        return (
+          moodKo: '잔잔한',
+          moodEn: 'calm',
+          bodyHookKo: '큰 결정은 미뤄라. 확인 한 가지로 분위기를 잡는다',
+          bodyHookEn: 'defer big calls; review and confirm instead',
+        );
+      case DayEnergyKind.restDay:
+        return (
+          moodKo: '쉬어가는',
+          moodEn: 'restful',
+          bodyHookKo: '오늘 너는 새로 시작하지 마라. 회복 한 가지가 정답이다',
+          bodyHookEn: 'conserve energy and prioritize recovery',
+        );
     }
-    if (score >= 70) {
-      return (
-        moodKo: '따스한',
-        moodEn: 'warm',
-        bodyHookKo: '큰 일은 안 일어나도 작은 결실이 차분히 쌓입니다',
-        bodyHookEn: 'no fireworks, but small wins quietly accumulate',
-      );
-    }
-    if (score >= 55) {
-      return (
-        moodKo: '잔잔한',
-        moodEn: 'calm',
-        bodyHookKo: '큰 결정은 미루고 정리·확인 위주로 가는 게 좋습니다',
-        bodyHookEn: 'defer big calls; review and confirm instead',
-      );
-    }
-    if (score >= 40) {
-      return (
-        moodKo: '조심스러운',
-        moodEn: 'careful',
-        bodyHookKo: '말과 행동을 한 번 더 다듬으면 흐름을 지킬 수 있어요',
-        bodyHookEn: 'pause once before speaking — preserve the flow',
-      );
-    }
-    return (
-      moodKo: '쉬어가는',
-      moodEn: 'restful',
-      bodyHookKo: '오늘은 에너지를 아끼고 회복에 집중하는 게 정답입니다',
-      bodyHookEn: 'conserve energy and prioritize recovery',
-    );
   }
 
   static String _composeBodyKo({
@@ -339,36 +380,52 @@ class TodayDeepService {
     return parts.join(' ');
   }
 
+  // Round 71 사용자 불만 #3 — `DayEnergyKind` 단일 source-of-truth.
+  // restDay 일 때 jeonggwan/pyeongwan 의 "공식 자리·발표·승진" / "도전·승부" 출력 0.
+  // actionDay 일 때 "쉬어가 / 아끼" 출력 0.
   static List<String> _actionsKo(TenGod? god, _BranchRelation rel, int score) {
     final out = <String>[];
-    // 1) 십신 기반
+    final dayEnergy = classifyDayEnergy(score);
+    // 1) 십신 기반 — restDay 면 행동권유형 행동을 묵은 정리 / 회복으로 대체.
     if (god != null) {
-      out.add(_actionForGodKo(god));
+      out.add(_actionForGodKoByEnergy(god, dayEnergy));
     }
-    // 2) 지지 관계 기반
+    // 2) 지지 관계 기반 — 단정 톤 + restDay 보정.
     if (rel == _BranchRelation.hap) {
-      out.add('미뤘던 약속·연락을 오늘 정리하면 잘 풀립니다.');
+      out.add(
+        dayEnergy == DayEnergyKind.restDay
+            ? '오늘은 새 약속 잡지 마라. 묵은 카톡 한 줄 정리하면 끝이다.'
+            : '미뤘던 약속·연락을 오늘 정리한다.',
+      );
     } else if (rel == _BranchRelation.chung) {
-      out.add('중요한 통화·계약은 내일로 미루는 편이 안전합니다.');
+      out.add('중요한 통화·계약은 내일로 미룬다.');
     } else if (rel == _BranchRelation.same) {
-      out.add('평소 루틴(운동·정리·습관)을 한 번 더 의식하면 큰 보상이 따라옵니다.');
+      out.add('평소 루틴(운동·정리·습관) 한 가지를 오늘 다시 잡는다.');
     } else {
-      out.add('짧은 산책이나 정리 한 가지로 하루 흐름을 잡으세요.');
+      out.add('짧은 산책이나 정리 한 가지로 하루 분위기를 잡는다.');
     }
-    // 3) 점수 기반
-    if (score >= 75) {
-      out.add('자기 분야의 한 사람에게 먼저 연락하세요. 작은 신호가 큰 인연이 됩니다.');
-    } else if (score < 50) {
-      out.add('오늘 만든 결과보다 오늘 회복한 에너지가 내일을 정합니다.');
+    // 3) 분류 기반 — actionDay 한정으로 적극 표현, restDay 한정으로 회복 표현.
+    switch (dayEnergy) {
+      case DayEnergyKind.actionDay:
+        out.add('자기 분야의 한 사람에게 먼저 연락한다. 그 한 줄이 큰 인연이 된다.');
+      case DayEnergyKind.restDay:
+        out.add('오늘 만든 결과보다 오늘 회복한 에너지가 내일을 정한다.');
+      case DayEnergyKind.mixedDay:
+        break;
     }
     return out;
   }
 
   static List<String> _actionsEn(TenGod? god, _BranchRelation rel, int score) {
     final out = <String>[];
-    if (god != null) out.add(_actionForGodEn(god));
+    final dayEnergy = classifyDayEnergy(score);
+    if (god != null) out.add(_actionForGodEnByEnergy(god, dayEnergy));
     if (rel == _BranchRelation.hap) {
-      out.add('Close postponed promises and calls today — they flow.');
+      out.add(
+        dayEnergy == DayEnergyKind.restDay
+            ? "Don't book new plans. Tidy one postponed message — that's it."
+            : 'Close postponed promises and calls today — they flow.',
+      );
     } else if (rel == _BranchRelation.chung) {
       out.add('Defer big contracts and important calls to tomorrow.');
     } else if (rel == _BranchRelation.same) {
@@ -376,12 +433,58 @@ class TodayDeepService {
     } else {
       out.add('A short walk or one tidy task sets the day right.');
     }
-    if (score >= 75) {
-      out.add('Reach out to one person in your field first — small signal, big result.');
-    } else if (score < 50) {
-      out.add("Today's recovered energy matters more than today's output.");
+    switch (dayEnergy) {
+      case DayEnergyKind.actionDay:
+        out.add('Reach out to one person in your field first — small signal, big result.');
+      case DayEnergyKind.restDay:
+        out.add("Today's recovered energy matters more than today's output.");
+      case DayEnergyKind.mixedDay:
+        break;
     }
     return out;
+  }
+
+  /// restDay 보정 — jeonggwan / pyeongwan / sanggwan 처럼 공격적 행동을 권유하는
+  /// 십신 멘트가 score<50 에서 나오면 모순이라 회복형으로 대체.
+  static String _actionForGodKoByEnergy(TenGod god, DayEnergyKind energy) {
+    if (energy == DayEnergyKind.restDay) {
+      // 공식 자리·도전·발표 → 회복·정리·짧은 한 줄.
+      switch (god) {
+        case TenGod.jeonggwan:
+          return '오늘 너는 격식 있는 자리 잡지 마라. 자료 한 줄 다듬는 게 정답이다.';
+        case TenGod.pyeongwan:
+          return '오늘 너는 새 책임 받지 마라. 받기 전 한 박자 쉬어라.';
+        case TenGod.sanggwan:
+          return '오늘은 표현 줄여라. 한 박자 천천히 들으면 분위기가 잡힌다.';
+        case TenGod.pyeonjae:
+          return '큰 돈 결정 잡지 마라. 정보 한 줄 정리하면 끝이다.';
+        case TenGod.geopjae:
+          return '동업·돈 거래는 오늘 진행하지 마라. 한 박자 더 쉬어라.';
+        default:
+          return _actionForGodKo(god);
+      }
+    }
+    return _actionForGodKo(god);
+  }
+
+  static String _actionForGodEnByEnergy(TenGod god, DayEnergyKind energy) {
+    if (energy == DayEnergyKind.restDay) {
+      switch (god) {
+        case TenGod.jeonggwan:
+          return "Don't lock formal settings today. Polish one document — that's it.";
+        case TenGod.pyeongwan:
+          return "Don't take new challenges. Pause one breath before any 'yes'.";
+        case TenGod.sanggwan:
+          return 'Speak less today. One careful listen sets the room.';
+        case TenGod.pyeonjae:
+          return "Don't move big money. File one line of info and stop.";
+        case TenGod.geopjae:
+          return "Don't run partnership or money talks today. Rest one more beat.";
+        default:
+          return _actionForGodEn(god);
+      }
+    }
+    return _actionForGodEn(god);
   }
 
   static String _actionForGodKo(TenGod g) {
@@ -434,30 +537,34 @@ class TodayDeepService {
     }
   }
 
+  // Round 71 사용자 불만 #3 — `DayEnergyKind` 단일 분기로 모순 차단.
+  // restDay 일 때 actionDay 톤 (도전/공식) 출력 X.
   static String _cautionKo(TenGod? god, _BranchRelation rel, int score) {
+    final dayEnergy = classifyDayEnergy(score);
     if (rel == _BranchRelation.chung) {
-      return '오늘은 큰 결정·서명·이별 같은 결단은 미루는 게 안전합니다.';
+      return '오늘 너는 큰 결정·서명·이별 같은 결단을 미뤄라.';
     }
-    if (score < 50) {
-      return '에너지를 다 쓰지 마세요 — 내일 복구가 힘들어집니다.';
+    if (dayEnergy == DayEnergyKind.restDay) {
+      return '오늘 너는 에너지를 다 쓰면 내일 회복이 길어진다. 한 가지만 끝내라.';
     }
     if (god == TenGod.geopjae) {
-      return '돈 거래·동업 이야기는 한 번 더 확인 — 신뢰만으로 진행 X.';
+      return '돈 거래·동업 이야기는 한 번 더 확인한다 — 신뢰만으로 진행하지 마라.';
     }
     if (god == TenGod.sanggwan) {
-      return '권위 있는 사람과 말 한 마디 — 톤이 너무 세지 않게.';
+      return '권위 있는 사람과 말 한 마디는 톤을 한 단계 부드럽게 던진다.';
     }
     if (god == TenGod.pyeongwan) {
-      return '갑작스러운 책임에 휘말리지 마세요 — 받기 전 한 박자 쉬기.';
+      return '갑작스러운 책임은 받기 전 한 박자 쉰다.';
     }
-    return '말의 톤을 한 단계 부드럽게 — 오늘은 작은 표현이 큰 차이를 만듭니다.';
+    return '말의 톤을 한 단계 부드럽게 던진다. 오늘은 작은 표현 한 줄이 큰 차이를 만든다.';
   }
 
   static String _cautionEn(TenGod? god, _BranchRelation rel, int score) {
+    final dayEnergy = classifyDayEnergy(score);
     if (rel == _BranchRelation.chung) {
       return 'Defer big decisions, signatures, and breakups — clash day.';
     }
-    if (score < 50) {
+    if (dayEnergy == DayEnergyKind.restDay) {
       return 'Do not burn the whole battery — tomorrow gets harder to recover.';
     }
     if (god == TenGod.geopjae) {

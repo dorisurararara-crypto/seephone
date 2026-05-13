@@ -2,6 +2,29 @@ import '../models/daily_fortune.dart';
 import '../models/saju_result.dart';
 import 'saju_service.dart';
 
+/// 하루 에너지 분류 — Round 71 사용자 불만 #3 (모순 0).
+///
+/// 한 사용자의 한 날 출력되는 score-driven 멘트 (home `_ScoreBlock` label/hint,
+/// today deep service headline/body/actions/caution/mood) 가 같은 분류에서만
+/// 흐름. `classifyDayEnergy(score)` 가 단일 source of truth.
+/// lucky_chips_service / result_screen 은 score 직접 분기 X (영향 X — wire 불필요).
+enum DayEnergyKind {
+  /// score < 50 — 쉬어가는 날. "발표/승진/공식 자리/도전·승부" 어휘 출력 금지.
+  restDay,
+
+  /// 50 ≤ score < 75 — 보통보다 조심. 보수적 행동만.
+  mixedDay,
+
+  /// score ≥ 75 — 좋은 날. "쉬어가/아끼" 어휘 출력 금지.
+  actionDay,
+}
+
+DayEnergyKind classifyDayEnergy(int totalScore) {
+  if (totalScore < 50) return DayEnergyKind.restDay;
+  if (totalScore < 75) return DayEnergyKind.mixedDay;
+  return DayEnergyKind.actionDay;
+}
+
 /// 데일리 운세 서비스 — 사용자 사주 vs 오늘 일진 충합 분석.
 ///
 /// 단순화 알고리즘 (Phase 1):

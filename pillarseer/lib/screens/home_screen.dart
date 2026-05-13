@@ -335,35 +335,38 @@ class _ScoreBlock extends StatelessWidget {
     final l = AppL10n.of(context);
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final explanation = score < 50
-        ? l.homeExplanationLow
-        : (score < 75 ? l.homeExplanationMid : l.homeExplanationHigh);
-    final ({String label, String hint, Color accent}) status;
-    if (score >= 75) {
-      status = (
-        label: useKo ? '오늘은 좋은 날' : 'A good day',
-        hint: useKo
-            ? '평소보다 흐름이 잘 풀립니다. 미뤘던 일을 시작해보세요.'
-            : 'Flow is on your side. Start what you delayed.',
-        accent: AppColors.woodJade,
-      );
-    } else if (score >= 50) {
-      status = (
-        label: useKo ? '오늘은 보통보다 조심' : 'Steady — proceed with care',
-        hint: useKo
-            ? '큰 결정은 미루고, 확인이 필요한 일을 처리하기 좋아요.'
-            : 'Defer big calls. Handle the checklists.',
-        accent: AppColors.accent,
-      );
-    } else {
-      status = (
-        label: useKo ? '오늘은 쉬어가는 날' : 'A resting day',
-        hint: useKo
-            ? '에너지를 아끼세요. 새 시작보다 정리·휴식이 더 도움됩니다.'
-            : 'Conserve energy. Today rewards tidying and rest.',
-        accent: AppColors.fireRed,
-      );
-    }
+    final dayEnergy = classifyDayEnergy(score);
+    final explanation = switch (dayEnergy) {
+      DayEnergyKind.restDay => l.homeExplanationLow,
+      DayEnergyKind.mixedDay => l.homeExplanationMid,
+      DayEnergyKind.actionDay => l.homeExplanationHigh,
+    };
+    // Round 71 사용자 불만 #3 — `DayEnergyKind` 단일 source-of-truth.
+    // `_ScoreBlock` 라벨/hint 는 score 직접 분기 X, enum 분기만.
+    // Round 67/71 톤: 단정 평서 (헷지 X / advice X / 보호자체 X).
+    final ({String label, String hint, Color accent}) status = switch (dayEnergy) {
+      DayEnergyKind.actionDay => (
+          label: useKo ? '오늘은 좋은 날' : 'A good day',
+          hint: useKo
+              ? '평소보다 분위기가 너 편이다. 미뤘던 일 한 가지를 오늘 시작해라.'
+              : 'Flow is on your side. Start what you delayed.',
+          accent: AppColors.woodJade,
+        ),
+      DayEnergyKind.mixedDay => (
+          label: useKo ? '오늘은 보통보다 조심' : 'Steady — proceed with care',
+          hint: useKo
+              ? '큰 결정은 미뤄라. 확인이 필요한 일 한 가지만 끝내라.'
+              : 'Defer big calls. Handle the checklists.',
+          accent: AppColors.accent,
+        ),
+      DayEnergyKind.restDay => (
+          label: useKo ? '오늘은 쉬어가는 날' : 'A resting day',
+          hint: useKo
+              ? '오늘 너는 새로 시작하지 마라. 미뤄둔 정리 하나만 끝내라.'
+              : 'Conserve energy. Today rewards tidying and rest.',
+          accent: AppColors.fireRed,
+        ),
+    };
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
