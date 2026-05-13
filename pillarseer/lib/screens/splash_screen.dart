@@ -38,6 +38,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   /// 어느 라우트로 점프할지 (기본 /result)
   static const _screenshotRoute =
       String.fromEnvironment('SCREENSHOT_ROUTE', defaultValue: '/result');
+  static const _ssYear = int.fromEnvironment('SCREENSHOT_YEAR', defaultValue: 1996);
+  static const _ssMonth = int.fromEnvironment('SCREENSHOT_MONTH', defaultValue: 4);
+  static const _ssDay = int.fromEnvironment('SCREENSHOT_DAY', defaultValue: 15);
+  static const _ssHour = int.fromEnvironment('SCREENSHOT_HOUR', defaultValue: 14);
+  static const _ssMin = int.fromEnvironment('SCREENSHOT_MIN', defaultValue: 30);
+  static const _ssName = String.fromEnvironment('SCREENSHOT_NAME', defaultValue: 'Demo');
+  static const _ssMale = bool.fromEnvironment('SCREENSHOT_MALE', defaultValue: true);
 
   void _go() async {
     if (_navigated || !mounted) return;
@@ -45,17 +52,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (_screenshotMode) {
       final svc = SajuService();
       final result = await svc.calculateSaju(
-        year: 1996, month: 4, day: 15, hour: 14, minute: 30,
-        isLunar: false, isMale: true,
+        year: _ssYear, month: _ssMonth, day: _ssDay,
+        hour: _ssHour, minute: _ssMin,
+        isLunar: false, isMale: _ssMale,
       );
       ref.read(sajuResultProvider.notifier).set(result);
       ref.read(userBirthInfoProvider.notifier).set(UserBirthInfo(
-            name: 'Demo',
-            birthDate: DateTime(1996, 4, 15),
-            birthHour: 14,
-            birthMinute: 30,
+            name: _ssName,
+            birthDate: DateTime(_ssYear, _ssMonth, _ssDay),
+            birthHour: _ssHour,
+            birthMinute: _ssMin,
             birthCity: '',
             isLunar: false,
+            isMale: _ssMale,
           ));
       if (!mounted) return;
       context.go(_screenshotRoute);

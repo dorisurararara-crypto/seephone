@@ -48,10 +48,18 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
   @override
   Widget build(BuildContext context) {
     final me = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    final userInfo = ref.watch(userBirthInfoProvider);
+    // 사용자 성별 반대 셀럽만 노출. 사용자 정보 없으면 전체.
+    final preferredGender =
+        userInfo == null ? null : (userInfo.isMale ? 'F' : 'M');
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     final filtered = _stars
         .where((s) => _filter == 'all' || s.kind == _filter)
+        .where((s) =>
+            preferredGender == null ||
+            s.gender.isEmpty ||
+            s.gender == preferredGender)
         .toList()
       ..sort((a, b) => _score(me, b).compareTo(_score(me, a)));
 
@@ -382,8 +390,8 @@ class _Hero extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             useKo
-                ? '오행 상생 · 일주 합 · 천간 五合 · 지지 六合·三合·沖·刑 종합 계산.'
-                : 'Elemental resonance · day-pillar combinations · stem 五合 · branch 六合/三合/沖/刑.',
+                ? '나와 잘 맞는 다섯 가지 기운, 같은 본성, 잘 어울리는 짝, 부딪히는 짝까지 한 번에 계산했어요.'
+                : 'Combines five-element resonance, matching day-pillar, harmonious pairings, and conflict points — all at once.',
             style: GoogleFonts.notoSansKr(
               fontSize: 13,
               color: AppColors.inkLight,
@@ -743,8 +751,8 @@ class _Methodology extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             useKo
-                ? '점수는 일간 오행 상생/비화/상극, 같은 일주·일지, 천간 합(五合), 지지 육합(六合)·삼합 부분 일치, 12지 충(沖)·형(刑)을 계산합니다. 스타의 출생일은 공개 자료 기반이며 출생 시간을 알 수 없어 일주(日柱) 기준 비교입니다. 시주(時柱)까지 알면 더 정밀합니다.'
-                : 'Score uses day-master element resonance (生/比/剋), same day-pillar/branch, stem combinations (五合), branch combinations (六合, 三合 partial), and 12-branch clash/punishment (沖·刑). Stars\' birth times are not public, so comparison is by day pillar only; including hour pillars would refine the score.',
+                ? '점수는 다섯 가지 기운(나무·불·흙·쇠·물)이 서로 살리는지, 같은 결인지, 잘 어울리는 띠인지, 부딪히는 띠인지를 종합해서 계산해요. 셀럽의 정확한 태어난 시간은 알 수 없어서 태어난 날짜 기준으로만 비교하는데, 시간까지 알면 점수가 더 정확해집니다.'
+                : 'The score blends five-element resonance (Wood, Fire, Earth, Metal, Water), shared core nature, harmonious zodiac pairings, and clashing zodiac points. We don\'t know the celebrity\'s exact birth time, so the comparison uses birth date only — adding birth time would refine the score further.',
             style: GoogleFonts.notoSansKr(
               fontSize: 12.5,
               color: AppColors.inkLight,
@@ -785,6 +793,8 @@ class _Star {
   final String dayPillarName;
   final String blurbEn;
   final String blurbKo;
+  /// 'M' (남성) / 'F' (여성) / '' (미지정)
+  final String gender;
   const _Star({
     required this.id,
     required this.nameEn,
@@ -795,6 +805,7 @@ class _Star {
     required this.dayPillarName,
     required this.blurbEn,
     required this.blurbKo,
+    this.gender = '',
   });
 
   factory _Star.fromJson(Map<String, dynamic> j) => _Star(
@@ -807,5 +818,6 @@ class _Star {
         dayPillarName: j['dayPillarName'] as String? ?? '',
         blurbEn: j['blurbEn'] as String? ?? '',
         blurbKo: j['blurbKo'] as String? ?? '',
+        gender: j['gender'] as String? ?? '',
       );
 }

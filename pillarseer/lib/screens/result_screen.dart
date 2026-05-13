@@ -309,11 +309,9 @@ class _DayMasterHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pair = result.dayPillar.pairKorean; // 예: 임오
     final meaning = useKo
         ? result.dayPillar.pairKoreanMeaning   // 예: 수 말
         : result.dayMasterName;
-    final han = result.day60ji;                // 예: 壬午
     final element = result.dayPillar.chunGanElement;
     final elementKo = const {
       '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
@@ -360,8 +358,8 @@ class _DayMasterHero extends StatelessWidget {
               children: [
                 TextSpan(
                   text: useKo
-                      ? '$pair 일주 — '
-                      : 'Day pillar — ',
+                      ? '당신의 기본 성향 — '
+                      : 'Your basic nature — ',
                 ),
                 TextSpan(
                   text: useKo ? meaning : meaning,
@@ -373,8 +371,8 @@ class _DayMasterHero extends StatelessWidget {
                 ),
                 TextSpan(
                   text: useKo
-                      ? '의 기운\n(태어난 날의 60갑자: $han)'
-                      : '\n(60-ganji of birth day: $han)',
+                      ? '의 결\n(태어난 날 기준 — 정밀 모드에서 한자 표기 보기)'
+                      : '\n(based on birth day — toggle precision mode for hanja)',
                 ),
               ],
             ),
@@ -383,8 +381,8 @@ class _DayMasterHero extends StatelessWidget {
           // 작은 hint — 용어 풀이
           Text(
             useKo
-                ? '※ 일주 = 사주의 중심, 나의 본성을 보여주는 두 글자.'
-                : '※ Day pillar = the core of your saju, two characters that show your nature.',
+                ? '※ 사주의 핵심 — 당신이 어떤 사람인지 가장 잘 보여주는 부분이에요.'
+                : '※ The core of your saju — the part that shows who you really are.',
             style: GoogleFonts.notoSansKr(
               fontSize: 11,
               color: AppColors.taupe,
@@ -414,7 +412,7 @@ class _ReadingSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final body = reading?.dayMasterDeep ??
         (useKo
-            ? '당신의 일주 ${result.day60ji}는 정통 명리학 기준으로 매우 구체적인 성질을 가집니다. 자세한 풀이는 곧 갱신됩니다.'
+            ? '당신의 기본 성향에 대한 자세한 풀이는 곧 갱신됩니다.'
             : result.summary);
     final lead = useKo ? '한 줄 요약 ' : 'In summary ';
     final accentPhrase = useKo

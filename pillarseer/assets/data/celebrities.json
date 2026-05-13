@@ -8,7 +8,8 @@
     "dayPillar": "丁卯",
     "dayPillarName": "Fire Rabbit",
     "blurbEn": "Solo K-pop icon whose Fire Rabbit day master glows softly under stage lights — a long-burning candle, not a flare.",
-    "blurbKo": "솔로 K-pop 아이콘. 일주 丁卯(Fire Rabbit)는 무대의 빛 아래 부드럽게 빛나는 — 폭죽이 아닌 오래 타는 촛불 같은."
+    "blurbKo": "솔로 K-pop 아이콘. 기본 성향은 무대의 빛 아래 부드럽게 빛나는 — 폭죽이 아닌 오래 타는 촛불 같은.",
+    "gender": "F"
   },
   {
     "id": "v",
@@ -19,7 +20,8 @@
     "dayPillar": "乙未",
     "dayPillarName": "Wood Goat",
     "blurbEn": "BTS visual whose Wood Goat day master carries quiet artistry and a mood that shifts camera language.",
-    "blurbKo": "방탄소년단의 비주얼. 일주 乙未(Wood Goat)는 조용한 예술성과 카메라 언어를 바꾸는 분위기를 가집니다."
+    "blurbKo": "방탄소년단의 비주얼. 기본 성향은 조용한 예술성과 카메라 언어를 바꾸는 분위기를 가집니다.",
+    "gender": "M"
   },
   {
     "id": "jennie",
@@ -30,7 +32,8 @@
     "dayPillar": "壬子",
     "dayPillarName": "Water Rat",
     "blurbEn": "BLACKPINK's Water Rat pillar runs deep — magnetic intuition, hidden current, unreadable star presence.",
-    "blurbKo": "블랙핑크 멤버. 일주 壬子(Water Rat) — 자력 있는 직관과 숨은 수류, 읽히지 않는 스타 존재감."
+    "blurbKo": "블랙핑크 멤버. 기본 성향은 자력 있는 직관과 숨은 수류, 읽히지 않는 스타 존재감.",
+    "gender": "F"
   },
   {
     "id": "karina",
@@ -41,7 +44,8 @@
     "dayPillar": "己亥",
     "dayPillarName": "Earth Pig",
     "blurbEn": "aespa leader with Earth Pig — soft surface, generous heart, structure built quietly under perfectionism.",
-    "blurbKo": "에스파 리더. 일주 己亥(Earth Pig) — 부드러운 표면 아래 너그러운 마음과 완벽주의 속에 조용히 쌓는 구조."
+    "blurbKo": "에스파 리더. 기본 성향은 부드러운 표면 아래 너그러운 마음과 완벽주의 속에 조용히 쌓는 구조.",
+    "gender": "F"
   },
   {
     "id": "jisoo",
@@ -52,7 +56,8 @@
     "dayPillar": "甲午",
     "dayPillarName": "Wood Horse",
     "blurbEn": "BLACKPINK eldest with Wood Horse — a tall tree riding noon flame, classic warmth meets cinematic poise.",
-    "blurbKo": "블랙핑크 맏언니. 일주 甲午(Wood Horse) — 한낮의 불꽃을 탄 큰 나무, 클래식한 따스함과 시네마틱한 균형."
+    "blurbKo": "블랙핑크 맏언니. 기본 성향은 한낮의 불꽃을 탄 큰 나무, 클래식한 따스함과 시네마틱한 균형.",
+    "gender": "F"
   },
   {
     "id": "jungkook",
@@ -63,7 +68,8 @@
     "dayPillar": "丙午",
     "dayPillarName": "Fire Horse",
     "blurbEn": "BTS golden maknae — Fire Horse day master burns through camera, dance, and rooms with magnetic warmth.",
-    "blurbKo": "방탄 황금막내. 일주 丙午(Fire Horse) — 카메라·댄스·공간을 자력 있는 따뜻함으로 태우는 불꽃."
+    "blurbKo": "방탄 황금막내. 기본 성향은 카메라·댄스·공간을 자력 있는 따뜻함으로 태우는 불꽃.",
+    "gender": "M"
   },
   {
     "id": "rose",
@@ -74,7 +80,8 @@
     "dayPillar": "甲申",
     "dayPillarName": "Wood Monkey",
     "blurbEn": "BLACKPINK vocalist with Wood Monkey — inventive curiosity, vocal craft, restless creative momentum.",
-    "blurbKo": "블랙핑크 보컬. 일주 甲申(Wood Monkey) — 발명가적 호기심, 보컬 장인 정신, 가만히 있지 못하는 창작 추진력."
+    "blurbKo": "블랙핑크 보컬. 기본 성향은 발명가적 호기심, 보컬 장인 정신, 가만히 있지 못하는 창작 추진력.",
+    "gender": "F"
   },
   {
     "id": "lisa",
@@ -85,7 +92,8 @@
     "dayPillar": "戊辰",
     "dayPillarName": "Earth Dragon",
     "blurbEn": "Global icon performer with Earth Dragon pillar — strategic depth, slow-build authority, dance precision.",
-    "blurbKo": "글로벌 아이콘 퍼포머. 일주 戊辰(Earth Dragon) — 전략적 깊이, 천천히 쌓는 권위, 정밀한 댄스."
+    "blurbKo": "글로벌 아이콘 퍼포머. 기본 성향은 전략적 깊이, 천천히 쌓는 권위, 정밀한 댄스.",
+    "gender": "F"
   },
   {
     "id": "lee-junho",
@@ -96,7 +104,8 @@
     "dayPillar": "庚寅",
     "dayPillarName": "Metal Tiger",
     "blurbEn": "Actor/2PM member with Metal Tiger — sharp focus, decisive movement, leadership through quiet pressure.",
-    "blurbKo": "배우 겸 2PM 멤버. 일주 庚寅(Metal Tiger) — 날카로운 집중, 결단력 있는 움직임, 조용한 압력의 리더십."
+    "blurbKo": "배우 겸 2PM 멤버. 기본 성향은 날카로운 집중, 결단력 있는 움직임, 조용한 압력의 리더십.",
+    "gender": "M"
   },
   {
     "id": "song-hyekyo",
@@ -107,7 +116,8 @@
     "dayPillar": "甲辰",
     "dayPillarName": "Wood Dragon",
     "blurbEn": "K-drama icon whose Wood Dragon pillar holds storms inside a perfectly still frame — long career, slow burn.",
-    "blurbKo": "K-드라마 아이콘. 일주 甲辰(Wood Dragon) — 정적인 프레임 안에 폭풍을 담은 — 길고 느린 곡선의 커리어."
+    "blurbKo": "K-드라마 아이콘. 기본 성향은 정적인 프레임 안에 폭풍을 담은 — 길고 느린 곡선의 커리어.",
+    "gender": "M"
   },
   {
     "id": "park-seojoon",
@@ -118,7 +128,8 @@
     "dayPillar": "乙巳",
     "dayPillarName": "Wood Snake",
     "blurbEn": "Actor with Wood Snake pillar — refined charisma, intelligent emotional layers, scenes deepen on rewatch.",
-    "blurbKo": "배우. 일주 乙巳(Wood Snake) — 정제된 카리스마, 지적인 감정의 결, 다시 볼수록 깊어지는 장면."
+    "blurbKo": "배우. 기본 성향은 정제된 카리스마, 지적인 감정의 결, 다시 볼수록 깊어지는 장면.",
+    "gender": "M"
   },
   {
     "id": "kim-yuna",
@@ -129,7 +140,8 @@
     "dayPillar": "癸酉",
     "dayPillarName": "Water Rooster",
     "blurbEn": "Figure skating legend — Water Rooster pillar reads as deep current + precision blade. Every performance broadcasts decades of disciplined water.",
-    "blurbKo": "피겨스케이팅 전설. 일주 癸酉(Water Rooster) — 깊은 수류와 정밀한 칼날의 결합. 매 연기마다 수십 년의 절제된 물의."
+    "blurbKo": "피겨스케이팅 전설. 기본 성향은 깊은 수류와 정밀한 칼날의가 만나는 모습이에요. 매 연기마다 수십 년의 절제된 물의.",
+    "gender": "M"
   },
   {
     "id": "son-heungmin",
@@ -140,7 +152,8 @@
     "dayPillar": "乙酉",
     "dayPillarName": "Wood Rooster",
     "blurbEn": "Premier League captain — Wood Rooster day master powers precision movement and tactical sharpness on global stages.",
-    "blurbKo": "프리미어리그 주장. 일주 乙酉(Wood Rooster) — 세계 무대에서의 정밀한 움직임과 전술적 예리함을 만드는 일간."
+    "blurbKo": "프리미어리그 주장. 기본 성향은 세계 무대에서의 정밀한 움직임과 전술적 예리함을 만드는 일간.",
+    "gender": "M"
   },
   {
     "id": "hyunjin",
@@ -151,7 +164,8 @@
     "dayPillar": "丁丑",
     "dayPillarName": "Fire Ox",
     "blurbEn": "Stray Kids visual/dancer with Fire Ox — candle in winter soil, slow-build glow, artistic mood close-ups.",
-    "blurbKo": "스트레이키즈 비주얼·댄서. 일주 丁丑(Fire Ox) — 겨울 흙 속의 촛불, 천천히 쌓이는 빛, 예술적 분위기의 클로즈업."
+    "blurbKo": "스트레이키즈 비주얼·댄서. 기본 성향은 겨울 흙 속의 촛불, 천천히 쌓이는 빛, 예술적 분위기의 클로즈업.",
+    "gender": "M"
   },
   {
     "id": "hwasa",
@@ -162,7 +176,8 @@
     "dayPillar": "乙卯",
     "dayPillarName": "Wood Rabbit",
     "blurbEn": "Solo artist with Wood Rabbit — willow under moonlight, signature softness, brand identity that refuses dilution.",
-    "blurbKo": "솔로 아티스트. 일주 乙卯(Wood Rabbit) — 달빛 아래의 버드나무, 시그니처 부드러움, 희석되지 않는 브랜드 정체성."
+    "blurbKo": "솔로 아티스트. 기본 성향은 달빛 아래의 버드나무, 시그니처 부드러움, 희석되지 않는 브랜드 정체성.",
+    "gender": "F"
   },
   {
     "id": "taeyeon",
@@ -173,7 +188,8 @@
     "dayPillar": "戊辰",
     "dayPillarName": "Earth Dragon",
     "blurbEn": "K-pop 2nd-gen queen — Earth Dragon pillar reads as enduring brand authority, vocal kingmaker, mountain shelter.",
-    "blurbKo": "K-pop 2세대 여왕. 일주 戊辰(Earth Dragon) — 변하지 않는 브랜드 권위, 보컬계의 킹메이커, 큰 산의 안식처."
+    "blurbKo": "K-pop 2세대 여왕. 기본 성향은 변하지 않는 브랜드 권위, 보컬계의 킹메이커, 큰 산의 안식처.",
+    "gender": "F"
   },
   {
     "id": "gdragon",
@@ -184,7 +200,8 @@
     "dayPillar": "乙巳",
     "dayPillarName": "Wood Snake",
     "blurbEn": "K-pop architect — Wood Snake pillar carries refined intellect + cultural authorship beyond charts.",
-    "blurbKo": "K-pop 건축가. 일주 乙巳(Wood Snake) — 정제된 지성과 차트를 넘어선 문화적 저자성."
+    "blurbKo": "K-pop 건축가. 기본 성향은 정제된 지성과 차트를 넘어선 문화적 저자성.",
+    "gender": "M"
   },
   {
     "id": "jin",
@@ -195,7 +212,8 @@
     "dayPillar": "甲寅",
     "dayPillarName": "Wood Tiger",
     "blurbEn": "BTS eldest — Wood Tiger pillar mixes humor, vocal craft, ambitious staying power, leadership without force.",
-    "blurbKo": "방탄 맏형. 일주 甲寅(Wood Tiger) — 유머, 보컬 장인 정신, 야망과 지속력, 강압 없는 리더십."
+    "blurbKo": "방탄 맏형. 기본 성향은 유머, 보컬 장인 정신, 야망과 지속력, 강압 없는 리더십.",
+    "gender": "M"
   },
   {
     "id": "jin-seyeon",
@@ -206,7 +224,8 @@
     "dayPillar": "戊寅",
     "dayPillarName": "Earth Tiger",
     "blurbEn": "Actor whose Earth Tiger delivers grounded gravity with subtle modern wit, sageuk and contemporary balance.",
-    "blurbKo": "배우. 일주 戊寅(Earth Tiger) — 안정된 무게감과 섬세한 현대적 위트, 사극과 현대의 균형."
+    "blurbKo": "배우. 기본 성향은 안정된 무게감과 섬세한 현대적 위트, 사극과 현대의 균형.",
+    "gender": "M"
   },
   {
     "id": "squidgame-lee",
@@ -217,7 +236,8 @@
     "dayPillar": "庚辰",
     "dayPillarName": "Metal Dragon",
     "blurbEn": "Squid Game lead with Metal Dragon pillar — late-career global icon arc, strategic intensity, brand-defining performance.",
-    "blurbKo": "오징어게임 주연. 일주 庚辰(Metal Dragon) — 후반기 글로벌 아이콘 곡선, 전략적 강도, 브랜드를 정의하는 연기."
+    "blurbKo": "오징어게임 주연. 기본 성향은 후반기 글로벌 아이콘 곡선, 전략적 강도, 브랜드를 정의하는 연기.",
+    "gender": "M"
   },
   {
     "id": "minji_njs",
@@ -227,8 +247,9 @@
     "birth": "2004-05-07",
     "dayPillar": "丙戌",
     "dayPillarName": "Fire Dog",
-    "blurbEn": "NewJeans member Minji — leader with a quiet confidence and elegant presence. Day master 丙戌 (Fire Dog) — Fire × Dog.",
-    "blurbKo": "NewJeans 민지. 일주 丙戌 — 태양 불과 개띠 결합. 리더로서 조용한 자신감과 우아한 존재감."
+    "blurbEn": "NewJeans member Minji — leader with a quiet confidence and elegant presence.",
+    "blurbKo": "NewJeans 민지. 기본 성향은 태양 불과 개띠가 만나는 모습이에요. 리더로서 조용한 자신감과 우아한 존재감.",
+    "gender": "F"
   },
   {
     "id": "hanni_njs",
@@ -238,8 +259,9 @@
     "birth": "2004-10-06",
     "dayPillar": "戊午",
     "dayPillarName": "Earth Horse",
-    "blurbEn": "NewJeans member Hanni — warm cosmopolitan smile that lifts every track. Day master 戊午 (Earth Horse) — Earth × Horse.",
-    "blurbKo": "NewJeans 하니. 일주 戊午 — 큰 흙과 말띠 결합. 따뜻한 코스모폴리탄 미소가 모든 곡을 띄우는."
+    "blurbEn": "NewJeans member Hanni — warm cosmopolitan smile that lifts every track.",
+    "blurbKo": "NewJeans 하니. 기본 성향은 큰 흙과 말띠가 만나는 모습이에요. 따뜻한 코스모폴리탄 미소가 모든 곡을 띄우는.",
+    "gender": "F"
   },
   {
     "id": "danielle_njs",
@@ -249,8 +271,9 @@
     "birth": "2005-04-11",
     "dayPillar": "乙丑",
     "dayPillarName": "Wood Ox",
-    "blurbEn": "NewJeans member Danielle — bilingual brightness with a soft-rebel edge. Day master 乙丑 (Wood Ox) — Wood × Ox.",
-    "blurbKo": "NewJeans 다니엘. 일주 乙丑 — 풀 나무와 소띠 결합. 이중언어의 밝음과 부드러운 반항의 향."
+    "blurbEn": "NewJeans member Danielle — bilingual brightness with a soft-rebel edge.",
+    "blurbKo": "NewJeans 다니엘. 기본 성향은 풀 나무와 소띠가 만나는 모습이에요. 이중언어의 밝음과 부드러운 반항의 향.",
+    "gender": "F"
   },
   {
     "id": "haerin_njs",
@@ -260,8 +283,9 @@
     "birth": "2006-05-15",
     "dayPillar": "甲辰",
     "dayPillarName": "Wood Dragon",
-    "blurbEn": "NewJeans member Haerin — feline mystery, the camera reads more than the line. Day master 甲辰 (Wood Dragon) — Wood × Dragon.",
-    "blurbKo": "NewJeans 해린. 일주 甲辰 — 큰 나무와 용띠 결합. 고양이 같은 신비, 카메라가 대사보다 더 많이 읽는."
+    "blurbEn": "NewJeans member Haerin — feline mystery, the camera reads more than the line.",
+    "blurbKo": "NewJeans 해린. 기본 성향은 큰 나무와 용띠가 만나는 모습이에요. 고양이 같은 신비, 카메라가 대사보다 더 많이 읽는.",
+    "gender": "F"
   },
   {
     "id": "hyein_njs",
@@ -271,8 +295,9 @@
     "birth": "2008-04-21",
     "dayPillar": "辛卯",
     "dayPillarName": "Metal Rabbit",
-    "blurbEn": "NewJeans member Hyein — the youngest with grown-up stage instincts. Day master 辛卯 (Metal Rabbit) — Metal × Rabbit.",
-    "blurbKo": "NewJeans 혜인. 일주 辛卯 — 작은 쇠와 토끼띠 결합. 최연소이지만 무대 위에서는 가장 어른의 본능."
+    "blurbEn": "NewJeans member Hyein — the youngest with grown-up stage instincts.",
+    "blurbKo": "NewJeans 혜인. 기본 성향은 작은 쇠와 토끼띠가 만나는 모습이에요. 최연소이지만 무대 위에서는 가장 어른의 본능.",
+    "gender": "F"
   },
   {
     "id": "yujin_ive",
@@ -282,8 +307,9 @@
     "birth": "2003-09-01",
     "dayPillar": "丁丑",
     "dayPillarName": "Fire Ox",
-    "blurbEn": "IVE member Yujin — leader who carries the room with a single beat. Day master 丁丑 (Fire Ox) — Fire × Ox.",
-    "blurbKo": "IVE 안유진. 일주 丁丑 — 촛불 불과 소띠 결합. 한 박자만으로 무대를 휘어잡는 리더."
+    "blurbEn": "IVE member Yujin — leader who carries the room with a single beat.",
+    "blurbKo": "IVE 안유진. 기본 성향은 촛불 불과 소띠가 만나는 모습이에요. 한 박자만으로 무대를 휘어잡는 리더.",
+    "gender": "F"
   },
   {
     "id": "gaeul_ive",
@@ -293,8 +319,9 @@
     "birth": "2002-09-24",
     "dayPillar": "乙未",
     "dayPillarName": "Wood Goat",
-    "blurbEn": "IVE member Gaeul — sharp dancer whose stage edge cuts cleanly. Day master 乙未 (Wood Goat) — Wood × Goat.",
-    "blurbKo": "IVE 가을. 일주 乙未 — 풀 나무와 양띠 결합. 무대의 결이 깔끔하게 끊어지는 칼군무 댄서."
+    "blurbEn": "IVE member Gaeul — sharp dancer whose stage edge cuts cleanly.",
+    "blurbKo": "IVE 가을. 기본 성향은 풀 나무와 양띠가 만나는 모습이에요. 무대의 결이 깔끔하게 끊어지는 칼군무 댄서.",
+    "gender": "F"
   },
   {
     "id": "rei_ive",
@@ -304,8 +331,9 @@
     "birth": "2004-02-03",
     "dayPillar": "壬子",
     "dayPillarName": "Water Rat",
-    "blurbEn": "IVE member Rei — Tokyo-born flow with a quiet rapper backbone. Day master 壬子 (Water Rat) — Water × Rat.",
-    "blurbKo": "IVE 레이. 일주 壬子 — 큰 물과 쥐띠 결합. 도쿄 출신의 흐름, 조용한 래퍼의 뼈대."
+    "blurbEn": "IVE member Rei — Tokyo-born flow with a quiet rapper backbone.",
+    "blurbKo": "IVE 레이. 기본 성향은 큰 물과 쥐띠가 만나는 모습이에요. 도쿄 출신의 흐름, 조용한 래퍼의 뼈대.",
+    "gender": "F"
   },
   {
     "id": "wonyoung_ive",
@@ -315,8 +343,9 @@
     "birth": "2004-08-31",
     "dayPillar": "壬午",
     "dayPillarName": "Water Horse",
-    "blurbEn": "IVE member Wonyoung — luminous it-girl whose presence resets every photo line. Day master 壬午 (Water Horse) — Water × Horse.",
-    "blurbKo": "IVE 장원영. 일주 壬午 — 큰 물과 말띠 결합. 포토라인을 매번 리셋시키는 빛나는 잇걸."
+    "blurbEn": "IVE member Wonyoung — luminous it-girl whose presence resets every photo line.",
+    "blurbKo": "IVE 장원영. 기본 성향은 큰 물과 말띠가 만나는 모습이에요. 포토라인을 매번 리셋시키는 빛나는 잇걸.",
+    "gender": "F"
   },
   {
     "id": "liz_ive",
@@ -326,8 +355,9 @@
     "birth": "2004-11-21",
     "dayPillar": "甲辰",
     "dayPillarName": "Wood Dragon",
-    "blurbEn": "IVE member Liz — main vocal whose tone floats above the mix. Day master 甲辰 (Wood Dragon) — Wood × Dragon.",
-    "blurbKo": "IVE 리즈. 일주 甲辰 — 큰 나무와 용띠 결합. 믹스 위에 떠 있는 듯한 메인보컬의 톤."
+    "blurbEn": "IVE member Liz — main vocal whose tone floats above the mix.",
+    "blurbKo": "IVE 리즈. 기본 성향은 큰 나무와 용띠가 만나는 모습이에요. 믹스 위에 떠 있는 듯한 메인보컬의 톤.",
+    "gender": "F"
   },
   {
     "id": "leeseo_ive",
@@ -337,8 +367,9 @@
     "birth": "2007-02-21",
     "dayPillar": "丙戌",
     "dayPillarName": "Fire Dog",
-    "blurbEn": "IVE member Leeseo — maknae with a polished doll-like aura. Day master 丙戌 (Fire Dog) — Fire × Dog.",
-    "blurbKo": "IVE 이서. 일주 丙戌 — 태양 불과 개띠 결합. 잘 다듬어진 인형 같은 아우라의 막내."
+    "blurbEn": "IVE member Leeseo — maknae with a polished doll-like aura.",
+    "blurbKo": "IVE 이서. 기본 성향은 태양 불과 개띠가 만나는 모습이에요. 잘 다듬어진 인형 같은 아우라의 막내.",
+    "gender": "F"
   },
   {
     "id": "sakura_les",
@@ -348,8 +379,9 @@
     "birth": "1998-03-19",
     "dayPillar": "乙丑",
     "dayPillarName": "Wood Ox",
-    "blurbEn": "LE SSERAFIM member Sakura — seasoned center whose two-nation career deepens every cut. Day master 乙丑 (Wood Ox) — Wood × Ox.",
-    "blurbKo": "LE SSERAFIM 사쿠라. 일주 乙丑 — 풀 나무와 소띠 결합. 두 나라 활동으로 단단해진 베테랑 센터."
+    "blurbEn": "LE SSERAFIM member Sakura — seasoned center whose two-nation career deepens every cut.",
+    "blurbKo": "LE SSERAFIM 사쿠라. 기본 성향은 풀 나무와 소띠가 만나는 모습이에요. 두 나라 활동으로 단단해진 베테랑 센터.",
+    "gender": "F"
   },
   {
     "id": "chaewon_les",
@@ -359,8 +391,9 @@
     "birth": "2000-08-01",
     "dayPillar": "辛卯",
     "dayPillarName": "Metal Rabbit",
-    "blurbEn": "LE SSERAFIM member Chaewon — leader voice with razor poise on stage. Day master 辛卯 (Metal Rabbit) — Metal × Rabbit.",
-    "blurbKo": "LE SSERAFIM 김채원. 일주 辛卯 — 작은 쇠와 토끼띠 결합. 면도날 같은 균형의 리더 보컬."
+    "blurbEn": "LE SSERAFIM member Chaewon — leader voice with razor poise on stage.",
+    "blurbKo": "LE SSERAFIM 김채원. 기본 성향은 작은 쇠와 토끼띠가 만나는 모습이에요. 면도날 같은 균형의 리더 보컬.",
+    "gender": "F"
   },
   {
     "id": "kazuha_les",
@@ -370,8 +403,9 @@
     "birth": "2003-08-09",
     "dayPillar": "甲寅",
     "dayPillarName": "Wood Tiger",
-    "blurbEn": "LE SSERAFIM member Kazuha — trained dancer turned idol — every line lands clean. Day master 甲寅 (Wood Tiger) — Wood × Tiger.",
-    "blurbKo": "LE SSERAFIM 카즈하. 일주 甲寅 — 큰 나무와 호랑이띠 결합. 전공 댄서의 정확함이 한 마디마다 살아 있는."
+    "blurbEn": "LE SSERAFIM member Kazuha — trained dancer turned idol — every line lands clean.",
+    "blurbKo": "LE SSERAFIM 카즈하. 기본 성향은 큰 나무와 호랑이띠가 만나는 모습이에요. 전공 댄서의 정확함이 한 마디마다 살아 있는.",
+    "gender": "F"
   },
   {
     "id": "eunchae_les",
@@ -381,8 +415,9 @@
     "birth": "2006-11-10",
     "dayPillar": "癸卯",
     "dayPillarName": "Water Rabbit",
-    "blurbEn": "LE SSERAFIM member Eunchae — the smile-energy maknae who turns chaos into camera magic. Day master 癸卯 (Water Rabbit) — Water × Rabbit.",
-    "blurbKo": "LE SSERAFIM 홍은채. 일주 癸卯 — 비/이슬 물과 토끼띠 결합. 혼란을 카메라 매직으로 바꾸는 미소 에너지 막내."
+    "blurbEn": "LE SSERAFIM member Eunchae — the smile-energy maknae who turns chaos into camera magic.",
+    "blurbKo": "LE SSERAFIM 홍은채. 기본 성향은 비/이슬 물과 토끼띠가 만나는 모습이에요. 혼란을 카메라 매직으로 바꾸는 미소 에너지 막내.",
+    "gender": "F"
   },
   {
     "id": "yeji_itzy",
@@ -392,8 +427,9 @@
     "birth": "2000-05-26",
     "dayPillar": "甲申",
     "dayPillarName": "Wood Monkey",
-    "blurbEn": "ITZY member Yeji — leader fox-eye intensity, dance line lead. Day master 甲申 (Wood Monkey) — Wood × Monkey.",
-    "blurbKo": "ITZY 예지. 일주 甲申 — 큰 나무와 원숭이띠 결합. 리더의 여우상 강렬함, 댄스 라인의 중심."
+    "blurbEn": "ITZY member Yeji — leader fox-eye intensity, dance line lead.",
+    "blurbKo": "ITZY 예지. 기본 성향은 큰 나무와 원숭이띠가 만나는 모습이에요. 리더의 여우상 강렬함, 댄스 라인의 중심.",
+    "gender": "F"
   },
   {
     "id": "lia_itzy",
@@ -403,8 +439,9 @@
     "birth": "2000-07-21",
     "dayPillar": "庚辰",
     "dayPillarName": "Metal Dragon",
-    "blurbEn": "ITZY member Lia — honey-colored main vocal with a warm core. Day master 庚辰 (Metal Dragon) — Metal × Dragon.",
-    "blurbKo": "ITZY 리아. 일주 庚辰 — 강한 쇠와 용띠 결합. 꿀빛 메인보컬의 따뜻한 중심."
+    "blurbEn": "ITZY member Lia — honey-colored main vocal with a warm core.",
+    "blurbKo": "ITZY 리아. 기본 성향은 강한 쇠와 용띠가 만나는 모습이에요. 꿀빛 메인보컬의 따뜻한 중심.",
+    "gender": "F"
   },
   {
     "id": "ryujin_itzy",
@@ -414,8 +451,9 @@
     "birth": "2001-04-17",
     "dayPillar": "庚戌",
     "dayPillarName": "Metal Dog",
-    "blurbEn": "ITZY member Ryujin — fearless dance line presence. Day master 庚戌 (Metal Dog) — Metal × Dog.",
-    "blurbKo": "ITZY 류진. 일주 庚戌 — 강한 쇠와 개띠 결합. 두려움 없는 댄스 라인의 존재감."
+    "blurbEn": "ITZY member Ryujin — fearless dance line presence.",
+    "blurbKo": "ITZY 류진. 기본 성향은 강한 쇠와 개띠가 만나는 모습이에요. 두려움 없는 댄스 라인의 존재감.",
+    "gender": "F"
   },
   {
     "id": "chaeryeong_itzy",
@@ -425,8 +463,9 @@
     "birth": "2001-06-05",
     "dayPillar": "庚午",
     "dayPillarName": "Metal Horse",
-    "blurbEn": "ITZY member Chaeryeong — main dancer whose lines flow like ink. Day master 庚午 (Metal Horse) — Metal × Horse.",
-    "blurbKo": "ITZY 채령. 일주 庚午 — 강한 쇠와 말띠 결합. 잉크가 흐르듯 이어지는 메인댄서의 선."
+    "blurbEn": "ITZY member Chaeryeong — main dancer whose lines flow like ink.",
+    "blurbKo": "ITZY 채령. 기본 성향은 강한 쇠와 말띠가 만나는 모습이에요. 잉크가 흐르듯 이어지는 메인댄서의 선.",
+    "gender": "F"
   },
   {
     "id": "yuna_itzy",
@@ -436,8 +475,9 @@
     "birth": "2003-12-09",
     "dayPillar": "丙辰",
     "dayPillarName": "Fire Dragon",
-    "blurbEn": "ITZY member Yuna — visual maknae with surprising vocal range. Day master 丙辰 (Fire Dragon) — Fire × Dragon.",
-    "blurbKo": "ITZY 유나. 일주 丙辰 — 태양 불과 용띠 결합. 예상 밖의 음역대를 가진 비주얼 막내."
+    "blurbEn": "ITZY member Yuna — visual maknae with surprising vocal range.",
+    "blurbKo": "ITZY 유나. 기본 성향은 태양 불과 용띠가 만나는 모습이에요. 예상 밖의 음역대를 가진 비주얼 막내.",
+    "gender": "F"
   },
   {
     "id": "winter_aespa",
@@ -447,8 +487,9 @@
     "birth": "2001-01-01",
     "dayPillar": "甲子",
     "dayPillarName": "Wood Rat",
-    "blurbEn": "aespa member Winter — icy clean lead vocal with sharp expressions. Day master 甲子 (Wood Rat) — Wood × Rat.",
-    "blurbKo": "aespa 윈터. 일주 甲子 — 큰 나무와 쥐띠 결합. 차가운 듯 깔끔한 리드 보컬과 또렷한 표정."
+    "blurbEn": "aespa member Winter — icy clean lead vocal with sharp expressions.",
+    "blurbKo": "aespa 윈터. 기본 성향은 큰 나무와 쥐띠가 만나는 모습이에요. 차가운 듯 깔끔한 리드 보컬과 또렷한 표정.",
+    "gender": "F"
   },
   {
     "id": "giselle_aespa",
@@ -458,8 +499,9 @@
     "birth": "2000-10-30",
     "dayPillar": "辛酉",
     "dayPillarName": "Metal Rooster",
-    "blurbEn": "aespa member Giselle — tri-lingual rap line — Japanese-Korean-English. Day master 辛酉 (Metal Rooster) — Metal × Rooster.",
-    "blurbKo": "aespa 지젤. 일주 辛酉 — 작은 쇠와 닭띠 결합. 일본어·한국어·영어 3개 국어 랩 라인."
+    "blurbEn": "aespa member Giselle — tri-lingual rap line — Japanese-Korean-English.",
+    "blurbKo": "aespa 지젤. 기본 성향은 작은 쇠와 닭띠가 만나는 모습이에요. 일본어·한국어·영어 3개 국어 랩 라인.",
+    "gender": "F"
   },
   {
     "id": "ningning_aespa",
@@ -469,8 +511,9 @@
     "birth": "2002-10-23",
     "dayPillar": "甲子",
     "dayPillarName": "Wood Rat",
-    "blurbEn": "aespa member Ningning — main vocal powerhouse from China. Day master 甲子 (Wood Rat) — Wood × Rat.",
-    "blurbKo": "aespa 닝닝. 일주 甲子 — 큰 나무와 쥐띠 결합. 중국 출신 메인보컬 파워하우스."
+    "blurbEn": "aespa member Ningning — main vocal powerhouse from China.",
+    "blurbKo": "aespa 닝닝. 기본 성향은 큰 나무와 쥐띠가 만나는 모습이에요. 중국 출신 메인보컬 파워하우스.",
+    "gender": "F"
   },
   {
     "id": "heeseung_eh",
@@ -480,8 +523,9 @@
     "birth": "2001-10-15",
     "dayPillar": "辛亥",
     "dayPillarName": "Metal Pig",
-    "blurbEn": "ENHYPEN member Heeseung — main vocal trained for years before debut. Day master 辛亥 (Metal Pig) — Metal × Pig.",
-    "blurbKo": "ENHYPEN 희승. 일주 辛亥 — 작은 쇠와 돼지띠 결합. 데뷔 전 오랜 훈련의 메인보컬."
+    "blurbEn": "ENHYPEN member Heeseung — main vocal trained for years before debut.",
+    "blurbKo": "ENHYPEN 희승. 기본 성향은 작은 쇠와 돼지띠가 만나는 모습이에요. 데뷔 전 오랜 훈련의 메인보컬.",
+    "gender": "M"
   },
   {
     "id": "jay_eh",
@@ -491,8 +535,9 @@
     "birth": "2002-04-20",
     "dayPillar": "戊午",
     "dayPillarName": "Earth Horse",
-    "blurbEn": "ENHYPEN member Jay — bilingual main rapper with stage edge. Day master 戊午 (Earth Horse) — Earth × Horse.",
-    "blurbKo": "ENHYPEN 제이. 일주 戊午 — 큰 흙과 말띠 결합. 이중언어 메인 래퍼의 무대 엣지."
+    "blurbEn": "ENHYPEN member Jay — bilingual main rapper with stage edge.",
+    "blurbKo": "ENHYPEN 제이. 기본 성향은 큰 흙과 말띠가 만나는 모습이에요. 이중언어 메인 래퍼의 무대 엣지.",
+    "gender": "M"
   },
   {
     "id": "jake_eh",
@@ -502,8 +547,9 @@
     "birth": "2002-11-15",
     "dayPillar": "丁亥",
     "dayPillarName": "Fire Pig",
-    "blurbEn": "ENHYPEN member Jake — Aussie-Korean charm with bright stage timing. Day master 丁亥 (Fire Pig) — Fire × Pig.",
-    "blurbKo": "ENHYPEN 제이크. 일주 丁亥 — 촛불 불과 돼지띠 결합. 호주-한국 매력과 밝은 무대 타이밍."
+    "blurbEn": "ENHYPEN member Jake — Aussie-Korean charm with bright stage timing.",
+    "blurbKo": "ENHYPEN 제이크. 기본 성향은 촛불 불과 돼지띠가 만나는 모습이에요. 호주-한국 매력과 밝은 무대 타이밍.",
+    "gender": "M"
   },
   {
     "id": "sunghoon_eh",
@@ -513,8 +559,9 @@
     "birth": "2002-12-08",
     "dayPillar": "庚戌",
     "dayPillarName": "Metal Dog",
-    "blurbEn": "ENHYPEN member Sunghoon — former figure skater with poised camera face. Day master 庚戌 (Metal Dog) — Metal × Dog.",
-    "blurbKo": "ENHYPEN 성훈. 일주 庚戌 — 강한 쇠와 개띠 결합. 전 피겨 선수 출신의 안정된 카메라 얼굴."
+    "blurbEn": "ENHYPEN member Sunghoon — former figure skater with poised camera face.",
+    "blurbKo": "ENHYPEN 성훈. 기본 성향은 강한 쇠와 개띠가 만나는 모습이에요. 전 피겨 선수 출신의 안정된 카메라 얼굴.",
+    "gender": "M"
   },
   {
     "id": "sunoo_eh",
@@ -524,8 +571,9 @@
     "birth": "2003-06-24",
     "dayPillar": "戊辰",
     "dayPillarName": "Earth Dragon",
-    "blurbEn": "ENHYPEN member Sunoo — bright eye-smile melts the camera. Day master 戊辰 (Earth Dragon) — Earth × Dragon.",
-    "blurbKo": "ENHYPEN 선우. 일주 戊辰 — 큰 흙과 용띠 결합. 카메라를 녹이는 밝은 눈웃음."
+    "blurbEn": "ENHYPEN member Sunoo — bright eye-smile melts the camera.",
+    "blurbKo": "ENHYPEN 선우. 기본 성향은 큰 흙과 용띠가 만나는 모습이에요. 카메라를 녹이는 밝은 눈웃음.",
+    "gender": "M"
   },
   {
     "id": "jungwon_eh",
@@ -535,8 +583,9 @@
     "birth": "2004-02-09",
     "dayPillar": "戊午",
     "dayPillarName": "Earth Horse",
-    "blurbEn": "ENHYPEN member Jungwon — youngest-leader paradox — quiet authority. Day master 戊午 (Earth Horse) — Earth × Horse.",
-    "blurbKo": "ENHYPEN 정원. 일주 戊午 — 큰 흙과 말띠 결합. 최연소 리더의 역설 — 조용한 권위."
+    "blurbEn": "ENHYPEN member Jungwon — youngest-leader paradox — quiet authority.",
+    "blurbKo": "ENHYPEN 정원. 기본 성향은 큰 흙과 말띠가 만나는 모습이에요. 최연소 리더의 역설 — 조용한 권위.",
+    "gender": "M"
   },
   {
     "id": "niki_eh",
@@ -546,8 +595,9 @@
     "birth": "2005-12-09",
     "dayPillar": "丁卯",
     "dayPillarName": "Fire Rabbit",
-    "blurbEn": "ENHYPEN member Niki — youngest powerhouse dancer from Japan. Day master 丁卯 (Fire Rabbit) — Fire × Rabbit.",
-    "blurbKo": "ENHYPEN 니키. 일주 丁卯 — 촛불 불과 토끼띠 결합. 일본 출신 최연소 파워하우스 댄서."
+    "blurbEn": "ENHYPEN member Niki — youngest powerhouse dancer from Japan.",
+    "blurbKo": "ENHYPEN 니키. 기본 성향은 촛불 불과 토끼띠가 만나는 모습이에요. 일본 출신 최연소 파워하우스 댄서.",
+    "gender": "M"
   },
   {
     "id": "joshua_svt",
@@ -557,8 +607,9 @@
     "birth": "1995-12-30",
     "dayPillar": "乙未",
     "dayPillarName": "Wood Goat",
-    "blurbEn": "SEVENTEEN member Joshua — LA-born vocal — soft surface, deep musicality. Day master 乙未 (Wood Goat) — Wood × Goat.",
-    "blurbKo": "SEVENTEEN 조슈아. 일주 乙未 — 풀 나무와 양띠 결합. LA 출신 보컬 — 부드러운 표면 아래 깊은 음악성."
+    "blurbEn": "SEVENTEEN member Joshua — LA-born vocal — soft surface, deep musicality.",
+    "blurbKo": "SEVENTEEN 조슈아. 기본 성향은 풀 나무와 양띠가 만나는 모습이에요. LA 출신 보컬 — 부드러운 표면 아래 깊은 음악성.",
+    "gender": "M"
   },
   {
     "id": "mingyu_svt",
@@ -568,8 +619,9 @@
     "birth": "1997-04-06",
     "dayPillar": "戊寅",
     "dayPillarName": "Earth Tiger",
-    "blurbEn": "SEVENTEEN member Mingyu — tall visual rapper with kitchen-warmth aura. Day master 戊寅 (Earth Tiger) — Earth × Tiger.",
-    "blurbKo": "SEVENTEEN 민규. 일주 戊寅 — 큰 흙과 호랑이띠 결합. 주방 같은 따뜻함의 큰 키 비주얼 래퍼."
+    "blurbEn": "SEVENTEEN member Mingyu — tall visual rapper with kitchen-warmth aura.",
+    "blurbKo": "SEVENTEEN 민규. 기본 성향은 큰 흙과 호랑이띠가 만나는 모습이에요. 주방 같은 따뜻함의 큰 키 비주얼 래퍼.",
+    "gender": "M"
   },
   {
     "id": "vernon_svt",
@@ -579,8 +631,9 @@
     "birth": "1998-02-18",
     "dayPillar": "丙申",
     "dayPillarName": "Fire Monkey",
-    "blurbEn": "SEVENTEEN member Vernon — Korean-American hip-hop pivot of the group. Day master 丙申 (Fire Monkey) — Fire × Monkey.",
-    "blurbKo": "SEVENTEEN 버논. 일주 丙申 — 태양 불과 원숭이띠 결합. 그룹의 한국계 미국인 힙합 축."
+    "blurbEn": "SEVENTEEN member Vernon — Korean-American hip-hop pivot of the group.",
+    "blurbKo": "SEVENTEEN 버논. 기본 성향은 태양 불과 원숭이띠가 만나는 모습이에요. 그룹의 한국계 미국인 힙합 축.",
+    "gender": "M"
   },
   {
     "id": "dk_svt",
@@ -590,8 +643,9 @@
     "birth": "1997-02-18",
     "dayPillar": "辛卯",
     "dayPillarName": "Metal Rabbit",
-    "blurbEn": "SEVENTEEN member DK — main vocal whose musical-theater belt soars. Day master 辛卯 (Metal Rabbit) — Metal × Rabbit.",
-    "blurbKo": "SEVENTEEN 도겸. 일주 辛卯 — 작은 쇠와 토끼띠 결합. 뮤지컬 출신의 시원한 메인보컬 음역."
+    "blurbEn": "SEVENTEEN member DK — main vocal whose musical-theater belt soars.",
+    "blurbKo": "SEVENTEEN 도겸. 기본 성향은 작은 쇠와 토끼띠가 만나는 모습이에요. 뮤지컬 출신의 시원한 메인보컬 음역.",
+    "gender": "M"
   },
   {
     "id": "woozi_svt",
@@ -601,8 +655,9 @@
     "birth": "1996-11-22",
     "dayPillar": "癸亥",
     "dayPillarName": "Water Pig",
-    "blurbEn": "SEVENTEEN member Woozi — producer-leader behind most of the discography. Day master 癸亥 (Water Pig) — Water × Pig.",
-    "blurbKo": "SEVENTEEN 우지. 일주 癸亥 — 비/이슬 물과 돼지띠 결합. 디스코그래피의 대부분을 만드는 프로듀서-리더."
+    "blurbEn": "SEVENTEEN member Woozi — producer-leader behind most of the discography.",
+    "blurbKo": "SEVENTEEN 우지. 기본 성향은 비/이슬 물과 돼지띠가 만나는 모습이에요. 디스코그래피의 대부분을 만드는 프로듀서-리더.",
+    "gender": "M"
   },
   {
     "id": "yeonjun_txt",
@@ -612,8 +667,9 @@
     "birth": "1999-09-13",
     "dayPillar": "戊辰",
     "dayPillarName": "Earth Dragon",
-    "blurbEn": "TXT member Yeonjun — main dancer with tigerish stage presence. Day master 戊辰 (Earth Dragon) — Earth × Dragon.",
-    "blurbKo": "TXT 연준. 일주 戊辰 — 큰 흙과 용띠 결합. 호랑이 같은 무대 존재감의 메인댄서."
+    "blurbEn": "TXT member Yeonjun — main dancer with tigerish stage presence.",
+    "blurbKo": "TXT 연준. 기본 성향은 큰 흙과 용띠가 만나는 모습이에요. 호랑이 같은 무대 존재감의 메인댄서.",
+    "gender": "M"
   },
   {
     "id": "soobin_txt",
@@ -623,8 +679,9 @@
     "birth": "2000-12-05",
     "dayPillar": "丁酉",
     "dayPillarName": "Fire Rooster",
-    "blurbEn": "TXT member Soobin — bunny-leader with quiet vocal warmth. Day master 丁酉 (Fire Rooster) — Fire × Rooster.",
-    "blurbKo": "TXT 수빈. 일주 丁酉 — 촛불 불과 닭띠 결합. 토끼상 리더의 조용한 보컬 따뜻함."
+    "blurbEn": "TXT member Soobin — bunny-leader with quiet vocal warmth.",
+    "blurbKo": "TXT 수빈. 기본 성향은 촛불 불과 닭띠가 만나는 모습이에요. 토끼상 리더의 조용한 보컬 따뜻함.",
+    "gender": "M"
   },
   {
     "id": "beomgyu_txt",
@@ -634,8 +691,9 @@
     "birth": "2001-03-13",
     "dayPillar": "乙亥",
     "dayPillarName": "Wood Pig",
-    "blurbEn": "TXT member Beomgyu — mood-maker guitar fan and clean vocal. Day master 乙亥 (Wood Pig) — Wood × Pig.",
-    "blurbKo": "TXT 범규. 일주 乙亥 — 풀 나무와 돼지띠 결합. 기타 팬이자 깔끔한 보컬의 분위기메이커."
+    "blurbEn": "TXT member Beomgyu — mood-maker guitar fan and clean vocal.",
+    "blurbKo": "TXT 범규. 기본 성향은 풀 나무와 돼지띠가 만나는 모습이에요. 기타 팬이자 깔끔한 보컬의 분위기메이커.",
+    "gender": "M"
   },
   {
     "id": "taehyun_txt",
@@ -645,8 +703,9 @@
     "birth": "2002-02-05",
     "dayPillar": "甲辰",
     "dayPillarName": "Wood Dragon",
-    "blurbEn": "TXT member Taehyun — lead vocal with sharp ML-debate logic in interviews. Day master 甲辰 (Wood Dragon) — Wood × Dragon.",
-    "blurbKo": "TXT 태현. 일주 甲辰 — 큰 나무와 용띠 결합. 인터뷰에서 날카로운 논리를 보이는 리드보컬."
+    "blurbEn": "TXT member Taehyun — lead vocal with sharp ML-debate logic in interviews.",
+    "blurbKo": "TXT 태현. 기본 성향은 큰 나무와 용띠가 만나는 모습이에요. 인터뷰에서 날카로운 논리를 보이는 리드보컬.",
+    "gender": "M"
   },
   {
     "id": "huening_txt",
@@ -656,8 +715,9 @@
     "birth": "2002-08-14",
     "dayPillar": "甲寅",
     "dayPillarName": "Wood Tiger",
-    "blurbEn": "TXT member Hueningkai — tri-cultural maknae main vocal — Hawaii-Korea-China. Day master 甲寅 (Wood Tiger) — Wood × Tiger.",
-    "blurbKo": "TXT 휴닝카이. 일주 甲寅 — 큰 나무와 호랑이띠 결합. 하와이-한국-중국 3문화의 막내 메인보컬."
+    "blurbEn": "TXT member Hueningkai — tri-cultural maknae main vocal — Hawaii-Korea-China.",
+    "blurbKo": "TXT 휴닝카이. 기본 성향은 큰 나무와 호랑이띠가 만나는 모습이에요. 하와이-한국-중국 3문화의 막내 메인보컬.",
+    "gender": "M"
   },
   {
     "id": "wonbin_riize",
@@ -667,8 +727,9 @@
     "birth": "2004-12-12",
     "dayPillar": "乙丑",
     "dayPillarName": "Wood Ox",
-    "blurbEn": "RIIZE member Wonbin — visual all-rounder with k-drama-lead face. Day master 乙丑 (Wood Ox) — Wood × Ox.",
-    "blurbKo": "RIIZE 원빈. 일주 乙丑 — 풀 나무와 소띠 결합. K-드라마 주연감 얼굴의 비주얼 올라운더."
+    "blurbEn": "RIIZE member Wonbin — visual all-rounder with k-drama-lead face.",
+    "blurbKo": "RIIZE 원빈. 기본 성향은 풀 나무와 소띠가 만나는 모습이에요. K-드라마 주연감 얼굴의 비주얼 올라운더.",
+    "gender": "M"
   },
   {
     "id": "anton_riize",
@@ -678,7 +739,8 @@
     "birth": "2004-03-04",
     "dayPillar": "壬午",
     "dayPillarName": "Water Horse",
-    "blurbEn": "RIIZE member Anton — Korean-American multi-instrumentalist maknae line. Day master 壬午 (Water Horse) — Water × Horse.",
-    "blurbKo": "RIIZE 안톤. 일주 壬午 — 큰 물과 말띠 결합. 한국계 미국인 멀티 악기 연주자 막내 라인."
+    "blurbEn": "RIIZE member Anton — Korean-American multi-instrumentalist maknae line.",
+    "blurbKo": "RIIZE 안톤. 기본 성향은 큰 물과 말띠가 만나는 모습이에요. 한국계 미국인 멀티 악기 연주자 막내 라인.",
+    "gender": "M"
   }
 ]

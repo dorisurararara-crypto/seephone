@@ -326,6 +326,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
             birthCity: _cityController.text.trim(),
             isLunar: _isLunar,
             unknownTime: _unknownTime,
+            isMale: _gender != Gender.female,
           ));
 
       if (mounted) {

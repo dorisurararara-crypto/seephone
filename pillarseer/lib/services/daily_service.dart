@@ -205,24 +205,84 @@ class DailyService {
     final band = score >= 80 ? 'high' : score >= 55 ? 'mid' : 'low';
     const map = {
       'love': {
-        'high': (en: 'Make the move — chemistry is on your side today.', ko: '먼저 다가가도 좋아요. 오늘은 케미가 당신 편이에요.'),
-        'mid': (en: 'Listen more than you speak — depth beats charm today.', ko: '말보다 듣기. 오늘은 깊이가 매력을 이깁니다.'),
-        'low': (en: 'Hold off on big confessions — give it 24 hours.', ko: '큰 고백은 미루세요. 24시간만 기다려도 OK.'),
+        'high': (
+          en:
+              'Chemistry is on your side today. If there\'s someone on your mind, this is the day to send the message you\'ve been holding — even a simple "How are you?" lands well. A natural, slightly playful tone works better than a serious one right now.',
+          ko:
+              '오늘은 케미가 당신 편이에요. 마음에 두고 있던 사람이 있다면, 미뤄왔던 안부 메시지 한 통 보내기 좋은 날이에요. "잘 지내?" 같은 가벼운 톤이 무거운 고백보다 더 잘 통하는 흐름이고, 약간 장난기 섞인 표현이 자연스럽게 닿습니다.'
+        ),
+        'mid': (
+          en:
+              'Today rewards listening over talking. The other person has something they want to say but hasn\'t found the moment yet — leave space and they\'ll open up. Depth and warmth beat charm and wit today, so resist the urge to perform.',
+          ko:
+              '오늘은 말하기보다 듣기에 점수가 더 붙어요. 상대가 말하고 싶었던 한 가지가 있는데 타이밍을 못 잡고 있으니, 당신이 여백을 만들어 주면 자연스럽게 열려요. 재치보다 깊이와 따뜻함이 더 매력적으로 느껴지는 흐름이라, 멋있어 보이려 애쓰지 않아도 충분합니다.'
+        ),
+        'low': (
+          en:
+              'Hold off on big confessions or heavy conversations today — give it 24 hours. Words you say right now may sound heavier than you mean. Spend the day on small kindnesses instead; a quiet message tomorrow morning will land much better than a big move now.',
+          ko:
+              '오늘은 큰 고백이나 무거운 대화는 24시간만 미루는 게 좋아요. 지금 하는 말이 의도보다 무겁게 들릴 가능성이 있는 흐름이에요. 대신 오늘은 작은 다정함만 보여주고, 내일 아침 보내는 짧은 메시지 한 통이 지금 한 큰 행동보다 훨씬 잘 닿습니다.'
+        ),
       },
       'work': {
-        'high': (en: 'Pitch the bold idea — your timing window is open.', ko: '용감한 제안을 던지세요. 타이밍의 창이 열렸어요.'),
-        'mid': (en: 'Steady execution today — close one task fully.', ko: '꾸준한 실행의 날. 한 가지를 끝까지 매듭짓기.'),
-        'low': (en: 'Defer big decisions — protect your bandwidth.', ko: '큰 결정은 미루기. 에너지를 보호하세요.'),
+        'high': (
+          en:
+              'A timing window is open — pitch the bold idea, ask for the meeting, send the proposal. Initiative is rewarded today, and decision-makers are more receptive than usual. Don\'t over-prepare; a confident outline beats a perfect deck right now.',
+          ko:
+              '오늘은 타이밍의 창이 열려 있어요. 미뤄왔던 제안, 미팅 요청, 큰 아이디어 — 먼저 움직이는 사람이 점수를 받는 날이에요. 의사 결정권자도 평소보다 열려 있는 흐름이라, 완벽한 자료보다 자신감 있는 한 줄 요약이 더 강하게 작동합니다.'
+        ),
+        'mid': (
+          en:
+              'Steady execution day. Pick one task you\'ve had open too long and close it fully today — even if it\'s small. The momentum from one clean finish carries into tomorrow much more than starting three new things. Avoid context-switching.',
+          ko:
+              '오늘은 꾸준히 실행하는 날이에요. 오래 열려 있던 작은 일 하나만 골라서 끝까지 매듭지어 보세요. 깨끗하게 끝낸 일 하나가 새로 시작한 세 가지보다 내일까지 가는 추진력을 더 만들어줍니다. 여러 일을 동시에 건드리는 건 오늘은 피하세요.'
+        ),
+        'low': (
+          en:
+              'Defer big decisions today — your bandwidth is lower than usual and you may push through what should pause. Use the day for prep, research, or quiet review instead of choices. Anything you decide today, you\'d probably revise tomorrow anyway.',
+          ko:
+              '오늘은 큰 결정을 미루세요. 평소보다 에너지가 낮은 흐름이라, 멈춰야 할 일도 그냥 밀어붙일 위험이 있어요. 결정 대신 자료 정리, 리서치, 조용한 점검으로 시간을 쓰세요. 오늘 정한 건 내일 다시 보면 어차피 수정하고 싶어집니다.'
+        ),
       },
       'wealth': {
-        'high': (en: 'Cash flow window — sign, invoice, or negotiate today.', ko: '돈의 창이 열렸어요. 서명·청구·협상에 좋아요.'),
-        'mid': (en: 'Review before you spend — smart audit today.', ko: '쓰기 전 점검. 오늘은 똑똑한 감사의 날.'),
-        'low': (en: 'Avoid impulse purchases — sit on it for 48 hours.', ko: '충동 지출 금물. 48시간만 참아 보세요.'),
+        'high': (
+          en:
+              'Cash flow window. Sign the contract, send the invoice, ask for the raise, negotiate the price — money-related conversations land better today. Don\'t miss this window on something you\'ve been postponing; even one decisive action moves the whole month forward.',
+          ko:
+              '돈의 창이 열린 날이에요. 계약 서명, 청구서 발송, 연봉 협상, 가격 협의 — 돈 관련 대화가 평소보다 잘 통하는 흐름이에요. 미뤄왔던 한 가지를 오늘 행동으로 옮기면, 그 한 번이 이번 달 전체 흐름을 바꿀 수 있어요.'
+        ),
+        'mid': (
+          en:
+              'Smart audit day. Before you spend or commit to a recurring cost, sit with it for ten minutes. The kind of expense that feels small today often shows up bigger in the monthly view — open the bank app and look once. Clarity beats discipline today.',
+          ko:
+              '오늘은 똑똑한 점검의 날이에요. 새로 지출하거나 정기 결제를 늘리기 전에 10분만 앉아서 생각해 보세요. 오늘 작아 보이는 지출이 한 달 단위로 보면 의외로 커지는 경우가 많으니, 가계부 앱 한 번만 열어 보세요. 의지력보다 가시화가 더 효과적인 날입니다.'
+        ),
+        'low': (
+          en:
+              'Avoid impulse purchases — sit on anything you\'re tempted by for 48 hours. Today\'s "I really need this" often turns into next week\'s "why did I buy this?". Use the day to pay one small bill or to cancel one subscription you don\'t use; both feel surprisingly good.',
+          ko:
+              '오늘은 충동 지출 금물. 사고 싶다는 마음이 들면 48시간만 기다려 보세요. 오늘의 "이거 진짜 필요해" 가 다음 주의 "왜 샀지" 가 되는 패턴이 잘 나오는 흐름이에요. 그 대신 작은 청구서 하나 결제하거나, 안 쓰는 구독 하나 해지하면 의외로 기분이 가벼워집니다.'
+        ),
       },
       'energy': {
-        'high': (en: 'High vitality — push the workout, do the call.', ko: '활력 최고치. 운동·통화 같은 액션 일로 풀어보세요.'),
-        'mid': (en: 'Pace yourself — don\'t burn the whole battery.', ko: '페이스 조절. 배터리 한 번에 다 쓰지 마세요.'),
-        'low': (en: 'Rest is productive today — recovery > output.', ko: '오늘은 쉬는 게 생산이에요. 회복 > 산출.'),
+        'high': (
+          en:
+              'Vitality is high — push the workout, take the call, run the errand you\'ve been postponing. Active energy is what you have today, so converting it into something physical (or completing a stuck task) feels much better than scrolling. Use the body, save the screen for tomorrow.',
+          ko:
+              '오늘은 활력 최고치예요. 운동 강도 한 번 올려도 좋고, 미뤄둔 전화·외출도 처리하기 좋은 날이에요. 오늘은 활동성 에너지가 풍부하니 몸 쓰는 일이나 막혀 있던 일 해결에 쓰면 화면 보는 것보다 훨씬 만족스러워요. 몸은 오늘, 스크롤은 내일.'
+        ),
+        'mid': (
+          en:
+              'Pace yourself today — don\'t burn the whole battery before noon. Two short breaks (10 minutes each, away from the screen) keep you sharper than one long crash later. Light meal, water before coffee, one short walk — your formula today.',
+          ko:
+              '오늘은 페이스 조절이 핵심이에요. 오전에 배터리를 다 쓰면 오후가 흐려져요. 10분씩 두 번 짧게 쉬는 게 한 번에 길게 쉬는 것보다 효과가 커요. 가벼운 식사, 커피보다 물 먼저, 짧은 산책 한 번 — 오늘의 공식입니다.'
+        ),
+        'low': (
+          en:
+              'Rest is productive today. Recovery beats output — pushing through low energy just steals from tomorrow. Cancel one optional thing on your calendar, sleep 30 minutes earlier, and forgive yourself for the "unproductive" feeling. Your body is asking for the day.',
+          ko:
+              '오늘은 쉬는 게 진짜 생산이에요. 회복이 출력보다 점수가 높은 날 — 낮은 에너지로 밀어붙이면 내일을 미리 끌어다 쓰는 셈이에요. 일정 중에 안 해도 되는 것 하나 취소하고, 30분 일찍 자고, "오늘 비생산적이었다" 는 죄책감만 내려놓으세요. 몸이 하루를 요청하는 중입니다.'
+        ),
       },
     };
     return map[cat]![band]!;

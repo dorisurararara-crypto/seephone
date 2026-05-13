@@ -14,6 +14,8 @@ class UserBirthInfo {
   final String birthCity;
   final bool isLunar;
   final bool unknownTime;
+  /// K-POP 셀럽 궁합 시 반대 성별 셀럽만 표시. 기본 true (남성) — null 일 땐 모두 표시.
+  final bool isMale;
 
   const UserBirthInfo({
     required this.name,
@@ -23,6 +25,7 @@ class UserBirthInfo {
     required this.birthCity,
     required this.isLunar,
     this.unknownTime = false,
+    this.isMale = true,
   });
 }
 
