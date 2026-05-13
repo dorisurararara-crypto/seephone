@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "schema": "dominantEl (木·火·土·金·水) → 6 카테고리 (health/body/social/socialPersona/innateNature/innateCharacter)",
+    "count": 30,
+    "tone": "Round 73 — 단정 친근 해요체, 양면 단정, 행동 처방, 시점 anchor, 비의료 표현 (몸이 닳/리듬 무너짐)"
+  },
+  "木": {
+    "healthKo": "본인은 머리·신경 쪽으로 피로가 빨리 와요. 화면 오래 보는 일이 본인을 닳게 해요. 25세 전후로 한 번 두통·시력 체크할 시점 와요. 그때 안 미루세요. 단, 활동량 좋아 몸 자체는 단단해요.",
+    "healthEn": "Fatigue lands fast on your head and nerves. Long screen time wears you down. Around twenty-five a headache or vision check window opens. Do not postpone it. Your activity level keeps the body sturdy though.",
+    "bodyKo": "본인은 길고 가는 체형이에요. 키 큰 편에 골격이 가벼워요. 운동은 유연성·요가 쪽이 잘 맞아요. 무거운 웨이트는 본인 관절을 무너뜨려요. 단, 지구력은 평생 좋아요.",
+    "bodyEn": "Long, slim frame. Tall side with light bones. Yoga and flexibility work suit you. Heavy weights break your joints. Endurance stays good for life.",
+    "socialKo": "본인 인간관계는 넓고 가벼워요. 친구는 많은데 깊이는 한두 명이에요. 30대 초반에 본인 인맥 정리할 시점 와요. 그때 진짜 사람만 남기세요. 단, 본인 매력은 사람을 끌어요. 본인 약점이 한 번 드러나요. 본인 강점은 단단하고 평생 받쳐줘요.",
+    "socialEn": "Your network is wide and light. Many friends, deep with one or two. In early thirties a clearing moment lands. Keep the real ones. Your charm keeps drawing people in.",
+    "socialPersonaKo": "겉으로는 활발하고 부드러워 보여요. 사람들이 본인을 친절한 사람으로 알아요. 단, 안에서는 의외로 까다로워요. 사람들이 모르는 본인 기준이 또렷해요.",
+    "socialPersonaEn": "Outside you look lively and warm. People read you as kind. Inside you are stricter than they know. Your standards stay sharp underneath.",
+    "innateNatureKo": "본인 본성은 자라는 나무처럼 위로 뻗는 쪽이에요. 새로운 자극에 빠르게 반응해요. 단, 한 곳에 오래 머물지 못해요. 변화가 본인 산소라 정기적으로 새 자리를 찾으세요. 본인 약점이 한 번 드러나요.",
+    "innateNatureEn": "Your nature reaches upward like a growing tree. You react fast to new stimulation. Staying long in one spot suffocates you. Change is your oxygen.",
+    "innateCharacterKo": "본인은 인정 많고 정의로운 사람이에요. 약한 사람 보면 본인이 먼저 손 내밀어요. 단, 본인 손해 보는 일이 잦아요. 한 번 단호하게 거절하는 법 배우세요.",
+    "innateCharacterEn": "You carry warmth and a sense of justice. You reach out first when someone is weak. You end up paying the cost often. Learn one clean refusal."
+  },
+  "火": {
+    "healthKo": "본인은 심장·혈압 쪽 리듬이 빨라요. 더위·스트레스가 본인을 닳게 해요. 30세 전후로 한 번 혈압 체크 시점 와요. 단, 회복력은 강한 편이에요.",
+    "healthEn": "Heart and blood rhythm run fast. Heat and stress wear you down. Around thirty a blood pressure check window opens. Your recovery is strong though.",
+    "bodyKo": "본인은 어깨 넓고 단단한 체형이에요. 근육이 잘 붙는 편이에요. 운동은 폭발력 위주 (HIIT·구기 종목) 가 잘 맞아요. 장시간 유산소는 본인을 닳게 해요. 단, 폼이 늘 또렷해요.",
+    "bodyEn": "Broad-shouldered, dense frame. Muscle builds well on you. Explosive workouts — HIIT, ball sports — suit you. Long-distance cardio drains you. Your form stays sharp.",
+    "socialKo": "본인은 무리의 중심 자리에 있는 사람이에요. 분위기 띄우는 사람으로 인기예요. 단, 한 번 큰 갈등 와요. 30세 전후로 사람 잃을 일 와요. 본인 입을 한 번 더 거르세요.",
+    "socialEn": "You sit at the center of the room. People love you for lifting the mood. One big clash will land. Around thirty you lose someone. Filter your mouth once more.",
+    "socialPersonaKo": "겉으로 본인은 활기차고 따뜻해 보여요. 사람들이 본인을 리더로 알아봐요. 단, 본인 감정이 다 비치는 면이에요. 표정 관리가 약점이라 한 번 더 신경 쓰세요. 본인 강점은 단단하고 평생 받쳐줘요.",
+    "socialPersonaEn": "Outside you look bright and warm. People read you as a leader. Your emotions show too clearly though. Face control is your weak spot.",
+    "innateNatureKo": "본인 본성은 타오르는 불처럼 빠르고 강해요. 좋아하는 일에 모든 걸 쏟아요. 단, 빨리 식는 면도 나타나요. 한 번 식으면 다시 안 데워지니 본인 페이스 조절하세요. 한 번 약점이 드러나요.",
+    "innateNatureEn": "Your nature burns fast and hard. You pour everything into what you love. The cooling comes just as fast. Once cold, you do not relight.",
+    "innateCharacterKo": "본인은 예의 바르고 명예를 중요하게 생각해요. 사람 앞에서 무례한 행동을 못 봐요. 단, 본인이 다친 자존심은 평생 안 잊어요. 용서하는 법을 배우세요. 본인 약점이 한 번 드러나요. 본인 강점은 단단하고 평생 받쳐줘요.",
+    "innateCharacterEn": "You hold manners and reputation in high regard. You cannot watch rudeness around others. A wounded pride stays with you for life. Learn to forgive."
+  },
+  "土": {
+    "healthKo": "본인은 위·소화기 쪽이 약해요. 스트레스 받으면 먼저 위로 와요. 28세 전후로 한 번 위염 체크 시점 와요. 그때 식습관 정리하세요. 단, 본인 기초 체력은 단단해요.",
+    "healthEn": "Stomach and digestion run weak. Stress lands on the stomach first. Around twenty-eight a gastritis check window opens. Sort your diet then. Base stamina stays solid.",
+    "bodyKo": "본인은 중간 키에 안정형 체형이에요. 살이 잘 붙는 편이에요. 운동은 꾸준한 유산소·걷기 가 잘 맞아요. 단기간 살 빼는 다이어트는 본인을 무너뜨려요. 단, 한 번 자세 잡으면 평생 안 무너져요. 본인 약점이 한 번 드러나요.",
+    "bodyEn": "Mid-height, steady frame. Weight piles on easily. Steady cardio — walking, jogging — fits you. Short crash diets break you. Once your form is set it holds for life.",
+    "socialKo": "본인은 신뢰형 친구 자리예요. 사람들이 본인한테 비밀 털어놓아요. 단, 본인이 너무 다 들어줘서 본인이 지쳐요. 30대 중반에 거절하는 법 배우세요. 본인 약점이 한 번 드러나요.",
+    "socialEn": "You are the trusted-friend seat. People drop secrets on you. Listening to all of it wears you down. In mid-thirties learn to refuse.",
+    "socialPersonaKo": "겉으로 본인은 듬직하고 안정적으로 보여요. 사람들이 본인을 어른 같다고 해요. 단, 안에서는 본인도 흔들리는 사람이에요. 본인을 위한 시간을 늘리세요.",
+    "socialPersonaEn": "Outside you look reliable and steady. People call you mature. Inside you shake too though. Carve more time for yourself.",
+    "innateNatureKo": "본인 본성은 흙처럼 깊고 안정적이에요. 사람을 받아들이는 폭이 넓어요. 단, 결정이 느린 면이에요. 빠른 결정 필요한 자리에서 본인이 답답해해요.",
+    "innateNatureEn": "Your nature runs deep and stable like earth. Your acceptance is wide. Your decisions come slow. Fast-call seats suffocate you.",
+    "innateCharacterKo": "본인은 신용이 본인의 자산이에요. 한 번 약속한 건 끝까지 지켜요. 단, 본인이 못 지킬 약속도 한 번에 떠안아요. 거절하는 연습을 의식적으로 하세요.",
+    "innateCharacterEn": "Trust is your asset. What you promise once, you finish. You also take on what you cannot keep. Practice refusal on purpose."
+  },
+  "金": {
+    "healthKo": "본인은 호흡기·피부 쪽이 약해요. 건조한 환경이 본인을 닳게 해요. 30대 초반에 한 번 천식·알레르기 체크 시점 와요. 그때 습도 관리 시작하세요. 단, 면역력은 평생 단단해요.",
+    "healthEn": "Lungs and skin run weak. Dry environments wear you down. In early thirties an asthma or allergy check window opens. Start humidity care then. Your immunity stays solid for life.",
+    "bodyKo": "본인은 단단하고 날카로운 체형이에요. 근육이 깔끔하게 잡혀요. 운동은 정확한 폼이 중요한 종목 (수영·골프·궁술) 이 잘 맞아요. 거친 격투기는 본인 색과 안 맞아요. 단, 본인 폼이 늘 또렷해요.",
+    "bodyEn": "Sharp, defined frame. Clean muscle. Form-precise sports — swimming, golf, archery — suit you. Rough contact sports do not fit you. Your form stays crisp.",
+    "socialKo": "본인은 가깝지만 거리 있는 친구 자리예요. 본인 사람만 골라 깊게 가요. 단, 한 번 본인 신뢰 무너지면 영영 안 돌아가요. 너무 빨리 손절하지 마세요. 한 번 약점이 돼요. 본인 강점은 단단하고 평생 받쳐줘요.",
+    "socialEn": "You are the close-but-distanced friend. You choose your people and go deep with them only. Once trust breaks you never come back. Do not cut too fast.",
+    "socialPersonaKo": "겉으로 본인은 세련되고 차가워 보여요. 사람들이 본인을 까칠한 사람으로 알아요. 단, 본인은 의외로 따뜻한 사람이에요. 표현이 약점이라 한 번 본인 마음을 더 꺼내세요.",
+    "socialPersonaEn": "Outside you look refined and cool. People read you as prickly. Inside you are warmer than they see. Expression is your weak point.",
+    "innateNatureKo": "본인 본성은 다듬어진 금처럼 정밀하고 날카로워요. 디테일을 잘 잡아내요. 단, 본인이 너무 깐깐해서 본인이 닳아요. 한 번 느슨해지는 법 배우세요. 본인 강점은 단단하고 평생 받쳐줘요.",
+    "innateNatureEn": "Your nature runs precise and sharp like refined metal. You catch details. Being too strict wears you down. Learn to loosen once.",
+    "innateCharacterKo": "본인은 정직과 의리를 평생 지켜요. 한 번 본인 사람이면 끝까지 가요. 단, 본인 기준이 너무 또렷해서 사람을 놓쳐요. 기준을 한 번 더 부드럽게 하세요. 본인 약점이 한 번 드러나요.",
+    "innateCharacterEn": "You hold honesty and loyalty for life. Once you call someone yours, you stay. Your standards are so sharp you lose people. Soften them once more."
+  },
+  "水": {
+    "healthKo": "본인은 신장·생식기 쪽이 약해요. 추위·습기가 본인을 닳게 해요. 28세 전후로 한 번 신장 기능 체크 시점 와요. 그때 수분 섭취 점검하세요. 단, 본인 회복 속도는 빨라요.",
+    "healthEn": "Kidneys and reproductive system run weak. Cold and damp wear you down. Around twenty-eight a kidney check window opens. Check your hydration then. Your recovery runs fast.",
+    "bodyKo": "본인은 부드럽고 곡선형 체형이에요. 살이 부드럽게 붙어요. 운동은 수영·필라테스가 잘 맞아요. 너무 마른 다이어트는 본인 호르몬을 무너뜨려요. 단, 한 번 잡힌 체형은 평생 단단해요.",
+    "bodyEn": "Soft, curving frame. Weight settles softly. Swimming and Pilates suit you. Crash dieting breaks your hormones. Once shaped, the body holds for life.",
+    "socialKo": "본인은 통찰력 있는 친구 자리예요. 사람들이 본인한테 인생 상담을 와요. 단, 본인이 다 받아주면 본인이 닳아요. 30대 중반에 거리 두는 법 배우세요.",
+    "socialEn": "You are the insightful-friend seat. People come to you for life advice. Taking it all in wears you down. In mid-thirties learn distance.",
+    "socialPersonaKo": "겉으로 본인은 조용하고 신비로워 보여요. 사람들이 본인을 깊은 사람으로 알아요. 단, 본인은 외향적인 자리에서 본인이 닳아요. 혼자 회복하는 시간이 꼭 필요해요.",
+    "socialPersonaEn": "Outside you look quiet and a touch mysterious. People read you as deep. Outgoing rooms wear you down. Solo recovery is a must.",
+    "innateNatureKo": "본인 본성은 물처럼 유연하고 깊어요. 어떤 자리에서도 본인 흐름을 만들어요. 단, 본인 색을 숨기는 면도 나타나요. 본인 마음 한 번 솔직하게 꺼내세요. 본인 강점은 평생 단단해요. 한 번 약점이 드러나요.",
+    "innateNatureEn": "Your nature runs fluid and deep like water. You shape your flow in any room. You hide too easily though. Speak your heart out loud once.",
+    "innateCharacterKo": "본인은 지혜롭고 통찰력이 깊어요. 사람과 상황을 빠르게 읽어요. 단, 너무 많이 보여서 본인이 우울해져요. 30대 후반에 마음 챙기는 시간 늘리세요. 본인 강점은 평생 단단해요.",
+    "innateCharacterEn": "You carry wisdom and deep insight. You read people and rooms fast. Seeing too much makes you down. In late thirties grow your mind-care time."
+  }
+}

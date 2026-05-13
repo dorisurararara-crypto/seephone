@@ -19,6 +19,7 @@ import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
 import '../services/life_stage_service.dart';
 import '../services/personalization_engine.dart';
+import '../services/additional_life_service.dart';
 import '../services/career_recommend_service.dart';
 import '../services/sipsin_persona_service.dart';
 import '../services/wealth_strategy_service.dart';
@@ -127,6 +128,8 @@ class ResultScreen extends ConsumerWidget {
             // 2.8 CAREER + WEALTH — 직업 추천 + 재테크 3 phase (Round 73 sprint 6)
             _CareerSection(result: result, useKo: useKo),
             _WealthStrategySection(result: result, useKo: useKo),
+            // 2.9 ADDITIONAL 6 — 건강/체질/사회/사회적성격/타고난성향/타고난인품 (Round 73 sprint 4)
+            _AdditionalLifeSection(result: result, useKo: useKo),
             // 3. CHART ATTRIBUTES — 2x2 grid (bg)
             _ChartAttributesSection(result: result, useKo: useKo),
             // 4. FOUR PILLARS — 4-column hairline (paper bg)
@@ -3746,6 +3749,145 @@ class _WealthPhaseRow extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           useKo ? ko : en,
+          style: useKo
+              ? GoogleFonts.notoSansKr(
+                  fontSize: 13.5,
+                  height: 1.75,
+                  color: AppColors.inkLight,
+                  letterSpacing: 0.1,
+                )
+              : GoogleFonts.inter(
+                  fontSize: 12.5,
+                  height: 1.65,
+                  color: AppColors.inkLight,
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────────── ADDITIONAL LIFE 6 — Round 73 sprint 4 ────────────
+// 운세의신 17 섹션 중 미커버 6 섹션:
+//   건강운 / 체질운 / 사회운 / 사회적성격 / 타고난성향 / 타고난인품
+// 입력: 사주 5행 dominant → 6 paragraph (ko/en).
+
+class _AdditionalLifeSection extends StatelessWidget {
+  final SajuResult result;
+  final bool useKo;
+  const _AdditionalLifeSection({required this.result, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<AdditionalLifeReading>(
+      future: AdditionalLifeService.compute(result),
+      builder: (context, snap) {
+        if (!snap.hasData) return const SizedBox(height: 0);
+        final r = snap.data!;
+        // 6 카테고리 정의 — 운세의신 17 섹션 라벨 매칭.
+        final rows = useKo
+            ? [
+                ('건강운', r.healthKo),
+                ('체질운', r.bodyKo),
+                ('사회운', r.socialKo),
+                ('사회적 성격', r.socialPersonaKo),
+                ('타고난 성향', r.innateNatureKo),
+                ('타고난 인품', r.innateCharacterKo),
+              ]
+            : [
+                ('HEALTH', r.healthEn),
+                ('CONSTITUTION', r.bodyEn),
+                ('SOCIAL CIRCLE', r.socialEn),
+                ('PUBLIC PERSONA', r.socialPersonaEn),
+                ('INNATE NATURE', r.innateNatureEn),
+                ('INNATE CHARACTER', r.innateCharacterEn),
+              ];
+        return _SectionFrame(
+          background: AppColors.bg,
+          meta: useKo ? '인생 6 결 · LIFE SIX' : 'LIFE SIX',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                useKo
+                    ? '건강 · 체질 · 사회 · 성품'
+                    : 'HEALTH · BODY · SOCIAL · CHARACTER',
+                style: useKo
+                    ? GoogleFonts.notoSerifKr(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                        height: 1.35,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      )
+                    : GoogleFonts.cormorantGaramond(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                        height: 1.3,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      ),
+              ),
+              const SizedBox(height: 12),
+              Container(width: 36, height: 1, color: AppColors.line),
+              const SizedBox(height: 18),
+              for (var i = 0; i < rows.length; i++) ...[
+                _AdditionalLifeRow(label: rows[i].$1, body: rows[i].$2, useKo: useKo),
+                if (i < rows.length - 1)
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 16),
+                    height: 1,
+                    color: AppColors.line,
+                  ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AdditionalLifeRow extends StatelessWidget {
+  final String label;
+  final String body;
+  final bool useKo;
+  const _AdditionalLifeRow({
+    required this.label,
+    required this.body,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              label,
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 11,
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(child: Container(height: 1, color: AppColors.line)),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Text(
+          body,
           style: useKo
               ? GoogleFonts.notoSansKr(
                   fontSize: 13.5,
