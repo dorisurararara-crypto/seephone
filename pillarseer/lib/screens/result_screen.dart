@@ -17,6 +17,8 @@ import '../services/shinsa_service.dart';
 import '../services/strength_service.dart';
 import '../services/twelve_unsung_service.dart';
 import '../services/yongsin_service.dart';
+import '../services/ziwei_crossmatch_service.dart';
+import '../services/ziwei_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
@@ -39,6 +41,22 @@ class ResultScreen extends ConsumerWidget {
     final lang = (overrideLocale?.languageCode ?? systemLocale?.languageCode ?? 'en');
     final useKo = lang == 'ko';
     final reading = useKo ? result.deepKo : result.deepEn;
+
+    // 자미두수 — 사용자 입력 있을 때만 계산. 없으면 null 처리.
+    final birth = ref.watch(userBirthInfoProvider);
+    final ZiweiResult? ziwei = birth != null
+        ? ZiweiService.calculate(
+            year: birth.birthDate.year,
+            month: birth.birthDate.month,
+            day: birth.birthDate.day,
+            hour: birth.unknownTime ? 12 : birth.birthHour,
+            minute: birth.unknownTime ? 0 : birth.birthMinute,
+            isMale: birth.isMale,
+          )
+        : null;
+    final crossmatches = ziwei != null
+        ? ZiweiCrossmatchService.find(result, ziwei)
+        : const <CrossMatch>[];
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -77,6 +95,9 @@ class ResultScreen extends ConsumerWidget {
             _DayMasterHero(result: result, reading: reading, useKo: useKo),
             // 2. A READING — magazine body (paper bg)
             _ReadingSection(result: result, reading: reading, useKo: useKo),
+            // 2.5 TWIN-LENS — 사주 + 자미두수 공통 결론 (차별점)
+            if (crossmatches.isNotEmpty)
+              _CrossmatchSection(matches: crossmatches, useKo: useKo),
             // 3. CHART ATTRIBUTES — 2x2 grid (bg)
             _ChartAttributesSection(result: result, useKo: useKo),
             // 4. FOUR PILLARS — 4-column hairline (paper bg)
@@ -87,6 +108,9 @@ class ResultScreen extends ConsumerWidget {
             _ForYouTodaySection(result: result, useKo: useKo),
             // 7. FIVE ELEMENTS — bar chart (bg)
             _FiveElementsSection(result: result, reading: reading, useKo: useKo),
+            // 7.5 자미두수 명반 — 12궁 풀이 (accordion 그룹, paper bg)
+            if (ziwei != null)
+              _ZiweiPalaceGroup(ziwei: ziwei, useKo: useKo),
             // 8. CORE READING accordion group (paper bg)
             _GroupSection(
               groupLabel: useKo ? '기본 풀이 · CORE READING' : 'CORE READING',
@@ -2546,5 +2570,525 @@ Open Pillar Seer for the full reading.''';
         backgroundColor: AppColors.ink,
         duration: const Duration(seconds: 2),
       ));
+  }
+}
+
+// ──────────── 2.5 TWIN-LENS — 사주 + 자미두수 공통 결론 ────────────
+
+class _CrossmatchSection extends StatelessWidget {
+  final List<CrossMatch> matches;
+  final bool useKo;
+  const _CrossmatchSection({required this.matches, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final headline = useKo
+        ? '사주랑 자미두수에서 똑같이 잡힌 포인트'
+        : 'WHAT BOTH SYSTEMS AGREE ON';
+    final intro = useKo
+        ? '사주랑 자미두수가 따로 봤는데도 같은 포인트가 딱 잡혔어요.\n그래서 중요하게 봐도 되는 핵심이에요.'
+        : 'Where Saju and Ziwei Doushu — two independent fortune systems — '
+            'reach the same conclusion. These are the most trustworthy lines.';
+    return _SectionFrame(
+      background: AppColors.paper,
+      meta: useKo ? '쌍안경 · TWIN LENS' : 'TWIN LENS · 雙 鏡',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // accent star + headline
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const _TwinStar(),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  headline,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                    height: 1.35,
+                    letterSpacing: -0.2,
+                    color: AppColors.ink,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(width: 36, height: 1, color: AppColors.line),
+          const SizedBox(height: 14),
+          Text(
+            intro,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              height: 1.75,
+              color: AppColors.inkLight,
+              letterSpacing: 0.1,
+            ),
+          ),
+          const SizedBox(height: 22),
+          // 각 매칭 항목
+          for (var i = 0; i < matches.length; i++) ...[
+            _CrossmatchTile(
+              match: matches[i],
+              useKo: useKo,
+              index: i + 1,
+            ),
+            if (i < matches.length - 1)
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 18),
+                height: 1,
+                color: AppColors.line,
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _TwinStar extends StatelessWidget {
+  const _TwinStar();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.accent, width: 1),
+        color: AppColors.bg,
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        '✦',
+        style: GoogleFonts.cormorantGaramond(
+          fontSize: 18,
+          color: AppColors.accent,
+          height: 1.0,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+}
+
+class _CrossmatchTile extends StatelessWidget {
+  final CrossMatch match;
+  final bool useKo;
+  final int index;
+  const _CrossmatchTile({
+    required this.match,
+    required this.useKo,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 주제 라벨 (작은 UPPERCASE)
+        Row(
+          children: [
+            Text(
+              index.toString().padLeft(2, '0'),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.accent,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Container(width: 14, height: 1, color: AppColors.line),
+            const SizedBox(width: 10),
+            Text(
+              match.topic.toUpperCase(),
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // 메인 결론
+        Text(
+          match.combinedKo,
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 16.5,
+            height: 1.55,
+            fontWeight: FontWeight.w400,
+            letterSpacing: -0.1,
+            color: AppColors.ink,
+          ),
+        ),
+        const SizedBox(height: 12),
+        // 두 시스템 근거 — 2-row layout
+        _TwinEvidenceRow(
+          labelKo: '사주',
+          labelEn: 'SAJU',
+          body: match.sajuSide,
+        ),
+        const SizedBox(height: 6),
+        _TwinEvidenceRow(
+          labelKo: '자미',
+          labelEn: 'ZIWEI',
+          body: match.ziweiSide,
+        ),
+      ],
+    );
+  }
+}
+
+class _TwinEvidenceRow extends StatelessWidget {
+  final String labelKo;
+  final String labelEn;
+  final String body;
+  const _TwinEvidenceRow({
+    required this.labelKo,
+    required this.labelEn,
+    required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 48,
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            labelEn,
+            style: GoogleFonts.inter(
+              fontSize: 8,
+              letterSpacing: 3,
+              fontWeight: FontWeight.w500,
+              color: AppColors.accent,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            body,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              height: 1.65,
+              color: AppColors.inkLight,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ──────────── 7.5 자미두수 12궁 풀이 그룹 (accordion) ────────────
+
+class _ZiweiPalaceGroup extends StatelessWidget {
+  final ZiweiResult ziwei;
+  final bool useKo;
+  const _ZiweiPalaceGroup({required this.ziwei, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final labels = useKo
+        ? {
+            '명궁': '나는 어떤 사람',
+            '형제궁': '형제·친구·동료',
+            '부처궁': '연애·결혼 인연',
+            '자녀궁': '자녀·창작·후배',
+            '재백궁': '돈 들어오는 방식',
+            '질액궁': '건강·체질',
+            '천이궁': '바깥 활동·이동·해외운',
+            '노복궁': '주변 사람·인맥',
+            '관록궁': '꿈·진로·하고 싶은 일',
+            '전택궁': '집·내 방·사는 환경',
+            '복덕궁': '마음·취향·힐링',
+            '부모궁': '부모·윗사람',
+          }
+        : {
+            '명궁': 'Self · core nature',
+            '형제궁': 'Siblings · peers',
+            '부처궁': 'Marriage · love',
+            '자녀궁': 'Children · creation',
+            '재백궁': 'Wealth · money',
+            '질액궁': 'Health · body',
+            '천이궁': 'Travel · movement',
+            '노복궁': 'Subordinates · network',
+            '관록궁': 'Career · status',
+            '전택궁': 'Home · property',
+            '복덕궁': 'Inner life · pleasure',
+            '부모궁': 'Parents · elders',
+          };
+    return _GroupSection(
+      groupLabel: useKo
+          ? '자미두수 명반 · ZIWEI DOUSHU'
+          : 'ZIWEI DOUSHU · 紫 微 斗 數',
+      background: AppColors.paper,
+      children: [
+        // 헤더 — 명주/신주 + 명궁/신궁 위치
+        _ZiweiHeader(ziwei: ziwei, useKo: useKo),
+        for (final p in ziwei.by12Gung)
+          _AccordionRow(
+            title: useKo
+                ? '${p.gungKo} · ${labels[p.gungKo] ?? ''}'
+                    .toUpperCase()
+                : '${p.gungKo.toUpperCase()} · ${labels[p.gungKo] ?? ''}',
+            hint: useKo
+                ? '${p.branchKo}(${p.branchAnimalKo})궁'
+                : '${p.branchEn.toUpperCase()} branch',
+            locked: false,
+            child: _ZiweiPalaceBlock(palace: p, useKo: useKo),
+          ),
+      ],
+    );
+  }
+}
+
+class _ZiweiHeader extends StatelessWidget {
+  final ZiweiResult ziwei;
+  final bool useKo;
+  const _ZiweiHeader({required this.ziwei, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 22),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo
+                ? '정통 만세력과 태어난 시간 기준으로 본 12궁 명반이에요.'
+                : 'A 12-palace chart drawn from the classical lunar almanac and hour pillar.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              height: 1.75,
+              color: AppColors.inkLight,
+              letterSpacing: 0.1,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _HeaderCell(
+                  label: useKo ? '명주 · MING ZHU' : 'MING ZHU',
+                  value: ziwei.mingZhuKo,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _HeaderCell(
+                  label: useKo ? '신주 · SHEN ZHU' : 'SHEN ZHU',
+                  value: ziwei.shenZhuKo,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _HeaderCell(
+                  label: useKo ? '명궁 · SELF' : 'SELF PALACE',
+                  value: ziwei.mingPalace.headerKo,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _HeaderCell(
+                  label: useKo ? '신궁 · BODY' : 'BODY PALACE',
+                  value: ziwei.shenPalace.headerKo,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderCell extends StatelessWidget {
+  final String label;
+  final String value;
+  const _HeaderCell({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+      decoration: BoxDecoration(
+        color: AppColors.bg,
+        border: Border.all(color: AppColors.line, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 8,
+              letterSpacing: 3,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              height: 1.3,
+              color: AppColors.ink,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ZiweiPalaceBlock extends StatelessWidget {
+  final ZiweiPalace palace;
+  final bool useKo;
+  const _ZiweiPalaceBlock({required this.palace, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 주성 — 한 줄 정렬 칩들
+        if (palace.majorStars.isNotEmpty) ...[
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final s in palace.majorStars)
+                _StarChip(label: s.nameKo, accent: true),
+            ],
+          ),
+          const SizedBox(height: 14),
+          for (final s in palace.majorStars)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                s.oneLineKo,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 14,
+                  height: 1.8,
+                  color: AppColors.ink,
+                ),
+              ),
+            ),
+        ] else
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              useKo
+                  ? '이 궁은 주성이 비어 있어요. 그래서 반대편 궁의 별을 빌려와서 풀어요.'
+                  : 'No major star in this palace — read the opposing palace as proxy.',
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13.5,
+                height: 1.8,
+                color: AppColors.inkLight,
+              ),
+            ),
+          ),
+        // 길성 / 흉성 — 한 줄씩
+        if (palace.luckyStars.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          _StarRow(
+            label: useKo ? '길성' : 'LUCKY',
+            items: palace.luckyStars,
+            color: AppColors.accent,
+          ),
+        ],
+        if (palace.badStars.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          _StarRow(
+            label: useKo ? '흉성' : 'TENSE',
+            items: palace.badStars,
+            color: AppColors.taupe,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _StarChip extends StatelessWidget {
+  final String label;
+  final bool accent;
+  const _StarChip({required this.label, this.accent = false});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: accent ? AppColors.accent : AppColors.line,
+          width: 1,
+        ),
+        color: AppColors.bg,
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.notoSerifKr(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: accent ? AppColors.accent : AppColors.ink,
+          letterSpacing: 0.3,
+        ),
+      ),
+    );
+  }
+}
+
+class _StarRow extends StatelessWidget {
+  final String label;
+  final List<String> items;
+  final Color color;
+  const _StarRow({required this.label, required this.items, required this.color});
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 42,
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            label.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 8,
+              letterSpacing: 3,
+              fontWeight: FontWeight.w500,
+              color: color,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(
+            items.join(' · '),
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 13,
+              height: 1.6,
+              color: AppColors.ink,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
