@@ -713,19 +713,19 @@ class _StarRow extends StatelessWidget {
   String _verdict() {
     if (score >= 88) {
       return useKo
-          ? '이 사람이랑 너랑은 첫 만남에서 이미 끝난다. 서로 보자마자 마음이 열린다. 카톡 답장이 둘 다 빠르고, 만나면 시간이 사라진다. 사귀면 너는 평소보다 말이 많아진다. 첫 데이트에서 둘 다 다음 약속을 먼저 잡는다.'
+          ? '이 사람이랑 당신이랑은 첫 만남에서 이미 끝난다. 서로 보자마자 마음이 열린다. 카톡 답장이 둘 다 빠르고, 만나면 시간이 사라진다. 사귀면 당신은 평소보다 말이 많아진다. 첫 데이트에서 둘 다 다음 약속을 먼저 잡는다.'
           : "From the first meeting it's already settled. Hearts open the moment you see each other. Replies are quick on both sides, and time disappears when you meet. Dating, you talk more than usual. On the first date, both of you book the next one before leaving.";
     } else if (score >= 70) {
       return useKo
-          ? '사귀면 자연스럽게 깊어진다. 카톡 답장 속도가 둘 다 비슷하다. 만나서 침묵이 어색하지 않다. 첫 데이트 다음 날 너는 그 사람을 또 보고 싶어진다. 큰 다툼 없이 한 해를 같이 보낸다.'
+          ? '사귀면 자연스럽게 깊어진다. 카톡 답장 속도가 둘 다 비슷하다. 만나서 침묵이 어색하지 않다. 첫 데이트 다음 날 당신은 그 사람을 또 보고 싶어진다. 큰 다툼 없이 한 해를 같이 보낸다.'
           : "Dating, you deepen naturally. Reply speeds match on both sides. Silence between you is not awkward. The day after the first date you want to see them again. You spend a whole year without big fights.";
     } else if (score >= 55) {
       return useKo
-          ? '사귀면 부딪힐 일이 한 번 온다. 카톡 답장 속도가 가끔 어긋난다. 둘이 만나서 한 사람이 먼저 말을 꺼내야 한다. 그 한마디로 마음이 다시 열린다. 첫 데이트 후 너는 한 박자 더 천천히 가고 싶어진다.'
+          ? '사귀면 부딪힐 일이 한 번 온다. 카톡 답장 속도가 가끔 어긋난다. 둘이 만나서 한 사람이 먼저 말을 꺼내야 한다. 그 한마디로 마음이 다시 열린다. 첫 데이트 후 당신은 한 박자 더 천천히 가고 싶어진다.'
           : "Dating, one collision is bound to come. Reply timings sometimes miss. When you meet, one of you has to speak first. That one line reopens the heart. After the first date, you want to slow one beat.";
     } else {
       return useKo
-          ? '사귀면 페이스가 다르다는 게 빨리 드러난다. 너는 카톡 답장이 빠른데 상대는 느리다, 혹은 반대다. 첫 만남에서 마음이 한쪽만 먼저 열린다. 만나서 너는 한 박자 늦게 표현한다. 자주 만나기보다 한 번을 길게 만나는 쪽이 너에게 맞다.'
+          ? '사귀면 페이스가 다르다는 게 빨리 드러난다. 당신은 카톡 답장이 빠른데 상대는 느리다, 혹은 반대다. 첫 만남에서 마음이 한쪽만 먼저 열린다. 만나서 당신은 한 박자 늦게 표현한다. 자주 만나기보다 한 번을 길게 만나는 쪽이 당신에게 맞다.'
           : "Dating, the pace gap surfaces fast. One of you replies quickly, the other slowly. At first meeting, only one side opens first. When you meet, you express one beat late. Few long meetings suit you better than many short ones.";
     }
   }

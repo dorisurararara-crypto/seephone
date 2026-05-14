@@ -3942,7 +3942,7 @@ class _AdditionalLifeRow extends StatelessWidget {
 
 // ──────────── Round 76 sprint 5 — Today Event Detail Section ────────────
 //
-// 17 섹션 + 본 섹션 = 18 (append). 사용자 verbatim "오늘 너에게 생길 수 있는 일" 상세.
+// 17 섹션 + 본 섹션 = 18 (append). 사용자 verbatim "오늘 당신에게 생길 수 있는 일" 상세.
 // 본문 1줄 + "왜 그런지" 사주 근거 + 조심 1줄 + 추천 1줄 + 별점 4 row.
 
 class _TodayEventDetailSection extends StatelessWidget {
@@ -3966,19 +3966,29 @@ class _TodayEventDetailSection extends StatelessWidget {
       todayPillar: fortune.dayPillar,
       todayScore: fortune.totalScore,
     );
-    // 본문 — Sprint 6 에서 pool 풀이로 교체. ko/en 분기.
+    // Round 77 sprint 2 — pool wire: ko 분기는 pool entry 우선, 미스 시 fallback.
+    final day60ji = result.dayPillar.text;
+    final now = DateTime.now();
     final body = useKo
-        ? TodayEventService.composeNotificationLine(reading)
+        ? TodayEventService.composeBodyKo(
+            reading: reading,
+            date: now,
+            day60ji: day60ji,
+          )
         : TodayEventService.composeNotificationLineEn(reading);
     // sourceReason 도 ko/en 분기 (Round 76 sprint 5 r2 fix).
     final why =
         useKo ? reading.sourceReason : reading.sourceReasonEn;
-    // 조심/추천 — 카테고리별 분기 (sprint 6 pool wire 전까지 inline).
+    // 조심/추천 — pool entry 우선, 미스 시 카테고리별 inline.
     final caution = useKo
-        ? _TodayEventDetailSection._cautionKo(reading.categoryDominant)
+        ? (TodayEventService.composeCautionKo(
+                reading: reading, date: now, day60ji: day60ji) ??
+            _TodayEventDetailSection._cautionKo(reading.categoryDominant))
         : _TodayEventDetailSection._cautionEn(reading.categoryDominant);
     final recommend = useKo
-        ? _TodayEventDetailSection._recommendKo(reading.categoryDominant)
+        ? (TodayEventService.composeRecommendKo(
+                reading: reading, date: now, day60ji: day60ji) ??
+            _TodayEventDetailSection._recommendKo(reading.categoryDominant))
         : _TodayEventDetailSection._recommendEn(reading.categoryDominant);
     final stars = [
       (l.homeCategoryLove, reading.starsLove),

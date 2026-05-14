@@ -1,4 +1,4 @@
-// Pillar Seer — Round 76 — 오늘 사건 가능성 엔진.
+// Pillar Seer — Round 76/77 — 오늘 사건 가능성 엔진.
 //
 // 입력: 사용자 일간/일지/월지 + 오늘 60갑자 + 오늘 score (Round 71 DayEnergyKind).
 // 출력: 6 카테고리 (relationship/money/work/love/health/luck) 점수 + dominant/sub
@@ -8,9 +8,13 @@
 // 단정 예언 (오늘 반드시 ~, 사고가 ~, 큰돈을 잃, 병원) 금지.
 // 사용자 verbatim 매핑: 재성→돈, 관성→일, 인성→건강, 식상→일/관계, 비겁→관계.
 //
-// 콘텐츠 풀 (today_event_pool.json) 은 Sprint 4 에서 wire — 본 sprint 는 엔진+테스트.
+// Round 77 sprint 2 — today_event_pool.json (90 entries / 30 key) wire 완료.
+// `composeBodyKo` 가 pool entry 우선 + fallback 6분기. home/result/notification 3 호출처 사용.
 
+import 'dart:convert';
 import 'dart:math' as math;
+
+import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/saju_result.dart';
 import 'daily_service.dart' show DayEnergyKind, classifyDayEnergy;
@@ -37,6 +41,8 @@ enum TenGodGroup {
   inseong, // 인성 (편인+정인)
 }
 
+/// today_event_pool.json key prefix 와 일치 (한국어 십신 그룹).
+/// pool key 형식: `{ko}_{EventCategory.key}` (예: `비겁_relationship`).
 extension TenGodGroupKo on TenGodGroup {
   String get ko {
     switch (this) {
@@ -72,7 +78,8 @@ extension EventCategoryKo on EventCategory {
     }
   }
 
-  /// today_event_pool.json key prefix 와 일치 (영문 alias).
+  /// today_event_pool.json key suffix 와 일치 (영문 카테고리 alias).
+  /// pool key 형식: `{한국어 십신}_{영문 카테고리}` 예: `관성_health`.
   String get key {
     switch (this) {
       case EventCategory.relationship:
@@ -227,6 +234,102 @@ class TodayEventService {
     }
     return body.length > 300 ? '${body.substring(0, 297)}...' : body;
   }
+
+  // ─────────────── Round 77 sprint 2 — today_event_pool.json wire ───────────────
+  //
+  // pool 90 entries (30 key × 3 entry) 1회 로드 + 캐시. 호출 측은 부팅 시
+  // `ensurePoolLoaded()` 1회 await. 이후 `composeBodyKo` / `composeCautionKo`
+  // / `composeRecommendKo` 가 deterministic 선택 (날짜+사주 seed). 캐시 미적재
+  // 또는 키 미스 시 6분기 fallback 으로 graceful.
+
+  static Map<String, List<_TodayEventPoolEntry>>? _poolCache;
+  static bool _poolLoaded = false;
+
+  /// today_event_pool.json 1회 로드 + 캐시. 실패해도 silent (빈 map).
+  /// 호출 측은 부팅 시 1회 await — 이후 동기 호출 OK.
+  static Future<void> ensurePoolLoaded() async {
+    if (_poolLoaded) return;
+    try {
+      final raw = await rootBundle.loadString('assets/data/today_event_pool.json');
+      final root = jsonDecode(raw) as Map<String, dynamic>;
+      final events = (root['events'] as Map).cast<String, dynamic>();
+      final out = <String, List<_TodayEventPoolEntry>>{};
+      events.forEach((key, value) {
+        final list = (value as List)
+            .map((e) =>
+                _TodayEventPoolEntry.fromJson((e as Map).cast<String, dynamic>()))
+            .toList();
+        out[key] = list;
+      });
+      _poolCache = out;
+    } catch (_) {
+      _poolCache = <String, List<_TodayEventPoolEntry>>{};
+    }
+    _poolLoaded = true;
+  }
+
+  /// 테스트 전용 — 캐시 리셋 (다른 테스트 사이 hygiene).
+  static void debugResetPool() {
+    _poolCache = null;
+    _poolLoaded = false;
+  }
+
+  /// pool 미로드 / 키 미스 시 null. 내부 helper — public composeBodyKo 등에서만 사용.
+  static _TodayEventPoolEntry? _pickPoolEntry({
+    required TodayEventReading reading,
+    required DateTime date,
+    required String day60ji,
+  }) {
+    final cache = _poolCache;
+    if (cache == null || cache.isEmpty) return null;
+    final groupKo = reading.tenGodGroup.ko;
+    final catKey = reading.categoryDominant.key;
+    final key = '${groupKo}_$catKey';
+    final list = cache[key];
+    if (list == null || list.isEmpty) return null;
+    final seed = (date.year * 366 + date.month * 31 + date.day) ^
+        day60ji.codeUnits.fold<int>(0, (a, b) => a + b) ^
+        reading.tenGodGroup.index ^
+        reading.categoryDominant.index;
+    final idx = (seed % list.length).abs();
+    return list[idx];
+  }
+
+  /// 테스트 전용 — pool entry 존재 여부 (private entry 노출 X).
+  static bool debugHasPoolEntry({
+    required TodayEventReading reading,
+    required DateTime date,
+    required String day60ji,
+  }) =>
+      _pickPoolEntry(reading: reading, date: date, day60ji: day60ji) != null;
+
+  /// 한국어 본문 1줄. pool entry 우선, 미스 시 composeNotificationLine fallback.
+  /// 결과는 항상 ≤300자.
+  static String composeBodyKo({
+    required TodayEventReading reading,
+    required DateTime date,
+    required String day60ji,
+  }) {
+    final entry = _pickPoolEntry(reading: reading, date: date, day60ji: day60ji);
+    final body = entry?.body ?? composeNotificationLine(reading);
+    return body.length > 300 ? '${body.substring(0, 297)}...' : body;
+  }
+
+  /// pool entry 의 caution. 미스 시 null.
+  static String? composeCautionKo({
+    required TodayEventReading reading,
+    required DateTime date,
+    required String day60ji,
+  }) =>
+      _pickPoolEntry(reading: reading, date: date, day60ji: day60ji)?.caution;
+
+  /// pool entry 의 recommend. 미스 시 null.
+  static String? composeRecommendKo({
+    required TodayEventReading reading,
+    required DateTime date,
+    required String day60ji,
+  }) =>
+      _pickPoolEntry(reading: reading, date: date, day60ji: day60ji)?.recommend;
 
   // ─────────────── 내부 helper ───────────────
 
@@ -450,7 +553,7 @@ class TodayEventService {
         relPart = '';
     }
     // FIX: 한자 jargon 노출 0 — god.ko 의 한자 () suffix 사용 X.
-    return '오늘은 너의 사주가 $groupTone 분위기를 만나서 $catKo 가능성이 강해요.'
+    return '오늘은 당신의 사주가 $groupTone 분위기를 만나서 $catKo 가능성이 강해요.'
         '$shinPart'
         '$relPart';
   }
@@ -539,5 +642,26 @@ class TodayEventService {
       case TenGodGroup.inseong:
         return 'rest and study';
     }
+  }
+}
+
+/// Round 77 sprint 2 — today_event_pool.json entry 모델 (private).
+/// schema: `{body, caution, recommend}` — 한국어 톤 mandate verbatim.
+class _TodayEventPoolEntry {
+  final String body;
+  final String caution;
+  final String recommend;
+  const _TodayEventPoolEntry({
+    required this.body,
+    required this.caution,
+    required this.recommend,
+  });
+
+  factory _TodayEventPoolEntry.fromJson(Map<String, dynamic> j) {
+    return _TodayEventPoolEntry(
+      body: (j['body'] as String?) ?? '',
+      caution: (j['caution'] as String?) ?? '',
+      recommend: (j['recommend'] as String?) ?? '',
+    );
   }
 }

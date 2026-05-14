@@ -297,7 +297,7 @@ class AppL10nKo extends AppL10n {
   }
 
   @override
-  String get todayEventCaption => '오늘 너에게 생길 수 있는 일';
+  String get todayEventCaption => '오늘 당신에게 생길 수 있는 일';
 
   @override
   String get todayEventCtaDetail => '자세히 보기';

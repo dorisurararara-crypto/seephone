@@ -137,8 +137,14 @@ class NotificationPoolService {
       todayPillar: todayPillar,
       todayScore: todayScore,
     );
+    // Round 77 sprint 2 — ko 본문은 pool entry 우선, 미스 시 6분기 fallback.
+    // ensurePoolLoaded() 가 부팅 시 이미 끝났다는 가정. 미적재여도 graceful.
     return (
-      ko: TodayEventService.composeNotificationLine(reading),
+      ko: TodayEventService.composeBodyKo(
+        reading: reading,
+        date: date,
+        day60ji: saju.dayPillar.text,
+      ),
       en: TodayEventService.composeNotificationLineEn(reading),
     );
   }

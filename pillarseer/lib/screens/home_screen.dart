@@ -98,6 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // Round 74 — 12시간 흐름을 first-fold 로 승격. Co-Star 식 도파민 카드.
               _HourlyFlowSection(saju: saju),
               // Round 76 sprint 5 — 오늘 사건 가능성 카드. CTA → /result 의 상세 섹션.
+              // Round 77 sprint 2 — pool wire 위해 day60ji 전달.
               _TodayEventCard(
                 reading: TodayEventService.build(
                   userDayStem: saju.dayPillar.chunGan,
@@ -106,6 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   todayPillar: fortune.dayPillar,
                   todayScore: fortune.totalScore,
                 ),
+                day60ji: saju.dayPillar.text,
               ),
               _ScoreBlock(
                 score: fortune.totalScore,
@@ -1284,21 +1286,26 @@ class _LuckySection extends StatelessWidget {
 
 // ──────────── Round 76 sprint 5 — Today Event Card (오늘 사건 가능성) ────────────
 //
-// home_screen first-fold 카드. 사용자 verbatim mandate: "오늘 너에게 생길 수 있는 일".
+// home_screen first-fold 카드. 사용자 verbatim mandate: "오늘 당신에게 생길 수 있는 일".
 // dominant 카테고리 본문 1줄 + 별점 4 row + "자세히 보기 →" CTA.
 
 class _TodayEventCard extends StatelessWidget {
   final TodayEventReading reading;
-  const _TodayEventCard({required this.reading});
+  final String day60ji;
+  const _TodayEventCard({required this.reading, required this.day60ji});
 
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    // 본문은 today_event_service fallback. Sprint 6 에서 pool 본문으로 교체.
+    // Round 77 sprint 2 — ko 분기는 pool entry 우선, 미스 시 fallback 6분기.
     final body = useKo
-        ? TodayEventService.composeNotificationLine(reading)
+        ? TodayEventService.composeBodyKo(
+            reading: reading,
+            date: DateTime.now(),
+            day60ji: day60ji,
+          )
         : TodayEventService.composeNotificationLineEn(reading);
     final stars = [
       (l.homeCategoryLove, reading.starsLove),

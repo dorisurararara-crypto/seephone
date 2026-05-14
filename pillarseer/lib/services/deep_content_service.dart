@@ -36,6 +36,8 @@ class DeepContentService {
     for (final an in _animNames) {
       t = t.replaceAll(RegExp(r'(?<!\w)' + an + r'(?!\w)'), '');
     }
+    // Round 77 sprint 2 — 영문 element/animal strip 후 남은 빈 괄호 ` ( )` / `()` 제거.
+    t = t.replaceAll(RegExp(r'\(\s*\)'), '');
     // 연속 공백 정리 + "는" "이" 앞 공백 정리
     return t.replaceAll(RegExp(r'\s+'), ' ').replaceAll(' ,', ',').trim();
   }
@@ -470,8 +472,9 @@ class DeepContentService {
 
   static String _fallbackDayMasterDeep(bool ko, String ji, String name) {
     if (ko) {
-      return '당신의 일간 $ji ($name) 은 60갑자 사이클 속에서 고유한 진동을 가져요. '
-          '$name 다운 본능은 환경의 압력을 견디며 자기 결을 다듬는 데서 강해져요. '
+      // Round 77 sprint 2 — `($name)` 영문 페어 제거. sanitize 후 빈 괄호 누출 0.
+      return '당신의 일간 $ji 은 60갑자 사이클 속에서 고유한 진동을 가져요. '
+          '본능은 환경의 압력을 견디며 자기 색을 다듬는 데서 강해져요. '
           '내면의 리듬을 따라갈 때 가장 자기다운 결과를 만들어요. '
           '서두르기보다 자기 흐름을, 흉내보다 자기 색을 따르는 사주예요.';
     }

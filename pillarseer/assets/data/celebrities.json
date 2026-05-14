@@ -117,7 +117,7 @@
     "dayPillarName": "Wood Dragon",
     "blurbEn": "K-drama icon whose Wood Dragon pillar holds storms inside a perfectly still frame — long career, slow burn.",
     "blurbKo": "K-드라마 아이콘. 기본 성향은 정적인 프레임 안에 폭풍을 담은 — 길고 느린 곡선의 커리어.",
-    "gender": "M"
+    "gender": "F"
   },
   {
     "id": "park-seojoon",
@@ -140,8 +140,8 @@
     "dayPillar": "癸酉",
     "dayPillarName": "Water Rooster",
     "blurbEn": "Figure skating legend — Water Rooster pillar reads as deep current + precision blade. Every performance broadcasts decades of disciplined water.",
-    "blurbKo": "피겨스케이팅 전설. 기본 성향은 깊은 수류와 정밀한 칼날의가 만나는 모습이에요. 매 연기마다 수십 년의 절제된 물의.",
-    "gender": "M"
+    "blurbKo": "피겨스케이팅 전설. 기본 성향은 깊은 수류와 정밀한 칼날이 만나는 모습이에요. 매 연기마다 수십 년의 절제된 물의 흐름을 보여줘요.",
+    "gender": "F"
   },
   {
     "id": "son-heungmin",
@@ -225,7 +225,7 @@
     "dayPillarName": "Earth Tiger",
     "blurbEn": "Actor whose Earth Tiger delivers grounded gravity with subtle modern wit, sageuk and contemporary balance.",
     "blurbKo": "배우. 기본 성향은 안정된 무게감과 섬세한 현대적 위트, 사극과 현대의 균형.",
-    "gender": "M"
+    "gender": "F"
   },
   {
     "id": "squidgame-lee",

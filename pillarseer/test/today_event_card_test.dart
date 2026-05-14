@@ -115,6 +115,22 @@ void main() {
       expect(result.contains('todayEventRecommend'), isTrue);
     });
 
+    test('호칭 회귀 가드 — lib/ 전역에서 "너에게" / "너의 사주" 0건', () {
+      // Round 77 sprint 2 — Round 74 호칭 mandate 회귀 방어.
+      // "당신" 톤 통일. lib/ 의 .dart / .arb 파일에서 "너" 호칭이 다시 들어오면 즉시 fail.
+      final libDir = Directory('lib');
+      final hits = <String>[];
+      for (final ent in libDir.listSync(recursive: true)) {
+        if (ent is! File) continue;
+        if (!ent.path.endsWith('.dart') && !ent.path.endsWith('.arb')) continue;
+        final src = ent.readAsStringSync();
+        if (src.contains('너에게') || src.contains('너의 사주')) {
+          hits.add(ent.path);
+        }
+      }
+      expect(hits, isEmpty, reason: '호칭 회귀: ${hits.join(", ")}');
+    });
+
     test('result_screen 17 섹션 본체 변경 X — 모든 기존 섹션 유지', () {
       const sections = [
         '_DayMasterHero',
@@ -168,8 +184,8 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 100));
-    // 캡션 — l10n key todayEventCaption == "오늘 너에게 생길 수 있는 일".
-    expect(find.text('오늘 너에게 생길 수 있는 일'), findsWidgets);
+    // 캡션 — l10n key todayEventCaption == "오늘 당신에게 생길 수 있는 일" (Round 77 호칭 통일).
+    expect(find.text('오늘 당신에게 생길 수 있는 일'), findsWidgets);
     // detail row 라벨 — "왜 그런지" / "조심하면 좋은 것" / "오늘 추천 행동" 중 최소 하나는 노출.
     // (한 번에 모든 라벨이 viewport 안에 있지 않을 수 있어 findsWidgets 사용.)
     final whyOrCaution = find.text('왜 그런지'.toUpperCase()).evaluate().isNotEmpty ||
