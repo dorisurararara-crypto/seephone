@@ -12,7 +12,7 @@ class AppL10nKo extends AppL10n {
   String get appTitle => '필러시어';
 
   @override
-  String get splashTagline => '사주 네 기둥으로\n당신의 운명을 읽다';
+  String get splashTagline => '오늘 너의 분위기,\n네 글자로 콕 집어 줄게';
 
   @override
   String get splashTapToSkip => '탭하여 건너뛰기';
@@ -39,8 +39,7 @@ class AppL10nKo extends AppL10n {
   String get inputBirthCity => '출생지 (선택)';
 
   @override
-  String get inputBirthCityHelper =>
-      '도시명 입력 시 진태양시 경도 자동 보정 (서울·부산·제주 등 36개 도시)';
+  String get inputBirthCityHelper => '모르면 비워둬도 돼. 적으면 더 정확해져.';
 
   @override
   String get inputCalendar => '달력:';
@@ -566,7 +565,7 @@ class AppL10nKo extends AppL10n {
   String get inputBirthdayPickButton => '또는 달력에서 선택';
 
   @override
-  String get splashTrust => '절기·진태양시·DST 자동 보정';
+  String get splashTrust => '절기·진태양시 자동';
 
   @override
   String get settingsSajuOptions => '사주 계산 옵션';

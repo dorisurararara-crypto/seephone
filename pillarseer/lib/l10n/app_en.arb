@@ -2,7 +2,7 @@
   "@@locale": "en",
 
   "appTitle": "Pillar Seer",
-  "splashTagline": "Read your destiny\nthrough the four pillars",
+  "splashTagline": "Your vibe today,\nfrom the four pillars of your birth.",
   "splashTapToSkip": "tap to skip",
   "splashSkipSemantic": "Skip splash and continue",
 
@@ -12,7 +12,7 @@
   "inputTime": "Select Time",
   "inputUnknownTime": "I don't know my birth time",
   "inputBirthCity": "Birth City (optional)",
-  "inputBirthCityHelper": "Auto longitude correction for 36 Korean cities (Seoul · Busan · Jeju ...)",
+  "inputBirthCityHelper": "Skip if you don't know. Adding makes it more accurate.",
   "inputCalendar": "Calendar:",
   "inputSolar": "Solar",
   "inputLunar": "Lunar",

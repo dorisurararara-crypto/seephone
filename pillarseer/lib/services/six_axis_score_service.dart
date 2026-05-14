@@ -27,11 +27,13 @@ class SixAxisScore {
   /// 내부 key 는 호환성을 위해 '본성' 으로 유지 (Map 조회용).
   static const axes = ['본성', '연애', '일', '돈', '건강', '평판'];
 
-  /// 한글 라벨 (UI 노출 — useKo == true). Round 77 Sprint 4 mandate — UI 라벨은 "중심 성향".
-  static const axesKo = ['중심 성향', '연애', '일', '돈', '건강', '평판'];
+  /// 한글 라벨 (UI 노출 — useKo == true). Round 77 Sprint 6 mandate — MZ 중학생 K-POP 팬 단어.
+  /// 중심 성향 → 성격 / 일 → 공부 (학생 페르소나) / 건강 → 체력 / 평판 → 인기.
+  static const axesKo = ['성격', '연애', '공부', '돈', '체력', '인기'];
 
   /// 영문 라벨 (UI 노출 — useKo == false). axes 순서와 1:1 대응.
-  static const axesEn = ['Nature', 'Love', 'Work', 'Money', 'Health', 'Fame'];
+  /// Round 77 Sprint 6 — 'Work' → 'Study' (글로벌 K-팬 학생 페르소나).
+  static const axesEn = ['Nature', 'Love', 'Study', 'Money', 'Health', 'Fame'];
 
   /// useKo flag → 노출용 라벨 list.
   static List<String> axesFor({required bool useKo}) => useKo ? axesKo : axesEn;

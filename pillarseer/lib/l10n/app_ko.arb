@@ -2,7 +2,7 @@
   "@@locale": "ko",
 
   "appTitle": "필러시어",
-  "splashTagline": "사주 네 기둥으로\n당신의 운명을 읽다",
+  "splashTagline": "오늘 너의 분위기,\n네 글자로 콕 집어 줄게",
   "splashTapToSkip": "탭하여 건너뛰기",
   "splashSkipSemantic": "스플래시 건너뛰고 계속하기",
 
@@ -12,7 +12,7 @@
   "inputTime": "태어난 시간",
   "inputUnknownTime": "태어난 시간을 모름",
   "inputBirthCity": "출생지 (선택)",
-  "inputBirthCityHelper": "도시명 입력 시 진태양시 경도 자동 보정 (서울·부산·제주 등 36개 도시)",
+  "inputBirthCityHelper": "모르면 비워둬도 돼. 적으면 더 정확해져.",
   "inputCalendar": "달력:",
   "inputSolar": "양력",
   "inputLunar": "음력",
@@ -195,7 +195,7 @@
   "inputBirthdayManualInvalid": "날짜 형식이 잘못됐어요 — YYYY-MM-DD",
   "inputBirthdayPickButton": "또는 달력에서 선택",
 
-  "splashTrust": "절기·진태양시·DST 자동 보정",
+  "splashTrust": "절기·진태양시 자동",
   "settingsSajuOptions": "사주 계산 옵션",
   "settingsLateNightZasi": "야자시 학파 (23시 이후)",
   "settingsLateNightZasiDesc": "기본 OFF: 23시 출생은 다음 날 일주 (조자시, 한국 mainstream).\nON: 23시 출생도 같은 날 일주 (야자시 학파).",

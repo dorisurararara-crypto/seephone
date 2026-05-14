@@ -131,7 +131,8 @@ void main() {
       await tester.enterText(find.widgetWithText(TextField, 'MM'), '13');
       await tester.enterText(find.widgetWithText(TextField, 'DD'), '01');
       await tester.pump();
-      final errorFinder = find.textContaining('월은 1~12 사이로');
+      // Round 77 sprint 6 — 친구 톤 변환 ("사이로 입력하라" → "중에 골라줘")
+      final errorFinder = find.textContaining('월은 1~12 중에 골라줘');
       expect(errorFinder, findsOneWidget);
       // 색상 검증 — 에러 텍스트가 빨간색 (AppColors.fireRed = 0xFFB55A3C).
       final errorText = tester.widget<Text>(errorFinder);
@@ -146,7 +147,8 @@ void main() {
       await tester.enterText(find.widgetWithText(TextField, 'MM'), '02');
       await tester.enterText(find.widgetWithText(TextField, 'DD'), '30');
       await tester.pump();
-      expect(find.textContaining('2월은 1~29 일까지만'), findsOneWidget);
+      // Round 77 sprint 6 — 친구 톤 변환 ("1~29 일까지만 입력하라" → "29일까지 있어 — 그 안에서 골라줘")
+      expect(find.textContaining('2월은 29일까지 있어'), findsOneWidget);
     });
 
     testWidgets('HHMM 1~3 자리 입력 중에는 에러 메시지 안 보임 (UX)', (tester) async {

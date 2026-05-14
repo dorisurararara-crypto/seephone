@@ -61,6 +61,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       _nameController.text.trim().isNotEmpty &&
       _selectedDate != null &&
       (_selectedTime != null || _unknownTime) &&
+      _gender != null &&
       _dateError == null &&
       _timeError == null &&
       !_isLoading;
@@ -94,21 +95,21 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     if (y == null || m == null || d == null) {
       setState(() {
         _selectedDate = null;
-        _dateError = '숫자만 입력하라.';
+        _dateError = '숫자만 적어줘.';
       });
       return;
     }
     if (y < 1900 || y > nowYear) {
       setState(() {
         _selectedDate = null;
-        _dateError = '연도는 1900~$nowYear 사이로 입력하라.';
+        _dateError = '태어난 해는 1900~$nowYear 사이로 적어줘.';
       });
       return;
     }
     if (m < 1 || m > 12) {
       setState(() {
         _selectedDate = null;
-        _dateError = '월은 1~12 사이로 입력하라.';
+        _dateError = '월은 1~12 중에 골라줘.';
       });
       return;
     }
@@ -116,7 +117,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     if (d < 1 || d > maxDay) {
       setState(() {
         _selectedDate = null;
-        _dateError = '$m월은 1~$maxDay 일까지만 입력하라.';
+        _dateError = '$m월은 $maxDay일까지 있어 — 그 안에서 골라줘.';
       });
       return;
     }
@@ -151,21 +152,21 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     if (h == null || m == null) {
       setState(() {
         _selectedTime = null;
-        _timeError = '숫자만 입력하라.';
+        _timeError = '숫자만 적어줘.';
       });
       return;
     }
     if (h < 0 || h > 23) {
       setState(() {
         _selectedTime = null;
-        _timeError = '시는 00~23 사이로 입력하라.';
+        _timeError = '시는 00~23 안에서 적어줘.';
       });
       return;
     }
     if (m < 0 || m > 59) {
       setState(() {
         _selectedTime = null;
-        _timeError = '분은 00~59 사이로 입력하라.';
+        _timeError = '분은 00~59 안에서 적어줘.';
       });
       return;
     }
@@ -336,10 +337,10 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                         const SizedBox(width: 10),
                         Text(
                           l.inputUnknownTime,
-                          style: GoogleFonts.inter(
-                            fontSize: 10,
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
-                            letterSpacing: 3,
+                            letterSpacing: 0.2,
                             color: AppColors.inkLight,
                           ),
                         ),
@@ -383,7 +384,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                     ),
                     const SizedBox(height: 40),
                     _PrimaryCta(
-                      label: l.inputFindMyDestiny.toUpperCase(),
+                      label: l.inputFindMyDestiny,
                       enabled: _canSubmit,
                       loading: _isLoading,
                       onPressed: _submit,
@@ -391,12 +392,12 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                     const SizedBox(height: 14),
                     Center(
                       child: Text(
-                        l.inputFreeFourPillar.toUpperCase(),
-                        style: GoogleFonts.inter(
-                          fontSize: 9,
-                          letterSpacing: 4,
+                        l.inputFreeFourPillar,
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 11,
+                          letterSpacing: 0.2,
                           color: AppColors.taupe,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -439,6 +440,19 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_selectedDate == null) return;
     if (_selectedTime == null && !_unknownTime) return;
+    // Round 77 sprint 6 — 성별 가드. 미선택 시 자동 isMale: true 적용 금지.
+    if (_gender == null) {
+      final useKo =
+          (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(useKo ? '성별 골라줘 — 사주 계산에 꼭 필요해.' : 'Pick a gender to continue.'),
+          backgroundColor: AppColors.ink,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
 
     final l = AppL10n.of(context);
     setState(() => _isLoading = true);
@@ -448,6 +462,8 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       final hour = _unknownTime ? 0 : (_selectedTime?.hour ?? 0);
       final minute = _unknownTime ? 0 : (_selectedTime?.minute ?? 0);
       final sajuOpts = ref.read(sajuSettingsProvider);
+      // _gender != null (위 가드 통과). Gender.female → isMale=false / 그 외(male/other) → isMale=true.
+      final isMale = _gender != Gender.female;
       final result = await svc.calculateSaju(
         year: _selectedDate!.year,
         month: _selectedDate!.month,
@@ -455,7 +471,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         hour: hour,
         minute: minute,
         isLunar: _isLunar,
-        isMale: _gender == Gender.female ? false : true,
+        isMale: isMale,
         unknownTime: _unknownTime,
         useLateNightZasi: sajuOpts.useLateNightZasi,
         applyTrueSunTime: sajuOpts.applyTrueSunTime,
@@ -473,7 +489,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
             birthCity: _cityController.text.trim(),
             isLunar: _isLunar,
             unknownTime: _unknownTime,
-            isMale: _gender != Gender.female,
+            isMale: isMale,
           ));
 
       if (mounted) {
@@ -511,23 +527,43 @@ class _AppBar extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'P I L L A R    S E E R',
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 5,
-                  color: AppColors.ink,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 한국어 메인 라벨 (notoSerifKr 16pt).
+                  Text(
+                    useKo ? '사주 입력' : 'New Reading',
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                  // 영문 sub-line — 9pt 회색 (메인은 한국어).
+                  Text(
+                    'PILLAR SEER',
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.5,
+                      color: AppColors.taupe.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                useKo ? '사주 입력 · 新' : 'NEW READING',
-                style: GoogleFonts.inter(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 3,
-                  color: AppColors.inkLight,
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  useKo ? '새로 보기' : 'NEW',
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 2,
+                    color: AppColors.inkLight,
+                  ),
                 ),
               ),
             ],
@@ -546,38 +582,43 @@ class _HeroBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'YOUR  CHART · 命  譜',
-          style: GoogleFonts.inter(
-            fontSize: 9,
-            letterSpacing: 5,
-            fontWeight: FontWeight.w500,
-            color: AppColors.taupe,
-          ),
-        ),
-        const SizedBox(height: 22),
         Text(
           l.inputTitle,
           style: GoogleFonts.notoSerifKr(
             fontSize: 32,
             fontWeight: FontWeight.w300,
-            letterSpacing: -0.5,
+            letterSpacing: 0,
             height: 1.2,
             color: AppColors.ink,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
+        // 영문/한자 sub-line — letter-spacing 2, 9pt 회색. 메인 라벨은 한국어.
         Text(
-          'Four pillars, true-solar-time, solar terms and DST. '
-          '입춘 기준의 절기력으로 사주를 정밀하게 풉니다.',
+          'YOUR CHART',
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            letterSpacing: 2,
+            fontWeight: FontWeight.w400,
+            color: AppColors.taupe.withValues(alpha: 0.75),
+          ),
+        ),
+        const SizedBox(height: 16),
+        // MZ 친구 톤 한국어 단독. 기술어(진태양시·절기·DST) 제거.
+        Text(
+          useKo
+              ? '생일·태어난 시간만 알려줘. 30초면 끝나.'
+              : "Just your birth date and time. Takes 30 seconds.",
           style: GoogleFonts.notoSansKr(
-            fontSize: 12,
+            fontSize: 13,
             color: AppColors.inkLight,
-            height: 1.7,
-            letterSpacing: 0.3,
+            height: 1.6,
+            letterSpacing: 0.2,
           ),
         ),
       ],
@@ -591,13 +632,14 @@ class _FieldLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Round 77 sprint 6 — 한국어 메인 자연문 라벨. UPPERCASE + letterSpacing 4 제거.
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
-        text.toUpperCase(),
-        style: GoogleFonts.inter(
-          fontSize: 9,
-          letterSpacing: 4,
+        text,
+        style: GoogleFonts.notoSerifKr(
+          fontSize: 12,
+          letterSpacing: 0.2,
           fontWeight: FontWeight.w500,
           color: AppColors.taupe,
         ),
@@ -724,11 +766,12 @@ class _SegmentPicker extends StatelessWidget {
                           : null,
                     ),
                     alignment: Alignment.center,
+                    // Round 77 sprint 6 — 한국어 자연문 segment. UPPERCASE + letterSpacing 4 제거.
                     child: Text(
-                      options[i].toUpperCase(),
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
-                        letterSpacing: 4,
+                      options[i],
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 13,
+                        letterSpacing: 0.2,
                         fontWeight: FontWeight.w500,
                         color: selected ? AppColors.bg : AppColors.ink,
                       ),
@@ -772,9 +815,9 @@ class _PrimaryCta extends StatelessWidget {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.zero,
           ),
-          textStyle: GoogleFonts.inter(
-            fontSize: 11,
-            letterSpacing: 5,
+          textStyle: GoogleFonts.notoSerifKr(
+            fontSize: 14,
+            letterSpacing: 0.4,
             fontWeight: FontWeight.w500,
           ),
         ),

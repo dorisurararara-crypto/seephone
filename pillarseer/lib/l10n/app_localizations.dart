@@ -106,7 +106,7 @@ abstract class AppL10n {
   /// No description provided for @splashTagline.
   ///
   /// In en, this message translates to:
-  /// **'Read your destiny\nthrough the four pillars'**
+  /// **'Your vibe today,\nfrom the four pillars of your birth.'**
   String get splashTagline;
 
   /// No description provided for @splashTapToSkip.
@@ -160,7 +160,7 @@ abstract class AppL10n {
   /// No description provided for @inputBirthCityHelper.
   ///
   /// In en, this message translates to:
-  /// **'Auto longitude correction for 36 Korean cities (Seoul · Busan · Jeju ...)'**
+  /// **'Skip if you don\'t know. Adding makes it more accurate.'**
   String get inputBirthCityHelper;
 
   /// No description provided for @inputCalendar.

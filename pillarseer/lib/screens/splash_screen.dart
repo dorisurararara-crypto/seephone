@@ -96,14 +96,32 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       ),
     );
 
-    final brand = Text(
-      'PILLAR  SEER',
-      style: GoogleFonts.inter(
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 8,
-        color: AppColors.ink,
-      ),
+    // Round 77 sprint 6 — 한국어 메인 + 영문 sub. letter-spacing 4 메인 X.
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final brand = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          useKo ? '필러시어' : 'Pillar Seer',
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0,
+            color: AppColors.ink,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'PILLAR SEER',
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.5,
+            color: AppColors.taupe.withValues(alpha: 0.8),
+          ),
+        ),
+      ],
     );
 
     final tagline = Column(
@@ -115,21 +133,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           l.splashTagline,
           textAlign: TextAlign.center,
           style: GoogleFonts.notoSerifKr(
-            fontSize: 13,
-            fontWeight: FontWeight.w300,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
             color: AppColors.inkLight,
-            height: 1.7,
-            letterSpacing: 0.4,
+            height: 1.6,
+            letterSpacing: 0.1,
           ),
         ),
         const SizedBox(height: 14),
         Text(
-          l.splashTrust.toUpperCase(),
-          style: GoogleFonts.inter(
-            fontSize: 9,
-            fontWeight: FontWeight.w500,
+          l.splashTrust,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 10,
+            fontWeight: FontWeight.w400,
             color: AppColors.taupe,
-            letterSpacing: 4,
+            letterSpacing: 0.2,
           ),
           textAlign: TextAlign.center,
         ),
@@ -186,12 +204,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                       minimumSize: const Size(120, 44),
                     ),
                     child: Text(
-                      l.splashTapToSkip.toUpperCase(),
-                      style: GoogleFonts.inter(
-                        fontSize: 10,
+                      l.splashTapToSkip,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 11,
                         color: AppColors.taupe,
-                        letterSpacing: 4,
-                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.2,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),

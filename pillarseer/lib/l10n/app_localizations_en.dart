@@ -12,7 +12,8 @@ class AppL10nEn extends AppL10n {
   String get appTitle => 'Pillar Seer';
 
   @override
-  String get splashTagline => 'Read your destiny\nthrough the four pillars';
+  String get splashTagline =>
+      'Your vibe today,\nfrom the four pillars of your birth.';
 
   @override
   String get splashTapToSkip => 'tap to skip';
@@ -40,7 +41,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get inputBirthCityHelper =>
-      'Auto longitude correction for 36 Korean cities (Seoul · Busan · Jeju ...)';
+      'Skip if you don\'t know. Adding makes it more accurate.';
 
   @override
   String get inputCalendar => 'Calendar:';

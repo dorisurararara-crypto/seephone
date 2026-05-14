@@ -51,22 +51,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    // 깊은 풀이 레이어 — birth info 있을 때만 계산. 없으면 dummy date.
+    // Round 77 sprint 6 — birth null 시 ziwei skip. 자동 isMale 가드 X.
+    // 깊은 풀이 레이어는 birth info (성별 포함) 가 있을 때만 계산.
     ZiweiResult? ziwei;
-    try {
-      final by = birth?.birthDate.year ?? 1995;
-      final bm = birth?.birthDate.month ?? 10;
-      final bd = birth?.birthDate.day ?? 27;
-      final bh = birth?.birthHour ?? 15;
-      final bmin = birth?.birthMinute ?? 43;
-      final male = birth?.isMale ?? true;
-      ziwei = ZiweiService.calculate(
-        year: by, month: bm, day: bd,
-        hour: bh, minute: bmin,
-        isMale: male,
-      );
-    } catch (_) {
-      ziwei = null;
+    if (birth != null) {
+      try {
+        ziwei = ZiweiService.calculate(
+          year: birth.birthDate.year,
+          month: birth.birthDate.month,
+          day: birth.birthDate.day,
+          hour: birth.birthHour,
+          minute: birth.birthMinute,
+          isMale: birth.isMale,
+        );
+      } catch (_) {
+        ziwei = null;
+      }
     }
 
     final sixAxis = ziwei == null
@@ -86,19 +86,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppBarBlock(),
-              // Round 71 사용자 불만 #8 — first-fold 도파민. _OracleHero 한 줄 단정
-              // 예언 (font ≥24, 2~3 line) 이 화면 상단 첫 250px 안에 위치.
+              // ── First-fold (Round 77 sprint 6 — MZ 페르소나 친밀도) ──
+              // first-fold = OracleHero + TodayEvent 둘만. 닉네임 인사/차트 5종은 deep dive 강등.
               _OracleHero(
                 dayPillarChunGan: saju.dayPillar.chunGan,
                 dayEnergy: classifyDayEnergy(fortune.totalScore),
               ),
-              // ── 5초 파악 first-fold (codex 9.9+ 흡수 1등 앱 강점 4종) ──
-              if (sixAxis != null) _SixAxisCard(score: sixAxis),
-              _FiveDayTrendCard(points: fiveDay),
-              // Round 74 — 12시간 흐름을 first-fold 로 승격. Co-Star 식 도파민 카드.
-              _HourlyFlowSection(saju: saju),
               // Round 76 sprint 5 — 오늘 사건 가능성 카드. CTA → /result 의 상세 섹션.
-              // Round 77 sprint 2 — pool wire 위해 day60ji 전달.
               _TodayEventCard(
                 reading: TodayEventService.build(
                   userDayStem: saju.dayPillar.chunGan,
@@ -109,25 +103,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 day60ji: saju.dayPillar.text,
               ),
-              _ScoreBlock(
-                score: fortune.totalScore,
-                quote: useKo
-                    ? (fortune.quoteKo.isEmpty ? fortune.quoteEn : fortune.quoteKo)
-                    : fortune.quoteEn,
-              ),
-              if (chips != null) _LuckyChipsCard(chips: chips),
-              // ── 더 깊이 보기 (collapsible) ──
-              // Round 71 — _HeroGreeting / _StreakLine 은 first-fold 도파민 트리거가
-              // 아니라 정보 (인사·streak). _DeepDiveSection 안으로 이동.
+              // ── Deep dive (collapsible) — 친구 인사 + 차트 5종 + 일진 + 4영역 + 행운 표 ──
               _DeepDiveSection(
                 children: [
-                  _HeroGreeting(
+                  // Round 77 sprint 6 — 닉네임 / 일주 별명 / 친구 인사. Deep dive 첫 카드.
+                  _FirstFoldGreeting(
                     name: birth?.name,
-                    dayMaster: useKo
-                        ? saju.dayPillar.pairKoreanMeaning
-                        : saju.dayMasterName,
+                    dayMasterKo: saju.dayPillar.pairKoreanMeaning,
+                    dayMasterEn: saju.dayMasterName,
                     date: fortune.date,
                   ),
+                  if (sixAxis != null) _SixAxisCard(score: sixAxis),
+                  _FiveDayTrendCard(points: fiveDay),
+                  _HourlyFlowSection(saju: saju),
+                  _ScoreBlock(
+                    score: fortune.totalScore,
+                    quote: useKo
+                        ? (fortune.quoteKo.isEmpty
+                            ? fortune.quoteEn
+                            : fortune.quoteKo)
+                        : fortune.quoteEn,
+                  ),
+                  if (chips != null) _LuckyChipsCard(chips: chips),
                   _StreakLine(),
                   _PillarOfTheDay(
                     dayPillar: fortune.dayPillar,
@@ -174,6 +171,14 @@ class _AppBarBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final now = DateTime.now();
+    String dateLabel;
+    if (useKo) {
+      const wd = {1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토', 7: '일'};
+      dateLabel = '${now.month}월 ${now.day}일 (${wd[now.weekday] ?? ''})';
+    } else {
+      dateLabel = DateFormat('MMM d (EEE)').format(now);
+    }
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 22, 24, 22),
       decoration: const BoxDecoration(
@@ -182,22 +187,41 @@ class _AppBarBlock extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'P I L L A R    S E E R',
-            style: GoogleFonts.inter(
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 5,
-              color: AppColors.ink,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 한국어 메인 라벨 — notoSerifKr 18pt.
+              Text(
+                useKo ? '오늘 내 운세' : "Today's Reading",
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0,
+                  color: AppColors.ink,
+                ),
+              ),
+              // 영문 sub-line — 9pt 회색 (메인은 한국어 "오늘 내 운세").
+              Text(
+                'PILLAR SEER',
+                style: GoogleFonts.inter(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                  color: AppColors.taupe.withValues(alpha: 0.8),
+                ),
+              ),
+            ],
           ),
+          // 우측 = 날짜 short (M월 D일 (요일) / MMM d (EEE)).
           Text(
-            useKo ? '오늘' : 'TODAY',
+            dateLabel,
             style: GoogleFonts.inter(
-              fontSize: 8,
+              fontSize: 10,
               fontWeight: FontWeight.w500,
-              letterSpacing: 3,
+              letterSpacing: 0.2,
               color: AppColors.inkLight,
             ),
           ),
@@ -226,42 +250,57 @@ class _OracleHero extends StatelessWidget {
   /// restDay: "오늘 너는 한 번 멈춰야 한다 / 새로 시작하지 마라 / 묵은 정리 한 가지가 정답이다" 류.
   /// actionDay: "오늘 너는 한 명한테 먼저 연락한다 / 그 한 줄이 분기점이다" 류.
   /// mixedDay: "오늘 너는 큰 결정 한 번 미룬다 / 확인 한 가지로 분위기를 잡는다" 류.
+  // Round 77 sprint 6 — 30 멘트 전수 재작성. MZ 중학생 K-POP 팬 친구 톤.
+  // 형식 3종 분배 (천간 10 × 3 dayEnergy = 30):
+  //   단정조 4 (해요체 / 친구 톤) — 甲乙丙丁
+  //   질문조 3 (친구 호기심) — 戊己庚
+  //   인용·밈 톤 3 (Co-Star 식 짧은 단정) — 辛壬癸
+  // invariant: restDay 에 "공식 자리·발표·승진·도전·승부" 0 / actionDay 에 "쉬어가·아끼" 0.
   static const _pool = <DayEnergyKind, Map<String, String>>{
     DayEnergyKind.restDay: {
-      '甲': '오늘은 새로 벌이지 않는 게 나아요.\n어제 시작한 일 하나만 매듭지으면 돼요.\n그게 오늘 최선이에요.',
-      '乙': '한 박자 늦게 가는 게 맞아요.\n새 약속은 안 잡는 게 나아요.\n잠 한 시간이 오늘 가장 큰 회복이에요.',
-      '丙': '앞에 나서지 않는 게 나아요.\n새 자리에 얼굴 비치지 않는 게 좋아요.\n묵은 톡 하나만 정리하면 돼요.',
-      '丁': '오늘은 조용히 가는 게 나아요.\n새 사람 안 만나는 게 좋아요.\n친한 친구한테 짧은 안부 하나면 충분해요.',
-      '戊': '큰 결정은 한 박자 미루는 게 나아요.\n새 일은 안 떠맡는 게 좋아요.\n오늘은 가만히 있는 게 나아요.',
-      '己': '남 일에 끼지 않는 게 나아요.\n오늘은 본인부터 챙겨요.\n친한 한 명만 신경 쓰면 돼요.',
-      '庚': '오늘은 바로 손절하지 않는 게 나아요.\n결정은 한 박자 미뤄요.\n한 박자 더 보고 가는 게 나아요.',
-      '辛': '오늘은 부딪치지 않는 게 나아요.\n날 세우고 싸우는 건 안 좋아요.\n어제 상한 마음부터 풀어주면 돼요.',
-      '壬': '오늘은 가만히 있는 게 나아요.\n새 방향 잡는 건 안 좋아요.\n묵은 일 하나만 정리하면 돼요.',
-      '癸': '끌려가지 않는 게 나아요.\n새 자리에 빠지지 않는 게 좋아요.\n오늘은 당신 자리만 지켜요.',
+      // 단정조 — 해요체 친구 톤
+      '甲': '오늘은 그냥 쉬는 게 진짜야.\n어제 펼친 일 한 가지만 매듭 짓고 끝.\n그 한 가지가 다야.',
+      '乙': '한 박자 늦춰 봐.\n잠 한 시간이 단톡 다섯 개보다 커.\n무리한 약속은 그냥 패스.',
+      '丙': '오늘 너 앞에 안 나서도 돼.\n묵은 톡 하나만 정리해 봐.\n그걸로 마음이 가벼워져.',
+      '丁': '조용히 가는 날이야.\n친한 친구 한 명한테만 짧게 안부 보내 봐.\n그 한 줄이 오늘 다야.',
+      // 질문조 — 친구 호기심 톤
+      '戊': '오늘 큰 결정 굳이 해야 돼?\n한 박자 미뤄도 안 사라져.\n오늘 너 가만히 있는 게 정답.',
+      '己': '오늘 남 일까지 떠맡고 있는 거 아니야?\n본인부터 챙길 차례야.\n친한 한 명한테만 신경 써 봐.',
+      '庚': '오늘 바로 손절하려고 했어?\n그거 한 박자 더 보고 가.\n흔들릴 때 결정은 항상 후회야.',
+      // 인용·밈 톤 — Co-Star 식 짧은 단정
+      '辛': '오늘 너 = 안 부딪치는 사람.\n날 세우면 너만 다쳐.\n어제 상한 마음부터 풀어 줘.',
+      '壬': '오늘 키워드 = 멈춤.\n새 방향 잡지 마. 묵은 일 한 가지만.\n그게 다야.',
+      '癸': '오늘 너 = 안 끌려가는 사람.\n네 자리만 지키면 돼.\n그게 정답.',
     },
     DayEnergyKind.mixedDay: {
-      '甲': '큰 결정은 한 박자 미뤄요.\n작은 확인 하나만 끝내면 돼요.\n그게 오늘 답이에요.',
-      '乙': '한 박자 늦게 움직여요.\n작은 약속 하나 지키는 게 답이에요.\n그 약속이 내일을 정해요.',
-      '丙': '오늘은 한 자리만 지켜요.\n친한 한 명한테 짧게 톡 보내요.\n그 말 한마디로 오늘 분위기가 잡혀요.',
-      '丁': '한 사람한테만 집중해요.\n오래된 친구한테 안부 하나 보내요.\n그 안부로 다음 톡이 쉬워져요.',
-      '戊': '자리만 지켜요.\n큰 결정은 한 박자 늦춰요.\n안 움직인 게 오늘 답이에요.',
-      '己': '한 사람만 챙겨요.\n묵은 약속 하나 끝내요.\n그 약속 끝내면 마음이 가벼워져요.',
-      '庚': '큰 결정은 한 박자 미뤄요.\n작게 하나만 제대로 하면 돼요.\n그게 당신의 이미지를 만들어요.',
-      '辛': '당신 스타일만 지켜요.\n흔들리지 않는 게 맞아요.\n거기서 다음 할 일이 보여요.',
-      '壬': '오늘은 흐름만 읽어요.\n다음 할 일 하나만 정해요.\n그 한 가지로 다음이 편해져요.',
-      '癸': '비어 있는 자리 하나만 챙겨요.\n오래 못 본 한 명한테 톡 보내요.\n그 톡으로 오늘 분위기가 잡혀요.',
+      // 단정조 — 해요체 친구 톤
+      '甲': '큰 결정은 한 박자 미뤄.\n작은 확인 한 가지만 끝내면 오늘 분위기 잡혀.\n그게 답.',
+      '乙': '한 박자 늦게 움직여 봐.\n작은 약속 한 가지 지키면 내일이 편해져.\n그 약속이 오늘 진짜야.',
+      '丙': '오늘은 한 자리만 지켜.\n친한 한 명한테 짧게 톡 한 줄.\n그 한 줄이 오늘 분위기 다 정해.',
+      '丁': '한 사람한테만 집중해.\n오래된 친구한테 안부 한 줄 보내 봐.\n다음 톡이 그 안부에서 풀려.',
+      // 질문조 — 친구 호기심
+      '戊': '오늘 자리 안 지키면 어떻게 될 거 같아?\n큰 결정은 한 박자 늦춰.\n안 움직인 게 오늘 답이야.',
+      '己': '오늘 한 사람만 챙길 수 있어?\n묵은 약속 한 가지 끝내 봐.\n그 약속 끝내면 마음이 가벼워져.',
+      '庚': '오늘 큰 결정 진짜 지금 해야 돼?\n작은 거 한 가지만 제대로 하면 돼.\n그게 너의 이미지를 만들어.',
+      // 인용·밈 톤 — Co-Star 식
+      '辛': '오늘 너 = 흔들리지 않는 사람.\n네 스타일만 지켜. 거기서 다음 할 일이 보여.\n그게 다야.',
+      '壬': '오늘 키워드 = 흐름 읽기.\n다음 할 일 한 가지만 정해.\n그 한 가지로 다음이 편해져.',
+      '癸': '오늘 너 = 비어 있는 자리 채우는 사람.\n오래 못 본 한 명한테 톡 보내 봐.\n그 톡으로 오늘 분위기 잡혀.',
     },
     DayEnergyKind.actionDay: {
-      '甲': '한 명한테 먼저 톡 보내요.\n그 톡이 오늘 분위기를 정해요.\n망설이면 타이밍 놓쳐요.',
-      '乙': '미뤘던 한 가지 시작해요.\n오늘은 당신 편이에요.\n그 한 발이 내일을 정해요.',
-      '丙': '앞에 나서서 분위기 잡아요.\n사람들이 당신한테 모여요.\n오늘 그 자리에서 다음이 편해져요.',
-      '丁': '한 명을 제대로 챙겨요.\n그 사람이 당신을 쉽게 못 잊어요.\n먼저 손 내미는 쪽이 당신이에요.',
-      '戊': '정한 건 끝까지 밀고 가요.\n결과가 딱 당신 결과로 남아요.\n그게 당신 이미지를 좋게 만들어요.',
-      '己': '한 사람을 도와줘요.\n그 사람이 당신한테 고맙다고 해요.\n그 한마디로 당신 자리가 잡혀요.',
-      '庚': '오늘은 바로 정해요.\n그 한 번이 당신 이미지를 만들어요.\n망설일 일 아니에요.',
-      '辛': '오늘은 본인 스타일로 가요.\n사람들이 당신을 바로 기억해요.\n그게 오늘 당신 장점이에요.',
-      '壬': '새 방향으로 움직여요.\n다음 할 일이 당신한테 먼저 보여요.\n그게 당신 장점이에요.',
-      '癸': '한 사람 기억에 딱 남아요.\n그 사람이 당신을 쉽게 못 잊어요.\n그게 다음 기회를 만들어요.',
+      // 단정조 — 해요체 친구 톤
+      '甲': '오늘 한 명한테 먼저 톡 보내 봐.\n그 톡이 오늘 분위기 다 정해.\n망설이면 타이밍 놓쳐.',
+      '乙': '미뤘던 한 가지 진짜 오늘 끝내 봐.\n오늘은 너 편이야.\n그 한 발이 내일을 정해.',
+      '丙': '앞에 나서서 분위기 잡아 봐.\n사람들이 너한테 모여.\n그 자리에서 다음이 편해져.',
+      '丁': '한 명을 제대로 챙겨 봐.\n그 사람이 너 쉽게 못 잊어.\n먼저 손 내미는 쪽이 너야.',
+      // 질문조 — 친구 호기심
+      '戊': '오늘 미루던 한 가지 진짜 끝낼 수 있어?\n너 오늘 그 정도 텐션이야.\n결과는 딱 네 이름으로 남아.',
+      '己': '오늘 한 사람 도와줄 수 있어?\n그 사람이 너한테 고맙다고 해.\n그 한마디로 네 자리가 잡혀.',
+      '庚': '오늘 바로 정할 수 있어?\n그 한 번이 너의 이미지를 만들어.\n망설일 일 아니야.',
+      // 인용·밈 톤 — Co-Star 식
+      '辛': '오늘 너 = 본인 스타일로 가는 사람.\n사람들이 너 바로 기억해.\n그게 오늘 너의 장점.',
+      '壬': '오늘 키워드 = 새 방향.\n다음 할 일이 너한테 먼저 보여.\n그게 다야.',
+      '癸': '오늘 너 = 한 사람 기억에 박히는 사람.\n그 사람이 너 쉽게 못 잊어.\n그게 다음 기회야.',
     },
   };
 
@@ -270,16 +309,16 @@ class _OracleHero extends StatelessWidget {
     return m[dayPillarChunGan] ?? m['甲']!;
   }
 
-  // Round 74 — 영문 fallback 도 DayEnergyKind 단정 평서 3 분기.
+  // Round 77 sprint 6 — 영문 fallback 친구 톤 native casual.
   // Plain English, no hedging (might/maybe/perhaps 0), no AI slop, no em dash.
   String _pickMentEn() {
     switch (dayEnergy) {
       case DayEnergyKind.actionDay:
-        return "Reach out first today.\nOne quick message changes the week.\nWaiting loses the timing.";
+        return "Drop a quick message. One will decide the vibe today.\nDon't wait. Send it now.\nThat one move makes the day.";
       case DayEnergyKind.mixedDay:
-        return "Skip big choices today.\nDo one small thing instead.\nThat small thing sets your day.";
+        return "Push the big call to tomorrow.\nOne small move does the work today.\nThat small move sets your vibe.";
       case DayEnergyKind.restDay:
-        return "Today is not a day to push.\nSkip new plans.\nRest is the real win today.";
+        return "Don't push today.\nSkip new plans. Resting is the real win.\nOne hour of rest beats five group chats.";
     }
   }
 
@@ -304,12 +343,12 @@ class _OracleHero extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 작은 라벨 — Round 70 톤 (한자 + 영문 letter-spacing).
+          // Round 77 sprint 6 — 한국어 메인 sub label. letter-spacing 4 → 0.3.
           Text(
-            useKo ? '오늘의 한 줄' : "TODAY'S ORACLE",
-            style: GoogleFonts.inter(
-              fontSize: 10,
-              letterSpacing: 4,
+            useKo ? '오늘의 한 줄' : "Today's Oracle",
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 11,
+              letterSpacing: 0.3,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
             ),
@@ -323,7 +362,7 @@ class _OracleHero extends StatelessWidget {
               fontWeight: FontWeight.w500,
               color: accent,
               height: 1.45,
-              letterSpacing: -0.1,
+              letterSpacing: 0,
             ),
           ),
         ],
@@ -379,10 +418,10 @@ class _HeroGreeting extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _dateText(context).toUpperCase(),
+            _dateText(context),
             style: GoogleFonts.inter(
-              fontSize: 9,
-              letterSpacing: 5,
+              fontSize: 10,
+              letterSpacing: 0.2,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
             ),
@@ -404,12 +443,104 @@ class _HeroGreeting extends StatelessWidget {
             style: GoogleFonts.notoSerifKr(
               fontSize: 32,
               fontWeight: FontWeight.w300,
-              letterSpacing: -0.5,
+              letterSpacing: 0,
               height: 1.2,
               color: AppColors.ink,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ──────────── First-fold greeting (Round 77 sprint 6) ────────────
+
+/// MZ 친구 톤 한 줄 인사 — 닉네임 / 일주 별명 / 친구 호칭.
+/// 예) "민수야, 오늘은 갑목의 날이야"
+/// 영문: "Hey Minsoo, it's a Yang Wood day for you"
+class _FirstFoldGreeting extends StatelessWidget {
+  final String? name;
+  final String dayMasterKo;
+  final String dayMasterEn;
+  final DateTime date;
+  const _FirstFoldGreeting({
+    required this.name,
+    required this.dayMasterKo,
+    required this.dayMasterEn,
+    required this.date,
+  });
+
+  /// 한국어 호칭 조사 — 받침 있으면 '아', 없으면 '야'.
+  String _josa(String n) {
+    if (n.isEmpty) return '';
+    final last = n.runes.last;
+    // 한글 가-힣 (0xAC00 ~ 0xD7A3) 음절 = (last - 0xAC00) % 28 != 0 → 받침 있음.
+    if (last < 0xAC00 || last > 0xD7A3) return '아'; // 비한글 시 fallback
+    final hasBatchim = ((last - 0xAC00) % 28) != 0;
+    return hasBatchim ? '아' : '야';
+  }
+
+  String _dateText(BuildContext context) {
+    final locale = Localizations.maybeLocaleOf(context);
+    final useKo = locale?.languageCode == 'ko';
+    if (useKo) {
+      const wd = {1: '월', 2: '화', 3: '수', 4: '목', 5: '금', 6: '토', 7: '일'};
+      return '${date.month}월 ${date.day}일 (${wd[date.weekday] ?? ''})';
+    }
+    return DateFormat('MMM d, EEE', locale?.toString()).format(date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final trimmed = (name ?? '').trim();
+    final hasName = trimmed.isNotEmpty;
+    String headline;
+    if (useKo) {
+      if (hasName) {
+        headline = '$trimmed${_josa(trimmed)}, 오늘은 $dayMasterKo의 날이야';
+      } else {
+        headline = '오늘은 $dayMasterKo의 날이야';
+      }
+    } else {
+      if (hasName) {
+        headline = "Hey $trimmed, it's a $dayMasterEn day for you";
+      } else {
+        headline = "It's a $dayMasterEn day for you";
+      }
+    }
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            headline,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 17,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0,
+              height: 1.4,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            _dateText(context),
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              color: AppColors.taupe,
+              letterSpacing: 0.2,
+            ),
           ),
         ],
       ),
@@ -434,11 +565,12 @@ class _StreakLine extends ConsumerWidget {
       ),
       child: Row(
         children: [
+          // Round 77 sprint 6 — 한국어 자연문 streak. UPPERCASE + letterSpacing 4 제거.
           Text(
-            l.homeStreakDays(streak.current).toUpperCase(),
-            style: GoogleFonts.inter(
-              fontSize: 9,
-              letterSpacing: 4,
+            l.homeStreakDays(streak.current),
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.2,
               fontWeight: FontWeight.w500,
               color: AppColors.accent,
             ),
@@ -446,10 +578,10 @@ class _StreakLine extends ConsumerWidget {
           if (streak.celebrate) ...[
             const SizedBox(width: 12),
             Text(
-              l.homeStreakNewDay.toUpperCase(),
-              style: GoogleFonts.inter(
-                fontSize: 9,
-                letterSpacing: 3,
+              l.homeStreakNewDay,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 11,
+                letterSpacing: 0.2,
                 color: AppColors.inkLight,
                 fontStyle: FontStyle.italic,
               ),
@@ -458,10 +590,10 @@ class _StreakLine extends ConsumerWidget {
           const Spacer(),
           if (streak.longest > streak.current)
             Text(
-              l.homeStreakLongest(streak.longest).toUpperCase(),
-              style: GoogleFonts.inter(
-                fontSize: 9,
-                letterSpacing: 3,
+              l.homeStreakLongest(streak.longest),
+              style: GoogleFonts.notoSansKr(
+                fontSize: 11,
+                letterSpacing: 0.2,
                 color: AppColors.taupe,
               ),
             ),
@@ -705,13 +837,25 @@ class _HourlyFlowSection extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 한국어 메인 라벨 — notoSerifKr 15pt.
           Text(
-            l.homeHourlyTitle.toUpperCase(),
+            l.homeHourlyTitle,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // 영문 sub-line — letter-spacing 2, 9pt 회색.
+          Text(
+            useKo ? 'NEXT 12 HOURS · 十二時' : 'NEXT 12 HOURS · 十二時',
             style: GoogleFonts.inter(
               fontSize: 9,
-              letterSpacing: 5,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 22),
@@ -742,10 +886,10 @@ class _HourlyFlowSection extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  l.homeHourlySeeAll.toUpperCase(),
+                  l.homeHourlySeeAll,
                   style: GoogleFonts.inter(
-                    fontSize: 10,
-                    letterSpacing: 4,
+                    fontSize: 11,
+                    letterSpacing: 0.3,
                     fontWeight: FontWeight.w500,
                     color: AppColors.ink,
                   ),
@@ -798,22 +942,24 @@ class _HourlyFlowSection extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            useKo ? '12 시간 흐름 · 十 二 時' : 'TWELVE  HOURS · 十 二 時',
-                            style: GoogleFonts.inter(
-                              fontSize: 9,
-                              letterSpacing: 5,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.taupe,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
+                          // 한국어 메인 라벨 — notoSerifKr 26pt.
                           Text(
                             l.homeHourlyFullTitle,
                             style: GoogleFonts.notoSerifKr(
                               fontSize: 26,
                               fontWeight: FontWeight.w300,
                               color: AppColors.ink,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          // 영문/한자 sub-line — letter-spacing 2, 9pt 회색.
+                          Text(
+                            '12 HOURS · 十二時',
+                            style: GoogleFonts.inter(
+                              fontSize: 9,
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.taupe.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -873,10 +1019,10 @@ class _HourlyCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label.toUpperCase(),
-            style: GoogleFonts.inter(
-              fontSize: 8.5,
-              letterSpacing: 3,
+            label,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 11,
+              letterSpacing: 0.2,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
             ),
@@ -951,10 +1097,10 @@ class _HourlyRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  slot.label(useKo).toUpperCase(),
-                  style: GoogleFonts.inter(
-                    fontSize: 9,
-                    letterSpacing: 3,
+                  slot.label(useKo),
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 11,
+                    letterSpacing: 0.2,
                     fontWeight: FontWeight.w500,
                     color: AppColors.taupe,
                   ),
@@ -986,6 +1132,8 @@ class _CategorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     final rows = [
       (l.homeCategoryLove, '愛', fortune.loveScore),
       (l.homeCategoryWork, '事', fortune.workScore),
@@ -1002,13 +1150,25 @@ class _CategorySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 한국어 메인 라벨 — notoSerifKr 15pt.
           Text(
-            'FOUR  AREAS · 四 域',
+            useKo ? '네 영역으로 본 오늘' : 'Four Areas Today',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // 영문/한자 sub-line — letter-spacing 2, 9pt 회색.
+          Text(
+            'FOUR AREAS · 四域',
             style: GoogleFonts.inter(
               fontSize: 9,
-              letterSpacing: 5,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 22),
@@ -1082,10 +1242,10 @@ class _CategoryCell extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                name.toUpperCase(),
-                style: GoogleFonts.inter(
-                  fontSize: 9,
-                  letterSpacing: 3,
+                name,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12,
+                  letterSpacing: 0.2,
                   fontWeight: FontWeight.w500,
                   color: AppColors.taupe,
                 ),
@@ -1137,13 +1297,25 @@ class _CategoryGuides extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 한국어 메인 라벨 — notoSerifKr 15pt.
           Text(
-            "TODAY'S  GUIDANCE",
+            useKo ? '오늘 이렇게 해 봐' : 'How to Move Today',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // 영문 sub-line — letter-spacing 2, 9pt 회색.
+          Text(
+            "TODAY'S GUIDANCE",
             style: GoogleFonts.inter(
               fontSize: 9,
-              letterSpacing: 5,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 22),
@@ -1164,10 +1336,10 @@ class _CategoryGuides extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      e.value.$1.toUpperCase(),
-                      style: GoogleFonts.inter(
-                        fontSize: 9,
-                        letterSpacing: 4,
+                      e.value.$1,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 12,
+                        letterSpacing: 0.2,
                         fontWeight: FontWeight.w500,
                         color: AppColors.taupe,
                       ),
@@ -1228,13 +1400,25 @@ class _LuckySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 한국어 메인 라벨 — notoSerifKr 15pt.
           Text(
-            'TODAY  AUSPICIOUS · 吉',
+            useKo ? '오늘의 행운 카드' : "Today's Luck",
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 4),
+          // 영문/한자 sub-line — letter-spacing 2, 9pt 회색.
+          Text(
+            'AUSPICIOUS · 吉',
             style: GoogleFonts.inter(
               fontSize: 9,
-              letterSpacing: 5,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 18),
@@ -1255,10 +1439,10 @@ class _LuckySection extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          r.$1.toUpperCase(),
-                          style: GoogleFonts.inter(
-                            fontSize: 10,
-                            letterSpacing: 3,
+                          r.$1,
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 12,
+                            letterSpacing: 0.2,
                             fontWeight: FontWeight.w500,
                             color: AppColors.taupe,
                           ),
@@ -1323,11 +1507,12 @@ class _TodayEventCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Round 77 sprint 6 — 한국어 자연문 sub-label. UPPERCASE / letterSpacing 4 제거.
           Text(
-            l.todayEventCaption.toUpperCase(),
-            style: GoogleFonts.inter(
-              fontSize: 10,
-              letterSpacing: 4,
+            l.todayEventCaption,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 12,
+              letterSpacing: 0.3,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
             ),
@@ -1342,6 +1527,7 @@ class _TodayEventCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
+          // Round 77 sprint 6 — 별점 row 라벨은 한국어 자연문. UPPERCASE / letterSpacing 2 제거.
           ...stars.map((row) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 3),
                 child: Row(
@@ -1349,10 +1535,11 @@ class _TodayEventCard extends StatelessWidget {
                     SizedBox(
                       width: 64,
                       child: Text(
-                        row.$1.toUpperCase(),
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          letterSpacing: 2,
+                        row.$1,
+                        style: GoogleFonts.notoSansKr(
+                          fontSize: 12,
+                          letterSpacing: 0.2,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.taupe,
                         ),
                       ),
@@ -1377,9 +1564,9 @@ class _TodayEventCard extends StatelessWidget {
               children: [
                 Text(
                   l.todayEventCtaDetail,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    letterSpacing: 3,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    letterSpacing: 0.2,
                     fontWeight: FontWeight.w500,
                     color: AppColors.ink,
                     decoration: TextDecoration.underline,
@@ -1448,10 +1635,10 @@ class _TodayDeepReadingSection extends StatelessWidget {
                 decoration:
                     BoxDecoration(border: Border.all(color: AppColors.accent, width: 1)),
                 child: Text(
-                  moodTag.toUpperCase(),
-                  style: GoogleFonts.inter(
-                    fontSize: 8.5,
-                    letterSpacing: 2,
+                  moodTag,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 10,
+                    letterSpacing: 0.2,
                     color: AppColors.accent,
                     fontWeight: FontWeight.w500,
                   ),
@@ -1485,10 +1672,10 @@ class _TodayDeepReadingSection extends StatelessWidget {
           const SizedBox(height: 22),
           // recommended actions
           Text(
-            useKo ? '오늘 추천 · 行' : 'Try today · 行',
-            style: GoogleFonts.inter(
-              fontSize: 10,
-              letterSpacing: 3,
+            useKo ? '오늘 추천' : 'Try today',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              letterSpacing: 0.2,
               fontWeight: FontWeight.w500,
               color: AppColors.taupe,
             ),
@@ -1528,10 +1715,10 @@ class _TodayDeepReadingSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  useKo ? '조심할 점 · 戒' : 'Watch out · 戒',
-                  style: GoogleFonts.inter(
-                    fontSize: 10,
-                    letterSpacing: 3,
+                  useKo ? '조심할 점' : 'Watch out',
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 12,
+                    letterSpacing: 0.2,
                     fontWeight: FontWeight.w500,
                     color: AppColors.taupe,
                   ),
@@ -1554,9 +1741,9 @@ class _TodayDeepReadingSection extends StatelessWidget {
             children: [
               Text(
                 useKo ? '운 좋은 시간' : 'Best time',
-                style: GoogleFonts.inter(
-                  fontSize: 10,
-                  letterSpacing: 3,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12,
+                  letterSpacing: 0.2,
                   fontWeight: FontWeight.w500,
                   color: AppColors.taupe,
                 ),
@@ -1597,10 +1784,10 @@ class _PromoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l.homePromoLimited.toUpperCase(),
+              l.homePromoLimited,
               style: GoogleFonts.inter(
-                fontSize: 9,
-                letterSpacing: 5,
+                fontSize: 10,
+                letterSpacing: 0.4,
                 fontWeight: FontWeight.w500,
                 color: AppColors.taupe,
               ),
@@ -1628,10 +1815,10 @@ class _PromoCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'READ  MORE',
-                  style: GoogleFonts.inter(
-                    fontSize: 10,
-                    letterSpacing: 4,
+                  '더 읽어 봐',
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 12,
+                    letterSpacing: 0.3,
                     fontWeight: FontWeight.w500,
                     color: AppColors.ink,
                   ),
@@ -1684,10 +1871,10 @@ class _NotifToggleCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l.homeNotifTitle.toUpperCase(),
-                  style: GoogleFonts.inter(
-                    fontSize: 10,
-                    letterSpacing: 4,
+                  l.homeNotifTitle,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    letterSpacing: 0.2,
                     fontWeight: FontWeight.w500,
                     color: AppColors.ink,
                   ),
@@ -1763,29 +1950,30 @@ class _SixAxisCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final headline = useKo ? '여섯 결로 본 오늘' : 'TODAY ON SIX AXES';
+    final headline =
+        useKo ? '성격·연애·공부·돈·체력·인기 한눈에' : 'You in Six Areas';
     final axesLine = useKo
-        ? '중심 성향 · 연애 · 일 · 돈 · 건강 · 평판'
-        : 'NATURE · LOVE · WORK · MONEY · HEALTH · FAME';
+        ? '성격 · 연애 · 공부 · 돈 · 체력 · 인기'
+        : 'Nature · Love · Study · Money · Health · Fame';
     final matched = score.matchedAxesFor(useKo: useKo);
     final mainLine = matched.isEmpty
         ? (useKo
-            ? '오늘은 흐름이 골고루 풀려요. 한쪽에 치우치지 않고 다양한 방향으로 풀려나갈 거예요.'
-            : 'Today the flow is even. Nothing leans hard one way — many directions stay open.')
+            ? '오늘 너는 한쪽으로 안 쏠려. 여러 방향이 다 열려 있어.'
+            : "You don't lean hard one way today. Many directions stay open.")
         : useKo
-            ? '✨ 깊게 봐도 다시 잡힌 핵심: ${matched.join(" · ")} (${score.matchCount}/6)'
-            : '✨ Confirmed at the deep layer: ${matched.join(" · ")} (${score.matchCount}/6)';
+            ? '✨ 너의 강점 ${score.matchCount}개: ${matched.join(" · ")}'
+            : '✨ Your ${score.matchCount} strengths: ${matched.join(" · ")}';
     final subLine = score.matchCount >= 3
         ? (useKo
-            ? '한 번 더 봐도 같은 방향으로 잡힌 포인트라 그만큼 단단해요. 본인이 평소에도 자주 느끼는 강점이에요.'
-            : 'These points stay the same when read again. That is the strength you already feel day to day.')
+            ? '평소에 너도 느끼는 강점이야. 단톡·발표·시험 다 여기서 풀려.'
+            : 'These are the strengths you already feel. Group chats, presentations, tests — all open up here.')
         : score.matchCount >= 1
             ? (useKo
-                ? '깊게 봐도 다시 잡힌 ${score.matchCount}개 축이 본인 기질의 핵심이에요. 그 부분 위주로 풀어 가세요.'
-                : 'The ${score.matchCount} axes confirmed at the deep layer are your real core. Lean into them.')
+                ? '이 ${score.matchCount}개가 너의 진짜 무기야. 오늘은 여기 위주로 가.'
+                : 'These ${score.matchCount} are your real edge. Lean into them today.')
             : (useKo
-                ? '오늘은 흐름이 골고루 풀려요. 한쪽 강점만 쓰는 게 아니라 변화가 많은 시기라는 뜻이에요.'
-                : 'The flow is even today. You are in a phase of change, not single-axis push.');
+                ? '오늘은 한쪽으로 안 쏠려. 여러 방향이 다 열려 있는 시기야.'
+                : "You're in a phase of change today, not a single-direction push.");
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
@@ -1798,19 +1986,12 @@ class _SixAxisCard extends StatelessWidget {
         children: [
           Text(
             headline,
-            style: useKo
-                ? GoogleFonts.notoSansKr(
-                    fontSize: 12,
-                    letterSpacing: 0.4,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.taupe,
-                  )
-                : GoogleFonts.inter(
-                    fontSize: 11,
-                    letterSpacing: 3,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.taupe,
-                  ),
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              letterSpacing: 0.2,
+              fontWeight: FontWeight.w500,
+              color: AppColors.ink,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -1879,17 +2060,18 @@ class _FiveDayTrendCard extends StatelessWidget {
     final axisLine = useKo
         ? '그제 · 어제 · 오늘 · 내일 · 모레'
         : '−2D · −1D · TODAY · +1D · +2D';
+    // Round 77 sprint 6 — 친구 톤 + 구체 점수 차 노출. "결이에요/가라앉아요" 어른 단어 제거.
     final hint = diff > 5
         ? (useKo
-            ? '내일은 오늘보다 더 풀려요. 오늘 미뤄둔 결정 한 가지가 내일 쉽게 풀릴 거예요.'
-            : 'Tomorrow opens up more than today. A decision you have been putting off will go through easier then.')
+            ? '내일은 오늘보다 $diff점 더 풀려. 미뤘던 거 내일 처리해 봐.'
+            : "Tomorrow opens up by $diff. Handle what you've put off then.")
         : diff < -5
             ? (useKo
-                ? '내일은 살짝 가라앉아요. 오늘 끝낼 수 있는 건 오늘 마무리하는 게 편해요.'
-                : 'Tomorrow dips a little. Close what you can today; it will be easier than waiting.')
+                ? '내일은 오늘보다 ${-diff}점 살짝 내려가. 오늘 끝낼 수 있는 건 오늘 끝내.'
+                : 'Tomorrow dips by ${-diff}. Finish today what you can today.')
             : (useKo
-                ? '내일도 비슷한 결이에요. 오늘 흐름 그대로 이어가도 괜찮아요.'
-                : 'Tomorrow runs in the same key as today. Keep the current flow going.');
+                ? '내일도 오늘이랑 거의 같아. 이 흐름 그대로 가도 돼.'
+                : 'Tomorrow tracks today. Keep the current flow going.');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 30, 24, 28),
@@ -1902,19 +2084,12 @@ class _FiveDayTrendCard extends StatelessWidget {
         children: [
           Text(
             headline,
-            style: useKo
-                ? GoogleFonts.notoSansKr(
-                    fontSize: 12,
-                    letterSpacing: 0.4,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.taupe,
-                  )
-                : GoogleFonts.inter(
-                    fontSize: 11,
-                    letterSpacing: 3,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.taupe,
-                  ),
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              letterSpacing: 0.2,
+              fontWeight: FontWeight.w500,
+              color: AppColors.ink,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -1969,20 +2144,20 @@ class _LuckyChipsCard extends StatelessWidget {
         children: [
           Text(
             '오늘의 행운',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 12,
-              letterSpacing: 0.4,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
               fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
+              letterSpacing: 0.2,
+              color: AppColors.ink,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            '하나 누르면 왜 행운인지 알려줘요',
+            '하나 눌러 봐 — 왜 너한테 행운인지 알려줄게',
             style: GoogleFonts.notoSansKr(
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: FontWeight.w400,
-              color: AppColors.taupe.withValues(alpha: 0.8),
+              color: AppColors.taupe.withValues(alpha: 0.85),
             ),
           ),
           const SizedBox(height: 18),
@@ -1999,31 +2174,61 @@ class _LuckyChipsCard extends StatelessWidget {
   }
 }
 
+/// Round 77 sprint 6 — '색' 카테고리 chip 배경을 실제 lucky 색상으로 칠하기.
+/// value (한국어 색 이름) → Color 매핑. AppColors 팔레트 톤 매칭.
+Color? _luckyColorBg(String value) {
+  return const <String, Color>{
+    '초록색': Color(0xFF7FAE7C), // woodJade 톤
+    '빨강색': Color(0xFFB85A4A), // fireRed 톤
+    '황금색': Color(0xFFD4A857), // accent 톤
+    '흰색':   Color(0xFFF3EDE4), // paper 톤
+    '검정색': Color(0xFF2A2A2A), // ink 톤
+  }[value];
+}
+
 class _LuckyChipButton extends StatelessWidget {
   final LuckyChip chip;
   const _LuckyChipButton({required this.chip});
 
   @override
   Widget build(BuildContext context) {
+    final isColorChip = chip.category == '색';
+    final bg = isColorChip ? _luckyColorBg(chip.value) : null;
+    final hasColorBg = bg != null;
+    // 배경 luminance 기준으로 텍스트 색 결정 — 밝으면 ink, 어두우면 white.
+    final textColor = hasColorBg
+        ? (bg.computeLuminance() > 0.6 ? AppColors.ink : Colors.white)
+        : AppColors.ink;
+    final iconOpacity = hasColorBg ? 1.0 : 1.0;
     return InkWell(
       onTap: () => _showReason(context),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColors.paper,
-          border: Border.all(color: AppColors.line, width: 1),
+          color: hasColorBg ? bg : AppColors.paper,
+          border: Border.all(
+            color: hasColorBg
+                ? bg.computeLuminance() > 0.85
+                    ? AppColors.line
+                    : Colors.transparent
+                : AppColors.line,
+            width: 1,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(chip.icon, style: const TextStyle(fontSize: 14)),
+            Opacity(
+              opacity: iconOpacity,
+              child: Text(chip.icon, style: const TextStyle(fontSize: 14)),
+            ),
             const SizedBox(width: 6),
             Text(
               '${chip.category} · ${chip.value}',
               style: GoogleFonts.notoSansKr(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: AppColors.ink,
+                color: textColor,
               ),
             ),
           ],
