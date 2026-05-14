@@ -240,6 +240,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ]),
           _SettingsGroup(label: l.settingsNotifications, children: [
             _NotifSwitch(),
+            // Round 76 — 사용자 알림 시간 picker.
+            _NotifTimePicker(),
           ]),
           _SettingsGroup(label: l.settingsSajuOptions, children: [
             _TrueSunSwitch(),
@@ -751,9 +753,11 @@ class _NotifSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final toggle = ref.watch(notificationProvider);
+    final hh = toggle.notifyHour.toString().padLeft(2, '0');
+    final mm = toggle.notifyMinute.toString().padLeft(2, '0');
     return _AesopSwitch(
       title: l.homeNotifTitle,
-      subtitle: toggle.enabled ? l.homeNotifOn : l.homeNotifSubtitle,
+      subtitle: toggle.enabled ? l.homeNotifOnAt(hh, mm) : l.homeNotifSubtitle,
       value: toggle.enabled,
       onChanged: (v) async {
         final notifier = ref.read(notificationProvider.notifier);
@@ -789,6 +793,99 @@ class _NotifSwitch extends ConsumerWidget {
         }
       },
     );
+  }
+}
+
+// Round 76 — 사용자 알림 시간 picker. iOS = CupertinoDatePicker(time),
+// Android = showTimePicker. 토글 OFF 상태에서도 시간 미리 설정 가능 (영속만).
+class _NotifTimePicker extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final toggle = ref.watch(notificationProvider);
+    final hh = toggle.notifyHour.toString().padLeft(2, '0');
+    final mm = toggle.notifyMinute.toString().padLeft(2, '0');
+    return InkWell(
+      onTap: () => _pick(context, ref),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.settingsNotifTimeLabel.toUpperCase(),
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l.settingsNotifTimeHint,
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              '$hh:$mm',
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+                letterSpacing: 1,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pick(BuildContext context, WidgetRef ref) async {
+    final l = AppL10n.of(context);
+    final notifier = ref.read(notificationProvider.notifier);
+    final state = ref.read(notificationProvider);
+    final saju = ref.read(sajuResultProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final picked = await showTimePicker(
+      context: context,
+      initialTime:
+          TimeOfDay(hour: state.notifyHour, minute: state.notifyMinute),
+      helpText: l.settingsNotifTimePickerTitle,
+    );
+    if (picked == null || !context.mounted) return;
+    await notifier.setTime(
+      hour: picked.hour,
+      minute: picked.minute,
+      pushTitle: l.homeNotifSampleTitle,
+      pushBody: l.homeNotifSampleBody,
+      day60ji: saju?.day60ji,
+      useKo: useKo,
+    );
+    if (!context.mounted) return;
+    final hh = picked.hour.toString().padLeft(2, '0');
+    final mm = picked.minute.toString().padLeft(2, '0');
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.ink,
+        content: Text(l.settingsNotifTimeDoneSnack(hh, mm)),
+      ));
   }
 }
 

@@ -278,6 +278,25 @@ class AppL10nKo extends AppL10n {
   String get homeNotifSampleBody => '오늘의 점수, 행운의 색, 한 줄 조언을 확인해 보세요.';
 
   @override
+  String homeNotifOnAt(Object hh, Object mm) {
+    return '켜짐 · $hh:$mm';
+  }
+
+  @override
+  String get settingsNotifTimeLabel => '알림 시간';
+
+  @override
+  String get settingsNotifTimeHint => '매일 이 시간에 알림이 와요';
+
+  @override
+  String get settingsNotifTimePickerTitle => '알림 시간 선택';
+
+  @override
+  String settingsNotifTimeDoneSnack(Object hh, Object mm) {
+    return '알림 시간을 $hh:$mm로 바꿨어요.';
+  }
+
+  @override
   String get homeHourlyTitle => '오늘의 흐름 ⏰';
 
   @override

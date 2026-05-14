@@ -631,6 +631,36 @@ abstract class AppL10n {
   /// **'Open to see today\'s score, lucky color, and one-line guide.'**
   String get homeNotifSampleBody;
 
+  /// No description provided for @homeNotifOnAt.
+  ///
+  /// In en, this message translates to:
+  /// **'ON · {hh}:{mm}'**
+  String homeNotifOnAt(Object hh, Object mm);
+
+  /// No description provided for @settingsNotifTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time'**
+  String get settingsNotifTimeLabel;
+
+  /// No description provided for @settingsNotifTimeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll ping you at this hour every day'**
+  String get settingsNotifTimeHint;
+
+  /// No description provided for @settingsNotifTimePickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick notification time'**
+  String get settingsNotifTimePickerTitle;
+
+  /// No description provided for @settingsNotifTimeDoneSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time set to {hh}:{mm}.'**
+  String settingsNotifTimeDoneSnack(Object hh, Object mm);
+
   /// No description provided for @homeHourlyTitle.
   ///
   /// In en, this message translates to:

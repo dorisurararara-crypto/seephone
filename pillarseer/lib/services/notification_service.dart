@@ -14,6 +14,9 @@ class NotificationService {
   static bool _initialized = false;
   static const _kPrefsEnabled = 'app.notif.daily8am.enabled';
   static const _kPrefsScheduleSig = 'app.notif.daily8am.scheduleSig';
+  // Round 76 — 사용자 설정 시간 영속 (디폴트 8:00 — 기존 호환).
+  static const _kPrefsHour = 'app.notif.daily.hour';
+  static const _kPrefsMinute = 'app.notif.daily.minute';
   static const int _kDailyId = 8888;
 
   static Future<void> ensureInitialized() async {
@@ -60,15 +63,19 @@ class NotificationService {
     return true;
   }
 
-  /// 30일 × 매일 오전 8시 알림 등록 — 각 알림마다 NotificationPool 에서 다른 문구 선택.
-  /// codex Round 7 fix: matchDateTimeComponents.time 으로 무한반복 시 첫 문구가 계속 반복되는 문제 해결.
+  /// 30일 × 매일 사용자 설정 시간 알림 등록.
+  /// Round 76 — hour/minute 사용자 설정 가능. 디폴트 8:00 (기존 호환).
+  /// codex Round 7 fix: 각 일자별 explicit schedule (matchDateTimeComponents.time 미사용)
+  /// — 사용자가 시간 변경 시 OS 캐싱 패턴이 안 깨지는 이슈 회피.
   /// day60ji null 시 fallback fixed body 사용.
-  static Future<void> scheduleDaily8am({
+  static Future<void> scheduleDaily({
     required String title,
     required String body,
     String? day60ji,
     bool useKo = false,
     int daysAhead = 30,
+    required int hour,
+    required int minute,
   }) async {
     await ensureInitialized();
     // 기존 모든 daily 알림 cancel
@@ -80,7 +87,7 @@ class NotificationService {
     final now = tz.TZDateTime.now(tz.local);
     for (var i = 0; i < daysAhead; i++) {
       final target = tz.TZDateTime(
-          tz.local, now.year, now.month, now.day, 8, 0, 0)
+          tz.local, now.year, now.month, now.day, hour, minute, 0)
           .add(Duration(days: i));
       if (target.isBefore(now)) continue;
       String pickedBody = body;
@@ -106,7 +113,7 @@ class NotificationService {
             android: AndroidNotificationDetails(
               'daily_fortune',
               'Daily Fortune',
-              channelDescription: '매일 아침 8시 오늘의 사주 운세',
+              channelDescription: '매일 사용자 지정 시간 오늘의 사주 운세',
               importance: Importance.high,
               priority: Priority.high,
             ),
@@ -124,8 +131,30 @@ class NotificationService {
       body: body,
       day60ji: day60ji,
       useKo: useKo,
+      hour: hour,
+      minute: minute,
     ));
+    await prefs.setInt(_kPrefsHour, hour);
+    await prefs.setInt(_kPrefsMinute, minute);
   }
+
+  /// 기존 호환 — 8AM 고정 wrapper. 신규 코드는 scheduleDaily 직접 사용 권장.
+  static Future<void> scheduleDaily8am({
+    required String title,
+    required String body,
+    String? day60ji,
+    bool useKo = false,
+    int daysAhead = 30,
+  }) =>
+      scheduleDaily(
+        title: title,
+        body: body,
+        day60ji: day60ji,
+        useKo: useKo,
+        daysAhead: daysAhead,
+        hour: 8,
+        minute: 0,
+      );
 
   static Future<void> cancelDaily() async {
     await ensureInitialized();
@@ -151,6 +180,8 @@ class NotificationService {
     required String body,
     String? day60ji,
     required bool useKo,
+    required int hour,
+    required int minute,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_kPrefsScheduleSig) != _scheduleSignature(
@@ -158,7 +189,23 @@ class NotificationService {
       body: body,
       day60ji: day60ji,
       useKo: useKo,
+      hour: hour,
+      minute: minute,
     );
+  }
+
+  /// Round 76 — 사용자 저장 알림 시간 (디폴트 8:00).
+  static Future<({int hour, int minute})> loadTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final h = prefs.getInt(_kPrefsHour) ?? 8;
+    final m = prefs.getInt(_kPrefsMinute) ?? 0;
+    return (hour: h.clamp(0, 23), minute: m.clamp(0, 59));
+  }
+
+  static Future<void> setTime(int hour, int minute) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_kPrefsHour, hour.clamp(0, 23));
+    await prefs.setInt(_kPrefsMinute, minute.clamp(0, 59));
   }
 
   static String _scheduleSignature({
@@ -166,6 +213,9 @@ class NotificationService {
     required String body,
     String? day60ji,
     required bool useKo,
+    required int hour,
+    required int minute,
   }) =>
-      '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}';
+      '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}|'
+      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 }

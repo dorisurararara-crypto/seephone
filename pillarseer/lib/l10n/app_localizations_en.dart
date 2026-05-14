@@ -290,6 +290,25 @@ class AppL10nEn extends AppL10n {
       'Open to see today\'s score, lucky color, and one-line guide.';
 
   @override
+  String homeNotifOnAt(Object hh, Object mm) {
+    return 'ON · $hh:$mm';
+  }
+
+  @override
+  String get settingsNotifTimeLabel => 'Notification time';
+
+  @override
+  String get settingsNotifTimeHint => 'We\'ll ping you at this hour every day';
+
+  @override
+  String get settingsNotifTimePickerTitle => 'Pick notification time';
+
+  @override
+  String settingsNotifTimeDoneSnack(Object hh, Object mm) {
+    return 'Notification time set to $hh:$mm.';
+  }
+
+  @override
   String get homeHourlyTitle => 'Today\'s flow ⏰';
 
   @override

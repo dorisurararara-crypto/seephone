@@ -1561,7 +1561,12 @@ class _NotifToggleCard extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  on ? l.homeNotifOn : l.homeNotifSubtitle,
+                  on
+                      ? l.homeNotifOnAt(
+                          toggle.notifyHour.toString().padLeft(2, '0'),
+                          toggle.notifyMinute.toString().padLeft(2, '0'),
+                        )
+                      : l.homeNotifSubtitle,
                   style: GoogleFonts.notoSansKr(
                     fontSize: 12.5,
                     color: AppColors.taupe,
