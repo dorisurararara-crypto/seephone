@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
+import '../../services/dynamic_text_resolver.dart';
 import '../../services/jol_calendar_2026.dart';
+import '../../services/saju_context.dart';
 import '../../services/seun_service.dart';
 import '../../services/strength_service.dart';
 import '../../services/yongsin_service.dart';
@@ -21,6 +23,16 @@ class NewYear2026Screen extends ConsumerWidget {
   const NewYear2026Screen({super.key});
 
   static const int year = 2026;
+
+  /// Round 78 sprint 7 — public test API.
+  /// 사용자 SajuContext 기반 i번째 절기 mood 합성 (격국 anchor + 용신 suffix).
+  /// 위임: _MonthlyFlow.moodFor.
+  static String moodFor({
+    required SajuContext ctx,
+    required int index,
+    required bool useKo,
+  }) =>
+      _MonthlyFlow.moodFor(ctx: ctx, index: index, useKo: useKo);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -307,8 +319,29 @@ class _MonthlyFlow extends StatelessWidget {
     'Daeseol — the storing month. Accumulate for next year.',
   ];
 
+  /// Round 78 sprint 7 — 사용자 SajuContext 기반 i번째 절기 mood 합성.
+  /// 기존 절기 라벨 (mood base) + 격국 anchor + 용신 5축 1줄 append.
+  /// 격국 / 용신 모두 빈 ctx 시 base 그대로 (회귀 가드). [ctx] 는 required —
+  /// null ctx 경로는 호출 측 (build) 에서 가드.
+  /// 테스트에서 widget 렌더 없이 직접 검증 가능 — public static.
+  static String moodFor({
+    required SajuContext ctx,
+    required int index,
+    required bool useKo,
+  }) {
+    final base = useKo ? _moodsKo[index] : _moodsEn[index];
+    final locale = useKo ? 'ko' : 'en';
+    final gAnchor = DynamicTextResolver.gyeokgukAnchor(ctx, locale: locale);
+    final ySuffix = DynamicTextResolver.yongsinSuffix(ctx, locale: locale);
+    final parts = [gAnchor, ySuffix].where((p) => p.isNotEmpty).toList();
+    if (parts.isEmpty) return base;
+    return '$base\n${parts.join(' ')}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Round 78 sprint 7 — build 안에서 1회 합성. 12 절기 row 에 재사용 (12회 재합성 X).
+    final newYearCtx = SajuContext.from(saju, today: DateTime(year, 1, 1));
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 36, 24, 28),
@@ -392,7 +425,11 @@ class _MonthlyFlow extends StatelessWidget {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              useKo ? _moodsKo[i] : _moodsEn[i],
+                              NewYear2026Screen.moodFor(
+                                ctx: newYearCtx,
+                                index: i,
+                                useKo: useKo,
+                              ),
                               style: GoogleFonts.notoSansKr(
                                 fontSize: 13,
                                 color: AppColors.ink,

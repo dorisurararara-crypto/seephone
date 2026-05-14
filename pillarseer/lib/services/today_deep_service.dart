@@ -119,20 +119,23 @@ class TodayDeepService {
       moodHookEn: hooks.bodyHookEn,
     );
 
-    // Round 78 sprint 4 — ctx 주입 시 격국 anchor + 용신 5축 derive suffix 합성.
-    // 같은 십신·dayEnergy 라도 격국·용신 다르면 본문 phrase 차이 ≥1 보장.
+    // Round 78 sprint 4/7 — ctx 주입 시 격국 anchor + 용신 5축 derive suffix +
+    // 현재 대운 십신 anchor (sprint 7) 합성.
+    // 같은 십신·dayEnergy 라도 격국·용신·대운 다르면 본문 phrase 차이 ≥1.
     if (ctx != null) {
       final gAnchorKo = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'ko');
       final ySuffixKo = DynamicTextResolver.yongsinSuffix(ctx, locale: 'ko');
+      final dwAnchorKo = _daewoonAnchor(ctx, locale: 'ko');
       final extraKo =
-          [gAnchorKo, ySuffixKo].where((p) => p.isNotEmpty).join(' ');
+          [dwAnchorKo, gAnchorKo, ySuffixKo].where((p) => p.isNotEmpty).join(' ');
       if (extraKo.isNotEmpty) {
         bodyKo = '$bodyKo $extraKo';
       }
       final gAnchorEn = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'en');
       final ySuffixEn = DynamicTextResolver.yongsinSuffix(ctx, locale: 'en');
+      final dwAnchorEn = _daewoonAnchor(ctx, locale: 'en');
       final extraEn =
-          [gAnchorEn, ySuffixEn].where((p) => p.isNotEmpty).join(' ');
+          [dwAnchorEn, gAnchorEn, ySuffixEn].where((p) => p.isNotEmpty).join(' ');
       if (extraEn.isNotEmpty) {
         bodyEn = '$bodyEn $extraEn';
       }
@@ -182,6 +185,45 @@ class TodayDeepService {
   }
 
   // ───────── helpers ─────────
+
+  /// Round 78 sprint 7 — 현재 대운 십신 anchor 1구.
+  /// userAge 미공급 / currentDaewoon null / currentDaewoonGod null 시 빈 string.
+  static String _daewoonAnchor(SajuContext ctx, {required String locale}) {
+    if (ctx.currentDaewoon == null) return '';
+    final dwGod = ctx.currentDaewoonGod;
+    if (dwGod == null) return '';
+    if (locale == 'ko') {
+      final ko = dwGod.ko.split(' ').first; // '정관 (正官)' → '정관'
+      const map = {
+        '비견': '비견 대운 안에 있는 지금, 또래와의 비교 흐름이 두 배로 강해져요.',
+        '겁재': '겁재 대운 안에 있는 지금, 경쟁심이 평소보다 한 박자 빨라져요.',
+        '식신': '식신 대운 안에 있는 지금, 표현·창작이 술술 풀리는 시기예요.',
+        '상관': '상관 대운 안에 있는 지금, 한 발 빠른 감각이 빛나는 시기예요.',
+        '편재': '편재 대운 안에 있는 지금, 새로운 거래·기회가 자주 찾아오는 흐름이에요.',
+        '정재': '정재 대운 안에 있는 지금, 차곡차곡 쌓이는 안정 흐름이에요.',
+        '편관': '편관 대운 안에 있는 지금, 도전·승부가 본 사주 위로 한 겹 덧대지는 시기예요.',
+        '정관': '정관 대운 안에 있는 지금, 직장·조직 안에서 자리 잡는 흐름이 두 배로 강해져요.',
+        '편인': '편인 대운 안에 있는 지금, 직관이 평소보다 또렷해지는 시기예요.',
+        '정인': '정인 대운 안에 있는 지금, 배우는 시간이 평소보다 단단하게 쌓여요.',
+      };
+      return map[ko] ?? '';
+    } else {
+      final ko = dwGod.ko.split(' ').first;
+      const map = {
+        '비견': "You are inside a Peer luck cycle. Peer dynamics double up now.",
+        '겁재': "You are inside a Rival cycle. Competitive edge sharpens.",
+        '식신': "You are inside an Output cycle. Expression flows easy.",
+        '상관': "You are inside a Sharp Output cycle. Quick reads stand out.",
+        '편재': "You are inside a Windfall Wealth cycle. New deals show up.",
+        '정재': "You are inside a Stable Wealth cycle. Steady stacking flow.",
+        '편관': "You are inside a Bold Drive cycle. Challenges layer on.",
+        '정관': "You are inside a Stable Office cycle. Position settles in.",
+        '편인': "You are inside an Unconventional Resource cycle. Intuition sharpens.",
+        '정인': "You are inside a Direct Resource cycle. Learning solidifies.",
+      };
+      return map[ko] ?? '';
+    }
+  }
 
   static String _elementOfStem(String stem) {
     const map = {
