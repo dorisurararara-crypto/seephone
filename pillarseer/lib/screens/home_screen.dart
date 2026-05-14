@@ -10,9 +10,11 @@ import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
 import '../services/daily_service.dart';
+import '../services/dynamic_text_resolver.dart';
 import '../services/five_day_trend_service.dart';
 import '../services/hourly_service.dart';
 import '../services/lucky_chips_service.dart';
+import '../services/saju_context.dart';
 import '../services/six_axis_score_service.dart';
 import '../services/today_deep_service.dart';
 import '../services/today_event_service.dart';
@@ -101,6 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _OracleHero(
                 dayPillarChunGan: saju.dayPillar.chunGan,
                 dayEnergy: classifyDayEnergy(fortune.totalScore),
+                ctx: SajuContext.from(saju, today: DateTime.now()),
               ),
               // Round 76 sprint 5 — 오늘 사건 가능성 카드. CTA → /result 의 상세 섹션.
               _TodayEventCard(
@@ -251,9 +254,13 @@ class _AppBarBlock extends StatelessWidget {
 class _OracleHero extends StatelessWidget {
   final String dayPillarChunGan;
   final DayEnergyKind dayEnergy;
+  // Round 78 sprint 3 — SajuContext 주입. 같은 천간·dayEnergy 라도 격국·용신 따라
+  // body 1줄 suffix 가 derive 되어 사용자별 phrase 차이 ≥1 보장.
+  final SajuContext? ctx;
   const _OracleHero({
     required this.dayPillarChunGan,
     required this.dayEnergy,
+    this.ctx,
   });
 
   /// 천간 10 × dayEnergy 3 = 30 ment pool.
@@ -314,22 +321,76 @@ class _OracleHero extends StatelessWidget {
     },
   };
 
+  /// Round 78 sprint 3 — H1 ctx-aware pool entries.
+  /// 한 chunGan/dayEnergy 셀 이 격국·용신 조합으로 정확/부분 매칭 가능하도록 작은 pool 제공.
+  /// 본 entries 가 미매칭 시 R77 _pool 정적 ment fallback + ctx suffix 합성 (chain 2~4).
+  static const _ctxEntries = <DynamicPoolEntry>[
+    // 정관격 + 용신 木 + restDay 사용자 — 직장 안정 + 초록 활동 안내.
+    DynamicPoolEntry(
+      key: 'oracle_hero.restDay.辛',
+      bodies: {
+        'ko':
+            '오늘은 정해진 룰 안에서 쉬는 게 정답.\n초록·산책 한 번 챙기면 컨디션이 받쳐줘요.\n무리한 약속은 다음 주로 넘겨.',
+        'en':
+            "Rest inside your usual lane today.\nA short green walk steadies your focus.\nPush bigger plans to next week.",
+      },
+      requires: {
+        'gyeokgukShort': '정관격',
+        'yongsin': '木',
+      },
+    ),
+    // 정관격 + 용신 火 — 같은 정관격이어도 용신 다르면 안내 다름.
+    // invariant: restDay 본문에 "도전·승부·발표·공식 자리·승진" 0.
+    DynamicPoolEntry(
+      key: 'oracle_hero.restDay.辛',
+      bodies: {
+        'ko':
+            '오늘은 정해진 룰 안에서 쉬는 게 정답.\n햇볕 받는 동선이 자신감을 채워줘요.\n새 일정은 한 주 미뤄.',
+        'en':
+            "Rest inside your usual lane today.\nA bit of sunlight refills your spark.\nPush new plans to next week.",
+      },
+      requires: {
+        'gyeokgukShort': '정관격',
+        'yongsin': '火',
+      },
+    ),
+  ];
+
   String _pickMent() {
     final m = _pool[dayEnergy]!;
-    return m[dayPillarChunGan] ?? m['甲']!;
+    final base = m[dayPillarChunGan] ?? m['甲']!;
+    // Round 78 sprint 3 — ctx 주입 시 DynamicTextResolver 가 용신 derive suffix 합성.
+    final c = ctx;
+    if (c == null) return base;
+    return DynamicTextResolver.resolve(
+      key: 'oracle_hero.${dayEnergy.name}.$dayPillarChunGan',
+      ctx: c,
+      locale: 'ko',
+      staticFallback: base,
+      entries: _ctxEntries,
+    );
   }
 
   // Round 77 sprint 6 — 영문 fallback 친구 톤 native casual.
   // Plain English, no hedging (might/maybe/perhaps 0), no AI slop, no em dash.
   String _pickMentEn() {
-    switch (dayEnergy) {
-      case DayEnergyKind.actionDay:
-        return "Drop a quick message. One will decide the vibe today.\nDon't wait. Send it now.\nThat one move makes the day.";
-      case DayEnergyKind.mixedDay:
-        return "Push the big call to tomorrow.\nOne small move does the work today.\nThat small move sets your vibe.";
-      case DayEnergyKind.restDay:
-        return "Don't push today.\nSkip new plans. Resting is the real win.\nOne hour of rest beats five group chats.";
-    }
+    final base = switch (dayEnergy) {
+      DayEnergyKind.actionDay =>
+        "Drop a quick message. One will decide the vibe today.\nDon't wait. Send it now.\nThat one move makes the day.",
+      DayEnergyKind.mixedDay =>
+        "Push the big call to tomorrow.\nOne small move does the work today.\nThat small move sets your vibe.",
+      DayEnergyKind.restDay =>
+        "Don't push today.\nSkip new plans. Resting is the real win.\nOne hour of rest beats five group chats.",
+    };
+    final c = ctx;
+    if (c == null) return base;
+    return DynamicTextResolver.resolve(
+      key: 'oracle_hero.${dayEnergy.name}.$dayPillarChunGan',
+      ctx: c,
+      locale: 'en',
+      staticFallback: base,
+      entries: _ctxEntries,
+    );
   }
 
   @override
