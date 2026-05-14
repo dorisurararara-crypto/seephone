@@ -3,6 +3,8 @@
 // deterministic seed (chart hash + date) → 같은 사용자 같은 날 동일 결과.
 
 import '../models/saju_result.dart';
+import 'dynamic_text_resolver.dart';
+import 'saju_context.dart';
 
 /// 사주 정규화 프로파일
 class PillarProfile {
@@ -133,13 +135,42 @@ class PersonalizationEngine {
     final today = picked['today'];
     final action = picked['action'];
     final caution = picked['caution'];
+
+    // Round 79 sprint 5 (H3 본문 wire) — SajuContext + DynamicTextResolver 격국·용신 anchor 합성.
+    // 시그니처 보존: PersonalReading 4 line 그대로 return.
+    // 격국·용신 derive 본문 1줄을 body/action 끝에 join → 같은 일주여도 격국 다르면 본문 diff ↑.
+    // 같은 사주 두 번 호출 → 같은 결과 (deterministic — ctx derive 도 deterministic).
+    SajuContext? ctx;
+    try {
+      ctx = SajuContext.from(saju, today: t);
+    } catch (_) {
+      ctx = null; // SajuContext 생성 실패 시 정적 fallback 만 사용 (회귀 가드).
+    }
+
+    final gAnchorKo = ctx != null ? DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'ko') : '';
+    final gAnchorEn = ctx != null ? DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'en') : '';
+    final yAnchorKo = ctx != null ? DynamicTextResolver.yongsinSuffix(ctx, locale: 'ko') : '';
+    final yAnchorEn = ctx != null ? DynamicTextResolver.yongsinSuffix(ctx, locale: 'en') : '';
+
+    String joinKo(String base, String extra) =>
+        (extra.isNotEmpty && !base.contains(extra)) ? '$base\n$extra' : base;
+    String joinEn(String base, String extra) =>
+        (extra.isNotEmpty && !base.contains(extra)) ? '$base\n$extra' : base;
+
+    final bodyKoBase = today != null ? render(today.koTpl) : _fallbackBodyKo(profile);
+    final bodyEnBase = today != null ? render(today.enTpl) : _fallbackBodyEn(profile);
+    final actionKoBase = action != null ? render(action.koTpl) : _fallbackActionKo(profile);
+    final actionEnBase = action != null ? render(action.enTpl) : _fallbackActionEn(profile);
+
     return PersonalReading(
       headlineKo: identity != null ? render(identity.koTpl) : _fallbackHeadKo(profile),
       headlineEn: identity != null ? render(identity.enTpl) : _fallbackHeadEn(profile),
-      bodyKo: today != null ? render(today.koTpl) : _fallbackBodyKo(profile),
-      bodyEn: today != null ? render(today.enTpl) : _fallbackBodyEn(profile),
-      actionKo: action != null ? render(action.koTpl) : _fallbackActionKo(profile),
-      actionEn: action != null ? render(action.enTpl) : _fallbackActionEn(profile),
+      // body 에는 격국 anchor 1줄 합성 — 같은 일주 다른 격국 sample 의 본문 diff ↑.
+      bodyKo: joinKo(bodyKoBase, gAnchorKo),
+      bodyEn: joinEn(bodyEnBase, gAnchorEn),
+      // action 에는 용신 5축 1줄 합성 — 행동 처방 dynamic.
+      actionKo: joinKo(actionKoBase, yAnchorKo),
+      actionEn: joinEn(actionEnBase, yAnchorEn),
       cautionKo: caution != null ? render(caution.koTpl) : _fallbackCautionKo(profile),
       cautionEn: caution != null ? render(caution.enTpl) : _fallbackCautionEn(profile),
     );

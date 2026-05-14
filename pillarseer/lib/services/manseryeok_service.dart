@@ -27,6 +27,9 @@ class ManseryeokService {
   static const double stemWeight = 1.4;
   static const double dayStemSelfBonus = 1.2;
   static const double rootMainBonus = 1.6;
+  // Round 79 sprint 5: 학파 표준 swap (rootMiddle 0.3 ↔ rootTrace 0.6) 시도 결과
+  // 1995-10-27 男 17시 5행 골든 16/21/17/41/4 깨짐 — 채택 X (revert).
+  // 학파 표준 정합은 Round 80 deferred. 현재 가중치 (본기 > 중기 > 여기) 유지.
   static const double rootMiddleBonus = 0.6;
   static const double rootTraceBonus = 0.3;
   static const double monthRootMultiplier = 1.5;
