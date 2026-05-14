@@ -16,9 +16,21 @@ class _DstRange {
 }
 
 class ManseryeokService {
-  /// 월령 가중 배수 — 전통 명리학 적천수·자평진전 표준 (2.0~3.0 사이).
-  /// 월지(月支)의 지장간 점수에 곱하여 사주 element 분포에 반영.
-  static const double monthBranchBoost = 2.5;
+  /// 월령 가중 배수 — 정통 세력 판단을 UX 퍼센트로 옮기는 휴리스틱.
+  /// 월지(月支)의 지장간 점수에 곱하여 계절 세력을 반영한다.
+  static const double monthBranchBoost = 3.0;
+
+  /// 오행 퍼센트용 휴리스틱 가중치.
+  /// 국내 사주 앱들이 공개하지 않는 5행 % 공식을 제품 안에서 일관되게 재현하기
+  /// 위한 세력 점수이며, 고전의 표준 산식이라는 뜻은 아니다.
+  static const double stemWeight = 1.4;
+  static const double dayStemSelfBonus = 1.2;
+  static const double rootMainBonus = 1.6;
+  static const double rootMiddleBonus = 0.6;
+  static const double rootTraceBonus = 0.3;
+  static const double monthRootMultiplier = 1.5;
+  static const double exactLuBonus = 0.8;
+  static const List<double> pillarWeights = [0.8, 1.4, 1.6, 1.1];
 
   /// 진태양시 longitude 보정 (분 단위) — 서울 기준 -32분 (KST UTC+9 시기).
   /// 동경 135° (KST) → 서울 126.98° 적용 시 표준시보다 32분 늦게 떠/짐.
@@ -436,15 +448,17 @@ class ManseryeokService {
     return Pillar(chunGan: chunGan[i % 10], jiJi: jiJi[i % 12]);
   }
 
-  /// 5행 분포 계산 — 지장간 비율 + 월령 가중치 (전통 명리학 표준).
+  /// 5행 분포 계산 — 지장간·월령·일간·통근을 반영한 UX 휴리스틱.
   ///
   /// 한 기둥 가중:
-  /// - 천간: 1.0 (그대로 자기 오행에 +1.0)
-  /// - 지지 지장간: 본기 0.6 / 중기 0.3 / 여기 0.1 (각 지장간 천간 → 자기 오행에 +ratio)
-  /// - **월령 가중**: 월지(月支) 지장간 점수에 ×monthBoost (기본 2.5 — 적천수·자평진전 표준).
+  /// - 천간: [stemWeight] × 년월일시 위치 가중.
+  /// - 지지 지장간: 본기/중기/여기 ratio × 년월일시 위치 가중.
+  /// - 월령: 월지(月支) 지장간 점수에 ×monthBoost.
+  /// - 일간: 자기 5행에 [dayStemSelfBonus] 추가.
+  /// - 통근: 일간이 지지 지장간에 뿌리내리면 본기/중기/여기 별 보너스.
   ///
   /// [monthIdx]: pillars 중 월주 index (보통 `[year, month, day, hour]` 의 1).
-  /// [monthBoost]: 월령 가중 배수 (기본 [monthBranchBoost] = 2.5).
+  /// [monthBoost]: 월령 가중 배수 (기본 [monthBranchBoost] = 3.0).
   static FiveElements _calculateElements(
     List<Pillar> pillars, {
     int monthIdx = 1,
@@ -462,17 +476,43 @@ class ManseryeokService {
       }
     }
 
+    final dayMaster = pillars.length > 2 ? pillars[2].chunGan : '';
+    final dayMasterElement = pillars.length > 2 ? pillars[2].chunGanElement : '';
+
     for (int i = 0; i < pillars.length; i++) {
       final p = pillars[i];
-      // 1. 천간 1.0 가중 (월령 boost 미적용 — 표준)
-      add(p.chunGanElement, 1.0);
-      // 2. 지지 지장간 비율 가중 (월지면 ×monthBoost)
+      final pillarWeight = i < pillarWeights.length ? pillarWeights[i] : 1.0;
+      // 1. 천간 가중. 천간은 밖으로 드러난 기운이라 지지 원점보다 높게 둔다.
+      add(p.chunGanElement, stemWeight * pillarWeight);
+      // 2. 지지 지장간 비율 가중. 월지는 계절권이라 추가 boost.
       final ratios =
           ThongGeunService.jijangGanRatio[p.jiJi] ?? const <String, double>{};
-      final boost = (i == monthIdx) ? monthBoost : 1.0;
+      final boost = pillarWeight * ((i == monthIdx) ? monthBoost : 1.0);
       ratios.forEach((gan, r) {
         add(ThongGeunService.ganElement(gan), r * boost);
       });
+    }
+
+    // 3. 일간 자체와 통근 보너스. 5행 %가 "내 사주의 세력표"로 읽히므로
+    // 일간의 뿌리는 별도 보정한다.
+    if (dayMasterElement.isNotEmpty) {
+      add(dayMasterElement, dayStemSelfBonus);
+      for (int i = 0; i < pillars.length; i++) {
+        final p = pillars[i];
+        final rootStrength = ThongGeunService.thongGeunStrength(dayMaster, p.jiJi);
+        if (rootStrength == 0) continue;
+        final base = switch (rootStrength) {
+          3 => rootMainBonus,
+          2 => rootMiddleBonus,
+          _ => rootTraceBonus,
+        };
+        add(dayMasterElement, base * (i == monthIdx ? monthRootMultiplier : 1.0));
+      }
+      if (_exactLuBranch[dayMaster] case final lu?) {
+        if (pillars.any((p) => p.jiJi == lu)) {
+          add(dayMasterElement, exactLuBonus);
+        }
+      }
     }
 
     final total = wood + fire + earth + metal + water;
@@ -487,6 +527,14 @@ class ManseryeokService {
       water: (water * 100 / total).round(),
     );
   }
+
+  static const Map<String, String> _exactLuBranch = {
+    '甲': '寅', '乙': '卯',
+    '丙': '巳', '丁': '午',
+    '戊': '巳', '己': '午',
+    '庚': '申', '辛': '酉',
+    '壬': '亥', '癸': '子',
+  };
 
   /// JDN 기반 fallback (klc 실패 시)
   static ({Pillar year, Pillar month, Pillar day}) _legacyPillars(

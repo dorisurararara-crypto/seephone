@@ -74,6 +74,7 @@ class DeepContentService {
   /// 8섹션 풀이 (en + ko) 빌드. 대운/세운/Lucky 는 procedural 추가.
   static Future<({DeepReading en, DeepReading ko})> buildFor({
     required String day60ji,
+    required String dayMaster,
     required String dayMasterName,
     required String currentYearGanji,
     required int userAge,
@@ -88,6 +89,7 @@ class DeepContentService {
     final en = _buildLang(
       lang: 'en',
       day60ji: day60ji,
+      dayMaster: dayMaster,
       name: dayMasterName,
       raw: enRaw,
       shortReadings: shortReadings,
@@ -99,6 +101,7 @@ class DeepContentService {
     final ko = _buildLang(
       lang: 'ko',
       day60ji: day60ji,
+      dayMaster: dayMaster,
       name: dayMasterName,
       raw: koRaw,
       shortReadings: shortReadings,
@@ -113,6 +116,7 @@ class DeepContentService {
   static DeepReading _buildLang({
     required String lang,
     required String day60ji,
+    required String dayMaster,
     required String name,
     required Map<String, dynamic>? raw,
     required Map<String, String> shortReadings,
@@ -144,8 +148,8 @@ class DeepContentService {
     final luckyDirection = raw?['luckyDirection'] as String? ??
         _luckyDirectionFor(isKo, dominant);
 
-    final elementsNote = _elementsNoteFor(isKo, dominant, deficit);
-    final tenGodsNote = _tenGodsNoteFor(isKo, day60ji, dominant);
+    final elementsNote = _elementsNoteFor(isKo, dayMaster, dominant, deficit);
+    final tenGodsNote = _tenGodsNoteFor(isKo, dayMaster, dominant);
     final hooks = _threeHits(
       isKo: isKo,
       day60ji: day60ji,
@@ -181,7 +185,7 @@ class DeepContentService {
   }
 
   /// 5행 dominant/deficit 한 줄 해석 (Round 4 codex 권장)
-  static String _elementsNoteFor(bool ko, String dom, String def) {
+  static String _elementsNoteFor(bool ko, String dayMaster, String dom, String def) {
     const koDomDesc = {
       '木': '나무 기운(추진력·성장)이 강해 새 도전·확장에 유리해요.',
       '火': '불 기운(표현·열정)이 강해 무대·발표·관계 확장에서 빛나요.',
@@ -194,7 +198,7 @@ class DeepContentService {
       '火': '불이 부족해 표현·감정 분출이 어려운 편이에요. 따뜻한 빛·운동 권장.',
       '土': '흙이 부족해 약속·끝맺음에 흔들리기 쉬워요. 루틴·기록이 도움 돼요.',
       '金': '쇠가 부족해 결단력·정리정돈이 약해요. 청소·일정 정리 의식으로 보완.',
-      '水': '물이 부족해 직관·휴식이 모자라요. 수분·수면 충분히 챙겨요.',
+      '水': '물이 부족해 흐름을 맡기는 감각이 약해질 수 있어요. 조용한 이동·기록·사색으로 보완해요.',
     };
     const enDomDesc = {
       '木': 'Strong Wood energy — pushy, growth-prone, great for new ventures.',
@@ -208,32 +212,79 @@ class DeepContentService {
       '火': 'Light on Fire — expression can stall. Sunlight and movement help.',
       '土': 'Light on Earth — follow-through wavers. Build a routine.',
       '金': 'Light on Metal — decisions linger. Clean a closet to reset.',
-      '水': 'Light on Water — intuition needs rest. Drink water, sleep more.',
+      '水': 'Light on Water — intuition needs quiet flow. Walk, journal, and make room for reflection.',
     };
+    final domRole = _fiveElementRoleFor(dayMaster, dom, ko);
+    final defRole = _fiveElementRoleFor(dayMaster, def, ko);
     if (ko) {
-      return '${koDomDesc[dom] ?? ''} ${koDefDesc[def] ?? ''}';
+      return '${koDomDesc[dom] ?? ''} 본인 기준으로는 $domRole 쪽이 제일 세요. '
+          '${koDefDesc[def] ?? ''} 채워야 할 쪽은 $defRole 쪽이에요.';
     }
-    return '${enDomDesc[dom] ?? ''} ${enDefDesc[def] ?? ''}';
+    return '${enDomDesc[dom] ?? ''} For you, the strongest side is $domRole. '
+        '${enDefDesc[def] ?? ''} The area to balance is $defRole.';
   }
 
   /// 십신 핵심 관계 한 줄 (가장 강한 신 → 의미)
-  static String _tenGodsNoteFor(bool ko, String day60ji, String dom) {
-    // dominant element 와 day master 의 관계로 핵심 십신 유형 결정
+  static String _tenGodsNoteFor(bool ko, String dayMaster, String dom) {
+    final role = _fiveElementRoleKey(dayMaster, dom);
     const ko10g = {
-      '木': '식상(食傷) 기운 — 표현·창작·output 이 곧 당신의 무기예요.',
-      '火': '재성(財星) 기운 — 돈과 기회가 당신을 향해 흘러와요.',
-      '土': '관성(官星) 기운 — 권위·책임·인정이 자연스럽게 와요.',
-      '金': '인성(印星) 기운 — 배움·후원·전통이 당신의 자원이에요.',
-      '水': '비겁(比劫) 기운 — 동료·팀워크가 당신을 키워요.',
+      'peer': '비겁(比劫) 기운 — 자기 주도·동료·경쟁심이 또렷하게 살아요.',
+      'output': '식상(食傷) 기운 — 표현·창작·말이 본인 무기예요.',
+      'wealth': '재성(財星) 기운 — 돈·기회·현실 감각을 다루는 힘이 커요.',
+      'authority': '관성(官星) 기운 — 책임·규칙·인정 받는 자리에서 성과가 생겨요.',
+      'resource': '인성(印星) 기운 — 배움·후원·기록이 본인 자원이에요.',
     };
     const en10g = {
-      '木': 'Output energy (食傷) — your expression and creations are your weapon.',
-      '火': 'Wealth energy (財星) — money and opportunity flow toward you.',
-      '土': 'Authority energy (官星) — recognition and responsibility come naturally.',
-      '金': 'Resource energy (印星) — learning, mentors, tradition are your base.',
-      '水': 'Peer energy (比劫) — your team and tribe grow you.',
+      'peer': 'Peer energy (比劫) — self-direction, allies, and rivalry run strong.',
+      'output': 'Output energy (食傷) — your expression and what you create are your edge.',
+      'wealth': 'Wealth energy (財星) — money, opportunity, and practical control are active.',
+      'authority': 'Authority energy (官星) — recognition and responsibility come through pressure.',
+      'resource': 'Resource energy (印星) — learning, mentors, and notes are your base.',
     };
-    return (ko ? ko10g[dom] : en10g[dom]) ?? '';
+    return (ko ? ko10g[role] : en10g[role]) ?? '';
+  }
+
+  static String _fiveElementRoleFor(String dayMaster, String target, bool ko) {
+    final key = _fiveElementRoleKey(dayMaster, target);
+    const koMap = {
+      'peer': '비겁(자기 힘·동료·경쟁)',
+      'output': '식상(표현·창작·말)',
+      'wealth': '재성(돈·현실·관리)',
+      'authority': '관성(책임·규칙·직함)',
+      'resource': '인성(배움·후원·문서)',
+    };
+    const enMap = {
+      'peer': 'peer/self-drive',
+      'output': 'output/expression',
+      'wealth': 'wealth/practical control',
+      'authority': 'authority/responsibility',
+      'resource': 'resource/support',
+    };
+    return (ko ? koMap[key] : enMap[key]) ?? target;
+  }
+
+  static String _fiveElementRoleKey(String dayMaster, String target) {
+    final dm = _ganElement(dayMaster);
+    if (dm.isEmpty || target.isEmpty) return '';
+    const generates = {'木': '火', '火': '土', '土': '金', '金': '水', '水': '木'};
+    const overcomes = {'木': '土', '土': '水', '水': '火', '火': '金', '金': '木'};
+    if (dm == target) return 'peer';
+    if (generates[dm] == target) return 'output';
+    if (overcomes[dm] == target) return 'wealth';
+    if (overcomes[target] == dm) return 'authority';
+    if (generates[target] == dm) return 'resource';
+    return '';
+  }
+
+  static String _ganElement(String gan) {
+    const map = {
+      '甲': '木', '乙': '木',
+      '丙': '火', '丁': '火',
+      '戊': '土', '己': '土',
+      '庚': '金', '辛': '金',
+      '壬': '水', '癸': '水',
+    };
+    return map[gan] ?? '';
   }
 
   // ──────── 3-hit summary (codex PM 권고: 성격/연애/오늘 액션 + why)

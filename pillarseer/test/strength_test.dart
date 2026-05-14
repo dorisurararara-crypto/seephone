@@ -6,7 +6,7 @@ import 'package:pillarseer/services/strength_service.dart';
 void main() {
   group('StrengthService 신강/신약 판단', () {
     test('일간 甲(木) + 寅월 + 사주 木 다수 통근 → 신강', () {
-      // 신모델: element % 는 이미 지장간 비율 + 월령 ×2.5 반영된 값으로 입력.
+      // 신모델: element % 는 이미 지장간·월령·통근 가중이 반영된 값으로 입력.
       // 추가로 일간 천간 + 4지지 제공하면 일간 통근 점수 가산.
       final r = StrengthService.judge(
         dayMasterElement: '木',

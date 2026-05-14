@@ -106,6 +106,7 @@ class SajuService {
     try {
       final pair = await DeepContentService.buildFor(
         day60ji: dayP.text,
+        dayMaster: dayP.chunGan,
         dayMasterName: dayMasterName,
         currentYearGanji: currentYearGanji,
         userAge: age.clamp(1, 120),

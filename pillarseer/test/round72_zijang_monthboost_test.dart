@@ -1,8 +1,8 @@
 // Round 72 — 지장간 비율 + 월령 가중치 회귀.
 //
 // 검증 4개:
-//   A. 12 지지 지장간 비율 합 = 1.0 (전통 본기 0.6 / 중기 0.3 / 여기 0.1)
-//   B. 월령 가중치 ×2.5 — 같은 지지가 월지일 때 vs 다른 위치일 때 element % 차이 발생
+//   A. 12 지지 지장간 비율 합 = 1.0 (UX 휴리스틱: 본기 0.7 / 중기 0.2 / 여기 0.1)
+//   B. 월령 가중치 ×3.0 — 같은 지지가 월지일 때 vs 다른 위치일 때 element % 차이 발생
 //   C. 일간 통근 점수 — 본기 +6 / 중기 +3 / 여기 +1, 월지면 ×1.5
 //   D. 1995-10-27 15:43 남자 (乙亥·丙戌·辛卯·丙申) — 신묘 일주 element % 변화 골든
 
@@ -30,10 +30,10 @@ void main() {
       expect(ThongGeunService.jijangGanRatio['酉'], {'辛': 1.0});
     });
 
-    test('3 천간 지지 — 본기 0.6 / 중기 0.3 / 여기 0.1', () {
+    test('3 천간 지지 — 본기 0.7 / 중기 0.2 / 여기 0.1 (UX 휴리스틱)', () {
       final inHo = ThongGeunService.jijangGanRatio['寅']!;
-      expect(inHo['甲'], 0.6);
-      expect(inHo['丙'], 0.3);
+      expect(inHo['甲'], 0.7);
+      expect(inHo['丙'], 0.2);
       expect(inHo['戊'], 0.1);
     });
 
@@ -85,7 +85,7 @@ void main() {
     });
   });
 
-  group('Round 72 — 월령 가중치 ×2.5 실제 element % 영향', () {
+  group('Round 72 — 월령 가중치 ×3.0 + 통근 실제 element % 영향', () {
     test('1995-10-27 15:43 남자 골든 — pillar + element % lock', () {
       final r = ManseryeokService.calculate(
         year: 1995, month: 10, day: 27,
@@ -103,34 +103,28 @@ void main() {
       expect(r.hourPillar?.chunGan, '丙');
       expect(r.hourPillar?.jiJi, '申');
 
-      // element % 골든 (지장간 비율 + 월령 ×2.5 적용):
-      //   천간: 乙(木) 丙(火) 辛(金) 丙(火) → wood +1, fire +2, metal +1
-      //   지장간: 亥{壬0.7,甲0.3} 戌{戊0.6,辛0.3,丁0.1}×2.5 卯{乙1.0} 申{庚0.6,壬0.3,戊0.1}
-      //          → water +0.7+0.3=1.0, wood +0.3+1.0=1.3, earth +1.5+0.1=1.6,
-      //             metal +0.75+0.6=1.35, fire +0.25, ...
-      //   합:
-      //     wood = 1 + 1.3 = 2.3
-      //     fire = 2 + 0.25 = 2.25
-      //     earth = 1.6
-      //     metal = 1 + 1.35 = 2.35
-      //     water = 1.0
-      //     total = 9.5
-      //   % (round): wood 24, fire 24, earth 17, metal 25, water 11
+      // element % 골든:
+      //   정통 세력 판단을 UX 숫자로 옮긴 휴리스틱.
+      //   천간 1.4, 지장간 0.7/0.2/0.1, 월령 ×3.0,
+      //   년월일시 0.8/1.4/1.6/1.1, 일간 +1.2, 통근 보너스 반영.
       //
       // 핵심 회귀 가드:
-      // - 월령 ×2.5 빠지면 earth 가 4점 이하로 떨어짐 (戌 토 가중 사라지므로).
-      // - earth ≥ 14 이면 월령 가중 살아있다고 확신.
       expect(r.elements.earth, greaterThanOrEqualTo(14),
-          reason: '월령 戌(土) ×2.5 가중 살아있는지 — earth=${r.elements.earth}');
-      expect(r.elements.metal, greaterThanOrEqualTo(20),
-          reason: '월령 戌 중기 辛(金) + 申 본기 庚(金) — metal=${r.elements.metal}');
+          reason: '월령 戌(土) ×3.0 가중 살아있는지 — earth=${r.elements.earth}');
+      expect(r.elements.metal, greaterThanOrEqualTo(40),
+          reason: '辛 일간 + 戌 중기 통근 + 申 본기 강근 — metal=${r.elements.metal}');
 
-      // element % 정확 골든 (±1 rounding 허용)
-      expect(r.elements.wood, inInclusiveRange(23, 25));
-      expect(r.elements.fire, inInclusiveRange(23, 25));
-      expect(r.elements.earth, inInclusiveRange(16, 18));
-      expect(r.elements.metal, inInclusiveRange(24, 26));
-      expect(r.elements.water, inInclusiveRange(10, 12));
+      // element % 정확 골든 — 1등 만세력 사이트 1995-10-27 15:43 男 lock.
+      // exact lock (±0): 16 / 21 / 17 / 41 / 4. 드리프트 즉시 catch.
+      expect(r.elements.wood, 16);
+      expect(r.elements.fire, 21);
+      expect(r.elements.earth, 17);
+      expect(r.elements.metal, 41);
+      expect(r.elements.water, 4);
+      // 추가 sanity — 1등 사이트 mandate 와 부합:
+      // 金 압도적 (>30 + dominant), 水 약 (<10).
+      expect(r.elements.metal, greaterThan(30));
+      expect(r.elements.water, lessThan(10));
 
       // 합 ≈ 100
       final total = r.elements.wood + r.elements.fire + r.elements.earth +
@@ -138,15 +132,15 @@ void main() {
       expect(total, inInclusiveRange(99, 101));
 
       // 일간 辛(金) 강약 골든:
-      //   base = 金(25) + 土(17) = 42
+      //   base = 金(약 41) + 土(약 17) = 약 58
       //   root: year亥(壬 없음/甲 없음, 辛 통근 X) 0
       //         month戌(辛 중기, s=2 → 3pts ×1.5 = 4.5)
       //         day卯(辛 없음) 0
       //         hour申(庚 본기, s=3 → 6pts) 6.0
       //   rootBonus = 4.5 + 6 = 10.5 → round 11 (≤20 clamp)
-      //   total = 42 + 11 = 53 → 중화 (45~54)
+      //   total = 약 69 → 신왕권. rounding 에 따라 신강 경계 가능.
       //
-      //   ±1 영역에서 신왕(≥55) 가능성도 있어 둘 중 하나로 lock.
+      //   ±1 영역에서 신강(≥70) 가능성도 있어 둘 중 하나로 lock.
       final s = StrengthService.judge(
         dayMasterElement: r.dayPillar.chunGanElement, // 金
         monthJi: r.monthPillar.jiJi,
@@ -157,20 +151,50 @@ void main() {
         dayJi: r.dayPillar.jiJi,
         hourJi: r.hourPillar?.jiJi,
       );
-      expect(s.label, anyOf(equals('중화'), equals('신왕')),
+      expect(s.label, anyOf(equals('신왕'), equals('신강')),
           reason: 'label=${s.label}, score=${s.score}');
-      expect(s.score, inInclusiveRange(50, 60),
+      expect(s.score, inInclusiveRange(65, 75),
           reason: 'score=${s.score}');
+    });
+
+    test('과적합 방지 — 다른 일간 케이스에서도 산식이 무너지지 않음', () {
+      // 단일 케이스 (1995-10-27, 辛 일간) 골든에 강하게 맞춘 가중치가
+      // 다른 일간에서도 합 ~ 100 % 유지하고 dominant 가 무너지지 않음 확인.
+      // IU (1993-5-16, 丁卯 일주, 火 일간) — 巳월 火 강 기대.
+      final iu = ManseryeokService.calculate(
+        year: 1993, month: 5, day: 16, hour: 12, minute: 0,
+        isLunar: false, isMale: false,
+      );
+      final iuTotal = iu.elements.wood + iu.elements.fire +
+          iu.elements.earth + iu.elements.metal + iu.elements.water;
+      expect(iuTotal, inInclusiveRange(99, 101),
+          reason: 'IU total=$iuTotal');
+      // 巳월 + 일간 火 → 火 응당 dominant 그룹 (>= earth/metal/water).
+      expect(iu.elements.fire, greaterThanOrEqualTo(iu.elements.water),
+          reason: 'IU fire=${iu.elements.fire} water=${iu.elements.water}');
+
+      // Karina (2000-4-11, 己亥 일주, 土 일간) — 辰월 土 강 기대.
+      final karina = ManseryeokService.calculate(
+        year: 2000, month: 4, day: 11, hour: 12, minute: 0,
+        isLunar: false, isMale: false,
+      );
+      final kaTotal = karina.elements.wood + karina.elements.fire +
+          karina.elements.earth + karina.elements.metal + karina.elements.water;
+      expect(kaTotal, inInclusiveRange(99, 101),
+          reason: 'Karina total=$kaTotal');
+      // 辰월 + 土 일간 → 土 강 (>= 25%).
+      expect(karina.elements.earth, greaterThanOrEqualTo(25),
+          reason: 'Karina earth=${karina.elements.earth} (辰월+己 mandate)');
     });
 
     test('월령 위치 invariance — 寅 가 月支 vs 時支 일 때 element % 다름', () {
       // 같은 4 지지 (寅·卯·辰·巳) 가 있는데 寅 이 월지일 때와 시지일 때
-      // 月支 위치의 지장간만 ×2.5 boost 받음.
+      // 月支 위치의 지장간만 ×3.0 boost 받음.
       //
       // case A: pillars = [寅, 卯, 辰, 巳] (year=寅, month=卯, day=辰, hour=巳)
-      //         월지 = 卯, boost = 卯 → 乙(木) ×2.5
+      //         월지 = 卯, boost = 卯 → 乙(木) ×3.0
       // case B: pillars = [卯, 寅, 辰, 巳] (year=卯, month=寅, day=辰, hour=巳)
-      //         월지 = 寅, boost = 寅 → 甲(木) 0.6 + 丙(火) 0.3 + 戊(土) 0.1 ×2.5
+      //         월지 = 寅, boost = 寅 → 甲(木) 0.7 + 丙(火) 0.2 + 戊(土) 0.1 ×3.0
       //
       // 직접 _calculateElements 호출 불가 (private), 따라서 ManseryeokService
       // 호출은 진태양시·년주 등 영향 받아 제어 어려움 → element % 비교는
