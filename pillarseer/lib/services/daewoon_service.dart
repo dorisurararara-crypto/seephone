@@ -6,9 +6,11 @@
 // 1. 월주(月柱) 천간/지지를 시작점.
 // 2. **양남음녀 (양 천간 + 남자 OR 음 천간 + 여자)**: 60갑자 순행 (월주 + 1, + 2...)
 //    **음남양녀**: 역행 (월주 - 1, - 2...)
-// 3. 첫 대운 시작 나이: 출생일 ~ 전절(前節) 또는 후절(後節) 까지 일수 ÷ 3
-//    (단순화: 모든 사람이 3살부터 첫 대운 시작 — UI 표시용)
+// 3. 첫 대운 시작 나이: 순행이면 다음 12절(節) 까지, 역행이면 직전 12절 까지 일수 ÷ 3.
+//    birthDateTime 미제공 시 기본값 3 (placeholder, UI 만 표시).
 // 4. 10년 단위 갑자 cycle.
+
+import 'solar_term_service.dart';
 
 class DaewoonService {
   static const List<String> _gan = [
@@ -41,11 +43,16 @@ class DaewoonService {
   }
 
   /// 8개 대운 chain — [{age, ganji, element}, ...].
+  ///
+  /// [birthDateTime] 제공 시: 정통 명리식 — 순행이면 다음 12절(節)·역행이면 직전
+  /// 12절 까지의 일수를 3으로 나눠 첫 대운 시작 나이 산출. 미제공 시 placeholder 3.
+  /// [startAge] 는 명시 제공 시 [birthDateTime] 보다 우선 (테스트 호환).
   static List<({int age, String ganji, String element})> chain({
     required String monthPillar, // 월주 (예: "乙丑")
     required String yearChunGan, // 년주 천간 (양/음 판단용)
     required bool isMale,
-    int startAge = 3, // 첫 대운 시작 나이 (default 3, 정확한 계산은 별도)
+    DateTime? birthDateTime,
+    int? startAge,
   }) {
     final yang = _isYang(yearChunGan);
     final forward = (yang && isMale) || (!yang && !isMale);
@@ -58,15 +65,62 @@ class DaewoonService {
       '壬': '水', '癸': '水',
     };
 
+    // 첫 대운 시작 나이 결정: 명시 startAge > birthDateTime 절기 거리 ÷ 3 > 3 fallback.
+    int firstAge;
+    if (startAge != null) {
+      firstAge = startAge;
+    } else if (birthDateTime != null) {
+      firstAge = _firstDaewoonAge(birthDateTime, forward);
+    } else {
+      firstAge = 3;
+    }
+
     final out = <({int age, String ganji, String element})>[];
     for (int k = 1; k <= 8; k++) {
       final idx = forward ? monthIdx + k : monthIdx - k;
       final ganji = _ganjiAt(idx);
       final element = elementOf[ganji[0]] ?? '?';
-      final age = startAge + (k - 1) * 10;
+      final age = firstAge + (k - 1) * 10;
       out.add((age: age, ganji: ganji, element: element));
     }
     return out;
+  }
+
+  /// 출생시각 ~ (순행: 다음 12절 / 역행: 직전 12절) 까지 일수 ÷ 3, round.
+  /// 0 이면 1 로 clamp (생후 0~1세는 보통 1살 표기).
+  static int _firstDaewoonAge(DateTime birth, bool forward) {
+    final y = birth.year;
+    // 후보 12절 datetime — 작년/올해/내년 12절 모음. jolDateTime(year, i) 의
+    // i=11 (소한) 은 year-1 의 12월 말~year 의 1월 사이라 단순 i 순서로 모으면
+    // 시간 정렬이 깨진다 → 시간순 sort 필수.
+    final jols = <DateTime>[
+      for (int i = 0; i < 12; i++) SolarTermService.jolDateTime(y - 1, i),
+      for (int i = 0; i < 12; i++) SolarTermService.jolDateTime(y, i),
+      for (int i = 0; i < 12; i++) SolarTermService.jolDateTime(y + 1, i),
+    ]..sort();
+    DateTime? target;
+    if (forward) {
+      // birth 이후 가장 빠른 절기.
+      for (final t in jols) {
+        if (t.isAfter(birth)) {
+          target = t;
+          break;
+        }
+      }
+    } else {
+      // birth 이전 가장 늦은 절기.
+      for (final t in jols) {
+        if (t.isBefore(birth)) {
+          target = t;
+        } else {
+          break;
+        }
+      }
+    }
+    if (target == null) return 3;
+    final days = target.difference(birth).inDays.abs();
+    final age = (days / 3).round();
+    return age < 1 ? 1 : age;
   }
 
   /// 현재 사용자 나이에 해당하는 대운 (None if before first chunk).

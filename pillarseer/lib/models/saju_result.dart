@@ -281,6 +281,9 @@ class SajuResult {
   final List<TenGodRow> tenGods;
   final int? userAge;         // 만 나이 — 대운 계산용
   final String? currentYearGanji; // 올해 60갑자
+  /// 양력 변환·진태양시 보정된 KST 출생 datetime — daewoon 절기 거리 계산용.
+  final DateTime? birthDateTime;
+  final bool? isMale;         // 양남음녀 결정용 — daewoon 순행/역행 (있으면 우선 사용).
 
   const SajuResult({
     required this.yearPillar,
@@ -297,6 +300,8 @@ class SajuResult {
     this.tenGods = const [],
     this.userAge,
     this.currentYearGanji,
+    this.birthDateTime,
+    this.isMale,
   });
 
   String get pillarsText {

@@ -4,6 +4,7 @@
 // 시주는 별도 계산 (klc 미지원).
 
 import 'dart:math';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:klc/klc.dart' as klc;
 import '../models/saju_result.dart';
 import 'solar_term_service.dart';
@@ -84,8 +85,9 @@ class ManseryeokService {
     '속초': 128.59,
     'wonju': 127.95,
     '원주': 127.95,
-    'cheongan': 127.50,
-    '청안': 127.50,
+    // 천안시(天安市, 충남 67만): cheongan→cheonan / 청안(괴산 면, 1만) 제거.
+    'cheonan': 127.15,
+    '천안': 127.15,
     'iksan': 126.94,
     '익산': 126.94,
     'sunchang': 127.13,
@@ -227,6 +229,10 @@ class ManseryeokService {
     Pillar? hourPillar,
     FiveElements elements,
     String dayMasterName,
+    int solarYear,
+    int solarMonth,
+    int solarDay,
+    DateTime adjustedBirth,
   }) calculate({
     required int year,
     required int month,
@@ -358,6 +364,12 @@ class ManseryeokService {
       hourPillar: hourP,
       elements: elements,
       dayMasterName: dayMasterName,
+      // 음력 입력의 양력 변환된 생년월일 — saju_service 의 나이 계산에서 사용.
+      solarYear: sYear,
+      solarMonth: sMonth,
+      solarDay: sDay,
+      // DST·진태양시 보정 모두 적용된 KST datetime — daewoon 절기 거리 계산에서 사용.
+      adjustedBirth: DateTime(adjY, adjM, adjD, adjHour, adjMin),
     );
   }
 
@@ -519,6 +531,16 @@ class ManseryeokService {
     if (total == 0) {
       return const FiveElements(wood: 20, fire: 20, earth: 20, metal: 20, water: 20);
     }
+    // 5행 % 산출 — 사용자 mandate calibration 우선.
+    //
+    // Round 77 Sprint 1 결정: 1995-10-27 男 5행 골든 16/21/17/41/4 (합 99) 은
+    // 1등 만세력 사이트 비교 기반 사용자 mandate. 산술적으로 합 100 보장과
+    // 정확한 골든 lock 은 양립 불가 (largest-remainder 시 火 22 로 변동) →
+    // 골든 보존 우선, 종전 독립 round() 그대로 유지.
+    //
+    // 일반 케이스 acceptance: 합 99~101 허용 (round() 자체 한계). UI 게이지
+    // 시각 mismatch 는 향후 sprint 에서 별도 dominant +1 / deficit -1 보정안으로
+    // deferred. backlog HIGH #7.
     return FiveElements(
       wood: (wood * 100 / total).round(),
       fire: (fire * 100 / total).round(),
@@ -536,7 +558,15 @@ class ManseryeokService {
     '壬': '亥', '癸': '子',
   };
 
-  /// JDN 기반 fallback (klc 실패 시)
+  /// 테스트 전용 fallback 강제 호출 — `_legacyPillars` 회귀 검증용.
+  @visibleForTesting
+  static ({Pillar year, Pillar month, Pillar day}) debugLegacyPillars(
+          int y, int m, int d) =>
+      _legacyPillars(y, m, d);
+
+  /// JDN 기반 fallback (klc 실패 시).
+  /// 월주는 SolarTermService(절기) + 오호둔법(五虎遁法) 으로 정상 산출.
+  /// 종전 `((dayIdx ~/ 60) * 10) % 60` 은 dayIdx 가 0~59 라 항상 0 → 월주가 영원히 甲子 였다.
   static ({Pillar year, Pillar month, Pillar day}) _legacyPillars(
       int y, int m, int d) {
     int yy = y;
@@ -553,10 +583,83 @@ class ManseryeokService {
         .floor();
     const epoch = 2415021;
     final dayIdx = ((10 + (jdn - epoch)) % 60 + 60) % 60;
+    final yearP = _yearPillarSolarBased(y, m, d, 0, 0);
+    final monthP = _legacyMonthPillar(y, m, d, yearP);
     return (
-      year: _yearPillarSolarBased(y, m, d, 0, 0),
-      month: _pillarFromIndex(((dayIdx ~/ 60) * 10) % 60),
+      year: yearP,
+      month: monthP,
       day: _pillarFromIndex(dayIdx),
     );
+  }
+
+  /// fallback 월주 — SolarTermService 우선, 실패 시 절입 평균일 표 fallback.
+  /// 월지(月支) = 12절 인덱스 매핑, 월간(月干) = 오호둔법(년간 % 5 기반).
+  static Pillar _legacyMonthPillar(int y, int m, int d, Pillar yearPillar) {
+    int monthJiIdx; // 0=寅 ~ 11=丑
+    try {
+      // SolarTermService 사용 가능: birth 가 어느 12절 구간인지 판정.
+      final birth = DateTime(y, m, d);
+      final jols = <DateTime>[
+        for (int i = 0; i < 11; i++) SolarTermService.jolDateTime(y, i),
+        SolarTermService.jolDateTime(y + 1, 11), // 다음해 소한
+      ];
+      int idx = -1;
+      for (int i = 0; i < 12; i++) {
+        if (!birth.isBefore(jols[i])) idx = i;
+      }
+      if (idx < 0) {
+        // 입춘 이전 (1월) — 전년 소한 이후 = 丑월(11).
+        idx = 11;
+      }
+      monthJiIdx = idx;
+    } catch (_) {
+      // 절기 데이터 실패 → 절입 평균일 표 fallback.
+      // 입춘 2/4, 경칩 3/6, 청명 4/5, 입하 5/6, 망종 6/6, 소서 7/7,
+      // 입추 8/8, 백로 9/8, 한로 10/8, 입동 11/7, 대설 12/7, 소한 1/6.
+      const cutoff = <List<int>>[
+        [2, 4],  // 寅 (입춘~)
+        [3, 6],  // 卯 (경칩~)
+        [4, 5],  // 辰 (청명~)
+        [5, 6],  // 巳 (입하~)
+        [6, 6],  // 午 (망종~)
+        [7, 7],  // 未 (소서~)
+        [8, 8],  // 申 (입추~)
+        [9, 8],  // 酉 (백로~)
+        [10, 8], // 戌 (한로~)
+        [11, 7], // 亥 (입동~)
+        [12, 7], // 子 (대설~)
+        [1, 6],  // 丑 (소한~)
+      ];
+      int idx = 11; // default: 丑 (입춘 직전)
+      for (int i = 11; i >= 0; i--) {
+        final cm = cutoff[i][0];
+        final cd = cutoff[i][1];
+        // 같은 해 시퀀스로 비교: 입춘(寅) 이전은 전년 丑월.
+        if (i == 11) {
+          // 丑월: (소한 1/6 ~ 입춘 2/4) 또는 (전년 소한 1/6 ~ 올해 입춘 직전).
+          if ((m == 1 && d >= cd) ||
+              (m == 2 && d < 4)) {
+            idx = 11;
+            break;
+          }
+          continue;
+        }
+        if (m > cm || (m == cm && d >= cd)) {
+          idx = i;
+          break;
+        }
+      }
+      monthJiIdx = idx;
+    }
+    // 월간(오호둔법): 寅월 시작 천간 = (년간 % 5 * 2 + 2) % 10. 이후 순차.
+    const chunGan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+    const jiJi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+    final yearChunGanIdx = chunGan.indexOf(yearPillar.chunGan);
+    final firstMonthChunGanIdx =
+        yearChunGanIdx < 0 ? 2 : ((yearChunGanIdx % 5) * 2 + 2) % 10;
+    final monthChunGanIdx = (firstMonthChunGanIdx + monthJiIdx) % 10;
+    // monthJiIdx 0=寅 → jiJi[(0+2)%12]=寅, 1=卯, ..., 11=丑.
+    final monthJiJi = jiJi[(monthJiIdx + 2) % 12];
+    return Pillar(chunGan: chunGan[monthChunGanIdx], jiJi: monthJiJi);
   }
 }

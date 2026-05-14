@@ -47,7 +47,10 @@ void main() {
         hour: 15, minute: 43,
         isLunar: false, isMale: true,
       );
-      final r = await LifeStageService.compute(saju, isMale: true, userAge: 35);
+      // Round 77: 1995-10-27 男 = 음남(乙亥년) 역행. 직전 절(한로) 거리 ÷ 3 ≈ 6
+      // → chain ages 6/16/26/36/46/56/66/76. early=[6,16,26], mid=[36,46].
+      // → mid phase 검증은 40세 사용.
+      final r = await LifeStageService.compute(saju, isMale: true, userAge: 40);
       expect(r.early.labelKo, '초년운');
       expect(r.mid.labelKo, '중년운');
       expect(r.late.labelKo, '말년운');
@@ -57,7 +60,6 @@ void main() {
       // current 가 정확히 하나여야 함
       final currentCount = r.all.where((p) => p.isCurrent).length;
       expect(currentCount, 1);
-      // 35세는 mid 에 속해야 함 (early 끝 ≈ 23~28, mid 끝 ≈ 43~48 보통)
       expect(r.mid.isCurrent, true);
       expect(r.early.isCurrent, false);
       expect(r.late.isCurrent, false);

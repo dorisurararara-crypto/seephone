@@ -96,12 +96,13 @@ class LifeStageService {
   }) async {
     final pool = await _pool();
 
-    // 1) DaewoonService chain → 8 chunk
+    // 1) DaewoonService chain → 8 chunk. birthDateTime 있으면 절기 거리 ÷ 3 startAge.
     final chain = DaewoonService.chain(
       monthPillar:
           '${saju.monthPillar.chunGan}${saju.monthPillar.jiJi}',
       yearChunGan: saju.yearPillar.chunGan,
-      isMale: isMale,
+      isMale: saju.isMale ?? isMale,
+      birthDateTime: saju.birthDateTime,
     );
 
     // 2) phase mapping: chunk index 0..2 / 3..4 / 5..7

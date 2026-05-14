@@ -100,15 +100,17 @@ class SolarTermService {
         break; // 다음 절기는 미래
       }
     }
-    // 만약 이번 해 입춘 이전이면 작년 소한·대한 시기.
+    // 이번 해 입춘 이전 (1월 ~ 입춘 직전) 분기.
+    // 후보 (늦은 것부터): 올해 대한(23) → 올해 소한(22) → 전년 동지(21) → 전년 대설(20).
+    // 소한(1/6경) · 대한(1/20경) 은 모두 "올해" 발생 — 전년 인덱스 조회는 잘못된 절기 매핑.
     if (kstDt.isBefore(termDateTime(y, 0))) {
-      // 작년 소한 또는 대한.
-      final dahan = termDateTime(y - 1, 23);
-      if (!kstDt.isBefore(dahan)) return 23;
-      final sohan = termDateTime(y - 1, 22);
-      if (!kstDt.isBefore(sohan)) return 22;
-      // 더 이전은 작년 대설(20).
-      return 20;
+      final dahanThisYear = termDateTime(y, 23);
+      if (!kstDt.isBefore(dahanThisYear)) return 23;
+      final sohanThisYear = termDateTime(y, 22);
+      if (!kstDt.isBefore(sohanThisYear)) return 22;
+      final dongjiPrev = termDateTime(y - 1, 21);
+      if (!kstDt.isBefore(dongjiPrev)) return 21;
+      return 20; // 전년 대설
     }
     return latest;
   }

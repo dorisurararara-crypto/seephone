@@ -94,7 +94,8 @@ class TenGodsService {
       ),
       TenGodRow(
         position: 'day',
-        chunGanGod: null, // 일간 자신은 비견
+        // 일간 자기자리도 비견(比肩) 으로 카운트 — null 처리 시 freq 1글자 누락.
+        chunGanGod: TenGod.bigyeon,
         jiJiGod: godForJiJi(dm, saju.dayPillar.jiJi),
       ),
       if (saju.hourPillar != null)

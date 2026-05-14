@@ -98,9 +98,10 @@ class SajuService {
     // 8섹션 deep content + 10신 table + 대운/세운 procedural
     final currentYearGanji = DeepContentService.currentYearGanji();
     final today = DateTime.now();
-    final hasBirthdayPassed = today.month > month ||
-        (today.month == month && today.day >= day);
-    final age = today.year - year - (hasBirthdayPassed ? 0 : 1);
+    // 음력 입력은 양력 변환된 month/day 기준으로 나이 계산 (1살 오차 방지).
+    final hasBirthdayPassed = today.month > mans.solarMonth ||
+        (today.month == mans.solarMonth && today.day >= mans.solarDay);
+    final age = today.year - mans.solarYear - (hasBirthdayPassed ? 0 : 1);
     DeepReading? deepEn;
     DeepReading? deepKo;
     try {
@@ -126,6 +127,9 @@ class SajuService {
       // deep content optional; result still works without it
     }
 
+    // 양력 변환·DST·진태양시 보정 모두 적용된 KST datetime — daewoon 절기 거리 계산용.
+    final birthDt = mans.adjustedBirth;
+
     final base = SajuResult(
       yearPillar: yearP,
       monthPillar: monthP,
@@ -140,6 +144,8 @@ class SajuService {
       deepKo: deepKo,
       userAge: age.clamp(1, 120),
       currentYearGanji: currentYearGanji,
+      birthDateTime: birthDt,
+      isMale: isMale,
     );
 
     final tenGods = TenGodsService.tableFor(base);
@@ -158,6 +164,8 @@ class SajuService {
       tenGods: tenGods,
       userAge: age.clamp(1, 120),
       currentYearGanji: currentYearGanji,
+      birthDateTime: birthDt,
+      isMale: isMale,
     );
   }
 

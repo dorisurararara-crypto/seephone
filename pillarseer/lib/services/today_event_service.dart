@@ -272,7 +272,11 @@ class TodayEventService {
   }
 
   static String _branchRelation(String userBranch, String todayBranch) {
-    if (userBranch == todayBranch) return '없음';
+    if (userBranch == todayBranch) {
+      // 자형(自刑) 4쌍 — 辰辰/午午/酉酉/亥亥 는 같은 지지 만남도 '형' 으로 잡힌다.
+      const selfHyung = {'辰', '午', '酉', '亥'};
+      return selfHyung.contains(userBranch) ? '형' : '없음';
+    }
     if (HapchungService.isJijiHap(userBranch, todayBranch)) return '합';
     if (HapchungService.isJijiChung(userBranch, todayBranch)) return '충';
     if (HapchungService.isJijiPa(userBranch, todayBranch)) return '파';
@@ -283,8 +287,8 @@ class TodayEventService {
   }
 
   static bool _isJijiHyung(String a, String b) {
-    // 무례지형 子卯, 三刑 寅巳申 / 丑戌未 의 2쌍 부분, 자형 (같은 지지) 은 위에서
-    // userBranch==todayBranch 케이스로 잡음. 三刑 의 2쌍 매핑만.
+    // 무례지형 子卯, 三刑 寅巳申 / 丑戌未 의 2쌍 부분. 자형(辰辰·午午·酉酉·亥亥) 은
+    // 위 _branchRelation 에서 userBranch==todayBranch 분기로 처리.
     const pairs = <Set<String>>[
       {'子', '卯'}, // 무례지형
       {'寅', '巳'}, {'巳', '申'}, {'寅', '申'}, // 三刑 寅巳申

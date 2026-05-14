@@ -7,6 +7,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/saju_result.dart';
+import 'solar_term_service.dart';
 
 class DeepContentService {
   static Map<String, Map<String, dynamic>>? _enCache;
@@ -600,9 +601,10 @@ class DeepContentService {
   /// 현재 연도의 60갑자 (1900년 庚子 기준)
   static String currentYearGanji([DateTime? now]) {
     final t = now ?? DateTime.now();
+    // 입춘 boundary 는 연도별 KST datetime (2/3~2/5 + 시분 가변) — SolarTermService 위임.
+    final lipchunDt = SolarTermService.lipchun(t.year);
     int adjustedYear = t.year;
-    // 입춘(2월 4일) 이전이면 전년도 처리
-    if (t.month < 2 || (t.month == 2 && t.day < 4)) {
+    if (t.isBefore(lipchunDt)) {
       adjustedYear -= 1;
     }
     const chunGan = ['庚', '辛', '壬', '癸', '甲', '乙', '丙', '丁', '戊', '己'];
