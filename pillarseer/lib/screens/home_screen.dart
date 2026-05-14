@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ import '../services/hourly_service.dart';
 import '../services/lucky_chips_service.dart';
 import '../services/six_axis_score_service.dart';
 import '../services/today_deep_service.dart';
+import '../services/today_event_service.dart';
 import '../services/ziwei_service.dart';
 import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
@@ -95,6 +97,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _FiveDayTrendCard(points: fiveDay),
               // Round 74 — 12시간 흐름을 first-fold 로 승격. Co-Star 식 도파민 카드.
               _HourlyFlowSection(saju: saju),
+              // Round 76 sprint 5 — 오늘 사건 가능성 카드. CTA → /result 의 상세 섹션.
+              _TodayEventCard(
+                reading: TodayEventService.build(
+                  userDayStem: saju.dayPillar.chunGan,
+                  userDayBranch: saju.dayPillar.jiJi,
+                  userMonthBranch: saju.monthPillar.jiJi,
+                  todayPillar: fortune.dayPillar,
+                  todayScore: fortune.totalScore,
+                ),
+              ),
               _ScoreBlock(
                 score: fortune.totalScore,
                 quote: useKo
@@ -1267,6 +1279,119 @@ class _LuckySection extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ──────────── Round 76 sprint 5 — Today Event Card (오늘 사건 가능성) ────────────
+//
+// home_screen first-fold 카드. 사용자 verbatim mandate: "오늘 너에게 생길 수 있는 일".
+// dominant 카테고리 본문 1줄 + 별점 4 row + "자세히 보기 →" CTA.
+
+class _TodayEventCard extends StatelessWidget {
+  final TodayEventReading reading;
+  const _TodayEventCard({required this.reading});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    // 본문은 today_event_service fallback. Sprint 6 에서 pool 본문으로 교체.
+    final body = useKo
+        ? TodayEventService.composeNotificationLine(reading)
+        : TodayEventService.composeNotificationLineEn(reading);
+    final stars = [
+      (l.homeCategoryLove, reading.starsLove),
+      (l.homeCategoryWealth, reading.starsMoney),
+      (l.homeCategoryWork, reading.starsWork),
+      (l.todayEventStarHealth, reading.starsHealth),
+    ];
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.todayEventCaption.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            body,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 15,
+              height: 1.55,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 18),
+          ...stars.map((row) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 64,
+                      child: Text(
+                        row.$1.toUpperCase(),
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          letterSpacing: 2,
+                          color: AppColors.taupe,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      _starsText(row.$2),
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: AppColors.ink,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+          const SizedBox(height: 18),
+          GestureDetector(
+            onTap: () =>
+                GoRouter.of(context).push('/result?anchor=today_event'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  l.todayEventCtaDetail,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    letterSpacing: 3,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.arrow_forward,
+                    size: 14, color: AppColors.ink),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _starsText(int n) {
+    final filled = n.clamp(0, 5);
+    return '★' * filled + '☆' * (5 - filled);
   }
 }
 

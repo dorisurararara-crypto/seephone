@@ -309,6 +309,27 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get todayEventCaption => 'What\'s likely for you today';
+
+  @override
+  String get todayEventCtaDetail => 'See details';
+
+  @override
+  String get todayEventStarHealth => 'Health';
+
+  @override
+  String get todayEventDetailTitle => 'Today\'s likely event';
+
+  @override
+  String get todayEventWhy => 'Why';
+
+  @override
+  String get todayEventCaution => 'Worth watching';
+
+  @override
+  String get todayEventRecommend => 'Worth trying';
+
+  @override
   String get homeHourlyTitle => 'Today\'s flow ⏰';
 
   @override

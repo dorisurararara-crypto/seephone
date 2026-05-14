@@ -661,6 +661,48 @@ abstract class AppL10n {
   /// **'Notification time set to {hh}:{mm}.'**
   String settingsNotifTimeDoneSnack(Object hh, Object mm);
 
+  /// No description provided for @todayEventCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s likely for you today'**
+  String get todayEventCaption;
+
+  /// No description provided for @todayEventCtaDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'See details'**
+  String get todayEventCtaDetail;
+
+  /// No description provided for @todayEventStarHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get todayEventStarHealth;
+
+  /// No description provided for @todayEventDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s likely event'**
+  String get todayEventDetailTitle;
+
+  /// No description provided for @todayEventWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Why'**
+  String get todayEventWhy;
+
+  /// No description provided for @todayEventCaution.
+  ///
+  /// In en, this message translates to:
+  /// **'Worth watching'**
+  String get todayEventCaution;
+
+  /// No description provided for @todayEventRecommend.
+  ///
+  /// In en, this message translates to:
+  /// **'Worth trying'**
+  String get todayEventRecommend;
+
   /// No description provided for @homeHourlyTitle.
   ///
   /// In en, this message translates to:

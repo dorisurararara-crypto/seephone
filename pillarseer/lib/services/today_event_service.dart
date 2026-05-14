@@ -103,6 +103,7 @@ class TodayEventReading {
   final int starsWork; // 1-5
   final int starsHealth; // 1-5
   final String sourceReason; // 2-3 문장 사주 근거 (한국어)
+  final String sourceReasonEn; // 2-3 sentence reasoning (English)
   final DayEnergyKind energy;
   final Map<EventCategory, int> rawScores; // 디버그 / 정렬용
 
@@ -117,6 +118,7 @@ class TodayEventReading {
     required this.starsWork,
     required this.starsHealth,
     required this.sourceReason,
+    this.sourceReasonEn = '',
     required this.energy,
     required this.rawScores,
   });
@@ -165,10 +167,16 @@ class TodayEventService {
     // 6. 별점 4 — love/money/work/health 의 카테고리 점수 매핑.
     int star(EventCategory c) => _scoreToStar(scores[c] ?? 0);
 
-    // 7. 사주 근거 단락 — 한자는 괄호 안에만.
+    // 7. 사주 근거 단락 — 한자 jargon 노출 0 (groupTone 자연어로만).
     final sourceReason = _composeSourceReasonKo(
       group: group,
       god: god,
+      activeShinsa: active,
+      relation: relation,
+      dominant: dominant,
+    );
+    final sourceReasonEn = _composeSourceReasonEn(
+      group: group,
       activeShinsa: active,
       relation: relation,
       dominant: dominant,
@@ -185,6 +193,7 @@ class TodayEventService {
       starsWork: star(EventCategory.work),
       starsHealth: star(EventCategory.health),
       sourceReason: sourceReason,
+      sourceReasonEn: sourceReasonEn,
       energy: classifyDayEnergy(todayScore),
       rawScores: scores,
     );
@@ -410,34 +419,121 @@ class TodayEventService {
     required String relation,
     required EventCategory dominant,
   }) {
-    final godKo = god?.ko ?? '비견 (比肩)';
-    final groupKo = group.ko;
+    // 자연어 톤: 십신 한자는 () 안에만, jargon "결/일간/지지" 단어 노출 X.
+    final groupTone = _groupToneKo(group);
     final catKo = dominant.ko;
     final shinPart = activeShinsa.isEmpty
         ? ''
-        : ' 거기에 \'${activeShinsa.first}\' 흐름이 들어오면서'
-            '${activeShinsa.length > 1 ? " '${activeShinsa[1]}' 까지" : ''}'
-            ' $catKo 결이 더 또렷해질 수 있어요.';
+        : " 거기에 '${activeShinsa.first}' 분위기까지 들어와서"
+            "${activeShinsa.length > 1 ? " '${activeShinsa[1]}' 까지" : ''}"
+            ' $catKo 가능성이 더 커지기 쉬워요.';
     String relPart;
     switch (relation) {
       case '합':
-        relPart = ' 오늘 지지는 \'합\' 분위기여서 사람과 연결되기 좋은 흐름이에요.';
+        relPart = ' 오늘은 사람과 연결되기 좋은 분위기도 같이 흐르고 있어요.';
         break;
       case '충':
-        relPart = ' 오늘 지지는 \'충\'이라 변화의 결이 강해서 컨디션 변동에 주의하면 좋아요.';
+        relPart = ' 오늘은 컨디션이 들쭉날쭉 흔들릴 수 있는 분위기예요.';
         break;
       case '형':
-        relPart = ' 오늘 지지는 \'형\' 흐름이라 작은 마찰이 생기기 쉬워요.';
+        relPart = ' 작은 마찰이 살짝 생기기 쉬운 분위기도 같이 있어요.';
         break;
       case '파':
       case '해':
-        relPart = ' 오늘 지지와 \'$relation\' 흐름이 살짝 어긋날 수 있어요.';
+        relPart = ' 톤이 살짝 어긋날 수 있는 분위기도 같이 있어요.';
         break;
       default:
         relPart = '';
     }
-    return '오늘은 사용자 일간 기준 \'$godKo\' 결의 $groupKo 흐름이라 $catKo 가능성이 강해요.'
+    // FIX: 한자 jargon 노출 0 — god.ko 의 한자 () suffix 사용 X.
+    return '오늘은 너의 사주가 $groupTone 분위기를 만나서 $catKo 가능성이 강해요.'
         '$shinPart'
         '$relPart';
+  }
+
+  static String _composeSourceReasonEn({
+    required TenGodGroup group,
+    required List<String> activeShinsa,
+    required String relation,
+    required EventCategory dominant,
+  }) {
+    final groupTone = _groupToneEn(group);
+    final catEn = dominant.key;
+    final shinPart = activeShinsa.isEmpty
+        ? ''
+        : " A '${activeShinsa.first}' vibe is also showing up,"
+            "${activeShinsa.length > 1 ? " plus '${activeShinsa[1]}'," : ''}"
+            ' nudging the $catEn track stronger.';
+    String relPart;
+    switch (relation) {
+      case '합':
+        relPart = ' Today also leans toward people clicking and connecting.';
+        break;
+      case '충':
+        relPart = " Energy can swing today, so watch the body's signals.";
+        break;
+      case '형':
+        relPart = ' Small frictions can pop up on the side.';
+        break;
+      case '파':
+      case '해':
+        relPart = ' The tone can slip a notch from yesterday.';
+        break;
+      default:
+        relPart = '';
+    }
+    // FIX r3 #3: 항상 2문장 이상 — 신살/관계 비어도 두 번째 문장 ("watch the small signals").
+    final twoSent = shinPart.isEmpty && relPart.isEmpty
+        ? ' Keep an eye on small signals on this track today.'
+        : '$shinPart$relPart';
+    return 'Today, your chart leans into $groupTone vibes — the $catEn track is more likely.$twoSent';
+  }
+
+  /// 영문 fallback notification line — 6 카테고리 분기 (composeNotificationLine 영문 짝).
+  static String composeNotificationLineEn(TodayEventReading r) {
+    switch (r.categoryDominant) {
+      case EventCategory.relationship:
+        return "Today, small words from someone may catch you off guard. Answer a beat later.";
+      case EventCategory.money:
+        return "Today, an unplanned urge to spend is likely. Add to cart and sleep on it.";
+      case EventCategory.work:
+        return "Today, focus can scatter. Stick to cleanup, not big decisions.";
+      case EventCategory.love:
+        return "Today, one message can shake your mood more than usual. Don't over-read it.";
+      case EventCategory.health:
+        return "Today, fatigue stacks easily. Skip the late-night feed and rest a bit earlier.";
+      case EventCategory.luck:
+        return "Today, small leads or info can drop in. Reply to one casual chat.";
+    }
+  }
+
+  static String _groupToneKo(TenGodGroup group) {
+    switch (group) {
+      case TenGodGroup.bigyeop:
+        return '친구·또래';
+      case TenGodGroup.siksang:
+        return '표현·말';
+      case TenGodGroup.jaeseong:
+        return '돈·소비';
+      case TenGodGroup.gwanseong:
+        return '책임·평가';
+      case TenGodGroup.inseong:
+        return '쉼·공부';
+    }
+  }
+
+  static String _groupToneEn(TenGodGroup group) {
+    switch (group) {
+      case TenGodGroup.bigyeop:
+        return 'peers and friends';
+      case TenGodGroup.siksang:
+        return 'expression and talk';
+      case TenGodGroup.jaeseong:
+        return 'money and spending';
+      case TenGodGroup.gwanseong:
+        return 'duty and evaluation';
+      case TenGodGroup.inseong:
+        return 'rest and study';
+    }
   }
 }
