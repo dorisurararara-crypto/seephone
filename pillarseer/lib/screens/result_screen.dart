@@ -144,8 +144,9 @@ class ResultScreen extends ConsumerWidget {
             // 1. Hero — 일주 한자 + 영문 보조
             _DayMasterHero(result: result, reading: reading, useKo: useKo),
             // Round 77 sprint 7 — 오늘 사건 가능성 카드 2번째 승격 (즉시 재미 확보).
-            // anchor key 유지: /result?anchor=today_event deep-link 스크롤 동작.
-            _TodayEventDetailSection(
+            // anchor key 유지: /result?anchor=today_event deep-link 스크롤 동작 (backward compat).
+            // Round 79 sprint 7 — 신규 진입은 /today route 권장 (사용자 mandate "내 사주 = 평생사주만").
+            TodayEventDetailSection(
               key: kTodayEventDetailAnchor,
               result: result,
               useKo: useKo,
@@ -4018,10 +4019,12 @@ class _AdditionalLifeRow extends StatelessWidget {
 // 17 섹션 + 본 섹션 = 18 (append). 사용자 verbatim "오늘 당신에게 생길 수 있는 일" 상세.
 // 본문 1줄 + "왜 그런지" 사주 근거 + 조심 1줄 + 추천 1줄 + 별점 4 row.
 
-class _TodayEventDetailSection extends StatelessWidget {
+/// Round 79 sprint 7 — today_screen 에서 재사용 위해 public visibility 노출.
+/// result_screen 의 평생사주 영역 안 mount 는 backward compat 으로 유지 (anchor scroll 가드).
+class TodayEventDetailSection extends StatelessWidget {
   final SajuResult result;
   final bool useKo;
-  const _TodayEventDetailSection({
+  const TodayEventDetailSection({
     super.key,
     required this.result,
     required this.useKo,
@@ -4060,13 +4063,13 @@ class _TodayEventDetailSection extends StatelessWidget {
     final caution = useKo
         ? (TodayEventService.composeCautionKo(
                 reading: reading, date: now, day60ji: day60ji) ??
-            _TodayEventDetailSection._cautionKo(reading.categoryDominant))
-        : _TodayEventDetailSection._cautionEn(reading.categoryDominant);
+            TodayEventDetailSection._cautionKo(reading.categoryDominant))
+        : TodayEventDetailSection._cautionEn(reading.categoryDominant);
     final recommend = useKo
         ? (TodayEventService.composeRecommendKo(
                 reading: reading, date: now, day60ji: day60ji) ??
-            _TodayEventDetailSection._recommendKo(reading.categoryDominant))
-        : _TodayEventDetailSection._recommendEn(reading.categoryDominant);
+            TodayEventDetailSection._recommendKo(reading.categoryDominant))
+        : TodayEventDetailSection._recommendEn(reading.categoryDominant);
     final stars = [
       (l.homeCategoryLove, reading.starsLove),
       (l.homeCategoryWealth, reading.starsMoney),

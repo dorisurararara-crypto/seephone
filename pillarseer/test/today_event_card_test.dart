@@ -99,16 +99,20 @@ void main() {
     final home = File('lib/screens/home_screen.dart').readAsStringSync();
     final result = File('lib/screens/result_screen.dart').readAsStringSync();
 
-    test('home_screen 에 _TodayEventCard 존재 + CTA /result?anchor=today_event',
+    test('home_screen 에 _TodayEventCard 존재 + CTA /today (Round 79 sprint 7 화면 분리)',
         () {
       expect(home.contains('_TodayEventCard'), isTrue);
       expect(home.contains('todayEventCaption'), isTrue);
       expect(home.contains('todayEventCtaDetail'), isTrue);
-      expect(home.contains('anchor=today_event'), isTrue);
+      // Round 79 sprint 7 — push target: /result?anchor=today_event → /today.
+      // 사용자 mandate "내 사주 = 평생사주만" — 신규 진입은 /today 별 페이지.
+      expect(home.contains("'/today'"), isTrue);
     });
 
-    test('result_screen 에 _TodayEventDetailSection + anchor key 존재', () {
-      expect(result.contains('_TodayEventDetailSection'), isTrue);
+    test('result_screen 에 TodayEventDetailSection + anchor key 존재 (backward compat)', () {
+      // Round 79 sprint 7 — class rename: _TodayEventDetailSection → TodayEventDetailSection.
+      // anchor key kTodayEventDetailAnchor 는 backward compat 으로 보존.
+      expect(result.contains('TodayEventDetailSection'), isTrue);
       expect(result.contains('kTodayEventDetailAnchor'), isTrue);
       expect(result.contains('TODAY EVENT'), isTrue);
       expect(result.contains('todayEventCaption'), isTrue);

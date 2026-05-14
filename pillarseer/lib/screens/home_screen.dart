@@ -145,7 +145,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     dayPillar: fortune.dayPillar,
                     label: _localizedGanjiLabel(context, fortune.dayPillar),
                   ),
-                  _TodayDeepReadingSection(
+                  TodayDeepReadingSection(
                     reading: TodayDeepService.build(
                       userDayStem: saju.dayPillar.chunGan,
                       userDayBranch: saju.dayPillar.jiJi,
@@ -1619,7 +1619,9 @@ class _TodayEventCard extends StatelessWidget {
           const SizedBox(height: 18),
           GestureDetector(
             onTap: () =>
-                GoRouter.of(context).push('/result?anchor=today_event'),
+                // Round 79 sprint 7 — 사용자 mandate "내 사주 = 평생사주만".
+                // 신규 진입 = /today route (result 의 today section 은 backward compat 유지).
+                GoRouter.of(context).push('/today'),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -1711,9 +1713,11 @@ class _ScoreGauge extends StatelessWidget {
 
 // ──────────── Today Deep Reading (사주 깊이 오늘 풀이) ────────────
 
-class _TodayDeepReadingSection extends StatelessWidget {
+/// Round 79 sprint 7 — today_screen 에서 재사용 위해 public visibility 노출.
+/// home_screen 의 deep dive 영역 안 mount 는 기존대로 유지.
+class TodayDeepReadingSection extends StatelessWidget {
   final TodayDeepReading reading;
-  const _TodayDeepReadingSection({required this.reading});
+  const TodayDeepReadingSection({super.key, required this.reading});
 
   @override
   Widget build(BuildContext context) {

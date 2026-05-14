@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'screens/splash_screen.dart';
 import 'screens/input_screen.dart';
 import 'screens/result_screen.dart';
+import 'screens/today_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/discover_screen.dart';
 import 'screens/profile_screen.dart';
@@ -26,6 +27,7 @@ GoRouter buildRouter(WidgetRef ref) {
       final loc = state.matchedLocation;
       const protected = [
         '/result',
+        '/today',
         '/home',
         '/reports',
         '/reports/compatibility',
@@ -41,6 +43,14 @@ GoRouter buildRouter(WidgetRef ref) {
       if (result == null && protected.contains(loc)) {
         return '/input';
       }
+      // Round 79 sprint 7 — 알림 deep-link `/result?anchor=today_event` payload 를
+      // 새 화면 `/today` 로 redirect (사용자 mandate "내 사주 = 평생사주만").
+      // result_screen 의 backward compat (anchor scroll) 는 유지하되, 신규 진입은
+      // /today 로만. notification_service 측 payload 도 sprint 7 안 `/today` 로 migration.
+      if (loc == '/result' &&
+          state.uri.queryParameters['anchor'] == 'today_event') {
+        return '/today';
+      }
       return null;
     },
     routes: [
@@ -55,6 +65,11 @@ GoRouter buildRouter(WidgetRef ref) {
       GoRoute(
         path: '/result',
         builder: (context, state) => const ResultScreen(),
+      ),
+      // Round 79 sprint 7 — 신규 `/today` route (사용자 mandate "내 사주 = 평생사주만").
+      GoRoute(
+        path: '/today',
+        builder: (context, state) => const TodayScreen(),
       ),
       GoRoute(
         path: '/home',
