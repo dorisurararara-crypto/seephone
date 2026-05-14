@@ -236,13 +236,99 @@ def main():
     if not (0.05 <= pct_both <= 0.20):
         fails.append(f"FAIL polarity 양면 {pct_both:.0%} out of 5-20%")
 
+    # Round 76 sprint 7 — 사건 영역 (today_event_pool.json) 분리 audit.
+    # 캐릭터 영역과 룰이 다름: hedge OK (사용자 verbatim mandate), 단정 예언 금지.
+    print('\n## Round 76 sprint 7 — 사건 영역 (today_event_pool.json)\n')
+    event_pool_path = ASSETS / 'today_event_pool.json'
+    if not event_pool_path.exists():
+        # 누락은 FAIL (Round 76 sprint 4 산출물 mandate).
+        fails.append('FAIL today_event_pool.json 누락 (Round 76 sprint 4 mandate)')
+    else:
+        event_fails = _audit_event_pool(event_pool_path)
+        if not event_fails:
+            print('  PASS — 사건 영역 헷지 / 행동 / 금지 패턴 통과')
+        else:
+            for f in event_fails:
+                print(f'  {f}')
+            fails.extend(event_fails)
+
     if not fails:
-        print('PASS — 전 항목 통과')
+        print('\nPASS — 캐릭터 영역 + 사건 영역 모두 통과')
         return 0
     else:
-        for f in fails:
-            print(f'  {f}')
         return 1
+
+
+# Round 76 sprint 7 — 사건 영역 사용자 verbatim mandate 검증.
+# hedge OK (생기기 쉬워요 / 흐름이 강해요 / 가능성이 있어요 / 쉬워요 / 흔들릴 수 있어요),
+# 단정 예언 금지 (반드시 / 사고가 날 / 큰돈을 잃 / 병원 / 이성과 만납니다),
+# body/caution/recommend 각 ≤120자, body 헷지 패턴 1개 이상.
+EVENT_HEDGE = re.compile(
+    r'(생기기 쉬워요|흐름이 강해요|가능성이 있어요|쌓이기 쉬워요|쉬워요|흔들릴 수 있어요|커지기 쉬워요|들어올|들어오는|기회가|있는 날|어울리는|있을 흐름|풀리는|흐름이에요|잘 풀리는|만날 수 있어요|떠오르기 쉬워요|들어와|수 있어요|쉬운 날|살아날|가능성이|올라올)')
+EVENT_FORBID = re.compile(r'(반드시|사고가 날|큰돈을 잃|병원|이성과 만납니다)')
+
+
+def _audit_event_pool(path: Path):
+    fails = []
+    data = json.loads(path.read_text(encoding='utf-8'))
+    events = data.get('events', {})
+    shinsa = data.get('shinsa', {})
+    if not events:
+        fails.append('FAIL events 비어 있음')
+        return fails
+
+    # 30 key check — 정확히 30 key + 5 그룹 × 6 카테고리 모두 존재.
+    groups = ['비겁', '식상', '재성', '관성', '인성']
+    cats = ['relationship', 'money', 'work', 'love', 'health', 'luck']
+    expected_keys = {f'{g}_{c}' for g in groups for c in cats}
+    actual_keys = set(events.keys())
+    missing = expected_keys - actual_keys
+    extra = actual_keys - expected_keys
+    if missing:
+        fails.append(f'FAIL 사건 영역 key 누락 {sorted(missing)}')
+    if extra:
+        fails.append(f'FAIL 사건 영역 예상 외 key {sorted(extra)}')
+    if len(events) != 30:
+        fails.append(f'FAIL events key 수 {len(events)} != 30')
+    # 각 key 정확히 3 set entry.
+    for key, lst in events.items():
+        if not isinstance(lst, list) or len(lst) != 3:
+            fails.append(f'FAIL {key} set 수 {len(lst) if isinstance(lst, list) else "non-list"} != 3')
+
+    # entry 톤.
+    total_entries = 0
+    body_hedge_misses = 0
+    forbidden = 0
+    over_120 = 0
+    for key, lst in events.items():
+        for e in lst:
+            total_entries += 1
+            body = e.get('body', '')
+            caution = e.get('caution', '')
+            recommend = e.get('recommend', '')
+            if len(body) > 120 or len(caution) > 120 or len(recommend) > 120:
+                over_120 += 1
+            if not EVENT_HEDGE.search(body):
+                body_hedge_misses += 1
+            for s in (body, caution, recommend):
+                if EVENT_FORBID.search(s):
+                    forbidden += 1
+
+    print(f'  events entries: {total_entries}')
+    print(f'  body hedge 미포함: {body_hedge_misses}  (target 0)')
+    print(f'  단정 예언 금지 hit: {forbidden}  (target 0)')
+    print(f'  120자 초과: {over_120}  (target 0)')
+    print(f'  shinsa keys: {len(shinsa)}  (target 8)')
+
+    if body_hedge_misses != 0:
+        fails.append(f'FAIL 사건 영역 body hedge 누락 {body_hedge_misses}건')
+    if forbidden != 0:
+        fails.append(f'FAIL 사건 영역 단정 예언 hit {forbidden}건')
+    if over_120 != 0:
+        fails.append(f'FAIL 사건 영역 120자 초과 {over_120}건')
+    if len(shinsa) != 8:
+        fails.append(f'FAIL shinsa keys {len(shinsa)} != 8')
+    return fails
 
 
 if __name__ == '__main__':
