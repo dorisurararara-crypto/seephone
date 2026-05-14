@@ -1,3 +1,4 @@
+// ignore_for_file: unused_field
 // Pillar Seer — 오늘 운세 깊이 풀이 서비스 (Round 11+).
 //
 // 사용자 사주 + 오늘 일진 → 5-7문장 narrative + 행동 추천 + 조심 + 시간대.
@@ -25,6 +26,8 @@
 
 import '../models/saju_result.dart';
 import 'daily_service.dart' show DayEnergyKind, classifyDayEnergy;
+import 'dynamic_text_resolver.dart';
+import 'saju_context.dart';
 import 'ten_gods_service.dart';
 
 class TodayDeepReading {
@@ -59,6 +62,10 @@ class TodayDeepReading {
 
 class TodayDeepService {
   /// 메인: 사용자 사주 + 오늘 일진 → 깊은 풀이.
+  ///
+  /// Round 78 sprint 4 — [ctx] (SajuContext) 가 주어지면 격국 anchor 와 용신 5축
+  /// suffix 가 body 끝에 derive 되어 같은 십신·dayEnergy 라도 격국·용신 다르면
+  /// 본문 phrase 차이 ≥1 보장. ctx null 시 R77 기존 형태 그대로 (회귀 가드).
   static TodayDeepReading build({
     required String userDayStem,        // 사용자 일간 (천간)
     required String userDayBranch,      // 사용자 일지
@@ -67,6 +74,7 @@ class TodayDeepService {
     required String userDeficitEl,      // 사용자 5행 약함
     required String todayPillar,        // 오늘 60갑자 (예: '丙戌')
     required int todayScore,            // 0-100
+    SajuContext? ctx,                   // Round 78 sprint 4 — 격국·용신 derive
   }) {
     final todayStem = todayPillar.isNotEmpty ? todayPillar[0] : '甲';
     final todayBranch = todayPillar.length >= 2 ? todayPillar[1] : '子';
@@ -97,18 +105,37 @@ class TodayDeepService {
     final headlineKo = '오늘은 ${hooks.moodKo} 분위기의 하루.';
     final headlineEn = "Today's mood: ${hooks.moodEn}.";
 
-    final bodyKo = _composeBodyKo(
+    var bodyKo = _composeBodyKo(
       godKo: godKo,
       branchKo: brKo,
       elementKo: elementMood.ko,
       moodHookKo: hooks.bodyHookKo,
     );
-    final bodyEn = _composeBodyEn(
+    var bodyEn = _composeBodyEn(
       godEn: godEn,
       branchEn: brEn,
       elementEn: elementMood.en,
       moodHookEn: hooks.bodyHookEn,
     );
+
+    // Round 78 sprint 4 — ctx 주입 시 격국 anchor + 용신 5축 derive suffix 합성.
+    // 같은 십신·dayEnergy 라도 격국·용신 다르면 본문 phrase 차이 ≥1 보장.
+    if (ctx != null) {
+      final gAnchorKo = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'ko');
+      final ySuffixKo = DynamicTextResolver.yongsinSuffix(ctx, locale: 'ko');
+      final extraKo =
+          [gAnchorKo, ySuffixKo].where((p) => p.isNotEmpty).join(' ');
+      if (extraKo.isNotEmpty) {
+        bodyKo = '$bodyKo $extraKo';
+      }
+      final gAnchorEn = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'en');
+      final ySuffixEn = DynamicTextResolver.yongsinSuffix(ctx, locale: 'en');
+      final extraEn =
+          [gAnchorEn, ySuffixEn].where((p) => p.isNotEmpty).join(' ');
+      if (extraEn.isNotEmpty) {
+        bodyEn = '$bodyEn $extraEn';
+      }
+    }
 
     final actionsKo = _actionsKo(god, branchRelation, todayScore);
     final actionsEn = _actionsEn(god, branchRelation, todayScore);

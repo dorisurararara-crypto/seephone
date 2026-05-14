@@ -152,6 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       userDeficitEl: saju.elements.deficit,
                       todayPillar: fortune.dayPillar,
                       todayScore: fortune.totalScore,
+                      ctx: SajuContext.from(saju, today: DateTime.now()),
                     ),
                   ),
                   _CategorySection(fortune: fortune),
