@@ -93,6 +93,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // ── 5초 파악 first-fold (codex 9.9+ 흡수 1등 앱 강점 4종) ──
               if (sixAxis != null) _SixAxisCard(score: sixAxis),
               _FiveDayTrendCard(points: fiveDay),
+              // Round 74 — 12시간 흐름을 first-fold 로 승격. Co-Star 식 도파민 카드.
+              _HourlyFlowSection(saju: saju),
               _ScoreBlock(
                 score: fortune.totalScore,
                 quote: useKo
@@ -128,7 +130,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       todayScore: fortune.totalScore,
                     ),
                   ),
-                  _HourlyFlowSection(saju: saju),
                   _CategorySection(fortune: fortune),
                   _CategoryGuides(fortune: fortune),
                   _LuckySection(fortune: fortune),
