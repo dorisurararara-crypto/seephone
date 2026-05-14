@@ -256,6 +256,10 @@ def main():
         print('\nPASS — 캐릭터 영역 + 사건 영역 모두 통과')
         return 0
     else:
+        # Round 78 sprint 8 — fails 목록을 명시 출력 (silent exit 1 회피).
+        print('\nFAIL — 다음 threshold 위반:')
+        for f in fails:
+            print(f'  - {f}')
         return 1
 
 
@@ -318,7 +322,16 @@ def _audit_event_pool(path: Path):
     print(f'  body hedge 미포함: {body_hedge_misses}  (target 0)')
     print(f'  단정 예언 금지 hit: {forbidden}  (target 0)')
     print(f'  120자 초과: {over_120}  (target 0)')
-    print(f'  shinsa keys: {len(shinsa)}  (target 8)')
+    # Round 78 sprint 6 — shinsa key 8 → 24 확장 (12 신살 + 별칭). target ≥8 로 완화.
+    print(f'  shinsa keys: {len(shinsa)}  (target ≥8)')
+    # Round 78 sprint 6 — hapchung anchor block.
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            root_obj = json.load(f)
+    except Exception:
+        root_obj = {}
+    hapchung = root_obj.get('hapchung', {})
+    print(f'  hapchung keys: {len(hapchung)}  (target ≥30 — 5 관계 × 6 카테고리)')
 
     if body_hedge_misses != 0:
         fails.append(f'FAIL 사건 영역 body hedge 누락 {body_hedge_misses}건')
@@ -326,8 +339,10 @@ def _audit_event_pool(path: Path):
         fails.append(f'FAIL 사건 영역 단정 예언 hit {forbidden}건')
     if over_120 != 0:
         fails.append(f'FAIL 사건 영역 120자 초과 {over_120}건')
-    if len(shinsa) != 8:
-        fails.append(f'FAIL shinsa keys {len(shinsa)} != 8')
+    if len(shinsa) < 8:
+        fails.append(f'FAIL shinsa keys {len(shinsa)} < 8')
+    if len(hapchung) < 30:
+        fails.append(f'FAIL hapchung keys {len(hapchung)} < 30 — R78 sprint 6')
     return fails
 
 
