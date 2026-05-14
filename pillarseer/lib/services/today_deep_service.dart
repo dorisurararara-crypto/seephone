@@ -29,6 +29,7 @@ import 'daily_service.dart' show DayEnergyKind, classifyDayEnergy;
 import 'dynamic_text_resolver.dart';
 import 'saju_context.dart';
 import 'ten_gods_service.dart';
+import 'yongsin_service.dart';
 
 class TodayDeepReading {
   final String headlineKo;
@@ -139,6 +140,18 @@ class TodayDeepService {
 
     final actionsKo = _actionsKo(god, branchRelation, todayScore);
     final actionsEn = _actionsEn(god, branchRelation, todayScore);
+
+    // Round 78 sprint 5 — ctx 주입 시 용신 5축 1줄 actions 끝에 join.
+    if (ctx != null && ctx.yongsin.isNotEmpty) {
+      final axisKo = YongsinService.oneAxisLineKo(ctx.yongsin, ctx.chartSeed);
+      final axisEn = YongsinService.oneAxisLineEn(ctx.yongsin, ctx.chartSeed);
+      if (axisKo.isNotEmpty) {
+        actionsKo.add('오늘 한 가지: $axisKo.');
+      }
+      if (axisEn.isNotEmpty) {
+        actionsEn.add('One small move: $axisEn.');
+      }
+    }
 
     final cautionKo = _cautionKo(god, branchRelation, todayScore);
     final cautionEn = _cautionEn(god, branchRelation, todayScore);

@@ -120,4 +120,113 @@ class YongsinService {
     };
     return enMap[yongsin] ?? '';
   }
+
+  /// Round 78 sprint 5 — 용신 5축 (색·방향·음식·시간대·요일) 행동 처방 record.
+  /// 25 entry (5행 × 5축) 모두 ko/en + body 1줄 — H9/H15 분기 입력.
+  ///
+  /// 운세의신 V2 분석 결과 흡수 — 추상 "용신 木 이에요" → 5축 실생활 행동 처방.
+  static ({String color, String direction, String food, String time, String weekday})
+      guideAxesKo(String yongsin) {
+    const map = {
+      '木': (
+        color: '초록·청색 (옷·소품 한 가지)',
+        direction: '동·동남쪽 활동',
+        food: '신맛 (식초·라임·풋사과)',
+        time: '새벽~아침 (寅卯시 3-7시)',
+        weekday: '목요일',
+      ),
+      '火': (
+        color: '빨강·자주 (옷·소품 한 가지)',
+        direction: '남쪽 활동',
+        food: '쓴맛 (커피·녹차·고들빼기)',
+        time: '오전 (巳午시 9시-13시)',
+        weekday: '화요일',
+      ),
+      '土': (
+        color: '노랑·갈색 (옷·소품 한 가지)',
+        direction: '중앙·북동 활동',
+        food: '단맛 (꿀·고구마)',
+        time: '환절기 시간대 (辰未戌丑시)',
+        weekday: '토요일',
+      ),
+      '金': (
+        color: '흰·은색 (옷·소품 한 가지)',
+        direction: '서·서북쪽 활동',
+        food: '매운맛 (마늘·생강)',
+        time: '오후 (申酉시 15-19시)',
+        weekday: '금요일',
+      ),
+      '水': (
+        color: '검정·청남 (옷·소품 한 가지)',
+        direction: '북쪽 활동',
+        food: '짠맛 (해조류·생선)',
+        time: '늦은 밤 (亥子시 21시-1시)',
+        weekday: '수요일',
+      ),
+    };
+    return map[yongsin] ??
+        (color: '', direction: '', food: '', time: '', weekday: '');
+  }
+
+  /// 영문 5축 record. R77 plain casual + em dash 가드 (em dash 0).
+  static ({String color, String direction, String food, String time, String weekday})
+      guideAxesEn(String yongsin) {
+    const map = {
+      '木': (
+        color: 'green or blue (one item)',
+        direction: 'east or southeast',
+        food: 'sour (vinegar, lime, green apple)',
+        time: 'early morning (3-7 am)',
+        weekday: 'Thursday',
+      ),
+      '火': (
+        color: 'red or purple (one item)',
+        direction: 'south',
+        food: 'bitter (coffee, green tea)',
+        time: 'late morning (9 am-1 pm)',
+        weekday: 'Tuesday',
+      ),
+      '土': (
+        color: 'yellow or brown (one item)',
+        direction: 'center or northeast',
+        food: 'sweet (honey, sweet potato)',
+        time: 'transition hours',
+        weekday: 'Saturday',
+      ),
+      '金': (
+        color: 'white or silver (one item)',
+        direction: 'west or northwest',
+        food: 'spicy (garlic, ginger)',
+        time: 'afternoon (3-7 pm)',
+        weekday: 'Friday',
+      ),
+      '水': (
+        color: 'black or navy (one item)',
+        direction: 'north',
+        food: 'salty (seaweed, fish)',
+        time: 'late night (9 pm-1 am)',
+        weekday: 'Wednesday',
+      ),
+    };
+    return map[yongsin] ??
+        (color: '', direction: '', food: '', time: '', weekday: '');
+  }
+
+  /// 용신 5축 중 1축 한 줄 — deterministic seed 로 선택.
+  /// today_deep / home_screen 행동 처방 본문에 join 용.
+  static String oneAxisLineKo(String yongsin, int seed) {
+    final axes = guideAxesKo(yongsin);
+    if (axes.color.isEmpty) return '';
+    final list = [axes.color, axes.direction, axes.food, axes.time, axes.weekday];
+    final idx = (seed.abs()) % list.length;
+    return list[idx];
+  }
+
+  static String oneAxisLineEn(String yongsin, int seed) {
+    final axes = guideAxesEn(yongsin);
+    if (axes.color.isEmpty) return '';
+    final list = [axes.color, axes.direction, axes.food, axes.time, axes.weekday];
+    final idx = (seed.abs()) % list.length;
+    return list[idx];
+  }
 }
