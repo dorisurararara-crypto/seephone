@@ -196,6 +196,48 @@ class DynamicTextResolver {
     }
   }
 
+  /// Round 79 sprint 6 — 활성 신살 → 짧은 1구 anchor (한자 X / 의료·금융 단정 X).
+  /// 같은 격국·용신이어도 신살 다르면 phrase 차이 ≥1 — caution 영역 wire 입력.
+  /// 우선순위 (positive 먼저): 천을귀인 → 문창귀인 → 도화 → 역마 → 화개 → 양인 → 괴강 → 백호.
+  static String shinsaAnchor(SajuContext ctx, {required String locale}) {
+    if (ctx.activeShinsa.isEmpty) return '';
+    // 우선순위 list — 강한 positive 먼저, 강한 caution 뒤.
+    const priority = ['천을귀인', '문창귀인', '도화', '역마', '화개', '양인', '괴강', '백호'];
+    String? hit;
+    for (final p in priority) {
+      if (ctx.activeShinsa.contains(p)) {
+        hit = p;
+        break;
+      }
+    }
+    if (hit == null) return '';
+    if (locale == 'ko') {
+      const map = {
+        '천을귀인': '귀인 신호가 있는 날이라 도움 받기 좋은 흐름이에요.',
+        '문창귀인': '공부·표현·아이디어가 잘 풀리는 분위기예요.',
+        '도화': '매력·표현이 살아나는 날이라 사람들 시선이 닿기 쉬워요.',
+        '역마': '이동·새 자리 신호가 있는 날이라 멀리 가도 잘 풀려요.',
+        '화개': '혼자 정리하는 시간이 더 큰 자원이 돼요.',
+        '양인': '결단력이 강해지는 날이라 한 박자 늦춰 결정해도 좋아요.',
+        '괴강': '리더십이 받쳐주는 흐름이지만 충돌은 한 박자 피하면 좋아요.',
+        '백호': '큰 변화 신호가 있는 날이라 평소보다 한 호흡 더 챙겨주세요.',
+      };
+      return map[hit] ?? '';
+    } else {
+      const map = {
+        '천을귀인': 'Helpful presence flows around you today.',
+        '문창귀인': 'Study, writing, and ideas line up well today.',
+        '도화': 'Magnetism and expression run strong today.',
+        '역마': 'Movement and new ground signal today.',
+        '화개': 'Quiet solo time is your strongest asset today.',
+        '양인': 'Decisive edge runs sharp — pause a beat before key calls.',
+        '괴강': 'Leadership flow steady — sidestep one clash if it comes.',
+        '백호': 'Big shift signal — give yourself one extra breath today.',
+      };
+      return map[hit] ?? '';
+    }
+  }
+
   /// 격국 (한자 jargon 제거) → 짧은 라벨 (resolver 호출처에서 사용 가능).
   /// 본문 body 에 한자 직접 노출 X 가드 — Sprint 1 SajuContext.gyeokgukShort docstring 일치.
   static String gyeokgukLabel(SajuContext ctx, {required String locale}) {

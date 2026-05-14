@@ -151,6 +151,9 @@ class PersonalizationEngine {
     final gAnchorEn = ctx != null ? DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'en') : '';
     final yAnchorKo = ctx != null ? DynamicTextResolver.yongsinSuffix(ctx, locale: 'ko') : '';
     final yAnchorEn = ctx != null ? DynamicTextResolver.yongsinSuffix(ctx, locale: 'en') : '';
+    // Round 79 sprint 6 — 신살 anchor (caution 영역).
+    final sAnchorKo = ctx != null ? DynamicTextResolver.shinsaAnchor(ctx, locale: 'ko') : '';
+    final sAnchorEn = ctx != null ? DynamicTextResolver.shinsaAnchor(ctx, locale: 'en') : '';
 
     String joinKo(String base, String extra) =>
         (extra.isNotEmpty && !base.contains(extra)) ? '$base\n$extra' : base;
@@ -161,6 +164,8 @@ class PersonalizationEngine {
     final bodyEnBase = today != null ? render(today.enTpl) : _fallbackBodyEn(profile);
     final actionKoBase = action != null ? render(action.koTpl) : _fallbackActionKo(profile);
     final actionEnBase = action != null ? render(action.enTpl) : _fallbackActionEn(profile);
+    final cautionKoBase = caution != null ? render(caution.koTpl) : _fallbackCautionKo(profile);
+    final cautionEnBase = caution != null ? render(caution.enTpl) : _fallbackCautionEn(profile);
 
     return PersonalReading(
       headlineKo: identity != null ? render(identity.koTpl) : _fallbackHeadKo(profile),
@@ -171,8 +176,9 @@ class PersonalizationEngine {
       // action 에는 용신 5축 1줄 합성 — 행동 처방 dynamic.
       actionKo: joinKo(actionKoBase, yAnchorKo),
       actionEn: joinEn(actionEnBase, yAnchorEn),
-      cautionKo: caution != null ? render(caution.koTpl) : _fallbackCautionKo(profile),
-      cautionEn: caution != null ? render(caution.enTpl) : _fallbackCautionEn(profile),
+      // caution 에는 신살 anchor 1줄 합성 — 같은 격국·용신 다른 신살 두 사람 본문 diff ↑.
+      cautionKo: joinKo(cautionKoBase, sAnchorKo),
+      cautionEn: joinEn(cautionEnBase, sAnchorEn),
     );
   }
 
