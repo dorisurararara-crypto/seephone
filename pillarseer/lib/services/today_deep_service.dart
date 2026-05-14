@@ -522,7 +522,7 @@ class TodayDeepService {
       case TenGod.siksin:
         return 'Write, post, or teach one thing today — expression flows.';
       case TenGod.sanggwan:
-        return 'Showcase talent — but soften your tone with authority.';
+        return 'Showcase your talent — but soften your tone around authority figures.';
       case TenGod.pyeonjae:
         return 'A signal of bigger money — listen, then double-check before contract.';
       case TenGod.jeongjae:

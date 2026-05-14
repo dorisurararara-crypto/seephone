@@ -338,7 +338,7 @@ final List<Hexagram> _hexagramData = List.generate(144, (i) {
   const yearOverviewEnByArch = [
     ' opens authority into your hand. Direct meetings with leadership define the year — your signature carries weight; you receive responsibility you did not accept.',
     ' rewards patience as harvest. Fast paths end in short branches. Daily routines make the biggest difference; what you plant in spring appears in autumn.',
-    ' redraws the year via an unexpected event. One decision reshapes four years. Do not flee the quake — write it down as grain.',
+    ' redraws the year via an unexpected event. One decision reshapes four years. Do not flee the quake — write it down as a seed.',
     ' moves big results through subtle currents. The biggest doors open sideways, not head-on. Tune your tone in stages.',
     ' tempers the nerve. The test runs deep yet short; new currents arrive from depth after the trial. Do not overreach.',
     ' reveals you on a stage. What you show under light becomes identity. Pick your robe before entering.',
@@ -507,7 +507,7 @@ final List<Hexagram> _hexagramData = List.generate(144, (i) {
     ],
     // 2 震
     [
-      'An unexpected event sets the year\'s grain.',
+      'An unexpected event sets the year\'s tone.',
       'Hidden shifts begin — take small signals seriously.',
       'After a quake, message hygiene is everything.',
       'A door opens and closes quickly — decide.',
@@ -532,7 +532,7 @@ final List<Hexagram> _hexagramData = List.generate(144, (i) {
       'Recognition comes by detour — do not demand it.',
       'An old contact\'s referral opens a new door.',
       'Harvest — close while the wind is at your back.',
-      'Recovery — re-tune the grain.',
+      'Recovery — re-tune your rhythm.',
       'Sketch next year\'s current in advance.',
     ],
     // 4 坎
@@ -552,7 +552,7 @@ final List<Hexagram> _hexagramData = List.generate(144, (i) {
     ],
     // 5 離
     [
-      'A revealing start — decide which grain to show.',
+      'A revealing start — decide which side to show.',
       'Hidden cards surface — be ready.',
       'Peak visibility — your tone decides everything.',
       'The door opens brightly — pick your robe before entering.',

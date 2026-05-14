@@ -143,7 +143,7 @@ class ShinsaService {
       return '$base ($areaStr 영역)';
     }
     const enMap = {
-      '역마': '🐎 Yeokma (驛馬) — movement, travel, change shape your life grain.',
+      '역마': '🐎 Yeokma (驛馬) — movement, travel, and change shape your life path.',
       '도화': '🌸 Dohwa (桃花) — magnetism, charm, art. Expression itself is your resource.',
       '화개': '🪔 Hwagae (華蓋) — religion, art, solitude. Alone time is your biggest asset.',
       '천을귀인': '✨ Cheoneul Guin (天乙貴人) — most auspicious. A guardian helps in crises.',

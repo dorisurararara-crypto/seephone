@@ -1480,13 +1480,13 @@ abstract class AppL10n {
   /// No description provided for @resultIntroLeadIn.
   ///
   /// In en, this message translates to:
-  /// **'You are'**
+  /// **'You are the'**
   String get resultIntroLeadIn;
 
   /// No description provided for @resultIntroLeadOut.
   ///
   /// In en, this message translates to:
-  /// **'kind of person.'**
+  /// **'type of person.'**
   String get resultIntroLeadOut;
 
   /// No description provided for @resultFirstTimeBanner.
@@ -1582,7 +1582,7 @@ abstract class AppL10n {
   /// No description provided for @discoverCompareSame.
   ///
   /// In en, this message translates to:
-  /// **'Same {pillar} type — your grains align.'**
+  /// **'Same {pillar} type — you two move in sync.'**
   String discoverCompareSame(Object pillar);
 
   /// No description provided for @discoverCompareDifferent.

@@ -104,7 +104,7 @@ class SipsinPersonaService {
           'persona': 'Your chart carries a rare distribution.',
           'career': 'You define your own path.',
           'wealth': 'Money gathers slowly for you.',
-          'love': 'Love arrives after your color sets.',
+          'love': 'Love arrives once you know who you are.',
         },
         freq: freq,
       );
@@ -153,7 +153,7 @@ class SipsinPersonaService {
           ? 'You define your own road.'
           : cat == 'wealth'
           ? 'Money builds slowly.'
-          : 'Love arrives after your color sets.';
+          : 'Love arrives once you know who you are.';
     }
 
     // 카테고리 별 십신 매핑 — 단조로움 차단:

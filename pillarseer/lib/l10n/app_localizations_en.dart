@@ -747,10 +747,10 @@ class AppL10nEn extends AppL10n {
   String get resultLuckyTitle => 'Lucky Compass · 吉';
 
   @override
-  String get resultIntroLeadIn => 'You are';
+  String get resultIntroLeadIn => 'You are the';
 
   @override
-  String get resultIntroLeadOut => 'kind of person.';
+  String get resultIntroLeadOut => 'type of person.';
 
   @override
   String get resultFirstTimeBanner =>
@@ -803,7 +803,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String discoverCompareSame(Object pillar) {
-    return 'Same $pillar type — your grains align.';
+    return 'Same $pillar type — you two move in sync.';
   }
 
   @override

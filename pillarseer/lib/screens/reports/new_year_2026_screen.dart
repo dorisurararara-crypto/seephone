@@ -223,7 +223,7 @@ class _AnnualThemeSection extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            themeText.isEmpty ? (useKo ? '비화 — 동등한 결' : 'Peer — equal grain') : themeText,
+            themeText.isEmpty ? (useKo ? '비화 — 동등한 결' : 'Peer — equal vibe') : themeText,
             style: GoogleFonts.notoSerifKr(
               fontSize: 18,
               fontWeight: FontWeight.w400,

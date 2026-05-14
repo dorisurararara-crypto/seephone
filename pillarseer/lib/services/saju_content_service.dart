@@ -34,7 +34,7 @@ class SajuContentService {
     if (raw != null && raw.isNotEmpty) return raw;
     return useKo
         ? '$ji60 일주는 정통 명리학 기준에서 매우 구체적인 결을 가집니다.'
-        : 'Your destiny carries the rhythm of $ji60 — ancient, specific, yours alone.';
+        : '$ji60 is a specific pattern in your chart with a clear rhythm.';
   }
 
   /// 카테고리별 readings (personality / love / money / career)
@@ -43,10 +43,10 @@ class SajuContentService {
     final entry = await findByJi60(ji60);
     if (entry == null) {
       return {
-        'personality': 'Your $ji60 day pillar carries an ancient signature.',
-        'love': 'Love arrives slowly for $ji60 — beginning in depth.',
-        'money': 'Wealth flows toward $ji60 when rooted in essence.',
-        'career': '$ji60 thrives where five-element balance expresses itself.',
+        'personality': 'Your $ji60 day pillar has a clear signature.',
+        'love': 'Love builds slowly for $ji60 — starts deep, grows steady.',
+        'money': 'Money works for $ji60 when you stick to your strengths.',
+        'career': '$ji60 works best when your five-element balance can show.',
       };
     }
     return {

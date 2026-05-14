@@ -637,17 +637,17 @@ class _CelebRow extends ConsumerWidget {
     if (sameElement) {
       return useKo
           ? '같은 오행 — 추진력 스타일이 비슷하고, 동기 부여 방식이 닮았어요.'
-          : 'Same elemental base — similar momentum and motivation grain.';
+          : 'Same elemental base — similar momentum and motivation style.';
     }
     if (generates[myEl] == celebEl) {
       return useKo
           ? '당신이 키워주는 관계 — 셀럽의 흐름을 자연스럽게 받쳐 줘요.'
-          : "You nourish their grain — your energy naturally supports their flow.";
+          : "You nourish their flow — your energy naturally supports their direction.";
     }
     if (generates[celebEl] == myEl) {
       return useKo
           ? '당신을 키워주는 관계 — 셀럽이 당신을 살려주는 구조예요.'
-          : 'They nourish yours — their grain feeds your direction.';
+          : 'They nourish yours — their energy feeds your direction.';
     }
     return useKo
         ? '다른 오행 — 보완 관계로 서로의 결핍을 채울 가능성이 큽니다.'
@@ -665,12 +665,12 @@ class _CelebRow extends ConsumerWidget {
     if (overcomes[myEl] == celebEl) {
       return useKo
           ? '당신이 누르는 관계 — 충고가 통제처럼 느껴질 수 있어서 표현 톤이 중요해요.'
-          : 'You control their grain — your advice can read as pressure; mind the tone.';
+          : 'You temper their flow — your advice can read as pressure; mind the tone.';
     }
     if (overcomes[celebEl] == myEl) {
       return useKo
           ? '셀럽이 당신을 누르는 관계 — 자극이 되지만 페이스를 빼앗기지 마세요.'
-          : 'Their grain pressures yours — stimulating, but guard your pace.';
+          : 'Their pace presses on yours — stimulating, but guard your own pace.';
     }
     if (sameJi && myEl != celebEl) {
       return useKo

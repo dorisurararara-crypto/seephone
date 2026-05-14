@@ -179,15 +179,15 @@ class SajuService {
       '癸亥': 'You are deep water under a winter moon — silent, mysterious, holding everything.',
       '庚申': 'You are forged steel under starlight — sharp, cold, made for purpose.',
     };
-    return map[day60ji] ?? 'Your destiny carries the rhythm of $day60ji — ancient, specific, yours alone.';
+    return map[day60ji] ?? '$day60ji is a specific pattern in your chart with a clear rhythm.';
   }
 
   Map<String, String> _readingsFor(String day60ji) {
     return {
-      'personality': 'Your $day60ji day pillar carries an ancient signature — strongest when you follow its native rhythm.',
-      'love': 'Love arrives slowly for $day60ji — beginning in depth, growing in patience.',
-      'money': 'Wealth flows toward $day60ji when you stay rooted in your essence, not chasing trends.',
-      'career': '$day60ji thrives where your five-element balance can fully express itself.',
+      'personality': 'Your $day60ji day pillar has a clear signature — it shows up most when you follow its own rhythm.',
+      'love': 'Love builds slowly for $day60ji — it starts deep and grows steady.',
+      'money': 'Money works better for $day60ji when you stick to your strengths instead of chasing trends.',
+      'career': '$day60ji works best when your five-element balance can show.',
     };
   }
 }

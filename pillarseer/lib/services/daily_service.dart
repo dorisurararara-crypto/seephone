@@ -162,7 +162,7 @@ class DailyService {
       (ko: '오늘은 안에 머무는 날 — 밖이 아니라 안을 살피세요.',
           en: 'Stay in today — look inward, not outward.'),
       (ko: '잠시 멈추는 것도 행동입니다. 결의 결을 다듬으세요.',
-          en: 'Pausing is also action — refine the grain of your grain.'),
+          en: 'Pausing is also action — refine your edge.'),
     ];
     return pool[seed];
   }

@@ -147,7 +147,7 @@ class StrengthService {
     }
     const enMap = {
       '신강':
-          'Very strong day master. Shines in expression/business/title (output·wealth·officer luck). Refine your own grain.',
+          'Very strong day master. Shines in expression/business/title (output·wealth·officer luck). Refine your own approach.',
       '신왕':
           'Strong day master — finishing power. Mind absorbing external energy.',
       '중화': 'Balanced — receives all luck types well. The freest chart.',

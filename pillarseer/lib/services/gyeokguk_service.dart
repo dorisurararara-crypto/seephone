@@ -112,7 +112,7 @@ class GyeokgukService {
           nameEn: 'Salaried Rank (建祿)',
           desc: '월지 비견 — 일간 강함. 독립적·자수성가형. 본인 스타일로 사는 사주.',
           descEn:
-              'Month-branch matches day stem — strong. Independent, self-made. Lives by own grain.',
+              'Month-branch matches day stem — strong. Independent, self-made. Lives by their own rules.',
         );
       case TenGod.geopjae:
         return (

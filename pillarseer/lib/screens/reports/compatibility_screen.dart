@@ -879,7 +879,7 @@ class _DetailSection extends StatelessWidget {
     if (myEl == ptEl) {
       summary = useKo
           ? '같은 오행 성질을 가진 사이예요. 처음 만남이 빠르게 편안해지지만, 같은 약점이 동시에 드러나기 쉽습니다.'
-          : 'Same element grain. Comfort comes fast — but the same blind spots also surface at once.';
+          : 'Same element vibe. Comfort comes fast — but the same blind spots also surface at once.';
       attract = useKo
           ? '리듬·말투·결정 속도가 비슷해 설명 없이도 통하는 느낌이 큽니다.'
           : 'Rhythm, tone, and decision speed align — you read each other without explaining.';

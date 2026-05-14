@@ -270,7 +270,7 @@ class PersonalizationEngine {
       topic: 'today',
       priority: 75,
       koTpl: '오늘은 {dom}이 강하게 흐르는 날이에요. 당신 본래의 색이 더 뚜렷하게 드러나는 흐름이라서, 평소보다 자기 의견을 분명하게 말해도 잘 받아들여져요.',
-      enTpl: 'Today\'s {domEn} flows strong, and your natural color shows clearer than usual. Speaking your opinion more openly today actually lands well.',
+      enTpl: 'Today\'s {domEn} flows strong, and your true style comes through clearer than usual. Speaking your mind more openly today actually lands well.',
       condition: (p, t) => true,
     ),
     InsightAtom(

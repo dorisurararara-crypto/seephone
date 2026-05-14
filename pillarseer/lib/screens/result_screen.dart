@@ -414,7 +414,7 @@ class _DayMasterHero extends StatelessWidget {
             ? '$elementKo의 기운을 가진 사람이에요.'
             : '$subAccent 사람이에요.')
         : (subAccent.isEmpty
-            ? 'A person carrying the grain of $element.'
+            ? 'A person carrying the spirit of $element.'
             : 'A $subAccent person.');
 
     return _SectionFrame(

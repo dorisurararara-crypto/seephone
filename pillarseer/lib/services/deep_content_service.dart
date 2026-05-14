@@ -481,7 +481,7 @@ class DeepContentService {
     }
     return 'Your $ji day master ($name) carries a singular pulse within the '
         '60-pillar cycle. The $name nature sharpens under steady pressure, '
-        'shaping its grain rather than performing identity. When you obey '
+        'shaping its own pattern rather than performing identity. When you obey '
         'your inner rhythm — not market trends — your work reads as inevitable.';
   }
 
@@ -490,7 +490,7 @@ class DeepContentService {
       return ko
           ? '당신의 $ji 일주는 $key 영역에서 본인 스타일대로 갈 때 가장 빛나요.'
           : 'Your $ji day pillar grows in $key when you follow your native '
-              'grain rather than copy strategies built for other charts.';
+              'own pattern rather than copy strategies built for other charts.';
     }
     // existing short reading already authored — use it as-is
     return short;
@@ -537,7 +537,7 @@ class DeepContentService {
           '$ji 일주의 명예 흐름이 환경을 끌어와요. 검색량보다 깊이가 자산이에요.';
     }
     return 'The $name stage glows brightest in authenticity. When $ji shows its '
-        'own grain — not a replicated formula — public energy moves toward you. '
+        'own pattern — not a replicated formula — public energy moves toward you. '
         'Depth, not algorithm gymnastics, is the asset.';
   }
 
@@ -567,7 +567,7 @@ class DeepContentService {
     return "This year (歲運): $yearGanji. "
         'The theme is how your $ji day master expresses inside $yearGanji '
         'energy. Volatility is highest mid-summer through autumn, while the '
-        'grain you set in spring compounds by harvest. The annual cycle '
+        'pattern you set in spring compounds by harvest. The annual cycle '
         'begins at 立春 — not January 1st.';
   }
 
