@@ -1527,34 +1527,9 @@ class _TodayEventCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
-          // Round 77 sprint 6 — 별점 row 라벨은 한국어 자연문. UPPERCASE / letterSpacing 2 제거.
-          ...stars.map((row) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 64,
-                      child: Text(
-                        row.$1,
-                        style: GoogleFonts.notoSansKr(
-                          fontSize: 12,
-                          letterSpacing: 0.2,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.taupe,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      _starsText(row.$2),
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: AppColors.ink,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+          // Round 77 sprint 7 — 별점 텍스트(★☆) → 가로 색 게이지 5칸.
+          // 4 카테고리 중 max 점수 1위는 accent 강조 (동률 시 Love → Wealth → Work → Health 순).
+          ..._buildStarRows(stars),
           const SizedBox(height: 18),
           GestureDetector(
             onTap: () =>
@@ -1583,9 +1558,68 @@ class _TodayEventCard extends StatelessWidget {
     );
   }
 
-  static String _starsText(int n) {
-    final filled = n.clamp(0, 5);
-    return '★' * filled + '☆' * (5 - filled);
+  // Round 77 sprint 7 — 4 row 게이지 빌더. 1위는 accent 색 강조.
+  // 동률 시 Love → Wealth → Work → Health 순 (stars 리스트 인덱스 0→3 순).
+  List<Widget> _buildStarRows(List<(String, int)> stars) {
+    int topIdx = 0;
+    int topScore = -1;
+    for (var i = 0; i < stars.length; i++) {
+      if (stars[i].$2 > topScore) {
+        topScore = stars[i].$2;
+        topIdx = i;
+      }
+    }
+    return stars.asMap().entries.map((e) {
+      final i = e.key;
+      final row = e.value;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 64,
+              child: Text(
+                row.$1,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12,
+                  letterSpacing: 0.2,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.taupe,
+                ),
+              ),
+            ),
+            Expanded(child: _ScoreGauge(score: row.$2, isTop: i == topIdx)),
+          ],
+        ),
+      );
+    }).toList();
+  }
+}
+
+/// Round 77 sprint 7 — 별점 텍스트 대체 가로 색 게이지 5칸.
+/// 가득 찬 칸: isTop=true → accent (gold), false → ink. 빈 칸: line (회색).
+/// 모서리 사각 (Aesop 톤). 칸 사이 4pt separator.
+class _ScoreGauge extends StatelessWidget {
+  final int score;
+  final bool isTop;
+  const _ScoreGauge({required this.score, required this.isTop});
+
+  @override
+  Widget build(BuildContext context) {
+    final filled = score.clamp(0, 5);
+    final activeColor = isTop ? AppColors.accent : AppColors.ink;
+    final cells = <Widget>[];
+    for (var i = 0; i < 5; i++) {
+      final isFilled = i < filled;
+      cells.add(Expanded(
+        child: Container(
+          height: 8,
+          color: isFilled ? activeColor : AppColors.line,
+        ),
+      ));
+      if (i < 4) cells.add(const SizedBox(width: 4));
+    }
+    return Row(children: cells);
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart' show rootBundle, Clipboard, ClipboardData
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
 import '../../theme/app_theme.dart';
@@ -47,21 +48,11 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final me = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    // Round 77 sprint 7 — dummy fallback 제거. 사주 null 시 empty state CTA.
+    final me = ref.watch(sajuResultProvider);
     final userInfo = ref.watch(userBirthInfoProvider);
-    // 사용자 성별 반대 셀럽만 노출. 사용자 정보 없으면 전체.
-    final preferredGender =
-        userInfo == null ? null : (userInfo.isMale ? 'F' : 'M');
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final filtered = _stars
-        .where((s) => _filter == 'all' || s.kind == _filter)
-        .where((s) =>
-            preferredGender == null ||
-            s.gender.isEmpty ||
-            s.gender == preferredGender)
-        .toList()
-      ..sort((a, b) => _score(me, b).compareTo(_score(me, a)));
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -88,55 +79,88 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
       ),
       body: SafeArea(
         top: false,
-        child: !_loaded
-            ? const Center(
-                child: SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(
-                        color: AppColors.ink, strokeWidth: 1.5)),
-              )
-            : Column(
-                children: [
-                  _Hero(useKo: useKo),
-                  // 최상위 매치 — "친구에게 캡처해서 보낼 한 줄" (Round 12 codex P0)
-                  if (filtered.isNotEmpty)
-                    _TopMatchCard(
-                      star: filtered.first,
-                      score: _score(me, filtered.first),
-                      useKo: useKo,
-                    ),
-                  _FilterRow(
-                    current: _filter,
-                    onChanged: (id) => setState(() => _filter = id),
-                    useKo: useKo,
-                  ),
-                  Expanded(
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      itemCount: filtered.length + 1,
-                      separatorBuilder: (_, _) => const Divider(
-                          height: 1, color: AppColors.line, thickness: 1),
-                      itemBuilder: (ctx, i) {
-                        if (i == filtered.length) {
-                          return _Methodology(useKo: useKo);
-                        }
-                        final s = filtered[i];
-                        final score = _score(me, s);
-                        return _StarRow(
-                          me: me,
-                          star: s,
-                          score: score,
-                          rank: i + 1,
-                          useKo: useKo,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+        child: me == null
+            ? _KpopEmptyState(useKo: useKo)
+            : _buildLoadedBody(context, me, userInfo, useKo),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
+    );
+  }
+
+  Widget _buildLoadedBody(
+      BuildContext context, SajuResult me, dynamic userInfo, bool useKo) {
+    // 사용자 성별 반대 셀럽만 노출. 사용자 정보 없으면 전체.
+    final preferredGender =
+        userInfo == null ? null : (userInfo.isMale ? 'F' : 'M');
+    final filtered = _stars
+        .where((s) => _filter == 'all' || s.kind == _filter)
+        .where((s) =>
+            preferredGender == null ||
+            s.gender.isEmpty ||
+            s.gender == preferredGender)
+        .toList()
+      ..sort((a, b) => _score(me, b).compareTo(_score(me, a)));
+
+    // Round 77 sprint 7 — 로딩 시 skeleton row 3개 (빈 화면 방지).
+    if (!_loaded) {
+      return Column(
+        children: [
+          _Hero(useKo: useKo),
+          _FilterRow(
+            current: _filter,
+            onChanged: (id) => setState(() => _filter = id),
+            useKo: useKo,
+          ),
+          Expanded(
+            child: ListView.separated(
+              padding: EdgeInsets.zero,
+              itemCount: 3,
+              separatorBuilder: (_, _) => const Divider(
+                  height: 1, color: AppColors.line, thickness: 1),
+              itemBuilder: (_, _) => const _SkeletonRow(),
+            ),
+          ),
+        ],
+      );
+    }
+    return Column(
+      children: [
+        _Hero(useKo: useKo),
+        // 최상위 매치 — "친구에게 캡처해서 보낼 한 줄" (Round 12 codex P0)
+        if (filtered.isNotEmpty)
+          _TopMatchCard(
+            star: filtered.first,
+            score: _score(me, filtered.first),
+            useKo: useKo,
+          ),
+        _FilterRow(
+          current: _filter,
+          onChanged: (id) => setState(() => _filter = id),
+          useKo: useKo,
+        ),
+        Expanded(
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            itemCount: filtered.length + 1,
+            separatorBuilder: (_, _) =>
+                const Divider(height: 1, color: AppColors.line, thickness: 1),
+            itemBuilder: (ctx, i) {
+              if (i == filtered.length) {
+                return _Methodology(useKo: useKo);
+              }
+              final s = filtered[i];
+              final score = _score(me, s);
+              return _StarRow(
+                me: me,
+                star: s,
+                score: score,
+                rank: i + 1,
+                useKo: useKo,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -501,6 +525,9 @@ class _StarRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
+            // Round 77 sprint 7 — 셀럽 thumbnail chip (56×56, 오행 5색 + 이니셜).
+            _CelebChip(star: star, useKo: useKo),
+            const SizedBox(width: 12),
             SizedBox(
               width: 44,
               child: Text(
@@ -706,28 +733,261 @@ class _StarRow extends StatelessWidget {
     );
   }
 
-  // Round 71 사용자 불만 #5 — K-POP 무대 비유 X, 1:1 로맨스 시나리오.
-  // "이 사람이랑 사귀면 어떻게 될까" 가 5초 안에 읽힘.
-  // 4 band 모두: 무대/시너지/퍼포먼스/팬덤/응원/센터/컴백/카메라 워크 어휘 0회.
-  // 4 band 합쳐: 사귀면/첫 만남/표현/마음 열어/데이트/카톡/만나서/답장 ≥10회.
+  // Round 77 sprint 7 — 아이돌·배우·스포츠 모두 팬-셀럽 시너지 톤 (무대/컴백/직캠/굿즈/팬싸/명대사/명장면/시즌).
+  // 망상 1:1 로맨스 시나리오 제거 — kind='idol' / 'athlete' / 'actor' 분기로 어휘만 차별.
   String _verdict() {
+    final isIdol = star.kind == 'idol';
+    if (isIdol) {
+      return _verdictIdol();
+    }
+    return _verdictRomance();
+  }
+
+  // 아이돌 4 band — 팬-아티스트 시너지 (무대/컴백/카메라/굿즈/직캠/팬싸).
+  // 어휘 mandate: 무대/컴백/직캠/굿즈/팬싸 ≥3개. 망상 톤 0회.
+  String _verdictIdol() {
     if (score >= 88) {
       return useKo
-          ? '이 사람이랑 당신이랑은 첫 만남에서 이미 끝난다. 서로 보자마자 마음이 열린다. 카톡 답장이 둘 다 빠르고, 만나면 시간이 사라진다. 사귀면 당신은 평소보다 말이 많아진다. 첫 데이트에서 둘 다 다음 약속을 먼저 잡는다.'
-          : "From the first meeting it's already settled. Hearts open the moment you see each other. Replies are quick on both sides, and time disappears when you meet. Dating, you talk more than usual. On the first date, both of you book the next one before leaving.";
+          ? '이 아이돌의 무대가 너의 흐름을 살리는 케미예요. 컴백 곡 첫 소절에 네 기분이 풀려요. 직캠 한 영상으로 하루가 다시 시작되는 타입. 팬싸 줄 서면 너 차례에 분위기가 풀려요. 굿즈 한 장이 일주일을 가게 해줘요.'
+          : "This idol's stage lifts your flow. The first line of a comeback track resets your mood. One fancam can restart your day. In a fansign queue, the room loosens up on your turn. One photocard carries you through a week.";
     } else if (score >= 70) {
       return useKo
-          ? '사귀면 자연스럽게 깊어진다. 카톡 답장 속도가 둘 다 비슷하다. 만나서 침묵이 어색하지 않다. 첫 데이트 다음 날 당신은 그 사람을 또 보고 싶어진다. 큰 다툼 없이 한 해를 같이 보낸다.'
-          : "Dating, you deepen naturally. Reply speeds match on both sides. Silence between you is not awkward. The day after the first date you want to see them again. You spend a whole year without big fights.";
+          ? '이 아이돌의 컴백 무대 하나가 너의 페이스를 잡아주는 케미예요. 새 앨범 발매일에 너 컨디션이 같이 올라가요. 직캠 영상에서 너랑 결이 닿는 멤버가 보여요. 콘서트 직관 한 번이 분기 전체를 바꿔주는 시너지. 굿즈 한 장도 책상 위에 두면 페이스가 잡혀요.'
+          : "One of this idol's comeback stages tunes your pace. On a new album release your condition rises with theirs. One fancam reveals the member whose grain matches yours. One in-person concert reshapes the whole quarter. Even one photocard on your desk keeps the pace.";
     } else if (score >= 55) {
       return useKo
-          ? '사귀면 부딪힐 일이 한 번 온다. 카톡 답장 속도가 가끔 어긋난다. 둘이 만나서 한 사람이 먼저 말을 꺼내야 한다. 그 한마디로 마음이 다시 열린다. 첫 데이트 후 당신은 한 박자 더 천천히 가고 싶어진다.'
-          : "Dating, one collision is bound to come. Reply timings sometimes miss. When you meet, one of you has to speak first. That one line reopens the heart. After the first date, you want to slow one beat.";
+          ? '이 아이돌의 컴백 주기에 너 흐름이 가끔 닿는 케미예요. 모든 무대가 맞진 않지만 한 직캠은 너의 시그니처가 돼요. 굿즈는 한두 장 정도면 충분한 거리감. 팬싸 줄 까지는 안 가도 좋아요.'
+          : "Your flow touches this idol's comeback cycle once in a while. Not every stage lands, but one fancam becomes your signature. One or two photocards is the right merch distance. No fansign queue needed.";
     } else {
       return useKo
-          ? '사귀면 페이스가 다르다는 게 빨리 드러난다. 당신은 카톡 답장이 빠른데 상대는 느리다, 혹은 반대다. 첫 만남에서 마음이 한쪽만 먼저 열린다. 만나서 당신은 한 박자 늦게 표현한다. 자주 만나기보다 한 번을 길게 만나는 쪽이 당신에게 맞다.'
-          : "Dating, the pace gap surfaces fast. One of you replies quickly, the other slowly. At first meeting, only one side opens first. When you meet, you express one beat late. Few long meetings suit you better than many short ones.";
+          ? '이 아이돌의 무대 톤이 너의 페이스랑 다른 케미예요. 컴백 직캠 한 번 보면 알아요. 굿즈 살 정도는 아닌 거리감. 한 곡 정도 플레이리스트 끝에 둘 만큼만.'
+          : "This idol's stage tone runs a different pace from yours. One comeback fancam tells you. Not a merch-buying distance. About one track sits well at the bottom of your playlist.";
     }
+  }
+
+  // Round 77 sprint 7 — 배우/스포츠 셀럽도 팬-셀럽 시너지 톤으로 통일.
+  // 망상 1:1 시나리오 X. 작품/경기/인터뷰/필모/명장면 어휘로 톤 차별화.
+  String _verdictRomance() {
+    final isAthlete = star.kind == 'athlete';
+    if (score >= 88) {
+      if (isAthlete) {
+        return useKo
+            ? '이 선수의 경기 흐름이 너의 페이스를 살리는 케미예요. 명장면 한 컷이 너의 하루를 다시 켜요. 우승 인터뷰 한 줄이 너 안에 박혀요. 시즌 첫 경기 직관 한 번이 분기를 바꿔줘요. 응원하는 팀 굿즈 한 장이 일주일을 가게 해줘요.'
+            : "This athlete's match flow lifts your pace. One highlight clip restarts your day. One line from a victory interview lands in you. One in-person opening game reshapes the quarter. One team merch piece carries you a week.";
+      }
+      return useKo
+          ? '이 배우의 필모가 너의 흐름을 살리는 케미예요. 명대사 한 줄에 너 기분이 풀려요. 인터뷰 영상 하나로 하루가 다시 시작되는 타입. 신작 첫 회 직관 한 번이 분기 전체를 바꿔줘요. 작품 OST 한 곡이 일주일 BGM이 돼요.'
+          : "This actor's filmography lifts your flow. One signature line resets your mood. One interview clip can restart your day. One opening-episode in real time reshapes the whole quarter. One OST track carries your week as BGM.";
+    } else if (score >= 70) {
+      if (isAthlete) {
+        return useKo
+            ? '이 선수의 시즌 컨디션이 너의 페이스를 잡아주는 케미예요. 큰 경기 결과에 너 컨디션이 같이 올라가요. 인터뷰 영상에서 너랑 결이 닿는 한 마디가 와요. 시즌 한 번 직관이 분기를 바꿔줘요.'
+            : "This athlete's season condition tunes your pace. On a big-game result your condition rises with theirs. One line from their interview touches your grain. One in-person season visit reshapes the quarter.";
+      }
+      return useKo
+          ? '이 배우의 새 작품 사이클에 너의 페이스가 같이 가는 케미예요. 공개일에 너 컨디션이 같이 올라가요. 인터뷰 한 컷에서 너랑 결이 닿는 멤버. 시즌 한 번 정주행이 분기 전체를 바꿔줘요.'
+          : "Your pace runs along this actor's new-project cycle. On a release date your condition rises with theirs. One interview frame touches your grain. One season binge reshapes the whole quarter.";
+    } else if (score >= 55) {
+      if (isAthlete) {
+        return useKo
+            ? '이 선수의 컨디션 사이클에 너의 흐름이 가끔 닿는 케미예요. 모든 경기가 닿진 않지만 한 경기는 너의 시그니처 게임이 돼요. 직캠보다 인터뷰 한 컷이 더 닿는 타입.'
+            : "Your flow touches this athlete's condition cycle once in a while. Not every game lands, but one becomes your signature match. Their interview clip reaches you more than the highlight reel.";
+      }
+      return useKo
+          ? '이 배우의 작품 사이클에 너의 흐름이 가끔 닿는 케미예요. 모든 작품이 맞진 않지만 한 작품은 너의 인생작이 돼요. 명대사보다 인터뷰 영상이 더 닿는 타입.'
+          : "Your flow touches this actor's project cycle once in a while. Not every project lands, but one becomes your life-show. Their interview reaches you more than the famous quote.";
+    } else {
+      if (isAthlete) {
+        return useKo
+            ? '이 선수의 경기 톤이 너의 페이스랑 다른 케미예요. 플레이는 좋지만 너의 일상 페이스 자리에는 잘 안 맞아요. 한 경기 정도 하이라이트로만 둘 만한 거리감.'
+            : "This athlete's game tone runs a different pace from yours. The play is good but doesn't fit your daily rhythm. About one match sits well at the bottom of your highlights.";
+      }
+      return useKo
+          ? '이 배우의 작품 톤이 너의 페이스랑 다른 케미예요. 작품은 좋지만 너의 일상 BGM 자리에는 잘 안 맞아요. 한 작품 정도 정주행 목록 끝에 둘 만한 거리감.'
+          : "This actor's project tone runs a different pace from yours. The shows are good but don't fit your daily BGM slot. About one project sits well at the bottom of your watch list.";
+    }
+  }
+
+  // Round 77 sprint 7 — discover 모달 prefill query 생성 (compat 화면 prefill).
+}
+
+/// Round 77 sprint 7 — 셀럽 thumbnail chip (56×56, 오행 5색 + 이니셜).
+/// 실사진 X (저작권 안전), 컬러+모노그램 만. 모서리 사각 Aesop 톤.
+class _CelebChip extends StatelessWidget {
+  final _Star star;
+  final bool useKo;
+  const _CelebChip({required this.star, required this.useKo});
+
+  static const _wood = Color(0xFF8FA86E); // 木 sage green
+  static const _fire = Color(0xFFE5947B); // 火 살구
+  static const _earth = Color(0xFFC9A66B); // 土 토피
+  static const _metal = Color(0xFFB8B5B0); // 金 라이트 그레이
+  static const _water = Color(0xFF6E7D8E); // 水 잉크 블루
+
+  static Color _colorFor(String stem) {
+    const elMap = {
+      '甲': _wood, '乙': _wood,
+      '丙': _fire, '丁': _fire,
+      '戊': _earth, '己': _earth,
+      '庚': _metal, '辛': _metal,
+      '壬': _water, '癸': _water,
+    };
+    return elMap[stem] ?? _earth;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stem = star.dayPillar.isNotEmpty ? star.dayPillar[0] : '甲';
+    final bg = _colorFor(stem);
+    // 한국어 모드 = 한국어 이니셜, 영문 = 영문 이니셜. 빈 문자열 fallback '·'.
+    String initial;
+    final name = useKo ? star.nameKo : star.nameEn;
+    if (name.isEmpty) {
+      initial = '·';
+    } else {
+      // 한국어: 첫 한 글자. 영문: 첫 공백 분리 후 각 단어 첫 글자 1-2.
+      if (useKo) {
+        initial = name[0];
+      } else {
+        final parts = name.split(RegExp(r'\s+'));
+        initial = parts.first.isNotEmpty ? parts.first[0] : '·';
+      }
+    }
+    return Container(
+      width: 56,
+      height: 56,
+      alignment: Alignment.center,
+      color: bg,
+      child: Text(
+        initial,
+        style: GoogleFonts.notoSerifKr(
+          fontSize: 22,
+          fontWeight: FontWeight.w400,
+          color: AppColors.bg,
+          height: 1.0,
+        ),
+      ),
+    );
+  }
+}
+
+/// Round 77 sprint 7 — 로딩 시 skeleton row (회색 placeholder).
+/// chip / rank / 일주 / 이름 / 점수 자리 모두 회색 막대.
+class _SkeletonRow extends StatelessWidget {
+  const _SkeletonRow();
+
+  static const _grey = Color(0xFFD7D1C2); // line 보다 살짝 진하게.
+
+  @override
+  Widget build(BuildContext context) {
+    Widget bar({double width = 60, double height = 12}) => Container(
+          width: width,
+          height: height,
+          color: _grey,
+        );
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+      color: AppColors.bg,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: 28, child: bar(width: 18, height: 10)),
+          const SizedBox(width: 8),
+          Container(width: 56, height: 56, color: _grey),
+          const SizedBox(width: 12),
+          SizedBox(width: 44, child: bar(width: 36, height: 18)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                bar(width: 120, height: 14),
+                const SizedBox(height: 6),
+                bar(width: 80, height: 9),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              bar(width: 42, height: 24),
+              const SizedBox(height: 4),
+              bar(width: 22, height: 9),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Round 77 sprint 7 — saju null 시 empty state CTA.
+/// dummy() fallback 제거 — "내 생일을 먼저 넣어야 케미가 보여요" + 입력 화면 이동.
+class _KpopEmptyState extends StatelessWidget {
+  final bool useKo;
+  const _KpopEmptyState({required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l.kpopEmptySub,
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l.kpopEmptyTitle,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 26,
+                fontWeight: FontWeight.w300,
+                color: AppColors.ink,
+                height: 1.3,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              l.kpopEmptyBody,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 14,
+                color: AppColors.inkLight,
+                height: 1.7,
+              ),
+            ),
+            const SizedBox(height: 28),
+            InkWell(
+              onTap: () => context.go('/input'),
+              child: Container(
+                width: double.infinity,
+                height: 52,
+                alignment: Alignment.center,
+                color: AppColors.ink,
+                child: Text(
+                  '${l.kpopEmptyCta}  →',
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.bg,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

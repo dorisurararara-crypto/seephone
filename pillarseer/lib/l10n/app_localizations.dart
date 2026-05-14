@@ -1968,6 +1968,96 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Compare with my chart'**
   String get discoverShareCompare;
+
+  /// No description provided for @resultShareHeroLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with a friend'**
+  String get resultShareHeroLabel;
+
+  /// No description provided for @resultShareHeroSub.
+  ///
+  /// In en, this message translates to:
+  /// **'SHARE · 友'**
+  String get resultShareHeroSub;
+
+  /// No description provided for @resultShareAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Share again'**
+  String get resultShareAgain;
+
+  /// No description provided for @settingsNotificationTone.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification tone'**
+  String get settingsNotificationTone;
+
+  /// No description provided for @settingsNotificationToneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Adult tone vs. teen tone — daily vocabulary'**
+  String get settingsNotificationToneHint;
+
+  /// No description provided for @settingsNotificationToneAdult.
+  ///
+  /// In en, this message translates to:
+  /// **'Adult'**
+  String get settingsNotificationToneAdult;
+
+  /// No description provided for @settingsNotificationToneMz.
+  ///
+  /// In en, this message translates to:
+  /// **'Teen'**
+  String get settingsNotificationToneMz;
+
+  /// No description provided for @profileShareCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Share my saju card'**
+  String get profileShareCard;
+
+  /// No description provided for @profileShareCardFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Share failed — card text copied to clipboard'**
+  String get profileShareCardFallback;
+
+  /// No description provided for @compatPrefilledTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Celebrity prefilled'**
+  String get compatPrefilledTag;
+
+  /// No description provided for @discoverSubRouteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DISCOVER'**
+  String get discoverSubRouteLabel;
+
+  /// No description provided for @kpopEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your birthday first to see chemistry'**
+  String get kpopEmptyTitle;
+
+  /// No description provided for @kpopEmptySub.
+  ///
+  /// In en, this message translates to:
+  /// **'BIRTHDATE FIRST · 命'**
+  String get kpopEmptySub;
+
+  /// No description provided for @kpopEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We need your day-pillar to compare you with your bias.'**
+  String get kpopEmptyBody;
+
+  /// No description provided for @kpopEmptyCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter my birthday'**
+  String get kpopEmptyCta;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -15,62 +15,62 @@ class ReportsHomeScreen extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    // 추천 1 — 가장 시즌성 강한 콘텐츠 (지금 시점 보너스)
+    // Round 77 sprint 7 — MZ K-POP 페르소나 mandate: 추천 1순위 = K-POP 궁합.
+    // 신년운세는 light 그룹으로 강등. 어른 한자 jargon 모두 한국어 메인 + 한자 sub.
     final recommended = <_Card>[
       _Card(
-        symbol: '丙午',
-        title: useKo ? '2026 신년운세' : 'New Year 2026',
+        symbol: '韓 流',
+        title: useKo ? 'K-POP 최애와 케미' : 'K-POP Bias Chemistry',
         subtitle: useKo
-            ? '병오년 1년 흐름 · 매달 분위기 · 12가지 생활 영역'
-            : 'Year of Fire Horse · monthly flow · 12 life areas',
-        route: '/reports/new-year-2026',
-        badge: useKo ? '추천' : 'PICK',
+            ? '최애 그룹 멤버 50+ 와 케미 비교 · 무대 시너지'
+            : 'Compare with 50+ K-POP idols · stage chemistry',
+        route: '/reports/kpop-compat',
+        badge: useKo ? 'NEW' : 'NEW',
         size: _CardSize.large,
       ),
     ];
 
-    // 가볍게 보기 2 — 재미 + 빠른 소비
+    // 가볍게 보기 2 — 시즌 운세 + 꿈 풀이
     final light = <_Card>[
       _Card(
-        symbol: '韓 流',
-        title: useKo ? 'K-POP 스타 궁합' : 'K-POP Star Compatibility',
+        symbol: '丙午',
+        title: useKo ? '2026 신년운세' : 'New Year 2026',
         subtitle: useKo
-            ? '20+ K-POP 스타와 나의 사주 일치율'
-            : 'Saju matching with 20+ K-POP stars',
-        route: '/reports/kpop-compat',
-        badge: useKo ? 'NEW' : 'NEW',
+            ? '올해 한 줄 운세 · 매달 분위기 · 12 영역'
+            : 'Year of Fire Horse · monthly flow · 12 life areas',
+        route: '/reports/new-year-2026',
       ),
       _Card(
         symbol: '解 夢',
         title: l.reportsCardDream,
         subtitle: useKo
-            ? '꿈으로 보는 길흉 — 1,000+ 사전'
+            ? '꿈 한 컷 → 길흉 · 1,000+ 사전'
             : 'Dream omens — 1,000+ entries',
         route: '/reports/dream',
       ),
     ];
 
-    // 깊게 보기 4 — 정통 명리 깊은 풀이
+    // Round 77 sprint 7 — 깊게 보기 4: 어른 단어 한자는 sub 로 내리고 한국어 메인 + 풀이 sub.
     final deep = <_Card>[
       _Card(
         symbol: '宮 合',
-        title: l.reportsCardCompatibility,
+        title: useKo ? '둘이 잘 맞아? · 궁합' : l.reportsCardCompatibility,
         subtitle: useKo
-            ? '두 사람의 사주 일치율 · 끌림과 갈등'
+            ? '두 사람 케미 · 끌림과 갈등'
             : l.reportsCardCompatibilityDesc,
         route: '/reports/compatibility',
       ),
       _Card(
         symbol: '土 亭',
-        title: l.reportsCardTojeong,
+        title: useKo ? '토정비결' : l.reportsCardTojeong,
         subtitle: useKo
-            ? '올해 한 줄 운세 · 12달 흐름'
+            ? '올해 짧은 한 줄 · 12달 흐름'
             : l.reportsCardTojeongDesc,
         route: '/reports/tojeong',
       ),
       _Card(
         symbol: '擇 日',
-        title: l.reportsCardDatePicking,
+        title: useKo ? '좋은 날 고르기' : l.reportsCardDatePicking,
         subtitle: useKo
             ? '앞으로 30일 길일 · 평일 · 흉일'
             : l.reportsCardDatePickingDesc,
@@ -78,9 +78,9 @@ class ReportsHomeScreen extends StatelessWidget {
       ),
       _Card(
         symbol: '名 譜',
-        title: l.discoverTitle,
+        title: useKo ? '유명인 일주 둘러보기' : l.discoverTitle,
         subtitle: useKo
-            ? '유명인 사주 둘러보기 · 일주 비교'
+            ? '누가 나랑 같은 일주? · 셀럽 비교'
             : l.discoverSubtitle,
         route: '/discover',
       ),

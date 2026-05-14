@@ -137,6 +137,17 @@ class ResultScreen extends ConsumerWidget {
           children: [
             // 1. Hero — 일주 한자 + 영문 보조
             _DayMasterHero(result: result, reading: reading, useKo: useKo),
+            // Round 77 sprint 7 — 오늘 사건 가능성 카드 2번째 승격 (즉시 재미 확보).
+            // anchor key 유지: /result?anchor=today_event deep-link 스크롤 동작.
+            _TodayEventDetailSection(
+              key: kTodayEventDetailAnchor,
+              result: result,
+              useKo: useKo,
+            ),
+            // Round 77 sprint 7 — 상단 공유 CTA (친구 자랑 흐름 first-fold).
+            _ShareHeroBar(
+              onTap: () => _shareChart(context, result, useKo),
+            ),
             // 2. A READING — magazine body (paper bg)
             _ReadingSection(result: result, reading: reading, useKo: useKo),
             // 2.5 TWIN-LENS — 깊이 풀이에서 같이 잡힌 결 (차별점)
@@ -168,12 +179,7 @@ class ResultScreen extends ConsumerWidget {
             _ForYouTodaySection(result: result, useKo: useKo),
             // 7. FIVE ELEMENTS — bar chart (bg)
             _FiveElementsSection(result: result, reading: reading, useKo: useKo),
-            // Round 76 sprint 5 — 7.5 오늘 사건 가능성 상세 (사주 근거 + 조심/추천 + 별점 4).
-            _TodayEventDetailSection(
-              key: kTodayEventDetailAnchor,
-              result: result,
-              useKo: useKo,
-            ),
+            // Round 77 sprint 7 — 오늘 사건 가능성은 hero 직후 2번째로 승격됨 (Column 상단).
             // 7.5 인생 12 영역 풀이 (accordion 그룹, paper bg)
             // kIsZiweiUiHidden flag: 자미두수 라벨 우회 유지 (Round 70).
             if (ziwei != null && kIsZiweiUiHidden)
@@ -1172,12 +1178,11 @@ class _ElementRow extends StatelessWidget {
                 if (isDom)
                   Padding(
                     padding: const EdgeInsets.only(left: 6),
-                    child: Text(
-                      '★',
-                      style: GoogleFonts.inter(
-                        fontSize: 11,
-                        color: AppColors.accent,
-                      ),
+                    // Round 77 sprint 7 — 별 텍스트 X. dominant 마커는 작은 사각 dot.
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      color: AppColors.accent,
                     ),
                   )
                 else if (isDef)
@@ -2542,7 +2547,8 @@ class _CtaStack extends StatelessWidget {
             alignment: Alignment.center,
             color: AppColors.bg,
             child: Text(
-              l.resultShare.toUpperCase(),
+              // Round 77 sprint 7 — 상단 ShareHeroBar 가 1차 CTA 이므로 하단은 "다시 공유" 톤.
+              l.resultShareAgain.toUpperCase(),
               style: GoogleFonts.inter(
                 fontSize: 10,
                 letterSpacing: 4,
@@ -2553,6 +2559,67 @@ class _CtaStack extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Round 77 sprint 7 — hero 직후 친구 공유 CTA (first-fold).
+/// 좌측 한국어 라벨 + sub (한자 letter-spacing) / 우측 화살표.
+class _ShareHeroBar extends StatelessWidget {
+  final VoidCallback onTap;
+  const _ShareHeroBar({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+        decoration: const BoxDecoration(
+          color: AppColors.bg,
+          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.resultShareHeroLabel,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
+                      height: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l.resultShareHeroSub,
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 3,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              '→',
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                color: AppColors.taupe,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -4030,36 +4097,47 @@ class _TodayEventDetailSection extends StatelessWidget {
           const SizedBox(height: 16),
           _DetailRow(label: l.todayEventRecommend, body: recommend, useKo: useKo),
           const SizedBox(height: 24),
-          ...stars.map((row) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 80,
-                      child: Text(
-                        row.$1.toUpperCase(),
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          letterSpacing: 3,
-                          color: AppColors.taupe,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      '★' * row.$2.clamp(0, 5) +
-                          '☆' * (5 - row.$2.clamp(0, 5)),
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        color: AppColors.ink,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+          // Round 77 sprint 7 — 별점 텍스트(★☆) → 가로 색 게이지 5칸. 4행 중 1위 accent 강조.
+          ..._buildDetailStarRows(stars),
         ],
       ),
     );
+  }
+
+  // Round 77 sprint 7 — 4 row 게이지 빌더. 1위는 accent 색 강조.
+  // 동률 시 Love → Wealth → Work → Health 순 (stars 리스트 인덱스 0→3 순).
+  List<Widget> _buildDetailStarRows(List<(String, int)> stars) {
+    int topIdx = 0;
+    int topScore = -1;
+    for (var i = 0; i < stars.length; i++) {
+      if (stars[i].$2 > topScore) {
+        topScore = stars[i].$2;
+        topIdx = i;
+      }
+    }
+    return stars.asMap().entries.map((e) {
+      final i = e.key;
+      final row = e.value;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 80,
+              child: Text(
+                row.$1.toUpperCase(),
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  letterSpacing: 3,
+                  color: AppColors.taupe,
+                ),
+              ),
+            ),
+            Expanded(child: _ResultScoreGauge(score: row.$2, isTop: i == topIdx)),
+          ],
+        ),
+      );
+    }).toList();
   }
 
   // Round 76 sprint 5 — 카테고리별 조심/추천 자연어 inline.
@@ -4169,5 +4247,31 @@ class _DetailRow extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// Round 77 sprint 7 — 별점 텍스트 대체 가로 색 게이지 5칸 (result_screen).
+/// 가득 찬 칸: isTop=true → accent (gold), false → ink. 빈 칸: line (회색).
+class _ResultScoreGauge extends StatelessWidget {
+  final int score;
+  final bool isTop;
+  const _ResultScoreGauge({required this.score, required this.isTop});
+
+  @override
+  Widget build(BuildContext context) {
+    final filled = score.clamp(0, 5);
+    final activeColor = isTop ? AppColors.accent : AppColors.ink;
+    final cells = <Widget>[];
+    for (var i = 0; i < 5; i++) {
+      final isFilled = i < filled;
+      cells.add(Expanded(
+        child: Container(
+          height: 9,
+          color: isFilled ? activeColor : AppColors.line,
+        ),
+      ));
+      if (i < 4) cells.add(const SizedBox(width: 4));
+    }
+    return Row(children: cells);
   }
 }

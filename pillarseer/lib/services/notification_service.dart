@@ -79,6 +79,8 @@ class NotificationService {
     required int hour,
     required int minute,
     SajuResult? saju, // Round 76 sprint 6 — 있으면 today_event_service deep pick.
+    // Round 77 sprint 7 — 알림 톤 (adult/mz). fallback pickFor 경로에서 풀 선택.
+    NotificationTone tone = NotificationTone.adult,
   }) async {
     await ensureInitialized();
     // 기존 모든 daily 알림 cancel
@@ -110,6 +112,7 @@ class NotificationService {
         final picked = NotificationPoolService.pickFor(
           DateTime(target.year, target.month, target.day),
           day60ji,
+          tone: tone,
         );
         pickedBody = useKo ? picked.ko : picked.en;
       }

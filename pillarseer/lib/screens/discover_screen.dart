@@ -76,14 +76,39 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
           onPressed: () => context.go('/reports'),
         ),
-        title: Text(
-          useKo ? '둘러보기 · 譜' : 'DISCOVER · 譜',
-          style: GoogleFonts.inter(
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 5,
-            color: AppColors.ink,
-          ),
+        // Round 77 sprint 7 — sub-route 헤더: "리포트 · 디스커버" 로 위치 인식.
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              useKo ? '리포트' : 'REPORTS',
+              style: GoogleFonts.inter(
+                fontSize: 9,
+                letterSpacing: 4,
+                fontWeight: FontWeight.w500,
+                color: AppColors.taupe,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '·',
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                color: AppColors.taupe,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              l.discoverSubRouteLabel,
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                letterSpacing: 5,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+              ),
+            ),
+          ],
         ),
         shape: const Border(
           bottom: BorderSide(color: AppColors.line, width: 1),
@@ -592,7 +617,18 @@ class _CelebRow extends ConsumerWidget {
                       child: TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop();
-                          GoRouter.of(context).go('/reports/compatibility');
+                          // Round 77 sprint 7 — 셀럽 정보 prefill (모달 → 궁합 화면).
+                          // 다시 입력 시키지 X — 셀럽 이름/생일 자동 채움.
+                          // day pillar / kind 는 compat 화면이 계산 후 노출.
+                          final partnerName = celeb.nameKo.isNotEmpty
+                              ? celeb.nameKo
+                              : celeb.nameEn;
+                          final qp = Uri(queryParameters: {
+                            'partnerName': partnerName,
+                            'partnerBirth': celeb.birth,
+                          }).query;
+                          GoRouter.of(context)
+                              .go('/reports/compatibility?$qp');
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: AppColors.ink,

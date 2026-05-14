@@ -962,4 +962,49 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get discoverShareCompare => '내 사주와 비교';
+
+  @override
+  String get resultShareHeroLabel => '친구에게 보내기';
+
+  @override
+  String get resultShareHeroSub => 'SHARE · 友';
+
+  @override
+  String get resultShareAgain => '다시 공유';
+
+  @override
+  String get settingsNotificationTone => '알림 톤';
+
+  @override
+  String get settingsNotificationToneHint => '어른 톤 / 중고생 톤 — 일상 단어 선택';
+
+  @override
+  String get settingsNotificationToneAdult => '어른';
+
+  @override
+  String get settingsNotificationToneMz => '중고생';
+
+  @override
+  String get profileShareCard => '내 사주 카드 공유';
+
+  @override
+  String get profileShareCardFallback => '공유 실패 — 카드 내용을 클립보드에 복사했어요';
+
+  @override
+  String get compatPrefilledTag => '셀럽 자동 입력';
+
+  @override
+  String get discoverSubRouteLabel => '디스커버';
+
+  @override
+  String get kpopEmptyTitle => '내 생일을 먼저 넣어야 케미가 보여요';
+
+  @override
+  String get kpopEmptySub => 'BIRTHDATE FIRST · 命';
+
+  @override
+  String get kpopEmptyBody => '내 사주 일주를 알아야 최애와의 케미를 비교할 수 있어요.';
+
+  @override
+  String get kpopEmptyCta => '생일 입력하러 가기';
 }

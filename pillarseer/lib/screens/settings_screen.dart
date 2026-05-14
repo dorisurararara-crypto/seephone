@@ -13,6 +13,7 @@ import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
 import '../providers/saju_settings_provider.dart';
 import '../providers/streak_provider.dart';
+import '../services/notification_pool_service.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
 
@@ -242,6 +243,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             _NotifSwitch(),
             // Round 76 — 사용자 알림 시간 picker.
             _NotifTimePicker(),
+            // Round 77 sprint 7 — 알림 톤 (어른 / 중고생) toggle.
+            _NotifToneToggle(),
           ]),
           _SettingsGroup(label: l.settingsSajuOptions, children: [
             _TrueSunSwitch(),
@@ -888,6 +891,112 @@ class _NotifTimePicker extends ConsumerWidget {
         backgroundColor: AppColors.ink,
         content: Text(l.settingsNotifTimeDoneSnack(hh, mm)),
       ));
+  }
+}
+
+/// Round 77 sprint 7 — 알림 톤 toggle (어른 / 중고생).
+/// pickFor fallback 풀 선택에 영향. saju 있는 경우 today_event_pool 본문 우선.
+class _NotifToneToggle extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    final toggle = ref.watch(notificationProvider);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.settingsNotificationTone.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l.settingsNotificationToneHint,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              color: AppColors.taupe,
+              height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              _ToneChip(
+                label: l.settingsNotificationToneAdult,
+                selected: toggle.tone == NotificationTone.adult,
+                onTap: () => _set(context, ref, NotificationTone.adult),
+              ),
+              const SizedBox(width: 10),
+              _ToneChip(
+                label: l.settingsNotificationToneMz,
+                selected: toggle.tone == NotificationTone.mz,
+                onTap: () => _set(context, ref, NotificationTone.mz),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _set(
+      BuildContext context, WidgetRef ref, NotificationTone tone) async {
+    final l = AppL10n.of(context);
+    final saju = ref.read(sajuResultProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    await ref.read(notificationProvider.notifier).setTone(
+          tone: tone,
+          pushTitle: l.homeNotifSampleTitle,
+          pushBody: l.homeNotifSampleBody,
+          day60ji: saju?.day60ji,
+          useKo: useKo,
+          saju: saju,
+        );
+  }
+}
+
+class _ToneChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  const _ToneChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.ink : AppColors.bg,
+          border: Border.all(
+              color: selected ? AppColors.ink : AppColors.line, width: 1),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.notoSerifKr(
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+            color: selected ? AppColors.bg : AppColors.ink,
+            letterSpacing: 0.3,
+          ),
+        ),
+      ),
+    );
   }
 }
 

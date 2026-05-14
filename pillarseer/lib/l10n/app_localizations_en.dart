@@ -1008,4 +1008,52 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get discoverShareCompare => 'Compare with my chart';
+
+  @override
+  String get resultShareHeroLabel => 'Share with a friend';
+
+  @override
+  String get resultShareHeroSub => 'SHARE · 友';
+
+  @override
+  String get resultShareAgain => 'Share again';
+
+  @override
+  String get settingsNotificationTone => 'Notification tone';
+
+  @override
+  String get settingsNotificationToneHint =>
+      'Adult tone vs. teen tone — daily vocabulary';
+
+  @override
+  String get settingsNotificationToneAdult => 'Adult';
+
+  @override
+  String get settingsNotificationToneMz => 'Teen';
+
+  @override
+  String get profileShareCard => 'Share my saju card';
+
+  @override
+  String get profileShareCardFallback =>
+      'Share failed — card text copied to clipboard';
+
+  @override
+  String get compatPrefilledTag => 'Celebrity prefilled';
+
+  @override
+  String get discoverSubRouteLabel => 'DISCOVER';
+
+  @override
+  String get kpopEmptyTitle => 'Add your birthday first to see chemistry';
+
+  @override
+  String get kpopEmptySub => 'BIRTHDATE FIRST · 命';
+
+  @override
+  String get kpopEmptyBody =>
+      'We need your day-pillar to compare you with your bias.';
+
+  @override
+  String get kpopEmptyCta => 'Enter my birthday';
 }

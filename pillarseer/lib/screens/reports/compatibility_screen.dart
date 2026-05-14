@@ -30,6 +30,45 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
   int? _score;
   String? _verdict;
   bool _loading = false;
+  // Round 77 sprint 7 — discover 모달 prefill 시 셀럽 이름 표시 chip.
+  String? _prefilledFromCeleb;
+
+  @override
+  void initState() {
+    super.initState();
+    // initState 시 GoRouterState 접근 불가 → didChangeDependencies 에서 1회 prefill.
+  }
+
+  bool _prefillApplied = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_prefillApplied) return;
+    _prefillApplied = true;
+    // Round 77 sprint 7 — discover 모달 셀럽 prefill query 읽기.
+    final qp = GoRouterState.of(context).uri.queryParameters;
+    final pName = qp['partnerName'];
+    final pBirth = qp['partnerBirth'];
+    if (pName != null && pName.isNotEmpty) {
+      _partnerNameCtrl.text = pName;
+      _prefilledFromCeleb = pName;
+    }
+    if (pBirth != null && pBirth.isNotEmpty) {
+      // pBirth 형식: 'YYYY-MM-DD' 또는 'YYYY-MM-DDTHH:MM' 등. 앞 10자만 사용.
+      try {
+        final iso = pBirth.length >= 10 ? pBirth.substring(0, 10) : pBirth;
+        final parsed = DateTime.tryParse(iso);
+        if (parsed != null) {
+          _partnerDate = parsed;
+          // 시간 모름 가정 — 셀럽 birth time 알 수 없음.
+          _unknownTime = true;
+        }
+      } catch (_) {/* silent — prefill 실패해도 사용자 직접 입력 가능 */}
+    }
+    if (_prefilledFromCeleb != null) {
+      setState(() {});
+    }
+  }
 
   Future<void> _calculate() async {
     if (_partnerDate == null) return;
@@ -137,6 +176,50 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
             if (me != null) _PillarHero(label: 'YOU · 我', result: me),
             // Round 14 codex P1 — sample hint 폼 위에 노출 (첫 viewport)
             if (_score == null) _CompatExampleHint(useKo: useKo),
+            // Round 77 sprint 7 — discover 모달 prefill 표시 chip.
+            if (_prefilledFromCeleb != null)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+                decoration: const BoxDecoration(
+                  color: AppColors.paper,
+                  border: Border(
+                      bottom: BorderSide(color: AppColors.line, width: 1)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(color: AppColors.accent, width: 1),
+                      ),
+                      child: Text(
+                        l.compatPrefilledTag.toUpperCase(),
+                        style: GoogleFonts.inter(
+                          fontSize: 9,
+                          letterSpacing: 3,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _prefilledFromCeleb!,
+                        style: GoogleFonts.notoSerifKr(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.ink,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             _PartnerForm(
               nameCtrl: _partnerNameCtrl,
               date: _partnerDate,

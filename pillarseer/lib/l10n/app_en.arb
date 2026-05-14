@@ -339,5 +339,21 @@
   "discoverFilterActor": "Actors",
   "discoverFilterAthlete": "Athletes",
   "discoverFilterIcon": "Icons",
-  "discoverShareCompare": "Compare with my chart"
+  "discoverShareCompare": "Compare with my chart",
+
+  "resultShareHeroLabel": "Share with a friend",
+  "resultShareHeroSub": "SHARE · 友",
+  "resultShareAgain": "Share again",
+  "settingsNotificationTone": "Notification tone",
+  "settingsNotificationToneHint": "Adult tone vs. teen tone — daily vocabulary",
+  "settingsNotificationToneAdult": "Adult",
+  "settingsNotificationToneMz": "Teen",
+  "profileShareCard": "Share my saju card",
+  "profileShareCardFallback": "Share failed — card text copied to clipboard",
+  "compatPrefilledTag": "Celebrity prefilled",
+  "discoverSubRouteLabel": "DISCOVER",
+  "kpopEmptyTitle": "Add your birthday first to see chemistry",
+  "kpopEmptySub": "BIRTHDATE FIRST · 命",
+  "kpopEmptyBody": "We need your day-pillar to compare you with your bias.",
+  "kpopEmptyCta": "Enter my birthday"
 }
