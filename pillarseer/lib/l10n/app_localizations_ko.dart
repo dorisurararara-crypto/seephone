@@ -192,9 +192,6 @@ class AppL10nKo extends AppL10n {
   String get navReports => '리포트';
 
   @override
-  String get navDiscover => '탐색';
-
-  @override
   String get navProfile => '프로필';
 
   @override
@@ -934,9 +931,6 @@ class AppL10nKo extends AppL10n {
   String get dreamCategoryLove => '애정';
 
   @override
-  String get dreamCategoryHealth => '건강';
-
-  @override
   String get dreamCategoryFamily => '가족';
 
   @override
@@ -1007,4 +1001,17 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get kpopEmptyCta => '생일 입력하러 가기';
+
+  @override
+  String get emptyStateSajuRequiredTitle => '사주 정보를 먼저 넣어주세요';
+
+  @override
+  String get emptyStateSajuRequiredSub => 'ADD YOUR SAJU · 命';
+
+  @override
+  String get emptyStateSajuRequiredBody =>
+      '내 사주 네 글자가 있어야 오늘의 풀이와 리포트를 보여줄 수 있어요.';
+
+  @override
+  String get emptyStateSajuRequiredCta => '사주 입력하러 가기';
 }

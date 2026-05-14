@@ -66,7 +66,6 @@
   "navHome": "오늘",
   "navReading": "내 사주",
   "navReports": "리포트",
-  "navDiscover": "탐색",
   "navProfile": "프로필",
 
   "placeholderReportsTitle": "리포트",
@@ -328,7 +327,6 @@
   "dreamCategoryWarning": "경고",
   "dreamCategoryWealth": "재물",
   "dreamCategoryLove": "애정",
-  "dreamCategoryHealth": "건강",
   "dreamCategoryFamily": "가족",
 
 
@@ -355,5 +353,9 @@
   "kpopEmptyTitle": "내 생일을 먼저 넣어야 케미가 보여요",
   "kpopEmptySub": "BIRTHDATE FIRST · 命",
   "kpopEmptyBody": "내 사주 일주를 알아야 최애와의 케미를 비교할 수 있어요.",
-  "kpopEmptyCta": "생일 입력하러 가기"
+  "kpopEmptyCta": "생일 입력하러 가기",
+  "emptyStateSajuRequiredTitle": "사주 정보를 먼저 넣어주세요",
+  "emptyStateSajuRequiredSub": "ADD YOUR SAJU · 命",
+  "emptyStateSajuRequiredBody": "내 사주 네 글자가 있어야 오늘의 풀이와 리포트를 보여줄 수 있어요.",
+  "emptyStateSajuRequiredCta": "사주 입력하러 가기"
 }

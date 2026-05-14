@@ -199,9 +199,6 @@ class AppL10nEn extends AppL10n {
   String get navReports => 'Reports';
 
   @override
-  String get navDiscover => 'Discover';
-
-  @override
   String get navProfile => 'Profile';
 
   @override
@@ -980,9 +977,6 @@ class AppL10nEn extends AppL10n {
   String get dreamCategoryLove => 'Love';
 
   @override
-  String get dreamCategoryHealth => 'Health';
-
-  @override
   String get dreamCategoryFamily => 'Family';
 
   @override
@@ -1056,4 +1050,17 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get kpopEmptyCta => 'Enter my birthday';
+
+  @override
+  String get emptyStateSajuRequiredTitle => 'Add your saju info first';
+
+  @override
+  String get emptyStateSajuRequiredSub => 'ADD YOUR SAJU · 命';
+
+  @override
+  String get emptyStateSajuRequiredBody =>
+      'We need your four pillars to show your daily reading and reports.';
+
+  @override
+  String get emptyStateSajuRequiredCta => 'Enter my saju';
 }

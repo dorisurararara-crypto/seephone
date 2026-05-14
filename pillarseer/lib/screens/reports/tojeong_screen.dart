@@ -11,6 +11,7 @@ import '../../providers/locale_provider.dart';
 import '../../providers/saju_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/saju_required_empty.dart';
 
 class TojeongScreen extends ConsumerWidget {
   const TojeongScreen({super.key});
@@ -18,7 +19,12 @@ class TojeongScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
-    final saju = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    // Round 77 sprint 8 — SajuResult.dummy() fallback 제거.
+    final sajuOrNull = ref.watch(sajuResultProvider);
+    if (sajuOrNull == null) {
+      return const SajuRequiredEmpty();
+    }
+    final saju = sajuOrNull;
     final birth = ref.watch(userBirthInfoProvider);
     final localeOverride = ref.watch(localeProvider);
     final systemLocale = Localizations.maybeLocaleOf(context);

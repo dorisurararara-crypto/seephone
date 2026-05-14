@@ -14,6 +14,7 @@ import '../../services/strength_service.dart';
 import '../../services/yongsin_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/saju_required_empty.dart';
 
 /// 2026 신년운세 screen — 사주 원국과 병오년 세운을 매칭하여 1년 운기 풀이.
 class NewYear2026Screen extends ConsumerWidget {
@@ -23,7 +24,12 @@ class NewYear2026Screen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final saju = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    // Round 77 sprint 8 — SajuResult.dummy() fallback 제거.
+    final sajuOrNull = ref.watch(sajuResultProvider);
+    if (sajuOrNull == null) {
+      return const SajuRequiredEmpty();
+    }
+    final saju = sajuOrNull;
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 

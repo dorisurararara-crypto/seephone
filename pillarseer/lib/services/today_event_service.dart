@@ -33,17 +33,17 @@ enum EventCategory {
 }
 
 /// 5 십성 그룹.
+/// today_event_pool.json key prefix 와 일치 (한국어 십신 그룹).
+/// pool key 형식: `{한국어 십신}_{EventCategory.key}` (예: `비겁_relationship`).
+/// Round 77 sprint 8 — `ko` getter 는 enum 내부 method 로 inline (extension 제거).
 enum TenGodGroup {
   bigyeop, // 비겁 (비견+겁재)
   siksang, // 식상 (식신+상관)
   jaeseong, // 재성 (편재+정재)
   gwanseong, // 관성 (편관+정관)
-  inseong, // 인성 (편인+정인)
-}
+  inseong; // 인성 (편인+정인)
 
-/// today_event_pool.json key prefix 와 일치 (한국어 십신 그룹).
-/// pool key 형식: `{ko}_{EventCategory.key}` (예: `비겁_relationship`).
-extension TenGodGroupKo on TenGodGroup {
+  /// pool key prefix (한국어 십신 그룹명).
   String get ko {
     switch (this) {
       case TenGodGroup.bigyeop:

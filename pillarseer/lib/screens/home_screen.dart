@@ -23,6 +23,7 @@ import '../providers/streak_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
 import '../widgets/five_day_trend_chart.dart';
+import '../widgets/saju_required_empty.dart';
 import '../widgets/six_axis_radar.dart';
 
 /// Aesop Luxury home — 텍스트 위주 magazine editorial.
@@ -45,7 +46,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final saju = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    // Round 77 sprint 8 — SajuResult.dummy() fallback 제거. 사주 null 시 empty state CTA.
+    final sajuOrNull = ref.watch(sajuResultProvider);
+    if (sajuOrNull == null) {
+      return const Scaffold(
+        backgroundColor: AppColors.bg,
+        body: SajuRequiredEmpty(showAppBar: false),
+        bottomNavigationBar: PillarBottomNav(activeIdx: 0),
+      );
+    }
+    final saju = sajuOrNull;
     final birth = ref.watch(userBirthInfoProvider);
     final fortune = DailyService().calculate(saju);
     final useKo =

@@ -39,6 +39,7 @@ import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
+import '../widgets/saju_required_empty.dart';
 
 /// Round 70 mandate 명시: 자미두수 별 이름/궁 이름 UI 노출 0.
 /// `_CrossmatchSection` 은 "DEEP POINT" 우회 라벨로 노출 유지 (우리 차별점).
@@ -57,7 +58,12 @@ class ResultScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
-    final result = ref.watch(sajuResultProvider) ?? SajuResult.dummy();
+    // Round 77 sprint 8 — SajuResult.dummy() fallback 제거. 사주 null 시 empty state CTA.
+    final resultOrNull = ref.watch(sajuResultProvider);
+    if (resultOrNull == null) {
+      return const SajuRequiredEmpty();
+    }
+    final result = resultOrNull;
     // anchor query 검사 — `/result?anchor=today_event` 일 때 한 번만 scroll.
     final uri = GoRouterState.of(context).uri;
     if (uri.queryParameters['anchor'] == 'today_event' &&

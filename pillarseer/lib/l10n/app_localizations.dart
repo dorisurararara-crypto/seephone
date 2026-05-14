@@ -463,12 +463,6 @@ abstract class AppL10n {
   /// **'Reports'**
   String get navReports;
 
-  /// No description provided for @navDiscover.
-  ///
-  /// In en, this message translates to:
-  /// **'Discover'**
-  String get navDiscover;
-
   /// No description provided for @navProfile.
   ///
   /// In en, this message translates to:
@@ -1909,12 +1903,6 @@ abstract class AppL10n {
   /// **'Love'**
   String get dreamCategoryLove;
 
-  /// No description provided for @dreamCategoryHealth.
-  ///
-  /// In en, this message translates to:
-  /// **'Health'**
-  String get dreamCategoryHealth;
-
   /// No description provided for @dreamCategoryFamily.
   ///
   /// In en, this message translates to:
@@ -2058,6 +2046,30 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Enter my birthday'**
   String get kpopEmptyCta;
+
+  /// No description provided for @emptyStateSajuRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your saju info first'**
+  String get emptyStateSajuRequiredTitle;
+
+  /// No description provided for @emptyStateSajuRequiredSub.
+  ///
+  /// In en, this message translates to:
+  /// **'ADD YOUR SAJU · 命'**
+  String get emptyStateSajuRequiredSub;
+
+  /// No description provided for @emptyStateSajuRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We need your four pillars to show your daily reading and reports.'**
+  String get emptyStateSajuRequiredBody;
+
+  /// No description provided for @emptyStateSajuRequiredCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter my saju'**
+  String get emptyStateSajuRequiredCta;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

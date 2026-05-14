@@ -11,6 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pillarseer/l10n/app_localizations.dart';
+import 'package:pillarseer/models/saju_result.dart';
+import 'package:pillarseer/providers/saju_provider.dart';
 import 'package:pillarseer/screens/result_screen.dart';
 import 'package:pillarseer/services/today_event_service.dart';
 
@@ -160,7 +162,8 @@ void main() {
   });
 
   // FIX r3 #2 — 실제 ResultScreen pump → anchor=today_event 시 detail 섹션 렌더링 확인.
-  // (DailyService.calculate 가 SajuResult.dummy 로 동작하므로 외부 의존 X.)
+  // Round 77 sprint 8 — SajuResult.dummy() production fallback 제거 후,
+  // 테스트 fixture 로만 dummy 주입. sajuResultProvider 를 dummy 로 override.
   testWidgets('ResultScreen pump (anchor=today_event) — detail caption 노출 + 별점 렌더',
       (tester) async {
     final router = GoRouter(
@@ -174,7 +177,10 @@ void main() {
     );
     await tester.pumpWidget(
       ProviderScope(
-        // sajuResultProvider 는 SajuResult.dummy() fallback 자동 사용 (override X).
+        overrides: [
+          // Round 77 sprint 8 — fallback 제거 후 명시 fixture 주입.
+          sajuResultProvider.overrideWith(_DummySajuNotifier.new),
+        ],
         child: MaterialApp.router(
           routerConfig: router,
           localizationsDelegates: AppL10n.localizationsDelegates,
@@ -195,4 +201,10 @@ void main() {
         reason: 'detail row label 하나도 노출되지 않음');
     // sajuResultProvider 의존 확인 — pump 자체가 throw 없으면 PASS.
   });
+}
+
+/// Round 77 sprint 8 — test fixture (production code 에서 dummy 호출 제거 후).
+class _DummySajuNotifier extends SajuResultNotifier {
+  @override
+  SajuResult? build() => SajuResult.dummy();
 }
