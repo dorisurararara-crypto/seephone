@@ -23,6 +23,9 @@
 **/ios/Runner.xcworkspace/xcuserdata/
 **/ios/Runner.xcodeproj/xcuserdata/
 
+# macOS Flutter ephemeral (generated)
+**/macos/Flutter/ephemeral/
+
 # Android
 **/android/.gradle/
 **/android/local.properties
@@ -47,6 +50,19 @@ tmp/
 
 # Claude Code workspace
 .claude/
+
+# Playwright MCP scratch
+.playwright-mcp/
+
+# Screenshots / screen recordings (large local-only assets)
+IMG_*.PNG
+IMG_*.png
+IMG_*.JPG
+ScreenRecording_*.mp4
+ScreenRecording_*.mov
+
+# Vercel/Next sibling site (not part of monorepo)
+pillarseer-site/
 
 # Image generation rejected drafts (keep curated only)
 raw-images/**/.rejected/
