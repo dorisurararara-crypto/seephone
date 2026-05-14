@@ -113,6 +113,12 @@ class SajuService {
         dominantElement: elements.dominant,
         deficitElement: elements.deficit,
         shortReadings: readings,
+        allStems: [
+          yearP.chunGan,
+          monthP.chunGan,
+          dayP.chunGan,
+          if (hourP != null) hourP.chunGan,
+        ],
       );
       deepEn = pair.en;
       deepKo = pair.ko;

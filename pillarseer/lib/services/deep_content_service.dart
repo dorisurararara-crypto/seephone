@@ -72,6 +72,7 @@ class DeepContentService {
   }
 
   /// 8섹션 풀이 (en + ko) 빌드. 대운/세운/Lucky 는 procedural 추가.
+  /// [allStems] = 년/월/일/시 4 천간 (시 없으면 3). 십신 음양 10분류용.
   static Future<({DeepReading en, DeepReading ko})> buildFor({
     required String day60ji,
     required String dayMaster,
@@ -81,6 +82,7 @@ class DeepContentService {
     required String dominantElement,
     required String deficitElement,
     required Map<String, String> shortReadings,
+    List<String> allStems = const [],
   }) async {
     await _ensureLoaded();
     final enRaw = _enCache?[day60ji];
@@ -97,6 +99,7 @@ class DeepContentService {
       userAge: userAge,
       dominant: dominantElement,
       deficit: deficitElement,
+      allStems: allStems,
     );
     final ko = _buildLang(
       lang: 'ko',
@@ -109,6 +112,7 @@ class DeepContentService {
       userAge: userAge,
       dominant: dominantElement,
       deficit: deficitElement,
+      allStems: allStems,
     );
     return (en: en, ko: ko);
   }
@@ -124,6 +128,7 @@ class DeepContentService {
     required int userAge,
     required String dominant,
     required String deficit,
+    List<String> allStems = const [],
   }) {
     final isKo = lang == 'ko';
     String pickField(String key, String fallback) {
@@ -149,7 +154,7 @@ class DeepContentService {
         _luckyDirectionFor(isKo, dominant);
 
     final elementsNote = _elementsNoteFor(isKo, dayMaster, dominant, deficit);
-    final tenGodsNote = _tenGodsNoteFor(isKo, dayMaster, dominant);
+    final tenGodsNote = _tenGodsNoteFor(isKo, dayMaster, dominant, allStems);
     final hooks = _threeHits(
       isKo: isKo,
       day60ji: day60ji,
@@ -224,24 +229,108 @@ class DeepContentService {
         '${enDefDesc[def] ?? ''} The area to balance is $defRole.';
   }
 
-  /// 십신 핵심 관계 한 줄 (가장 강한 신 → 의미)
-  static String _tenGodsNoteFor(bool ko, String dayMaster, String dom) {
+  /// 십신 핵심 관계 한 줄 (가장 강한 신 → 의미).
+  /// [allStems] 가 있으면 음양 분리 10분류 (정관/편관, 정인/편인, 정재/편재,
+  /// 식신/상관, 비견/겁재), 없으면 기본 5분류로 fallback.
+  static String _tenGodsNoteFor(
+      bool ko, String dayMaster, String dom, List<String> allStems) {
     final role = _fiveElementRoleKey(dayMaster, dom);
+    if (role.isEmpty) return '';
+    final ten = _tenGodKey(dayMaster, dom, allStems);
+    if (ten.isNotEmpty) {
+      const ko10 = {
+        'bigyun': '비견 기운 — 자기 페이스·동료와 어깨 나란히 가는 힘이 또렷해요.',
+        'gupjae': '겁재 기운 — 강한 경쟁심·승부욕이 살아 있고 친구·라이벌과 부딪혀요.',
+        'siksin': '식신 기운 — 부드러운 표현·창작·먹고 노는 즐거움이 본인 자원이에요.',
+        'sanggwan': '상관 기운 — 톡톡 튀는 말·재능·자기 표현이 강하게 흘러요.',
+        'jeongjae': '정재 기운 — 꾸준한 돈·현실 관리·약속 지키는 힘이 본인 자원이에요.',
+        'pyeonjae': '편재 기운 — 큰 기회·유동 자산·발 빠른 현실 감각이 무기예요.',
+        'jeonggwan': '정관 기운 — 책임감·규칙·인정 받는 자리에서 성과가 따라와요.',
+        'pyeongwan': '편관 기운 — 도전·압박·돌파력이 본인을 성장시키는 라이벌이에요.',
+        'jeongin': '정인 기운 — 차분한 배움·후원·문서·자격이 본인 자원이에요.',
+        'pyeonin': '편인 기운 — 직관·예술·비주류 지식·독학력이 본인 자원이에요.',
+      };
+      const en10 = {
+        'bigyun': 'Friend energy — peer-paced, side-by-side strength runs strong.',
+        'gupjae': 'Rival energy — competitive drive flares with friends and rivals.',
+        'siksin': 'Producer energy — soft expression, creating, and enjoyment fuel you.',
+        'sanggwan': 'Spark energy — sharp talk, talent, and self-expression flow.',
+        'jeongjae': 'Steady wealth — patient money, follow-through, promises.',
+        'pyeonjae': 'Big-shot wealth — large flows, quick reads, deal sense.',
+        'jeonggwan': 'Officer energy — responsibility and recognized roles reward you.',
+        'pyeongwan': 'Challenger energy — pressure and breakthroughs grow you.',
+        'jeongin': 'Mentor energy — calm learning, support, papers, credentials.',
+        'pyeonin': 'Insight energy — intuition, art, niche knowledge, self-teaching.',
+      };
+      return (ko ? ko10[ten] : en10[ten]) ?? '';
+    }
+    // fallback 5분류 (allStems 비었을 때)
     const ko10g = {
-      'peer': '비겁(比劫) 기운 — 자기 주도·동료·경쟁심이 또렷하게 살아요.',
-      'output': '식상(食傷) 기운 — 표현·창작·말이 본인 무기예요.',
-      'wealth': '재성(財星) 기운 — 돈·기회·현실 감각을 다루는 힘이 커요.',
-      'authority': '관성(官星) 기운 — 책임·규칙·인정 받는 자리에서 성과가 생겨요.',
-      'resource': '인성(印星) 기운 — 배움·후원·기록이 본인 자원이에요.',
+      'peer': '비겁 기운 — 자기 주도·동료·경쟁심이 또렷하게 살아요.',
+      'output': '식상 기운 — 표현·창작·말이 본인 무기예요.',
+      'wealth': '재성 기운 — 돈·기회·현실 감각을 다루는 힘이 커요.',
+      'authority': '관성 기운 — 책임·규칙·인정 받는 자리에서 성과가 생겨요.',
+      'resource': '인성 기운 — 배움·후원·기록이 본인 자원이에요.',
     };
     const en10g = {
-      'peer': 'Peer energy (比劫) — self-direction, allies, and rivalry run strong.',
-      'output': 'Output energy (食傷) — your expression and what you create are your edge.',
-      'wealth': 'Wealth energy (財星) — money, opportunity, and practical control are active.',
-      'authority': 'Authority energy (官星) — recognition and responsibility come through pressure.',
-      'resource': 'Resource energy (印星) — learning, mentors, and notes are your base.',
+      'peer': 'Peer energy — self-direction, allies, and rivalry run strong.',
+      'output': 'Output energy — your expression and what you create are your edge.',
+      'wealth': 'Wealth energy — money, opportunity, and practical control are active.',
+      'authority': 'Authority energy — recognition and responsibility come through pressure.',
+      'resource': 'Resource energy — learning, mentors, and notes are your base.',
     };
     return (ko ? ko10g[role] : en10g[role]) ?? '';
+  }
+
+  /// 일간 음양 + dominant 5행 + 같은 5행 천간 음양 다수 → 10분류 key.
+  /// 같은 5행 천간이 사주에 없으면 빈 문자열 (fallback 발동).
+  ///
+  /// Tie 규칙: 일간(dayMaster) 자체가 dominant 5행에 속하면 domStems 에 항상
+  /// 포함되어 sameCount 가 자동으로 +1 가산됨 → tie 시 same 우세가 자연스러움.
+  /// 일간이 dominant 외 5행이고 외부 천간이 같은 수면 same 우세로 보정 (>=).
+  static String _tenGodKey(
+      String dayMaster, String dom, List<String> allStems) {
+    if (dayMaster.isEmpty || dom.isEmpty || allStems.isEmpty) return '';
+    final domStems = allStems
+        .where((s) => s.isNotEmpty && _ganElement(s) == dom)
+        .toList();
+    if (domStems.isEmpty) return '';
+    // 같은 음양 vs 다른 음양 천간 개수 비교 — 더 많은 쪽으로 결정.
+    final dmYang = _ganIsYang(dayMaster);
+    int sameCount = 0;
+    int otherCount = 0;
+    for (final s in domStems) {
+      if (_ganIsYang(s) == dmYang) {
+        sameCount++;
+      } else {
+        otherCount++;
+      }
+    }
+    // tie 시 일간 음양 우세 (앱은 일간 중심 해석이라 자연스러운 default).
+    final sameYinYang = sameCount >= otherCount;
+    final role = _fiveElementRoleKey(dayMaster, dom);
+    switch (role) {
+      case 'peer':
+        return sameYinYang ? 'bigyun' : 'gupjae';
+      case 'output':
+        return sameYinYang ? 'siksin' : 'sanggwan';
+      case 'wealth':
+        // 정재 = 음양 다름, 편재 = 음양 같음
+        return sameYinYang ? 'pyeonjae' : 'jeongjae';
+      case 'authority':
+        // 정관 = 음양 다름, 편관 = 음양 같음 (七殺)
+        return sameYinYang ? 'pyeongwan' : 'jeonggwan';
+      case 'resource':
+        // 정인 = 음양 다름, 편인 = 음양 같음
+        return sameYinYang ? 'pyeonin' : 'jeongin';
+      default:
+        return '';
+    }
+  }
+
+  static bool _ganIsYang(String gan) {
+    const yangSet = {'甲', '丙', '戊', '庚', '壬'};
+    return yangSet.contains(gan);
   }
 
   static String _fiveElementRoleFor(String dayMaster, String target, bool ko) {
