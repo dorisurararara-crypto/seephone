@@ -339,7 +339,7 @@ class PersonalizationEngine {
       topic: 'today',
       priority: 60,
       koTpl: '오늘은 살짝 부족한 {def}을 의식적으로 보태면 흐름이 부드러워져요. 평소 잊기 쉬운 작은 습관 하나가 오늘의 열쇠가 돼요.',
-      enTpl: 'Adding a conscious touch of {defEn} unblocks today. A small habit you usually forget could be the key.',
+      enTpl: 'Adding a conscious touch of {defEn} unblocks today. A small habit you usually forget becomes today\'s key.',
       condition: (p, t) => !p.isStrong,
     ),
     // action 추가
