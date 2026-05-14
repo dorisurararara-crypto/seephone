@@ -243,7 +243,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 80,
-      koTpl: '당신은 {dm}이에요. {def}이 좀 부족해서, 결정 전에 한 번 더 생각하고 다듬는 신중한 면이 강합니다.',
+      koTpl: '당신은 {dm}이에요. {def}이 좀 부족해서, 결정 전에 한 번 더 생각하고 다듬는 신중한 면이 강해요.',
       enTpl: 'You are {dmEn}. With less {defEn} inside, you tend to think twice and refine before acting — a careful style.',
       condition: (p, t) => !p.isStrong,
     ),
@@ -262,14 +262,14 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'today',
       priority: 85,
-      koTpl: '오늘은 새로 시작하기보다 진행 중인 일을 매듭짓는 게 더 잘 풀려요. 한 번에 하나씩, 시작했던 작은 일부터 차근차근 끝내 보세요. 마무리한 한 가지가 오늘 가장 큰 성취가 됩니다.',
+      koTpl: '오늘은 새로 시작하기보다 진행 중인 일을 매듭짓는 게 더 잘 풀려요. 한 번에 하나씩, 시작했던 작은 일부터 차근차근 끝내 보세요. 마무리한 하나가 오늘 가장 큰 성취가 돼요.',
       enTpl: 'Today rewards closing over opening. Go one thing at a time — finish a small task you started earlier. The single closed loop is today\'s biggest win.',
       condition: (p, t) => t.weekday >= 4,
     ),
     InsightAtom(
       topic: 'today',
       priority: 75,
-      koTpl: '오늘은 {dom}이 강하게 흐르는 날이에요. 당신 본래의 색이 더 뚜렷하게 드러나는 흐름이라서, 평소보다 자기 의견을 분명하게 말해도 잘 받아들여집니다.',
+      koTpl: '오늘은 {dom}이 강하게 흐르는 날이에요. 당신 본래의 색이 더 뚜렷하게 드러나는 흐름이라서, 평소보다 자기 의견을 분명하게 말해도 잘 받아들여져요.',
       enTpl: 'Today\'s {domEn} flows strong, and your natural color shows clearer than usual. Speaking your opinion more openly today actually lands well.',
       condition: (p, t) => true,
     ),
@@ -283,7 +283,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'today',
       priority: 70,
-      koTpl: '오늘은 미뤄둔 결정을 마무리하기에 좋은 날이에요. 작은 결정 하나만 명확하게 끝내도 일주일 전체가 한결 가벼워집니다.',
+      koTpl: '오늘은 미뤄둔 결정을 마무리하기에 좋은 날이에요. 작은 결정 하나만 명확하게 끝내도 일주일 전체가 한결 가벼워져요.',
       enTpl: 'A good day to close a postponed decision. Finishing even one small choice lightens the whole week.',
       condition: (p, t) => p.dayMasterElement == '土',
     ),
@@ -292,14 +292,14 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'action',
       priority: 80,
-      koTpl: '당신에게 살짝 부족한 {def}을 의식적으로 보충해 보세요. {compKo} 같은 작은 행동 하나면 충분하고, 그 한 가지가 오늘 흐름을 부드럽게 풀어줘요.',
+      koTpl: '당신에게 살짝 부족한 {def}을 의식적으로 보충해 보세요. {compKo} 같은 작은 행동 하나면 충분하고, 그 하나가 오늘 흐름을 부드럽게 풀어줘요.',
       enTpl: 'Add one conscious touch of {defEn} ({compEn}). One small action is enough — it softens the day visibly.',
       condition: (p, t) => true,
     ),
     InsightAtom(
       topic: 'action',
       priority: 70,
-      koTpl: '오늘 중요한 메시지나 제안은 오전 11시 이후에 보내는 게 더 잘 받아들여집니다. 이른 아침보다는 상대가 충분히 깨어 있을 때 닿게 하세요.',
+      koTpl: '오늘 중요한 메시지나 제안은 오전 11시 이후에 보내는 게 더 잘 받아들여져요. 이른 아침보다는 상대가 충분히 깨어 있을 때 닿게 보내세요.',
       enTpl: 'Send the important message after 11 AM today — better reception when the other side is fully awake.',
       condition: (p, t) => t.weekday <= 3,
     ),
@@ -308,21 +308,21 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'caution',
       priority: 85,
-      koTpl: '오늘은 당신 안의 {dom}이 평소보다 강해서, 말의 폭이 좁아질 수 있어요. 한 박자 늦춰서 상대 말이 끝난 뒤에 답하고, "다시 생각해보면…" 같은 한 문장만 끼워 넣어도 분위기가 부드러워집니다.',
+      koTpl: '오늘은 당신 안의 {dom}이 평소보다 강해서, 말의 폭이 좁아질 수 있어요. 한 박자 늦춰서 상대 말이 끝난 뒤에 답하고, "다시 생각해보면…" 같은 한 문장만 끼워 넣어도 분위기가 부드러워져요.',
       enTpl: 'Your {domEn} runs heavy today and may narrow your tone. Slow one beat, let the other finish, and add one phrase like "thinking again..." — the room softens instantly.',
       condition: (p, t) => p.isStrong,
     ),
     InsightAtom(
       topic: 'caution',
       priority: 80,
-      koTpl: '오늘은 {def}이 살짝 부족한 흐름이에요. 큰 결정은 24시간 보류하고, 한 번 자고 일어난 후에 결정해도 늦지 않습니다.',
+      koTpl: '오늘은 {def}이 살짝 부족한 흐름이에요. 큰 결정은 24시간 보류하고, 한 번 자고 일어난 후에 결정해도 늦지 않아요.',
       enTpl: 'Your {defEn} runs light today. Hold big decisions for 24 hours — sleep on it, then decide.',
       condition: (p, t) => !p.isStrong,
     ),
     InsightAtom(
       topic: 'caution',
       priority: 65,
-      koTpl: '주말 흐름이에요. 의무감으로 약속을 잡으면 다음 주까지 피로가 따라옵니다. 정말 보고 싶은 한 사람만 만나도 충분해요.',
+      koTpl: '주말 흐름이에요. 의무감으로 약속을 잡으면 다음 주까지 피로가 따라와요. 정말 보고 싶은 한 사람만 만나도 충분해요.',
       enTpl: 'Weekend energy. Booking from obligation drags fatigue into next week — meeting one person you really want to see is enough.',
       condition: (p, t) => t.weekday >= 6,
     ),
@@ -338,7 +338,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'today',
       priority: 60,
-      koTpl: '오늘은 살짝 부족한 {def}을 의식적으로 보태면 흐름이 부드러워집니다. 평소 잊기 쉬운 작은 습관 하나가 오늘의 열쇠가 될 수 있어요.',
+      koTpl: '오늘은 살짝 부족한 {def}을 의식적으로 보태면 흐름이 부드러워져요. 평소 잊기 쉬운 작은 습관 하나가 오늘의 열쇠가 돼요.',
       enTpl: 'Adding a conscious touch of {defEn} unblocks today. A small habit you usually forget could be the key.',
       condition: (p, t) => !p.isStrong,
     ),
@@ -346,7 +346,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'action',
       priority: 60,
-      koTpl: '오늘 일정 어딘가에 {compKo} 시간을 잠깐이라도 끼워 넣으세요. 길지 않아도 됩니다, 의식적으로 한 번이면 충분해요.',
+      koTpl: '오늘 일정 어딘가에 {compKo} 시간을 잠깐이라도 끼워 넣으세요. 길지 않아도 돼요, 의식적으로 한 번이면 충분해요.',
       enTpl: 'Slot a quick block of {compEn} somewhere in today\'s schedule. It doesn\'t have to be long — one conscious moment is enough.',
       condition: (p, t) => true,
     ),
@@ -354,7 +354,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 75,
-      koTpl: '당신은 {dm}이에요. 새 흐름을 직접 만들기보다 이미 흐르는 흐름의 결을 정확히 읽어내는 쪽이 강점이에요. 변화를 주도하지 않아도, 잘 따라가서 결국 가장 깊이 도달하는 타입입니다.',
+      koTpl: '당신은 {dm}이에요. 새 흐름을 직접 만들기보다 이미 흐르는 흐름을 정확히 읽어내는 쪽이 강점이에요. 변화를 주도하지 않아도, 잘 따라가서 결국 가장 깊이 도달하는 타입이에요.',
       enTpl: 'You are {dmEn}. You read existing currents better than you create new ones — and by riding the right one, you reach the deepest spot.',
       condition: (p, t) =>
           p.dayMasterElement == '土' || p.dayMasterElement == '金',
@@ -362,7 +362,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 75,
-      koTpl: '당신은 {dm}이에요. 시작은 빠른데, 진짜 마음은 천천히 표현하는 결이 있어서, 처음 본 사람과 오래 본 사람이 느끼는 당신이 꽤 달라요.',
+      koTpl: '당신은 {dm}이에요. 시작은 빠른데, 진짜 마음은 천천히 표현하는 면이 있어서, 처음 본 사람과 오래 본 사람이 느끼는 당신이 꽤 달라요.',
       enTpl: 'You are {dmEn}. Quick to start, slow to reveal real feeling — first impressions and long-time impressions of you can differ noticeably.',
       condition: (p, t) =>
           p.dayMasterElement == '木' || p.dayMasterElement == '火',
@@ -370,7 +370,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 70,
-      koTpl: '당신은 {dm}이에요. 흐름을 직접 만들지 않아도, 결국 가장 깊은 곳까지 도달하는 결이 있어요. 서두르지 않아도 자기 자리를 찾는 사람입니다.',
+      koTpl: '당신은 {dm}이에요. 흐름을 직접 만들지 않아도, 결국 가장 깊은 곳까지 도달하는 힘이 있어요. 서두르지 않아도 자기 자리를 찾는 사람이에요.',
       enTpl: 'You are {dmEn}. You don\'t need to force the current — you reach the deepest place anyway. You find your place without rushing.',
       condition: (p, t) => p.dayMasterElement == '水',
     ),
@@ -378,7 +378,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'today',
       priority: 75,
-      koTpl: '오늘은 {dom}이 강한 날이라 새로 시작하는 일보다 정리·마무리에 더 좋은 흐름이에요. 책상 위 한 가지만 정리해도 머리가 가벼워집니다.',
+      koTpl: '오늘은 {dom}이 강한 날이라 새로 시작하는 일보다 정리·마무리에 더 좋은 흐름이에요. 책상 위 한 칸만 정리해도 머리가 가벼워져요.',
       enTpl: 'A {domEn}-heavy day — better for tidying and closing than for starting. Even clearing one corner of your desk lifts your head.',
       condition: (p, t) =>
           p.dominantEl == '土' || p.dominantEl == '金',
@@ -395,14 +395,14 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'caution',
       priority: 70,
-      koTpl: '오늘은 월요일이에요. 가장 먼저 보내는 한 통의 메시지나 첫 인사의 톤이 한 주 전체 분위기를 정합니다. 평소보다 한 단계 더 정성스럽게 시작하세요.',
+      koTpl: '오늘은 월요일이에요. 가장 먼저 보내는 한 통의 메시지나 첫 인사의 톤이 한 주 전체 분위기를 정해요. 평소보다 한 단계 더 정성스럽게 시작해 보세요.',
       enTpl: 'Monday. The first message you send sets the tone of the whole week — start with one extra notch of care.',
       condition: (p, t) => t.weekday == 1,
     ),
     InsightAtom(
       topic: 'caution',
       priority: 70,
-      koTpl: '오늘은 금요일이에요. 중요한 결정은 주말을 보내고 월요일에 다시 보세요. 오늘은 결정보다 듣는 시간을 더 길게 가지면 답이 자연스럽게 옵니다.',
+      koTpl: '오늘은 금요일이에요. 중요한 결정은 주말을 보내고 월요일에 다시 보세요. 오늘은 결정보다 듣는 시간을 더 길게 가지면 답이 자연스럽게 와요.',
       enTpl: 'Friday. Hold key decisions until Monday — today, listen longer than you decide, and answers arrive naturally.',
       condition: (p, t) => t.weekday == 5,
     ),
@@ -410,14 +410,14 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'action',
       priority: 65,
-      koTpl: '겨울 — 당신에게 부족한 {def}을 따뜻한 색과 음식({compKo})으로 보충하는 시기예요. 따뜻한 차 한 잔, 노란 조명, 따끈한 국 한 그릇이 효과가 큽니다.',
+      koTpl: '겨울 — 당신에게 부족한 {def}을 따뜻한 색과 음식({compKo})으로 보충하는 시기예요. 따뜻한 차 한 잔, 노란 조명, 따끈한 국 한 그릇이 효과가 커요.',
       enTpl: 'Winter — bring missing {defEn} via warm colors and food ({compEn}). A hot cup, yellow lighting, a warm soup do real work.',
       condition: (p, t) => t.month >= 12 || t.month <= 2,
     ),
     InsightAtom(
       topic: 'action',
       priority: 65,
-      koTpl: '여름 — {def}을 자연 속에서 흡수하기 좋은 계절이에요. 짧은 산책, 물 한 잔, 잠깐 하늘 올려다보기만 해도 보충됩니다.',
+      koTpl: '여름 — {def}을 자연 속에서 흡수하기 좋은 계절이에요. 짧은 산책, 물 한 잔, 잠깐 하늘 올려다보기만 해도 보충돼요.',
       enTpl: 'Summer — absorb {defEn} from nature. A short walk, a glass of water, looking up at the sky for a minute — that refills it.',
       condition: (p, t) => t.month >= 6 && t.month <= 8,
     ),

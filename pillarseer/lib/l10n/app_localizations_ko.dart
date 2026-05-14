@@ -575,7 +575,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get resultProHookCompatTeaser =>
-      '상대 생년월일을 넣으면 끌리는 이유와 부딪히는 지점을 볼 수 있어요.';
+      '상대 생년월일을 넣으면 끌리는 이유와 부딪히는 지점이 한눈에 보여요.';
 
   @override
   String get resultProHookDatesTitle => '올해 중요한 날짜';

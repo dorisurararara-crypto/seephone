@@ -183,18 +183,18 @@ class DeepContentService {
   /// 5행 dominant/deficit 한 줄 해석 (Round 4 codex 권장)
   static String _elementsNoteFor(bool ko, String dom, String def) {
     const koDomDesc = {
-      '木': '나무 기운(추진력·성장)이 강해 새 도전·확장에 유리합니다.',
-      '火': '불 기운(표현·열정)이 강해 무대·발표·관계 확장에서 빛납니다.',
-      '土': '흙 기운(안정·신뢰)이 강해 책임감과 약속을 지키는 힘이 큽니다.',
-      '金': '쇠 기운(정밀·판단)이 강해 결정·정리·비판적 사고가 뛰어납니다.',
-      '水': '물 기운(직관·깊이)이 강해 통찰과 흐름을 읽는 감각이 좋습니다.',
+      '木': '나무 기운(추진력·성장)이 강해 새 도전·확장에 유리해요.',
+      '火': '불 기운(표현·열정)이 강해 무대·발표·관계 확장에서 빛나요.',
+      '土': '흙 기운(안정·신뢰)이 강해 책임감과 약속을 지키는 힘이 커요.',
+      '金': '쇠 기운(정밀·판단)이 강해 결정·정리·비판적 사고가 뛰어나요.',
+      '水': '물 기운(직관·깊이)이 강해 통찰과 흐름을 읽는 감각이 좋아요.',
     };
     const koDefDesc = {
-      '木': '나무가 부족해 시작이 늦거나 추진력이 약할 수 있어요. 식물·산책 자주.',
-      '火': '불이 부족해 표현·감정 분출이 어려울 수 있어요. 따뜻한 빛·운동 권장.',
-      '土': '흙이 부족해 약속·끝맺음에 흔들릴 수 있어요. 루틴·기록 도움.',
-      '金': '쇠가 부족해 결단력·정리정돈이 약할 수 있어요. 청소·일정 정리 의식.',
-      '水': '물이 부족해 직관·휴식이 부족할 수 있어요. 충분한 수분·수면.',
+      '木': '나무가 부족해 시작이 늦거나 추진력이 약해요. 식물·산책 자주 해요.',
+      '火': '불이 부족해 표현·감정 분출이 어려운 편이에요. 따뜻한 빛·운동 권장.',
+      '土': '흙이 부족해 약속·끝맺음에 흔들리기 쉬워요. 루틴·기록이 도움 돼요.',
+      '金': '쇠가 부족해 결단력·정리정돈이 약해요. 청소·일정 정리 의식으로 보완.',
+      '水': '물이 부족해 직관·휴식이 모자라요. 수분·수면 충분히 챙겨요.',
     };
     const enDomDesc = {
       '木': 'Strong Wood energy — pushy, growth-prone, great for new ventures.',
@@ -221,7 +221,7 @@ class DeepContentService {
     // dominant element 와 day master 의 관계로 핵심 십신 유형 결정
     const ko10g = {
       '木': '식상(食傷) 기운 — 표현·창작·output 이 곧 당신의 무기예요.',
-      '火': '재성(財星) 기운 — 돈과 기회가 당신을 향해 흐릅니다.',
+      '火': '재성(財星) 기운 — 돈과 기회가 당신을 향해 흘러와요.',
       '土': '관성(官星) 기운 — 권위·책임·인정이 자연스럽게 와요.',
       '金': '인성(印星) 기운 — 배움·후원·전통이 당신의 자원이에요.',
       '水': '비겁(比劫) 기운 — 동료·팀워크가 당신을 키워요.',
@@ -292,10 +292,10 @@ class DeepContentService {
 
   static String _todayHookFor(bool ko, String ji, String dom) {
     const koMap = {
-      '木': '오늘은 새 아이디어 한 줄을 메모해 두면 일주일 뒤 쓰임이 옵니다.',
-      '火': '오늘은 말보다 타이밍이 중요한 날. 답장·제안은 오전보다 오후가 낫습니다.',
-      '土': '오늘은 결정을 늦추지 말고, 한 가지를 매듭짓는 데 집중하세요.',
-      '金': '오늘은 디테일이 평가를 가릅니다. 한 줄 더 확인하고 보내세요.',
+      '木': '오늘은 새 아이디어 한 줄을 메모해 두면 일주일 뒤 쓰임이 와요.',
+      '火': '오늘은 말보다 타이밍이 중요한 날. 답장·제안은 오전보다 오후가 나아요.',
+      '土': '오늘은 결정을 늦추지 말고, 하나를 매듭짓는 데 집중해 보세요.',
+      '金': '오늘은 디테일이 평가를 가려요. 한 줄 더 확인하고 보내세요.',
       '水': '오늘은 듣는 시간이 길수록 좋아요. 말은 마지막 5분만.',
     };
     const enMap = {
@@ -316,8 +316,8 @@ class DeepContentService {
       '木': 'wood', '火': 'fire', '土': 'earth/mountain', '金': 'metal/blade', '水': 'water',
     };
     if (ko) {
-      final domName = koElName[dom] ?? '한 가지';
-      final defName = koElName[def] ?? '한 가지';
+      final domName = koElName[dom] ?? '하나';
+      final defName = koElName[def] ?? '하나';
       return '$ji 일주는 $domName 기운이 강하고 $defName 기운이 약해서, 위와 같은 결로 풀어드린 거예요.';
     }
     final domName = enElName[dom] ?? 'one';
@@ -329,10 +329,10 @@ class DeepContentService {
 
   static String _fallbackDayMasterDeep(bool ko, String ji, String name) {
     if (ko) {
-      return '당신의 일간 $ji ($name) 은 60갑자 사이클 속에서 고유한 진동을 가집니다. '
-          '$name 다운 본능은 환경의 압력을 견디며 결을 다듬는 데서 강해집니다. '
-          '내면의 리듬을 따라갈 때 가장 자기다운 결과를 만듭니다. '
-          '서두름보다는 결의 흐름을, 흉내보다는 본질을 따르는 사주입니다.';
+      return '당신의 일간 $ji ($name) 은 60갑자 사이클 속에서 고유한 진동을 가져요. '
+          '$name 다운 본능은 환경의 압력을 견디며 자기 결을 다듬는 데서 강해져요. '
+          '내면의 리듬을 따라갈 때 가장 자기다운 결과를 만들어요. '
+          '서두르기보다 자기 흐름을, 흉내보다 자기 색을 따르는 사주예요.';
     }
     return 'Your $ji day master ($name) carries a singular pulse within the '
         '60-pillar cycle. The $name nature sharpens under steady pressure, '
@@ -343,7 +343,7 @@ class DeepContentService {
   static String _expandShort(String short, bool ko, String key, String ji) {
     if (short.isEmpty) {
       return ko
-          ? '당신의 $ji 일주는 $key 영역에서 자기 결을 따를 때 가장 빛납니다.'
+          ? '당신의 $ji 일주는 $key 영역에서 자기 결을 따를 때 가장 빛나요.'
           : 'Your $ji day pillar grows in $key when you follow your native '
               'grain rather than copy strategies built for other charts.';
     }
@@ -369,8 +369,8 @@ class DeepContentService {
     final koArea = koMap[deficit] ?? '오장육부의 미세한 균형';
     final enArea = enMap[deficit] ?? 'subtle five-organ balance';
     if (ko) {
-      return '$ji 의 몸은 결핍 오행($deficit)이 약속한 신호를 가장 먼저 알립니다. '
-          '특히 $koArea 의 컨디션을 정기적으로 점검하세요. 작은 신호를 무시하지 않을 때 장기적인 안정이 옵니다.';
+      return '$ji 의 몸은 결핍 오행($deficit)이 약속한 신호를 가장 먼저 알려요. '
+          '특히 $koArea 의 컨디션을 정기적으로 점검하세요. 작은 신호를 무시하지 않을 때 장기적인 안정이 와요.';
     }
     return 'Your $ji body whispers first through the deficit element ($deficit). '
         'Track $enArea regularly — what you notice early, you never have to fix late.';
@@ -378,8 +378,8 @@ class DeepContentService {
 
   static String _fallbackFamily(bool ko, String ji) {
     if (ko) {
-      return '$ji 일주의 가정은 자기 정체성을 닦는 거울입니다. '
-          '말보다는 함께 보내는 시간의 결이 가족 운을 만듭니다. 사랑의 형태가 표현될 때, 관계의 운도 함께 살아납니다.';
+      return '$ji 일주의 가정은 자기 정체성을 닦는 거울이에요. '
+          '말보다는 함께 보내는 시간의 결이 가족 운을 만들어요. 사랑의 형태가 표현될 때, 관계의 운도 함께 살아나요.';
     }
     return 'Family for $ji is the soft mirror that returns your real self. '
         'Time spent together — not perfect words — composes the chord of belonging '
@@ -388,8 +388,8 @@ class DeepContentService {
 
   static String _fallbackFame(bool ko, String ji, String name) {
     if (ko) {
-      return '$name 의 무대는 진정성에서 빛납니다. 흉내가 아닌 자신만의 결로 공개될 때, '
-          '$ji 의 명예 운이 환경을 끌어옵니다. 검색량보다 깊이가 자산입니다.';
+      return '$name 의 무대는 진정성에서 빛나요. 흉내가 아닌 자신만의 색으로 공개될 때, '
+          '$ji 의 명예 운이 환경을 끌어와요. 검색량보다 깊이가 자산이에요.';
     }
     return 'The $name stage glows brightest in authenticity. When $ji shows its '
         'own grain — not a replicated formula — public energy moves toward you. '
@@ -401,9 +401,9 @@ class DeepContentService {
     final next = decade + 10;
     if (ko) {
       return '현재 대운: $decade대 흐름. '
-          '이번 10년은 $ji 의 깊이가 외부에 인정받기 시작하는 게이트입니다. '
-          '특히 ${next - 3}~${next - 1}살 구간이 대운 정점에 가깝습니다. '
-          '대운은 주(週)가 아니라 10년 단위 흐름으로 읽어야 합니다.';
+          '이번 10년은 $ji 의 깊이가 외부에 인정받기 시작하는 게이트예요. '
+          '특히 ${next - 3}~${next - 1}살 구간이 대운 정점에 가까워요. '
+          '대운은 주(週)가 아니라 10년 단위 흐름으로 읽어야 해요.';
     }
     final nextEnd = next - 1;
     return 'Current 大運 window: your $decade-decade. '
@@ -415,9 +415,9 @@ class DeepContentService {
   static String _thisYear(bool ko, String ji, String yearGanji) {
     if (ko) {
       return '올해 세운: $yearGanji. '
-          '$ji 의 일간이 $yearGanji 환경 속에서 어떤 색으로 발현될지가 올해의 주제입니다. '
-          '여름 ~ 가을 구간에 변동성이 가장 크고, 봄에 심은 결이 가을에 거두어집니다. '
-          '한 해의 결정은 절기(節氣) 기준 입춘부터 한 사이클입니다.';
+          '$ji 의 일간이 $yearGanji 환경 속에서 어떤 색으로 발현될지가 올해의 주제예요. '
+          '여름 ~ 가을 구간에 변동성이 가장 크고, 봄에 심은 흐름이 가을에 거두어져요. '
+          '한 해의 결정은 절기(節氣) 기준 입춘부터 한 사이클이에요.';
     }
     return "This year (歲運): $yearGanji. "
         'The theme is how your $ji day master expresses inside $yearGanji '
