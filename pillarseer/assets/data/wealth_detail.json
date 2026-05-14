@@ -5,67 +5,67 @@
     "policy": "각 phase paragraph ≥80자 (ko), ≥60자 (en)"
   },
   "pyeonjae_strong": {
-    "accumKo": "본인은 외부 거래·중개·부업으로 돈이 들어오는 분포예요. 본인이 안 보는 거래는 들어가지 마세요. 30대 후반에 첫 큰 자산 한 번 모여요. 그때 본업과 부업 비율을 7:3 으로 잡으세요. 단, 모은 만큼 흘러나가는 시기도 같이 와요.",
-    "accumEn": "Money flows in through outside deals and side work. Do not enter trades you cannot see. In late thirties your first large asset gathers. Hold the main-to-side ratio around seven to three then. As much as you build, some will flow out too.",
-    "lossKo": "큰 손실 시점은 35세 전후, 무리한 동업·사기·과한 레버리지 셋 중 하나가 와요. 그 한 번을 피하면 평생 자산이 단단해져요. 잘 모르는 영역은 절대 들어가지 마세요. 친구·지인 명의 거래 X.",
-    "lossEn": "The big loss window opens around thirty-five — overextended partnership, fraud, or stretched leverage. Avoid that one and lifetime assets stay solid. Never enter zones you do not understand. No deals under friends’ names.",
-    "techKo": "본인은 짧게 굴리고 짧게 정리하는 형이에요. 부동산은 단기 시세 차익보다 임대 수익 위주, 주식은 분할 매수·분할 매도 원칙을 지키세요. 큰 돈은 분산하세요. 40대 초반에 자산 절반은 안전 자산으로 옮기세요.",
-    "techEn": "You spin short and close short. With real estate, prioritize rental income over flips. With stocks, split your entries and exits. Diversify big money. In early forties move half of your assets into safe holdings."
+    "accumKo": "본인은 외부 거래·중개·부업으로 돈이 들어오는 분포예요. 본인이 안 보는 거래는 조심하면 좋아요. 30대 후반에 첫 큰 자산이 모일 수 있는 시기가 와요. 그때 본업과 부업 비율을 7:3 처럼 떠올려 볼 수 있어요. 모은 만큼 흘러나가는 시기도 같이 오기 쉬워요.",
+    "accumEn": "Money may flow in through outside deals and side work. Trades you cannot see are worth being careful with. In late thirties, a first large asset window could open. A main-to-side ratio around seven to three is one example to keep in mind then. As much as you build, some may flow out too.",
+    "lossKo": "35세 전후로 무리한 동업·과한 베팅이 위험해질 수 있는 시기가 와요. 그 시기를 잘 넘기면 자산이 더 안정돼요. 잘 모르는 영역은 들어가지 않는 게 현명해요. 친구·지인 명의 거래는 조심하세요.",
+    "lossEn": "Around thirty-five, overextended partnerships or stretched bets may feel risky. Easing past that window can leave your assets steadier. Zones you do not understand are worth skipping. Deals under friends' names are worth being extra careful with.",
+    "techKo": "본인은 짧게 굴리고 짧게 정리하는 형이에요. 부동산은 단기 시세 차익보다 임대 수익 쪽을 한 번 살펴봐도 좋아요. 주식은 분할 매수·분할 매도 원칙이 마음 편한 길이에요. 큰 돈은 분산을 한 번 떠올려 보세요. 40대 초반에 자산 일부를 안전 자산 쪽으로 옮기면 한결 든든해져요.",
+    "techEn": "Short cycles often fit you. With real estate, rental income over flips can be a good direction. With stocks, splitting entries and exits often works well. Diversifying big money is worth a look. In early forties, shifting part of your assets toward safer holdings can leave the balance steadier."
   },
   "pyeonjae_weak": {
-    "accumKo": "본인 돈은 외부에서 들어오는데 흘러가는 속도도 같이 빨라요. 25세 전후로 본인 첫 비상자금을 따로 만드세요. 한 번 들어온 큰 돈은 절반 이상 묶어두세요. 단, 본인의 부수입 감각은 살아나요.",
-    "accumEn": "Money flows in from outside but flows out just as fast. In late twenties build your first emergency fund. Lock more than half of any large sum you receive. Your side-income instincts stay alive.",
-    "lossKo": "본인은 큰 한 방 욕심에 약해요. 30대 초반에 사기·동업 사기 한 번 와요. 그때 친구·지인 통한 투자는 거절하세요. 본인 명의로 한 보증은 절대 X.",
-    "lossEn": "You are vulnerable to one-shot greed. In early thirties one scam or partner fraud lands. Decline investments through friends or acquaintances then. Never co-sign in your own name.",
-    "techKo": "본인은 정기 적금 + 소액 분산 투자 조합이 맞아요. 큰 돈은 한 번에 굴리지 마세요. 30대 후반에 본인 자산이 분산되어 있다면 한 번 합치는 정리 시점 와요. 정기 ETF·연금형 상품 중심으로 가세요.",
-    "techEn": "Steady saving plus small-ticket diversification fits you. Do not move big money in one shot. In late thirties, if assets are scattered, one consolidation moment lands. Center on index ETFs and pension-style products."
+    "accumKo": "본인 돈은 외부에서 들어오는데 흘러가는 속도도 같이 빠른 편이에요. 25세 전후로 본인 첫 비상자금을 따로 만들어 두면 한결 단단해져요. 들어온 큰 돈은 절반 이상 묶어두는 게 좋아요. 본인의 부수입 감각은 잘 살아나는 편이에요.",
+    "accumEn": "Money may flow in from outside but can flow out just as fast. In late twenties, building your first emergency fund often helps. Locking more than half of any large sum you receive is one option worth keeping. Your side-income instincts tend to stay alive.",
+    "lossKo": "본인은 큰 한 방 욕심에 약한 편이에요. 30대 초반에 동업·투자 위험이 흔들릴 수 있는 시기가 와요. 그때 친구·지인 통한 투자는 조심하면 좋아요. 본인 명의 보증은 가능하면 피하는 쪽이 더 든든해요.",
+    "lossEn": "One-shot greed could pull you in. In early thirties, partnership or investment risks may feel shaky. Investments through friends or acquaintances are worth declining around then. Co-signing in your own name is worth being extra careful with.",
+    "techKo": "본인은 정기 적금 + 소액 분산 투자 조합이 잘 맞는 편이에요. 큰 돈은 한 번에 굴리지 않는 쪽이 한결 가벼워요. 30대 후반에 자산이 분산되어 있다면 한 번 합쳐 정리하는 시기가 와요. 정기 ETF·연금형 상품을 한 번 떠올려 볼 수 있어요.",
+    "techEn": "Steady saving plus small-ticket diversification often fits you. Moving big money in one shot is worth being careful with. In late thirties, if assets are scattered, a consolidation window can open. Index ETFs and pension-style products may be worth considering as a center."
   },
   "jeongjae_strong": {
-    "accumKo": "본인은 월급·임대·연금처럼 정기 수입이 자산이 돼요. 큰 한 방은 없지만 평생 안 줄어드는 분포예요. 30세 전후로 본인 첫 자가 마련 시기 와요. 그때 무리한 대출은 피하세요. 단, 너무 안전만 가서 큰 기회 한 번 놓쳐요.",
-    "accumEn": "Salary, rent, and pension turn into assets. No big swings but lifelong shrink-proof. Around thirty your first home arrives. Avoid stretched loans then. Chasing only safety, you miss one big chance.",
-    "lossKo": "본인 손실 시점은 40대 초반, 자녀·부모 부양 부담이 한 번 크게 와요. 그때 본인 노후 자금은 따로 묶어두세요. 가족이라도 보증·명의 대여는 X.",
-    "lossEn": "The loss window opens in early forties when family duty — kids or parents — lands heavy. Lock your retirement fund separately then. Even for family, never co-sign or lend your name.",
-    "techKo": "본인은 단순한 자산 배분이 길어요. 60% 정기 자산 + 30% 안전 분산 + 10% 도전 자산으로 평생 굴리세요. 40대 중반에 자녀 명의 분할 증여 시작하세요. 본인 자산은 본인이 끝까지 통제하세요.",
-    "techEn": "Simple allocation runs longest for you. Sixty percent steady, thirty percent safe-spread, ten percent risk — for life. In mid-forties begin staggered gifts in children’s names. Keep control of your assets to the end."
+    "accumKo": "본인은 월급·임대·연금처럼 정기 수입이 자산으로 쌓이는 분위기예요. 큰 한 방은 없지만 평생 잘 줄지 않는 분포예요. 30세 전후로 본인 첫 자가 마련 시기가 와요. 그때 무리한 대출은 조심하면 좋아요. 너무 안전만 가다 큰 기회를 놓칠 수도 있어요.",
+    "accumEn": "Salary, rent, and pension often turn into your real assets. Few big swings but the path can stay steady for life. Around thirty, a first-home window may open. Stretched loans are worth being careful with then. Chasing only safety, you may miss one big chance.",
+    "lossKo": "40대 초반에 자녀·부모 부양 부담이 무겁게 다가올 수 있는 시기가 와요. 그때 본인 노후 자금은 따로 묶어두면 한결 단단해져요. 가족이라도 보증·명의 대여는 조심하세요.",
+    "lossEn": "In early forties, family duty — kids or parents — may feel heavy. Locking your retirement fund separately around then can help. Even for family, co-signing or lending your name is worth being extra careful with.",
+    "techKo": "본인은 단순한 자산 배분이 잘 맞는 편이에요. 60% 정기 자산 + 30% 안전 분산 + 10% 도전 자산 같은 비율을 예시로 떠올려 볼 수 있어요. 40대 중반에 자녀 명의 분할 증여를 한 번 떠올려 보면 좋은 때가 와요. 본인 자산은 본인이 끝까지 살펴보는 쪽이 현명해요.",
+    "techEn": "A simple allocation often runs longest for you. A mix like sixty percent steady, thirty percent safe-spread, ten percent risk is one example to keep in mind. In mid-forties, staggered gifts in children's names can fit. Keeping watch over your assets to the end is worth holding onto."
   },
   "jeongjae_weak": {
-    "accumKo": "본인은 정기 수입이 약해요. 본인 손에 모으는 데 시간이 걸려요. 25세 전후로 본인 적금 첫 만기 와요. 그 후 자동이체로 묶어두세요. 단, 본인은 평생 큰 빚지지 않는 단단한 자산형이에요.",
-    "accumEn": "Steady income runs thin. Building in your hand takes time. Around twenty-five your first savings matures. Lock everything into auto-transfer after that. You stay debt-free and solid for life.",
-    "lossKo": "본인 손실은 큰 돈보다 잦은 작은 지출에서 와요. 신용카드 결제 미루기·할부 늪에 빠지지 마세요. 30대 초반에 카드 정리 한 번 하세요. 모르는 사이트 자동결제는 차단하세요.",
-    "lossEn": "Your losses come less from big mistakes, more from frequent small spends. Do not roll credit balances or fall into installment debt. In early thirties consolidate cards once. Block recurring charges from unknown sites.",
-    "techKo": "본인은 ETF·연금·예금 중심이 길이에요. 한 달 수입의 30% 자동 저축을 평생 이어가세요. 40대 후반에 본인 명의 작은 임대 자산 한 번 마련하세요. 무리한 주식·코인은 절대 X.",
-    "techEn": "ETFs, pension plans, and deposits are your lane. Auto-save thirty percent of monthly income for life. In late forties acquire one small rental asset in your name. No reckless stocks or coins."
+    "accumKo": "본인은 정기 수입이 약한 편이에요. 본인 손에 모으는 데 시간이 걸리기 쉬워요. 25세 전후로 본인 적금 첫 만기가 와요. 그 후 자동이체로 묶어두면 한결 단단해져요. 본인은 평생 큰 빚을 잘 지지 않는 단단한 자산형이에요.",
+    "accumEn": "Steady income may run thin. Building it by hand takes time. Around twenty-five, your first savings can mature. Locking everything into auto-transfer after that often helps. You can stay debt-free and solid for life.",
+    "lossKo": "본인 손실은 큰 돈보다 잦은 작은 지출에서 오기 쉬워요. 신용카드 결제 미루기·할부 늪에 빠지지 않는 쪽이 현명해요. 30대 초반에 카드 정리 시기가 한 번 보일 수 있어요. 모르는 사이트 자동결제는 차단해 두면 한결 편해요.",
+    "lossEn": "Losses may come less from big mistakes, more from frequent small spends. Rolling credit balances or installment debt is worth being careful with. In early thirties, a card-consolidation window can open. Blocking recurring charges from unknown sites can help.",
+    "techKo": "본인은 ETF·연금·예금 중심이 잘 맞는 편이에요. 한 달 수입의 일정 비율을 자동 저축으로 평생 이어가면 한결 단단해져요. 40대 후반에 본인 명의 작은 임대 자산을 한 번 떠올려 볼 수 있어요. 무리한 주식·코인은 조심하세요.",
+    "techEn": "ETFs, pension plans, and deposits often fit your lane. Auto-saving a steady share of monthly income for life can help. In late forties, a small rental asset in your name is one option worth keeping in mind. Reckless stocks or coins are worth being extra careful with."
   },
   "mixed_strong": {
-    "accumKo": "본인은 외부 거래와 안정 자산이 함께 굴러가요. 사업·투자·월급 셋이 본인을 받쳐줘요. 30대 중반에 본인의 첫 큰 자산 시점 와요. 그때 욕심 절제하세요. 단, 한 번에 다 모으려 하면 흩어져요.",
-    "accumEn": "Outside deals and steady assets roll together. Business, investing, salary — three legs hold you. In mid-thirties your first big asset window opens. Hold greed back then. Trying to gather it all at once scatters it.",
-    "lossKo": "본인 큰 손실은 사람한테서 와요. 35세 전후로 동업자·매니저·친지 한 명이 본인 자산을 흔들어요. 그때 단호하게 끊으세요. 정 때문에 망설이면 본인이 무너져요.",
-    "lossEn": "Your big losses come through people. Around thirty-five a partner, manager, or relative shakes your assets. Cut cleanly then. Hesitating out of warmth breaks you.",
-    "techKo": "본인은 자산 클래스 4 분산이 길이에요. 부동산 40% + 주식·ETF 30% + 사업 자본 20% + 비상금 10%. 40대 중반에 한 번 재분배 시점 와요. 본인이 직접 점검하세요.",
-    "techEn": "Four-class diversification suits you. Real estate forty, equities thirty, business capital twenty, emergency ten. In mid-forties a rebalancing window opens. Check it personally."
+    "accumKo": "본인은 외부 거래와 안정 자산이 함께 굴러가는 분위기예요. 사업·투자·월급 셋이 본인을 받쳐주기 쉬워요. 30대 중반에 본인의 첫 큰 자산 시기가 와요. 그때 욕심을 절제하면 한결 단단해져요. 한 번에 다 모으려 하면 흩어지기 쉬워요.",
+    "accumEn": "Outside deals and steady assets often roll together. Business, investing, salary — three legs can hold you up. In mid-thirties, a first-big-asset window can open. Holding greed back then often helps. Trying to gather it all at once may scatter it.",
+    "lossKo": "본인 큰 손실은 사람한테서 오기 쉬워요. 35세 전후로 동업자·매니저·친지 한 명이 본인 자산을 흔들 가능성이 있어요. 그때 결단이 필요할 수 있어요. 정 때문에 너무 망설이지 않는 쪽이 좋아요.",
+    "lossEn": "Big losses often come through people. Around thirty-five, a partner, manager, or relative could shake your assets. Clean decisions can help around then. Hesitating out of warmth is worth being extra careful with.",
+    "techKo": "본인은 자산을 4개 축으로 나눠 두면 한결 가벼워요. 부동산 40% + 주식·ETF 30% + 사업 자본 20% + 비상금 10% 같은 비율을 예시로 떠올려 볼 수 있어요. 40대 중반에 재분배 시기가 한 번 다가올 수 있어요. 본인이 직접 점검해 보면 한결 든든해요.",
+    "techEn": "A four-class split may feel lighter for you. A mix like real estate forty, equities thirty, business capital twenty, emergency ten is one example to keep in mind. In mid-forties, a rebalancing window can open. Checking it personally often helps."
   },
   "mixed_weak": {
-    "accumKo": "본인은 돈이 들어왔다 나가는 돈길이 강해요. 자산을 손에 잡으려면 강제 자동 시스템이 필요해요. 25세 전후로 자동이체 시스템 한 번 만드세요. 큰 돈은 본인이 안 만지는 곳에 두세요.",
-    "accumEn": "Money cycles in and out fast for you. Holding it needs a forced auto-system. In late twenties build the auto-transfer setup once. Place big money where you cannot touch it daily.",
-    "lossKo": "본인은 충동 지출과 인간관계 비용으로 손실 와요. 30대 초반에 한 번 큰 카드값 한 번 와요. 그때 가족·연인 명의 카드 사용 정리하세요. 친구·연인 보증 X.",
-    "lossEn": "Impulse spending and people-related costs drain you. In early thirties one big credit bill lands. Sort out family- or partner-named cards then. No co-signing with friends or partners.",
-    "techKo": "본인은 자산 운용을 본인이 직접 하지 마세요. 신뢰 가능한 자산 운용사·로보어드바이저에 맡기는 길이 길이에요. 40대 초반에 본인 명의 작은 부동산 한 번 마련하세요. 본인이 매달 들여다보지 않아도 되는 구조로 만드세요.",
-    "techEn": "Do not manage your money hands-on. A trusted advisor or robo-advisor lane fits you. In early forties acquire one small property in your name. Build a structure you do not need to check every month."
+    "accumKo": "본인은 돈이 들어왔다 나가는 돈길이 강한 편이에요. 자산을 손에 잡으려면 자동 시스템이 필요할 수 있어요. 25세 전후로 자동이체 시스템을 한 번 만들어 두면 한결 단단해져요. 큰 돈은 본인이 안 만지는 곳에 두면 좋아요.",
+    "accumEn": "Money may cycle in and out fast for you. Holding it can benefit from an auto-system. In late twenties, building the auto-transfer setup once often helps. Placing big money where you cannot touch it daily can keep it steady.",
+    "lossKo": "본인은 충동 지출과 인간관계 비용에서 손실이 흔들리기 쉬워요. 30대 초반에 큰 카드값이 무거워질 수 있는 시기가 보일 수 있어요. 그때 가족·연인 명의 카드 사용을 한 번 정리해 두면 든든해요. 친구·연인 보증은 조심하세요.",
+    "lossEn": "Impulse spending and people-related costs could drain you. In early thirties, a big credit bill may feel heavy. Sorting family- or partner-named cards around then can help. Co-signing with friends or partners is worth being extra careful with.",
+    "techKo": "본인은 자산 운용을 본인이 직접 하기보다 한 단계 거리를 두는 쪽이 한결 가벼워요. 신뢰 가능한 안내자한테 맡기는 길도 잘 맞는 편이에요. 40대 초반에 본인 명의 작은 부동산을 한 번 떠올려 볼 수 있어요. 본인이 매달 들여다보지 않아도 되는 구조가 답이 되기 쉬워요.",
+    "techEn": "Hands-on money management is worth being careful with. Leaning on a trusted guide can fit you. In early forties, a small property in your name is one option worth keeping in mind. A structure you do not need to check every month can help."
   },
   "none_strong": {
-    "accumKo": "본인 사주에는 재성이 약해요. 돈은 본인 일과 명예 위에 쌓여요. 30대 후반에 본인 이름으로 첫 자산 시점 와요. 그때 본인 일에 본인을 더 묶으세요. 단, 돈 자체를 좇으면 오히려 멀어져요.",
-    "accumEn": "Wealth element runs thin in your chart. Money builds on top of your work and name. In late thirties your first asset in your name lands. Anchor harder to your work then. Chasing money for its own sake pushes it away.",
-    "lossKo": "본인 손실은 무리한 투자 한 번에서 와요. 40세 전후로 큰 손실 한 번 와요. 그때 본인이 안 보는 영역은 빠지세요. 본인 일에서 멀어진 투자는 절대 X.",
-    "lossEn": "Your loss comes from one overreach. Around forty one large loss lands. Stay out of zones you cannot see then. Investments far from your own work — never.",
-    "techKo": "본인은 본업 위 명예 자산이 길이에요. IP·저작권·자격증·평판 같은 무형 자산이 본인을 받쳐줘요. 40대 후반에 본인 이름의 콘텐츠 자산을 정리하세요. 본인 일이 본인 평생 연금이에요.",
-    "techEn": "Honor assets built on top of your main work suit you. IP, copyright, certifications, reputation — intangible assets hold you up. In late forties consolidate content assets in your name. Your work is your lifelong pension."
+    "accumKo": "본인 사주에는 재성이 약한 편이에요. 돈은 본인 일과 이름 위에 쌓이기 쉬워요. 30대 후반에 본인 이름으로 첫 자산 시기가 와요. 그때 본인 일에 본인을 더 묶어두면 한결 단단해져요. 돈 자체를 좇으면 오히려 멀어지기 쉬워요.",
+    "accumEn": "The wealth element may run thin in your chart. Money can build on top of your work and name. In late thirties, a first-asset window in your name may open. Anchoring harder to your work then often helps. Chasing money for its own sake may push it away.",
+    "lossKo": "본인 손실은 무리한 투자에서 오기 쉬워요. 40세 전후로 큰 손실 가능성이 한 번 보일 수 있어요. 그때 본인이 안 보는 영역은 빠지는 쪽이 현명해요. 본인 일에서 멀어진 투자는 조심하세요.",
+    "lossEn": "Losses may come from one overreach. Around forty, a large loss may feel close. Staying out of zones you cannot see often helps. Investments far from your own work are worth being extra careful with.",
+    "techKo": "본인은 본업 위에 쌓이는 이름값 자산이 잘 맞는 편이에요. 작품·전문 지식·평판 같은 무형 자산이 본인을 받쳐주기 쉬워요. 40대 후반에 본인 이름의 작업물을 한 번 정리해 두면 좋은 때가 와요. 본인 일이 본인 평생을 받쳐주기 쉬워요.",
+    "techEn": "Assets built on top of your work and name can suit you. Creations, expertise, reputation — these often hold you up. In late forties, pulling your work together under your name can be a good move. Your work may carry you for life."
   },
   "none_weak": {
-    "accumKo": "본인은 돈이 천천히 모이는 분포예요. 큰 한 방은 평생 안 와요. 25세 전후로 본인 첫 자동 저축 시작하세요. 그게 평생 본인을 받쳐줘요. 단, 너무 느린 속도에 본인이 흔들려요.",
-    "accumEn": "Money gathers slowly for you. No big one shot comes in your lifetime. Around twenty-five start your first auto-savings. That carries you for life. The pace shakes you sometimes.",
-    "lossKo": "본인은 큰 손실보다 잦은 작은 지출에서 무너져요. 30대 중반에 한 번 큰 빚 정리 시점 와요. 그때 부모·친구 도움 받지 말고 본인 손으로 정리하세요. 부채 정리 후 본인이 단단해져요.",
-    "lossEn": "Frequent small spends break you more than one big mistake. In mid-thirties one debt-clearing moment lands. Sort it with your own hand, not parents or friends. After the clearing you grow solid.",
-    "techKo": "본인은 단순한 적금 + 연금이 길이에요. 자동이체 + 자동 이체 + 자동 이체 — 본인이 손대지 않는 구조가 답이에요. 40대 후반에 본인 명의 작은 안정 자산 한 번 마련하세요. 큰 사치는 평생 X.",
-    "techEn": "Simple saving plus pension is your lane. Auto-transfer, auto-transfer, auto-transfer — a hands-off structure is the answer. In late forties acquire one small steady asset in your name. No big splurges, ever."
+    "accumKo": "본인은 돈이 천천히 모이는 분포예요. 큰 한 방은 평생 잘 오지 않는 편이에요. 25세 전후로 본인 첫 자동 저축을 시작해 두면 평생 본인을 받쳐주기 쉬워요. 너무 느린 속도에 본인이 흔들릴 수 있어요.",
+    "accumEn": "Money may gather slowly for you. A big one-shot may not come in your lifetime. Around twenty-five, starting your first auto-savings can carry you for life. The pace may shake you sometimes.",
+    "lossKo": "본인은 큰 손실보다 잦은 작은 지출에서 흔들리기 쉬워요. 30대 중반에 큰 빚 정리 시기가 한 번 다가올 수 있어요. 그때 부모·친구 도움보다 본인 손으로 정리하는 게 더 단단해져요. 부채 정리 후 본인이 단단해지기 쉬워요.",
+    "lossEn": "Frequent small spends may shake you more than one big mistake. In mid-thirties, a debt-clearing moment may feel close. Sorting it with your own hand rather than parents or friends often helps. After the clearing, you may grow more solid.",
+    "techKo": "본인은 단순한 적금 + 연금이 잘 맞는 편이에요. 자동이체 중심으로 본인이 손대지 않는 구조를 한 번 떠올려 보세요. 40대 후반에 본인 명의 작은 안정 자산을 한 번 떠올려 볼 수 있어요. 큰 사치는 조심하세요.",
+    "techEn": "Simple saving plus pension often fits your lane. A hands-off auto-transfer structure is one example to keep in mind. In late forties, a small steady asset in your name can be a good option to weigh. Big splurges are worth being extra careful with."
   }
 }

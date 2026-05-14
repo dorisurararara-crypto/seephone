@@ -5,10 +5,10 @@
     "tone": "Round 73 — 단정 친근 해요체, 양면 단정, 행동 처방, 시점 anchor, 비의료 표현 (몸이 닳/리듬 무너짐)"
   },
   "木": {
-    "healthKo": "본인은 머리·신경 쪽으로 피로가 빨리 와요. 화면 오래 보는 일이 본인을 닳게 해요. 25세 전후로 한 번 두통·시력 체크할 시점 와요. 그때 안 미루세요. 단, 활동량 좋아 몸 자체는 단단해요.",
-    "healthEn": "Fatigue lands fast on your head and nerves. Long screen time wears you down. Around twenty-five a headache or vision check window opens. Do not postpone it. Your activity level keeps the body sturdy though.",
-    "bodyKo": "본인은 길고 가는 체형이에요. 키 큰 편에 골격이 가벼워요. 운동은 유연성·요가 쪽이 잘 맞아요. 무거운 웨이트는 본인 관절을 무너뜨려요. 단, 지구력은 평생 좋아요.",
-    "bodyEn": "Long, slim frame. Tall side with light bones. Yoga and flexibility work suit you. Heavy weights break your joints. Endurance stays good for life.",
+    "healthKo": "본인은 머리·신경 쪽으로 피로가 빨리 오는 편이에요. 화면 오래 보는 일이 본인을 닳게 할 수 있어요. 25세 전후로 두통·시력을 한 번 살펴보면 좋은 때가 와요. 미루지 않고 챙기면 좋아요. 활동량은 좋아서 몸 자체는 단단한 편이에요.",
+    "healthEn": "Fatigue can hit your head and nerves quickly. Long screen time may wear you down. Around twenty-five, a quiet headache or vision check is worth keeping an eye on. Catching it early can be a good move. Your activity level often keeps the body fairly sturdy though.",
+    "bodyKo": "본인은 길고 가는 체형이에요. 키 큰 편에 골격이 가벼워요. 운동은 유연성·요가 쪽이 잘 맞아요. 무거운 웨이트는 본인 관절에 부담이 될 수 있어요. 단, 지구력은 평생 좋아요.",
+    "bodyEn": "Long, slim frame. Tall side with light bones. Yoga and flexibility work suit you. Heavy weights can be hard on your joints. Endurance often holds well for life.",
     "socialKo": "본인 인간관계는 넓고 가벼워요. 친구는 많은데 깊이는 한두 명이에요. 30대 초반에 본인 인맥 정리할 시점 와요. 그때 진짜 사람만 남기세요. 단, 본인 매력은 사람을 끌어요. 본인 약점이 한 번 드러나요. 본인 강점은 단단하고 평생 받쳐줘요.",
     "socialEn": "Your network is wide and light. Many friends, deep with one or two. In early thirties a clearing moment lands. Keep the real ones. Your charm keeps drawing people in.",
     "socialPersonaKo": "겉으로는 활발하고 부드러워 보여요. 사람들이 본인을 친절한 사람으로 알아요. 단, 안에서는 의외로 까다로워요. 사람들이 모르는 본인 기준이 또렷해요.",
@@ -19,12 +19,12 @@
     "innateCharacterEn": "You carry warmth and a sense of justice. You reach out first when someone is weak. You end up paying the cost often. Learn one clean refusal."
   },
   "火": {
-    "healthKo": "본인은 심장·혈압 쪽 리듬이 빨라요. 더위·스트레스가 본인을 닳게 해요. 30세 전후로 한 번 혈압 체크 시점 와요. 단, 회복력은 강한 쪽이에요.",
-    "healthEn": "Heart and blood rhythm run fast. Heat and stress wear you down. Around thirty a blood pressure check window opens. Your recovery is strong though.",
+    "healthKo": "본인은 심장·혈압 쪽 리듬이 빠른 편이에요. 더위·스트레스가 본인을 닳게 할 수 있어요. 30세 전후로 혈압을 한 번 살펴보면 좋은 때가 와요. 회복력은 강한 편이에요.",
+    "healthEn": "Your heart and pulse can run on the faster side. Heat and stress may wear you down. Around thirty, an easy blood pressure check is worth a look. Your recovery tends to bounce back strong.",
     "bodyKo": "본인은 어깨 넓고 단단한 체형이에요. 근육이 잘 붙는 쪽이에요. 운동은 폭발력 위주 (HIIT·구기 종목) 가 잘 맞아요. 장시간 유산소는 본인을 닳게 해요. 단, 폼이 늘 또렷해요.",
     "bodyEn": "Broad-shouldered, dense frame. Muscle builds well on you. Explosive workouts — HIIT, ball sports — suit you. Long-distance cardio drains you. Your form stays sharp.",
-    "socialKo": "본인은 무리의 중심 자리에 있는 사람이에요. 분위기 띄우는 사람으로 인기예요. 단, 한 번 큰 갈등 와요. 30세 전후로 사람 잃을 일 와요. 본인 입을 한 번 더 거르세요.",
-    "socialEn": "You sit at the center of the room. People love you for lifting the mood. One big clash will land. Around thirty you lose someone. Filter your mouth once more.",
+    "socialKo": "본인은 무리의 중심 자리에 있는 사람이에요. 분위기 띄우는 사람으로 인기예요. 단, 큰 갈등이 한 번 떠오를 수 있는 시기가 와요. 30세 전후로 사람과 멀어지는 변화가 느껴질 수 있어요. 본인 입을 한 번 더 걸러 보면 마음 편해요.",
+    "socialEn": "You sit at the center of the room. People love you for lifting the mood. A big clash could surface. Around thirty, a relationship change may feel close. Filtering your words once more can help.",
     "socialPersonaKo": "겉으로 본인은 활기차고 따뜻해 보여요. 사람들이 본인을 리더로 알아봐요. 단, 본인 감정이 다 비치는 면이에요. 표정 관리가 약점이라 한 번 더 신경 쓰세요. 본인 강점은 단단하고 평생 받쳐줘요.",
     "socialPersonaEn": "Outside you look bright and warm. People read you as a leader. Your emotions show too clearly though. Face control is your weak spot.",
     "innateNatureKo": "본인 본성은 타오르는 불처럼 빠르고 강해요. 좋아하는 일에 모든 걸 쏟아요. 단, 빨리 식는 면도 나타나요. 한 번 식으면 다시 안 데워지니 본인 페이스 조절하세요. 한 번 약점이 드러나요.",
@@ -33,10 +33,10 @@
     "innateCharacterEn": "You hold manners and reputation in high regard. You cannot watch rudeness around others. A wounded pride stays with you for life. Learn to forgive."
   },
   "土": {
-    "healthKo": "본인은 위·소화기 쪽이 약해요. 스트레스 받으면 먼저 위로 와요. 28세 전후로 한 번 위염 체크 시점 와요. 그때 식습관 정리하세요. 단, 본인 기초 체력은 단단해요.",
-    "healthEn": "Stomach and digestion run weak. Stress lands on the stomach first. Around twenty-eight a gastritis check window opens. Sort your diet then. Base stamina stays solid.",
-    "bodyKo": "본인은 중간 키에 안정형 체형이에요. 살이 잘 붙는 쪽이에요. 운동은 꾸준한 유산소·걷기 가 잘 맞아요. 단기간 살 빼는 다이어트는 본인을 무너뜨려요. 단, 한 번 자세 잡으면 평생 안 무너져요. 본인 약점이 한 번 드러나요.",
-    "bodyEn": "Mid-height, steady frame. Weight piles on easily. Steady cardio — walking, jogging — fits you. Short crash diets break you. Once your form is set it holds for life.",
+    "healthKo": "본인은 위·소화기 쪽이 약한 편이에요. 스트레스 받으면 먼저 위로 오기 쉬워요. 28세 전후로 위염을 한 번 살펴보면 좋은 때가 와요. 그 무렵 식습관을 정리해 두면 한결 편해요. 본인 기초 체력은 단단한 편이에요.",
+    "healthEn": "Your stomach and gut can run a little weak. Stress tends to hit your stomach first. Around twenty-eight, a quiet gastritis check is one thing to keep an eye on. Tidying up your diet around then can be a good move. Your base stamina can stay fairly steady.",
+    "bodyKo": "본인은 중간 키에 안정형 체형이에요. 살이 잘 붙는 쪽이에요. 운동은 꾸준한 유산소·걷기가 잘 맞아요. 단기간 살 빼는 다이어트는 본인 리듬을 무너뜨릴 수 있어요. 단, 한 번 자세 잡으면 평생 잘 유지되는 편이에요. 본인 약점이 한 번 드러나요.",
+    "bodyEn": "Mid-height, steady frame. Weight piles on easily. Steady cardio — walking, jogging — fits you. Short crash diets can throw your rhythm off. Once your form is set it often holds well for life.",
     "socialKo": "본인은 신뢰형 친구 자리예요. 사람들이 본인한테 비밀 털어놓아요. 단, 본인이 너무 다 들어줘서 본인이 지쳐요. 30대 중반에 거절하는 법 배우세요. 본인 약점이 한 번 드러나요.",
     "socialEn": "You are the trusted-friend seat. People drop secrets on you. Listening to all of it wears you down. In mid-thirties learn to refuse.",
     "socialPersonaKo": "겉으로 본인은 듬직하고 안정적으로 보여요. 사람들이 본인을 어른 같다고 해요. 단, 안에서는 본인도 흔들리는 사람이에요. 본인을 위한 시간을 늘리세요.",
@@ -47,8 +47,8 @@
     "innateCharacterEn": "Trust is your asset. What you promise once, you finish. You also take on what you cannot keep. Practice refusal on purpose."
   },
   "金": {
-    "healthKo": "본인은 호흡기·피부 쪽이 약해요. 건조한 환경이 본인을 닳게 해요. 30대 초반에 한 번 천식·알레르기 체크 시점 와요. 그때 습도 관리 시작하세요. 단, 면역력은 평생 단단해요.",
-    "healthEn": "Lungs and skin run weak. Dry environments wear you down. In early thirties an asthma or allergy check window opens. Start humidity care then. Your immunity stays solid for life.",
+    "healthKo": "본인은 호흡기·피부 쪽이 약한 편이에요. 건조한 환경이 본인을 닳게 할 수 있어요. 30대 초반에 천식·알레르기를 한 번 살펴보면 좋은 때가 와요. 그 무렵 습도 관리를 시작하면 한결 편해요. 면역력은 평생 단단한 편이에요.",
+    "healthEn": "Your lungs and skin can run a little weak. Dry environments may wear you down. In early thirties, a quiet asthma or allergy check is one thing to keep an eye on. Looking after humidity around then can be a good move. Your immunity can stay fairly steady for life.",
     "bodyKo": "본인은 단단하고 날카로운 체형이에요. 근육이 깔끔하게 잡혀요. 운동은 정확한 폼이 중요한 종목 (수영·골프·궁술) 이 잘 맞아요. 거친 격투기는 본인 색과 안 맞아요. 단, 본인 폼이 늘 또렷해요.",
     "bodyEn": "Sharp, defined frame. Clean muscle. Form-precise sports — swimming, golf, archery — suit you. Rough contact sports do not fit you. Your form stays crisp.",
     "socialKo": "본인은 가깝지만 거리 있는 친구 자리예요. 본인 사람만 골라 깊게 가요. 단, 한 번 본인 신뢰 무너지면 영영 안 돌아가요. 너무 빨리 손절하지 마세요. 한 번 약점이 돼요. 본인 강점은 단단하고 평생 받쳐줘요.",
@@ -61,10 +61,10 @@
     "innateCharacterEn": "You hold honesty and loyalty for life. Once you call someone yours, you stay. Your standards are so sharp you lose people. Soften them once more."
   },
   "水": {
-    "healthKo": "본인은 신장·생식기 쪽이 약해요. 추위·습기가 본인을 닳게 해요. 28세 전후로 한 번 신장 기능 체크 시점 와요. 그때 수분 섭취 점검하세요. 단, 본인 회복 속도는 빨라요.",
-    "healthEn": "Kidneys and reproductive system run weak. Cold and damp wear you down. Around twenty-eight a kidney check window opens. Check your hydration then. Your recovery runs fast.",
-    "bodyKo": "본인은 부드럽고 곡선형 체형이에요. 살이 부드럽게 붙어요. 운동은 수영·필라테스가 잘 맞아요. 너무 마른 다이어트는 본인 호르몬을 무너뜨려요. 단, 한 번 잡힌 체형은 평생 단단해요.",
-    "bodyEn": "Soft, curving frame. Weight settles softly. Swimming and Pilates suit you. Crash dieting breaks your hormones. Once shaped, the body holds for life.",
+    "healthKo": "본인은 신장·생식기 쪽이 약한 편이에요. 추위·습기가 본인을 닳게 할 수 있어요. 28세 전후로 신장 기능을 한 번 살펴보면 좋은 때가 와요. 그 무렵 수분 섭취를 점검해 보세요. 본인 회복 속도는 빠른 편이에요.",
+    "healthEn": "Your kidneys and reproductive system can run a little weak. Cold and damp may wear you down. Around twenty-eight, a quiet kidney check is one thing to keep an eye on. Looking after your hydration around then can be a good move. Your recovery tends to bounce back quickly.",
+    "bodyKo": "본인은 부드럽고 곡선형 체형이에요. 살이 부드럽게 붙어요. 운동은 수영·필라테스가 잘 맞아요. 너무 마른 다이어트는 본인 호르몬에 무리가 될 수 있어요. 단, 한 번 잡힌 체형은 평생 잘 유지되는 편이에요.",
+    "bodyEn": "Soft, curving frame. Weight settles softly. Swimming and Pilates suit you. Crash dieting may throw your hormones off. Once shaped, the body often holds well for life.",
     "socialKo": "본인은 통찰력 있는 친구 자리예요. 사람들이 본인한테 인생 상담을 와요. 단, 본인이 다 받아주면 본인이 닳아요. 30대 중반에 거리 두는 법 배우세요.",
     "socialEn": "You are the insightful-friend seat. People come to you for life advice. Taking it all in wears you down. In mid-thirties learn distance.",
     "socialPersonaKo": "겉으로 본인은 조용하고 신비로워 보여요. 사람들이 본인을 깊은 사람으로 알아요. 단, 본인은 외향적인 자리에서 본인이 닳아요. 혼자 회복하는 시간이 꼭 필요해요.",

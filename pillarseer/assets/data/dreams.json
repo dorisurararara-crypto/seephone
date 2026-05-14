@@ -237,7 +237,7 @@
     "cat": "wealth",
     "auspicious": true,
     "meaningEn": "Calm sea brings emotional balance and steady wealth. Stormy sea warns of relationship turbulence.",
-    "meaningKo": "고요한 바다는 감정의 균형과 안정된 재물 — 거친 바다는 관계 격동을 경고합니다. 받기 전에 감사부터 표하면 흐름이 막히지 않습니다."
+    "meaningKo": "고요한 바다는 감정의 균형과 안정된 재물 — 거친 바다는 관계 격동을 알리는 신호예요. 받기 전에 감사부터 표하면 길이 막히지 않아요."
   },
   {
     "en": "star",
@@ -333,7 +333,7 @@
     "cat": "auspicious",
     "auspicious": true,
     "meaningEn": "Books in dreams signal knowledge arriving or a phase of learning. Closed book means unopened opportunity.",
-    "meaningKo": "책 꿈은 지식의 도착이나 학습기 — 닫힌 책은 아직 열지 않은 기회입니다. 같은 신호가 두 번 더 보이면 흐름이 확정입니다."
+    "meaningKo": "책 꿈은 지식의 도착이나 학습기 — 닫힌 책은 아직 열지 않은 기회를 상징해요. 같은 신호가 두 번 더 보이면 방향이 또렷해지기 쉬워요."
   },
   {
     "en": "key",
@@ -349,7 +349,7 @@
     "cat": "auspicious",
     "auspicious": true,
     "meaningEn": "Boarding a plane signals a major life direction shift. Plane crash dreams reflect anxiety about a current decision.",
-    "meaningKo": "비행기를 타는 꿈은 큰 방향 전환 — 추락 꿈은 현재 결정에 대한 불안의 반영. 같은 신호가 두 번 더 보이면 흐름이 확정입니다."
+    "meaningKo": "비행기를 타는 꿈은 큰 방향 전환을 의미해요 — 추락 꿈은 현재 결정에 대한 불안의 반영이에요. 같은 신호가 두 번 더 보이면 방향이 더 또렷해지기 쉬워요."
   },
   {
     "en": "bridge",
@@ -1236,8 +1236,8 @@
     "ko": "맑은 물",
     "cat": "wealth",
     "auspicious": true,
-    "meaningEn": "Clear water means clean wealth flowing in. Drinking it confirms reception.",
-    "meaningKo": "맑은 물은 깨끗한 재물이 들어옴을 의미합니다. 마시면 수령 확정입니다."
+    "meaningEn": "Clear water can be a sign of clean wealth flowing in. Drinking it may hint that a receiving moment is close.",
+    "meaningKo": "맑은 물 꿈은 깨끗한 재물이 들어오는 신호예요. 마시는 모습은 수령 가능성이 가까워졌다는 뜻으로 풀어 볼 수 있어요."
   },
   {
     "en": "muddy_water",
@@ -1492,8 +1492,8 @@
     "ko": "꿀",
     "cat": "wealth",
     "auspicious": true,
-    "meaningEn": "Honey signals sweet steady gain. Tasting it confirms a long-anticipated reward.",
-    "meaningKo": "꿀은 달콤하고 꾸준한 이득입니다. 맛보면 오래 기다린 보상의 확정입니다."
+    "meaningEn": "Honey can be a sign of sweet steady gain. Tasting it may hint that a long-anticipated reward is close.",
+    "meaningKo": "꿀 꿈은 달콤하고 꾸준한 이득을 떠올리게 해요. 맛보는 모습은 오래 기다린 보상이 가까워졌다는 뜻으로 풀어 볼 수 있어요."
   },
   {
     "en": "salt",
@@ -1676,8 +1676,8 @@
     "ko": "와인",
     "cat": "auspicious",
     "auspicious": true,
-    "meaningEn": "Wine announces refined celebration. A toast means agreement sealed.",
-    "meaningKo": "와인은 세련된 축하입니다. 건배는 합의의 확정입니다."
+    "meaningEn": "Wine can be a sign of refined celebration. A toast may hint at an agreement coming together.",
+    "meaningKo": "와인 꿈은 세련된 축하를 떠올리게 해요. 건배는 합의가 가까워졌다는 신호로 풀어 볼 수 있어요."
   },
   {
     "en": "beer",
@@ -1852,8 +1852,8 @@
     "ko": "의사",
     "cat": "family",
     "auspicious": true,
-    "meaningEn": "A doctor signals health check needed. Schedule what you have been postponing.",
-    "meaningKo": "의사는 필요한 건강 점검입니다. 미뤄둔 것을 잡으세요."
+    "meaningEn": "A doctor can be a sign that attention to health may help. Consider what you have been putting off.",
+    "meaningKo": "의사 꿈은 건강을 한 번 돌아보면 좋다는 신호예요. 미뤄둔 게 있다면 천천히 떠올려 보세요."
   },
   {
     "en": "lover",
@@ -2260,8 +2260,8 @@
     "ko": "목소리",
     "cat": "auspicious",
     "auspicious": true,
-    "meaningEn": "A clear voice in a dream signals your message will land. Speak up tomorrow.",
-    "meaningKo": "꿈의 맑은 목소리는 메시지가 도달할 것을 알립니다. 내일 말하세요."
+    "meaningEn": "A clear voice in a dream can be a sign that your message could carry well. Speaking up tomorrow is worth a look.",
+    "meaningKo": "꿈의 맑은 목소리는 메시지가 잘 닿을 가능성을 떠올리게 해요. 내일 한 번 말해 보세요."
   },
   {
     "en": "ears",
@@ -2412,8 +2412,8 @@
     "ko": "금색",
     "cat": "wealth",
     "auspicious": true,
-    "meaningEn": "Gold signals premium-tier opportunity. Touching it = high-status gain confirmed.",
-    "meaningKo": "금색은 최상위 기회입니다. 만지면 고위 이득의 확정입니다."
+    "meaningEn": "Gold can be a sign of premium-tier opportunity. Touching it may hint at high-status gain coming closer.",
+    "meaningKo": "금색 꿈은 최상위 기회를 떠올리게 해요. 만지는 모습은 고위 이득이 가까워졌다는 신호로 풀어 볼 수 있어요."
   },
   {
     "en": "silver",
@@ -2676,8 +2676,8 @@
     "ko": "길",
     "cat": "auspicious",
     "auspicious": true,
-    "meaningEn": "A clear road signals direction confirmed. Forked road = upcoming choice.",
-    "meaningKo": "명확한 길은 확정된 방향입니다. 갈림길은 다가오는 선택입니다."
+    "meaningEn": "A clear road can be a sign that direction is taking shape. A forked road may hint at an upcoming choice.",
+    "meaningKo": "명확한 길 꿈은 방향이 또렷해진다는 신호예요. 갈림길은 다가오는 선택을 떠올리게 해요."
   },
   {
     "en": "tunnel",
@@ -2716,8 +2716,8 @@
     "ko": "병원",
     "cat": "family",
     "auspicious": true,
-    "meaningEn": "A hospital signals needed attention to health or family. Schedule the appointment.",
-    "meaningKo": "병원은 건강이나 가족에 필요한 관심입니다. 예약을 잡으세요."
+    "meaningEn": "A hospital can be a sign that attention to health or family is worth a look. An easy check-in is one option to consider.",
+    "meaningKo": "병원 꿈은 건강이나 가족에 관심이 필요하다는 신호예요. 가벼운 점검 정도 떠올려 보면 좋아요."
   },
   {
     "en": "library",
@@ -2996,8 +2996,8 @@
     "ko": "여객기",
     "cat": "auspicious",
     "auspicious": true,
-    "meaningEn": "A plane signals long-distance leap. Taking off = ambitious launch confirmed.",
-    "meaningKo": "비행기는 장거리 도약입니다. 이륙은 야심 찬 출발의 확정입니다."
+    "meaningEn": "A plane can be a sign of a long-distance leap. Taking off may hint at an ambitious launch coming closer.",
+    "meaningKo": "비행기 꿈은 장거리 도약을 떠올리게 해요. 이륙하는 모습은 야심 찬 출발이 가까워졌다는 신호로 풀어 볼 수 있어요."
   },
   {
     "en": "bicycle",
@@ -3212,8 +3212,8 @@
     "ko": "돈 줍기",
     "cat": "wealth",
     "auspicious": true,
-    "meaningEn": "Finding money signals unexpected gain confirmed. Receive it openly when offered.",
-    "meaningKo": "돈 줍기는 확정된 예상치 못한 이득입니다. 제안될 때 열린 마음으로 받으세요."
+    "meaningEn": "Finding money can be a sign of unexpected gain coming closer. Receive it openly when offered.",
+    "meaningKo": "돈 줍기 꿈은 예상치 못한 이득 가능성을 떠올리게 해요. 제안이 오면 열린 마음으로 받아 보세요."
   },
   {
     "en": "losing_money",
@@ -3268,8 +3268,8 @@
     "ko": "승리",
     "cat": "auspicious",
     "auspicious": true,
-    "meaningEn": "Winning signals confirmed success ahead. Note what you won — that is the area.",
-    "meaningKo": "승리는 확정된 성공입니다. 무엇을 이겼는지가 영역입니다."
+    "meaningEn": "Winning can be a sign that success is coming closer. Note what you won — that is the area.",
+    "meaningKo": "승리 꿈은 성공이 가까워졌다는 신호예요. 무엇을 이겼는지가 영역을 알려줘요."
   },
   {
     "en": "losing_game",
@@ -4012,8 +4012,8 @@
     "ko": "황금 돼지",
     "cat": "wealth",
     "auspicious": true,
-    "meaningEn": "A golden pig signals premium wealth — top-tier income confirmed. Express gratitude before receiving — flow stays open.",
-    "meaningKo": "황금 돼지는 최고급 재물입니다 — 최상위 수입의 확정입니다. 받기 전에 감사부터 표하면 흐름이 막히지 않습니다."
+    "meaningEn": "A golden pig can be a sign of premium wealth — top-tier income coming closer. Expressing gratitude before receiving often keeps the path open.",
+    "meaningKo": "황금 돼지 꿈은 최고급 재물의 신호예요 — 최상위 수입이 가까워졌다는 뜻으로 풀어 볼 수 있어요. 받기 전에 감사부터 표하면 길이 막히지 않아요."
   },
   {
     "en": "phoenix_rising",
