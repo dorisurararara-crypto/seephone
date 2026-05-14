@@ -461,7 +461,7 @@ class DeepContentService {
     if (ko) {
       final domName = koElName[dom] ?? '하나';
       final defName = koElName[def] ?? '하나';
-      return '$ji 일주는 $domName 기운이 강하고 $defName 기운이 약해서, 위와 같은 결로 풀어드린 거예요.';
+      return '$ji 일주는 $domName 쪽이 강하고 $defName 쪽이 약해서, 위처럼 풀어드린 거예요.';
     }
     final domName = enElName[dom] ?? 'one';
     final defName = enElName[def] ?? 'one';
@@ -473,10 +473,11 @@ class DeepContentService {
   static String _fallbackDayMasterDeep(bool ko, String ji, String name) {
     if (ko) {
       // Round 77 sprint 2 — `($name)` 영문 페어 제거. sanitize 후 빈 괄호 누출 0.
-      return '당신의 일간 $ji 은 60갑자 사이클 속에서 고유한 진동을 가져요. '
-          '본능은 환경의 압력을 견디며 자기 색을 다듬는 데서 강해져요. '
-          '내면의 리듬을 따라갈 때 가장 자기다운 결과를 만들어요. '
-          '서두르기보다 자기 흐름을, 흉내보다 자기 색을 따르는 사주예요.';
+      // Round 77 sprint 4 — 한자 jargon (일간/60갑자 사이클/진동/결/색) 제거.
+      return '$ji 일주는 비슷한 일주끼리도 살짝 다른 느낌을 만드는 사주예요. '
+          '본인은 환경의 압력을 견디며 자기다움을 다듬는 데서 강해져요. '
+          '본인 안의 리듬을 따라갈 때 가장 본인다운 결과가 나와요. '
+          '서두르기보다 본인 호흡대로, 흉내보다 본인 스타일대로 가는 사람이에요.';
     }
     return 'Your $ji day master ($name) carries a singular pulse within the '
         '60-pillar cycle. The $name nature sharpens under steady pressure, '
@@ -487,7 +488,7 @@ class DeepContentService {
   static String _expandShort(String short, bool ko, String key, String ji) {
     if (short.isEmpty) {
       return ko
-          ? '당신의 $ji 일주는 $key 영역에서 자기 결을 따를 때 가장 빛나요.'
+          ? '당신의 $ji 일주는 $key 영역에서 본인 스타일대로 갈 때 가장 빛나요.'
           : 'Your $ji day pillar grows in $key when you follow your native '
               'grain rather than copy strategies built for other charts.';
     }
@@ -513,7 +514,7 @@ class DeepContentService {
     final koArea = koMap[deficit] ?? '오장육부의 미세한 균형';
     final enArea = enMap[deficit] ?? 'subtle five-organ balance';
     if (ko) {
-      return '$ji 의 몸은 결핍 오행($deficit)이 약속한 신호를 가장 먼저 알려요. '
+      return '$ji 일주의 몸은 부족한 쪽($deficit) 신호를 가장 먼저 알려줘요. '
           '특히 $koArea 의 컨디션을 정기적으로 점검하세요. 작은 신호를 무시하지 않을 때 장기적인 안정이 와요.';
     }
     return 'Your $ji body whispers first through the deficit element ($deficit). '
@@ -522,8 +523,8 @@ class DeepContentService {
 
   static String _fallbackFamily(bool ko, String ji) {
     if (ko) {
-      return '$ji 일주의 가정은 자기 정체성을 닦는 거울이에요. '
-          '말보다는 함께 보내는 시간의 결이 가족 운을 만들어요. 사랑의 형태가 표현될 때, 관계의 운도 함께 살아나요.';
+      return '$ji 일주에게 가정은 본인이 어떤 사람인지 비춰주는 거울이에요. '
+          '말보다 함께 보내는 시간의 분위기가 가족 운을 만들어요. 사랑의 형태가 표현될 때 관계 운도 함께 살아나요.';
     }
     return 'Family for $ji is the soft mirror that returns your real self. '
         'Time spent together — not perfect words — composes the chord of belonging '
@@ -532,8 +533,8 @@ class DeepContentService {
 
   static String _fallbackFame(bool ko, String ji, String name) {
     if (ko) {
-      return '$name 의 무대는 진정성에서 빛나요. 흉내가 아닌 자신만의 색으로 공개될 때, '
-          '$ji 의 명예 운이 환경을 끌어와요. 검색량보다 깊이가 자산이에요.';
+      return '$name 일주는 본인다움이 분명할수록 평판이 살아나요. 흉내가 아닌 본인 스타일로 공개될 때, '
+          '$ji 일주의 명예 흐름이 환경을 끌어와요. 검색량보다 깊이가 자산이에요.';
     }
     return 'The $name stage glows brightest in authenticity. When $ji shows its '
         'own grain — not a replicated formula — public energy moves toward you. '

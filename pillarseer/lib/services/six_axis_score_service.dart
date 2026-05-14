@@ -24,17 +24,17 @@ class SixAxisScore {
   final Map<String, bool> crossMatches;
 
   /// 축 라벨 순서 (radar 시계 12시부터 시계방향) — 한글 (내부 key).
+  /// 내부 key 는 호환성을 위해 '본성' 으로 유지 (Map 조회용).
   static const axes = ['본성', '연애', '일', '돈', '건강', '평판'];
 
-  /// 한글 라벨 (UI 노출 — useKo == true).
-  static const axesKo = axes;
+  /// 한글 라벨 (UI 노출 — useKo == true). Round 77 Sprint 4 mandate — UI 라벨은 "중심 성향".
+  static const axesKo = ['중심 성향', '연애', '일', '돈', '건강', '평판'];
 
   /// 영문 라벨 (UI 노출 — useKo == false). axes 순서와 1:1 대응.
   static const axesEn = ['Nature', 'Love', 'Work', 'Money', 'Health', 'Fame'];
 
   /// useKo flag → 노출용 라벨 list.
-  static List<String> axesFor({required bool useKo}) =>
-      useKo ? axesKo : axesEn;
+  static List<String> axesFor({required bool useKo}) => useKo ? axesKo : axesEn;
 
   const SixAxisScore({
     required this.sajuScores,
@@ -66,8 +66,14 @@ class SixAxisScore {
   }
 
   /// useKo flag → 일치한 축 라벨 list.
-  List<String> matchedAxesFor({required bool useKo}) =>
-      useKo ? matchedAxes : matchedAxesEn;
+  List<String> matchedAxesFor({required bool useKo}) {
+    if (!useKo) return matchedAxesEn;
+    final out = <String>[];
+    for (var i = 0; i < axes.length; i++) {
+      if (crossMatches[axes[i]] == true) out.add(axesKo[i]);
+    }
+    return out;
+  }
 
   /// 통합 평균 (사용자에게 보여줄 단일 점수 후보).
   int get combinedAverage {
@@ -231,7 +237,7 @@ class SixAxisScoreService {
     int base = 65;
     final dayJi = saju.dayPillar.jiJi;
     if ({'子', '午', '卯', '酉'}.contains(dayJi)) base += 10; // 도화 인기
-    if ({'寅', '申', '巳', '亥'}.contains(dayJi)) base += 6;  // 역마 활동
+    if ({'寅', '申', '巳', '亥'}.contains(dayJi)) base += 6; // 역마 활동
     if (saju.dayPillar.chunGanYang) base += 5;
     base += _stableJitter(saju.day60ji, 'fame') * 3;
     return base.clamp(30, 100);
@@ -301,7 +307,9 @@ class SixAxisScoreService {
           base += 14;
           break;
         }
-        if (s.keyEn == 'jumen' || s.keyEn == 'tianji' || s.keyEn == 'tianliang') {
+        if (s.keyEn == 'jumen' ||
+            s.keyEn == 'tianji' ||
+            s.keyEn == 'tianliang') {
           base += 10;
           break;
         }
@@ -319,9 +327,7 @@ class SixAxisScoreService {
     int base = 60;
     if (jaebaek != null) {
       for (final s in jaebaek.majorStars) {
-        if (s.keyEn == 'wuqu' ||
-            s.keyEn == 'tianfu' ||
-            s.keyEn == 'taiyang') {
+        if (s.keyEn == 'wuqu' || s.keyEn == 'tianfu' || s.keyEn == 'taiyang') {
           base += 13;
           break;
         }
@@ -403,7 +409,8 @@ class SixAxisScoreService {
   /// 같은 일주 + 같은 축 라벨 = 항상 같은 값 (-2~+2).
   /// 점수 단조로움 방지용 미세 변동.
   static int _stableJitter(String day60ji, String axisKey) {
-    final seed = (day60ji.codeUnits.fold<int>(0, (a, b) => a + b) +
+    final seed =
+        (day60ji.codeUnits.fold<int>(0, (a, b) => a + b) +
             axisKey.codeUnits.fold<int>(0, (a, b) => a + b)) %
         5;
     return seed - 2; // -2 ~ +2

@@ -113,7 +113,7 @@ class DatePickingScreen extends ConsumerWidget {
       } else if (generates[el] == dm) {
         kind = _DayKind.good;
         reasonEn = 'Day nourishes you — receive, decide, sign.';
-        reasonKo = '오늘이 당신을 살림 — 받고, 결정하고, 서명하세요.';
+        reasonKo = '오늘이 당신을 살림 — 받고, 결정하고, 약속을 잡으세요.';
       } else if (generates[dm] == el) {
         kind = _DayKind.good;
         reasonEn = 'You nourish the day — pitch, present, launch.';

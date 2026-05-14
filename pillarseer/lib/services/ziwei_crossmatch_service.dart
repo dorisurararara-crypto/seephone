@@ -83,7 +83,7 @@ class ZiweiCrossmatchService {
     if (dayStem == '辛' &&
         (mingStars.contains('문창') || mingStars.contains('문곡'))) {
       out.add(const CrossMatch(
-        topic: '본성',
+        topic: '중심 성향',
         topicEn: 'NATURE',
         sajuSide: '신(辛) 일간 — 정밀하고 깔끔한 감각',
         sajuSideEn: 'Xin (辛) day master — precise and clean instincts.',
@@ -100,7 +100,7 @@ class ZiweiCrossmatchService {
             s.keyEn == 'ziwei' || s.keyEn == 'taiyang' || s.keyEn == 'qisha')) {
       final dayStemEn = dayStem == '甲' ? 'Jia (甲) wood' : 'Bing (丙) fire';
       out.add(CrossMatch(
-        topic: '본성',
+        topic: '중심 성향',
         topicEn: 'NATURE',
         sajuSide:
             '${dayStem == '甲' ? '갑목(甲)' : '병화(丙)'} 일간 — 앞에 서는 리더 기질',
@@ -121,7 +121,7 @@ class ZiweiCrossmatchService {
               ? 'Yi (乙) wood day master'
               : 'Wei (未) sheep branch';
       out.add(CrossMatch(
-        topic: '본성',
+        topic: '중심 성향',
         topicEn: 'NATURE',
         sajuSide:
             '${dayJi == '卯' ? '묘(卯) 토끼' : dayStem == '乙' ? '을목(乙)' : '미(未) 양'} — 부드럽고 조율 잘하는 성향',

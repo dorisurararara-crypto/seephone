@@ -390,7 +390,7 @@ class _Hero extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             useKo
-                ? '나와 잘 맞는 다섯 가지 기운, 같은 본성, 잘 어울리는 짝, 부딪히는 짝까지 한 번에 계산했어요.'
+                ? '나와 잘 맞는 다섯 가지 에너지, 같은 중심 성향, 잘 어울리는 관계, 부딪히는 관계까지 한 번에 계산했어요.'
                 : 'Combines five-element resonance, matching day-pillar, harmonious pairings, and conflict points — all at once.',
             style: GoogleFonts.notoSansKr(
               fontSize: 13,

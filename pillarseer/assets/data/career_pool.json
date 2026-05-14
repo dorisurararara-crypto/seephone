@@ -79,7 +79,7 @@
   "jeonggwan_sanggwan": {
     "primaryKo": "정관 + 상관",
     "primaryEn": "Jeonggwan + Sanggwan",
-    "noteKo": "체면과 입담이 같이 강해요. 명예 무대 위에서 말로 사람 끄는 길이 길이에요.",
+    "noteKo": "평판과 말센스가 같이 강해요. 사람 앞에서 말로 신뢰를 얻는 일이 잘 맞아요.",
     "noteEn": "Reputation and wit are both strong. The lane where you pull a room on a public stage suits you.",
     "careersKo": [
       "정치인",
@@ -175,7 +175,7 @@
   "siksin_pyeonjae": {
     "primaryKo": "식신 + 편재",
     "primaryEn": "Siksin + Pyeonjae",
-    "noteKo": "표현력 위에 돈 감각이 붙어요. 본인이 만든 콘텐츠로 시장에 닿는 길이 길이에요.",
+    "noteKo": "표현력 위에 돈 감각이 붙어요. 본인이 만든 콘텐츠로 시장에 닿는 일이 잘 맞아요.",
     "noteEn": "Money sense rides on your expression. The lane where your creation meets the market suits you.",
     "careersKo": [
       "요리사·셰프",
@@ -247,7 +247,7 @@
   "sanggwan_pyeonjae": {
     "primaryKo": "상관 + 편재",
     "primaryEn": "Sanggwan + Pyeonjae",
-    "noteKo": "말과 돈이 같이 풀려요. 본인이 직접 무대에 서서 돈을 만드는 길이 길이에요.",
+    "noteKo": "말과 돈이 같이 풀려요. 본인이 직접 앞에 서서 돈을 만드는 일이 잘 맞아요.",
     "noteEn": "Words and money open together. The lane where you stand on stage and make money fits you.",
     "careersEn": [
       "MC / host",
@@ -271,7 +271,7 @@
   "sanggwan_jeonggwan": {
     "primaryKo": "상관 + 정관",
     "primaryEn": "Sanggwan + Jeonggwan",
-    "noteKo": "공식 무대 위 입담이 강해요. 법조·정치·언론처럼 명예 자리에서 말로 사는 길이 어울려요.",
+    "noteKo": "공식 자리에서 입담이 강해요. 법조·정치·언론처럼 평판이 큰 자리에서 말로 사는 길이 어울려요.",
     "noteEn": "Sharp speech sits on a public stage. Law, politics, journalism — honor seats where words live fit you.",
     "careersKo": [
       "변호사",
@@ -391,7 +391,7 @@
   "geopjae_pyeongwan": {
     "primaryKo": "겁재 + 편관",
     "primaryEn": "Geopjae + Pyeongwan",
-    "noteKo": "경쟁과 추진력이 함께 폭발해요. 토너먼트형 무대에서 본인이 살아나요.",
+    "noteKo": "경쟁과 추진력이 함께 폭발해요. 토너먼트 같은 경쟁 구도에서 본인이 살아나요.",
     "noteEn": "Competition and drive erupt together. Tournament-shape stages wake you up.",
     "careersKo": [
       "프로 운동선수",
@@ -439,7 +439,7 @@
   "bigyeon_pyeongwan": {
     "primaryKo": "비견 + 편관",
     "primaryEn": "Bigyeon + Pyeongwan",
-    "noteKo": "자기 색이 강하고 추진력도 폭발해요. 본인 사업·창업 무대에서 빛나는 자리예요.",
+    "noteKo": "자기 색이 강하고 추진력도 폭발해요. 본인 사업·창업 자리에서 빛나는 타입이에요.",
     "noteEn": "Strong self-color paired with explosive drive. Your own venture stage suits you.",
     "careersKo": [
       "창업가",
@@ -463,12 +463,12 @@
   "geopjae_jeongjae": {
     "primaryKo": "겁재 + 정재",
     "primaryEn": "Geopjae + Jeongjae",
-    "noteKo": "경쟁 안에서 단단한 자산이 쌓여요. 영업·세일즈로 정기 수익을 만드는 자리가 어울려요.",
+    "noteKo": "경쟁 안에서 단단한 자산이 쌓여요. 영업·판매로 정기 수익을 만드는 자리가 어울려요.",
     "noteEn": "Steady assets pile up inside competition. Sales-driven steady-revenue seats suit you.",
     "careersKo": [
       "영업 관리자",
       "보험·증권 영업",
-      "B2B 세일즈",
+      "B2B 판매",
       "프랜차이즈 점주",
       "지점 관리자",
       "팀장",
@@ -487,7 +487,7 @@
   "geopjae_siksin": {
     "primaryKo": "겁재 + 식신",
     "primaryEn": "Geopjae + Siksin",
-    "noteKo": "라이벌 무대 위에서 본인 표현이 살아나요. 경쟁형 예술·스포츠 자리가 어울려요.",
+    "noteKo": "경쟁 구도에서 표현력이 살아나요. 예술·스포츠처럼 실력을 겨루는 자리가 어울려요.",
     "noteEn": "Your expression wakes up on a rival stage. Competitive arts and sports seats suit you.",
     "careersKo": [
       "프로 댄서",
@@ -511,7 +511,7 @@
   "siksin_sanggwan": {
     "primaryKo": "식신 + 상관",
     "primaryEn": "Siksin + Sanggwan",
-    "noteKo": "표현력과 입담이 함께 폭발해요. 본인이 곧 브랜드 되는 무대가 어울려요.",
+    "noteKo": "표현력과 입담이 함께 폭발해요. 본인이 곧 브랜드가 되는 자리가 어울려요.",
     "noteEn": "Expression and wit erupt together. The stage where you become the brand suits you.",
     "careersKo": [
       "배우",
@@ -655,7 +655,7 @@
   "sanggwan_pyeonin": {
     "primaryKo": "상관 + 편인",
     "primaryEn": "Sanggwan + Pyeonin",
-    "noteKo": "비주류 시각에 입담까지 받쳐줘요. 평론·해석·풍자 같은 본인 톤 무대가 어울려요.",
+    "noteKo": "비주류 시각에 입담까지 받쳐줘요. 평론·해석·풍자처럼 본인 톤이 살아나는 일이 어울려요.",
     "noteEn": "Niche angles backed by sharp speech. Critique, interpretation, satire — your tone stages suit you.",
     "careersKo": [
       "문화평론가",
@@ -703,7 +703,7 @@
   "geopjae_jeongin": {
     "primaryKo": "겁재 + 정인",
     "primaryEn": "Geopjae + Jeongin",
-    "noteKo": "경쟁 안에서 학문이 본인을 키워요. 시험·자격증 무대에서 본인이 빛나요.",
+    "noteKo": "경쟁 안에서 학문이 본인을 키워요. 시험·자격증 같은 자리에서 본인이 빛나요.",
     "noteEn": "Inside competition study raises you up. Exam and certification stages light you up.",
     "careersKo": [
       "고시 합격자 (사법·행시·기시)",

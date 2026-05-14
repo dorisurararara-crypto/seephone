@@ -636,17 +636,17 @@ class _CelebRow extends ConsumerWidget {
     }
     if (sameElement) {
       return useKo
-          ? '같은 오행 기운 — 추진력 결이 비슷하고, 동기 부여 방식이 닮았어요.'
+          ? '같은 오행 — 추진력 스타일이 비슷하고, 동기 부여 방식이 닮았어요.'
           : 'Same elemental base — similar momentum and motivation grain.';
     }
     if (generates[myEl] == celebEl) {
       return useKo
-          ? '당신이 키워주는 결 — 셀럽의 흐름을 자연스럽게 받쳐 줍니다.'
+          ? '당신이 키워주는 관계 — 셀럽의 흐름을 자연스럽게 받쳐 줘요.'
           : "You nourish their grain — your energy naturally supports their flow.";
     }
     if (generates[celebEl] == myEl) {
       return useKo
-          ? '당신을 키워주는 결 — 셀럽의 결이 당신을 살려주는 관계 구조.'
+          ? '당신을 키워주는 관계 — 셀럽이 당신을 살려주는 구조예요.'
           : 'They nourish yours — their grain feeds your direction.';
     }
     return useKo
@@ -664,17 +664,17 @@ class _CelebRow extends ConsumerWidget {
         me.dayPillar.jiJi == celeb.dayPillar[1];
     if (overcomes[myEl] == celebEl) {
       return useKo
-          ? '당신이 누르는 결 — 충고가 통제처럼 느껴질 수 있어 표현 톤이 중요합니다.'
+          ? '당신이 누르는 관계 — 충고가 통제처럼 느껴질 수 있어서 표현 톤이 중요해요.'
           : 'You control their grain — your advice can read as pressure; mind the tone.';
     }
     if (overcomes[celebEl] == myEl) {
       return useKo
-          ? '셀럽이 당신을 누르는 결 — 자극이 되지만 페이스를 빼앗기지 마세요.'
+          ? '셀럽이 당신을 누르는 관계 — 자극이 되지만 페이스를 빼앗기지 마세요.'
           : 'Their grain pressures yours — stimulating, but guard your pace.';
     }
     if (sameJi && myEl != celebEl) {
       return useKo
-          ? '비슷한 베이스지만 표현 방식이 다름 — 같은 무대에서 다른 색을 냅니다.'
+          ? '비슷한 베이스지만 표현 방식이 달라요 — 같은 자리에서 다른 색을 내는 타입이에요.'
           : 'Similar base, different expression — same stage, different colors.';
     }
     return useKo

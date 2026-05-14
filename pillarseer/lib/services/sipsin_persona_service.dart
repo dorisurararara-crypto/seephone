@@ -95,10 +95,10 @@ class SipsinPersonaService {
     if (freq.isEmpty) {
       return SipsinPersonaReading(
         ko: const {
-          'persona': '본인 사주는 흔치 않은 분포입니다.',
-          'career': '본인 길은 본인이 정해가는 쪽입니다.',
-          'wealth': '돈은 천천히 모으는 쪽입니다.',
-          'love': '인연은 본인 색이 잡힌 후 옵니다.',
+          'persona': '본인 사주는 흔치 않은 분포예요.',
+          'career': '본인 길은 본인이 정해가는 쪽이에요.',
+          'wealth': '돈은 천천히 모으는 쪽이에요.',
+          'love': '인연은 본인이 어떤 사람인지 또렷해진 다음에 와요.',
         },
         en: const {
           'persona': 'Your chart carries a rare distribution.',
@@ -138,22 +138,22 @@ class SipsinPersonaService {
 
     String fallback(String cat) {
       return cat == 'persona'
-          ? '본인 사주는 균형 잡힌 분포입니다.'
+          ? '본인 사주는 균형 잡힌 분포예요.'
           : cat == 'career'
-              ? '본인은 본인 길을 찾아가는 사람입니다.'
-              : cat == 'wealth'
-                  ? '돈은 천천히 모이는 쪽입니다.'
-                  : '인연은 본인 색이 또렷해진 후 옵니다.';
+          ? '본인은 본인 길을 찾아가는 사람이에요.'
+          : cat == 'wealth'
+          ? '돈은 천천히 모이는 쪽이에요.'
+          : '인연은 본인 색이 또렷해진 뒤에 와요.';
     }
 
     String fallbackEn(String cat) {
       return cat == 'persona'
           ? 'Your chart sits in balance.'
           : cat == 'career'
-              ? 'You define your own road.'
-              : cat == 'wealth'
-                  ? 'Money builds slowly.'
-                  : 'Love arrives after your color sets.';
+          ? 'You define your own road.'
+          : cat == 'wealth'
+          ? 'Money builds slowly.'
+          : 'Love arrives after your color sets.';
     }
 
     // 카테고리 별 십신 매핑 — 단조로움 차단:

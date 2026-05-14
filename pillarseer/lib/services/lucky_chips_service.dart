@@ -81,7 +81,7 @@ class LuckyChipsService {
       '木': '초록색', '火': '빨강색', '土': '황금색',
       '金': '흰색', '水': '검정색',
     }[el] ?? '황금색';
-    final stemKo = _stemKo[dayStem] ?? '본인 결';
+    final stemKo = _stemKo[dayStem] ?? '본인 페이스의';
     final elKo = _elKo[el] ?? el;
     final subj = _subjMark(v);
     final reason =
@@ -177,9 +177,9 @@ class LuckyChipsService {
     }[el] ?? ('소띠', '주씨');
     final v = '${pair.$1} 또는 ${pair.$2}';
     final elKo = _elKo[el] ?? el;
-    final stemKo = _stemKo[dayStem] ?? '본인 결';
+    final stemKo = _stemKo[dayStem] ?? '본인 페이스의';
     final reason =
-        '본인은 $stemKo 사람이라 $elKo 결을 가진 사람과 오늘 잘 통해요. '
+        '본인은 $stemKo 사람이라 $elKo 쪽이 강한 사람과 오늘 잘 통해요. '
         '${pair.$1} 친구나 ${pair.$2} 성을 가진 사람이랑 대화하면 평소보다 답답한 게 풀려요. '
         '특히 고민 상담은 그쪽이 잘 받아줘요.';
     return LuckyChip(
@@ -206,7 +206,7 @@ class LuckyChipsService {
     final topic = _topicMark(v);
     final reason =
         '$v$topic $elKo 기운을 옆에 두는 가장 가벼운 방법이에요. 책상 한쪽이나 가방 안에 '
-        '하나 두면 공간 분위기가 바뀌고, 마음의 결도 정돈돼요. 큰 게 아니라도 효과 있어요.';
+        '하나 두면 공간 분위기가 바뀌고, 마음도 조금 차분해져요. 큰 게 아니라도 효과 있어요.';
     return LuckyChip(
       category: '물건',
       icon: '💼',
@@ -217,11 +217,11 @@ class LuckyChipsService {
   }
 
   static const Map<String, String> _stemKo = {
-    '甲': '큰 나무 결', '乙': '여린 나무 결',
-    '丙': '태양 같은 결', '丁': '촛불 같은 결',
-    '戊': '큰 산 결', '己': '논밭 같은 결',
-    '庚': '날카로운 쇠 결', '辛': '섬세한 쇠 결',
-    '壬': '큰 강 결', '癸': '이슬비 결',
+    '甲': '큰 나무 같은', '乙': '여린 나무 같은',
+    '丙': '태양 같은', '丁': '촛불 같은',
+    '戊': '큰 산 같은', '己': '논밭 같은',
+    '庚': '날카로운 쇠 같은', '辛': '섬세한 쇠 같은',
+    '壬': '큰 강 같은', '癸': '이슬비 같은',
   };
 
   static const Map<String, String> _elKo = {

@@ -137,7 +137,7 @@ class DaewoonService {
   /// 대운 한 줄 의미 (locale-aware).
   static String description({bool ko = false}) {
     return ko
-        ? '대운(大運)은 사주의 10년 단위 운기 흐름. 월주에서 시작하여 양남음녀는 순행, 음남양녀는 역행. 각 chunk 10년이 인생의 한 챕터.'
+        ? '대운(大運)은 사주의 10년 단위 흐름. 월주에서 시작하여 양남음녀는 순행, 음남양녀는 역행. 각 chunk 10년이 인생의 한 챕터.'
         : 'Daewoon (大運) — life unfolds in 10-year chunks beginning from the month pillar. Yang-male/Yin-female go forward; Yin-male/Yang-female go backward.';
   }
 }

@@ -166,8 +166,8 @@ class PersonalizationEngine {
       g;
 
   static String _elNameKo(String e) => {
-        '木': '나무 기운', '火': '불 기운', '土': '흙 기운',
-        '金': '쇠 기운', '水': '물 기운',
+        '木': '나무', '火': '불', '土': '흙',
+        '金': '쇠', '水': '물',
       }[e] ??
       e;
 
@@ -191,26 +191,26 @@ class PersonalizationEngine {
   // ──────── Fallbacks (atom 매치 실패 시)
 
   static String _fallbackHeadKo(PillarProfile p) =>
-      '{dm} 일간, {dom} 기운이 오늘의 흐름을 만들어요.'.replaceAll('{dm}', _gnameKo(p.dayMaster))
+      '당신은 {dm}이에요. 오늘은 {dom} 쪽이 강한 날이에요.'.replaceAll('{dm}', _gnameKo(p.dayMaster))
           .replaceAll('{dom}', _elNameKo(p.dominantEl));
 
   static String _fallbackHeadEn(PillarProfile p) =>
       'Your ${_gnameEn(p.dayMaster)} day master under ${_elNameEn(p.dominantEl)} dominance shapes today.';
 
   static String _fallbackBodyKo(PillarProfile p) =>
-      '오늘은 한 가지에 집중하면 보상이 따라요. 당신은 출생 계절(${_seasonKo(p.season)}) 결을 가진 사람.';
+      '오늘은 한 가지에 집중하면 보상이 따라요. 당신은 ${_seasonKo(p.season)}에 태어난 사람이에요.';
 
   static String _fallbackBodyEn(PillarProfile p) =>
       'Today, focus on one thing — you carry ${_seasonEn(p.season)}-born momentum.';
 
   static String _fallbackActionKo(PillarProfile p) =>
-      '오늘 ${_elNameKo(p.deficitEl)} 기운을 보태는 행동(${_compensationKo(p.deficitEl)})을 하나만 의식하세요.';
+      '오늘 ${_elNameKo(p.deficitEl)} 쪽을 보태는 행동(${_compensationKo(p.deficitEl)})을 하나만 의식하세요.';
 
   static String _fallbackActionEn(PillarProfile p) =>
       'Add one ${_elNameEn(p.deficitEl)} touch today (${_compensationEn(p.deficitEl)}).';
 
   static String _fallbackCautionKo(PillarProfile p) => p.isStrong
-      ? '강한 ${_elNameKo(p.dominantEl)} 기운 — 자기 주장이 과해지지 않게 한 박자 늦추세요.'
+      ? '${_elNameKo(p.dominantEl)} 쪽이 강한 날 — 자기 주장이 과해지지 않게 한 박자 늦추세요.'
       : '약한 ${_elNameKo(p.deficitEl)} — 무리한 결정은 미루세요.';
 
   static String _fallbackCautionEn(PillarProfile p) => p.isStrong
@@ -330,7 +330,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 60,
-      koTpl: '당신은 환절기({season})에 태어난 {dm}. 분위기가 바뀌는 순간의 결을 다른 사람보다 빠르게 읽는 감각이 있어요.',
+      koTpl: '당신은 환절기({season})에 태어난 {dm}이에요. 분위기가 바뀌는 순간을 다른 사람보다 빠르게 알아채는 감각이 있어요.',
       enTpl: 'You are {dmEn} born in {seasonEn} transition. You read shifts in mood faster than most.',
       condition: (p, t) => p.season == 'transition',
     ),

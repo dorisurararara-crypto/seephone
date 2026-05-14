@@ -46,7 +46,7 @@ class GyeokgukService {
         return (
           name: '정관격 (正官格)',
           nameEn: 'Right Officer (正官)',
-          desc: '책임감·명예·사회적 인정의 결. 조직·공직·관리직에서 빛납니다. 보수적이고 안정적인 길.',
+          desc: '책임감·명예·사회적 인정의 흐름이에요. 조직·공직·관리직에서 빛납니다. 보수적이고 안정적인 길.',
           descEn:
               'Responsibility, honor, social recognition. Shines in organization/civic roles. Conservative, stable path.',
         );
@@ -62,7 +62,7 @@ class GyeokgukService {
         return (
           name: '정인격 (正印格)',
           nameEn: 'Right Seal (正印)',
-          desc: '학문·교육·자비의 결. 멘토·교수·연구원형. 후원받고 공부하는 사주.',
+          desc: '학문·교육·자비의 흐름이에요. 멘토·교수·연구원형. 후원받고 공부하는 사주.',
           descEn:
               'Study, teaching, compassion. Mentor/professor/researcher type. Supported by elders.',
         );
@@ -70,7 +70,7 @@ class GyeokgukService {
         return (
           name: '편인격 (偏印格)',
           nameEn: 'Oblique Seal (偏印)',
-          desc: '특수 학문·종교·예술의 결. 직관·외길. 학자·종교가·예술가형.',
+          desc: '특수 학문·종교·예술의 흐름이에요. 직관·외길. 학자·종교가·예술가형.',
           descEn:
               'Specialized study, religion, art. Intuitive and singular path. Scholar/clergy/artist type.',
         );
@@ -78,7 +78,7 @@ class GyeokgukService {
         return (
           name: '정재격 (正財格)',
           nameEn: 'Right Wealth (正財)',
-          desc: '안정된 재물·결혼·가정의 결. 꾸준한 수입·신용. 사업·재정 관리에 강.',
+          desc: '안정된 재물·결혼·가정의 흐름이에요. 꾸준한 수입·신용. 사업·재정 관리에 강.',
           descEn:
               'Stable wealth, marriage, family. Steady income and credit. Strong in business/finance management.',
         );
@@ -86,7 +86,7 @@ class GyeokgukService {
         return (
           name: '편재격 (偏財格)',
           nameEn: 'Oblique Wealth (偏財)',
-          desc: '큰 재물·기회 포착의 결. 무역·투자·사교형. 돈이 들어오는 만큼 나가기도.',
+          desc: '큰 재물·기회 포착의 흐름이에요. 무역·투자·사교형. 돈이 들어오는 만큼 나가기도.',
           descEn:
               'Big money, opportunity-spotter. Trade/investment/socializer. Money flows in and out big.',
         );
@@ -94,7 +94,7 @@ class GyeokgukService {
         return (
           name: '식신격 (食神格)',
           nameEn: 'Eating God (食神)',
-          desc: '표현·창작·여유의 결. 작가·강사·요리·예술 등. 베푸는 만큼 받는 사주.',
+          desc: '표현·창작·여유의 흐름이에요. 작가·강사·요리·예술 등. 베푸는 만큼 받는 사주.',
           descEn:
               'Expression, creation, ease. Writer/teacher/cook/artist. Giving brings receiving.',
         );
@@ -102,7 +102,7 @@ class GyeokgukService {
         return (
           name: '상관격 (傷官格)',
           nameEn: 'Hurting Officer (傷官)',
-          desc: '재능·예술·반골의 결. 똑똑하지만 권위에 약함. 자기 표현이 자원.',
+          desc: '재능·예술·반골의 흐름이에요. 똑똑하지만 권위에 약함. 자기 표현이 자원.',
           descEn:
               'Talent, art, rebellion. Brilliant but anti-authority. Self-expression is the asset.',
         );
@@ -110,7 +110,7 @@ class GyeokgukService {
         return (
           name: '건록격 (建祿格)',
           nameEn: 'Salaried Rank (建祿)',
-          desc: '월지 비견 — 일간 강함. 독립적·자수성가형. 자기 결로 사는 사주.',
+          desc: '월지 비견 — 일간 강함. 독립적·자수성가형. 본인 스타일로 사는 사주.',
           descEn:
               'Month-branch matches day stem — strong. Independent, self-made. Lives by own grain.',
         );
@@ -118,7 +118,7 @@ class GyeokgukService {
         return (
           name: '양인격 (陽刃格)',
           nameEn: 'Sun Blade (陽刃)',
-          desc: '월지 겁재 — 강한 살. 무관·검사·체육 등 강한 결의 직군. 잘 다루면 권위, 못 다루면 충돌.',
+          desc: '월지 겁재 — 강한 살. 무관·검사·체육 등 강한 분위기의 직군. 잘 다루면 권위, 못 다루면 충돌.',
           descEn:
               'Month-branch is rob-wealth — strong blade. Military/legal/athletic types. Handled well: authority.',
         );

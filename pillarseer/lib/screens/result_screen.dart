@@ -411,8 +411,8 @@ class _DayMasterHero extends StatelessWidget {
     // 한 줄 답 — 사용자가 5초 안에 이해할 문장.
     final oneLineAnswer = useKo
         ? (subAccent.isEmpty
-            ? '$elementKo의 기운을 가진 사람입니다.'
-            : '$subAccent 사람입니다.')
+            ? '$elementKo의 기운을 가진 사람이에요.'
+            : '$subAccent 사람이에요.')
         : (subAccent.isEmpty
             ? 'A person carrying the grain of $element.'
             : 'A $subAccent person.');
@@ -1761,7 +1761,7 @@ class _ShinsaBlock extends StatelessWidget {
         }),
         const SizedBox(height: 14),
         _FootnoteItalic(useKo
-            ? '신살(神煞) — 사주 원국 지지가 일간/일지의 특정 패턴과 일치할 때 활성화되는 명리학 부수 요소.'
+            ? '신살(神煞) — 사주 원국이 특정 패턴과 일치할 때 활성화되는 명리학 부수 요소.'
             : 'Shinsa: auxiliary myeongli markers activated when chart branches match certain stem/branch patterns.'),
       ],
     );
@@ -2904,18 +2904,18 @@ class _ZiweiPalaceGroup extends StatelessWidget {
     // 내부 키는 그대로 유지하되 화면에는 우회 표현만 노출.
     final labels = useKo
         ? const {
-            '명궁': '본성 결',
-            '형제궁': '친구 결',
-            '부처궁': '인연 결',
-            '자녀궁': '창작·후배 결',
-            '재백궁': '돈 결',
-            '질액궁': '건강 결',
-            '천이궁': '바깥 활동 결',
-            '노복궁': '사람망 결',
-            '관록궁': '일 결',
-            '전택궁': '사는 공간 결',
-            '복덕궁': '마음 결',
-            '부모궁': '어른·상사 결',
+            '명궁': '나의 중심',
+            '형제궁': '친구·동료',
+            '부처궁': '연애·결혼',
+            '자녀궁': '창작·후배',
+            '재백궁': '돈 흐름',
+            '질액궁': '건강·체질',
+            '천이궁': '바깥 활동',
+            '노복궁': '사람 네트워크',
+            '관록궁': '일·진로',
+            '전택궁': '사는 공간',
+            '복덕궁': '마음·취향',
+            '부모궁': '어른·윗사람',
           }
         : const {
             '명궁': 'Core nature',
@@ -3085,7 +3085,7 @@ class _ZiweiHeader extends StatelessWidget {
             children: [
               Expanded(
                 child: _HeaderCell(
-                  label: useKo ? '본성 결' : 'SELF',
+                  label: useKo ? '나의 중심' : 'SELF',
                   value: _selfHeader(ziwei.mingPalace),
                 ),
               ),

@@ -97,7 +97,7 @@ class AppL10nKo extends AppL10n {
   String get resultFiveElements => '오행 분포';
 
   @override
-  String get resultDominant => '강한 기운';
+  String get resultDominant => '많이 가진 에너지';
 
   @override
   String get resultDeficit => '보충 필요';
@@ -151,7 +151,7 @@ class AppL10nKo extends AppL10n {
   String get homeExplanationMid => '평온한 하루예요. 꾸준한 한 발이 큰 결과로 와요.';
 
   @override
-  String get homeExplanationHigh => '오늘 기운이 본인 결이랑 잘 맞아요. 미루던 거 한 번 시도해 봐요.';
+  String get homeExplanationHigh => '오늘은 평소 리듬이랑 타이밍이 잘 맞아요. 미루던 거 한 번 시도해 봐요.';
 
   @override
   String get homeCategoryLove => '애정';
@@ -272,7 +272,7 @@ class AppL10nKo extends AppL10n {
   String get homeNotifDisabledSnack => '일일 알림을 껐어요.';
 
   @override
-  String get homeNotifSampleTitle => 'Pillar Seer · 오늘의 기운';
+  String get homeNotifSampleTitle => 'Pillar Seer · 오늘의 한 줄';
 
   @override
   String get homeNotifSampleBody => '오늘의 점수, 행운의 색, 한 줄 조언을 확인해 보세요.';
@@ -361,7 +361,7 @@ class AppL10nKo extends AppL10n {
   String get shareCardTitle => '사주 공유';
 
   @override
-  String get shareCardSubtitle => '본성 카드를 친구에게 보내요';
+  String get shareCardSubtitle => '나의 한 줄 카드를 친구에게 보내요';
 
   @override
   String get shareCardSave => '이미지로 저장';
@@ -424,7 +424,7 @@ class AppL10nKo extends AppL10n {
   String get resultBasisDayBoundaryVal => '자시 (子時, 23:00 이후 다음날)';
 
   @override
-  String get personalCardTitle => '오늘, 당신을 위한 한 줄 · 今 日';
+  String get personalCardTitle => '오늘, 당신을 위한 한 줄';
 
   @override
   String get personalHeadlineLabel => '당신은';
@@ -621,7 +621,7 @@ class AppL10nKo extends AppL10n {
   String get resultProHookDatesTitle => '올해 중요한 날짜';
 
   @override
-  String get resultProHookDatesTeaser => '결정·서명·런칭을 위한 길일/피할 날을 미리 확인하세요.';
+  String get resultProHookDatesTeaser => '결정·발표·런칭을 위한 길일/피할 날을 미리 확인하세요.';
 
   @override
   String get resultProHookCta => '자세히 보기';
@@ -678,7 +678,7 @@ class AppL10nKo extends AppL10n {
   String get devGateInvalid => '인식할 수 없는 코드입니다.';
 
   @override
-  String get resultDayMasterDeepTitle => '당신의 본성 · 日 干';
+  String get resultDayMasterDeepTitle => '당신의 중심 성향 · 日 干';
 
   @override
   String get resultDayMasterTermHint => '= 일간 (日干) — 사주의 중심';
@@ -687,7 +687,7 @@ class AppL10nKo extends AppL10n {
   String get resultFiveElementsDetailTitle => '5가지 에너지 균형 · 五 行';
 
   @override
-  String get resultFiveElementsTermHint => '= 오행 (五行) — 당신 안의 다섯 기운';
+  String get resultFiveElementsTermHint => '= 오행 (五行) — 당신 안의 다섯 가지 에너지';
 
   @override
   String get resultTenGodsTitle => '십신 — 사람 관계 지도 · 十 神';
@@ -727,7 +727,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get resultGuideBody =>
-      '생년월일+시간으로 네 기둥(年·月·日·時)이 만들어져요. 그 중 일주(日)가 \'당신의 본성\'. 5가지 에너지(나무·불·흙·쇠·물)의 균형이 내 안의 결을 보여줘요. 나머지 풀이(관계·일·운세)는 모두 본성에서 나옵니다.';
+      '생년월일+시간으로 네 기둥(年·月·日·時)이 만들어져요. 그 중 일주(日)가 \'당신을 가장 잘 보여주는 한 글자\'. 5가지 에너지(나무·불·흙·쇠·물)의 균형이 평소 성격을 만들어요. 나머지 풀이(관계·일·운세)는 모두 여기서 시작해요.';
 
   @override
   String get resultGuideGotIt => '알겠어요';
@@ -767,7 +767,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String discoverCompareSame(Object pillar) {
-    return '같은 $pillar 타입 — 결이 같이 흐릅니다.';
+    return '같은 $pillar 타입 — 분위기가 비슷해요.';
   }
 
   @override
@@ -836,7 +836,7 @@ class AppL10nKo extends AppL10n {
   String get reportsCardDatePicking => '택일 (擇日)';
 
   @override
-  String get reportsCardDatePickingDesc => '결혼·개업·서명 등 길일 vs 흉일 가이드.';
+  String get reportsCardDatePickingDesc => '결혼·개업·이사 등 길일 vs 흉일 가이드.';
 
   @override
   String get reportsCardDream => '해몽 (解夢)';

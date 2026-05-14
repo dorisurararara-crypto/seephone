@@ -920,12 +920,12 @@ class _DetailSection extends StatelessWidget {
 
     if (clash) {
       friction += useKo
-          ? ' 일지 12지 충(沖)이 있어 결정·여행·이사 같은 큰 선택에서 의견이 엇갈리기 쉽습니다.'
+          ? ' 일주 띠끼리 충(沖)이 있어서 결정·여행·이사 같은 큰 선택에서 의견이 엇갈리기 쉬워요.'
           : ' Day-branch clash (沖) adds friction around big decisions.';
     }
     if (complementary) {
       attract += useKo
-          ? ' 한쪽의 강한 기운이 다른 쪽의 결핍을 정확히 채우는 보완 구조도 있어요.'
+          ? ' 한쪽이 많이 가진 부분이 다른 쪽이 부족한 부분을 정확히 채우는 보완 구조도 있어요.'
           : " One person's dominant element fills the other's deficit.";
     }
 
@@ -933,7 +933,7 @@ class _DetailSection extends StatelessWidget {
         ? [
             '매주 한 가지 결정은 상대 의견을 먼저 듣고 정해보기.',
             '같은 약점이 보이는 날은 둘 중 한 명이 의식적으로 다른 행동 선택.',
-            '서로의 결핍 오행을 카드로 공유하고, 그 기운을 보충하는 사소한 의식(색·음식·장소) 하나 함께.',
+            '서로 부족한 오행을 카드로 공유하고, 색·음식·장소 중 하나로 작게 챙겨보기.',
           ]
         : [
             'Once a week, let the other go first on one real decision.',

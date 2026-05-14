@@ -147,7 +147,7 @@ class HourlyService {
     switch (mood) {
       case 'peak':
         return (
-          ko: '$base 시간. 큰 결정·발표·서명 OK.',
+          ko: '$base 시간. 큰 결정·발표·약속 OK.',
           en: '$baseEn window — green light for big calls.',
         );
       case 'good':

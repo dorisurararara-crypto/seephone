@@ -141,7 +141,7 @@ class HapchungService {
   /// 합 결과 한 줄 의미.
   static String hapInterpretation({bool ko = false}) {
     return ko
-        ? '합(合)이 강한 사주 — 협력·조화·결합의 결이 큽니다. 단, 합이 많으면 자기 결을 잃기 쉬워 의식적 분리가 필요.'
+        ? '합(合)이 강한 사주 — 협력·조화·결합의 흐름이 커요. 단, 합이 많으면 자기 기준을 잃기 쉬워 의식적 분리가 필요해요.'
         : 'Strong "hap" (合) chart — alliance, harmony, and merging. But too many alliances can blur your own grain; conscious separation matters.';
   }
 

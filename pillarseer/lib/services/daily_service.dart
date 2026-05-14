@@ -252,7 +252,7 @@ class DailyService {
           en:
               'A timing window is open — pitch the bold idea, ask for the meeting, send the proposal. Initiative is rewarded today, and decision-makers are more receptive than usual. Don\'t over-prepare; a confident outline beats a perfect deck right now.',
           ko:
-              '오늘은 타이밍의 창이 열려 있어요. 미뤄왔던 제안, 미팅 요청, 큰 아이디어 — 먼저 움직이는 사람이 점수를 받는 날이에요. 의사 결정권자도 평소보다 열려 있는 흐름이라, 완벽한 자료보다 자신감 있는 한 줄 요약이 더 강하게 작동합니다.'
+              '오늘은 먼저 말 꺼내기 좋은 날이에요. 미뤄왔던 제안이나 발표 아이디어 — 먼저 움직이는 사람이 점수를 받는 날이에요. 상대도 평소보다 열려 있는 흐름이라, 완벽한 자료보다 자신감 있는 한 줄 요약이 더 강하게 작동해요.'
         ),
         'mid': (
           en:
@@ -272,7 +272,7 @@ class DailyService {
           en:
               'Cash flow window. Sign the contract, send the invoice, ask for the raise, negotiate the price — money-related conversations land better today. Don\'t miss this window on something you\'ve been postponing; even one decisive action moves the whole month forward.',
           ko:
-              '돈의 창이 열린 날이에요. 계약 서명, 청구서 발송, 연봉 협상, 가격 협의 — 돈 관련 대화가 평소보다 잘 통하는 흐름이에요. 미뤄왔던 한 가지를 오늘 행동으로 옮기면, 그 한 번이 이번 달 전체 흐름을 바꿀 수 있어요.'
+              '돈의 창이 열린 날이에요. 용돈 협상, 알바비 정산, 가격 흥정 — 돈 관련 얘기가 평소보다 잘 통하는 흐름이에요. 미뤄왔던 한 가지를 오늘 행동으로 옮기면, 그 한 번이 이번 달 전체 흐름을 바꿀 수 있어요.'
         ),
         'mid': (
           en:
@@ -284,7 +284,7 @@ class DailyService {
           en:
               'Avoid impulse purchases — sit on anything you\'re tempted by for 48 hours. Today\'s "I really need this" often turns into next week\'s "why did I buy this?". Use the day to pay one small bill or to cancel one subscription you don\'t use; both feel surprisingly good.',
           ko:
-              '오늘은 충동 지출 금물. 사고 싶다는 마음이 들면 48시간만 기다려 보세요. 오늘의 "이거 진짜 필요해" 가 다음 주의 "왜 샀지" 가 되는 패턴이 잘 나오는 흐름이에요. 그 대신 작은 청구서 하나 결제하거나, 안 쓰는 구독 하나 해지하면 의외로 기분이 가벼워집니다.'
+              '오늘은 충동 지출 금물. 사고 싶다는 마음이 들면 48시간만 기다려 보세요. 오늘의 "이거 진짜 필요해" 가 다음 주의 "왜 샀지" 가 되는 패턴이 잘 나오는 흐름이에요. 그 대신 안 쓰는 구독 하나 해지하거나, 작은 결제 하나만 처리하면 의외로 기분이 가벼워져요.'
         ),
       },
       'energy': {

@@ -69,7 +69,7 @@ void main() {
     test('제왕 KO/EN', () {
       expect(
         TwelveUnsungService.interpretation('제왕', ko: true),
-        contains('절정'),
+        contains('정점'),
       );
       expect(
         TwelveUnsungService.interpretation('제왕', ko: false),

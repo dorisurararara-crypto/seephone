@@ -151,13 +151,13 @@ class TodayDeepService {
         case TenGod.jeonggwan:
           return '평소 자리 관련 얘기가 오늘은 잠잠하다';
         case TenGod.pyeongwan:
-          return '오늘은 새 일 떠맡기에 어울리는 날이 아니다';
+          return '오늘은 새 일 떠맡기에 어울리는 날이 아니에요';
         case TenGod.sanggwan:
-          return '표현 욕구가 평소보다 조용해진다';
+          return '표현 욕구가 평소보다 조용해져요';
         case TenGod.pyeonjae:
-          return '큰돈 얘기는 오늘 멀리 간다';
+          return '큰돈 얘기는 오늘 멀리 가요';
         case TenGod.geopjae:
-          return '경쟁심이 평소보다 가라앉는다';
+          return '경쟁심이 평소보다 가라앉아요';
         case TenGod.bigyeon:
         case TenGod.siksin:
         case TenGod.jeongjae:
@@ -196,25 +196,25 @@ class TodayDeepService {
   static String _godPhraseKo(TenGod g) {
     switch (g) {
       case TenGod.bigyeon:
-        return '오늘은 친구나 동료처럼 너랑 같은 자리 사람이 가까워진다';
+        return '오늘은 친구나 동료처럼 당신과 같은 자리 사람이 가까워져요';
       case TenGod.geopjae:
-        return '오늘은 비슷한 자리 사람이랑 부딪칠 일이 생긴다';
+        return '오늘은 비슷한 자리 사람이랑 부딪칠 일이 생겨요';
       case TenGod.siksin:
-        return '오늘은 표현·창작이 잘 풀려서 말과 글이 가벼워진다';
+        return '오늘은 표현·창작이 잘 풀려서 말과 글이 가벼워져요';
       case TenGod.sanggwan:
-        return '재능이 빛나는 날이다. 윗사람한테 톤만 한 단계 부드럽게 가라';
+        return '재능이 빛나는 날이에요. 윗사람한테 톤만 한 단계 부드럽게 가요';
       case TenGod.pyeonjae:
-        return '뜻밖의 기회나 큰돈 얘기가 너한테 온다';
+        return '뜻밖의 기회나 큰돈 얘기가 당신한테 와요';
       case TenGod.jeongjae:
-        return '꾸준한 수입·약속이 자리 잡는 흐름이다';
+        return '꾸준한 수입·약속이 자리 잡는 흐름이에요';
       case TenGod.pyeongwan:
-        return '큰 책임이나 새 도전이 갑자기 너한테 다가온다';
+        return '큰 책임이나 새 도전이 갑자기 당신한테 다가와요';
       case TenGod.jeonggwan:
-        return '인정받을 일이나 자리 관련 얘기가 오늘 생긴다';
+        return '인정받을 일이나 자리 관련 얘기가 오늘 생겨요';
       case TenGod.pyeonin:
-        return '오늘은 깊은 공부·직관이 너한테 강해진다';
+        return '오늘은 깊은 공부·직관이 당신한테 강해져요';
       case TenGod.jeongin:
-        return '배움·멘토·도움이 너한테 자연스럽게 온다';
+        return '배움·멘토·도움이 당신한테 자연스럽게 와요';
     }
   }
 
@@ -262,13 +262,13 @@ class TodayDeepService {
   static String _branchRelationKo(_BranchRelation r) {
     switch (r) {
       case _BranchRelation.same:
-        return '오늘 흐름이 네 사주랑 같아서 평소 습관이 강하게 나온다';
+        return '오늘 흐름이 당신 사주랑 같아서 평소 습관이 강하게 나와요';
       case _BranchRelation.hap:
-        return '오늘 흐름이 네 사주랑 잘 맞아서 인연이 자연스럽게 풀린다';
+        return '오늘 흐름이 당신 사주랑 잘 맞아서 인연이 자연스럽게 풀려요';
       case _BranchRelation.chung:
-        return '오늘 흐름이 네 사주랑 부딪쳐서 마음이 흔들리고 결정이 어렵다';
+        return '오늘 흐름이 당신 사주랑 부딪쳐서 마음이 흔들리고 결정이 어려워요';
       case _BranchRelation.neutral:
-        return '오늘 흐름은 네 사주랑 크게 안 부딪치고 잔잔하게 간다';
+        return '오늘 흐름은 당신 사주랑 크게 안 부딪치고 잔잔하게 가요';
     }
   }
 
@@ -290,18 +290,18 @@ class TodayDeepService {
     const enEl = {'木':'wood','火':'fire','土':'earth','金':'metal','水':'water'};
     if (todayEl == dominant) {
       return (
-        ko: '평소 강한 ${koEl[dominant]} 색이 오늘 더 짙어진다',
+        ko: '평소 강한 ${koEl[dominant]} 색이 오늘 더 짙어져요',
         en: 'your strong ${enEl[todayEl]} side gets even stronger today',
       );
     }
     if (todayEl == deficit) {
       return (
-        ko: '평소 부족한 ${koEl[deficit]} 색이 오늘 채워진다',
+        ko: '평소 부족한 ${koEl[deficit]} 색이 오늘 채워져요',
         en: 'your weak ${enEl[deficit]} side gets a boost today',
       );
     }
     return (
-      ko: '오늘은 ${koEl[todayEl]} 색이 강한 하루다',
+      ko: '오늘은 ${koEl[todayEl]} 색이 강한 하루예요',
       en: '${enEl[todayEl]} sets the tone today',
     );
   }
@@ -333,21 +333,21 @@ class TodayDeepService {
         return (
           moodKo: '활짝 열린',
           moodEn: 'wide open',
-          bodyHookKo: '평소 못 하던 일을 오늘 시작하면 흐름이 네 편이다',
+          bodyHookKo: '평소 못 하던 일을 오늘 시작하면 흐름이 당신 편이에요',
           bodyHookEn: 'a good day to start what you usually delay',
         );
       case DayEnergyKind.mixedDay:
         return (
           moodKo: '잔잔한',
           moodEn: 'calm',
-          bodyHookKo: '큰 결정은 미뤄라. 작은 확인 하나만 끝내면 된다',
+          bodyHookKo: '큰 결정은 미뤄요. 작은 확인 하나만 끝내면 돼요',
           bodyHookEn: 'skip big calls. just confirm one small thing',
         );
       case DayEnergyKind.restDay:
         return (
           moodKo: '쉬어가는',
           moodEn: 'restful',
-          bodyHookKo: '오늘은 새로 시작하지 않는 게 낫다. 회복 하나가 정답이다',
+          bodyHookKo: '오늘은 새로 시작하지 않는 게 나아요. 회복 하나가 정답이에요',
           bodyHookEn: 'not a day to start. recovery is the real win',
         );
     }
@@ -395,22 +395,22 @@ class TodayDeepService {
     if (rel == _BranchRelation.hap) {
       out.add(
         dayEnergy == DayEnergyKind.restDay
-            ? '오늘은 새 약속 잡지 마라. 묵은 톡 하나 정리하면 끝이다.'
-            : '미뤘던 약속·연락을 오늘 정리한다.',
+            ? '오늘은 새 약속 잡지 마세요. 묵은 톡 하나 정리하면 끝이에요.'
+            : '미뤘던 약속·연락을 오늘 정리해요.',
       );
     } else if (rel == _BranchRelation.chung) {
-      out.add('중요한 통화·계약은 내일로 미룬다.');
+      out.add('중요한 통화·약속은 내일로 미뤄요.');
     } else if (rel == _BranchRelation.same) {
-      out.add('평소 루틴(운동·정리·습관) 하나를 오늘 다시 잡는다.');
+      out.add('평소 루틴(운동·정리·습관) 하나를 오늘 다시 잡아요.');
     } else {
-      out.add('짧게 걷거나 책상 한 칸만 치워도 오늘 흐름이 잡힌다.');
+      out.add('짧게 걷거나 책상 한 칸만 치워도 오늘 흐름이 잡혀요.');
     }
     // 3) 분류 기반 — actionDay 한정으로 적극 표현, restDay 한정으로 회복 표현.
     switch (dayEnergy) {
       case DayEnergyKind.actionDay:
-        out.add('자기 분야의 한 사람에게 먼저 연락한다. 그 한 줄이 큰 인연이 된다.');
+        out.add('자기 분야의 한 사람에게 먼저 연락해요. 그 한 줄이 큰 인연이 돼요.');
       case DayEnergyKind.restDay:
-        out.add('오늘 만든 결과보다 오늘 회복한 에너지가 내일을 정한다.');
+        out.add('오늘 만든 결과보다 오늘 회복한 에너지가 내일을 정해요.');
       case DayEnergyKind.mixedDay:
         break;
     }
@@ -452,15 +452,15 @@ class TodayDeepService {
       // 공식 자리·도전·발표 → 회복·정리·짧은 한 줄.
       switch (god) {
         case TenGod.jeonggwan:
-          return '오늘은 격식 있는 자리 잡지 마라. 자료 하나 다듬는 게 정답이다.';
+          return '오늘은 격식 있는 자리 잡지 마세요. 자료 하나 다듬는 게 정답이에요.';
         case TenGod.pyeongwan:
-          return '오늘은 새 일 떠맡지 마라. 받기 전 한 박자 쉬어라.';
+          return '오늘은 새 일 떠맡지 마세요. 받기 전 한 박자 쉬어요.';
         case TenGod.sanggwan:
-          return '오늘은 표현 줄여라. 한 박자 천천히 들으면 흐름이 잡힌다.';
+          return '오늘은 표현 줄여요. 한 박자 천천히 들으면 흐름이 잡혀요.';
         case TenGod.pyeonjae:
-          return '큰 돈 결정 잡지 마라. 정보 하나 정리하면 끝이다.';
+          return '큰 돈 결정 잡지 마세요. 정보 하나 정리하면 끝이에요.';
         case TenGod.geopjae:
-          return '동업·돈 거래는 오늘 진행하지 마라. 한 박자 더 쉬어라.';
+          return '동업·돈 거래는 오늘 진행하지 마세요. 한 박자 더 쉬어요.';
         default:
           return _actionForGodKo(god);
       }
@@ -499,11 +499,11 @@ class TodayDeepService {
       case TenGod.sanggwan:
         return '재능 보여주기 좋은 날 — 단, 윗사람에겐 톤 한 단계 부드럽게.';
       case TenGod.pyeonjae:
-        return '큰 돈의 기회 신호 — 정보 듣고, 계약 전에 한 번 더 확인.';
+        return '큰 돈의 기회 신호 — 정보 듣고, 결정 전에 한 번 더 확인.';
       case TenGod.jeongjae:
         return '꾸준한 일·고정 수입 점검 — 작게 쌓는 결정이 빛납니다.';
       case TenGod.pyeongwan:
-        return '도전·승부 받기 좋은 날 — 단, 끝맺음까지 책임 끝까지.';
+        return '도전·승부 받기 좋은 날 — 단, 끝까지 책임지세요.';
       case TenGod.jeonggwan:
         return '공식 자리·발표·승진 신청에 좋은 날 — 격식 한 단계 올리세요.';
       case TenGod.pyeonin:
@@ -543,21 +543,21 @@ class TodayDeepService {
   static String _cautionKo(TenGod? god, _BranchRelation rel, int score) {
     final dayEnergy = classifyDayEnergy(score);
     if (rel == _BranchRelation.chung) {
-      return '오늘 너는 큰 결정·서명·이별 같은 결단을 미뤄라.';
+      return '오늘은 큰 결정·약속·이별 같은 결단을 미뤄요.';
     }
     if (dayEnergy == DayEnergyKind.restDay) {
-      return '오늘 에너지 다 쓰면 내일 회복이 오래 걸린다. 하나만 끝내라.';
+      return '오늘 에너지 다 쓰면 내일 회복이 오래 걸려요. 하나만 끝내요.';
     }
     if (god == TenGod.geopjae) {
-      return '돈 거래·동업은 한 번 더 확인한다. 믿음만으로 진행하지 마라.';
+      return '돈 거래·동업은 한 번 더 확인해요. 믿음만으로 진행하지 마세요.';
     }
     if (god == TenGod.sanggwan) {
-      return '윗사람한테 말 한마디 던질 때 톤을 한 단계 부드럽게 한다.';
+      return '윗사람한테 말 한마디 던질 때 톤을 한 단계 부드럽게 해요.';
     }
     if (god == TenGod.pyeongwan) {
-      return '갑작스러운 일 떠맡기 전 한 박자 쉬어라.';
+      return '갑작스러운 일 떠맡기 전 한 박자 쉬어요.';
     }
-    return '말 톤을 한 단계 부드럽게 한다. 오늘은 짧은 한마디가 큰 차이를 만든다.';
+    return '말 톤을 한 단계 부드럽게 해요. 오늘은 짧은 한마디가 큰 차이를 만들어요.';
   }
 
   static String _cautionEn(TenGod? god, _BranchRelation rel, int score) {
