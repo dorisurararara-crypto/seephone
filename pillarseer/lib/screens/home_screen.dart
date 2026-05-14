@@ -1660,6 +1660,7 @@ class _NotifToggleCard extends ConsumerWidget {
               pushBody: l.homeNotifSampleBody,
               day60ji: saju?.day60ji,
               useKo: useKo,
+              saju: saju,
             );
       });
     }
@@ -1713,6 +1714,7 @@ class _NotifToggleCard extends ConsumerWidget {
                   pushBody: l.homeNotifSampleBody,
                   day60ji: saju?.day60ji,
                   useKo: useKo,
+                  saju: saju,
                 );
                 messenger
                   ..hideCurrentSnackBar()

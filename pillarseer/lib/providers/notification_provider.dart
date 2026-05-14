@@ -2,6 +2,7 @@
 // Round 76 — 사용자 알림 시간 (hour, minute) state + SharedPreferences 영속 추가.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/saju_result.dart';
 import '../services/notification_service.dart';
 
 class NotificationToggle {
@@ -54,6 +55,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
     required String pushBody,
     String? day60ji,
     bool useKo = false,
+    SajuResult? saju, // Round 76 sprint 6 — 있으면 today_event 기반 본문.
   }) async {
     final granted = await NotificationService.requestPermission();
     if (!granted) {
@@ -68,6 +70,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
       useKo: useKo,
       hour: state.notifyHour,
       minute: state.notifyMinute,
+      saju: saju,
     );
     await NotificationService.setEnabled(true);
     state = state.copyWith(enabled: true, permissionGranted: true);
@@ -89,6 +92,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
     required String pushBody,
     String? day60ji,
     bool useKo = false,
+    SajuResult? saju,
   }) async {
     final h = hour.clamp(0, 23);
     final m = minute.clamp(0, 59);
@@ -102,6 +106,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
         useKo: useKo,
         hour: h,
         minute: m,
+        saju: saju,
       );
     }
   }
@@ -111,6 +116,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
     required String pushBody,
     String? day60ji,
     required bool useKo,
+    SajuResult? saju,
   }) async {
     if (!state.enabled) return;
     final needsReschedule = await NotificationService.needsReschedule(
@@ -120,6 +126,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
       useKo: useKo,
       hour: state.notifyHour,
       minute: state.notifyMinute,
+      saju: saju,
     );
     if (!needsReschedule) return;
     await NotificationService.scheduleDaily(
@@ -129,6 +136,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
       useKo: useKo,
       hour: state.notifyHour,
       minute: state.notifyMinute,
+      saju: saju,
     );
   }
 }

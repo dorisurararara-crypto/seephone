@@ -772,6 +772,7 @@ class _NotifSwitch extends ConsumerWidget {
             pushBody: l.homeNotifSampleBody,
             day60ji: saju?.day60ji,
             useKo: useKo,
+            saju: saju,
           );
           messenger
             ..hideCurrentSnackBar()
@@ -875,6 +876,7 @@ class _NotifTimePicker extends ConsumerWidget {
       pushBody: l.homeNotifSampleBody,
       day60ji: saju?.day60ji,
       useKo: useKo,
+      saju: saju,
     );
     if (!context.mounted) return;
     final hh = picked.hour.toString().padLeft(2, '0');

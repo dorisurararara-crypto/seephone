@@ -7,6 +7,8 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
+import '../models/saju_result.dart';
+import 'daily_service.dart';
 import 'notification_pool_service.dart';
 
 class NotificationService {
@@ -76,6 +78,7 @@ class NotificationService {
     int daysAhead = 30,
     required int hour,
     required int minute,
+    SajuResult? saju, // Round 76 sprint 6 — 있으면 today_event_service deep pick.
   }) async {
     await ensureInitialized();
     // 기존 모든 daily 알림 cancel
@@ -84,6 +87,7 @@ class NotificationService {
         await _plugin.cancel(id: _kDailyId + i);
       } catch (_) {}
     }
+    final daily = DailyService();
     final now = tz.TZDateTime.now(tz.local);
     for (var i = 0; i < daysAhead; i++) {
       final target = tz.TZDateTime(
@@ -91,7 +95,18 @@ class NotificationService {
           .add(Duration(days: i));
       if (target.isBefore(now)) continue;
       String pickedBody = body;
-      if (day60ji != null && day60ji.isNotEmpty) {
+      if (saju != null) {
+        // Round 76 sprint 6 — 매일 다른 일진 → 사주 기반 매일 다른 본문.
+        final dayDate = DateTime(target.year, target.month, target.day);
+        final fortune = daily.calculate(saju, today: dayDate);
+        final picked = NotificationPoolService.pickDeep(
+          date: dayDate,
+          saju: saju,
+          todayPillar: fortune.dayPillar,
+          todayScore: fortune.totalScore,
+        );
+        pickedBody = useKo ? picked.ko : picked.en;
+      } else if (day60ji != null && day60ji.isNotEmpty) {
         final picked = NotificationPoolService.pickFor(
           DateTime(target.year, target.month, target.day),
           day60ji,
@@ -133,6 +148,7 @@ class NotificationService {
       useKo: useKo,
       hour: hour,
       minute: minute,
+      saju: saju,
     ));
     await prefs.setInt(_kPrefsHour, hour);
     await prefs.setInt(_kPrefsMinute, minute);
@@ -145,6 +161,7 @@ class NotificationService {
     String? day60ji,
     bool useKo = false,
     int daysAhead = 30,
+    SajuResult? saju,
   }) =>
       scheduleDaily(
         title: title,
@@ -154,6 +171,7 @@ class NotificationService {
         daysAhead: daysAhead,
         hour: 8,
         minute: 0,
+        saju: saju,
       );
 
   static Future<void> cancelDaily() async {
@@ -182,6 +200,7 @@ class NotificationService {
     required bool useKo,
     required int hour,
     required int minute,
+    SajuResult? saju,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_kPrefsScheduleSig) != _scheduleSignature(
@@ -191,6 +210,7 @@ class NotificationService {
       useKo: useKo,
       hour: hour,
       minute: minute,
+      saju: saju,
     );
   }
 
@@ -215,7 +235,15 @@ class NotificationService {
     required bool useKo,
     required int hour,
     required int minute,
-  }) =>
-      '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}|'
-      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+    SajuResult? saju,
+  }) {
+    // Round 76 sprint 6 — saju 의 derived key (dayPillar + monthBranch + dayMaster) 포함.
+    // fallback↔deep 전환 시 signature mismatch → reschedule 보장.
+    final sajuKey = saju == null
+        ? 'nosaju'
+        : 'deep:${saju.dayPillar.text}:${saju.monthPillar.jiJi}:${saju.dayMaster}';
+    return '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}|'
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}|'
+        '$sajuKey';
+  }
 }

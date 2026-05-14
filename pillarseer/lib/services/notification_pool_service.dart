@@ -1,5 +1,9 @@
 // Pillar Seer — 일일 알림 문구 풀 (50+ 변주).
 // 매일 8시 푸시가 같은 문구면 끄게 됨. 50개 풀에서 일자별 deterministic 선택.
+// Round 76 sprint 6 — pickDeep 신규: 사용자 사주 + 오늘 일진 기반 calibrate.
+
+import '../models/saju_result.dart';
+import 'today_event_service.dart';
 
 class NotificationPoolService {
   static const _enPool = [
@@ -115,5 +119,27 @@ class NotificationPoolService {
         day60ji.codeUnits.fold<int>(0, (a, b) => a + b);
     final idx = (seed % _enPool.length).abs();
     return (en: _enPool[idx], ko: _koPool[idx]);
+  }
+
+  /// Round 76 sprint 6 — 사용자 사주 + 오늘 일진 기반 deep pick.
+  /// today_event_service.build + composeNotificationLine 결과 (ko+en) 반환.
+  /// saju null 시 호출 측에서 pickFor fallback.
+  static ({String en, String ko}) pickDeep({
+    required DateTime date,
+    required SajuResult saju,
+    required String todayPillar,
+    required int todayScore,
+  }) {
+    final reading = TodayEventService.build(
+      userDayStem: saju.dayPillar.chunGan,
+      userDayBranch: saju.dayPillar.jiJi,
+      userMonthBranch: saju.monthPillar.jiJi,
+      todayPillar: todayPillar,
+      todayScore: todayScore,
+    );
+    return (
+      ko: TodayEventService.composeNotificationLine(reading),
+      en: TodayEventService.composeNotificationLineEn(reading),
+    );
   }
 }
