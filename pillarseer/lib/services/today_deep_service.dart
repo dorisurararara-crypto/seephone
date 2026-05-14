@@ -153,8 +153,17 @@ class TodayDeepService {
       }
     }
 
-    final cautionKo = _cautionKo(god, branchRelation, todayScore);
-    final cautionEn = _cautionEn(god, branchRelation, todayScore);
+    var cautionKo = _cautionKo(god, branchRelation, todayScore);
+    var cautionEn = _cautionEn(god, branchRelation, todayScore);
+
+    // Round 78 sprint 6 — 공망 발동 시 caution 끝에 anchor join.
+    // ctx.gongMangAreas 가 비어있지 않으면 caution 에 "공망 신호" 한 줄 prepend.
+    if (ctx != null && ctx.gongMangAreas.isNotEmpty) {
+      cautionKo =
+          '$cautionKo 공망 신호가 도는 날이라 큰돈·계약 결정은 한 번 더 확인해보세요.';
+      cautionEn =
+          '$cautionEn Void signal day — double-check big money or contract calls.';
+    }
 
     return TodayDeepReading(
       headlineKo: headlineKo,

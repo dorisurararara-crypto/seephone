@@ -4039,14 +4039,18 @@ class _TodayEventDetailSection extends StatelessWidget {
       todayPillar: fortune.dayPillar,
       todayScore: fortune.totalScore,
     );
-    // Round 77 sprint 2 — pool wire: ko 분기는 pool entry 우선, 미스 시 fallback.
+    // Round 78 sprint 6 — anchor (신살/합충/천간합) wire. ko 본문은 composeBodyKoWithAnchor.
     final day60ji = result.dayPillar.text;
     final now = DateTime.now();
     final body = useKo
-        ? TodayEventService.composeBodyKo(
+        ? TodayEventService.composeBodyKoWithAnchor(
             reading: reading,
             date: now,
             day60ji: day60ji,
+            userDayStem: result.dayPillar.chunGan,
+            todayStem: fortune.dayPillar.isNotEmpty
+                ? fortune.dayPillar[0]
+                : null,
           )
         : TodayEventService.composeNotificationLineEn(reading);
     // sourceReason 도 ko/en 분기 (Round 76 sprint 5 r2 fix).

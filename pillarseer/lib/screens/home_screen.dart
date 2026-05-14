@@ -115,6 +115,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   todayScore: fortune.totalScore,
                 ),
                 day60ji: saju.dayPillar.text,
+                userDayStem: saju.dayPillar.chunGan,
+                todayPillar: fortune.dayPillar,
               ),
               // ── Deep dive (collapsible) — 친구 인사 + 차트 5종 + 일진 + 4영역 + 행운 표 ──
               _DeepDiveSection(
@@ -1548,19 +1550,31 @@ class _LuckySection extends StatelessWidget {
 class _TodayEventCard extends StatelessWidget {
   final TodayEventReading reading;
   final String day60ji;
-  const _TodayEventCard({required this.reading, required this.day60ji});
+  // Round 78 sprint 6 — anchor wire 용 stems.
+  final String? userDayStem;
+  final String? todayPillar;
+  const _TodayEventCard({
+    required this.reading,
+    required this.day60ji,
+    this.userDayStem,
+    this.todayPillar,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    // Round 77 sprint 2 — ko 분기는 pool entry 우선, 미스 시 fallback 6분기.
+    // Round 78 sprint 6 — anchor (신살/합충/천간합) wire. ko 본문은 composeBodyKoWithAnchor.
     final body = useKo
-        ? TodayEventService.composeBodyKo(
+        ? TodayEventService.composeBodyKoWithAnchor(
             reading: reading,
             date: DateTime.now(),
             day60ji: day60ji,
+            userDayStem: userDayStem,
+            todayStem: (todayPillar != null && todayPillar!.isNotEmpty)
+                ? todayPillar![0]
+                : null,
           )
         : TodayEventService.composeNotificationLineEn(reading);
     final stars = [

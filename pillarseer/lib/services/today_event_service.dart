@@ -243,6 +243,9 @@ class TodayEventService {
   // 또는 키 미스 시 6분기 fallback 으로 graceful.
 
   static Map<String, List<_TodayEventPoolEntry>>? _poolCache;
+  /// Round 78 sprint 6 — 신살 16 key + 합/충/형/파/해 36 key 단일 line cache.
+  static Map<String, String>? _shinsaCache;
+  static Map<String, String>? _hapchungCache;
   static bool _poolLoaded = false;
 
   /// today_event_pool.json 1회 로드 + 캐시. 실패해도 silent (빈 map).
@@ -262,8 +265,19 @@ class TodayEventService {
         out[key] = list;
       });
       _poolCache = out;
+      // Round 78 sprint 6 — shinsa / hapchung 캐시.
+      _shinsaCache = (root['shinsa'] as Map?)
+              ?.cast<String, dynamic>()
+              .map((k, v) => MapEntry(k, v as String)) ??
+          <String, String>{};
+      _hapchungCache = (root['hapchung'] as Map?)
+              ?.cast<String, dynamic>()
+              .map((k, v) => MapEntry(k, v as String)) ??
+          <String, String>{};
     } catch (_) {
       _poolCache = <String, List<_TodayEventPoolEntry>>{};
+      _shinsaCache = <String, String>{};
+      _hapchungCache = <String, String>{};
     }
     _poolLoaded = true;
   }
@@ -271,7 +285,70 @@ class TodayEventService {
   /// 테스트 전용 — 캐시 리셋 (다른 테스트 사이 hygiene).
   static void debugResetPool() {
     _poolCache = null;
+    _shinsaCache = null;
+    _hapchungCache = null;
     _poolLoaded = false;
+  }
+
+  /// Round 78 sprint 6 — 신살 key 직접 line 조회 (활성 신살 anchor 본문 join).
+  /// pool 미로드 / key 미스 시 null. seed 미사용 (각 신살 1 line — 단일 verbatim).
+  static String? shinsaLineKo(String shinsaKey) {
+    final c = _shinsaCache;
+    if (c == null || c.isEmpty) return null;
+    return c[shinsaKey];
+  }
+
+  /// Round 78 sprint 6 — 합/충/형/파/해 + 카테고리 결합 line.
+  /// [relationKey] = '천간합' / '지지합' / '지지충' / '지지형' / '지지파' / '지지해'.
+  /// [categoryKey] = 'relationship' / 'money' / 'work' / 'love' / 'health' / 'luck'.
+  /// 미스 시 null — fallback chain (today_event_pool body) 유지.
+  static String? hapchungLineKo(String relationKey, String categoryKey) {
+    final c = _hapchungCache;
+    if (c == null || c.isEmpty) return null;
+    return c['${relationKey}_$categoryKey'];
+  }
+
+  /// Round 78 sprint 6 — 활성 신살 set 중 우선순위 1개 → anchor line.
+  /// 우선순위 (강한 신호 우선):
+  ///   천을귀인 > 도화 > 역마 > 문창귀인 > 양인 > 괴강 > 백호 > 화개 > 공망 > 겁살 >
+  ///   재살 > 월살 > 망신 > 천살 > 장성 > 반안 > 지살 > 육해 > 삼합 > 방합 > 삼재 >
+  ///   암록 > 년살 > 화개살.
+  /// 신규 12 신살 8개 (천살/지살/장성/반안/망신/육해/년살/화개살) 도 모두 활성 시 라인 반환.
+  static String? primaryShinsaLine(Set<String> activeShinsa) {
+    for (final p in shinsaPriority) {
+      if (activeShinsa.contains(p)) {
+        final line = shinsaLineKo(p);
+        if (line != null) return line;
+      }
+    }
+    return null;
+  }
+
+  /// 24 신살 우선순위 list — primaryShinsaLine + 향후 UI 표시 정렬 공용.
+  static const shinsaPriority = [
+    '천을귀인', '도화', '역마', '문창귀인', '양인', '괴강', '백호', '화개',
+    '공망', '겁살', '재살', '월살', '망신', '천살', '장성', '반안', '지살',
+    '육해', '삼합', '방합', '삼재', '암록', '년살', '화개살',
+  ];
+
+  /// composeBodyKoWithAnchor 단계 1 (신살 우선) 에서 사용할 핵심 신살 — 강한 신호 8개만.
+  /// 12 신살 (천살/지살/장성/반안/망신/육해/겁살/재살/월살) 은 매 사주 거의 항상 활성
+  /// (일지 삼합 그룹 기준 9 cell cover) 이므로 anchor 항상 hit 되어 천간합·지지 hapchung
+  /// 우선순위가 뒤집힘. 따라서 anchor 단계 1 은 사용자 사주 고유 "강한" 신살만.
+  static const _coreShinsaForAnchor = {
+    '천을귀인', '도화', '역마', '문창귀인', '양인', '괴강', '백호', '화개', '공망',
+  };
+
+  /// composeBodyKoWithAnchor 가 사용하는 anchor 1차 — 핵심 신살만.
+  static String? _coreShinsaAnchor(Set<String> activeShinsa) {
+    for (final p in shinsaPriority) {
+      if (!_coreShinsaForAnchor.contains(p)) continue;
+      if (activeShinsa.contains(p)) {
+        final line = shinsaLineKo(p);
+        if (line != null) return line;
+      }
+    }
+    return null;
   }
 
   /// pool 미로드 / 키 미스 시 null. 내부 helper — public composeBodyKo 등에서만 사용.
@@ -313,6 +390,73 @@ class TodayEventService {
     final entry = _pickPoolEntry(reading: reading, date: date, day60ji: day60ji);
     final body = entry?.body ?? composeNotificationLine(reading);
     return body.length > 300 ? '${body.substring(0, 297)}...' : body;
+  }
+
+  /// Round 78 sprint 6 — composeBodyKo + 신살·합충 anchor 1줄 prepend.
+  /// 신살 활성 set + relation 둘 다 보유 시 신살 anchor 우선 (사용자 사주 고유 신호).
+  /// [userDayStem] / [todayStem] 둘 다 제공 시 천간합 발동도 검사.
+  static String composeBodyKoWithAnchor({
+    required TodayEventReading reading,
+    required DateTime date,
+    required String day60ji,
+    String? userDayStem,
+    String? todayStem,
+  }) {
+    final body = composeBodyKo(reading: reading, date: date, day60ji: day60ji);
+    // 1차: 활성 강한 신살 anchor (천을귀인·도화·역마·문창귀인·양인·괴강·백호·화개·공망).
+    // 12 신살 (겁살·재살·월살·천살·지살·장성·반안·망신·육해) 는 항상 1 hit 이라
+    // 천간합·지지 hapchung 우선순위가 뒤집히지 않게 1차 anchor 에서 제외.
+    final shinsaLine = _coreShinsaAnchor(reading.activeShinsa.toSet());
+    if (shinsaLine != null) {
+      final combined = '$shinsaLine\n$body';
+      return combined.length > 400 ? '${combined.substring(0, 397)}...' : combined;
+    }
+    // 2차: 천간합 anchor (userDayStem + todayStem 둘 다 제공 시).
+    if (userDayStem != null && todayStem != null) {
+      if (_isCheonganHap(userDayStem, todayStem)) {
+        final catKey = reading.categoryDominant.key;
+        final hapLine = hapchungLineKo('천간합', catKey);
+        if (hapLine != null) {
+          final combined = '$hapLine\n$body';
+          return combined.length > 400 ? '${combined.substring(0, 397)}...' : combined;
+        }
+      }
+    }
+    // 3차: 지지 hapchung anchor (지지합/충/형/파/해).
+    final relKey = _hapchungKeyOf(reading.hapChungType);
+    if (relKey.isNotEmpty) {
+      final catKey = reading.categoryDominant.key;
+      final hapLine = hapchungLineKo(relKey, catKey);
+      if (hapLine != null) {
+        final combined = '$hapLine\n$body';
+        return combined.length > 400 ? '${combined.substring(0, 397)}...' : combined;
+      }
+    }
+    return body;
+  }
+
+  /// 천간 5합 (甲己 / 乙庚 / 丙辛 / 丁壬 / 戊癸).
+  static bool _isCheonganHap(String a, String b) {
+    const pairs = {'甲': '己', '乙': '庚', '丙': '辛', '丁': '壬', '戊': '癸'};
+    if (pairs[a] == b) return true;
+    if (pairs[b] == a) return true;
+    return false;
+  }
+
+  static String _hapchungKeyOf(String rel) {
+    switch (rel) {
+      case '합':
+        return '지지합';
+      case '충':
+        return '지지충';
+      case '형':
+        return '지지형';
+      case '파':
+        return '지지파';
+      case '해':
+        return '지지해';
+    }
+    return '';
   }
 
   /// pool entry 의 caution. 미스 시 null.
@@ -370,8 +514,83 @@ class TodayEventService {
     if (ShinsaService.munchangFor(userDayStem) == todayBranch) out.add('문창귀인');
     final yangIn = ShinsaService.yangInFor(userDayStem);
     if (yangIn.isNotEmpty && yangIn == todayBranch) out.add('양인');
-    // 백호/괴강 은 오늘 일주 자체 기준 — today_event 에서는 활성 X (NON-GOAL).
+    // Round 78 sprint 6 — 12 신살 확장 (일지 삼합 그룹 기준).
+    final extra = _twelveShinsaFor(userDayBranch, todayBranch);
+    out.addAll(extra);
+    // 공망: 일주 기준 공망 지지에 오늘 지지가 매칭되면.
+    final gongmang = _gongmangBranches(userDayStem, userDayBranch);
+    if (gongmang.contains(todayBranch)) out.add('공망');
     return out;
+  }
+
+  /// 12 신살 — 일지 삼합 그룹 기준. 12 살 전부 emit.
+  /// 삼합 4 그룹: 申子辰(水), 巳酉丑(金), 寅午戌(火), 亥卯未(木).
+  /// 정통 표 (각 그룹별 12지 순환):
+  ///   水: 겁=巳, 재=午, 천=未, 지=申, 년(도)=酉, 월=戌, 망=亥, 장=子, 반=丑, 역=寅, 육=卯, 화(개)=辰
+  ///   金: 겁=寅, 재=卯, 천=辰, 지=巳, 년=午, 월=未, 망=申, 장=酉, 반=戌, 역=亥, 육=子, 화=丑
+  ///   火: 겁=亥, 재=子, 천=丑, 지=寅, 년=卯, 월=辰, 망=巳, 장=午, 반=未, 역=申, 육=酉, 화=戌
+  ///   木: 겁=申, 재=酉, 천=戌, 지=亥, 년=子, 월=丑, 망=寅, 장=卯, 반=辰, 역=巳, 육=午, 화=未
+  /// 도화/역마/화개 는 12 신살 표의 년(도)/역/화(개) — 이미 별도 분기 emit 됨.
+  /// 본 메서드는 그 외 9 살 (겁살·재살·천살·지살·월살·망신·장성·반안·육해) emit.
+  static List<String> _twelveShinsaFor(String userBranch, String todayBranch) {
+    const samhapGroup = {
+      '申': '水', '子': '水', '辰': '水',
+      '巳': '金', '酉': '金', '丑': '金',
+      '寅': '火', '午': '火', '戌': '火',
+      '亥': '木', '卯': '木', '未': '木',
+    };
+    const map = {
+      '水': {
+        '겁살': '巳', '재살': '午', '천살': '未', '지살': '申',
+        '월살': '戌', '망신': '亥', '장성': '子', '반안': '丑', '육해': '卯',
+      },
+      '金': {
+        '겁살': '寅', '재살': '卯', '천살': '辰', '지살': '巳',
+        '월살': '未', '망신': '申', '장성': '酉', '반안': '戌', '육해': '子',
+      },
+      '火': {
+        '겁살': '亥', '재살': '子', '천살': '丑', '지살': '寅',
+        '월살': '辰', '망신': '巳', '장성': '午', '반안': '未', '육해': '酉',
+      },
+      '木': {
+        '겁살': '申', '재살': '酉', '천살': '戌', '지살': '亥',
+        '월살': '丑', '망신': '寅', '장성': '卯', '반안': '辰', '육해': '午',
+      },
+    };
+    final group = samhapGroup[userBranch];
+    if (group == null) return const [];
+    final out = <String>[];
+    final g = map[group]!;
+    for (final entry in g.entries) {
+      if (entry.value == todayBranch) out.add(entry.key);
+    }
+    return out;
+  }
+
+  /// 공망 — 일주 기준 2개 지지. saju_service 와 동일 식 GongMangService 위임 가능.
+  /// 본 service 의존성 최소화를 위해 단순 lookup.
+  static List<String> _gongmangBranches(String dayStem, String dayBranch) {
+    // 60갑자 인덱스 idx → soon = idx ~/ 10. 6 순 × 2 지지 = 공망 list.
+    const stems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+    const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+    final g = stems.indexOf(dayStem);
+    final j = branches.indexOf(dayBranch);
+    if (g < 0 || j < 0) return const [];
+    int idx = -1;
+    for (int i = 0; i < 60; i++) {
+      if (i % 10 == g && i % 12 == j) { idx = i; break; }
+    }
+    if (idx < 0) return const [];
+    final soon = idx ~/ 10;
+    const gongMangBySoon = [
+      ['戌', '亥'],
+      ['申', '酉'],
+      ['午', '未'],
+      ['辰', '巳'],
+      ['寅', '卯'],
+      ['子', '丑'],
+    ];
+    return gongMangBySoon[soon];
   }
 
   static String _branchRelation(String userBranch, String todayBranch) {
