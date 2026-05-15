@@ -15,7 +15,11 @@
 
 class YongsinService {
   /// 일간 오행 + 강약 + 5행 분포 → 용신 오행 (1차) + 희신 (2차).
-  static ({String yongsin, String huisin, String reason}) judge({
+  ///
+  /// Round 80 sprint 6 — `monthBranch` optional 인자 추가 (조후용신 보정).
+  /// monthBranch != null → reason 끝에 계절 보정 한 줄 추가 + chowhuYongsin getter
+  /// 같이 노출. yongsin/huisin 자체는 backward compat 유지 (R69 회귀 가드).
+  static ({String yongsin, String huisin, String reason, String? chowhuYongsin}) judge({
     required String dayMasterElement, // 木/火/土/金/水
     required String strengthLabel, // 신강/신왕/중화/신약/신쇠
     required int wood,
@@ -23,6 +27,7 @@ class YongsinService {
     required int earth,
     required int metal,
     required int water,
+    String? monthBranch, // Round 80 sprint 6 — 조후 보정 입력 (월지).
   }) {
     final dm = dayMasterElement;
     // 5행 → 상생/상극 관계.
@@ -96,7 +101,50 @@ class YongsinService {
       reason = '중화 사주 — 5행 균형. 가장 부족한 $yongsin 가 용신 (균형 회복).';
     }
 
-    return (yongsin: yongsin, huisin: huisin, reason: reason);
+    String? chowhu;
+    if (monthBranch != null && monthBranch.isNotEmpty) {
+      chowhu = _chowhuYongsinFor(monthBranch);
+      if (chowhu != null) {
+        final season = _seasonOfMonth(monthBranch);
+        if (chowhu == yongsin) {
+          reason += ' 계절 조후 ($season)도 같은 $chowhu 라 정합도가 한 번 더 올라가요.';
+        } else {
+          reason += ' 계절 조후 ($season)는 $chowhu 쪽이 필요한데, '
+              '강약 우선 $yongsin 와 차이가 있어요. 둘 다 활용하면 균형이 더 좋아져요.';
+        }
+      }
+    }
+
+    return (
+      yongsin: yongsin,
+      huisin: huisin,
+      reason: reason,
+      chowhuYongsin: chowhu,
+    );
+  }
+
+  /// 월지 → 계절 조후 용신 (계절 보온/식힘).
+  /// 봄(寅卯辰) 火 / 여름(巳午未) 水 / 가을(申酉戌) 木 / 겨울(亥子丑) 火.
+  static String? _chowhuYongsinFor(String monthBranch) {
+    const map = {
+      '寅': '火', '卯': '火', '辰': '火',
+      '巳': '水', '午': '水', '未': '水',
+      '申': '木', '酉': '木', '戌': '木',
+      '亥': '火', '子': '火', '丑': '火',
+    };
+    return map[monthBranch];
+  }
+
+  static String _seasonOfMonth(String monthBranch) {
+    const spring = {'寅', '卯', '辰'};
+    const summer = {'巳', '午', '未'};
+    const autumn = {'申', '酉', '戌'};
+    const winter = {'亥', '子', '丑'};
+    if (spring.contains(monthBranch)) return '봄';
+    if (summer.contains(monthBranch)) return '여름';
+    if (autumn.contains(monthBranch)) return '가을';
+    if (winter.contains(monthBranch)) return '겨울';
+    return '계절';
   }
 
   /// 용신 오행 → 실생활 보충 방법 (locale-aware).
