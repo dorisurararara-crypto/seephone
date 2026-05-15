@@ -118,7 +118,11 @@ class AppL10nEn extends AppL10n {
   String get resultDayMaster => 'DAY MASTER';
 
   @override
-  String get resultFiveElements => 'FIVE ELEMENTS';
+  String get resultFiveElements => 'Element strength score (app-calibrated)';
+
+  @override
+  String get resultFiveElementsHelper =>
+      'An app-calibrated score combining hidden stems, the birth month, and root strength.';
 
   @override
   String get resultDominant => 'Dominant';

@@ -115,7 +115,11 @@ class AppL10nKo extends AppL10n {
   String get resultDayMaster => '일간 (日干)';
 
   @override
-  String get resultFiveElements => '오행 분포';
+  String get resultFiveElements => '세력 분포 점수 (앱 기준)';
+
+  @override
+  String get resultFiveElementsHelper =>
+      '숨은 글자, 태어난 달, 뿌리 힘을 같이 본 앱 기준 점수예요.';
 
   @override
   String get resultDominant => '많이 가진 에너지';

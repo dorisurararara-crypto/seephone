@@ -1170,12 +1170,42 @@ class _FiveElementsSection extends StatelessWidget {
       ('金', el.metal),
       ('水', el.water),
     ];
+    // Round 82 sprint 10 — 외부 reviewer P0 #7 fix.
+    // 라벨이 사주 고전 산식처럼 보이지 않도록 헤더 + helper 1줄을 평이 어휘로 갱신.
+    // 5행 raw 산출 값 (1995-10-27 男 17시 16/21/17/41/4 등) 보존.
+    // 한자 jargon (사용자가 의미 모를 명리학 명사) 사용자 노출 X — "숨은 글자 /
+    // 태어난 달 / 뿌리 힘" 평이 풀이만.
+    final l = AppL10n.of(context);
+    final header = l.resultFiveElements;
+    final helper = l.resultFiveElementsHelper;
     return _SectionFrame(
       background: AppColors.bg,
-      meta: useKo ? '내 안의 5가지 기운 · 五 行' : 'FIVE ELEMENTS · 五 行',
+      meta: useKo ? '내 안의 5가지 기운' : 'FIVE ENERGIES',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 헤더 — 평이 한국어 라벨 (사용자 친근 어휘).
+          Text(
+            header,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 17,
+              fontWeight: FontWeight.w400,
+              height: 1.35,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 6),
+          // 1줄 helper — "숨은 글자 / 태어난 달 / 뿌리 힘" 평이 풀이.
+          Text(
+            helper,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              height: 1.7,
+              color: AppColors.inkLight,
+              letterSpacing: 0.1,
+            ),
+          ),
+          const SizedBox(height: 16),
           ...rows.map((r) => _ElementRow(
                 han: r.$1,
                 name: names[r.$1]!,

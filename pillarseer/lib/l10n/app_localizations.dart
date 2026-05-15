@@ -310,8 +310,14 @@ abstract class AppL10n {
   /// No description provided for @resultFiveElements.
   ///
   /// In en, this message translates to:
-  /// **'FIVE ELEMENTS'**
+  /// **'Element strength score (app-calibrated)'**
   String get resultFiveElements;
+
+  /// One-line helper under the element strength score header.
+  ///
+  /// In en, this message translates to:
+  /// **'An app-calibrated score combining hidden stems, the birth month, and root strength.'**
+  String get resultFiveElementsHelper;
 
   /// No description provided for @resultDominant.
   ///
