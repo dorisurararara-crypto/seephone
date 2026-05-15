@@ -1,9 +1,12 @@
 // Round 80 sprint 2 — oneLine 60일주 wire 회귀 가드.
+// Round 82 sprint 3 갱신 — 신묘 골든 phrase 를 "단단한데 말투는 부드러운"
+//                          으로 교체 (사용자 verbatim "벼린칼 같은사람 이 단어도
+//                          너무 어렵고" 직발 한자 jargon + 시적 어휘 일소).
 //
 // 사용자 verbatim ("벼린 칼 같은 사람 본인+여친 동일") → _oneLinerFor 가
 // 60일주별 unique phrase 노출 + 폐기 5종 phrase 직접 노출 0 (lookup 통과 시).
 //
-// 5행 골든 1995-10-27 男 17시 → 일주 辛卯 → "다듬어진 칼 안에 부드러운 봄 결 품은" 노출.
+// 5행 골든 1995-10-27 男 17시 → 일주 辛卯 → "단단한데 말투는 부드러운" 노출.
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pillarseer/services/deep_content_service.dart';
@@ -34,7 +37,7 @@ void main() {
       expect(saju.dayPillar.text, '辛卯');
       expect(
         reading.ko.oneLineYouAre,
-        contains('다듬어진 칼 안에 부드러운 봄 결'),
+        contains('단단한데 말투는 부드러운'),
         reason: '신묘 일주 60일주 phrase 노출 의무. 실제=${reading.ko.oneLineYouAre}',
       );
 
@@ -51,7 +54,7 @@ void main() {
       // 6 sample × 일주 다양성 cover.
       final samples = [
         // (year, month, day, hour, minute, dayPillar 기대, oneLine 기대 contains)
-        (1995, 10, 27, 17, 0, '辛卯', '다듬어진 칼 안에 부드러운 봄 결'),
+        (1995, 10, 27, 17, 0, '辛卯', '단단한데 말투는 부드러운'),
         (1996, 4, 15, 9, 0, null, null), // dayPillar derived, phrase contains check 생략
       ];
 
