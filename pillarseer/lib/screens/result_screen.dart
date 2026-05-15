@@ -2706,11 +2706,13 @@ class _CrossmatchSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Round 82 sprint 4 — 사용자 verbatim "깊게봐도 다시 잡힌 핵심 이것도 부자연스럽고"
+    // 직발 → headline + intro 친근 어휘 재작성. widget tree 미변경 / 산식 미변경 / R69 lock 보존.
     final headline = useKo
-        ? '깊게 봐도 다시 잡힌 핵심'
+        ? '두 번 봐도 같이 잡힌 강점'
         : 'WHAT THE DEEP READ CONFIRMS';
     final intro = useKo
-        ? '사주를 한 번 더 깊게 봐도 같은 결론이 나온 부분이에요.\n그래서 제일 단단하게 잡고 가도 되는 포인트예요.'
+        ? '사주를 한 번 더 들여다봐도 똑같이 잡힌 부분이에요.\n그래서 제일 단단하게 믿고 가도 되는 곳이에요.'
         : 'Even when read at a deeper layer, these points stay the same. '
             'The most trustworthy lines in your chart.';
     return _SectionFrame(

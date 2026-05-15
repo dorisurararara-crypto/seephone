@@ -15,7 +15,9 @@ class SixAxisRadar extends StatelessWidget {
   /// radar 한 변 픽셀.
   final double size;
 
-  /// true → "깊게 봐도 다시 잡힌 핵심: N/6 ✨" 작은 카드도 같이 보여줌.
+  /// true → "두 번 봐도 같이 잡힌 강점: N/6 ✨" 작은 카드도 같이 보여줌.
+  /// Round 82 sprint 4 — 사용자 verbatim "깊게봐도 다시 잡힌 핵심 이것도 부자연스럽고"
+  /// 직발 → 라벨 재작성 (한국 MZ 중학생 친근 어휘, widget tree 미변경).
   final bool showMatchBadge;
 
   const SixAxisRadar({
@@ -68,7 +70,7 @@ class _MatchBadge extends StatelessWidget {
         children: [
           Text(
             useKo
-                ? '깊게 봐도 다시 잡힌 핵심'
+                ? '두 번 봐도 같이 잡힌 강점'
                 : 'CONFIRMED AT THE DEEP LAYER',
             style: useKo
                 ? GoogleFonts.notoSansKr(
