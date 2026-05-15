@@ -1152,4 +1152,14 @@ class AppL10nEn extends AppL10n {
   @override
   String get infoCalcBasisFooter =>
       'Deeper rules (eokbu / johu / gyeokguk yongsin) are documented in a later round.';
+
+  @override
+  String get celebDisclosureBanner => 'Light comparison from public birthdays';
+
+  @override
+  String get celebDisclosureBannerHelper =>
+      'Celebrity birth times are rarely public, so we drop the hour pillar and compare day pillars only. Treat it as a fun read.';
+
+  @override
+  String get celebCardConfidenceLabel => 'Public birthday · birth time unknown';
 }

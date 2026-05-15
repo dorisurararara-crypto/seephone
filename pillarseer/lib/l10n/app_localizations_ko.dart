@@ -1101,4 +1101,14 @@ class AppL10nKo extends AppL10n {
   @override
   String get infoCalcBasisFooter =>
       '더 깊은 계산 기준(억부용신·조후용신·격국용신 등)은 다음 라운드에서 안내해드릴게요.';
+
+  @override
+  String get celebDisclosureBanner => '공개 생일 기반의 가벼운 비교예요';
+
+  @override
+  String get celebDisclosureBannerHelper =>
+      '유명인 출생시간은 공개 자료가 없어서 시주(시각 기둥)는 빼고 일주만 비교해요. 재미로만 봐주세요.';
+
+  @override
+  String get celebCardConfidenceLabel => '공개 생일 기반 · 출생시간 미상';
 }

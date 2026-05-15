@@ -384,5 +384,9 @@
   "infoCalcBasisLunarDesc": "You enter your birthday in the solar calendar by default. Lunar input is converted automatically, with leap-month support.",
   "infoCalcBasisCityLabel": "Birth-city longitude correction",
   "infoCalcBasisCityDesc": "Seoul is the default. Korean cities such as Busan or Gwangju get an extra correction based on their longitude. Birthplaces abroad are planned for a later release.",
-  "infoCalcBasisFooter": "Deeper rules (eokbu / johu / gyeokguk yongsin) are documented in a later round."
+  "infoCalcBasisFooter": "Deeper rules (eokbu / johu / gyeokguk yongsin) are documented in a later round.",
+
+  "celebDisclosureBanner": "Light comparison from public birthdays",
+  "celebDisclosureBannerHelper": "Celebrity birth times are rarely public, so we drop the hour pillar and compare day pillars only. Treat it as a fun read.",
+  "celebCardConfidenceLabel": "Public birthday · birth time unknown"
 }

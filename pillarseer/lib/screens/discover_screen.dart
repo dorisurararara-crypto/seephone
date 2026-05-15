@@ -200,6 +200,43 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                 ],
               ),
             ),
+            // Round 83 sprint 3 — P1-F 셀럽 출생정보 신뢰도 disclaimer banner.
+            // 외부 reviewer 권고: 유명인 출생시간은 공개되지 않으므로 시주 빼고
+            // 일주만 비교하는 "가벼운 비교" 라고 사용자에게 transparent 안내.
+            Container(
+              key: const Key('discover_celeb_disclosure_banner'),
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+              decoration: const BoxDecoration(
+                color: AppColors.paper,
+                border: Border(
+                    bottom: BorderSide(color: AppColors.line, width: 1)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.celebDisclosureBanner,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.celebDisclosureBannerHelper,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.taupe,
+                      height: 1.55,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -298,6 +335,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
                           celeb: c,
                           useKo: useKo,
                           isMatch: isMatch,
+                          listIndex: i,
                         );
                       },
                     ),
@@ -389,10 +427,12 @@ class _CelebRow extends ConsumerWidget {
   final _Celebrity celeb;
   final bool useKo;
   final bool isMatch;
+  final int listIndex;
   const _CelebRow({
     required this.celeb,
     required this.useKo,
     required this.isMatch,
+    required this.listIndex,
   });
 
   @override
@@ -456,6 +496,20 @@ class _CelebRow extends ConsumerWidget {
                       letterSpacing: 3,
                       fontWeight: FontWeight.w500,
                       color: AppColors.taupe,
+                    ),
+                  ),
+                  // Round 83 sprint 3 — P1-F 카드별 신뢰도 라벨.
+                  // 셀럽 출생시간은 공개 자료가 없어 시주 빼고 일주만 비교한다는
+                  // confidence caveat 을 카드마다 1줄로 reminder.
+                  const SizedBox(height: 4),
+                  Text(
+                    l.celebCardConfidenceLabel,
+                    key: Key('discover_celeb_confidence_label_$listIndex'),
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.taupe,
+                      height: 1.4,
                     ),
                   ),
                   const SizedBox(height: 10),

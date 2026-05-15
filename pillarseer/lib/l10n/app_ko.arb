@@ -384,5 +384,9 @@
   "infoCalcBasisLunarDesc": "양력 생일을 기본으로 받고, 음력으로 입력해도 자동으로 양력으로 바꿔서 계산해요. 윤달도 지원해요.",
   "infoCalcBasisCityLabel": "출생지 경도 보정",
   "infoCalcBasisCityDesc": "서울이 기본이에요. 부산이나 광주처럼 다른 도시에서 태어났으면 도시 경도에 맞게 추가로 보정해요. 해외 출생지 지원은 다음 단계 작업이에요.",
-  "infoCalcBasisFooter": "더 깊은 계산 기준(억부용신·조후용신·격국용신 등)은 다음 라운드에서 안내해드릴게요."
+  "infoCalcBasisFooter": "더 깊은 계산 기준(억부용신·조후용신·격국용신 등)은 다음 라운드에서 안내해드릴게요.",
+
+  "celebDisclosureBanner": "공개 생일 기반의 가벼운 비교예요",
+  "celebDisclosureBannerHelper": "유명인 출생시간은 공개 자료가 없어서 시주(시각 기둥)는 빼고 일주만 비교해요. 재미로만 봐주세요.",
+  "celebCardConfidenceLabel": "공개 생일 기반 · 출생시간 미상"
 }

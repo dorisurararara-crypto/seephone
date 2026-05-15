@@ -2226,6 +2226,24 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Deeper rules (eokbu / johu / gyeokguk yongsin) are documented in a later round.'**
   String get infoCalcBasisFooter;
+
+  /// No description provided for @celebDisclosureBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Light comparison from public birthdays'**
+  String get celebDisclosureBanner;
+
+  /// No description provided for @celebDisclosureBannerHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Celebrity birth times are rarely public, so we drop the hour pillar and compare day pillars only. Treat it as a fun read.'**
+  String get celebDisclosureBannerHelper;
+
+  /// No description provided for @celebCardConfidenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Public birthday · birth time unknown'**
+  String get celebCardConfidenceLabel;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
