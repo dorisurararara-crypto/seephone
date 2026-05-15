@@ -82,6 +82,101 @@ void main() {
       }
     });
 
+    test('Sprint 3 — todayHook 60일주 base + dom suffix 합성 + 변별력 가드', () async {
+      // 같은 dominant (金) 여도 일주 다르면 hook 다름.
+      final a = await SajuService().calculateSaju(
+        year: 1995, month: 10, day: 27,
+        hour: 17, minute: 0,
+        isLunar: false, isMale: true,
+      );
+      // 다른 일주 — 일주 hash 만 바꾸기 위해 다른 날짜.
+      final b = await SajuService().calculateSaju(
+        year: 1992, month: 6, day: 15,
+        hour: 17, minute: 0,
+        isLunar: false, isMale: true,
+      );
+      final ra = await DeepContentService.buildFor(
+        day60ji: a.dayPillar.text,
+        dayMaster: a.dayPillar.chunGan,
+        dayMasterName: 'A',
+        currentYearGanji: '丙午',
+        userAge: 31,
+        dominantElement: '金',
+        deficitElement: '水',
+        shortReadings: const {},
+      );
+      final rb = await DeepContentService.buildFor(
+        day60ji: b.dayPillar.text,
+        dayMaster: b.dayPillar.chunGan,
+        dayMasterName: 'B',
+        currentYearGanji: '丙午',
+        userAge: 34,
+        dominantElement: '金',
+        deficitElement: '水',
+        shortReadings: const {},
+      );
+
+      // 둘 다 today hook 비어 있지 않음.
+      expect(ra.ko.todayHook.isNotEmpty, isTrue);
+      expect(rb.ko.todayHook.isNotEmpty, isTrue);
+
+      // 일주 다르면 today hook 도 달라야.
+      if (a.dayPillar.text != b.dayPillar.text) {
+        expect(
+          ra.ko.todayHook,
+          isNot(equals(rb.ko.todayHook)),
+          reason: '일주 다름 (${a.dayPillar.text} vs ${b.dayPillar.text}) → '
+              'todayHook 동일 = 개인화 broken.',
+        );
+      }
+    });
+
+    test('Sprint 3 — whyReason 60일주 intro + 변별력 가드', () async {
+      final a = await SajuService().calculateSaju(
+        year: 1995, month: 10, day: 27,
+        hour: 17, minute: 0,
+        isLunar: false, isMale: true,
+      );
+      final b = await SajuService().calculateSaju(
+        year: 1990, month: 3, day: 15,
+        hour: 9, minute: 0,
+        isLunar: false, isMale: true,
+      );
+      final ra = await DeepContentService.buildFor(
+        day60ji: a.dayPillar.text,
+        dayMaster: a.dayPillar.chunGan,
+        dayMasterName: 'A',
+        currentYearGanji: '丙午',
+        userAge: 31,
+        dominantElement: '金',
+        deficitElement: '水',
+        shortReadings: const {},
+      );
+      final rb = await DeepContentService.buildFor(
+        day60ji: b.dayPillar.text,
+        dayMaster: b.dayPillar.chunGan,
+        dayMasterName: 'B',
+        currentYearGanji: '丙午',
+        userAge: 36,
+        dominantElement: '金',
+        deficitElement: '水',
+        shortReadings: const {},
+      );
+
+      // whyReason 모두 비어있지 않음.
+      expect(ra.ko.whyReason.isNotEmpty, isTrue);
+      expect(rb.ko.whyReason.isNotEmpty, isTrue);
+
+      // 같은 (dom, def) 페어 여도 일주 다르면 whyReason 다름 (intro 다름).
+      if (a.dayPillar.text != b.dayPillar.text) {
+        expect(
+          ra.ko.whyReason,
+          isNot(equals(rb.ko.whyReason)),
+          reason: '일주 다름 → whyReason 동일 = 일주 intro wire 안 됨.',
+        );
+      }
+    });
+
     test('서로 다른 일주 → 서로 다른 oneLine (변별력 가드)', () async {
       // A: 1995-10-27 男 17시 → 신묘
       final a = await SajuService().calculateSaju(
