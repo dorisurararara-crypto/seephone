@@ -12,6 +12,12 @@
 //    - 비겁(比劫) 용신: 일간과 같은 오행
 //
 // 중화(中和): 균형 → 사주 결핍 오행이 용신 (가장 약한 오행 보충).
+//
+// Round 83 sprint 6 — 억부 / 조후 / 격국 3 종 분리 표시 wire.
+// 사용자 노출 카드에서 3 종 동시 비교 + 신뢰도 라벨 ("강한 확신" / "복합 사주") 노출.
+
+import '../models/saju_result.dart';
+import 'ten_gods_service.dart';
 
 class YongsinService {
   /// 일간 오행 + 강약 + 5행 분포 → 용신 오행 (1차) + 희신 (2차).
@@ -148,14 +154,16 @@ class YongsinService {
   }
 
   /// 용신 오행 → 실생활 보충 방법 (locale-aware).
+  /// Round 83 sprint 6 — ko 본문에서 "기운" jargon 제거 (M5 mandate). 5축 행동
+  /// 처방은 그대로 유지 — 친근 명사 ("나무 / 불 / 흙 / 쇠 / 물") 로 시작.
   static String compensationGuide(String yongsin, {bool ko = false}) {
     if (ko) {
       const koMap = {
-        '木': '나무 기운 보충 — 식물 키우기, 산책, 동쪽 활동, 초록색·청색, 신맛 음식.',
-        '火': '불 기운 보충 — 햇빛, 운동, 남쪽 활동, 빨간색·자주색, 쓴맛 음식.',
-        '土': '흙 기운 보충 — 산·들·중앙, 노란색·갈색, 단맛 음식, 안정된 루틴.',
-        '金': '쇠 기운 보충 — 정리·청소, 서쪽 활동, 흰색·은색, 매운맛 음식, 명료한 결정.',
-        '水': '물 기운 보충 — 휴식·수면, 북쪽 활동, 검은색·파란색, 짠맛 음식, 직관 시간.',
+        '木': '나무 보충 — 식물 키우기, 산책, 동쪽 활동, 초록색·청색, 신맛 음식.',
+        '火': '불 보충 — 햇빛, 운동, 남쪽 활동, 빨간색·자주색, 쓴맛 음식.',
+        '土': '흙 보충 — 산·들·중앙, 노란색·갈색, 단맛 음식, 안정된 루틴.',
+        '金': '쇠 보충 — 정리·청소, 서쪽 활동, 흰색·은색, 매운맛 음식, 명료한 결정.',
+        '水': '물 보충 — 휴식·수면, 북쪽 활동, 검은색·파란색, 짠맛 음식, 직관 시간.',
       };
       return koMap[yongsin] ?? '';
     }
@@ -276,5 +284,141 @@ class YongsinService {
     final list = [axes.color, axes.direction, axes.food, axes.time, axes.weekday];
     final idx = (seed.abs()) % list.length;
     return list[idx];
+  }
+
+  // ── Round 83 sprint 6 — 격국용신 + 3 종 분리 + 신뢰도 라벨 ──
+
+  /// 격국 보좌 용신 (격국용신).
+  ///
+  /// 명리 학파 simplification — 격국 (월지 본기 십신) 기준 보좌 오행:
+  /// - 정관격 / 편관격 (관성격) → 인성 (관성 통제, 일간 보호) = 일간을 생하는 오행
+  /// - 정인격 / 편인격 (인성격) → 관성 (인성 살림) = 일간을 극하는 오행
+  /// - 정재격 / 편재격 (재성격) → 식상 (재성 살림) = 일간이 생하는 오행
+  /// - 식신격 / 상관격 (식상격) → 재성 (식상 결실) = 일간이 극하는 오행
+  /// - 건록격 (비견) → 식상 (강한 일간 설기) = 일간이 생하는 오행
+  /// - 양인격 (겁재) → 관성 (강한 일간 제어) = 일간을 극하는 오행
+  /// - 그 외 → null
+  ///
+  /// dayMasterElement: 木/火/土/金/水 (일간 5행).
+  /// dayMaster: 천간 (甲乙丙丁戊己庚辛壬癸).
+  /// monthJi: 월지 (子丑寅...).
+  static String? gyeokgukYongsinFor({
+    required String dayMaster,
+    required String dayMasterElement,
+    required String monthJi,
+  }) {
+    final god = TenGodsService.godForJiJi(dayMaster, monthJi);
+    if (god == null) return null;
+    const generates = {
+      '木': '火', '火': '土', '土': '金', '金': '水', '水': '木',
+    };
+    const generatedBy = {
+      '木': '水', '火': '木', '土': '火', '金': '土', '水': '金',
+    };
+    const overcomes = {
+      '木': '土', '火': '金', '土': '水', '金': '木', '水': '火',
+    };
+    const overcomeBy = {
+      '木': '金', '火': '水', '土': '木', '金': '火', '水': '土',
+    };
+    switch (god) {
+      case TenGod.jeonggwan:
+      case TenGod.pyeongwan:
+        // 관성격 → 인성 보좌 (일간을 생하는 오행).
+        return generatedBy[dayMasterElement];
+      case TenGod.jeongin:
+      case TenGod.pyeonin:
+        // 인성격 → 관성 보좌 (일간을 극하는 오행).
+        return overcomeBy[dayMasterElement];
+      case TenGod.jeongjae:
+      case TenGod.pyeonjae:
+        // 재성격 → 식상 보좌 (일간이 생하는 오행).
+        return generates[dayMasterElement];
+      case TenGod.siksin:
+      case TenGod.sanggwan:
+        // 식상격 → 재성 보좌 (일간이 극하는 오행).
+        return overcomes[dayMasterElement];
+      case TenGod.bigyeon:
+        // 건록격 → 식상 보좌.
+        return generates[dayMasterElement];
+      case TenGod.geopjae:
+        // 양인격 → 관성 보좌.
+        return overcomeBy[dayMasterElement];
+    }
+  }
+
+  /// 3 종 용신 (억부 / 조후 / 격국) 신뢰도 분석.
+  ///
+  /// 사용자 노출 라벨:
+  /// - 3 종 (또는 정보 있는 종) 모두 동일 → "강한 확신" / "Strong consensus".
+  /// - 2 종 동일 → "두 줄기가 함께 보이는 복합 사주" / "Two streams aligned".
+  /// - 모두 다름 → "여러 방향이 같이 보이는 사주" / "Three streams woven".
+  /// - 정보 1 종 이하 → "한 줄기 기준" / "Single stream".
+  ///
+  /// 친근 helper (선택):
+  /// - 일치 → "세 기준이 같아서 더 또렷한 방향이에요."
+  /// - 부분 일치 → "두 기준이 같이 가리켜요."
+  /// - 모두 다름 → "기준마다 살짝 달라요. 셋 다 참고하면 좋아요."
+  static ({String labelKo, String labelEn, String helperKo, String helperEn, int agreement})
+      confidence({
+    String? eokbu,
+    String? chowhu,
+    String? gyeokguk,
+  }) {
+    final list = <String>[
+      if (eokbu != null && eokbu.isNotEmpty) eokbu,
+      if (chowhu != null && chowhu.isNotEmpty) chowhu,
+      if (gyeokguk != null && gyeokguk.isNotEmpty) gyeokguk,
+    ];
+    if (list.length <= 1) {
+      return (
+        labelKo: '한 줄기 기준',
+        labelEn: 'Single stream',
+        helperKo: '하나의 기준만 잡혀요. 다른 기준은 정보가 부족해요.',
+        helperEn: 'Only one stream available. Other streams lack data.',
+        agreement: 1,
+      );
+    }
+    // 빈도 계산.
+    final counts = <String, int>{};
+    for (final e in list) {
+      counts[e] = (counts[e] ?? 0) + 1;
+    }
+    final maxCount = counts.values.reduce((a, b) => a > b ? a : b);
+    if (maxCount == list.length) {
+      // 전부 동일.
+      return (
+        labelKo: '강한 확신',
+        labelEn: 'Strong consensus',
+        helperKo: '세 기준이 같은 방향을 가리켜요. 또렷한 신호예요.',
+        helperEn: 'All three streams agree. A clear signal.',
+        agreement: 3,
+      );
+    } else if (maxCount >= 2) {
+      // 2 종 동일.
+      return (
+        labelKo: '두 줄기가 함께 보이는 복합 사주',
+        labelEn: 'Two streams aligned',
+        helperKo: '두 기준이 같이 가리켜요. 두 방향을 함께 활용해보세요.',
+        helperEn: 'Two streams agree. Use both directions together.',
+        agreement: 2,
+      );
+    } else {
+      // 모두 다름.
+      return (
+        labelKo: '여러 방향이 같이 보이는 사주',
+        labelEn: 'Three streams woven',
+        helperKo: '기준마다 살짝 달라요. 셋 다 참고하면 좋아요.',
+        helperEn: 'Each stream points differently. All three are useful.',
+        agreement: 1,
+      );
+    }
+  }
+
+  /// 5행 → 한국어 친근 명사 ("나무 / 불 / 흙 / 쇠 / 물").
+  /// 격국용신 / 조후용신 / 억부용신 사용자 노출 라벨 옆 1줄 풀이 wire 용.
+  static String elementKo(String el) {
+    const m = {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'};
+    return m[el] ?? el;
   }
 }

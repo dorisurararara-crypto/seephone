@@ -1857,17 +1857,33 @@ class _YongsinBlock extends StatelessWidget {
       dayJi: result.dayPillar.jiJi,
       hourJi: result.hourPillar?.jiJi,
     );
+    // Round 83 sprint 6 — monthBranch 도 전달해서 조후용신 같이 산출.
     final y = YongsinService.judge(
       dayMasterElement: dm,
       strengthLabel: s.label,
       wood: el.wood, fire: el.fire, earth: el.earth,
       metal: el.metal, water: el.water,
+      monthBranch: result.monthPillar.jiJi,
     );
-    String elKo(String e) =>
-        {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'}[e] ?? e;
+    // 격국용신 산출 (Round 83 sprint 6).
+    final gyeokgukYs = YongsinService.gyeokgukYongsinFor(
+      dayMaster: result.dayPillar.chunGan,
+      dayMasterElement: dm,
+      monthJi: result.monthPillar.jiJi,
+    );
+    // 3 종 신뢰도 분석.
+    final conf = YongsinService.confidence(
+      eokbu: y.yongsin,
+      chowhu: y.chowhuYongsin,
+      gyeokguk: gyeokgukYs,
+    );
+    final elKo = YongsinService.elementKo;
+    final dash = '—';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1차 용신 헤더 (= 억부용신, 기존 시그니처 보존).
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -1898,7 +1914,66 @@ class _YongsinBlock extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
+        // 신뢰도 라벨 chip.
+        Align(
+          alignment: Alignment.centerLeft,
+          child: _AesopChip(
+            label: useKo ? conf.labelKo : conf.labelEn,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          useKo ? conf.helperKo : conf.helperEn,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 13,
+            color: AppColors.inkLight,
+            height: 1.75,
+          ),
+        ),
+        const SizedBox(height: 18),
+        // ── 3 종 분리 표시 ──
+        Text(
+          useKo ? '세 기준의 용신 · THREE STREAMS' : 'THREE STREAMS',
+          style: GoogleFonts.inter(
+            fontSize: 9,
+            letterSpacing: 4,
+            fontWeight: FontWeight.w500,
+            color: AppColors.taupe,
+          ),
+        ),
+        const SizedBox(height: 12),
+        _YongsinSplitRow(
+          labelKo: '억부용신 (강약 기준)',
+          labelEn: 'Eokbu (strength)',
+          element: y.yongsin,
+          helperKo: '일간 강약을 보고 모자란 쪽을 채우는 용신이에요.',
+          helperEn: 'Fills what the day-master needs by strength.',
+          useKo: useKo,
+          dash: dash,
+        ),
+        const SizedBox(height: 10),
+        _YongsinSplitRow(
+          labelKo: '조후용신 (계절 기준)',
+          labelEn: 'Johu (season)',
+          element: y.chowhuYongsin,
+          helperKo: '계절을 보고 추우면 따뜻하게, 더우면 식혀주는 용신이에요.',
+          helperEn: 'Warms a cold chart, cools a hot one by season.',
+          useKo: useKo,
+          dash: dash,
+        ),
+        const SizedBox(height: 10),
+        _YongsinSplitRow(
+          labelKo: '격국용신 (격국 보좌 기준)',
+          labelEn: 'Gyeokguk (format)',
+          element: gyeokgukYs,
+          helperKo: '사주 격국을 받쳐주는 보좌 오행이에요.',
+          helperEn: 'Supports the chart format as backup.',
+          useKo: useKo,
+          dash: dash,
+        ),
+        const SizedBox(height: 18),
+        // 기존 강약 reason (요약).
         Text(
           y.reason,
           style: GoogleFonts.notoSansKr(
@@ -1928,8 +2003,93 @@ class _YongsinBlock extends StatelessWidget {
         ),
         const SizedBox(height: 14),
         _FootnoteItalic(useKo
-            ? '용신(用神) — 사주에서 가장 필요한 오행. 일간 강약 + 5행 균형 기반. 인생 결정의 기준점.'
-            : 'Yongsin — the most needed element. Based on strength + 5-element balance. Decision compass for life.'),
+            ? '용신(用神) — 사주에서 가장 필요한 오행. 일간 강약 + 5행 균형 기반. 억부 / 조후 / 격국 세 기준으로 같이 봐요.'
+            : 'Yongsin — the most needed element. Based on day master strength and 5-element balance. Read by three streams: eokbu / johu / gyeokguk.'),
+      ],
+    );
+  }
+}
+
+/// Round 83 sprint 6 — 용신 3 종 분리 row.
+///
+/// 한 라벨 + 한 오행 (없으면 dash) + 1줄 친근 풀이.
+class _YongsinSplitRow extends StatelessWidget {
+  final String labelKo;
+  final String labelEn;
+  final String? element;
+  final String helperKo;
+  final String helperEn;
+  final bool useKo;
+  final String dash;
+  const _YongsinSplitRow({
+    required this.labelKo,
+    required this.labelEn,
+    required this.element,
+    required this.helperKo,
+    required this.helperEn,
+    required this.useKo,
+    required this.dash,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final el = element;
+    final elKo = YongsinService.elementKo;
+    final hasEl = el != null && el.isNotEmpty;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Expanded(
+              child: Text(
+                useKo ? labelKo : labelEn,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.ink,
+                  height: 1.4,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              hasEl ? el : dash,
+              style: GoogleFonts.notoSerifKr(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: hasEl ? AppColors.accent : AppColors.taupe,
+                height: 1.0,
+              ),
+            ),
+            if (hasEl && useKo) ...[
+              const SizedBox(width: 8),
+              Text(
+                elKo(el),
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12,
+                  color: AppColors.inkLight,
+                  height: 1.2,
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          hasEl
+              ? (useKo ? helperKo : helperEn)
+              : (useKo
+                  ? '이 기준의 정보가 부족해요.'
+                  : 'This stream lacks data.'),
+          style: GoogleFonts.notoSansKr(
+            fontSize: 12,
+            color: AppColors.inkLight,
+            height: 1.6,
+          ),
+        ),
       ],
     );
   }
