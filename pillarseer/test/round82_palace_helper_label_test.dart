@@ -303,9 +303,9 @@ void main() {
       final r82Region = src.substring(blockStart, blockEnd);
 
       // 사용자 노출 string literal 만 추출 (작은따옴표 / 큰따옴표 단순 매칭).
-      final stringLiterals = RegExp(r"'([^'\n]+)'|" + r'"([^"\n]+)"')
+      final stringLiterals = RegExp(r'''('([^'\n]+)'|"([^"\n]+)")''')
           .allMatches(r82Region)
-          .map((m) => m.group(1) ?? m.group(2) ?? '')
+          .map((m) => m.group(2) ?? m.group(3) ?? '')
           .where((s) => s.isNotEmpty)
           .toList();
       // R82 변경 영역의 user-visible blacklist.
