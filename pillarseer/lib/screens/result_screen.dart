@@ -18,8 +18,10 @@ import '../services/gong_mang_service.dart';
 import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
 import '../services/life_stage_service.dart';
+import '../services/palace_helper_anchor_service.dart';
 import '../services/personalization_engine.dart';
 import '../services/additional_life_service.dart';
+import '../services/saju_context.dart';
 import '../services/career_recommend_service.dart';
 import '../services/sipsin_persona_service.dart';
 import '../services/wealth_strategy_service.dart';
@@ -161,7 +163,11 @@ class ResultScreen extends ConsumerWidget {
             // 7.5 인생 12 영역 풀이 (accordion 그룹, paper bg)
             // kIsZiweiUiHidden flag: 자미두수 라벨 우회 유지 (Round 70).
             if (ziwei != null && kIsZiweiUiHidden)
-              _ZiweiPalaceGroup(ziwei: ziwei, useKo: useKo),
+              _ZiweiPalaceGroup(
+                ziwei: ziwei,
+                useKo: useKo,
+                sajuResult: result,
+              ),
             // 8. CORE READING accordion group (paper bg)
             _GroupSection(
               groupLabel: useKo ? '기본 풀이 · CORE READING' : 'CORE READING',
@@ -2943,10 +2949,21 @@ class _TwinEvidenceRow extends StatelessWidget {
 class _ZiweiPalaceGroup extends StatelessWidget {
   final ZiweiResult ziwei;
   final bool useKo;
-  const _ZiweiPalaceGroup({required this.ziwei, required this.useKo});
+  // Round 82 sprint 5 — 12 결 풀이 카드의 "도와주는 흐름" / "살짝 걸리는 흐름"
+  // 라벨 옆 helper (= 십신/용신/신살 anchor + 1줄 설명) wire 용 source.
+  // 사용자 mandate (R82 인수인계 line 14): support/caution row 옆에 사주 근거가
+  // 안 나오고 설명이 약하다는 사용자 지적.
+  final SajuResult sajuResult;
+  const _ZiweiPalaceGroup({
+    required this.ziwei,
+    required this.useKo,
+    required this.sajuResult,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // SajuContext 1차 source — R78 4단계 chain 보존 (재계산 0).
+    final ctx = SajuContext.from(sajuResult);
     // gungKo (내부 키) → 사용자 노출용 우회 라벨.
     // 내부 키는 그대로 유지하되 화면에는 우회 표현만 노출.
     final labels = useKo
@@ -3025,7 +3042,11 @@ class _ZiweiPalaceGroup extends StatelessWidget {
                 ? '${p.branchKo}(${p.branchAnimalKo}) 결'
                 : '${p.branchEn.toUpperCase()} branch',
             locked: false,
-            child: _ZiweiPalaceBlock(palace: p, useKo: useKo),
+            child: _ZiweiPalaceBlock(
+              palace: p,
+              useKo: useKo,
+              sajuContext: ctx,
+            ),
           ),
       ],
     );
@@ -3195,10 +3216,25 @@ class _HeaderCell extends StatelessWidget {
 class _ZiweiPalaceBlock extends StatelessWidget {
   final ZiweiPalace palace;
   final bool useKo;
-  const _ZiweiPalaceBlock({required this.palace, required this.useKo});
+  // Round 82 sprint 5 — 사주 anchor (십신/용신/신살) 기반 1줄 helper wire.
+  final SajuContext sajuContext;
+  const _ZiweiPalaceBlock({
+    required this.palace,
+    required this.useKo,
+    required this.sajuContext,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // Round 82 sprint 5 — 영역별 사주 anchor 결정. palace.luckyStars/badStars 의
+    // nameKo (자미두수 별 이름) 는 절대 노출 X — length 만 service 에 전달 (R70 mandate).
+    final anchorPair = PalaceHelperAnchorService.resolve(
+      gungKo: palace.gungKo,
+      ctx: sajuContext,
+      useKo: useKo,
+      luckyCount: palace.luckyStars.length,
+      badCount: palace.badStars.length,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -3237,7 +3273,7 @@ class _ZiweiPalaceBlock extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 6),
             child: Text(
               useKo
-                  ? '이 결은 직접 드러난 기운이 약해서, 연결된 흐름까지 같이 봐요.'
+                  ? '이 자리는 직접 드러난 사주가 약해서, 연결된 자리까지 같이 봐요.'
                   : 'This area is open — read the opposing area as proxy.',
               style: GoogleFonts.notoSansKr(
                 fontSize: 13.5,
@@ -3246,25 +3282,36 @@ class _ZiweiPalaceBlock extends StatelessWidget {
               ),
             ),
           ),
-        // 도와주는 흐름 / 살짝 걸리는 흐름 — 개수만, 별 이름 노출 X.
+        // Round 82 sprint 5 — 도와주는 흐름 / 살짝 걸리는 흐름 라벨 옆 사주 anchor
+        // (십신/용신/신살) + 1줄 helper. palace.luckyStars/badStars 의 length 만 사용.
         if (palace.luckyStars.isNotEmpty) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           _SupportSummaryRow(
             labelKo: '도와주는 흐름',
-            countKo: '${palace.luckyStars.length}가지 기운이 받쳐줘요',
+            labelEn: 'Support',
+            countKo: '받쳐주는 단서 ${palace.luckyStars.length}가지',
             countEn:
-                '${palace.luckyStars.length} supportive flow${palace.luckyStars.length == 1 ? '' : 's'}',
+                '${palace.luckyStars.length} supportive cue${palace.luckyStars.length == 1 ? '' : 's'}',
+            anchorKo: anchorPair.support.anchorLabelKo,
+            anchorEn: anchorPair.support.anchorLabelEn,
+            helperKo: anchorPair.support.helperKo,
+            helperEn: anchorPair.support.helperEn,
             color: AppColors.accent,
             useKo: useKo,
           ),
         ],
         if (palace.badStars.isNotEmpty) ...[
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           _SupportSummaryRow(
             labelKo: '살짝 걸리는 흐름',
-            countKo: '${palace.badStars.length}가지 기운이 살짝 걸려요',
+            labelEn: 'Caution',
+            countKo: '걸리는 단서 ${palace.badStars.length}가지',
             countEn:
-                '${palace.badStars.length} tense flow${palace.badStars.length == 1 ? '' : 's'}',
+                '${palace.badStars.length} tense cue${palace.badStars.length == 1 ? '' : 's'}',
+            anchorKo: anchorPair.caution.anchorLabelKo,
+            anchorEn: anchorPair.caution.anchorLabelEn,
+            helperKo: anchorPair.caution.helperKo,
+            helperEn: anchorPair.caution.helperEn,
             color: AppColors.taupe,
             useKo: useKo,
           ),
@@ -3274,16 +3321,29 @@ class _ZiweiPalaceBlock extends StatelessWidget {
   }
 }
 
+// Round 82 sprint 5 — 12 결 풀이 카드 "도와주는 흐름" / "살짝 걸리는 흐름" row.
+// 변경점: anchor label (= 사주의 X 십신 / Y 용신 / Z 신살) + 1줄 helper text 추가.
+// 사용자 mandate: support/caution row 옆에 사주 근거가 안 나오고 설명이 약하다는 지적.
 class _SupportSummaryRow extends StatelessWidget {
   final String labelKo;
+  final String labelEn;
   final String countKo;
   final String countEn;
+  final String anchorKo;
+  final String anchorEn;
+  final String helperKo;
+  final String helperEn;
   final Color color;
   final bool useKo;
   const _SupportSummaryRow({
     required this.labelKo,
+    required this.labelEn,
     required this.countKo,
     required this.countEn,
+    required this.anchorKo,
+    required this.anchorEn,
+    required this.helperKo,
+    required this.helperEn,
     required this.color,
     required this.useKo,
   });
@@ -3296,7 +3356,7 @@ class _SupportSummaryRow extends StatelessWidget {
           width: 96,
           padding: const EdgeInsets.only(top: 3),
           child: Text(
-            labelKo,
+            useKo ? labelKo : labelEn,
             style: GoogleFonts.notoSansKr(
               fontSize: 11,
               letterSpacing: 0.2,
@@ -3306,13 +3366,42 @@ class _SupportSummaryRow extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Text(
-            useKo ? countKo : countEn,
-            style: GoogleFonts.notoSerifKr(
-              fontSize: 13,
-              height: 1.6,
-              color: AppColors.ink,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 1행 — 개수 요약 + anchor 라벨 ( = 사주의 X 십신 ).
+              RichText(
+                text: TextSpan(
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 13,
+                    height: 1.55,
+                    color: AppColors.ink,
+                  ),
+                  children: [
+                    TextSpan(text: useKo ? countKo : countEn),
+                    TextSpan(
+                      text: ' ${useKo ? anchorKo : anchorEn}',
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 12,
+                        height: 1.55,
+                        color: color,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 4),
+              // 2행 — 1줄 helper (친근 행동 처방).
+              Text(
+                useKo ? helperKo : helperEn,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12.5,
+                  height: 1.7,
+                  color: AppColors.inkLight,
+                ),
+              ),
+            ],
           ),
         ),
       ],
