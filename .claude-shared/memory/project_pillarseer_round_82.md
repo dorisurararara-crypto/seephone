@@ -39,8 +39,8 @@ metadata:
 
 | Sprint | 의제 | 상태 |
 |---|---|---|
-| 1 | spec | ✅ 완료 (commit 1eab1a5) |
-| 2 | #4 fix — /today route 분리 (result_screen 에서 today_event 제거) | 대기 |
+| 1 | spec (+ 1.5 외부 reviewer audit 흡수, 14 sprint 확장) | ✅ 완료 (commit `1eab1a5` + `3cf6362`) |
+| 2 | #4 fix — /today route 분리 (result_screen 에서 today_event 제거) | ✅ 완료 commit `2d19d57` (codex 9.96 / 523 test / 5행 골든 보존) |
 | 3 | #6 fix — _oneLineByJi60Ko 60 entry 쉬운 단어 + 폐기 fallback 정리 | 대기 |
 | 4 | #5 fix — "깊게 봐도 다시 잡힌 핵심" 라벨 재작성/제거 | 대기 |
 | 5 | #3 fix — 12 결 풀이 라벨 명시 + 1줄 설명 | 대기 |
