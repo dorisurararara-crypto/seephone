@@ -9,6 +9,7 @@ import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
+import '../services/animal_context_service.dart';
 import '../services/daily_service.dart';
 import '../services/dynamic_text_resolver.dart';
 import '../services/five_day_trend_service.dart';
@@ -127,6 +128,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     dayMasterKo: saju.dayPillar.pairKoreanMeaning,
                     dayMasterEn: saju.dayMasterName,
                     date: fortune.date,
+                    // Round 82 sprint 6 — 한글 동물 단독 노출 fix (#7+#8 통합).
+                    // headline ("조승현아 오늘은 금 토끼의 날이야") 아래 1줄 helper
+                    // 추가 — "= 평소 본인 분위기. <12 동물별 1줄>".
+                    dayChunGan: saju.dayPillar.chunGan,
+                    dayJiJi: saju.dayPillar.jiJi,
                   ),
                   if (sixAxis != null) _SixAxisCard(score: sixAxis),
                   _FiveDayTrendCard(points: fiveDay),
@@ -144,6 +150,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   _PillarOfTheDay(
                     dayPillar: fortune.dayPillar,
                     label: _localizedGanjiLabel(context, fortune.dayPillar),
+                    // Round 82 sprint 6 — 일진 단독 노출 fix (#9).
+                    // "오늘의 일진 화 개" 단독 노출 X — 사용자 일간과 관계 1줄 helper.
+                    userDayChunGan: saju.dayPillar.chunGan,
                   ),
                   TodayDeepReadingSection(
                     reading: TodayDeepService.build(
@@ -540,11 +549,17 @@ class _FirstFoldGreeting extends StatelessWidget {
   final String dayMasterKo;
   final String dayMasterEn;
   final DateTime date;
+  // Round 82 sprint 6 — 한글 동물 단독 노출 fix (#7+#8). dayChunGan + dayJiJi 주입 시
+  // headline 아래 sub-line 1줄 helper ("= 평소 본인 분위기. <동물별 1줄>") 추가.
+  final String? dayChunGan;
+  final String? dayJiJi;
   const _FirstFoldGreeting({
     required this.name,
     required this.dayMasterKo,
     required this.dayMasterEn,
     required this.date,
+    this.dayChunGan,
+    this.dayJiJi,
   });
 
   /// 한국어 호칭 조사 — 받침 있으면 '아', 없으면 '야'.
@@ -587,6 +602,19 @@ class _FirstFoldGreeting extends StatelessWidget {
         headline = "It's a $dayMasterEn day for you";
       }
     }
+    // Round 82 sprint 6 — 한국어 단독 노출 영역 fix (#7+#8).
+    // ko + dayChunGan + dayJiJi 셋 다 갖춰진 경우 headline 바로 아래 1줄 helper.
+    // "조승현아, 오늘은 금 토끼의 날이야" → 그 아래 "= 평소 본인 분위기. 단단한데 다정한 사람.".
+    final String? helperKo = (useKo &&
+            dayChunGan != null &&
+            dayJiJi != null &&
+            (dayChunGan?.isNotEmpty ?? false) &&
+            (dayJiJi?.isNotEmpty ?? false))
+        ? AnimalContextService.selfPairHelperKo(
+            dayChunGan: dayChunGan!,
+            dayJiJi: dayJiJi!,
+          )
+        : null;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
@@ -607,6 +635,19 @@ class _FirstFoldGreeting extends StatelessWidget {
               color: AppColors.ink,
             ),
           ),
+          if (helperKo != null) ...[
+            const SizedBox(height: 6),
+            Text(
+              helperKo,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                height: 1.5,
+                fontWeight: FontWeight.w400,
+                color: AppColors.taupe,
+                letterSpacing: 0.1,
+              ),
+            ),
+          ],
           const SizedBox(height: 6),
           Text(
             _dateText(context),
@@ -825,13 +866,30 @@ class _ScoreBlock extends StatelessWidget {
 class _PillarOfTheDay extends StatelessWidget {
   final String dayPillar;
   final String label;
-  const _PillarOfTheDay({required this.dayPillar, required this.label});
+  // Round 82 sprint 6 — 일진 단독 노출 fix (#9). userDayChunGan 주입 시 1줄 helper
+  // ("= 당신을 잡아주는 분위기...") 추가.
+  final String? userDayChunGan;
+  const _PillarOfTheDay({
+    required this.dayPillar,
+    required this.label,
+    this.userDayChunGan,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    // Round 82 sprint 6 — 일진 1줄 helper (사용자 일간과 오늘 일진 천간의 십신/천간합 관계).
+    final String? pillarHelperKo = (useKo &&
+            userDayChunGan != null &&
+            (userDayChunGan?.isNotEmpty ?? false) &&
+            dayPillar.length == 2)
+        ? AnimalContextService.todayPillarHelperKo(
+            userDayChunGan: userDayChunGan!,
+            todayPillar: dayPillar,
+          )
+        : null;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 26, 24, 26),
@@ -875,6 +933,21 @@ class _PillarOfTheDay extends StatelessWidget {
               color: AppColors.accent,
             ),
           ),
+          if (pillarHelperKo != null) ...[
+            const SizedBox(height: 10),
+            // Round 82 sprint 6 — "오늘의 일진" 단독 노출 fix (#9).
+            // 사용자 일간 + 오늘 일진 천간 관계 1줄 helper (한자 jargon X).
+            Text(
+              pillarHelperKo,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                height: 1.5,
+                fontWeight: FontWeight.w400,
+                color: AppColors.ink,
+                letterSpacing: 0.1,
+              ),
+            ),
+          ],
         ],
       ),
     );
