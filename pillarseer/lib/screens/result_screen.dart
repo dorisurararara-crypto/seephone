@@ -119,144 +119,262 @@ class ResultScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // 1. Hero — 일주 한자 + 영문 보조
+            // Round 82 sprint 7 — first-fold 핵심 4 섹션 만 펼침. 나머지 14+ 섹션은
+            // `_CollapsibleSection` wrapper 로 접힘 (사용자 mandate "한눈에 안 들어옴").
+            // 정보 손실 0: 기존 widget 그대로 child 로 mount, R71~R80 시그니처 보존.
+            //
+            // 펼침 4 (codex 9.9+ 우선순위):
+            //   1) 일주 한 줄 (_DayMasterHero — R71 _OracleHero)
+            //   2) 5행 분포 (_FiveElementsSection — 1995-10-27 男 17시 16/21/17/41/4 골든)
+            //   3) 8글자 십신 (_SipsinPersonaSection — R73 sprint 3)
+            //   4) 오늘 한 줄 (_ForYouTodaySection — R71 personalization)
+
+            // ===== first-fold 펼침 (4 섹션) =====
+            // 1. Hero — 일주 한 줄
             _DayMasterHero(result: result, reading: reading, useKo: useKo),
-            // Round 82 sprint 2 — 오늘 사건 카드 mount 제거. 사용자 mandate
-            // "내 사주 = 평생사주만". 오늘 카드는 `/today` 탭 단독 노출. 알림 deep-link
-            // 는 router redirect (R79 sprint 7) 로 처리.
-            // Round 77 sprint 7 — 상단 공유 CTA (친구 자랑 흐름 first-fold).
-            _ShareHeroBar(
-              onTap: () => _shareChart(context, result, useKo),
-            ),
-            // 2. A READING — magazine body (paper bg)
-            _ReadingSection(result: result, reading: reading, useKo: useKo),
-            // 2.5 TWIN-LENS — 깊이 풀이에서 같이 잡힌 결 (차별점)
-            if (crossmatches.isNotEmpty)
-              _CrossmatchSection(matches: crossmatches, useKo: useKo),
-            // 2.6 LIFE STAGE — 초년/중년/말년 (Round 73 sprint 2 — DaewoonService wire)
-            _LifeStageSection(
-              result: result,
-              useKo: useKo,
-              isMale: birth?.isMale ?? true,
-              userAge: birth != null
-                  ? (DateTime.now().year - birth.birthDate.year)
-                  : null,
-            ),
-            // 2.7 SIPSIN PERSONA — 8글자 십신 인격 풀이 (Round 73 sprint 3)
+            // 2. FIVE ELEMENTS — 5행 분포 (골든)
+            _FiveElementsSection(
+                result: result, reading: reading, useKo: useKo),
+            // 3. SIPSIN PERSONA — 8글자 십신 (R73 sprint 3)
             _SipsinPersonaSection(result: result, useKo: useKo),
-            // 2.8 CAREER + WEALTH — 직업 추천 + 재테크 3 phase (Round 73 sprint 6)
-            _CareerSection(result: result, useKo: useKo),
-            _WealthStrategySection(result: result, useKo: useKo),
-            // 2.9 ADDITIONAL 6 — 건강/체질/사회/사회적성격/타고난성향/타고난인품 (Round 73 sprint 4)
-            _AdditionalLifeSection(result: result, useKo: useKo),
-            // 3. CHART ATTRIBUTES — 2x2 grid (bg)
-            _ChartAttributesSection(result: result, useKo: useKo),
-            // 4. FOUR PILLARS — 4-column hairline (paper bg)
-            _FourPillarsSection(result: result, useKo: useKo),
-            // 5. THREE STROKES — magazine 3-hit (bg)
-            _ThreeStrokesSection(result: result, reading: reading, useKo: useKo),
-            // 6. FOR YOU TODAY — Personalization Engine (paper bg)
+            // 4. FOR YOU TODAY — 오늘 한 줄 (R71 personalization)
             _ForYouTodaySection(result: result, useKo: useKo),
-            // 7. FIVE ELEMENTS — bar chart (bg)
-            _FiveElementsSection(result: result, reading: reading, useKo: useKo),
-            // Round 77 sprint 7 — 오늘 사건 가능성은 hero 직후 2번째로 승격됨 (Column 상단).
-            // 7.5 인생 12 영역 풀이 (accordion 그룹, paper bg)
-            // kIsZiweiUiHidden flag: 자미두수 라벨 우회 유지 (Round 70).
+
+            // ===== 접힘 collapsed (헤더 라벨 + tap 펼침, 정보 손실 0) =====
+            // 친구 자랑 CTA — 첫 fold 4 다음.
+            _CollapsibleSection(
+              label: useKo ? '친구한테 자랑하기' : 'SHARE',
+              preview: useKo
+                  ? '내 사주 카드를 친구한테 보내볼까요.'
+                  : 'Send your saju card to a friend.',
+              background: AppColors.bg,
+              child: _ShareHeroBar(
+                onTap: () => _shareChart(context, result, useKo),
+              ),
+            ),
+            // 2.5 TWIN-LENS — 두 번 봐도 같이 잡힌 강점 (차별점)
+            if (crossmatches.isNotEmpty)
+              _CollapsibleSection(
+                label: useKo ? '두 번 봐도 같이 잡힌 강점' : 'DEEP POINT · 深 點',
+                preview: useKo
+                    ? '깊게 봐도 똑같이 잡힌 사주의 단단한 부분이에요.'
+                    : 'Strengths that hold up even when read twice.',
+                background: AppColors.paper,
+                child: _CrossmatchSection(matches: crossmatches, useKo: useKo),
+              ),
+            // 2.6 LIFE STAGE — 초년/중년/말년 (Round 73 sprint 2)
+            _CollapsibleSection(
+              label: useKo ? '시기별 풀이 (초년·중년·말년)' : 'LIFE STAGE',
+              preview: useKo
+                  ? '초년·중년·말년 시기별로 사주를 풀어드려요.'
+                  : 'Read by life stage.',
+              background: AppColors.bg,
+              child: _LifeStageSection(
+                result: result,
+                useKo: useKo,
+                isMale: birth?.isMale ?? true,
+                userAge: birth != null
+                    ? (DateTime.now().year - birth.birthDate.year)
+                    : null,
+              ),
+            ),
+            // 2.8 CAREER — 직업 추천 (Round 73 sprint 6)
+            _CollapsibleSection(
+              label: useKo ? '나한테 맞는 일 방향' : 'CAREER',
+              preview: useKo
+                  ? '사주에 맞는 일 방향을 추천해드려요.'
+                  : 'Work directions that fit your chart.',
+              background: AppColors.paper,
+              child: _CareerSection(result: result, useKo: useKo),
+            ),
+            // 2.8 WEALTH — 재테크 3 phase (Round 73 sprint 6)
+            _CollapsibleSection(
+              label: useKo ? '돈 들어오는 방식' : 'WEALTH',
+              preview: useKo
+                  ? '돈이 어떻게 들어오고 나가는지 봐드려요.'
+                  : 'How money moves in your chart.',
+              background: AppColors.bg,
+              child: _WealthStrategySection(result: result, useKo: useKo),
+            ),
+            // 2.9 ADDITIONAL 6 — 건강/체질/사회 등 (Round 73 sprint 4)
+            _CollapsibleSection(
+              label: useKo ? '6가지 추가 풀이' : 'ADDITIONAL',
+              preview: useKo
+                  ? '건강·체질·사회성 등 여섯 가지 영역을 추가로 봐요.'
+                  : 'Health, body, social, and three more.',
+              background: AppColors.paper,
+              child: _AdditionalLifeSection(result: result, useKo: useKo),
+            ),
+            // 3. CHART ATTRIBUTES — 2x2 grid
+            _CollapsibleSection(
+              label: useKo ? '사주 핵심 4가지' : 'CHART ATTRIBUTES',
+              preview: useKo
+                  ? '사주 유형·필요한 보충·세기·비어있는 자리 한눈에.'
+                  : 'Format, needed element, strength, void.',
+              background: AppColors.bg,
+              child: _ChartAttributesSection(result: result, useKo: useKo),
+            ),
+            // 4. FOUR PILLARS — 4-column hairline
+            _CollapsibleSection(
+              label: useKo ? '네 기둥 한눈에' : 'FOUR PILLARS',
+              preview: useKo
+                  ? '연주·월주·일주·시주 네 기둥을 카드로 보여드려요.'
+                  : 'Year, Month, Day, Hour pillars.',
+              background: AppColors.paper,
+              child: _FourPillarsSection(result: result, useKo: useKo),
+            ),
+            // 5. THREE STROKES — magazine 3-hit
+            _CollapsibleSection(
+              label: useKo ? '핵심 세 줄 매거진 풀이' : 'THREE STROKES',
+              preview: useKo
+                  ? '사주 핵심을 매거진 세 줄로 정리해드려요.'
+                  : 'Your chart in three magazine strokes.',
+              background: AppColors.bg,
+              child: _ThreeStrokesSection(
+                  result: result, reading: reading, useKo: useKo),
+            ),
+            // A READING — 사주 5초 요약 (paper bg) — first-fold 에서 collapsed 로 이동.
+            // 사용자 mandate first-fold = 일주/5행/십신/오늘. 본 섹션은 보조 magazine body.
+            _CollapsibleSection(
+              label: useKo ? '내 사주 한눈에 매거진 풀이' : 'A READING',
+              preview: useKo
+                  ? '사주 한 줄 요약을 매거진 본문으로 풀어드려요.'
+                  : 'Magazine summary of your chart.',
+              background: AppColors.paper,
+              child:
+                  _ReadingSection(result: result, reading: reading, useKo: useKo),
+            ),
+            // 7.5 인생 12 영역 풀이 (R70 자미두수 hidden, 라벨 우회 유지).
+            // `_ZiweiPalaceGroup` 자체가 _GroupSection + 12 _AccordionRow 접힘.
+            // 추가 wrap 없이 그대로 mount — 12 row 가 모두 접힌 상태로 시작.
             if (ziwei != null && kIsZiweiUiHidden)
               _ZiweiPalaceGroup(
                 ziwei: ziwei,
                 useKo: useKo,
                 sajuResult: result,
               ),
-            // 8. CORE READING accordion group (paper bg)
-            _GroupSection(
-              groupLabel: useKo ? '기본 풀이 · CORE READING' : 'CORE READING',
+            // 8. CORE READING accordion group — 자체 5 _AccordionRow 접힘.
+            // 그룹 자체도 추가 collapse 적용 → 첫 fold 깔끔.
+            _CollapsibleSection(
+              label: useKo ? '기본 풀이 (십신·테마·10년·올해·행운)' : 'CORE READING',
+              preview: useKo
+                  ? '십신·테마·10년 운·올해 운·행운 다섯 가지를 봐드려요.'
+                  : 'Ten gods, themes, 10-year, this year, lucky.',
               background: AppColors.paper,
-              children: [
-                _AccordionRow(
-                  title: l.resultTenGodsTitle.toUpperCase(),
-                  hint: l.resultTenGodsTermHint,
-                  locked: !isPro,
-                  note: reading?.tenGodsNote,
-                  child: _TenGodsTable(rows: result.tenGods, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: l.resultLifeThemesTitle.toUpperCase(),
-                  locked: false,
-                  child: _LifeThemesBlock(reading: reading, isPro: isPro),
-                ),
-                _AccordionRow(
-                  title: l.resultTenYearLuckTitle.toUpperCase(),
-                  hint: l.resultTenYearLuckTermHint,
-                  locked: !isPro,
-                  child: _LongText(text: reading?.tenYearLuck ?? ''),
-                ),
-                _AccordionRow(
-                  title: l.resultThisYearTitle.toUpperCase(),
-                  hint: l.resultThisYearTermHint,
-                  locked: !isPro,
-                  child: _LongText(text: reading?.thisYear ?? ''),
-                ),
-                _AccordionRow(
-                  title: l.resultLuckyTitle.toUpperCase(),
-                  locked: !isPro,
-                  child: _LuckyBlock(reading: reading, useKo: useKo),
-                ),
-              ],
+              child: _GroupSection(
+                groupLabel: useKo ? '기본 풀이 · CORE READING' : 'CORE READING',
+                background: AppColors.paper,
+                children: [
+                  _AccordionRow(
+                    title: l.resultTenGodsTitle.toUpperCase(),
+                    hint: l.resultTenGodsTermHint,
+                    locked: !isPro,
+                    note: reading?.tenGodsNote,
+                    child: _TenGodsTable(rows: result.tenGods, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: l.resultLifeThemesTitle.toUpperCase(),
+                    locked: false,
+                    child: _LifeThemesBlock(reading: reading, isPro: isPro),
+                  ),
+                  _AccordionRow(
+                    title: l.resultTenYearLuckTitle.toUpperCase(),
+                    hint: l.resultTenYearLuckTermHint,
+                    locked: !isPro,
+                    child: _LongText(text: reading?.tenYearLuck ?? ''),
+                  ),
+                  _AccordionRow(
+                    title: l.resultThisYearTitle.toUpperCase(),
+                    hint: l.resultThisYearTermHint,
+                    locked: !isPro,
+                    child: _LongText(text: reading?.thisYear ?? ''),
+                  ),
+                  _AccordionRow(
+                    title: l.resultLuckyTitle.toUpperCase(),
+                    locked: !isPro,
+                    child: _LuckyBlock(reading: reading, useKo: useKo),
+                  ),
+                ],
+              ),
             ),
-            // 9. DEEP MYEONGLI accordion group (bg)
-            _GroupSection(
-              groupLabel: useKo ? '깊은 명리학 · DEEP MYEONGLI' : 'DEEP MYEONGLI',
+            // 9. DEEP MYEONGLI accordion group — 자체 7 _AccordionRow 접힘.
+            _CollapsibleSection(
+              label: useKo
+                  ? '깊은 사주 풀이 (격국·용신·강약·공망·신살·12운성·합충)'
+                  : 'DEEP MYEONGLI',
+              preview: useKo
+                  ? '격국·용신·강약·공망·신살·12운성·합충 일곱 가지 사주 깊은 풀이.'
+                  : 'Format, yongsin, strength, void, shinsa, life cycle, relations.',
               background: AppColors.bg,
-              children: [
-                _AccordionRow(
-                  title: useKo ? '격국 · CHART FORMAT' : 'GYEOKGUK · CHART FORMAT',
-                  locked: false,
-                  child: _GyeokgukBlock(result: result, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: useKo ? '용신 · NEEDED ELEMENT' : 'YONGSIN · NEEDED ELEMENT',
-                  locked: false,
-                  child: _YongsinBlock(result: result, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: useKo ? '강약 · STRENGTH' : 'STRENGTH',
-                  locked: false,
-                  child: _StrengthBlock(result: result, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: useKo ? '공망 · VOID' : 'VOID BRANCHES',
-                  locked: false,
-                  child: _GongMangBlock(result: result, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: useKo ? '신살 · SHINSA' : 'SHINSA',
-                  locked: false,
-                  child: _ShinsaBlock(result: result, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: useKo ? '12 운성 · LIFE CYCLE' : '12 UNSUNG · LIFE CYCLE',
-                  locked: false,
-                  child: _TwelveUnsungBlock(result: result, useKo: useKo),
-                ),
-                _AccordionRow(
-                  title: useKo ? '합·충 · RELATIONS' : 'HAP & CHUNG · RELATIONS',
-                  locked: false,
-                  child: _HapchungBlock(result: result, useKo: useKo),
-                ),
-              ],
+              child: _GroupSection(
+                groupLabel:
+                    useKo ? '깊은 명리학 · DEEP MYEONGLI' : 'DEEP MYEONGLI',
+                background: AppColors.bg,
+                children: [
+                  _AccordionRow(
+                    title:
+                        useKo ? '격국 · CHART FORMAT' : 'GYEOKGUK · CHART FORMAT',
+                    locked: false,
+                    child: _GyeokgukBlock(result: result, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: useKo
+                        ? '용신 · NEEDED ELEMENT'
+                        : 'YONGSIN · NEEDED ELEMENT',
+                    locked: false,
+                    child: _YongsinBlock(result: result, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: useKo ? '강약 · STRENGTH' : 'STRENGTH',
+                    locked: false,
+                    child: _StrengthBlock(result: result, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: useKo ? '공망 · VOID' : 'VOID BRANCHES',
+                    locked: false,
+                    child: _GongMangBlock(result: result, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: useKo ? '신살 · SHINSA' : 'SHINSA',
+                    locked: false,
+                    child: _ShinsaBlock(result: result, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: useKo
+                        ? '12 운성 · LIFE CYCLE'
+                        : '12 UNSUNG · LIFE CYCLE',
+                    locked: false,
+                    child: _TwelveUnsungBlock(result: result, useKo: useKo),
+                  ),
+                  _AccordionRow(
+                    title: useKo
+                        ? '합·충 · RELATIONS'
+                        : 'HAP & CHUNG · RELATIONS',
+                    locked: false,
+                    child: _HapchungBlock(result: result, useKo: useKo),
+                  ),
+                ],
+              ),
             ),
-            // 10. VERIFICATION (paper)
-            _GroupSection(
-              groupLabel: useKo ? '검증 · VERIFICATION' : 'VERIFICATION',
+            // 10. VERIFICATION — 자체 1 _AccordionRow 접힘.
+            _CollapsibleSection(
+              label: useKo ? '계산 기준 확인' : 'VERIFICATION',
+              preview: useKo
+                  ? '사주 계산 기준과 산식 근거를 확인할 수 있어요.'
+                  : 'How the calculation was done.',
               background: AppColors.paper,
-              children: [
-                _AccordionRow(
-                  title: l.resultBasisTitle.toUpperCase(),
-                  locked: false,
-                  child: _CalculationBasisBody(result: result, useKo: useKo),
-                ),
-              ],
+              child: _GroupSection(
+                groupLabel: useKo ? '검증 · VERIFICATION' : 'VERIFICATION',
+                background: AppColors.paper,
+                children: [
+                  _AccordionRow(
+                    title: l.resultBasisTitle.toUpperCase(),
+                    locked: false,
+                    child:
+                        _CalculationBasisBody(result: result, useKo: useKo),
+                  ),
+                ],
+              ),
             ),
             // 11. PRO HOOKS (only free) — bg
             if (!isPro) ...[
@@ -1355,6 +1473,112 @@ class _AccordionRowState extends State<_AccordionRow> {
                 ],
               ),
             ),
+            crossFadeState: _open
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 220),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Round 82 sprint 7 — first-fold 정리용 collapsible wrapper.
+// 사용자 mandate (R82 인수인계 line 14): "너무 뭐가 많아서 한눈에 들어오지도 않고"
+// → 큰 섹션을 헤더만 노출된 접힘 상태로 mount, tap 시 child mount.
+// 정보 손실 0: 기존 widget 그대로 child 로 mount, widget tree 자체 유지.
+class _CollapsibleSection extends StatefulWidget {
+  final String label; // 메인 라벨 — letter-spacing UPPERCASE
+  final String preview; // 한 줄 미리보기 — 사용자 친근 해요체
+  final Color background;
+  final Widget child;
+  final bool initiallyOpen;
+
+  const _CollapsibleSection({
+    required this.label,
+    required this.preview,
+    required this.background,
+    required this.child,
+    this.initiallyOpen = false,
+  });
+
+  @override
+  State<_CollapsibleSection> createState() => _CollapsibleSectionState();
+}
+
+class _CollapsibleSectionState extends State<_CollapsibleSection> {
+  late bool _open;
+
+  @override
+  void initState() {
+    super.initState();
+    _open = widget.initiallyOpen;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: widget.background,
+        border: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          InkWell(
+            onTap: () => setState(() => _open = !_open),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 26, 24, 26),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.label.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 9,
+                            letterSpacing: 5,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.taupe,
+                          ),
+                        ),
+                        if (widget.preview.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            widget.preview,
+                            style: GoogleFonts.notoSansKr(
+                              fontSize: 13,
+                              color: AppColors.ink,
+                              height: 1.55,
+                              letterSpacing: 0.1,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  AnimatedRotation(
+                    turns: _open ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 200),
+                    child: const Icon(
+                      Icons.expand_more,
+                      size: 20,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: const SizedBox(width: double.infinity),
+            secondChild: widget.child,
             crossFadeState: _open
                 ? CrossFadeState.showSecond
                 : CrossFadeState.showFirst,
