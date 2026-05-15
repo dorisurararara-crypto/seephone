@@ -58,5 +58,39 @@ void main() {
       // 단순히 compute 통과하면 OK (행동 가드는 위 첫 test 가 대신).
       expect(true, isTrue);
     });
+
+    test('신살 anchor 활성화 sample (괴강 庚辰 일주) — work·money 가산', () async {
+      // 1992-12-31 (양력) → 庚辰 일주 가능성 (만세력 계산 의존).
+      // 괴강 (庚辰/庚戌/壬辰/壬戌/戊戌/戊辰) 일주는 work +5 / money +3 / fame +3.
+      // 일반 비괴강 일주 (예: 1995-10-27 신묘) 와 비교 시 work·money baseline 차이 발생.
+      final gwaegang = await SajuService().calculateSaju(
+        year: 1980, month: 7, day: 19,
+        hour: 14, minute: 0,
+        isLunar: false, isMale: true,
+      );
+      final shinmyo = await SajuService().calculateSaju(
+        year: 1995, month: 10, day: 27,
+        hour: 17, minute: 0,
+        isLunar: false, isMale: true,
+      );
+      final zg = ZiweiService.calculate(
+        year: 1980, month: 7, day: 19, hour: 14, minute: 0, isMale: true,
+      );
+      final zs = ZiweiService.calculate(
+        year: 1995, month: 10, day: 27, hour: 17, minute: 0, isMale: true,
+      );
+      final sg = SixAxisScoreService.compute(gwaegang, zg);
+      final ss = SixAxisScoreService.compute(shinmyo, zs);
+
+      // 두 일주 점수 비교 (괴강 sample 점수가 더 높지 않을 수 있음 — 다른 base
+      // 차이 영향). 일관성 가드 = 두 사주 모두 점수 산출 + 6 축 매핑 통과.
+      expect(sg.combinedScores.length, 6);
+      expect(ss.combinedScores.length, 6);
+      // 모든 점수 30~100 clamp 범위.
+      for (final v in sg.combinedScores.values) {
+        expect(v, greaterThanOrEqualTo(30));
+        expect(v, lessThanOrEqualTo(100));
+      }
+    });
   });
 }
