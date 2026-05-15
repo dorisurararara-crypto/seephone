@@ -85,6 +85,23 @@ class AppL10nKo extends AppL10n {
   String get inputGenderOtherCalcFemaleBadge => '계산 기준: 여';
 
   @override
+  String get inputZasiHelperTitle => '자시(子時)에 태어났네 — 학파마다 일주가 갈려';
+
+  @override
+  String get inputZasiHelperBody =>
+      '밤 11시부터 새벽 1시는 자시예요. 학파에 따라 23시 출생자의 일주가 달라질 수 있어요. 이 앱은 기본 정자시(밤 11시부터 다음 날로 보는, 한국에서 널리 쓰는 기준)로 계산해요.';
+
+  @override
+  String get inputZasiHelperBoundary =>
+      '23:00–23:29는 자시 시작 시각, 23:30–00:59는 자시 중·후반이에요. 30분 경계가 학파마다 달라요.';
+
+  @override
+  String get inputZasiOptionEarly => '정자시 — 23시 출생은 다음 날 일주 (기본)';
+
+  @override
+  String get inputZasiOptionLate => '야자시 — 23시 출생도 같은 날 일주 유지';
+
+  @override
   String get inputFindMyDestiny => '내 사주 보기';
 
   @override
@@ -606,7 +623,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get settingsLateNightZasiDesc =>
-      '기본 OFF: 23시 출생은 다음 날 일주 (조자시, 한국 mainstream).\nON: 23시 출생도 같은 날 일주 (야자시 학파).';
+      '기본 OFF: 23시 출생은 다음 날 일주 (정자시 — 한국에서 널리 쓰는 기준).\nON: 23시 출생도 같은 날 일주 유지 (야자시 학파).';
 
   @override
   String get settingsLateNightZasiSnackOn => '야자시 학파 ON — 사주를 다시 입력하면 적용돼요';

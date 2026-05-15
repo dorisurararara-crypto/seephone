@@ -134,6 +134,22 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     });
   }
 
+  /// Round 83 sprint 4 (P1-B) — 자시 학파 helper 노출 조건.
+  ///
+  /// HHMM 의 HH 영역이 23 또는 00 (자시 = 23:00~01:00) 일 때만 helper widget mount.
+  /// 그 외 (HH 미입력 / 01~22 / `_unknownTime=true`) mount 0.
+  ///
+  /// 사용자 mandate (R83 spec §2 #B): 23시 출생자는 학파에 따라 일주가 달라질 수 있다는
+  /// 즉시 안내 + 정자시/야자시 학파 선택지를 input 안에 인라인 노출 (Settings 숨김 X).
+  bool get _isZasiHourEntered {
+    if (_unknownTime) return false;
+    final raw = _timeCtl.text;
+    if (raw.length < 2) return false;
+    final hh = int.tryParse(raw.substring(0, 2));
+    if (hh == null) return false;
+    return hh == 23 || hh == 0;
+  }
+
   /// HHMM (4자리 24h) → TimeOfDay.
   /// 1~3 자리 중에는 error 안 보여줌 (UX — 입력 중 빨간 에러 X).
   /// 4 자리 도달했을 때만 검증해서 error / 성공.
@@ -314,6 +330,15 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                         ),
                       ),
                     ],
+                    // Round 83 sprint 4 (P1-B) — 자시 학파 helper mount.
+                    // HH ∈ {23, 00} && !_unknownTime 일 때만 mount.
+                    // Settings 으로 숨기지 않고 input 안 인라인 — 사용자 mandate (외부 reviewer
+                    // P0 #4) 의 "즉시 안내 + 학파 선택지 input 안에 노출".
+                    if (_isZasiHourEntered)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 14),
+                        child: _ZasiHelperBlock(l: l),
+                      ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -1008,6 +1033,141 @@ class _OtherGenderChoiceButton extends StatelessWidget {
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: AppColors.ink,
+        ),
+      ),
+    );
+  }
+}
+
+/// Round 83 sprint 4 (P1-B) — 23시 자시 학파 helper block.
+///
+/// HHMM 의 HH 가 23 또는 00 이면 자동 mount 되어 다음을 1번에 보여줘요:
+///   1) 자시 어휘 + 학파 차이 1줄 풀이 (M5 mandate: 도메인 어휘 옆 1줄 평이).
+///   2) 30분 boundary 1줄 (23:00–23:29 / 23:30–00:59 학파별 차이).
+///   3) 학파 선택 인라인 옵션 2개 — 정자시 (기본) / 야자시.
+///
+/// 옵션 탭 시 `sajuSettingsProvider.useLateNightZasi` state 토글 — settings_screen
+/// 의 `_LateNightZasiSwitch` 와 single-source. 사용자가 input 화면을 떠나지 않고도
+/// 학파를 즉석에서 바꿀 수 있어요 (사용자 mandate: Settings 으로 숨기지 X).
+class _ZasiHelperBlock extends ConsumerWidget {
+  final AppL10n l;
+  const _ZasiHelperBlock({required this.l});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final opts = ref.watch(sajuSettingsProvider);
+    final useLate = opts.useLateNightZasi;
+    return Container(
+      key: const ValueKey('zasi-helper-block'),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+      decoration: BoxDecoration(
+        color: AppColors.ink.withValues(alpha: 0.04),
+        border: Border.all(color: AppColors.line, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l.inputZasiHelperTitle,
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 13.5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.ink,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l.inputZasiHelperBody,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              color: AppColors.inkLight,
+              height: 1.65,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l.inputZasiHelperBoundary,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 11.5,
+              color: AppColors.taupe,
+              height: 1.6,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _ZasiOptionTile(
+            keyId: 'zasi-option-early',
+            label: l.inputZasiOptionEarly,
+            selected: !useLate,
+            onTap: () => ref
+                .read(sajuSettingsProvider.notifier)
+                .setUseLateNightZasi(false),
+          ),
+          const SizedBox(height: 8),
+          _ZasiOptionTile(
+            keyId: 'zasi-option-late',
+            label: l.inputZasiOptionLate,
+            selected: useLate,
+            onTap: () => ref
+                .read(sajuSettingsProvider.notifier)
+                .setUseLateNightZasi(true),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Round 83 sprint 4 (P1-B) — 자시 학파 inline 옵션 tile.
+class _ZasiOptionTile extends StatelessWidget {
+  final String keyId;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  const _ZasiOptionTile({
+    required this.keyId,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      key: ValueKey(keyId),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.ink : Colors.transparent,
+          border: Border.all(
+            color: selected ? AppColors.ink : AppColors.line,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              selected
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_off,
+              size: 16,
+              color: selected ? AppColors.bg : AppColors.taupe,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                label,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w500,
+                  color: selected ? AppColors.bg : AppColors.ink,
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

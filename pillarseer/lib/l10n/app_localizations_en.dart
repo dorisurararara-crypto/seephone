@@ -87,6 +87,26 @@ class AppL10nEn extends AppL10n {
   String get inputGenderOtherCalcFemaleBadge => 'Calc basis: female';
 
   @override
+  String get inputZasiHelperTitle =>
+      'Born during Jasi (子時) — schools disagree on the day pillar';
+
+  @override
+  String get inputZasiHelperBody =>
+      'The hour from 11pm to 1am is called Jasi. Different schools assign 23:00 births to different day pillars. This app defaults to the early-Jasi rule (11pm = next day\'s pillar, Korean mainstream).';
+
+  @override
+  String get inputZasiHelperBoundary =>
+      '23:00–23:29 is the start of Jasi; 23:30–00:59 is its second half. The 30-minute boundary varies by school.';
+
+  @override
+  String get inputZasiOptionEarly =>
+      'Early Jasi — 23:00 birth uses next day\'s pillar (default)';
+
+  @override
+  String get inputZasiOptionLate =>
+      'Late Jasi — 23:00 birth keeps same day\'s pillar';
+
+  @override
   String get inputFindMyDestiny => 'Find My Destiny';
 
   @override
