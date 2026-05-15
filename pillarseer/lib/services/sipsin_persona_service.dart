@@ -13,6 +13,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/saju_result.dart';
+import 'saju_context.dart';
 import 'ten_gods_service.dart';
 
 class SipsinPersonaReading {
@@ -80,6 +81,15 @@ class SipsinPersonaService {
   static Future<SipsinPersonaReading> compute(SajuResult saju) async {
     final pool = await _pool();
 
+    // R84 Batch 1 — SajuContext 합성, 카테고리별 한국어 anchor 문장 1개 append.
+    // 영문 phrase 는 그대로 (영문 behavior stability mandate).
+    SajuContext? ctx;
+    try {
+      ctx = SajuContext.from(saju);
+    } catch (_) {
+      ctx = null;
+    }
+
     // 1) TenGodsService.tableFor → 8 십신 분포
     final table = TenGodsService.tableFor(saju);
     final freq = <TenGod, int>{};
@@ -93,13 +103,17 @@ class SipsinPersonaService {
     }
 
     if (freq.isEmpty) {
+      final koBase = const {
+        'persona': '본인 사주는 흔치 않은 분포예요.',
+        'career': '본인 길은 본인이 정해가는 쪽이에요.',
+        'wealth': '돈은 천천히 모으는 쪽이에요.',
+        'love': '인연은 본인이 어떤 사람인지 또렷해진 다음에 와요.',
+      };
+      final ko = <String, String>{
+        for (final c in koBase.keys) c: _withAnchor(koBase[c]!, c, ctx),
+      };
       return SipsinPersonaReading(
-        ko: const {
-          'persona': '본인 사주는 흔치 않은 분포예요.',
-          'career': '본인 길은 본인이 정해가는 쪽이에요.',
-          'wealth': '돈은 천천히 모으는 쪽이에요.',
-          'love': '인연은 본인이 어떤 사람인지 또렷해진 다음에 와요.',
-        },
+        ko: ko,
         en: const {
           'persona': 'Your chart carries a rare distribution.',
           'career': 'You define your own path.',
@@ -218,7 +232,8 @@ class SipsinPersonaService {
         enPhrase = entryEn(sec, secFreq, cat);
       }
       // fallback 3: hardcoded
-      ko[cat] = koPhrase ?? fallback(cat);
+      final koBase = koPhrase ?? fallback(cat);
+      ko[cat] = _withAnchor(koBase, cat, ctx);
       en[cat] = enPhrase ?? fallbackEn(cat);
     }
 
@@ -229,6 +244,40 @@ class SipsinPersonaService {
       dominantSipsin: dom,
       secondarySipsin: sec,
     );
+  }
+
+  /// R84 Batch 1 — 카테고리별 deterministic 한국어 anchor 문장 1개.
+  /// 영문은 절대 append 하지 않음 (영문 stability mandate).
+  static String _withAnchor(String base, String cat, SajuContext? ctx) {
+    if (ctx == null) return base;
+    final anchor = _anchorFor(cat, ctx);
+    if (anchor.isEmpty) return base;
+    final trimmed = base.trimRight();
+    return '$trimmed $anchor';
+  }
+
+  static String _anchorFor(String cat, SajuContext ctx) {
+    final dEl = SajuContext.elementKo(ctx.dayElement);
+    final domEl = SajuContext.elementKo(ctx.dominantElement);
+    final defEl = SajuContext.elementKo(ctx.deficitElement);
+    final ysEl = SajuContext.elementKo(ctx.yongsin);
+    final hsEl = SajuContext.elementKo(ctx.huisin);
+    switch (cat) {
+      case 'persona':
+        // season + dayElement (일간) — month/season flow.
+        return '${ctx.season} 흐름 안에서 $dEl 일간 색이 더 또렷해져요.';
+      case 'career':
+        // strength + yongsin — 결정 방향.
+        return '${ctx.strengthLabel} 결이라 $ysEl 쪽 결정을 따를 때 자리가 잘 잡혀요.';
+      case 'wealth':
+        // dominant + deficit — 채움 거래.
+        return '$domEl 쪽은 풍성하고 $defEl 쪽은 비어 있어서, 비는 자리를 채우는 거래가 본인을 단단하게 만들어요.';
+      case 'love':
+        // 일주 dayElement + huisin — trust/pace.
+        return '일주가 $dEl 결이라 $hsEl 쪽 톤이 닮은 사람한테 마음이 흔들리지 않아요.';
+      default:
+        return '';
+    }
   }
 
   static String _sipsinKey(TenGod g) {

@@ -92,9 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ? null
         : SixAxisScoreService.compute(saju, ziwei);
     final fiveDay = FiveDayTrendService.compute(saju);
-    final chips = ziwei == null
-        ? null
-        : LuckyChipsService.compute(saju, ziwei);
+    final chips = ziwei == null ? null : LuckyChipsService.compute(saju, ziwei);
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -135,7 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     dayMasterEn: saju.dayMasterName,
                     date: fortune.date,
                     // Round 82 sprint 6 — 한글 동물 단독 노출 fix (#7+#8 통합).
-                    // headline ("조승현아 오늘은 금 토끼의 날이야") 아래 1줄 helper
+                    // headline ("조승현아, 오늘은 금 토끼 분위기가 강해") 아래 1줄 helper
                     // 추가 — "= 평소 본인 분위기. <12 동물별 1줄>".
                     dayChunGan: saju.dayPillar.chunGan,
                     dayJiJi: saju.dayPillar.jiJi,
@@ -147,8 +145,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     score: fortune.totalScore,
                     quote: useKo
                         ? (fortune.quoteKo.isEmpty
-                            ? fortune.quoteEn
-                            : fortune.quoteKo)
+                              ? fortune.quoteEn
+                              : fortune.quoteKo)
                         : fortune.quoteEn,
                   ),
                   if (chips != null) _LuckyChipsCard(chips: chips),
@@ -352,25 +350,18 @@ class _OracleHero extends StatelessWidget {
         'en':
             "Rest inside your usual lane today.\nA short green walk steadies your focus.\nPush bigger plans to next week.",
       },
-      requires: {
-        'gyeokgukShort': '정관격',
-        'yongsin': '木',
-      },
+      requires: {'gyeokgukShort': '정관격', 'yongsin': '木'},
     ),
     // 정관격 + 용신 火 — 같은 정관격이어도 용신 다르면 안내 다름.
     // invariant: restDay 본문에 "도전·승부·발표·공식 자리·승진" 0.
     DynamicPoolEntry(
       key: 'oracle_hero.restDay.辛',
       bodies: {
-        'ko':
-            '오늘은 정해진 룰 안에서 쉬는 게 정답.\n햇볕 받는 동선이 자신감을 채워줘요.\n새 일정은 한 주 미뤄.',
+        'ko': '오늘은 정해진 룰 안에서 쉬는 게 정답.\n햇볕 받는 동선이 자신감을 채워줘요.\n새 일정은 한 주 미뤄.',
         'en':
             "Rest inside your usual lane today.\nA bit of sunlight refills your spark.\nPush new plans to next week.",
       },
-      requires: {
-        'gyeokgukShort': '정관격',
-        'yongsin': '火',
-      },
+      requires: {'gyeokgukShort': '정관격', 'yongsin': '火'},
     ),
   ];
 
@@ -548,8 +539,8 @@ class _HeroGreeting extends StatelessWidget {
 // ──────────── First-fold greeting (Round 77 sprint 6) ────────────
 
 /// MZ 친구 톤 한 줄 인사 — 닉네임 / 일주 별명 / 친구 호칭.
-/// 예) "민수야, 오늘은 갑목의 날이야"
-/// 영문: "Hey Minsoo, it's a Yang Wood day for you"
+/// 예) "민수야, 오늘은 갑목 분위기가 강해"
+/// 영문: "Hey Minsoo, today's energy leans Yang Wood"
 class _FirstFoldGreeting extends StatelessWidget {
   final String? name;
   final String dayMasterKo;
@@ -597,21 +588,22 @@ class _FirstFoldGreeting extends StatelessWidget {
     String headline;
     if (useKo) {
       if (hasName) {
-        headline = '$trimmed${_josa(trimmed)}, 오늘은 $dayMasterKo의 날이야';
+        headline = '$trimmed${_josa(trimmed)}, 오늘은 $dayMasterKo 분위기가 강해';
       } else {
-        headline = '오늘은 $dayMasterKo의 날이야';
+        headline = '오늘은 $dayMasterKo 분위기가 강해';
       }
     } else {
       if (hasName) {
-        headline = "Hey $trimmed, it's a $dayMasterEn day for you";
+        headline = "Hey $trimmed, today's energy leans $dayMasterEn";
       } else {
-        headline = "It's a $dayMasterEn day for you";
+        headline = "Today's energy leans $dayMasterEn";
       }
     }
     // Round 82 sprint 6 — 한국어 단독 노출 영역 fix (#7+#8).
     // ko + dayChunGan + dayJiJi 셋 다 갖춰진 경우 headline 바로 아래 1줄 helper.
-    // "조승현아, 오늘은 금 토끼의 날이야" → 그 아래 "= 평소 본인 분위기. 단단한데 다정한 사람.".
-    final String? helperKo = (useKo &&
+    // "조승현아, 오늘은 금 토끼 분위기가 강해" → 그 아래 "= 평소 본인 분위기. 단단한데 다정한 사람.".
+    final String? helperKo =
+        (useKo &&
             dayChunGan != null &&
             dayJiJi != null &&
             (dayChunGan?.isNotEmpty ?? false) &&
@@ -745,29 +737,30 @@ class _ScoreBlock extends StatelessWidget {
     // Round 71 사용자 불만 #3 — `DayEnergyKind` 단일 source-of-truth.
     // `_ScoreBlock` 라벨/hint 는 score 직접 분기 X, enum 분기만.
     // Round 67/71 톤: 단정 평서 (헷지 X / advice X / 보호자체 X).
-    final ({String label, String hint, Color accent}) status = switch (dayEnergy) {
-      DayEnergyKind.actionDay => (
-          label: useKo ? '오늘은 좋은 날' : 'A good day',
-          hint: useKo
-              ? '평소보다 분위기가 본인 편이에요. 미뤘던 일 한 가지를 오늘 시작해 봐요.'
-              : 'Flow is on your side. Start what you delayed.',
-          accent: AppColors.woodJade,
-        ),
-      DayEnergyKind.mixedDay => (
-          label: useKo ? '오늘은 평소보다 신중하게' : 'Steady — proceed with care',
-          hint: useKo
-              ? '큰 결정은 미뤄요. 확인이 필요한 일 한 가지만 끝내요.'
-              : 'Defer big calls. Handle the checklists.',
-          accent: AppColors.accent,
-        ),
-      DayEnergyKind.restDay => (
-          label: useKo ? '오늘은 쉬어가는 날' : 'A resting day',
-          hint: useKo
-              ? '오늘은 새로 시작하지 말고, 미뤄둔 정리 하나만 끝내요.'
-              : 'Conserve energy. Today rewards tidying and rest.',
-          accent: AppColors.fireRed,
-        ),
-    };
+    final ({String label, String hint, Color accent}) status =
+        switch (dayEnergy) {
+          DayEnergyKind.actionDay => (
+            label: useKo ? '오늘은 좋은 날' : 'A good day',
+            hint: useKo
+                ? '평소보다 분위기가 본인 편이에요. 미뤘던 일 한 가지를 오늘 시작해 봐요.'
+                : 'Flow is on your side. Start what you delayed.',
+            accent: AppColors.woodJade,
+          ),
+          DayEnergyKind.mixedDay => (
+            label: useKo ? '오늘은 평소보다 신중하게' : 'Steady — proceed with care',
+            hint: useKo
+                ? '큰 결정은 미뤄요. 확인이 필요한 일 한 가지만 끝내요.'
+                : 'Defer big calls. Handle the checklists.',
+            accent: AppColors.accent,
+          ),
+          DayEnergyKind.restDay => (
+            label: useKo ? '오늘은 쉬어가는 날' : 'A resting day',
+            hint: useKo
+                ? '오늘은 새로 시작하지 말고, 미뤄둔 정리 하나만 끝내요.'
+                : 'Conserve energy. Today rewards tidying and rest.',
+            accent: AppColors.fireRed,
+          ),
+        };
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
@@ -887,7 +880,8 @@ class _PillarOfTheDay extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     // Round 82 sprint 6 — 일진 1줄 helper (사용자 일간과 오늘 일진 천간의 십신/천간합 관계).
-    final String? pillarHelperKo = (useKo &&
+    final String? pillarHelperKo =
+        (useKo &&
             userDayChunGan != null &&
             (userDayChunGan?.isNotEmpty ?? false) &&
             dayPillar.length == 2)
@@ -1048,10 +1042,7 @@ class _HourlyFlowSection extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Text(
-                  '→',
-                  style: TextStyle(color: AppColors.ink),
-                ),
+                const Text('→', style: TextStyle(color: AppColors.ink)),
               ],
             ),
           ),
@@ -1061,7 +1052,11 @@ class _HourlyFlowSection extends ConsumerWidget {
   }
 
   void _showAll(
-      BuildContext context, AppL10n l, List<HourlySlot> slots, bool useKo) {
+    BuildContext context,
+    AppL10n l,
+    List<HourlySlot> slots,
+    bool useKo,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppColors.bg,
@@ -1080,11 +1075,7 @@ class _HourlyFlowSection extends ConsumerWidget {
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.center,
-                child: Container(
-                  width: 36,
-                  height: 1,
-                  color: AppColors.line,
-                ),
+                child: Container(width: 36, height: 1, color: AppColors.line),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(24, 14, 24, 22),
@@ -1133,8 +1124,12 @@ class _HourlyFlowSection extends ConsumerWidget {
                   padding: EdgeInsets.zero,
                   itemCount: slots.length,
                   separatorBuilder: (_, _) => const Divider(
-                      height: 1, color: AppColors.line, thickness: 0.6),
-                  itemBuilder: (ctx3, i) => _HourlyRow(slot: slots[i], useKo: useKo),
+                    height: 1,
+                    color: AppColors.line,
+                    thickness: 0.6,
+                  ),
+                  itemBuilder: (ctx3, i) =>
+                      _HourlyRow(slot: slots[i], useKo: useKo),
                 ),
               ),
             ],
@@ -1337,17 +1332,29 @@ class _CategorySection extends StatelessWidget {
                 Row(
                   children: rows
                       .sublist(0, 2)
-                      .map((r) => Expanded(
+                      .map(
+                        (r) => Expanded(
                           child: _CategoryCell(
-                              name: r.$1, glyph: r.$2, score: r.$3)))
+                            name: r.$1,
+                            glyph: r.$2,
+                            score: r.$3,
+                          ),
+                        ),
+                      )
                       .toList(),
                 ),
                 Row(
                   children: rows
                       .sublist(2, 4)
-                      .map((r) => Expanded(
+                      .map(
+                        (r) => Expanded(
                           child: _CategoryCell(
-                              name: r.$1, glyph: r.$2, score: r.$3)))
+                            name: r.$1,
+                            glyph: r.$2,
+                            score: r.$3,
+                          ),
+                        ),
+                      )
                       .toList(),
                 ),
               ],
@@ -1437,8 +1444,14 @@ class _CategoryGuides extends StatelessWidget {
     final rows = [
       (l.homeCategoryLove, useKo ? fortune.loveGuideKo : fortune.loveGuideEn),
       (l.homeCategoryWork, useKo ? fortune.workGuideKo : fortune.workGuideEn),
-      (l.homeCategoryWealth, useKo ? fortune.wealthGuideKo : fortune.wealthGuideEn),
-      (l.homeCategoryEnergy, useKo ? fortune.energyGuideKo : fortune.energyGuideEn),
+      (
+        l.homeCategoryWealth,
+        useKo ? fortune.wealthGuideKo : fortune.wealthGuideEn,
+      ),
+      (
+        l.homeCategoryEnergy,
+        useKo ? fortune.energyGuideKo : fortune.energyGuideEn,
+      ),
     ].where((r) => r.$2.isNotEmpty).toList();
     return Container(
       width: double.infinity,
@@ -1529,15 +1542,19 @@ class _LuckySection extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     final color = useKo
-        ? (fortune.luckyColorKo.isEmpty ? fortune.luckyColor : fortune.luckyColorKo)
-        : (fortune.luckyColorEn.isEmpty ? fortune.luckyColor : fortune.luckyColorEn);
+        ? (fortune.luckyColorKo.isEmpty
+              ? fortune.luckyColor
+              : fortune.luckyColorKo)
+        : (fortune.luckyColorEn.isEmpty
+              ? fortune.luckyColor
+              : fortune.luckyColorEn);
     final direction = useKo
         ? (fortune.luckyDirectionKo.isEmpty
-            ? fortune.luckyDirection
-            : fortune.luckyDirectionKo)
+              ? fortune.luckyDirection
+              : fortune.luckyDirectionKo)
         : (fortune.luckyDirectionEn.isEmpty
-            ? fortune.luckyDirection
-            : fortune.luckyDirectionEn);
+              ? fortune.luckyDirection
+              : fortune.luckyDirectionEn);
     final rows = [
       (l.homeLuckyColor, color),
       (l.homeLuckyNumber, '${fortune.luckyNumber}'),
@@ -1577,7 +1594,9 @@ class _LuckySection extends StatelessWidget {
           const SizedBox(height: 18),
           Container(
             decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+              border: Border(
+                top: BorderSide(color: AppColors.line, width: 0.6),
+              ),
             ),
             child: Column(
               children: rows.map((r) {
@@ -1585,8 +1604,8 @@ class _LuckySection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   decoration: const BoxDecoration(
                     border: Border(
-                        bottom:
-                            BorderSide(color: AppColors.line, width: 0.6)),
+                      bottom: BorderSide(color: AppColors.line, width: 0.6),
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -1715,8 +1734,7 @@ class _TodayEventCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 6),
-                const Icon(Icons.arrow_forward,
-                    size: 14, color: AppColors.ink),
+                const Icon(Icons.arrow_forward, size: 14, color: AppColors.ink),
               ],
             ),
           ),
@@ -1755,7 +1773,9 @@ class _TodayEventCard extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(child: _ScoreGauge(score: row.$2, isTop: i == topIdx)),
+            Expanded(
+              child: _ScoreGauge(score: row.$2, isTop: i == topIdx),
+            ),
           ],
         ),
       );
@@ -1778,12 +1798,14 @@ class _ScoreGauge extends StatelessWidget {
     final cells = <Widget>[];
     for (var i = 0; i < 5; i++) {
       final isFilled = i < filled;
-      cells.add(Expanded(
-        child: Container(
-          height: 8,
-          color: isFilled ? activeColor : AppColors.line,
+      cells.add(
+        Expanded(
+          child: Container(
+            height: 8,
+            color: isFilled ? activeColor : AppColors.line,
+          ),
         ),
-      ));
+      );
       if (i < 4) cells.add(const SizedBox(width: 4));
     }
     return Row(children: cells);
@@ -1833,10 +1855,10 @@ class TodayDeepReadingSection extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColors.accent, width: 1)),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.accent, width: 1),
+                ),
                 child: Text(
                   moodTag,
                   style: GoogleFonts.notoSansKr(
@@ -1884,35 +1906,42 @@ class TodayDeepReadingSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          ...actions.map((a) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6, right: 10),
-                      child: Container(
-                          width: 4, height: 4, color: AppColors.accent),
+          ...actions.map(
+            (a) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6, right: 10),
+                    child: Container(
+                      width: 4,
+                      height: 4,
+                      color: AppColors.accent,
                     ),
-                    Expanded(
-                      child: Text(
-                        a,
-                        style: GoogleFonts.notoSansKr(
-                          fontSize: 13.5,
-                          color: AppColors.ink,
-                          height: 1.75,
-                        ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      a,
+                      style: GoogleFonts.notoSansKr(
+                        fontSize: 13.5,
+                        color: AppColors.ink,
+                        height: 1.75,
                       ),
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 18),
           // caution
           Container(
             padding: const EdgeInsets.only(top: 14),
             decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: AppColors.line, width: 0.6)),
+              border: Border(
+                top: BorderSide(color: AppColors.line, width: 0.6),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2052,7 +2081,9 @@ class _NotifToggleCard extends ConsumerWidget {
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     if (on) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(notificationProvider.notifier).reconcileSchedule(
+        ref
+            .read(notificationProvider.notifier)
+            .reconcileSchedule(
               pushTitle: l.homeNotifSampleTitle,
               pushBody: l.homeNotifSampleBody,
               day60ji: saju?.day60ji,
@@ -2115,25 +2146,29 @@ class _NotifToggleCard extends ConsumerWidget {
                 );
                 messenger
                   ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: AppColors.ink,
-                    content: Text(
-                      ok
-                          ? l.homeNotifEnabledSnack
-                          : l.homeNotifPermissionDenied,
-                      style: const TextStyle(color: AppColors.bg),
+                  ..showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: AppColors.ink,
+                      content: Text(
+                        ok
+                            ? l.homeNotifEnabledSnack
+                            : l.homeNotifPermissionDenied,
+                        style: const TextStyle(color: AppColors.bg),
+                      ),
                     ),
-                  ));
+                  );
               } else {
                 await notifier.disable();
                 messenger
                   ..hideCurrentSnackBar()
-                  ..showSnackBar(SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: AppColors.ink,
-                    content: Text(l.homeNotifDisabledSnack),
-                  ));
+                  ..showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: AppColors.ink,
+                      content: Text(l.homeNotifDisabledSnack),
+                    ),
+                  );
               }
             },
           ),
@@ -2153,30 +2188,29 @@ class _SixAxisCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    final headline =
-        useKo ? '성격·연애·공부·돈·체력·인기 한눈에' : 'You in Six Areas';
+    final headline = useKo ? '성격·연애·공부·돈·체력·인기 한눈에' : 'You in Six Areas';
     final axesLine = useKo
         ? '성격 · 연애 · 공부 · 돈 · 체력 · 인기'
         : 'Nature · Love · Study · Money · Health · Fame';
     final matched = score.matchedAxesFor(useKo: useKo);
     final mainLine = matched.isEmpty
         ? (useKo
-            ? '오늘 너는 한쪽으로 안 쏠려. 여러 방향이 다 열려 있어.'
-            : "You don't lean hard one way today. Many directions stay open.")
+              ? '오늘 너는 한쪽으로 안 쏠려. 여러 방향이 다 열려 있어.'
+              : "You don't lean hard one way today. Many directions stay open.")
         : useKo
-            ? '✨ 너의 강점 ${score.matchCount}개: ${matched.join(" · ")}'
-            : '✨ Your ${score.matchCount} strengths: ${matched.join(" · ")}';
-    final subLine = score.matchCount >= 3
+        ? '✨ ${matched.join(" · ")} — 안팎에서 같이 보인 강점'
+        : '✨ ${matched.join(" · ")} — confirmed on the deeper read';
+    final subLine = matched.isEmpty
         ? (useKo
-            ? '평소에 너도 느끼는 강점이야. 단톡·발표·시험 다 여기서 풀려.'
-            : 'These are the strengths you already feel. Group chats, presentations, tests — all open up here.')
-        : score.matchCount >= 1
-            ? (useKo
-                ? '이 ${score.matchCount}개가 너의 진짜 무기야. 오늘은 여기 위주로 가.'
-                : 'These ${score.matchCount} are your real edge. Lean into them today.')
-            : (useKo
-                ? '오늘은 한쪽으로 안 쏠려. 여러 방향이 다 열려 있는 시기야.'
-                : "You're in a phase of change today, not a single-direction push.");
+              ? '오늘은 한쪽으로 안 쏠려. 여러 방향이 다 열려 있는 시기야.'
+              : "You're in a phase of change today, not a single-direction push.")
+        : score.matchCount >= 3
+        ? (useKo
+              ? '${matched.join(" · ")} 쪽은 평소에도 느끼는 강점이야. 단톡·발표·시험 다 여기서 풀려.'
+              : 'You already feel ${matched.join(" · ")} in daily life — chats, presentations, tests open up here.')
+        : (useKo
+              ? '${matched.join(" · ")} 쪽으로 가면 오늘이 풀려. 이 강점 위주로 움직여 봐.'
+              : 'Lean into ${matched.join(" · ")} today — your day opens up there.');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 32, 24, 28),
@@ -2266,15 +2300,15 @@ class _FiveDayTrendCard extends StatelessWidget {
     // Round 77 sprint 6 — 친구 톤 + 구체 점수 차 노출. "결이에요/가라앉아요" 어른 단어 제거.
     final hint = diff > 5
         ? (useKo
-            ? '내일은 오늘보다 $diff점 더 풀려. 미뤘던 거 내일 처리해 봐.'
-            : "Tomorrow opens up by $diff. Handle what you've put off then.")
+              ? '내일은 오늘보다 $diff점 더 풀려. 미뤘던 거 내일 처리해 봐.'
+              : "Tomorrow opens up by $diff. Handle what you've put off then.")
         : diff < -5
-            ? (useKo
-                ? '내일은 오늘보다 ${-diff}점 살짝 내려가. 오늘 끝낼 수 있는 건 오늘 끝내.'
-                : 'Tomorrow dips by ${-diff}. Finish today what you can today.')
-            : (useKo
-                ? '내일도 오늘이랑 거의 같아. 이 흐름 그대로 가도 돼.'
-                : 'Tomorrow tracks today. Keep the current flow going.');
+        ? (useKo
+              ? '내일은 오늘보다 ${-diff}점 살짝 내려가. 오늘 끝낼 수 있는 건 오늘 끝내.'
+              : 'Tomorrow dips by ${-diff}. Finish today what you can today.')
+        : (useKo
+              ? '내일도 오늘이랑 거의 같아. 이 흐름 그대로 가도 돼.'
+              : 'Tomorrow tracks today. Keep the current flow going.');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 30, 24, 28),
@@ -2384,7 +2418,7 @@ Color? _luckyColorBg(String value) {
     '초록색': Color(0xFF7FAE7C), // woodJade 톤
     '빨강색': Color(0xFFB85A4A), // fireRed 톤
     '황금색': Color(0xFFD4A857), // accent 톤
-    '흰색':   Color(0xFFF3EDE4), // paper 톤
+    '흰색': Color(0xFFF3EDE4), // paper 톤
     '검정색': Color(0xFF2A2A2A), // ink 톤
   }[value];
 }
@@ -2412,8 +2446,8 @@ class _LuckyChipButton extends StatelessWidget {
           border: Border.all(
             color: hasColorBg
                 ? bg.computeLuminance() > 0.85
-                    ? AppColors.line
-                    : Colors.transparent
+                      ? AppColors.line
+                      : Colors.transparent
                 : AppColors.line,
             width: 1,
           ),
@@ -2495,9 +2529,7 @@ class _LuckyChipButton extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () => Navigator.of(ctx).pop(),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.ink,
-                    ),
+                    style: TextButton.styleFrom(foregroundColor: AppColors.ink),
                     child: Text(
                       '닫기',
                       style: GoogleFonts.notoSansKr(
@@ -2558,19 +2590,13 @@ class _DeepDiveSectionState extends State<_DeepDiveSection> {
                 const Spacer(),
                 Text(
                   _expanded ? '▲' : '▼',
-                  style: const TextStyle(
-                    color: AppColors.accent,
-                    fontSize: 10,
-                  ),
+                  style: const TextStyle(color: AppColors.accent, fontSize: 10),
                 ),
               ],
             ),
           ),
         ),
-        if (_expanded) ...[
-          ...widget.children,
-          _FullSajuCTA(),
-        ],
+        if (_expanded) ...[...widget.children, _FullSajuCTA()],
       ],
     );
   }

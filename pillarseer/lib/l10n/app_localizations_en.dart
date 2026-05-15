@@ -166,7 +166,7 @@ class AppL10nEn extends AppL10n {
   String get resultLocked => 'LOCKED';
 
   @override
-  String get resultUnlockFull => 'Full Reading — coming in Phase 2';
+  String get resultUnlockFull => 'See detailed reading';
 
   @override
   String get resultContinueDaily => 'Continue to Daily Reading';
@@ -252,24 +252,24 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get placeholderReportsDesc =>
-      'Premium reports — Compatibility, Tojeongbigyeol (Korean New Year fortune), Date Picking, Dream Interpretation. Coming soon.';
+      'Compatibility, Tojeong yearly fortune, date picking, and dream reports in one place.';
 
   @override
   String get placeholderDiscoverTitle => 'DISCOVER';
 
   @override
   String get placeholderDiscoverDesc =>
-      'K-pop saju, K-drama mysticism, and Korean fortune-telling stories. Coming soon.';
+      'Browse K-pop saju, K-drama figures, and Korean fortune-telling stories.';
 
   @override
   String get placeholderProfileTitle => 'PROFILE';
 
   @override
   String get placeholderProfileDesc =>
-      'Your birth chart archive, multi-profile management, and subscription. Coming soon.';
+      'Review your birth chart input, settings, and reset options.';
 
   @override
-  String get placeholderComingSoon => 'COMING SOON';
+  String get placeholderComingSoon => 'In preparation';
 
   @override
   String get placeholderNotifyMe => 'Notify me when ready';
@@ -534,7 +534,7 @@ class AppL10nEn extends AppL10n {
   String get paywallTitle => 'Pillar Seer Pro';
 
   @override
-  String get paywallSubtitle => 'Unlock your full Four Pillars map';
+  String get paywallSubtitle => 'Go deeper into your Four Pillars map';
 
   @override
   String get paywallHeadline => 'More than today\'s one-liner.';
@@ -608,8 +608,7 @@ class AppL10nEn extends AppL10n {
   String get paywallCta => 'Start Pro';
 
   @override
-  String get paywallSoon =>
-      'Payments coming soon — leave your email below for early access';
+  String get paywallSoon => 'Deep features are in preparation';
 
   @override
   String get paywallRestoreLater => 'Restore purchase (later)';
@@ -725,11 +724,11 @@ class AppL10nEn extends AppL10n {
   String get settingsContact => 'Contact Support';
 
   @override
-  String get modalComingSoonTitle => 'Coming in Phase 2';
+  String get modalComingSoonTitle => 'Feature in preparation';
 
   @override
   String get modalComingSoonDesc =>
-      'This feature is on the way. Want a heads-up when it lands?';
+      'This feature is still being refined. Want a heads-up when it lands?';
 
   @override
   String get modalNotifyMe => 'Notify Me';
@@ -903,7 +902,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get resultUnlockHint =>
-      'Tap Unlock Full Reading to reveal locked sections.';
+      'More sections will open when deep features are ready.';
 
   @override
   String get reportsHomeTitle => 'REPORTS';

@@ -159,7 +159,7 @@ class AppL10nKo extends AppL10n {
   String get resultLocked => '잠금';
 
   @override
-  String get resultUnlockFull => '전체 풀이 — Phase 2 출시 예정';
+  String get resultUnlockFull => '자세한 풀이 보기';
 
   @override
   String get resultContinueDaily => '오늘의 운세 보기';
@@ -240,23 +240,23 @@ class AppL10nKo extends AppL10n {
   String get placeholderReportsTitle => '리포트';
 
   @override
-  String get placeholderReportsDesc => '프리미엄 리포트 — 궁합, 토정비결, 택일, 해몽. 곧 추가됩니다.';
+  String get placeholderReportsDesc => '궁합, 토정비결, 택일, 해몽 리포트를 한곳에서 볼 수 있어요.';
 
   @override
   String get placeholderDiscoverTitle => '탐색';
 
   @override
   String get placeholderDiscoverDesc =>
-      'K-pop 사주, K-drama 미스틱, 한국 운세 이야기. 곧 추가됩니다.';
+      'K-pop 사주, K-drama 인물, 한국 운세 이야기를 가볍게 둘러보세요.';
 
   @override
   String get placeholderProfileTitle => '프로필';
 
   @override
-  String get placeholderProfileDesc => '내 사주 보관, 다중 프로필 관리, 구독. 곧 추가됩니다.';
+  String get placeholderProfileDesc => '내 사주 입력값과 설정을 확인하고 다시 입력할 수 있어요.';
 
   @override
-  String get placeholderComingSoon => '준비 중';
+  String get placeholderComingSoon => '준비 중인 기능';
 
   @override
   String get placeholderNotifyMe => '준비되면 알림 받기';
@@ -511,7 +511,7 @@ class AppL10nKo extends AppL10n {
   String get paywallTitle => 'Pillar Seer Pro';
 
   @override
-  String get paywallSubtitle => '내 사주의 전체 흐름을 열어보세요';
+  String get paywallSubtitle => '내 사주의 깊은 흐름을 더 자세히 보세요';
 
   @override
   String get paywallHeadline => '오늘의 한 줄을 넘어서.';
@@ -580,10 +580,10 @@ class AppL10nKo extends AppL10n {
   String get paywallLifetimeHint => '런칭 한정';
 
   @override
-  String get paywallCta => 'Pro 시작하기';
+  String get paywallCta => '심층 기능 보기';
 
   @override
-  String get paywallSoon => '결제 곧 출시 — 이메일 남기면 얼리액세스 안내';
+  String get paywallSoon => '심층 기능은 준비 중이에요';
 
   @override
   String get paywallRestoreLater => '구매 복원 (나중에)';
@@ -689,10 +689,10 @@ class AppL10nKo extends AppL10n {
   String get settingsContact => '고객 문의';
 
   @override
-  String get modalComingSoonTitle => 'Phase 2에 추가 예정';
+  String get modalComingSoonTitle => '준비 중인 기능';
 
   @override
-  String get modalComingSoonDesc => '이 기능은 곧 추가됩니다. 준비되면 알려드릴까요?';
+  String get modalComingSoonDesc => '이 기능은 아직 다듬는 중이에요. 준비되면 알려드릴까요?';
 
   @override
   String get modalNotifyMe => '알림 받기';
@@ -859,7 +859,7 @@ class AppL10nKo extends AppL10n {
   String get resultProLocked => 'PRO';
 
   @override
-  String get resultUnlockHint => '전체 풀이를 잠금 해제하면 모든 섹션이 열립니다.';
+  String get resultUnlockHint => '심층 기능이 준비되면 더 많은 영역을 볼 수 있어요.';
 
   @override
   String get reportsHomeTitle => '심층 리포트';

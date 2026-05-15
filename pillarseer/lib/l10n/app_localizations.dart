@@ -394,7 +394,7 @@ abstract class AppL10n {
   /// No description provided for @resultUnlockFull.
   ///
   /// In en, this message translates to:
-  /// **'Full Reading — coming in Phase 2'**
+  /// **'See detailed reading'**
   String get resultUnlockFull;
 
   /// No description provided for @resultContinueDaily.
@@ -556,7 +556,7 @@ abstract class AppL10n {
   /// No description provided for @placeholderReportsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Premium reports — Compatibility, Tojeongbigyeol (Korean New Year fortune), Date Picking, Dream Interpretation. Coming soon.'**
+  /// **'Compatibility, Tojeong yearly fortune, date picking, and dream reports in one place.'**
   String get placeholderReportsDesc;
 
   /// No description provided for @placeholderDiscoverTitle.
@@ -568,7 +568,7 @@ abstract class AppL10n {
   /// No description provided for @placeholderDiscoverDesc.
   ///
   /// In en, this message translates to:
-  /// **'K-pop saju, K-drama mysticism, and Korean fortune-telling stories. Coming soon.'**
+  /// **'Browse K-pop saju, K-drama figures, and Korean fortune-telling stories.'**
   String get placeholderDiscoverDesc;
 
   /// No description provided for @placeholderProfileTitle.
@@ -580,13 +580,13 @@ abstract class AppL10n {
   /// No description provided for @placeholderProfileDesc.
   ///
   /// In en, this message translates to:
-  /// **'Your birth chart archive, multi-profile management, and subscription. Coming soon.'**
+  /// **'Review your birth chart input, settings, and reset options.'**
   String get placeholderProfileDesc;
 
   /// No description provided for @placeholderComingSoon.
   ///
   /// In en, this message translates to:
-  /// **'COMING SOON'**
+  /// **'In preparation'**
   String get placeholderComingSoon;
 
   /// No description provided for @placeholderNotifyMe.
@@ -1078,7 +1078,7 @@ abstract class AppL10n {
   /// No description provided for @paywallSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Unlock your full Four Pillars map'**
+  /// **'Go deeper into your Four Pillars map'**
   String get paywallSubtitle;
 
   /// No description provided for @paywallHeadline.
@@ -1222,7 +1222,7 @@ abstract class AppL10n {
   /// No description provided for @paywallSoon.
   ///
   /// In en, this message translates to:
-  /// **'Payments coming soon — leave your email below for early access'**
+  /// **'Deep features are in preparation'**
   String get paywallSoon;
 
   /// No description provided for @paywallRestoreLater.
@@ -1426,13 +1426,13 @@ abstract class AppL10n {
   /// No description provided for @modalComingSoonTitle.
   ///
   /// In en, this message translates to:
-  /// **'Coming in Phase 2'**
+  /// **'Feature in preparation'**
   String get modalComingSoonTitle;
 
   /// No description provided for @modalComingSoonDesc.
   ///
   /// In en, this message translates to:
-  /// **'This feature is on the way. Want a heads-up when it lands?'**
+  /// **'This feature is still being refined. Want a heads-up when it lands?'**
   String get modalComingSoonDesc;
 
   /// No description provided for @modalNotifyMe.
@@ -1756,7 +1756,7 @@ abstract class AppL10n {
   /// No description provided for @resultUnlockHint.
   ///
   /// In en, this message translates to:
-  /// **'Tap Unlock Full Reading to reveal locked sections.'**
+  /// **'More sections will open when deep features are ready.'**
   String get resultUnlockHint;
 
   /// No description provided for @reportsHomeTitle.

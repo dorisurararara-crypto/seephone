@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/saju_provider.dart';
 import '../services/daily_service.dart';
+import '../services/saju_context.dart';
 import '../services/today_deep_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/today_event_detail_section.dart';
@@ -37,6 +38,14 @@ class TodayScreen extends ConsumerWidget {
       });
       return const SizedBox.shrink();
     }
+
+    // R84 — 단일 source DateTime + 단일 fortune + ctx 주입 (home 와 parity).
+    // 이전: TodayDeepService.build 가 ctx 없이 호출되어 today tab 본문이 home 대비
+    // 격국/용신/대운 anchor 누락 + DailyService 가 2회 호출되며 SajuContext 의
+    // todayPillar/seed 가 home 과 달라지는 위험. now/today/fortune 단일화로 고정.
+    final now = DateTime.now();
+    final fortune = DailyService().calculate(result, today: now);
+    final ctx = SajuContext.from(result, today: now);
 
     return Scaffold(
       backgroundColor: AppColors.paper,
@@ -80,8 +89,9 @@ class TodayScreen extends ConsumerWidget {
                   userMonthBranch: result.monthPillar.jiJi,
                   userDominantEl: result.elements.dominant,
                   userDeficitEl: result.elements.deficit,
-                  todayPillar: DailyService().calculate(result).dayPillar,
-                  todayScore: DailyService().calculate(result).totalScore,
+                  todayPillar: fortune.dayPillar,
+                  todayScore: fortune.totalScore,
+                  ctx: ctx,
                 ),
               ),
             ],

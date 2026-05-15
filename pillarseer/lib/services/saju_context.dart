@@ -186,6 +186,9 @@ class SajuContext {
     );
 
     // 용신.
+    // R84 — monthBranch 전달로 R83 조후/계절 보정 reason 흡수. yongsin/huisin
+    // 자체는 변하지 않으나 (R80 sprint 6 mandate / R83 회귀 가드) result_screen
+    // 의 YongsinService.judge 호출과 signature parity 확보.
     final ys = YongsinService.judge(
       dayMasterElement: dmEl,
       strengthLabel: strength.label,
@@ -194,6 +197,7 @@ class SajuContext {
       earth: el.earth,
       metal: el.metal,
       water: el.water,
+      monthBranch: saju.monthPillar.jiJi,
     );
 
     // 기신 — 용신을 극하는 오행 (5행 상극).

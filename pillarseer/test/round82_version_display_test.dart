@@ -1,7 +1,7 @@
 // Round 82 sprint 12 — version 하드코딩 제거 + package_info_plus 동적 로드 가드.
 //
 // 외부 reviewer P1 #8 (verbatim, docs/round82_spec.md §3 sprint 12):
-//   "Settings 에는 version 이 1.0.0 으로 하드코딩, pubspec 은 1.0.0+39.
+//   "Settings 에는 version 이 1.0.0 으로 하드코딩, pubspec 은 1.0.0+40.
 //    package_info_plus 로 실제 버전/빌드 번호를 읽어야 함."
 //
 // → settings_screen.dart 의 `_ValueRow(label: l.settingsVersion, value: '1.0.0')`
@@ -12,7 +12,7 @@
 // 본 test 의 testable 행동 (S1+S2+B1+B2):
 //   S1 — settings_screen.dart 에 `'1.0.0'` literal grep 0 (label value 분리).
 //   S2 — package_info_plus import + AppVersionService.load 호출 wire 잔존.
-//   B1 — AppVersionService.formatLabel(ko=true, build=39)  = "버전 1.0.0 · 빌드 39".
+//   B1 — AppVersionService.formatLabel(ko=true, build=40)  = "버전 1.0.0 · 빌드 40".
 //   B2 — Settings widget mount + mock PackageInfo 도착 후 동적 label 표시.
 
 import 'dart:io';
@@ -93,30 +93,30 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+39) 는 변경 X — 사용자 mandate.
+      // pubspec version 자체 (1.0.0+40) — R83 delivery 통합 1.0.0+40.
       expect(
-        pubspecSrc.contains('version: 1.0.0+39'),
+        pubspecSrc.contains('version: 1.0.0+40'),
         isTrue,
-        reason: 'pubspec version (1.0.0+39) 자체 변경 — 사용자 mandate 위반',
+        reason: 'pubspec version (1.0.0+40) 자체 변경 — R83 delivery 불일치',
       );
     });
 
-    test('B1 — formatLabel(ko, version=1.0.0, build=39) = "버전 1.0.0 · 빌드 39"',
+    test('B1 — formatLabel(ko, version=1.0.0, build=40) = "버전 1.0.0 · 빌드 40"',
         () {
       // PackageInfo 직접 생성. (constructor public — package_info_plus 4.x+)
       final info = PackageInfo(
         appName: 'pillarseer',
         packageName: 'com.ganziman.pillarseer',
         version: '1.0.0',
-        buildNumber: '39',
+        buildNumber: '40',
       );
       expect(
         AppVersionService.formatLabel(info, useKo: true),
-        '버전 1.0.0 · 빌드 39',
+        '버전 1.0.0 · 빌드 40',
       );
       expect(
         AppVersionService.formatLabel(info, useKo: false),
-        'Version 1.0.0 (build 39)',
+        'Version 1.0.0 (build 40)',
       );
     });
 
@@ -138,7 +138,7 @@ void main() {
     });
 
     testWidgets(
-        'B2 — Settings widget mount + mock PackageInfo 도착 후 "버전 1.0.0 · 빌드 39" 표시',
+        'B2 — Settings widget mount + mock PackageInfo 도착 후 "버전 1.0.0 · 빌드 40" 표시',
         (tester) async {
       // R82 baseline — Settings ListView 는 393 폭에서 letter-spacing 5 영향
       // _SettingsGroup 라벨이 overflow 가능. 본 test 는 version row 라벨만 검증
@@ -146,12 +146,12 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(600, 900));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      // PackageInfo mock — pubspec 의 1.0.0+39 매칭.
+      // PackageInfo mock — pubspec 의 1.0.0+40 매칭.
       PackageInfo.setMockInitialValues(
         appName: 'pillarseer',
         packageName: 'com.ganziman.pillarseer',
         version: '1.0.0',
-        buildNumber: '39',
+        buildNumber: '40',
         buildSignature: '',
         installerStore: null,
       );
@@ -210,9 +210,9 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 100));
 
-      // 동적 value — "버전 1.0.0 · 빌드 39" mount.
+      // 동적 value — "버전 1.0.0 · 빌드 40" mount.
       expect(
-        find.text('버전 1.0.0 · 빌드 39'),
+        find.text('버전 1.0.0 · 빌드 40'),
         findsOneWidget,
         reason: 'PackageInfo mock 도착 후 동적 label 미 표시',
       );

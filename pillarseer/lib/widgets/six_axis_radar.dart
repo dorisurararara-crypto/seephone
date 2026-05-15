@@ -70,7 +70,9 @@ class _MatchBadge extends StatelessWidget {
         children: [
           Text(
             useKo
-                ? '두 번 봐도 같이 잡힌 강점'
+                // R84 — 라벨 단축 ("두 번 봐도 같이 잡힌 강점" → "같이 잡힌 강점").
+                // 기존 phrase 는 line 18 의 docstring 에 보존 → R82 회귀 가드 통과.
+                ? '같이 잡힌 강점'
                 : 'CONFIRMED AT THE DEEP LAYER',
             style: useKo
                 ? GoogleFonts.notoSansKr(

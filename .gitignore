@@ -5,6 +5,9 @@
 *.p12
 *.keystore
 
+# Codex 운영 백업 (R84 운영 메모리 — 절대 주의 파일)
+**/.codex_backups/
+
 # Flutter / Dart
 **/.dart_tool/
 **/.flutter-plugins
