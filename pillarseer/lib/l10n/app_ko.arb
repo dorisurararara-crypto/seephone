@@ -368,5 +368,21 @@
   "emptyStateSajuRequiredTitle": "사주 정보를 먼저 넣어주세요",
   "emptyStateSajuRequiredSub": "ADD YOUR SAJU · 命",
   "emptyStateSajuRequiredBody": "내 사주 네 글자가 있어야 오늘의 풀이와 리포트를 보여줄 수 있어요.",
-  "emptyStateSajuRequiredCta": "사주 입력하러 가기"
+  "emptyStateSajuRequiredCta": "사주 입력하러 가기",
+
+  "settingsCalcBasisRow": "사주 계산 기준 안내",
+  "settingsCalcBasisRowDesc": "이 앱이 진태양시 · 자시 · 절기 · 음력 · 출생지를 어떻게 다루는지 한눈에 봐요",
+  "infoCalcBasisTitle": "사주 계산 기준 안내",
+  "infoCalcBasisIntro": "이 앱이 사주를 계산할 때 쓰는 5가지 기준이에요. 어려운 한자말 없이 한 줄씩 풀어드릴게요.",
+  "infoCalcBasisTrueSunLabel": "진태양시 보정",
+  "infoCalcBasisTrueSunDesc": "사주는 시계 시간 대신 태양이 실제 가장 높이 뜨는 시각을 기준으로 봐요. 이 앱은 서울 기준으로 약 32분 일찍 보정해서 계산해요.",
+  "infoCalcBasisJasiLabel": "자시 학파 (밤 11시~새벽 1시)",
+  "infoCalcBasisJasiDesc": "밤 11시부터 새벽 1시 사이를 자시(子時)라고 불러요. 학파에 따라 일주가 갈리는데, 이 앱은 밤 11시부터 다음 날로 보는 정자시(조자시)를 기본으로 써요.",
+  "infoCalcBasisSolarTermLabel": "절기 기준 월주",
+  "infoCalcBasisSolarTermDesc": "달력 1월이 아니라 절기로 사주의 한 달이 바뀌어요. 예를 들어 입춘(양력 2월 4일 무렵)이 한 해의 첫 달 시작점이에요.",
+  "infoCalcBasisLunarLabel": "음력 · 양력 입력",
+  "infoCalcBasisLunarDesc": "양력 생일을 기본으로 받고, 음력으로 입력해도 자동으로 양력으로 바꿔서 계산해요. 윤달도 지원해요.",
+  "infoCalcBasisCityLabel": "출생지 경도 보정",
+  "infoCalcBasisCityDesc": "서울이 기본이에요. 부산이나 광주처럼 다른 도시에서 태어났으면 도시 경도에 맞게 추가로 보정해요. 해외 출생지 지원은 다음 단계 작업이에요.",
+  "infoCalcBasisFooter": "더 깊은 계산 기준(억부용신·조후용신·격국용신 등)은 다음 라운드에서 안내해드릴게요."
 }

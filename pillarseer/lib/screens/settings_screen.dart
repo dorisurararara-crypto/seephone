@@ -257,6 +257,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               title: l.settingsTrustHowCalculated,
               subtitle: l.settingsTrustHowCalculatedDesc,
             ),
+            // Round 83 sprint 2 — "사주 계산 기준 안내" 진입점 (P1-G).
+            // 진태양시 / 자시 학파 / 절기 / 음력 / 출생지 경도 5 영역 readonly 안내.
+            _InfoRow(
+              title: l.settingsCalcBasisRow,
+              subtitle: l.settingsCalcBasisRowDesc,
+              onTap: () => context.push('/settings/saju-calc-basis'),
+            ),
             _InfoRow(
               title: l.settingsTrustDataLocal,
               subtitle: l.settingsTrustDataLocalDesc,

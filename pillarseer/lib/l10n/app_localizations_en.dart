@@ -1099,4 +1099,57 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get emptyStateSajuRequiredCta => 'Enter my saju';
+
+  @override
+  String get settingsCalcBasisRow => 'How your saju is calculated';
+
+  @override
+  String get settingsCalcBasisRowDesc =>
+      'See how this app handles true sun time, the late-night Jasi hour, solar terms, lunar input, and birth-city longitude.';
+
+  @override
+  String get infoCalcBasisTitle => 'How your saju is calculated';
+
+  @override
+  String get infoCalcBasisIntro =>
+      'These are the five rules this app uses when it reads your saju. One short line each — no heavy jargon.';
+
+  @override
+  String get infoCalcBasisTrueSunLabel => 'True sun time correction';
+
+  @override
+  String get infoCalcBasisTrueSunDesc =>
+      'Saju uses the real sun\'s noon, not your wall clock. This app shifts the time by about 32 minutes from the Korean standard, calibrated for Seoul.';
+
+  @override
+  String get infoCalcBasisJasiLabel => 'Jasi hour rules (11pm to 1am)';
+
+  @override
+  String get infoCalcBasisJasiDesc =>
+      'The hour between 11pm and 1am is called Jasi (子時). Schools disagree on which day\'s pillar to use; this app\'s default treats 11pm as the start of the next day\'s pillar.';
+
+  @override
+  String get infoCalcBasisSolarTermLabel => 'Monthly pillar by solar terms';
+
+  @override
+  String get infoCalcBasisSolarTermDesc =>
+      'Saju months don\'t follow the calendar. They switch on solar terms — for example, Ipchun around February 4 is treated as the year\'s first month.';
+
+  @override
+  String get infoCalcBasisLunarLabel => 'Lunar and solar input';
+
+  @override
+  String get infoCalcBasisLunarDesc =>
+      'You enter your birthday in the solar calendar by default. Lunar input is converted automatically, with leap-month support.';
+
+  @override
+  String get infoCalcBasisCityLabel => 'Birth-city longitude correction';
+
+  @override
+  String get infoCalcBasisCityDesc =>
+      'Seoul is the default. Korean cities such as Busan or Gwangju get an extra correction based on their longitude. Birthplaces abroad are planned for a later release.';
+
+  @override
+  String get infoCalcBasisFooter =>
+      'Deeper rules (eokbu / johu / gyeokguk yongsin) are documented in a later round.';
 }

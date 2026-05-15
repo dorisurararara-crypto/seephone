@@ -2136,6 +2136,96 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Enter my saju'**
   String get emptyStateSajuRequiredCta;
+
+  /// No description provided for @settingsCalcBasisRow.
+  ///
+  /// In en, this message translates to:
+  /// **'How your saju is calculated'**
+  String get settingsCalcBasisRow;
+
+  /// No description provided for @settingsCalcBasisRowDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'See how this app handles true sun time, the late-night Jasi hour, solar terms, lunar input, and birth-city longitude.'**
+  String get settingsCalcBasisRowDesc;
+
+  /// No description provided for @infoCalcBasisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How your saju is calculated'**
+  String get infoCalcBasisTitle;
+
+  /// No description provided for @infoCalcBasisIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'These are the five rules this app uses when it reads your saju. One short line each — no heavy jargon.'**
+  String get infoCalcBasisIntro;
+
+  /// No description provided for @infoCalcBasisTrueSunLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'True sun time correction'**
+  String get infoCalcBasisTrueSunLabel;
+
+  /// No description provided for @infoCalcBasisTrueSunDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Saju uses the real sun\'s noon, not your wall clock. This app shifts the time by about 32 minutes from the Korean standard, calibrated for Seoul.'**
+  String get infoCalcBasisTrueSunDesc;
+
+  /// No description provided for @infoCalcBasisJasiLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Jasi hour rules (11pm to 1am)'**
+  String get infoCalcBasisJasiLabel;
+
+  /// No description provided for @infoCalcBasisJasiDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The hour between 11pm and 1am is called Jasi (子時). Schools disagree on which day\'s pillar to use; this app\'s default treats 11pm as the start of the next day\'s pillar.'**
+  String get infoCalcBasisJasiDesc;
+
+  /// No description provided for @infoCalcBasisSolarTermLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly pillar by solar terms'**
+  String get infoCalcBasisSolarTermLabel;
+
+  /// No description provided for @infoCalcBasisSolarTermDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Saju months don\'t follow the calendar. They switch on solar terms — for example, Ipchun around February 4 is treated as the year\'s first month.'**
+  String get infoCalcBasisSolarTermDesc;
+
+  /// No description provided for @infoCalcBasisLunarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunar and solar input'**
+  String get infoCalcBasisLunarLabel;
+
+  /// No description provided for @infoCalcBasisLunarDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You enter your birthday in the solar calendar by default. Lunar input is converted automatically, with leap-month support.'**
+  String get infoCalcBasisLunarDesc;
+
+  /// No description provided for @infoCalcBasisCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth-city longitude correction'**
+  String get infoCalcBasisCityLabel;
+
+  /// No description provided for @infoCalcBasisCityDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Seoul is the default. Korean cities such as Busan or Gwangju get an extra correction based on their longitude. Birthplaces abroad are planned for a later release.'**
+  String get infoCalcBasisCityDesc;
+
+  /// No description provided for @infoCalcBasisFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Deeper rules (eokbu / johu / gyeokguk yongsin) are documented in a later round.'**
+  String get infoCalcBasisFooter;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {
