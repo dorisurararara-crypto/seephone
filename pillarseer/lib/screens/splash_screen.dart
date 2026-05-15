@@ -65,6 +65,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             birthCity: '',
             isLunar: false,
             isMale: _ssMale,
+            // Round 82 sprint 9 — screenshot mode 는 male/female boolean 만 받음,
+            // 원본 gender 도 동일하게 mapping (Gender.other 시뮬레이션은 별도 ENV 필요 시 추가).
+            gender: _ssMale ? UserGender.male : UserGender.female,
           ));
       if (!mounted) return;
       context.go(_screenshotRoute);

@@ -205,6 +205,48 @@ abstract class AppL10n {
   /// **'Other'**
   String get inputGenderOther;
 
+  /// No description provided for @inputGenderOtherModalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a calculation basis'**
+  String get inputGenderOtherModalTitle;
+
+  /// No description provided for @inputGenderOtherModalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Saju luck-pillar math needs a male/female basis. Which basis should we use?'**
+  String get inputGenderOtherModalBody;
+
+  /// No description provided for @inputGenderOtherModalMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Use male basis'**
+  String get inputGenderOtherModalMale;
+
+  /// No description provided for @inputGenderOtherModalFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Use female basis'**
+  String get inputGenderOtherModalFemale;
+
+  /// No description provided for @inputGenderOtherModalCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get inputGenderOtherModalCancel;
+
+  /// No description provided for @inputGenderOtherCalcMaleBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Calc basis: male'**
+  String get inputGenderOtherCalcMaleBadge;
+
+  /// No description provided for @inputGenderOtherCalcFemaleBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Calc basis: female'**
+  String get inputGenderOtherCalcFemaleBadge;
+
   /// No description provided for @inputFindMyDestiny.
   ///
   /// In en, this message translates to:

@@ -63,6 +63,28 @@ class AppL10nKo extends AppL10n {
   String get inputGenderOther => '기타';
 
   @override
+  String get inputGenderOtherModalTitle => '계산 기준을 골라 주세요';
+
+  @override
+  String get inputGenderOtherModalBody =>
+      '사주 대운 계산은 남/여 기준이 필요해요. 어느 기준으로 계산할까요?';
+
+  @override
+  String get inputGenderOtherModalMale => '남 기준으로 계산할게요';
+
+  @override
+  String get inputGenderOtherModalFemale => '여 기준으로 계산할게요';
+
+  @override
+  String get inputGenderOtherModalCancel => '닫기';
+
+  @override
+  String get inputGenderOtherCalcMaleBadge => '계산 기준: 남';
+
+  @override
+  String get inputGenderOtherCalcFemaleBadge => '계산 기준: 여';
+
+  @override
   String get inputFindMyDestiny => '내 사주 보기';
 
   @override

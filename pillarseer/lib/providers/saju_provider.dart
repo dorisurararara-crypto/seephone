@@ -5,6 +5,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/saju_result.dart';
 
+/// Round 82 sprint 9 — 사용자 원본 성별 보존 (외부 review P0 #6).
+///
+/// `isMale` 은 사주 대운 순행/역행 계산 용 boolean 으로만 사용.
+/// 원본 입력은 `gender` 필드에 male/female/other 그대로 store → K-POP 궁합 필터 등
+/// 후속 surface 가 "기타" 사용자를 silent 로 남/여 중 하나로 분류하지 않도록 보존.
+enum UserGender { male, female, other }
+
 /// 사용자 입력 정보 (재계산 / Profile 표시용)
 class UserBirthInfo {
   final String name;
@@ -14,8 +21,14 @@ class UserBirthInfo {
   final String birthCity;
   final bool isLunar;
   final bool unknownTime;
-  /// K-POP 셀럽 궁합 시 반대 성별 셀럽만 표시. 기본 true (남성) — null 일 땐 모두 표시.
+
+  /// 사주 대운 순행/역행 계산 기준 (양남 = 순행 / 음남 = 역행).
+  /// Gender.other 사용자는 보조 모달에서 명시 선택한 기준이 들어감 (silent X).
   final bool isMale;
+
+  /// Round 82 sprint 9 — 사용자 원본 성별. Gender.other 보존 보장.
+  /// K-POP 궁합 등 후속 surface 에서 원본 의도가 필요할 때 참조.
+  final UserGender gender;
 
   const UserBirthInfo({
     required this.name,
@@ -26,6 +39,7 @@ class UserBirthInfo {
     required this.isLunar,
     this.unknownTime = false,
     this.isMale = true,
+    this.gender = UserGender.male,
   });
 }
 

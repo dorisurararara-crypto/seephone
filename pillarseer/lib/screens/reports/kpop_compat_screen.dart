@@ -89,9 +89,22 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
 
   Widget _buildLoadedBody(
       BuildContext context, SajuResult me, dynamic userInfo, bool useKo) {
-    // 사용자 성별 반대 셀럽만 노출. 사용자 정보 없으면 전체.
-    final preferredGender =
-        userInfo == null ? null : (userInfo.isMale ? 'F' : 'M');
+    // Round 82 sprint 9 — Gender.other 사용자 silent 필터링 fix (외부 review P0 #6).
+    // 원본 성별이 UserGender.other 면 반대 성별 셀럽 필터를 끔 — 사용자 의도 존중.
+    // 사용자 정보 없거나 other 면 전체 노출.
+    String? preferredGender;
+    if (userInfo != null) {
+      final UserGender userOriginalGender =
+          (userInfo is UserBirthInfo) ? userInfo.gender : UserGender.male;
+      if (userOriginalGender == UserGender.male) {
+        preferredGender = 'F';
+      } else if (userOriginalGender == UserGender.female) {
+        preferredGender = 'M';
+      } else {
+        // UserGender.other — 반대 성별 필터 끔, 모든 셀럽 노출.
+        preferredGender = null;
+      }
+    }
     final filtered = _stars
         .where((s) => _filter == 'all' || s.kind == _filter)
         .where((s) =>

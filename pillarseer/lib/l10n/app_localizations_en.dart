@@ -65,6 +65,28 @@ class AppL10nEn extends AppL10n {
   String get inputGenderOther => 'Other';
 
   @override
+  String get inputGenderOtherModalTitle => 'Pick a calculation basis';
+
+  @override
+  String get inputGenderOtherModalBody =>
+      'Saju luck-pillar math needs a male/female basis. Which basis should we use?';
+
+  @override
+  String get inputGenderOtherModalMale => 'Use male basis';
+
+  @override
+  String get inputGenderOtherModalFemale => 'Use female basis';
+
+  @override
+  String get inputGenderOtherModalCancel => 'Close';
+
+  @override
+  String get inputGenderOtherCalcMaleBadge => 'Calc basis: male';
+
+  @override
+  String get inputGenderOtherCalcFemaleBadge => 'Calc basis: female';
+
+  @override
   String get inputFindMyDestiny => 'Find My Destiny';
 
   @override

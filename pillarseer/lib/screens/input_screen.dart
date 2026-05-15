@@ -40,6 +40,10 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   bool _isLunar = false;
   bool _unknownTime = false;
   Gender? _gender;
+  // Round 82 sprint 9 — Gender.other 계산 처리 (외부 review P0 #6).
+  // "기타" 선택 시 사용자에게 보조 모달로 "남 기준 / 여 기준" 명시 선택을 받아 저장.
+  // null 이면 _gender == Gender.other 여도 silent male 처리 0 — 제출 가드가 다시 모달 띄움.
+  bool? _calculationIsMaleForOther;
   bool _isLoading = false;
 
   @override
@@ -62,6 +66,9 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       _selectedDate != null &&
       (_selectedTime != null || _unknownTime) &&
       _gender != null &&
+      // Round 82 sprint 9 — Gender.other 면 계산 기준도 명시 선택해야 제출 가능.
+      // silent male fallback 0 mandate (외부 review P0 #6).
+      (_gender != Gender.other || _calculationIsMaleForOther != null) &&
       _dateError == null &&
       _timeError == null &&
       !_isLoading;
@@ -377,11 +384,38 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                           : (_gender == Gender.male
                               ? 0
                               : (_gender == Gender.female ? 1 : 2)),
-                      onChanged: (i) => setState(() => _gender =
-                          i == 0
-                              ? Gender.male
-                              : (i == 1 ? Gender.female : Gender.other)),
+                      onChanged: (i) {
+                        if (i == 0) {
+                          setState(() {
+                            _gender = Gender.male;
+                            _calculationIsMaleForOther = null;
+                          });
+                        } else if (i == 1) {
+                          setState(() {
+                            _gender = Gender.female;
+                            _calculationIsMaleForOther = null;
+                          });
+                        } else {
+                          // Round 82 sprint 9 — Gender.other 선택 시 보조 모달 mount.
+                          // silent male 처리 X — 사용자 명시 선택만 수용 (외부 review P0 #6).
+                          setState(() => _gender = Gender.other);
+                          _askOtherGenderCalcBasis();
+                        }
+                      },
                     ),
+                    // Round 82 sprint 9 — Gender.other 선택 후 계산 기준 명시 store 시
+                    // 사용자에게 현재 적용된 기준을 1줄 배지로 보여줌 (silent 가 silent 가 아님).
+                    if (_gender == Gender.other &&
+                        _calculationIsMaleForOther != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: _OtherGenderCalcBadge(
+                          label: _calculationIsMaleForOther == true
+                              ? l.inputGenderOtherCalcMaleBadge
+                              : l.inputGenderOtherCalcFemaleBadge,
+                          onTap: _askOtherGenderCalcBasis,
+                        ),
+                      ),
                     const SizedBox(height: 40),
                     _PrimaryCta(
                       label: l.inputFindMyDestiny,
@@ -436,6 +470,87 @@ class _InputScreenState extends ConsumerState<InputScreen> {
         ),
       );
 
+  /// Round 82 sprint 9 — Gender.other 보조 모달 (외부 review P0 #6).
+  ///
+  /// 사주 대운 계산은 남양여음 (양남 = 순행 / 음남 = 역행) 기반이라 male/female 둘 중 하나의
+  /// boolean 이 필수. "기타" 선택 사용자에게 silent male 처리 X — 명시 선택 받음.
+  /// 사용자가 모달 취소·dismiss 시 _gender 가 Gender.other 인 채로 _calculationIsMaleForOther
+  /// 가 null 로 남아, _canSubmit + _submit 가드가 막아 silent fallback 0.
+  Future<void> _askOtherGenderCalcBasis() async {
+    final l = AppL10n.of(context);
+    final choice = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        return SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(22, 22, 22, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l.inputGenderOtherModalTitle,
+                  style: GoogleFonts.notoSerifKr(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.ink,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l.inputGenderOtherModalBody,
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    height: 1.5,
+                    color: AppColors.inkLight,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                _OtherGenderChoiceButton(
+                  label: l.inputGenderOtherModalMale,
+                  onTap: () => Navigator.of(sheetCtx).pop(true),
+                ),
+                const SizedBox(height: 8),
+                _OtherGenderChoiceButton(
+                  label: l.inputGenderOtherModalFemale,
+                  onTap: () => Navigator.of(sheetCtx).pop(false),
+                ),
+                const SizedBox(height: 4),
+                TextButton(
+                  onPressed: () => Navigator.of(sheetCtx).pop(null),
+                  child: Text(
+                    l.inputGenderOtherModalCancel,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.taupe,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    if (!mounted) return;
+    if (choice == null) {
+      // 취소·dismiss — silent male 처리 0 mandate. _gender 를 null 로 되돌려
+      // 사용자가 segmented picker 에서 다시 골라야 진행 가능.
+      setState(() {
+        _gender = null;
+        _calculationIsMaleForOther = null;
+      });
+    } else {
+      setState(() => _calculationIsMaleForOther = choice);
+    }
+  }
+
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     if (_selectedDate == null) return;
@@ -453,6 +568,12 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       );
       return;
     }
+    // Round 82 sprint 9 — Gender.other 가드. silent male 처리 0 (외부 review P0 #6).
+    // _calculationIsMaleForOther 미선택 시 모달 다시 띄우고 return.
+    if (_gender == Gender.other && _calculationIsMaleForOther == null) {
+      _askOtherGenderCalcBasis();
+      return;
+    }
 
     final l = AppL10n.of(context);
     setState(() => _isLoading = true);
@@ -462,8 +583,21 @@ class _InputScreenState extends ConsumerState<InputScreen> {
       final hour = _unknownTime ? 0 : (_selectedTime?.hour ?? 0);
       final minute = _unknownTime ? 0 : (_selectedTime?.minute ?? 0);
       final sajuOpts = ref.read(sajuSettingsProvider);
-      // _gender != null (위 가드 통과). Gender.female → isMale=false / 그 외(male/other) → isMale=true.
-      final isMale = _gender != Gender.female;
+      // Round 82 sprint 9 — silent truthy fallback 제거 (외부 review P0 #6).
+      // Gender.male → isMale=true / Gender.female → isMale=false / Gender.other → 사용자가
+      // 보조 모달로 명시 선택한 _calculationIsMaleForOther 사용 (위 가드에서 non-null 보장).
+      final bool isMale;
+      switch (_gender!) {
+        case Gender.male:
+          isMale = true;
+          break;
+        case Gender.female:
+          isMale = false;
+          break;
+        case Gender.other:
+          isMale = _calculationIsMaleForOther!;
+          break;
+      }
       final result = await svc.calculateSaju(
         year: _selectedDate!.year,
         month: _selectedDate!.month,
@@ -480,6 +614,22 @@ class _InputScreenState extends ConsumerState<InputScreen> {
             : _cityController.text.trim(),
       );
 
+      // Round 82 sprint 9 — 원본 성별 보존 (외부 review P0 #6 fix 2).
+      // Gender.other 사용자는 isMale 이 보조 모달로 결정된 계산 기준일 뿐이라,
+      // 원본 의도는 UserBirthInfo.gender 에 별도 store. K-POP 궁합 등 후속 surface 에서
+      // "기타" 사용자를 silent 로 남/여 중 하나로 분류하지 않게 함.
+      final UserGender userGender;
+      switch (_gender!) {
+        case Gender.male:
+          userGender = UserGender.male;
+          break;
+        case Gender.female:
+          userGender = UserGender.female;
+          break;
+        case Gender.other:
+          userGender = UserGender.other;
+          break;
+      }
       ref.read(sajuResultProvider.notifier).set(result);
       ref.read(userBirthInfoProvider.notifier).set(UserBirthInfo(
             name: _nameController.text.trim(),
@@ -490,6 +640,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
             isLunar: _isLunar,
             unknownTime: _unknownTime,
             isMale: isMale,
+            gender: userGender,
           ));
 
       if (mounted) {
@@ -829,6 +980,75 @@ class _PrimaryCta extends StatelessWidget {
                     color: AppColors.bg, strokeWidth: 2),
               )
             : Text(label),
+      ),
+    );
+  }
+}
+
+/// Round 82 sprint 9 — Gender.other 보조 모달 선택 버튼 (외부 review P0 #6).
+class _OtherGenderChoiceButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  const _OtherGenderChoiceButton({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      key: ValueKey('other-gender-choice-$label'),
+      onPressed: onTap,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.ink,
+        side: const BorderSide(color: AppColors.ink, width: 1.0),
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.notoSansKr(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppColors.ink,
+        ),
+      ),
+    );
+  }
+}
+
+/// Round 82 sprint 9 — Gender.other 선택 후 적용된 계산 기준 배지 (외부 review P0 #6).
+/// silent 가 silent 가 아님을 사용자가 한눈에 보도록 1줄 surfacing.
+class _OtherGenderCalcBadge extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  const _OtherGenderCalcBadge({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      key: const ValueKey('other-gender-calc-badge'),
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          color: AppColors.ink.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Icon(Icons.edit_outlined,
+                size: 14, color: AppColors.ink.withValues(alpha: 0.7)),
+          ],
+        ),
       ),
     );
   }
