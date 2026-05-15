@@ -1,0 +1,38 @@
+# R82 sprint 8 — saju_deep_slice ko 본문 AI 슬롭 + 한자 jargon blacklist
+# 사용자 verbatim (인수인계.md 2026-05-15): "내용도 부자연스러운것도 많고"
+# 한 줄에 한 phrase. # 주석 라인은 무시.
+# 본 fixture 는 test/round82_deep_slice_tone_test.dart 가 30 sample 영역에 grep.
+
+# === 한자 jargon (사용자 의미 모름) ===
+벼린 칼
+도검의 끝
+정수
+본질
+결을 다듬
+구조예요
+구조에요
+본질을
+
+# === AI 슬롭 직역체 noun 단독 ===
+흐름이
+센터처럼
+본인 결
+본인의 결
+당신의 결
+결이에요
+
+# === Apologetic AI 어조 ===
+죄송하지만
+단정 짓기 어렵
+확실하지는 않
+
+# === 의료 단정 ===
+병이 나요
+치료가 필요해요
+의사 상담
+
+# === 직장인 jargon ===
+KPI
+OKR
+리텐션
+퍼포먼스
