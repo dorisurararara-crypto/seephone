@@ -251,7 +251,10 @@ class _RadarPainter extends CustomPainter {
       ..strokeWidth = 1.5;
     canvas.drawPath(dataPath, strokePaint);
 
-    // 3) 데이터 점 — 일치(✨) 축은 강조.
+    // 3) 데이터 점 — Round 80 sprint 5 색상 재설계.
+    // 사용자 사진1 피드백 ("작은 점에 색깔, 큰 점은 색 X") 직발.
+    // - 채도/투명도/점 크기 = 값 비례 (사용자 직관 = "값 클수록 진하고 큼").
+    // - matched (cross-match) = ring + label ✨ 만 보조 채널.
     for (var i = 0; i < axes.length; i++) {
       final v = (score.combinedScores[axes[i]] ?? 0) / 100.0;
       final r = radius * v;
@@ -260,17 +263,21 @@ class _RadarPainter extends CustomPainter {
         center.dy + r * math.sin(angles[i]),
       );
       final matched = score.crossMatches[axes[i]] ?? false;
+      // 점 크기: 값 비례 (값 0 → 2.5px, 값 1.0 → 4.5px).
+      final dotRadius = 2.5 + 2.0 * v.clamp(0.0, 1.0);
+      // 점 색: 단일 ink, 채도(투명도)는 값 비례 (값 0 → 0.45 / 값 1.0 → 1.0).
+      final dotAlpha = (0.45 + 0.55 * v.clamp(0.0, 1.0)).clamp(0.45, 1.0);
       final dotPaint = Paint()
-        ..color = matched ? AppColors.accent : AppColors.ink
+        ..color = AppColors.ink.withValues(alpha: dotAlpha)
         ..style = PaintingStyle.fill;
-      canvas.drawCircle(p, matched ? 4.2 : 3.0, dotPaint);
+      canvas.drawCircle(p, dotRadius, dotPaint);
       if (matched) {
-        // ✨ 효과: outer ring
+        // ✨ 효과: outer ring (matched 보조 채널 — 색상은 값에 양보).
         final ringPaint = Paint()
-          ..color = AppColors.accent.withValues(alpha: 0.35)
+          ..color = AppColors.accent.withValues(alpha: 0.55)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.5;
-        canvas.drawCircle(p, 7, ringPaint);
+        canvas.drawCircle(p, dotRadius + 3.0, ringPaint);
       }
     }
 
