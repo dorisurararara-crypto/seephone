@@ -313,7 +313,7 @@ abstract class AppL10n {
   /// **'Element strength score (app-calibrated)'**
   String get resultFiveElements;
 
-  /// One-line helper under the element strength score header.
+  /// No description provided for @resultFiveElementsHelper.
   ///
   /// In en, this message translates to:
   /// **'An app-calibrated score combining hidden stems, the birth month, and root strength.'**
@@ -1212,6 +1212,24 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Reset birth chart'**
   String get profileReset;
+
+  /// No description provided for @profileResetConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset your saju input?'**
+  String get profileResetConfirmTitle;
+
+  /// No description provided for @profileResetConfirmDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll start over from the input screen.'**
+  String get profileResetConfirmDesc;
+
+  /// No description provided for @profileResetConfirmCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get profileResetConfirmCta;
 
   /// No description provided for @inputBirthdayManualHint.
   ///

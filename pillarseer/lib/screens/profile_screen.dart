@@ -171,11 +171,9 @@ class ProfileScreen extends ConsumerWidget {
             _MenuRow(
               label: l.profileReset,
               destructive: true,
-              onTap: () {
-                ref.read(sajuResultProvider.notifier).clear();
-                ref.read(userBirthInfoProvider.notifier).clear();
-                context.go('/input');
-              },
+              // R82 sprint 11 — 외부 reviewer P1 #7. 즉시 clear 가 아니라 confirm
+              // dialog 1회. Settings 의 "내 데이터 모두 삭제" 모달 패턴과 일관.
+              onTap: () => _confirmReset(context, ref, l),
             ),
           ],
         ),
@@ -183,6 +181,74 @@ class ProfileScreen extends ConsumerWidget {
       bottomNavigationBar: const PillarBottomNav(activeIdx: 3),
     );
   }
+}
+
+/// Round 82 sprint 11 — Profile reset 메뉴 row tap 시 confirm dialog 1회.
+/// 외부 reviewer P1 #7 — Settings "내 데이터 모두 삭제" 와 동일 패턴 (AlertDialog +
+/// BorderRadius.zero + line 1px + Inter letterSpacing 4 + fireRed accent).
+/// "지우기" 분기에서만 기존 reset 동작 실행 (provider clear + `/input` 이동).
+Future<void> _confirmReset(
+  BuildContext context,
+  WidgetRef ref,
+  AppL10n l,
+) async {
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.bg,
+      surfaceTintColor: AppColors.bg,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+        side: BorderSide(color: AppColors.line, width: 1),
+      ),
+      title: Text(
+        l.profileResetConfirmTitle,
+        style: GoogleFonts.notoSerifKr(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.ink,
+          height: 1.5,
+        ),
+      ),
+      content: Text(
+        l.profileResetConfirmDesc,
+        style: GoogleFonts.notoSansKr(
+          color: AppColors.inkLight,
+          fontSize: 13,
+          height: 1.7,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(
+            l.modalNotNow.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 4,
+              color: AppColors.taupe,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(
+            l.profileResetConfirmCta.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 4,
+              color: AppColors.fireRed,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+  if (ok != true || !context.mounted) return;
+  ref.read(sajuResultProvider.notifier).clear();
+  ref.read(userBirthInfoProvider.notifier).clear();
+  context.go('/input');
 }
 
 /// Round 77 sprint 7 — 정사각 1080×1080 PNG 공유 카드 생성 + share_plus 호출.

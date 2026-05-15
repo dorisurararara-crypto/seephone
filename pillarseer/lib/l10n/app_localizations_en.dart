@@ -601,6 +601,16 @@ class AppL10nEn extends AppL10n {
   String get profileReset => 'Reset birth chart';
 
   @override
+  String get profileResetConfirmTitle => 'Reset your saju input?';
+
+  @override
+  String get profileResetConfirmDesc =>
+      'You\'ll start over from the input screen.';
+
+  @override
+  String get profileResetConfirmCta => 'Reset';
+
+  @override
   String get inputBirthdayManualHint =>
       'Type directly: YYYY-MM-DD (e.g. 1996-05-16)';
 

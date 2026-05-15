@@ -118,8 +118,7 @@ class AppL10nKo extends AppL10n {
   String get resultFiveElements => '세력 분포 점수 (앱 기준)';
 
   @override
-  String get resultFiveElementsHelper =>
-      '숨은 글자, 태어난 달, 뿌리 힘을 같이 본 앱 기준 점수예요.';
+  String get resultFiveElementsHelper => '숨은 글자, 태어난 달, 뿌리 힘을 같이 본 앱 기준 점수예요.';
 
   @override
   String get resultDominant => '많이 가진 에너지';
@@ -577,6 +576,15 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get profileReset => '사주 다시 입력';
+
+  @override
+  String get profileResetConfirmTitle => '내 사주 입력값을 지울까요?';
+
+  @override
+  String get profileResetConfirmDesc => '지우면 처음부터 다시 입력하게 돼요.';
+
+  @override
+  String get profileResetConfirmCta => '지우기';
 
   @override
   String get inputBirthdayManualHint => '직접 입력: YYYY-MM-DD (예: 1996-05-16)';
