@@ -14,7 +14,7 @@
 |---|---|
 | Round | 82 |
 | 시작일 | 2026-05-15 |
-| 예정 sprint 수 | 10 |
+| 예정 sprint 수 | 14 (sprint 1~8 = 사용자 9문제 fix / sprint 9~12 = 외부 review 4 작은 fix / sprint 13 회귀 가드 / sprint 14 memory + 배포) |
 | 직전 Round | 80 (개인화 broken fix + 차트 색상 + D2 조후용신, 미배포 / commit `f259133`) |
 | 진행 중단 Round | 81 (만세력 일주 99% mandate, sprint 1 spec 까지 — `docs/round81_spec.md` / commit `2ea7054`) |
 | 사용자 trigger 시점 | R81 sprint 1 spec 작성 직후, 사용자가 1.0.0+39 ganzitester 빌드를 본인 + 여자친구 + 본인 결과 다시 보다가 9 visible 문제 noticed → R81 중단 · R82 우선 진행 |
@@ -43,7 +43,7 @@
 | 4. AI 기능 자연 녹임 기회 (sprint 2~8) | §2 #3 / #5 / #6 / §3 Sprint plan 의 fix 방향 |
 | 5. 디자인 톤 (콘텐츠 작성 시) | §4 M5 mandate (페르소나 + 톤 게이트) |
 | 6. NON-GOAL list | §5 NON-GOAL (12 항목) |
-| 7. Sprint Outline (10 sprint user story) | §3 Sprint plan (10 sprint 표 + user story 1줄) |
+| 7. Sprint Outline (14 sprint user story) | §3 Sprint plan (14 sprint 표 + user story 1줄, sprint 1~8 사용자 9문제 + sprint 9~12 외부 review 4 fix + sprint 13 회귀 가드 + sprint 14 memory/배포) |
 
 ---
 
@@ -197,7 +197,7 @@
 
 ---
 
-## 3. Sprint plan (10 sprint)
+## 3. Sprint plan (14 sprint)
 
 각 sprint 의 user story 는 testable. codex 9.9+ 못 받으면 그 sprint 안에서 반복 (harness pattern, max 7 라운드 / 라운드 마다 다른 audit file).
 
@@ -211,8 +211,12 @@
 | 6 | #7+#8+#9 fix — 한글 동물 name / 일진 / 알림 context | 사용자가 "금토끼" / "금원숭이" / "조승현아 오늘은 금토끼에 날이야" / "오늘 일진 토 쥐" 문구를 보고 옆에 1줄 의미 설명 (사주와 관계 명시) 을 본다. | `notification_pool_service.dart` / `home_screen.dart` / arb / 한글 동물 노출 영역 grep + 카드 widget 추가 test | 보존 | 보존 |
 | 7 | #1 fix — UI 정보 우선순위 정리 (first-fold 핵심만) | 사용자가 `result_screen.dart` 첫 fold 에서 핵심 3~4 섹션 만 펼침 상태, 나머지 12+ 섹션은 접힘 상태로 본다. | `result_screen.dart` widget tree 재구성 + 첫 fold cap test + golden screenshot | 보존 | 보존 |
 | 8 | #2 fix — 본문 부자연스러움 (saju_deep_slice 30 entry sample 재작성) | 사용자가 `saju_deep_slice_*.json` sample 30 entry ko 본문에서 R74 어색 phrase blacklist 0 (운세의신 톤 참고하되 문장 복제 X). | `assets/data/saju_deep_slice_*.json` 30 entry update + tone audit + blacklist grep test | 보존 | 보존 |
-| 9 | 회귀 가드 + R69 lock 검증 + 5행 골든 보존 | 사용자가 `flutter test` 전체 PASS 확인. 1995-10-27 男 17시 5행 골든 16/21/17/41/4 + 일주 辛卯 보존. R69 lock (본성 78 / 연애 78 / 일 72 / 돈 74 / 건강 57 / 평판 71) 보존 또는 갱신 commit. | `flutter analyze` 0 + `flutter test` 전체 PASS + 골든 test + R69 lock test | 보존 | 보존 또는 갱신 |
-| 10 | memory R82 + 인수인계.md R82 섹션 + (사용자가 배포 지시 시 그때만) 1.0.0+40 외부 베타 ganzitester 제출 | 사용자가 본 memory (`project_pillarseer_round_82.md`) + 인수인계.md R82 섹션 commit 을 확인하고, 그 후 사용자가 "배포해" 라고 지시한 경우에만 1.0.0+40 외부 베타 제출 진행. | memory + 인수인계 commit + (사용자가 배포 지시 시 그때만) altool 업로드 | 보존 | 보존 |
+| 9 | 외부 review P0 #6 fix — Gender.other 계산 처리 | 사용자가 입력 화면에서 "기타" 성별을 골랐을 때 보조 설명 모달 또는 "계산 기준 성별" 라벨로 사용자 의도를 묻고, ManseryeokService 가 fallback 으로 male 을 silent assume 하지 않는다. | `input_screen.dart` 라벨/모달 + `manseryeok_service.dart` gender 처리 + test 신규 | 보존 | 보존 |
+| 10 | 외부 review P0 #7 fix — 오행 퍼센트 라벨을 "세력 분포 점수" 로 정정 + 산출 근거 1줄 | 사용자가 5행 카드 라벨/툴팁에서 "정확한 오행 비율" 이 아닌 "앱 기준 세력 분포 점수 — 숨은 글자, 태어난 달, 뿌리 힘을 같이 본 점수예요" 평이 풀이 1줄을 본다. | `result_screen.dart` 5행 카드 라벨 + arb key + helper text + tone audit | 보존 | 보존 |
+| 11 | 외부 review P1 #7 fix — Profile reset confirm 모달 | 사용자가 Profile 화면의 reset 버튼을 눌렀을 때 즉시 clear 가 아니라 "내 사주 입력값을 지울까요?" confirm dialog 가 뜬다. | `profile_screen.dart` reset 핸들러 + dialog + test 신규 | 보존 | 보존 |
+| 12 | 외부 review P1 #8 fix — version 하드코딩 제거 (package_info_plus) | 사용자가 Settings 의 버전 라벨에서 1.0.0 (하드코딩) 이 아니라 pubspec 의 실제 version+build 가 표시된 것을 본다. | `settings_screen.dart` version 영역 + `pubspec.yaml` dep 추가 + initState 로드 + test 신규 | 보존 | 보존 |
+| 13 | 회귀 가드 + R69 lock 검증 + 5행 골든 보존 | 사용자가 `flutter test` 전체 PASS 확인. 1995-10-27 男 17시 5행 골든 16/21/17/41/4 + 일주 辛卯 보존. R69 lock (본성 78 / 연애 78 / 일 72 / 돈 74 / 건강 57 / 평판 71) 보존 또는 갱신 commit. | `flutter analyze` 0 + `flutter test` 전체 PASS + 골든 test + R69 lock test | 보존 | 보존 또는 갱신 |
+| 14 | memory R82 + 인수인계.md R82 섹션 + (사용자가 배포 지시 시 그때만) 1.0.0+40 외부 베타 ganzitester 제출 | 사용자가 본 memory (`project_pillarseer_round_82.md`) + 인수인계.md R82 섹션 commit 을 확인하고, 그 후 사용자가 "배포해" 라고 지시한 경우에만 1.0.0+40 외부 베타 제출 진행. | memory + 인수인계 commit + (사용자가 배포 지시 시 그때만) altool 업로드 | 보존 | 보존 |
 
 ### Sprint user story 평이한 한국어 풀이 (페르소나 적합 보강 — M5 mandate)
 
@@ -226,15 +230,20 @@
 6. Sprint 6 — "금토끼" / "오늘 일진은 토 쥐" 같은 단어가 단독으로 뜨지 않게, 옆에 짧은 설명과 사용자 사주와의 관계 1줄을 같이 보여준다.
 7. Sprint 7 — "내 사주" 탭에서 처음 화면에 17가지 섹션이 동시에 펼쳐지지 않고, 핵심 3~4개만 펼쳐진 채 나머지는 접혀 있도록 화면을 정리한다.
 8. Sprint 8 — 사주 본문 (saju_deep_slice 안의 한국어 본문 240개 중 30개) 의 어색한 문장을 더 자연스러운 표현으로 다시 쓴다.
-9. Sprint 9 — 모든 테스트가 통과하고, 1995-10-27 남자 17시 사주의 5행 16/21/17/41/4 + 일주 辛卯 가 그대로 유지되는지 확인한다.
-10. Sprint 10 — 본 라운드 결과를 메모리 + 인수인계 문서에 남기고, 사용자가 "배포해" 라고 명시했을 때에만 외부 베타 빌드 제출.
+9. Sprint 9 — 입력 화면에서 "기타" 성별을 골랐을 때 그대로 male 로 silent 계산하지 않도록, 계산 기준 성별을 사용자에게 한 번 더 묻거나 보조 설명을 보여준다 (외부 review P0 #6).
+10. Sprint 10 — 5행 카드의 "오행 퍼센트" 라벨을 "세력 분포 점수 (앱 기준)" 로 바꾸고, "숨은 글자, 태어난 달, 뿌리 힘을 같이 본 앱 기준 점수예요" 같이 평이한 1줄 helper 를 함께 보여준다 (외부 review P0 #7 — 사주 고전 산식과의 혼동 방지).
+11. Sprint 11 — Profile 화면의 reset 버튼을 누르면 즉시 사라지지 않고, "내 사주 입력값을 지울까요?" 확인 모달이 먼저 뜬다 (외부 review P1 #7 — Settings 의 delete-all 모달 패턴 일관).
+12. Sprint 12 — Settings 의 앱 버전이 1.0.0 (하드코딩) 이 아니라 pubspec 의 실제 version+build 로 표시되도록 package_info_plus 를 붙인다 (외부 review P1 #8).
+13. Sprint 13 — 모든 테스트가 통과하고, 1995-10-27 남자 17시 사주의 5행 16/21/17/41/4 + 일주 辛卯 가 그대로 유지되는지 확인한다.
+14. Sprint 14 — 본 라운드 결과를 메모리 + 인수인계 문서에 남기고, 사용자가 "배포해" 라고 명시했을 때에만 외부 베타 빌드 제출.
 
 ### Sprint 간 의존
 - Sprint 2 (#4) 가 sprint 7 (#1 UI 정리) 보다 먼저 — today_event 제거 후에 first-fold 정의가 깨끗.
 - Sprint 5 (#3) 가 sprint 7 (#1) 보다 먼저 — 12 카드 라벨 보강 후 접기 순서 정리.
 - Sprint 8 (#2) 은 multi-sprint 가능 — 240 entry 중 30 sample 우선, 나머지는 후속 라운드.
-- Sprint 9 (회귀 가드) 가 sprint 2~8 모든 commit 후 마지막 종합.
-- Sprint 10 = 배포 = 사용자 명시 후만.
+- Sprint 9~12 (외부 review 4 작은 fix) 는 sprint 2~8 과 독립 (코드 영역 다름) — 병렬 가능. 단 sprint 13 회귀 가드 전 모두 commit 완료 필수.
+- Sprint 13 (회귀 가드) 가 sprint 2~12 모든 commit 후 마지막 종합.
+- Sprint 14 = 배포 = 사용자 명시 후만.
 
 ### Sprint 별 사용자 노출 톤 체크리스트 (M5 mandate 적용 — generator 가 매 sprint 끝 확인)
 
@@ -268,7 +277,7 @@
 
 - 사용자 verbatim (R80 mandate, 2026-05-15): **"내가 배포하라고 할때만해"**
 - TestFlight 1.0.0+40 빌드·altool 업로드·외부 베타 제출 = 사용자 명시 후만.
-- sprint 10 user story 의 IPA 자동 제출은 사용자 mandate 가 trigger.
+- sprint 14 user story 의 IPA 자동 제출은 사용자 mandate 가 trigger.
 - 1.0.0+39 (R79) 이미 외부 베타 ganzitester 제출 + 검증 완료 → R80 + R81 + R82 통합 빌드는 사용자 OK 후만.
 
 ### M3 — 시뮬·에뮬레이터 새 부팅 X (사용자 mandate)
@@ -283,7 +292,7 @@
 - 1995-10-27 男 17:00 양력 → 木 16 / 火 21 / 土 17 / 金 41 / 水 4 + 일주 辛卯.
 - 골든 test: `test/critical_regression_test.dart`, `test/celebrity_calibration_test.dart`, `test/round79_golden_test.dart`, `test/round80_*_test.dart`.
 - R69 lock — matchCount 5 / matchedAxes [연애·일·돈·건강·평판] / 본성 78 / 연애 78 / 일 72 / 돈 74 / 건강 57 / 평판 71 (R80 갱신 baseline).
-- 의도적 baseline 갱신 시 R69 lock test 동시 갱신 commit 분리 (sprint 9).
+- 의도적 baseline 갱신 시 R69 lock test 동시 갱신 commit 분리 (sprint 13).
 
 ### M5 — 한국 MZ 중학생 K-POP 팬 페르소나 (사용자 mandate)
 
@@ -307,7 +316,7 @@
 
 1. **자미두수 UI 노출** — `kIsZiweiUiHidden=true` 보존 (R70 마케팅 차별점 보호). 12 결 풀이 라벨 보강 (#3 fix) 시 별 이름 nameKo (자미성·천기성·태양성 등) 사용자 노출 0 가드.
 2. **새 기능** (구독·결제·Firebase·RevenueCat·소셜·푸시 신규 채널·결제 wall) — 별도 라운드.
-3. **TestFlight 1.0.0+40 자동 배포** — 사용자 명시 후만 (sprint 10 user mandate 후만, M2 mandate).
+3. **TestFlight 1.0.0+40 자동 배포** — 사용자 명시 후만 (sprint 14 user mandate 후만, M2 mandate).
 4. **R72~R77 캐릭터 영역 폴라리티 정정** — `life_stage_pool.json` / `sipsin_persona.json` / `additional_life_pool.json` (오늘 12 결 풀이 본문 영역) / `career_pool.json` / `wealth_detail.json` 의 5:4:1 폴라리티 본문 재작성 (별도 라운드, R78 polarity 캐릭터 영역 deferred).
 5. **만세력 algorithmic 깊은 fix** — R81 deferred D1 (KASI cross-check + 입추 ±5분) / D3 (시간 picker UX 30분 boundary 시각화) / D4 (H1 swap `rootMiddleBonus` ↔ `rootTraceBonus`). 회귀 위험 高 + 5행 골든 보존 algorithmic 어려움. R81 별도 라운드에서 처리.
 6. **paywall 28 ARB 재활성** — `lib/l10n/app_ko.arb` 의 paywall_* 28 key 재활성 = 구독·결제 wire 별도 라운드 (R77 deferred).
@@ -332,6 +341,39 @@
 
 → R81 의 D1 / D3 / D4 모두 사용자 추가 정성 sample (≥10) + 학파 표준 cross-check 가 선결. 본 R82 와 동시 진행 X (사용자 mandate "R82 우선" 준수).
 
+### 외부 review 보고서 (2026-05-15 GitHub public 코드 기준 audit) 대응 노트
+
+본 R82 가 spec 작성 직후 외부 reviewer 의 audit 보고서를 함께 수령. reviewer 결론 + 본 round 가 어떻게 흡수하는지 매핑:
+
+**외부 reviewer 가 P0 #1 / #2 로 지목한 "Unsin 일주 일치율 50%"는 R79 docs 기준 outdated.**
+- R81 sprint 1 (commit `2ea7054`) 측정 결과 = 케이스 A (1998-12-06 男 10시) + 케이스 B (2006-12-06 男 10시) 4기둥 unsin 100% 일치. 만세력 algorithmic 변경 X 조건 하에서 도달 가능한 일치율 = 5/6 sample = 83% (R79 baseline) ~ 케이스 A/B 100% (R81 측정 baseline).
+- 잔존 mismatch sample (R79 sprint 2 의 6 sample 중 #2 / #4 / #5) 는 R81 deferred D1 (KASI cross-check + 절기 ±5분 + 야자시 학파 boundary) 로 위임. 본 R82 와 동시 진행 X (사용자 mandate "R82 우선" 준수).
+- 본 round 는 외부 reviewer 의 일주 정확도 비판을 docs 차원에서 위 명시로 응답. 만세력 algorithmic 변경 0 (M4 mandate 5행 골든 보존).
+
+**외부 reviewer P0 #3 (글로벌 출생지/timezone)** — Co-Star 글로벌 진출 전 한국 페르소나 검증 단계 mandate (M5). 본 R82 NON-GOAL #12 (영문 i18n 새 콘텐츠 X) 와 일치. 별도 라운드 위임.
+
+**외부 reviewer P0 #4 (23시 자시 학파 입력 안내)** — R81 deferred D3 와 동일. R81 라운드 별도 처리.
+
+**외부 reviewer P0 #5 (ResultScreen 의 Today 섹션 제거)** — 본 spec 의 #4 (sprint 2) 와 정확히 일치. ✅ 흡수.
+
+**외부 reviewer P0 #6 (Gender.other 계산)** — 본 R82 sprint 9 신규 추가. ✅ 흡수.
+
+**외부 reviewer P0 #7 (오행 퍼센트 라벨)** — 본 R82 sprint 10 신규 추가. ✅ 흡수.
+
+**외부 reviewer P0 #8 (결제/구독 시스템 정리)** — 본 R82 NON-GOAL #2 (새 기능 — 구독·결제·Firebase·RevenueCat) 와 일치. 별도 라운드 위임 (paywall 28 ARB R77 deferred 와 함께).
+
+**외부 reviewer P1 #1 (ResultScreen 정보 축소)** — 본 spec 의 #1 (sprint 7) 과 정확히 일치. ✅ 흡수.
+
+**외부 reviewer P1 #7 (Profile reset confirm)** — 본 R82 sprint 11 신규 추가. ✅ 흡수.
+
+**외부 reviewer P1 #8 (version 하드코딩 제거)** — 본 R82 sprint 12 신규 추가. ✅ 흡수.
+
+**외부 reviewer P1 #2 / #3 / #4 / #5 / #6 (BottomNav 이름 / Home 단순화 / 용신 분리 / 데일리 Phase 2 / l10n 완전 정리)** — 별도 라운드 위임. `docs/round83_backlog.md` 에 통합 (각각 P2-A / P2-B / P1-D / P4-D / P3-B).
+
+**외부 reviewer P2 (셀럽 신뢰도 / 공유 카드 / 접근성 / paywall 미리보기 / 사주 계산 기준 설명 페이지)** — 별도 라운드 위임. `docs/round83_backlog.md` 에 통합.
+
+**외부 reviewer 의 디자인 톤 다크 vs Aesop 결정** — 외부 reviewer 도 "Aesop 유지가 글로벌 K-pop 시장에서 차별화" 결론. 본 round 디자인 톤 변경 X (현재 AppTheme 유지). README docs 동기화는 R83 backlog 작업.
+
 ### R77 deferred
 
 - **paywall 28 ARB 재활성** — `lib/l10n/app_ko.arb` 의 paywall_* 28 key + `compat` / `datePick` 77 ARB. 구독·결제 wire 별도 라운드.
@@ -349,7 +391,7 @@
 
 ## 7. 검증 plan (round 종료 시점 회귀 가드)
 
-sprint 9 (회귀 가드) 시점에 다음 모두 PASS 확인 → R82 round close commit.
+sprint 13 (회귀 가드) 시점에 다음 모두 PASS 확인 → R82 round close commit.
 
 ### G1 — flutter analyze 0 issue
 
@@ -427,12 +469,17 @@ flutter test
 | 6 | `test/round82_animal_context_test.dart` — 한글 동물 단독 노출 영역 grep + context 1줄 wire |
 | 7 | `test/round82_result_first_fold_test.dart` — 첫 fold widget cap + 접힘 상태 사전 검증 |
 | 8 | `test/round82_deep_slice_tone_test.dart` — saju_deep_slice 30 entry tone audit blacklist |
-| 9 | `test/round82_round_close_test.dart` — flutter analyze 0 + flutter test count + 5행 골든 + R69 lock 통합 |
+| 9 | `test/round82_gender_other_test.dart` — input_screen "기타" 선택 시 silent male assume X / 보조 안내 + ManseryeokService gender 파라미터 명시 가드 |
+| 10 | `test/round82_five_element_label_test.dart` — 5행 카드 라벨이 "퍼센트" / "정확한 비율" 류 0, "세력 분포 점수 (앱 기준)" + helper 1줄 wire 검증 |
+| 11 | `test/round82_profile_reset_confirm_test.dart` — Profile reset 버튼 tap 시 confirm dialog 모달 mount 검증 + cancel 시 provider 변경 0 |
+| 12 | `test/round82_version_display_test.dart` — Settings 의 version 라벨이 1.0.0 하드코딩 0, package_info_plus 로드된 실제 version+build 표시 (mocked) |
+| 13 | `test/round82_round_close_test.dart` — flutter analyze 0 + flutter test count + 5행 골든 + R69 lock 통합 |
+| 14 | `test/round82_round_deploy_gate_test.dart` — sprint 14 IPA 자동 제출 0 (사용자 명시 mandate 가드) + memory `project_pillarseer_round_82.md` 존재 + 인수인계.md R82 sprint 14 commit 검증 |
 
 ### G7 — 회귀 발견 시 protocol
 
 - 5행 골든 sample 일치 X → 즉시 sprint 중단, 사용자 보고. M4 mandate 위반.
-- R69 lock 일치 X → 의도적 변경이면 lock 갱신 commit 분리 (sprint 9). 의도 X 면 sprint 중단.
+- R69 lock 일치 X → 의도적 변경이면 lock 갱신 commit 분리 (sprint 13). 의도 X 면 sprint 중단.
 - flutter test 1개라도 FAIL → 즉시 sprint 중단.
 - 시크릿 leak grep hit (.p8 / .env / .jks / AuthKey_ / private_key / sk- / ghp_) → 즉시 stash + 사용자 보고.
 
@@ -462,13 +509,13 @@ flutter test
 
 - 본 spec = R82 ground truth. Sprint 2 부터 generator subagent 가 각 sprint 의 해당 # (#1~#9) 정확히 구현.
 - 매 sprint 끝 codex audit 9.9+ PASS 까지 generator 반복 (max 7 라운드, 매 라운드 다른 audit file).
-- M2 mandate (자동 배포 X) 절대 — sprint 10 의 IPA 자동 제출은 사용자 명시 후만.
+- M2 mandate (자동 배포 X) 절대 — sprint 14 의 IPA 자동 제출은 사용자 명시 후만.
 - 본 sprint 1 산출물 = `docs/round82_spec.md` 1개 markdown + (필요 시) 인수인계.md 의 "R82 진행 중" micro update.
 - Flutter 코드 변경 0 / test 변경 0 / 시뮬 새 부팅 0 / 시크릿 leak 0.
 
 ### 영문 약어 disclaimer
 
-본 문서의 영문 약어 (C1·C2·D1·D2·G1~G7·H1·M1~M5·#1~#9) 는 개발자 audit · planner · generator · evaluator 간 communication 용. 사용자 노출 UI 본문 (sprint 2~8 의 phrase pool / arb / widget label) 에는 영문 약어 0 노출. 사용자가 보는 모든 한국어 본문은 한국 MZ 중학생 K-POP 팬 친근 해요체 (M5 mandate) 만 사용.
+본 문서의 영문 약어 (C1·C2·D1·D2·G1~G7·H1·M1~M5·#1~#9·sprint 2~14) 는 개발자 audit · planner · generator · evaluator 간 communication 용. 사용자 노출 UI 본문 (sprint 2~12 의 phrase pool / arb / widget label) 에는 영문 약어 0 노출. 사용자가 보는 모든 한국어 본문은 한국 MZ 중학생 K-POP 팬 친근 해요체 (M5 mandate) 만 사용.
 
 ---
 
