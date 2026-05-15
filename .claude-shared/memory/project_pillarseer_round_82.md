@@ -50,6 +50,7 @@ metadata:
 | 9 | 외부 review P0 #6 — Gender.other 계산 처리 | ✅ 완료 commit `be27fd3` (codex 10.0 / 588 test / silent male fallback 제거 + 보조 모달 + UserGender enum 신규 + K-POP 궁합 silent 분류 제거) |
 | 10 | 외부 review P0 #7 — 오행 퍼센트 라벨 정정 | ✅ 완료 commit `fe4a277` (codex 9.93 / 595 test / "세력 분포 점수 (앱 기준)" + 평이 helper / 5행 산출 값 보존) |
 | 11 | 외부 review P1 #7 — Profile reset confirm 모달 | ✅ 완료 commit `b240f80` (codex 9.975 / 600 test / Settings _confirmDeleteAll 패턴 1:1 매칭) |
+| 12 | 외부 review P1 #8 — version 하드코딩 제거 | ✅ 완료 commit `10fc74e` (codex 9.92 / 605 test / package_info_plus 10.1.0 + app_version_service 신규) |
 | 9 | 회귀 가드 + R69 lock 검증 + 5행 골든 보존 | 대기 |
 | 10 | memory R82 + 인수인계.md R82 + (사용자 mandate 후) TestFlight 1.0.0+40 | 대기 |
 
