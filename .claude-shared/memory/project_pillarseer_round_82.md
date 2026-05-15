@@ -45,7 +45,7 @@ metadata:
 | 4 | #5 fix — "깊게 봐도 다시 잡힌 핵심" 라벨 재작성/제거 | ✅ 완료 commit `0d76dd3` (codex 9.92 / 540 test / 옵션 A "두 번 봐도 같이 잡힌 강점") |
 | 5 | #3 fix — 12 결 풀이 라벨 명시 + 1줄 설명 | ✅ 완료 commit `b052d52` (codex 9.9 / 555 test / palace_helper_anchor_service 신규 520 line + 자미두수 nameKo noLeak 12×16 case + R78 chain 보존) |
 | 6 | #7+#8+#9 fix — 금토끼·금원숭이/일진 한글 name 영역 audit + 설명 | ✅ 완료 commit `3eb7429` (codex 9.91 / 562 test / animal_context_service 신규 159 line + self-pair 60 / today-pillar 132 anchor + 호명 무서움 risk blacklist) |
-| 7 | #1 fix — UI 정보 우선순위 (first-fold + 접기) | 대기 |
+| 7 | #1 fix — UI 정보 우선순위 (first-fold + 접기) | ✅ 완료 commit `165fb9f` (codex 9.93 / 569 test / _CollapsibleSection + 펼침 4 (_DayMasterHero / 5행 / 십신 / ForYouToday) / 접힘 14 + R69~R82 시그니처 모두 보존) |
 | 8 | #2 fix — 본문 어색 saju_deep_slice sample 재작성 | 대기 |
 | 9 | 회귀 가드 + R69 lock 검증 + 5행 골든 보존 | 대기 |
 | 10 | memory R82 + 인수인계.md R82 + (사용자 mandate 후) TestFlight 1.0.0+40 | 대기 |
