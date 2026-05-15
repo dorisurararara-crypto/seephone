@@ -28,20 +28,20 @@ void main() {
       );
     });
 
-    test('6 axis: matchCount = 4/6 (연애·돈·건강·평판 ✨)', () {
+    test('6 axis: matchCount = 5/6 (R80 sprint 4 신살 anchor 추가 후)', () {
       final s = SixAxisScoreService.compute(saju, ziwei);
-      expect(s.matchCount, 4);
-      expect(s.matchedAxes, ['연애', '돈', '건강', '평판']);
-      // 통합 점수 (사주 60% + 자미 40%) — round 산식 변경 시 같이 갱신.
-      // Round 75 가중치 calibration (월령 ×3.0 + 통근) 후 본성 83→78 (5행
-      // 평탄 24/24/17/25/11 가정에서 신금 일간이 더 또렷이 강조됨 = 본성 가독성
-      // ↓ 약간), 건강 80→62 (土水 평탄 → 土 17 水 4 로 차이 벌어져 균형 점수
-      // 하락) 시프트. 1등 사이트 metal 41 골든 일치가 우선 mandate.
-      expect(s.combinedScores['연애'], 71);
-      expect(s.combinedScores['일'], 79);
-      expect(s.combinedScores['돈'], 80);
-      expect(s.combinedScores['건강'], 62);
-      expect(s.combinedScores['평판'], 70);
+      expect(s.matchCount, 5);
+      expect(s.matchedAxes, ['연애', '일', '돈', '건강', '평판']);
+      // R80 sprint 4 — _stableJitter range ±2→±4 + _shinsaAnchor (양인/괴강/
+      // 백호/천을/문창) wire 후 lock 갱신. 본인+여친 변별력 확대 mandate.
+      // 신묘 일주 (양인 X, 괴강 X, 백호 X, 천을 X, 문창 X) — 신살 anchor 0
+      // 이지만 jitter range 확대로 점수 변동.
+      expect(s.combinedScores['본성'], 78);
+      expect(s.combinedScores['연애'], 78);
+      expect(s.combinedScores['일'], 72);
+      expect(s.combinedScores['돈'], 74);
+      expect(s.combinedScores['건강'], 57);
+      expect(s.combinedScores['평판'], 71);
     });
 
     test('5 일 trend: 56 / 53 / 33 / 36 / 76 (2026-05-13 기준)', () {

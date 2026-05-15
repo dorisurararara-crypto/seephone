@@ -8,6 +8,7 @@
 // (가족 축은 [4] 행운 chip 의 '사람띠'로 흡수, K-POP 페르소나 우선순위 반영.)
 
 import '../models/saju_result.dart';
+import 'shinsa_service.dart';
 import 'ziwei_service.dart';
 
 class SixAxisScore {
@@ -152,7 +153,8 @@ class SixAxisScoreService {
     var bonus = 0;
     if (dayEl == el.dominant) bonus = 5;
     if (dayEl == el.deficit) bonus = -5;
-    return (balance + bonus).clamp(30, 100);
+    final shinsa = _shinsaAnchor(saju, 'nature');
+    return (balance + bonus + shinsa).clamp(30, 100);
   }
 
   /// 연애 — 일지 5행 + 음양 + 합/충 (단순).
@@ -172,8 +174,9 @@ class SixAxisScoreService {
     var score = base;
     if (dohwa) score += 10;
     if (yin) score += 5;
-    // 일주별 변동 (60갑자 1개당 ±3) — 같은 일주는 항상 같은 점수.
+    // 일주별 변동 (60갑자 1개당 ±4 × 3 = ±12) — Round 80 sprint 4 변별력 ↑.
     score += _stableJitter(saju.day60ji, 'love') * 3;
+    score += _shinsaAnchor(saju, 'love');
     return score.clamp(30, 100);
   }
 
@@ -194,6 +197,7 @@ class SixAxisScoreService {
     // 양간(甲·丙·戊·庚·壬) +5: 추진력.
     if (saju.dayPillar.chunGanYang) base += 5;
     base += _stableJitter(saju.day60ji, 'work') * 3;
+    base += _shinsaAnchor(saju, 'work');
     return base.clamp(30, 100);
   }
 
@@ -210,6 +214,7 @@ class SixAxisScoreService {
     final gozi = {'辰', '戌', '丑', '未'}.contains(saju.dayPillar.jiJi);
     if (gozi) base += 8;
     base += _stableJitter(saju.day60ji, 'money') * 3;
+    base += _shinsaAnchor(saju, 'money');
     return base.clamp(30, 100);
   }
 
@@ -231,6 +236,7 @@ class SixAxisScoreService {
       base = 48;
     }
     base += _stableJitter(saju.day60ji, 'health') * 2;
+    base += _shinsaAnchor(saju, 'health');
     return base.clamp(30, 100);
   }
 
@@ -242,6 +248,7 @@ class SixAxisScoreService {
     if ({'寅', '申', '巳', '亥'}.contains(dayJi)) base += 6; // 역마 활동
     if (saju.dayPillar.chunGanYang) base += 5;
     base += _stableJitter(saju.day60ji, 'fame') * 3;
+    base += _shinsaAnchor(saju, 'fame');
     return base.clamp(30, 100);
   }
 
@@ -408,13 +415,69 @@ class SixAxisScoreService {
     return m[dayEl] ?? 0;
   }
 
-  /// 같은 일주 + 같은 축 라벨 = 항상 같은 값 (-2~+2).
-  /// 점수 단조로움 방지용 미세 변동.
+  /// 같은 일주 + 같은 축 라벨 = 항상 같은 값 (-4~+4).
+  /// Round 80 sprint 4 — range ±2 → ±4 확대 (사용자 본인+여친 점수 변별력 mandate).
   static int _stableJitter(String day60ji, String axisKey) {
     final seed =
         (day60ji.codeUnits.fold<int>(0, (a, b) => a + b) +
             axisKey.codeUnits.fold<int>(0, (a, b) => a + b)) %
-        5;
-    return seed - 2; // -2 ~ +2
+        9;
+    return seed - 4; // -4 ~ +4
+  }
+
+  /// Round 80 sprint 4 — 신살 boolean 4종 활성화 시 추가 anchor (±5 점 합).
+  /// 양인/괴강/백호 강한 살 = work/health 변동 / 천을·문창 = fame/work 변동.
+  /// 같은 dom + 같은 deficit 페어 두 사주 사이 변별력 보강.
+  static int _shinsaAnchor(SajuResult saju, String axisKey) {
+    final dayPillar = saju.dayPillar.text;
+    final dayChunGan = saju.dayPillar.chunGan;
+    final yangIn = ShinsaService.yangInFor(dayChunGan);
+    final hasYangIn = yangIn.isNotEmpty &&
+        (saju.dayPillar.jiJi == yangIn ||
+            saju.monthPillar.jiJi == yangIn ||
+            saju.yearPillar.jiJi == yangIn);
+    final isGwaegang = ShinsaService.isGwaegangDayPillar(dayPillar);
+    final isBaekho = ShinsaService.isBaekhoDayPillar(dayPillar);
+    final cheonEul = ShinsaService.cheonEulGwiInFor(dayChunGan);
+    final hasCheonEul = cheonEul.any((j) =>
+        saju.dayPillar.jiJi == j ||
+        saju.monthPillar.jiJi == j ||
+        saju.yearPillar.jiJi == j);
+    final munchang = ShinsaService.munchangFor(dayChunGan);
+    final hasMunchang = munchang.isNotEmpty &&
+        (saju.dayPillar.jiJi == munchang ||
+            saju.monthPillar.jiJi == munchang ||
+            saju.yearPillar.jiJi == munchang);
+    var v = 0;
+    switch (axisKey) {
+      case 'work':
+        if (isGwaegang) v += 5;
+        if (hasYangIn) v += 3;
+        if (hasMunchang) v += 2;
+        break;
+      case 'love':
+        if (hasCheonEul) v += 4;
+        if (isBaekho) v -= 3;
+        break;
+      case 'money':
+        if (hasYangIn) v += 2;
+        if (isGwaegang) v += 3;
+        break;
+      case 'health':
+        if (isBaekho) v -= 4;
+        if (hasYangIn) v -= 2;
+        break;
+      case 'fame':
+        if (hasCheonEul) v += 5;
+        if (hasMunchang) v += 4;
+        if (isGwaegang) v += 3;
+        break;
+      case 'nature':
+        if (hasCheonEul) v += 3;
+        if (isGwaegang) v += 2;
+        if (isBaekho) v -= 2;
+        break;
+    }
+    return v;
   }
 }
