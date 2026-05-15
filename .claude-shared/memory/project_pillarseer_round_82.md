@@ -48,6 +48,7 @@ metadata:
 | 7 | #1 fix — UI 정보 우선순위 (first-fold + 접기) | ✅ 완료 commit `165fb9f` (codex 9.93 / 569 test / _CollapsibleSection + 펼침 4 (_DayMasterHero / 5행 / 십신 / ForYouToday) / 접힘 14 + R69~R82 시그니처 모두 보존) |
 | 8 | #2 fix — 본문 어색 saju_deep_slice sample 재작성 | ✅ 완료 commit `69911e9` (codex peak 9.20 / 578 test / 30 sample × 7 field = 210 본문 / 한자 jargon + AI 슬롭 + 본인 본인 오타 + 평판/자산 0 / 잔여 210 entry R83 P4-C 위임) |
 | 9 | 외부 review P0 #6 — Gender.other 계산 처리 | ✅ 완료 commit `be27fd3` (codex 10.0 / 588 test / silent male fallback 제거 + 보조 모달 + UserGender enum 신규 + K-POP 궁합 silent 분류 제거) |
+| 10 | 외부 review P0 #7 — 오행 퍼센트 라벨 정정 | ✅ 완료 commit `fe4a277` (codex 9.93 / 595 test / "세력 분포 점수 (앱 기준)" + 평이 helper / 5행 산출 값 보존) |
 | 9 | 회귀 가드 + R69 lock 검증 + 5행 골든 보존 | 대기 |
 | 10 | memory R82 + 인수인계.md R82 + (사용자 mandate 후) TestFlight 1.0.0+40 | 대기 |
 
