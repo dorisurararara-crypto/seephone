@@ -63,21 +63,30 @@ void main() {
     });
 
     test('A3 — 펼침 first-fold 4 섹션 mount 보존 + 우선순위', () {
-      // 1) 일주 한 줄 — _DayMasterHero
-      expect(src.contains('_DayMasterHero(result: result'), isTrue,
+      // R82 sprint 7 — first-fold 펼침 4 섹션의 호출이 ResultScreen.build body 안에서
+      // 우선순위 (Hero → 5행 → 십신 → 오늘) 그대로 mount 되는지 검증.
+      // R83 sprint 5 — multi-line argument 변경 (unknownTime prop 추가) 도 허용하도록
+      // 호출 anchor `<class>(` 만 매칭 (회귀 가드 의도 = 호출 mount 여부 + 순서).
+      final bodyStart = src.indexOf('// ===== first-fold 펼침 (4 섹션) =====');
+      final bodyEnd = src.indexOf('// ===== 접힘 collapsed');
+      expect(bodyStart, greaterThan(0),
+          reason: 'first-fold 펼침 marker 누락');
+      expect(bodyEnd, greaterThan(bodyStart),
+          reason: '접힘 collapsed marker 누락');
+      final firstFoldBody = src.substring(bodyStart, bodyEnd);
+      // 호출 mount + 순서 4 (Hero → 5행 → 십신 → 오늘).
+      final heroIdx = firstFoldBody.indexOf('_DayMasterHero(');
+      final fiveIdx = firstFoldBody.indexOf('_FiveElementsSection(');
+      final sipsinIdx = firstFoldBody.indexOf('_SipsinPersonaSection(');
+      final todayIdx = firstFoldBody.indexOf('_ForYouTodaySection(');
+      expect(heroIdx, greaterThan(0),
           reason: '_DayMasterHero first-fold mount 누락');
-      // 2) 5행 — _FiveElementsSection
-      expect(src.contains('_FiveElementsSection(\n                result: result'),
-          isTrue,
-          reason: '_FiveElementsSection first-fold mount 누락');
-      // 3) 8글자 십신 — _SipsinPersonaSection
-      expect(src.contains('_SipsinPersonaSection(result: result, useKo: useKo),'),
-          isTrue,
-          reason: '_SipsinPersonaSection first-fold mount 누락');
-      // 4) 오늘 한 줄 — _ForYouTodaySection
-      expect(src.contains('_ForYouTodaySection(result: result, useKo: useKo),'),
-          isTrue,
-          reason: '_ForYouTodaySection first-fold mount 누락');
+      expect(fiveIdx, greaterThan(heroIdx),
+          reason: '_FiveElementsSection first-fold mount 누락 또는 순서 위반');
+      expect(sipsinIdx, greaterThan(fiveIdx),
+          reason: '_SipsinPersonaSection first-fold mount 누락 또는 순서 위반');
+      expect(todayIdx, greaterThan(sipsinIdx),
+          reason: '_ForYouTodaySection first-fold mount 누락 또는 순서 위반');
     });
 
     test('A4 — R70 자미두수 hidden 보존 (_ZiweiPalaceGroup mount + 별 이름 leak 0)',

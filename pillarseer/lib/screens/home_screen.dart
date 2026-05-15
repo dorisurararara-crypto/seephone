@@ -66,8 +66,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     // Round 77 sprint 6 — birth null 시 ziwei skip. 자동 isMale 가드 X.
     // 깊은 풀이 레이어는 birth info (성별 포함) 가 있을 때만 계산.
+    //
+    // R83 sprint 5 (P1-E) — 외부 reviewer P0 #4 mandate:
+    //   "시간 모름 = 임의 시간으로 계산 금지." input_screen 은 unknownTime=true 시
+    //   birthHour=0, birthMinute=0 로 store → home 의 ziwei 가 임의 0시 계산 위험.
+    //   `!birth.unknownTime` 분기로 차단 → sixAxis / chips 등 ziwei-derived 콘텐츠
+    //   자동 hide (false precision 방지).
     ZiweiResult? ziwei;
-    if (birth != null) {
+    if (birth != null && !birth.unknownTime) {
       try {
         ziwei = ZiweiService.calculate(
           year: birth.birthDate.year,

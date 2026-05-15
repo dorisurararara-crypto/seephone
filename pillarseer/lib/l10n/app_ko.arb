@@ -393,5 +393,9 @@
 
   "celebDisclosureBanner": "공개 생일 기반의 가벼운 비교예요",
   "celebDisclosureBannerHelper": "유명인 출생시간은 공개 자료가 없어서 시주(시각 기둥)는 빼고 일주만 비교해요. 재미로만 봐주세요.",
-  "celebCardConfidenceLabel": "공개 생일 기반 · 출생시간 미상"
+  "celebCardConfidenceLabel": "공개 생일 기반 · 출생시간 미상",
+
+  "hourPillarUnknownDisclaimer": "시간을 모르셔서 시주(시각 기둥)는 비워뒀어요. 큰 흐름 위주로 봐주세요.",
+  "hourPillarUnknownBadge": "시주 미포함 결과",
+  "timeUnknownAffectsAccuracy": "시간 정보가 없어 이 영역은 정확도가 살짝 떨어져요"
 }

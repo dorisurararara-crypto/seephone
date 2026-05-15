@@ -2274,6 +2274,24 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Public birthday · birth time unknown'**
   String get celebCardConfidenceLabel;
+
+  /// No description provided for @hourPillarUnknownDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'You did not enter a birth time, so the hour pillar is left blank. Read the broader flow rather than fine timing.'**
+  String get hourPillarUnknownDisclaimer;
+
+  /// No description provided for @hourPillarUnknownBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Result without hour pillar'**
+  String get hourPillarUnknownBadge;
+
+  /// No description provided for @timeUnknownAffectsAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Without a birth time, this section reads a little less sharp'**
+  String get timeUnknownAffectsAccuracy;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

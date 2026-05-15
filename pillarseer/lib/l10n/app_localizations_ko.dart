@@ -1128,4 +1128,14 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get celebCardConfidenceLabel => '공개 생일 기반 · 출생시간 미상';
+
+  @override
+  String get hourPillarUnknownDisclaimer =>
+      '시간을 모르셔서 시주(시각 기둥)는 비워뒀어요. 큰 흐름 위주로 봐주세요.';
+
+  @override
+  String get hourPillarUnknownBadge => '시주 미포함 결과';
+
+  @override
+  String get timeUnknownAffectsAccuracy => '시간 정보가 없어 이 영역은 정확도가 살짝 떨어져요';
 }

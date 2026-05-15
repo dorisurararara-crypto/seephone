@@ -270,6 +270,14 @@ class SajuResult {
   final Pillar yearPillar;
   final Pillar monthPillar;
   final Pillar dayPillar;
+  /// 시주 (시각 기둥).
+  ///
+  /// R83 sprint 5 (P1-E) — 출생 시간 모름 처리:
+  /// 사용자가 input_screen 의 "시간 모름" 체크박스를 체크 후 계산하면
+  /// `SajuService.calculateSaju(... unknownTime: true)` 가 `hourPillar=null` 로 set 함
+  /// (`ManseryeokService.calculate` step 5). 5행 분포도 3 기둥(년/월/일)만으로 산출.
+  /// `result_screen` 은 `birth.unknownTime` flag 를 같이 받아 HOUR 영역 흐림 + disclaimer
+  /// 라벨 + 대운/성향 영역 정확도 안내 라벨을 추가로 mount.
   final Pillar? hourPillar;
   final FiveElements elements;
   final String dayMaster;     // 일간 천간

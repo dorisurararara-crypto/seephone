@@ -71,14 +71,18 @@ class ResultScreen extends ConsumerWidget {
     final reading = useKo ? result.deepKo : result.deepEn;
 
     // 깊은 풀이 레이어 — 사용자 입력 있을 때만 계산. 없으면 null 처리.
+    // R83 sprint 5 (P1-E) — 외부 reviewer P0 #4 mandate:
+    //   "시간 모름 = 임의 12시로 계산 금지." 자미두수는 시지 (時支) 가 12궁 배치의
+    //   핵심 입력 — 시간 모름 시 노출하면 거짓 정보. 따라서 unknownTime=true 시
+    //   ziwei=null + crossmatches=빈 list 로 차단 (정직성 우선).
     final birth = ref.watch(userBirthInfoProvider);
-    final ZiweiResult? ziwei = birth != null
+    final ZiweiResult? ziwei = (birth != null && !birth.unknownTime)
         ? ZiweiService.calculate(
             year: birth.birthDate.year,
             month: birth.birthDate.month,
             day: birth.birthDate.day,
-            hour: birth.unknownTime ? 12 : birth.birthHour,
-            minute: birth.unknownTime ? 0 : birth.birthMinute,
+            hour: birth.birthHour,
+            minute: birth.birthMinute,
             isMale: birth.isMale,
           )
         : null;
@@ -136,7 +140,12 @@ class ResultScreen extends ConsumerWidget {
             _FiveElementsSection(
                 result: result, reading: reading, useKo: useKo),
             // 3. SIPSIN PERSONA — 8글자 십신 (R73 sprint 3)
-            _SipsinPersonaSection(result: result, useKo: useKo),
+            // R83 sprint 5 (P1-E) — unknownTime=true 시 헤더 아래 보조 라벨 mount.
+            _SipsinPersonaSection(
+              result: result,
+              useKo: useKo,
+              unknownTime: birth?.unknownTime ?? false,
+            ),
             // 4. FOR YOU TODAY — 오늘 한 줄 (R71 personalization)
             _ForYouTodaySection(result: result, useKo: useKo),
 
@@ -176,6 +185,8 @@ class ResultScreen extends ConsumerWidget {
                 userAge: birth != null
                     ? (DateTime.now().year - birth.birthDate.year)
                     : null,
+                // R83 sprint 5 (P1-E) — 시간 모름 시 정확도 안내 라벨.
+                unknownTime: birth?.unknownTime ?? false,
               ),
             ),
             // 2.8 CAREER — 직업 추천 (Round 73 sprint 6)
@@ -221,7 +232,12 @@ class ResultScreen extends ConsumerWidget {
                   ? '연주·월주·일주·시주 네 기둥을 카드로 보여드려요.'
                   : 'Year, Month, Day, Hour pillars.',
               background: AppColors.paper,
-              child: _FourPillarsSection(result: result, useKo: useKo),
+              // R83 sprint 5 (P1-E) — 시간 모름 시 HOUR 영역 흐림 + disclaimer.
+              child: _FourPillarsSection(
+                result: result,
+                useKo: useKo,
+                unknownTime: birth?.unknownTime ?? false,
+              ),
             ),
             // 5. THREE STROKES — magazine 3-hit
             _CollapsibleSection(
@@ -886,41 +902,144 @@ class _AttributeGrid extends StatelessWidget {
   }
 }
 
+// ──────────── R83 SPRINT 5 — 시간 모름 안내 라벨 (P1-E) ────────────
+//
+// 시간 모름 사용자가 대운/성향 등 시간 영향 큰 섹션을 봤을 때, "왜 어떤 영역이 흐릿하게
+// 느껴지는지" 1줄로 안내해주는 보조 라벨. 본문 widget 자체는 보존 — 라벨만 추가.
+//
+// 사용자 mandate M5 (한국 MZ 페르소나) + 친근 해요체 + 사주 도메인 어휘 화이트리스트.
+class _TimeUnknownNote extends StatelessWidget {
+  final String keyId;
+  final bool useKo;
+  final String text;
+  const _TimeUnknownNote({
+    required this.keyId,
+    required this.useKo,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: ValueKey(keyId),
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      decoration: BoxDecoration(
+        color: AppColors.paper,
+        border: Border.all(color: AppColors.line, width: 0.5),
+      ),
+      child: Text(
+        text,
+        style: useKo
+            ? GoogleFonts.notoSansKr(
+                fontSize: 12,
+                height: 1.5,
+                color: AppColors.taupe,
+              )
+            : GoogleFonts.inter(
+                fontSize: 12,
+                height: 1.5,
+                color: AppColors.taupe,
+              ),
+      ),
+    );
+  }
+}
+
 // ──────────── FOUR PILLARS ────────────
 
 class _FourPillarsSection extends StatelessWidget {
   final SajuResult result;
   final bool useKo;
-  const _FourPillarsSection({required this.result, required this.useKo});
+  // R83 sprint 5 (P1-E) — 시간 모름 처리.
+  // true 면 HOUR _PillarCol 영역 Opacity 0.4 + 카드 하단 disclaimer 1줄 mount.
+  // false 면 기존 동작 그대로 (5행 골든 1995-10-27 男 17시 sample 영향 0).
+  final bool unknownTime;
+  const _FourPillarsSection({
+    required this.result,
+    required this.useKo,
+    this.unknownTime = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     final pillars = [
       _PillarCol(label: 'YEAR', pillar: result.yearPillar),
       _PillarCol(label: 'MONTH', pillar: result.monthPillar),
       _PillarCol(label: 'DAY', pillar: result.dayPillar, isDay: true),
-      _PillarCol(label: 'HOUR', pillar: result.hourPillar),
+      // R83 sprint 5 (P1-E) — 시간 모름 시 HOUR 영역 흐림 처리 (opacity 0.4).
+      _PillarCol(
+        label: 'HOUR',
+        pillar: result.hourPillar,
+        dim: unknownTime,
+      ),
     ];
     return _SectionFrame(
       background: AppColors.paper,
       meta: useKo ? '네 기둥 · 四 柱' : 'FOUR PILLARS · 四 柱',
-      child: Row(
-        children: pillars.asMap().entries.map((e) {
-          final isLast = e.key == pillars.length - 1;
-          return Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  right: isLast
-                      ? BorderSide.none
-                      : const BorderSide(color: AppColors.line, width: 0.6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: pillars.asMap().entries.map((e) {
+              final isLast = e.key == pillars.length - 1;
+              return Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: isLast
+                          ? BorderSide.none
+                          : const BorderSide(color: AppColors.line, width: 0.6),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: e.value,
                 ),
+              );
+            }).toList(),
+          ),
+          // R83 sprint 5 (P1-E) — 시간 모름 시 시주 미포함 disclaimer + badge.
+          if (unknownTime) ...[
+            const SizedBox(height: 14),
+            Container(
+              key: const ValueKey('hour-pillar-unknown-disclaimer'),
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+              decoration: BoxDecoration(
+                color: AppColors.bg,
+                border: Border.all(color: AppColors.line, width: 0.6),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              child: e.value,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.hourPillarUnknownBadge,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 10,
+                      letterSpacing: 2.4,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l.hourPillarUnknownDisclaimer,
+                    style: useKo
+                        ? GoogleFonts.notoSansKr(
+                            fontSize: 13,
+                            height: 1.55,
+                            color: AppColors.ink,
+                          )
+                        : GoogleFonts.inter(
+                            fontSize: 13,
+                            height: 1.55,
+                            color: AppColors.ink,
+                          ),
+                  ),
+                ],
+              ),
             ),
-          );
-        }).toList(),
+          ],
+        ],
       ),
     );
   }
@@ -930,10 +1049,14 @@ class _PillarCol extends StatelessWidget {
   final String label;
   final Pillar? pillar;
   final bool isDay;
+  // R83 sprint 5 (P1-E) — 시간 모름 시 HOUR 영역 흐림 (opacity 0.4).
+  // 데이터 자체 (pillar=null) 는 유지, UI 만 dim — disclaimer 본문에서 의도 설명.
+  final bool dim;
   const _PillarCol({
     required this.label,
     required this.pillar,
     this.isDay = false,
+    this.dim = false,
   });
 
   @override
@@ -941,7 +1064,7 @@ class _PillarCol extends StatelessWidget {
     final isNull = pillar == null;
     final color = isDay ? AppColors.accent : AppColors.ink;
     final weight = isDay ? FontWeight.w400 : FontWeight.w300;
-    return Column(
+    final col = Column(
       children: [
         Text(
           label,
@@ -974,6 +1097,14 @@ class _PillarCol extends StatelessWidget {
         ),
       ],
     );
+    // R83 sprint 5 (P1-E) — dim=true 시 Opacity wrapper.
+    return dim
+        ? Opacity(
+            key: const ValueKey('pillar-col-hour-dim'),
+            opacity: 0.4,
+            child: col,
+          )
+        : col;
   }
 }
 
@@ -3675,15 +3806,20 @@ class _LifeStageSection extends StatelessWidget {
   final bool useKo;
   final bool isMale;
   final int? userAge;
+  // R83 sprint 5 (P1-E) — 대운 영역은 시주에서 파생되는 십신/대운 일부 영향을 받음.
+  // unknownTime=true 시 헤더 아래 정확도 안내 라벨 1줄 mount.
+  final bool unknownTime;
   const _LifeStageSection({
     required this.result,
     required this.useKo,
     required this.isMale,
     required this.userAge,
+    this.unknownTime = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     return FutureBuilder<LifeStageResult>(
       future: LifeStageService.compute(
         result,
@@ -3724,6 +3860,15 @@ class _LifeStageSection extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Container(width: 36, height: 1, color: AppColors.line),
+              // R83 sprint 5 (P1-E) — 시간 모름 시 정확도 안내 라벨.
+              if (unknownTime) ...[
+                const SizedBox(height: 12),
+                _TimeUnknownNote(
+                  keyId: 'life-stage-time-unknown',
+                  useKo: useKo,
+                  text: l.timeUnknownAffectsAccuracy,
+                ),
+              ],
               const SizedBox(height: 18),
               for (var i = 0; i < r.all.length; i++) ...[
                 _LifeStageCard(phase: r.all[i], useKo: useKo),
@@ -3820,10 +3965,18 @@ class _LifeStageCard extends StatelessWidget {
 class _SipsinPersonaSection extends StatelessWidget {
   final SajuResult result;
   final bool useKo;
-  const _SipsinPersonaSection({required this.result, required this.useKo});
+  // R83 sprint 5 (P1-E) — 성향 영역은 시간(시주 천간/지지)에 영향을 일부 받음.
+  // unknownTime=true 시 헤더 아래 정확도 안내 라벨 1줄 mount (큰 widget 변경 X).
+  final bool unknownTime;
+  const _SipsinPersonaSection({
+    required this.result,
+    required this.useKo,
+    this.unknownTime = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     return FutureBuilder<SipsinPersonaReading>(
       future: SipsinPersonaService.compute(result),
       builder: (context, snap) {
@@ -3857,6 +4010,15 @@ class _SipsinPersonaSection extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Container(width: 36, height: 1, color: AppColors.line),
+              // R83 sprint 5 (P1-E) — 시간 모름 시 정확도 안내 라벨.
+              if (unknownTime) ...[
+                const SizedBox(height: 12),
+                _TimeUnknownNote(
+                  keyId: 'sipsin-persona-time-unknown',
+                  useKo: useKo,
+                  text: l.timeUnknownAffectsAccuracy,
+                ),
+              ],
               const SizedBox(height: 18),
               for (var i = 0; i < SipsinPersonaService.categories.length; i++) ...[
                 _SipsinPersonaRow(

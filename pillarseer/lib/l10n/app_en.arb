@@ -393,5 +393,9 @@
 
   "celebDisclosureBanner": "Light comparison from public birthdays",
   "celebDisclosureBannerHelper": "Celebrity birth times are rarely public, so we drop the hour pillar and compare day pillars only. Treat it as a fun read.",
-  "celebCardConfidenceLabel": "Public birthday · birth time unknown"
+  "celebCardConfidenceLabel": "Public birthday · birth time unknown",
+
+  "hourPillarUnknownDisclaimer": "You did not enter a birth time, so the hour pillar is left blank. Read the broader flow rather than fine timing.",
+  "hourPillarUnknownBadge": "Result without hour pillar",
+  "timeUnknownAffectsAccuracy": "Without a birth time, this section reads a little less sharp"
 }

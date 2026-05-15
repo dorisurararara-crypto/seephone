@@ -1182,4 +1182,15 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get celebCardConfidenceLabel => 'Public birthday · birth time unknown';
+
+  @override
+  String get hourPillarUnknownDisclaimer =>
+      'You did not enter a birth time, so the hour pillar is left blank. Read the broader flow rather than fine timing.';
+
+  @override
+  String get hourPillarUnknownBadge => 'Result without hour pillar';
+
+  @override
+  String get timeUnknownAffectsAccuracy =>
+      'Without a birth time, this section reads a little less sharp';
 }
