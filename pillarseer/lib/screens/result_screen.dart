@@ -25,8 +25,6 @@ import '../services/sipsin_persona_service.dart';
 import '../services/wealth_strategy_service.dart';
 import '../services/shinsa_service.dart';
 import '../services/strength_service.dart';
-import '../services/today_event_service.dart';
-import '../services/daily_service.dart' show DailyService;
 import '../services/twelve_unsung_service.dart';
 import '../services/yongsin_service.dart';
 import '../services/ziwei_crossmatch_service.dart';
@@ -47,10 +45,9 @@ import '../widgets/saju_required_empty.dart';
 /// Sprint 1 (Round 73): UI 토글 변경 X — useKo 분기 추가만.
 const bool kIsZiweiUiHidden = true;
 
-/// Round 76 sprint 5 — anchor scroll target (today_event detail section).
-final GlobalKey kTodayEventDetailAnchor = GlobalKey();
-// rebuild 마다 scroll 재예약 방지 (sprint 5 r3 fix #1) — 1회성 가드.
-bool _todayEventAnchorScheduled = false;
+// Round 82 sprint 2 — 오늘 사건 카드 widget 및 anchor key/scroll logic 제거.
+// 사용자 mandate "내 사주 = 평생사주만". 알림 deep-link 는 `lib/router.dart` 의
+// redirect rule (R79 sprint 7) 로 `/today` 로 처리.
 
 class ResultScreen extends ConsumerWidget {
   const ResultScreen({super.key});
@@ -64,27 +61,6 @@ class ResultScreen extends ConsumerWidget {
       return const SajuRequiredEmpty();
     }
     final result = resultOrNull;
-    // anchor query 검사 — `/result?anchor=today_event` 일 때 한 번만 scroll.
-    final uri = GoRouterState.of(context).uri;
-    if (uri.queryParameters['anchor'] == 'today_event' &&
-        !_todayEventAnchorScheduled) {
-      _todayEventAnchorScheduled = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final ctx = kTodayEventDetailAnchor.currentContext;
-        if (ctx != null) {
-          Scrollable.ensureVisible(
-            ctx,
-            duration: const Duration(milliseconds: 400),
-            alignment: 0,
-            curve: Curves.easeOut,
-          );
-        }
-      });
-    }
-    // route 가 anchor 가 아닐 때 가드 reset — 다음 anchor push 시 다시 작동.
-    if (uri.queryParameters['anchor'] != 'today_event') {
-      _todayEventAnchorScheduled = false;
-    }
     final isPro = ref.watch(devUnlockProvider);
     final overrideLocale = ref.watch(localeProvider);
     final systemLocale = Localizations.maybeLocaleOf(context);
@@ -143,14 +119,9 @@ class ResultScreen extends ConsumerWidget {
           children: [
             // 1. Hero — 일주 한자 + 영문 보조
             _DayMasterHero(result: result, reading: reading, useKo: useKo),
-            // Round 77 sprint 7 — 오늘 사건 가능성 카드 2번째 승격 (즉시 재미 확보).
-            // anchor key 유지: /result?anchor=today_event deep-link 스크롤 동작 (backward compat).
-            // Round 79 sprint 7 — 신규 진입은 /today route 권장 (사용자 mandate "내 사주 = 평생사주만").
-            TodayEventDetailSection(
-              key: kTodayEventDetailAnchor,
-              result: result,
-              useKo: useKo,
-            ),
+            // Round 82 sprint 2 — 오늘 사건 카드 mount 제거. 사용자 mandate
+            // "내 사주 = 평생사주만". 오늘 카드는 `/today` 탭 단독 노출. 알림 deep-link
+            // 는 router redirect (R79 sprint 7) 로 처리.
             // Round 77 sprint 7 — 상단 공유 CTA (친구 자랑 흐름 first-fold).
             _ShareHeroBar(
               onTap: () => _shareChart(context, result, useKo),
@@ -4014,277 +3985,3 @@ class _AdditionalLifeRow extends StatelessWidget {
   }
 }
 
-// ──────────── Round 76 sprint 5 — Today Event Detail Section ────────────
-//
-// 17 섹션 + 본 섹션 = 18 (append). 사용자 verbatim "오늘 당신에게 생길 수 있는 일" 상세.
-// 본문 1줄 + "왜 그런지" 사주 근거 + 조심 1줄 + 추천 1줄 + 별점 4 row.
-
-/// Round 79 sprint 7 — today_screen 에서 재사용 위해 public visibility 노출.
-/// result_screen 의 평생사주 영역 안 mount 는 backward compat 으로 유지 (anchor scroll 가드).
-class TodayEventDetailSection extends StatelessWidget {
-  final SajuResult result;
-  final bool useKo;
-  const TodayEventDetailSection({
-    super.key,
-    required this.result,
-    required this.useKo,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppL10n.of(context);
-    // DailyService 로 오늘 일진 + 점수 계산 후 TodayEventService.build 호출.
-    final fortune = DailyService().calculate(result);
-    final reading = TodayEventService.build(
-      userDayStem: result.dayPillar.chunGan,
-      userDayBranch: result.dayPillar.jiJi,
-      userMonthBranch: result.monthPillar.jiJi,
-      todayPillar: fortune.dayPillar,
-      todayScore: fortune.totalScore,
-    );
-    // Round 78 sprint 6 — anchor (신살/합충/천간합) wire. ko 본문은 composeBodyKoWithAnchor.
-    final day60ji = result.dayPillar.text;
-    final now = DateTime.now();
-    final body = useKo
-        ? TodayEventService.composeBodyKoWithAnchor(
-            reading: reading,
-            date: now,
-            day60ji: day60ji,
-            userDayStem: result.dayPillar.chunGan,
-            todayStem: fortune.dayPillar.isNotEmpty
-                ? fortune.dayPillar[0]
-                : null,
-          )
-        : TodayEventService.composeNotificationLineEn(reading);
-    // sourceReason 도 ko/en 분기 (Round 76 sprint 5 r2 fix).
-    final why =
-        useKo ? reading.sourceReason : reading.sourceReasonEn;
-    // 조심/추천 — pool entry 우선, 미스 시 카테고리별 inline.
-    final caution = useKo
-        ? (TodayEventService.composeCautionKo(
-                reading: reading, date: now, day60ji: day60ji) ??
-            TodayEventDetailSection._cautionKo(reading.categoryDominant))
-        : TodayEventDetailSection._cautionEn(reading.categoryDominant);
-    final recommend = useKo
-        ? (TodayEventService.composeRecommendKo(
-                reading: reading, date: now, day60ji: day60ji) ??
-            TodayEventDetailSection._recommendKo(reading.categoryDominant))
-        : TodayEventDetailSection._recommendEn(reading.categoryDominant);
-    final stars = [
-      (l.homeCategoryLove, reading.starsLove),
-      (l.homeCategoryWealth, reading.starsMoney),
-      (l.homeCategoryWork, reading.starsWork),
-      (l.todayEventStarHealth, reading.starsHealth),
-    ];
-
-    return _SectionFrame(
-      background: AppColors.paper,
-      meta: useKo
-          ? '오늘 사건 가능성 · TODAY EVENT'
-          : 'TODAY EVENT',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l.todayEventCaption,
-            style: GoogleFonts.notoSansKr(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: AppColors.ink,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 18),
-          Text(
-            body,
-            style: GoogleFonts.notoSansKr(
-              fontSize: 15,
-              height: 1.65,
-              color: AppColors.ink,
-            ),
-          ),
-          const SizedBox(height: 26),
-          _DetailRow(label: l.todayEventWhy, body: why, useKo: useKo),
-          const SizedBox(height: 16),
-          _DetailRow(label: l.todayEventCaution, body: caution, useKo: useKo),
-          const SizedBox(height: 16),
-          _DetailRow(label: l.todayEventRecommend, body: recommend, useKo: useKo),
-          const SizedBox(height: 24),
-          // Round 77 sprint 7 — 별점 텍스트(★☆) → 가로 색 게이지 5칸. 4행 중 1위 accent 강조.
-          ..._buildDetailStarRows(stars),
-        ],
-      ),
-    );
-  }
-
-  // Round 77 sprint 7 — 4 row 게이지 빌더. 1위는 accent 색 강조.
-  // 동률 시 Love → Wealth → Work → Health 순 (stars 리스트 인덱스 0→3 순).
-  List<Widget> _buildDetailStarRows(List<(String, int)> stars) {
-    int topIdx = 0;
-    int topScore = -1;
-    for (var i = 0; i < stars.length; i++) {
-      if (stars[i].$2 > topScore) {
-        topScore = stars[i].$2;
-        topIdx = i;
-      }
-    }
-    return stars.asMap().entries.map((e) {
-      final i = e.key;
-      final row = e.value;
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 80,
-              child: Text(
-                row.$1.toUpperCase(),
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  letterSpacing: 3,
-                  color: AppColors.taupe,
-                ),
-              ),
-            ),
-            Expanded(child: _ResultScoreGauge(score: row.$2, isTop: i == topIdx)),
-          ],
-        ),
-      );
-    }).toList();
-  }
-
-  // Round 76 sprint 5 — 카테고리별 조심/추천 자연어 inline.
-  static String _cautionKo(EventCategory c) {
-    switch (c) {
-      case EventCategory.relationship:
-        return '바로 반응하지 말고 한 박자 늦게 답하세요.';
-      case EventCategory.money:
-        return '할인이라는 말에 바로 결제하지 마세요.';
-      case EventCategory.work:
-        return '큰 결정 말고 정리부터 하면 좋아요.';
-      case EventCategory.love:
-        return '상대 반응을 너무 크게 해석하지 마세요.';
-      case EventCategory.health:
-        return '자극적인 음식이나 늦은 수면은 피하세요.';
-      case EventCategory.luck:
-        return '관심 분야 하나만 가볍게 검색해보세요.';
-    }
-  }
-
-  static String _cautionEn(EventCategory c) {
-    switch (c) {
-      case EventCategory.relationship:
-        return 'Hold the snap reply — answer a beat later.';
-      case EventCategory.money:
-        return "Don't tap pay just because it's on sale.";
-      case EventCategory.work:
-        return 'Skip big decisions today — cleanup first.';
-      case EventCategory.love:
-        return "Don't over-read the other person's reaction.";
-      case EventCategory.health:
-        return 'Avoid spicy food and late sleep.';
-      case EventCategory.luck:
-        return "Don't ignore a casual recommendation — note it before it fades.";
-    }
-  }
-
-  static String _recommendKo(EventCategory c) {
-    switch (c) {
-      case EventCategory.relationship:
-        return '먼저 가볍게 인사 한 줄 건네보세요.';
-      case EventCategory.money:
-        return '장바구니에만 담아두고 하루 자고 보세요.';
-      case EventCategory.work:
-        return '오늘 끝낼 한 가지만 정해 집중하세요.';
-      case EventCategory.love:
-        return '짧은 안부 한 줄로 가볍게 시작하세요.';
-      case EventCategory.health:
-        return '물 한 잔 마시고 30분 일찍 누워보세요.';
-      case EventCategory.luck:
-        return '들은 키워드 하나는 메모에 적어두세요.';
-    }
-  }
-
-  static String _recommendEn(EventCategory c) {
-    switch (c) {
-      case EventCategory.relationship:
-        return 'Send a light hello first.';
-      case EventCategory.money:
-        return 'Add to cart and sleep on it.';
-      case EventCategory.work:
-        return 'Pick one task to finish today and focus.';
-      case EventCategory.love:
-        return 'Open with a short, friendly hi.';
-      case EventCategory.health:
-        return 'Drink water and go to bed 30 min earlier.';
-      case EventCategory.luck:
-        return 'Note one keyword you heard today.';
-    }
-  }
-}
-
-class _DetailRow extends StatelessWidget {
-  final String label;
-  final String body;
-  final bool useKo;
-  const _DetailRow({required this.label, required this.body, required this.useKo});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: GoogleFonts.inter(
-            fontSize: 10,
-            letterSpacing: 3,
-            fontWeight: FontWeight.w500,
-            color: AppColors.taupe,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          body,
-          style: useKo
-              ? GoogleFonts.notoSansKr(
-                  fontSize: 13.5,
-                  height: 1.65,
-                  color: AppColors.inkLight,
-                )
-              : GoogleFonts.inter(
-                  fontSize: 12.5,
-                  height: 1.6,
-                  color: AppColors.inkLight,
-                ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Round 77 sprint 7 — 별점 텍스트 대체 가로 색 게이지 5칸 (result_screen).
-/// 가득 찬 칸: isTop=true → accent (gold), false → ink. 빈 칸: line (회색).
-class _ResultScoreGauge extends StatelessWidget {
-  final int score;
-  final bool isTop;
-  const _ResultScoreGauge({required this.score, required this.isTop});
-
-  @override
-  Widget build(BuildContext context) {
-    final filled = score.clamp(0, 5);
-    final activeColor = isTop ? AppColors.accent : AppColors.ink;
-    final cells = <Widget>[];
-    for (var i = 0; i < 5; i++) {
-      final isFilled = i < filled;
-      cells.add(Expanded(
-        child: Container(
-          height: 9,
-          color: isFilled ? activeColor : AppColors.line,
-        ),
-      ));
-      if (i < 4) cells.add(const SizedBox(width: 4));
-    }
-    return Row(children: cells);
-  }
-}

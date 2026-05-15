@@ -1,8 +1,10 @@
 // Round 76 sprint 5 — today_event UI 검증.
 // 1) service-level: 결정성 / 별점 범위 / sourceReason 한자 jargon 0
-// 2) widget-level: home_screen 의 _TodayEventCard 와 result_screen 의
-//    _TodayEventDetailSection 은 private 라 직접 빌드 X — 대신 source grep
-//    으로 회귀 방어 + ResultScreen 전체 pump 으로 카드 텍스트 확인.
+// 2) widget-level: home_screen 의 _TodayEventCard 는 private 라 직접 빌드 X — 대신
+//    source grep 으로 회귀 방어 + TodayScreen 전체 pump 으로 카드 텍스트 확인.
+// Round 82 sprint 2 — result_screen 에서 TodayEventDetailSection 완전 제거 (사용자
+// mandate "내 사주 = 평생사주만"). 본 file 의 backward compat 가드는 R82 의 신정책으로
+// update — result_screen 에는 today_event 노출 0, TodayScreen 에 mount 유지.
 
 import 'dart:io';
 
@@ -13,7 +15,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pillarseer/l10n/app_localizations.dart';
 import 'package:pillarseer/models/saju_result.dart';
 import 'package:pillarseer/providers/saju_provider.dart';
-import 'package:pillarseer/screens/result_screen.dart';
+import 'package:pillarseer/screens/today_screen.dart';
 import 'package:pillarseer/services/today_event_service.dart';
 
 void main() {
@@ -109,16 +111,45 @@ void main() {
       expect(home.contains("'/today'"), isTrue);
     });
 
-    test('result_screen 에 TodayEventDetailSection + anchor key 존재 (backward compat)', () {
-      // Round 79 sprint 7 — class rename: _TodayEventDetailSection → TodayEventDetailSection.
-      // anchor key kTodayEventDetailAnchor 는 backward compat 으로 보존.
-      expect(result.contains('TodayEventDetailSection'), isTrue);
-      expect(result.contains('kTodayEventDetailAnchor'), isTrue);
-      expect(result.contains('TODAY EVENT'), isTrue);
-      expect(result.contains('todayEventCaption'), isTrue);
-      expect(result.contains('todayEventWhy'), isTrue);
-      expect(result.contains('todayEventCaution'), isTrue);
-      expect(result.contains('todayEventRecommend'), isTrue);
+    test('result_screen 에 TodayEventDetailSection / anchor key 0 (R82 sprint 2 분리)', () {
+      // Round 82 sprint 2 — 사용자 mandate "내 사주 = 평생사주만". result_screen 안에서
+      // TodayEventDetailSection 사용 / 정의 / anchor key 모두 0. 알림 deep-link 호환은
+      // router 의 `/result?anchor=today_event` → `/today` redirect (R79 sprint 7) 가 처리.
+      expect(result.contains('TodayEventDetailSection'), isFalse);
+      expect(result.contains('kTodayEventDetailAnchor'), isFalse);
+      // todayEventCaption/Why/Caution/Recommend l10n key 는 home_screen / today widget 에서
+      // 사용 — result_screen 에는 0.
+      expect(result.contains('todayEventCaption'), isFalse);
+      expect(result.contains('todayEventWhy'), isFalse);
+      expect(result.contains('todayEventCaution'), isFalse);
+      expect(result.contains('todayEventRecommend'), isFalse);
+    });
+
+    test('today_screen 에 TodayEventDetailSection mount + 신규 widget file import (R82 sprint 2)', () {
+      final today =
+          File('lib/screens/today_screen.dart').readAsStringSync();
+      expect(today.contains('TodayEventDetailSection'), isTrue,
+          reason: 'today_screen TodayEventDetailSection mount');
+      expect(
+        today.contains("'../widgets/today_event_detail_section.dart'"),
+        isTrue,
+        reason: 'today_screen import path → widgets/today_event_detail_section.dart',
+      );
+      // 이전 result_screen import (R79 sprint 7) 은 제거됨.
+      expect(today.contains("'result_screen.dart' show TodayEventDetailSection"),
+          isFalse,
+          reason: 'today_screen 의 R79 backward import 제거');
+    });
+
+    test('widgets/today_event_detail_section.dart file 존재 + class 정의 (R82 sprint 2)', () {
+      final widget =
+          File('lib/widgets/today_event_detail_section.dart').readAsStringSync();
+      expect(widget.contains('class TodayEventDetailSection'), isTrue);
+      expect(widget.contains('TODAY EVENT'), isTrue);
+      expect(widget.contains('todayEventCaption'), isTrue);
+      expect(widget.contains('todayEventWhy'), isTrue);
+      expect(widget.contains('todayEventCaution'), isTrue);
+      expect(widget.contains('todayEventRecommend'), isTrue);
     });
 
     test('호칭 회귀 가드 — lib/ 전역에서 "너에게" / "너의 사주" 0건', () {
@@ -161,28 +192,22 @@ void main() {
     });
   });
 
-  testWidgets('kTodayEventDetailAnchor global key — instance 존재', (tester) async {
-    expect(kTodayEventDetailAnchor, isA<GlobalKey>());
-  });
-
-  // FIX r3 #2 — 실제 ResultScreen pump → anchor=today_event 시 detail 섹션 렌더링 확인.
-  // Round 77 sprint 8 — SajuResult.dummy() production fallback 제거 후,
-  // 테스트 fixture 로만 dummy 주입. sajuResultProvider 를 dummy 로 override.
-  testWidgets('ResultScreen pump (anchor=today_event) — detail caption 노출 + 별점 렌더',
+  // Round 82 sprint 2 — TodayScreen 직접 pump → caption + detail row 렌더 확인.
+  // 사용자 mandate "내 사주 = 평생사주만". 오늘 카드는 `/today` 단독 노출.
+  testWidgets('TodayScreen pump — detail caption 노출 + detail row 렌더',
       (tester) async {
     final router = GoRouter(
-      initialLocation: '/result?anchor=today_event',
+      initialLocation: '/today',
       routes: [
         GoRoute(
-          path: '/result',
-          builder: (c, s) => const ResultScreen(),
+          path: '/today',
+          builder: (c, s) => const TodayScreen(),
         ),
       ],
     );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          // Round 77 sprint 8 — fallback 제거 후 명시 fixture 주입.
           sajuResultProvider.overrideWith(_DummySajuNotifier.new),
         ],
         child: MaterialApp.router(
@@ -196,14 +221,11 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     // 캡션 — l10n key todayEventCaption == "오늘 당신에게 생길 수 있는 일" (Round 77 호칭 통일).
     expect(find.text('오늘 당신에게 생길 수 있는 일'), findsWidgets);
-    // detail row 라벨 — "왜 그런지" / "조심하면 좋은 것" / "오늘 추천 행동" 중 최소 하나는 노출.
-    // (한 번에 모든 라벨이 viewport 안에 있지 않을 수 있어 findsWidgets 사용.)
     final whyOrCaution = find.text('왜 그런지'.toUpperCase()).evaluate().isNotEmpty ||
         find.text('조심하면 좋은 것'.toUpperCase()).evaluate().isNotEmpty ||
         find.text('오늘 추천 행동'.toUpperCase()).evaluate().isNotEmpty;
     expect(whyOrCaution, isTrue,
         reason: 'detail row label 하나도 노출되지 않음');
-    // sajuResultProvider 의존 확인 — pump 자체가 throw 없으면 PASS.
   });
 }
 

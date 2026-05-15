@@ -114,16 +114,21 @@ void main() {
   });
 
   group('screen wire 가드 — Round 78 sprint 6', () {
-    test('home_screen + result_screen 가 composeBodyKoWithAnchor 호출', () {
+    test('home_screen + today_event widget 가 composeBodyKoWithAnchor 호출', () {
+      // Round 82 sprint 2 — TodayEventDetailSection 가 result_screen 에서
+      // `lib/widgets/today_event_detail_section.dart` 로 분리됨. anchor wire 검증을
+      // 신규 widget file 기준으로 update (사용자 mandate "내 사주 = 평생사주만").
       final home = File('lib/screens/home_screen.dart').readAsStringSync();
-      final result = File('lib/screens/result_screen.dart').readAsStringSync();
+      final todayWidget =
+          File('lib/widgets/today_event_detail_section.dart').readAsStringSync();
       expect(home.contains('composeBodyKoWithAnchor'), isTrue,
           reason: 'home_screen.dart 가 composeBodyKoWithAnchor 호출');
-      expect(result.contains('composeBodyKoWithAnchor'), isTrue,
-          reason: 'result_screen.dart 가 composeBodyKoWithAnchor 호출');
+      expect(todayWidget.contains('composeBodyKoWithAnchor'), isTrue,
+          reason:
+              'widgets/today_event_detail_section.dart 가 composeBodyKoWithAnchor 호출');
       // userDayStem + todayStem 인자도 함께 전달.
       expect(home.contains('userDayStem:'), isTrue);
-      expect(result.contains('userDayStem:'), isTrue);
+      expect(todayWidget.contains('userDayStem:'), isTrue);
     });
 
     test('천간합 발동 시 anchor — composeBodyKoWithAnchor 가 직접 hapchungLineKo 호출', () async {

@@ -3,11 +3,11 @@
 // 사용자 mandate: "내 사주 = 평생사주만 나오게".
 // result_screen 의 today_event detail 섹션을 별 페이지로 분리.
 //
-// 본 sprint 7 의 minimal 화면 분리:
-// - 신규 `/today` route 진입 시 TodayEventDetailSection (result_screen public 노출) 렌더.
-// - result_screen 의 평생사주 영역 안 mount 는 backward compat (anchor scroll) 으로 유지.
-// - home_screen `_TodayEventCard` push target → `/today` (사용자 새 진입 경로).
-// - 알림 deep-link `/result?anchor=today_event` → `/today` redirect (router rule).
+// Round 82 sprint 2 — 분리 완료:
+// - TodayEventDetailSection 이 `lib/widgets/today_event_detail_section.dart` 단독.
+// - result_screen 의 mount + anchor key + scroll logic 전부 제거 (`#4` fix).
+// - home_screen `_TodayEventCard` push target → `/today` (R79 sprint 7 wire 보존).
+// - 알림 deep-link `/result?anchor=today_event` → `/today` redirect (router rule 보존).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,8 +17,8 @@ import '../providers/saju_provider.dart';
 import '../services/daily_service.dart';
 import '../services/today_deep_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/today_event_detail_section.dart';
 import 'home_screen.dart' show TodayDeepReadingSection;
-import 'result_screen.dart' show TodayEventDetailSection;
 
 /// /today 페이지 — today_event 상세 + (옵션) today_deep 본문 통합 노출.
 /// result_screen 의 평생사주 영역과 분리 (사용자 mandate "내 사주 = 평생사주만").
