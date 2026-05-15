@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
@@ -13,6 +14,7 @@ import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
 import '../providers/saju_settings_provider.dart';
 import '../providers/streak_provider.dart';
+import '../services/app_version_service.dart';
 import '../services/notification_pool_service.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
@@ -279,10 +281,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ]),
           _SettingsGroup(label: l.settingsAbout, children: [
+            // Round 82 sprint 12 — pubspec 의 version+build 를 package_info_plus
+            // 로 비동기 로드. 첫 frame 은 placeholder 값을 보여주고, info 가 도착
+            // 하면 "버전 X.Y.Z · 빌드 N" (ko) / "Version X.Y.Z (build N)" (en).
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: _onVersionTap,
-              child: _ValueRow(label: l.settingsVersion, value: '1.0.0'),
+              child: FutureBuilder<PackageInfo>(
+                future: AppVersionService.load(),
+                builder: (ctx, snap) {
+                  final useKo =
+                      Localizations.maybeLocaleOf(ctx)?.languageCode == 'ko';
+                  final value = snap.hasData
+                      ? AppVersionService.formatLabel(snap.data!, useKo: useKo)
+                      : (useKo ? '버전 …' : 'Version …');
+                  return _ValueRow(label: l.settingsVersion, value: value);
+                },
+              ),
             ),
             _LinkRow(
               label: l.settingsPrivacy,
