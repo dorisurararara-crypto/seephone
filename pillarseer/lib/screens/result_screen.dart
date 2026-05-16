@@ -524,9 +524,7 @@ class _DayMasterHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final meaning = useKo
-        ? result.dayPillar.pairKoreanMeaning   // 예: 수 말
-        : result.dayMasterName;
+    // R86 — 사용자 mandate: "금 토끼의 결" 명사화 표현 제거. meaning 본문 노출 0.
     final element = result.dayPillar.chunGanElement;
     final elementKo = const {
       '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
@@ -572,22 +570,11 @@ class _DayMasterHero extends StatelessWidget {
               ),
               children: [
                 TextSpan(
+                  // R86 — 사용자 mandate: "금 토끼의 결" 명사화 표현 제거.
+                  // meaning ("금 토끼") + "의 결" 모두 노출 X. subtitle 만 유지.
                   text: useKo
-                      ? '당신의 기본 성향 — '
-                      : 'Your basic nature — ',
-                ),
-                TextSpan(
-                  text: useKo ? meaning : meaning,
-                  style: GoogleFonts.notoSerifKr(
-                    fontSize: 14,
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                TextSpan(
-                  text: useKo
-                      ? '의 결\n(태어난 날 기준 — 정밀 모드에서 한자 표기 보기)'
-                      : '\n(based on birth day — toggle precision mode for hanja)',
+                      ? '당신의 기본 성향\n(태어난 날 기준 — 정밀 모드에서 한자 표기 보기)'
+                      : 'Your basic nature\n(based on birth day — toggle precision mode for hanja)',
                 ),
               ],
             ),

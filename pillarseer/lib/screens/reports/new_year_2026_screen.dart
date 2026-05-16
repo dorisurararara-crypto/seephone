@@ -103,11 +103,9 @@ class NewYear2026Screen extends ConsumerWidget {
               yongsin: yongsin.yongsin,
               useKo: useKo,
             ),
-            _MonthlyFlow(
-              saju: saju,
-              year: year,
-              useKo: useKo,
-            ),
+            // R86 — 사용자 mandate: 신년운세 화면에서 12절기 카드 섹션 제거.
+            // moodFor static API 는 R78 sprint 7 test 가 의존 → class 유지.
+            // _MonthlyFlow(saju: saju, year: year, useKo: useKo),
             _TwelveAreas(theme: theme, saju: saju, useKo: useKo),
             _Counsel(useKo: useKo),
             _Footer(),

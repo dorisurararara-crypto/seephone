@@ -204,9 +204,12 @@ void main() {
       final moodB = NewYear2026Screen.moodFor(ctx: ctxB, index: 1, useKo: true);
       expect(moodA != moodB, isTrue,
           reason: '같은 입춘 라벨 + 다른 격국 (정관 vs 식신) → 본문 차이');
-      // 둘 다 입춘 base 포함 + 다른 격국 anchor 포함.
-      expect(moodA.contains('정관격'), isTrue);
-      expect(moodB.contains('식신격'), isTrue);
+      // R86 — 사용자 mandate: 격국 jargon ("정관격" / "식신격") 본문 노출 0.
+      // 격국별 변별력은 anchor phrase 차이로 유지 (위 != 검증으로 충분).
+      expect(moodA.contains('정관격'), isFalse,
+          reason: 'R86 — 격국 jargon 본문 노출 0');
+      expect(moodB.contains('식신격'), isFalse,
+          reason: 'R86 — 격국 jargon 본문 노출 0');
     });
 
     test('NewYear2026Screen.moodFor — 영문 locale + em dash leak 0 (suffix 한정)', () {

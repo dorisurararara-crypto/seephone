@@ -400,8 +400,12 @@ void main() {
       // 동일 용신이지만 격국 anchor 다름 → 본문 phrase 차이.
       expect(outA != outB, isTrue,
           reason: '격국 anchor: A=${ctxA.gyeokgukShort} vs B=${ctxB.gyeokgukShort}');
-      expect(outA.contains('정관격'), isTrue);
-      expect(outB.contains('식신격'), isTrue);
+      // R86 — 사용자 mandate: 격국 jargon ("정관격" / "식신격") 본문 노출 0 가드.
+      // 변별력은 위 outA != outB 로 보장.
+      expect(outA.contains('정관격'), isFalse,
+          reason: 'R86 — 격국 단어 본문 노출 0');
+      expect(outB.contains('식신격'), isFalse,
+          reason: 'R86 — 격국 단어 본문 노출 0');
     });
 
     test('gyeokgukAnchor — 격국 8 모두 ko/en non-empty + 한자 0', () {

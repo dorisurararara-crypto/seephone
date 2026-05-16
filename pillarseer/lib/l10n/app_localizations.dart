@@ -538,7 +538,7 @@ abstract class AppL10n {
   /// No description provided for @navReports.
   ///
   /// In en, this message translates to:
-  /// **'Reports'**
+  /// **'More'**
   String get navReports;
 
   /// No description provided for @navProfile.
@@ -550,13 +550,13 @@ abstract class AppL10n {
   /// No description provided for @placeholderReportsTitle.
   ///
   /// In en, this message translates to:
-  /// **'REPORTS'**
+  /// **'More'**
   String get placeholderReportsTitle;
 
   /// No description provided for @placeholderReportsDesc.
   ///
   /// In en, this message translates to:
-  /// **'Compatibility, Tojeong yearly fortune, date picking, and dream reports in one place.'**
+  /// **'Compatibility, yearly flow, and dream readings in one place.'**
   String get placeholderReportsDesc;
 
   /// No description provided for @placeholderDiscoverTitle.
@@ -1762,13 +1762,13 @@ abstract class AppL10n {
   /// No description provided for @reportsHomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'REPORTS'**
+  /// **'More'**
   String get reportsHomeTitle;
 
   /// No description provided for @reportsHomeSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Deep readings beyond your daily pillar.'**
+  /// **'Extra readings for when you need more than today\'s summary.'**
   String get reportsHomeSubtitle;
 
   /// No description provided for @reportsCardCompatibility.

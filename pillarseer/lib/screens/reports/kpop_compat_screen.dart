@@ -25,6 +25,15 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
   List<_Star> _stars = [];
   bool _loaded = false;
   String _filter = 'idol'; // K-POP 팬 page → 아이돌이 기본. all/idol/actor/athlete.
+  // R86 — 사용자 mandate: 이름/그룹명 검색.
+  String _query = '';
+  final TextEditingController _queryCtrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _queryCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -105,74 +114,96 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
         preferredGender = null;
       }
     }
+    // R86 — 사용자 mandate: 이름/그룹명 substring 검색 + 화면 전체 스크롤.
+    final query = _query.trim().toLowerCase();
     final filtered = _stars
         .where((s) => _filter == 'all' || s.kind == _filter)
         .where((s) =>
             preferredGender == null ||
             s.gender.isEmpty ||
             s.gender == preferredGender)
+        .where((s) {
+          if (query.isEmpty) return true;
+          return s.nameKo.toLowerCase().contains(query) ||
+              s.nameEn.toLowerCase().contains(query);
+        })
         .toList()
       ..sort((a, b) => _score(me, b).compareTo(_score(me, a)));
 
-    // Round 77 sprint 7 — 로딩 시 skeleton row 3개 (빈 화면 방지).
-    if (!_loaded) {
-      return Column(
-        children: [
-          _Hero(useKo: useKo),
-          _FilterRow(
+    // R86 — 사용자 mandate: Column+Expanded(ListView) 구조 (내부만 스크롤) → CustomScrollView
+    // 슬라이버로 통합해 Hero/TopMatch/Filter/Search/리스트가 한 번에 스크롤되도록 교체.
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(child: _Hero(useKo: useKo)),
+        // 최상위 매치 — "친구에게 캡처해서 보낼 한 줄" (Round 12 codex P0)
+        if (_loaded && filtered.isNotEmpty)
+          SliverToBoxAdapter(
+            child: _TopMatchCard(
+              star: filtered.first,
+              score: _score(me, filtered.first),
+              useKo: useKo,
+            ),
+          ),
+        SliverToBoxAdapter(
+          child: _FilterRow(
             current: _filter,
             onChanged: (id) => setState(() => _filter = id),
             useKo: useKo,
           ),
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              itemCount: 3,
-              separatorBuilder: (_, _) => const Divider(
-                  height: 1, color: AppColors.line, thickness: 1),
-              itemBuilder: (_, _) => const _SkeletonRow(),
+        ),
+        SliverToBoxAdapter(
+          child: _SearchBar(
+            controller: _queryCtrl,
+            useKo: useKo,
+            onChanged: (q) => setState(() => _query = q),
+          ),
+        ),
+        // Round 77 sprint 7 — 로딩 시 skeleton row 3개 (빈 화면 방지).
+        if (!_loaded)
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (ctx, i) => Column(
+                children: [
+                  const _SkeletonRow(),
+                  const Divider(
+                      height: 1, color: AppColors.line, thickness: 1),
+                ],
+              ),
+              childCount: 3,
+            ),
+          )
+        else if (filtered.isEmpty)
+          SliverToBoxAdapter(
+            child: _EmptySearchResult(useKo: useKo, query: _query),
+          )
+        else
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (ctx, i) {
+                if (i == filtered.length) {
+                  return _Methodology(useKo: useKo);
+                }
+                final s = filtered[i];
+                final score = _score(me, s);
+                return Column(
+                  children: [
+                    _StarRow(
+                      me: me,
+                      star: s,
+                      score: score,
+                      rank: i + 1,
+                      useKo: useKo,
+                    ),
+                    const Divider(
+                        height: 1, color: AppColors.line, thickness: 1),
+                  ],
+                );
+              },
+              childCount: filtered.length + 1,
             ),
           ),
-        ],
-      );
-    }
-    return Column(
-      children: [
-        _Hero(useKo: useKo),
-        // 최상위 매치 — "친구에게 캡처해서 보낼 한 줄" (Round 12 codex P0)
-        if (filtered.isNotEmpty)
-          _TopMatchCard(
-            star: filtered.first,
-            score: _score(me, filtered.first),
-            useKo: useKo,
-          ),
-        _FilterRow(
-          current: _filter,
-          onChanged: (id) => setState(() => _filter = id),
-          useKo: useKo,
-        ),
-        Expanded(
-          child: ListView.separated(
-            padding: EdgeInsets.zero,
-            itemCount: filtered.length + 1,
-            separatorBuilder: (_, _) =>
-                const Divider(height: 1, color: AppColors.line, thickness: 1),
-            itemBuilder: (ctx, i) {
-              if (i == filtered.length) {
-                return _Methodology(useKo: useKo);
-              }
-              final s = filtered[i];
-              final score = _score(me, s);
-              return _StarRow(
-                me: me,
-                star: s,
-                score: score,
-                rank: i + 1,
-                useKo: useKo,
-              );
-            },
-          ),
-        ),
+        // 하단 nav 와의 여유 공간.
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
       ],
     );
   }
@@ -495,6 +526,121 @@ class _FilterRow extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+// R86 — 사용자 mandate: 이름/그룹 검색바. 가벼운 한 줄, 키보드 띄우면 자동 스크롤.
+class _SearchBar extends StatelessWidget {
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final bool useKo;
+  const _SearchBar({
+    required this.controller,
+    required this.onChanged,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        textInputAction: TextInputAction.search,
+        style: GoogleFonts.notoSansKr(
+          fontSize: 13,
+          color: AppColors.ink,
+          height: 1.4,
+        ),
+        decoration: InputDecoration(
+          isDense: true,
+          hintText: useKo ? '이름 또는 그룹 검색' : 'Search by name or group',
+          hintStyle: GoogleFonts.notoSansKr(
+            fontSize: 13,
+            color: AppColors.taupe,
+            height: 1.4,
+          ),
+          prefixIcon: const Icon(Icons.search, size: 18, color: AppColors.taupe),
+          prefixIconConstraints:
+              const BoxConstraints(minWidth: 28, minHeight: 28),
+          suffixIcon: controller.text.isEmpty
+              ? null
+              : IconButton(
+                  iconSize: 16,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
+                  icon: const Icon(Icons.close, color: AppColors.taupe),
+                  onPressed: () {
+                    controller.clear();
+                    onChanged('');
+                  },
+                ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(2),
+            borderSide: const BorderSide(color: AppColors.line, width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(2),
+            borderSide: const BorderSide(color: AppColors.line, width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(2),
+            borderSide: const BorderSide(color: AppColors.ink, width: 1),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptySearchResult extends StatelessWidget {
+  final bool useKo;
+  final String query;
+  const _EmptySearchResult({required this.useKo, required this.query});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 60, 24, 60),
+      child: Column(
+        children: [
+          Text(
+            useKo
+                ? (query.trim().isEmpty
+                    ? '조건에 맞는 셀럽이 없어요.'
+                    : '"$query" 검색 결과가 없어요.')
+                : (query.trim().isEmpty
+                    ? 'No celebrities match these filters.'
+                    : 'No results for "$query".'),
+            textAlign: TextAlign.center,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.inkLight,
+              height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            useKo
+                ? '필터를 ‘전체’로 바꾸거나 다른 이름으로 검색해 보세요.'
+                : 'Try the “All” filter or another name.',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12,
+              color: AppColors.taupe,
+              height: 1.6,
+            ),
+          ),
+        ],
       ),
     );
   }

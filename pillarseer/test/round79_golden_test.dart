@@ -77,10 +77,20 @@ void main() {
       expect(reading.actionKo.isNotEmpty, isTrue, reason: 'actionKo');
       expect(reading.cautionKo.isNotEmpty, isTrue, reason: 'cautionKo');
       // bodyKo — 격국 anchor 8개 중 하나 포함 (Round 79 sprint 5).
-      const gMap = ['정관격', '편관격', '정인격', '편인격', '정재격', '편재격', '식신격', '상관격'];
-      final hasGyeokguk = gMap.any((g) => reading.bodyKo.contains(g));
+      // R86 — 사용자 mandate: 격국 jargon ("정인격" 등) 본문 노출 0 → 평어 phrase 매칭.
+      const gPhrases = [
+        '안정적인 일 흐름이 받쳐줘요',
+        '추진력이 한 박자 강해지는 분위기예요',
+        '배움이 잘 자리잡는 흐름이에요',
+        '직관이 평소보다 또렷해지는 분위기예요',
+        '차곡차곡 쌓이는 흐름이에요',
+        '새 거래 신호가 자주 오는 분위기예요',
+        '표현이 술술 풀리는 흐름이에요',
+        '한 발 빠른 감이 살아나는 분위기예요',
+      ];
+      final hasGyeokguk = gPhrases.any((p) => reading.bodyKo.contains(p));
       expect(hasGyeokguk, isTrue,
-          reason: 'G6 bodyKo 격국 anchor: ${reading.bodyKo}');
+          reason: 'G6 bodyKo 격국 anchor (R86 평어): ${reading.bodyKo}');
       // actionKo — 용신 5축 keyword 중 하나 포함 (Round 79 sprint 5 / DynamicTextResolver.yongsinSuffix).
       // 5행 5종 (초록·산책 / 햇볕 / 단맛 / 책상 정리 / 충분한 수면) 중 하나.
       const ySoftMap = [
