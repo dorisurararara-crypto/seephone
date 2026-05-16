@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Pillar Seer · Splash Logo 1024</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #efe6d2;
+    --ink: #2a2520;
+    --ink-light: #5a4d3e;
+    --wood:  #2EB872;
+    --fire:  #E63946;
+    --earth: #F2A93B;
+    --metal: #B7C3D0;
+    --water: #2563EB;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    width: 1024px; height: 1024px;
+    background: var(--paper);
+    overflow: hidden;
+    font-family: 'Noto Serif KR', serif;
+  }
+  /* native_splash 가 단일 image 를 center 에 박는다. 그래서 brand text 까지 logo PNG 한 장에 합성. */
+  .canvas {
+    width: 1024px; height: 1024px;
+    background: var(--paper);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 64px;
+  }
+  .ring {
+    width: 620px; height: 620px;
+    border-radius: 50%;
+    border: 12px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 30px var(--paper),
+      inset 0 0 0 32px rgba(42,37,32,0.10);
+  }
+  .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 500;
+    font-size: 300px;
+    line-height: 0.9;
+    color: var(--ink);
+    transform: translateY(6px);
+  }
+  .dot {
+    position: absolute;
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 16px var(--paper),
+      0 6px 18px rgba(0,0,0,0.08);
+  }
+  .d1 { top: -48px; left: 50%; transform: translateX(-50%); background: var(--wood); }
+  .d2 { top: 17%; right: -48px; background: var(--fire); }
+  .d3 { bottom: 17%; right: -48px; background: var(--earth); }
+  .d4 { bottom: 17%; left: -48px; background: var(--metal); }
+  .d5 { top: 17%; left: -48px; background: var(--water); }
+  .meta {
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+  }
+  .brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 44px;
+    font-weight: 500;
+    letter-spacing: 16px;
+    color: var(--ink);
+  }
+  .ledger {
+    display: flex; gap: 36px;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 500;
+    font-size: 40px;
+  }
+  .ledger .w { color: var(--wood); }
+  .ledger .f { color: var(--fire); }
+  .ledger .e { color: var(--earth); }
+  .ledger .m { color: #6E7C8E; }
+  .ledger .a { color: var(--water); }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="ring">
+    <span class="han">柱</span>
+    <span class="dot d1"></span>
+    <span class="dot d2"></span>
+    <span class="dot d3"></span>
+    <span class="dot d4"></span>
+    <span class="dot d5"></span>
+  </div>
+  <div class="meta">
+    <div class="brand">PILLAR SEER</div>
+    <div class="ledger">
+      <span class="w">木</span>
+      <span class="f">火</span>
+      <span class="e">土</span>
+      <span class="m">金</span>
+      <span class="a">水</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

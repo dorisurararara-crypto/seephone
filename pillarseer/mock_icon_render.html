@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>Pillar Seer · App Icon 1024</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #efe6d2;
+    --ink: #2a2520;
+    --wood:  #2EB872;
+    --fire:  #E63946;
+    --earth: #F2A93B;
+    --metal: #B7C3D0;
+    --water: #2563EB;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    width: 1024px; height: 1024px;
+    background: var(--paper);
+    overflow: hidden;
+    font-family: 'Noto Serif KR', serif;
+  }
+  .icon {
+    width: 1024px; height: 1024px;
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  /* iOS 자동 squircle mask 적용되므로 안쪽만 그림. 모서리 마스크 X — Asset Catalog 가 squircle 처리. */
+  .ring {
+    width: 740px; height: 740px;
+    border-radius: 50%;
+    border: 14px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 36px var(--paper),
+      inset 0 0 0 38px rgba(42,37,32,0.12);
+  }
+  .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 500;
+    font-size: 360px;
+    line-height: 0.9;
+    color: var(--ink);
+    transform: translateY(8px);
+  }
+  .dot {
+    position: absolute;
+    width: 112px; height: 112px;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 18px var(--paper),
+      0 6px 20px rgba(0,0,0,0.08);
+  }
+  .d1 { top: -56px; left: 50%; transform: translateX(-50%); background: var(--wood); }
+  .d2 { top: 17%; right: -56px; background: var(--fire); }
+  .d3 { bottom: 17%; right: -56px; background: var(--earth); }
+  .d4 { bottom: 17%; left: -56px; background: var(--metal); }
+  .d5 { top: 17%; left: -56px; background: var(--water); }
+</style>
+</head>
+<body>
+<div class="icon">
+  <div class="ring">
+    <span class="han">柱</span>
+    <span class="dot d1"></span>
+    <span class="dot d2"></span>
+    <span class="dot d3"></span>
+    <span class="dot d4"></span>
+    <span class="dot d5"></span>
+  </div>
+</div>
+</body>
+</html>

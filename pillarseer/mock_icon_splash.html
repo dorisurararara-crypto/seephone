@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Pillar Seer — 아이콘 / 스플래시 mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&family=Noto+Serif+KR:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4ecdc;
+    --paper: #efe6d2;
+    --ink: #2a2520;
+    --ink-light: #5a4d3e;
+    --taupe: #8a7960;
+    --line: #d6c9a8;
+    --accent: #b08a4a;
+    /* R86 — Mock B 비비드 5색 (사용자 mandate). 채도 ↑ contrast ↑. */
+    --wood: #2EB872;   /* 비비드 emerald — 봄·시작·생장 */
+    --fire: #E63946;   /* 비비드 vermilion — 여름·정점·표현 */
+    --earth: #F2A93B;  /* 비비드 amber gold — 환절·중심·안정 */
+    --metal: #B7C3D0;  /* light silver platinum — 가을·수렴·결단 */
+    --water: #2563EB;  /* 비비드 cobalt — 겨울·저장·지혜 */
+    --gold: #c8a45a;
+    --dark-ink: #1a1814;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+  }
+  .head {
+    padding: 14px 6px 24px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 22px;
+  }
+  .head .meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--taupe);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .head h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0 0 8px;
+    letter-spacing: -0.2px;
+  }
+  .head p {
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .card {
+    padding: 22px 0 28px;
+    border-bottom: 1px solid var(--line);
+  }
+  .card:last-of-type { border-bottom: none; }
+  .card .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: var(--taupe);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card .title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    font-weight: 400;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .card .desc {
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.65;
+    margin: 0 0 16px;
+  }
+  .duo {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .icon-wrap, .splash-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .icon {
+    width: 110px;
+    height: 110px;
+    border-radius: 24.6px; /* iOS squircle approximation */
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.06),
+      0 6px 18px rgba(40,30,20,0.10);
+  }
+  .splash {
+    flex: 1;
+    aspect-ratio: 9/19.5;
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,0.04),
+      0 6px 18px rgba(40,30,20,0.10);
+  }
+  .tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--taupe);
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 8px;
+  }
+  /* ───────── Mock A — 古典 한지 톤 ───────── */
+  .a-icon, .a-splash {
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .a-icon::before, .a-splash::before {
+    content: "";
+    position: absolute;
+    inset: 14% 38% auto 38%;
+    height: 1px;
+    background: var(--line);
+  }
+  .a-icon .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 60px;
+    color: var(--ink);
+    line-height: 1;
+    margin-top: 6px;
+  }
+  .a-splash {
+    padding: 50px 22px;
+  }
+  .a-splash .brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 6px;
+    color: var(--taupe);
+    margin-bottom: 36px;
+  }
+  .a-splash .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 90px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .a-splash .sub {
+    margin-top: 28px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+  }
+  /* ───────── Mock B — 오행 5색 ring ───────── */
+  .b-icon, .b-splash {
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .b-icon .ring {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 0 0 0 4px var(--paper);
+  }
+  .b-icon .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 500;
+    font-size: 32px;
+    color: var(--ink);
+  }
+  .b-icon .dot, .b-splash .dot {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--paper);
+  }
+  /* Mock B 비비드 — 점 크기 ↑ 채도 ↑ */
+  .b-icon .dot { width: 12px; height: 12px; }
+  .b-icon .d1 { top: -6px; left: 50%; transform: translateX(-50%); background: var(--wood); }
+  .b-icon .d2 { top: 17%; right: -6px; background: var(--fire); }
+  .b-icon .d3 { bottom: 17%; right: -6px; background: var(--earth); }
+  .b-icon .d4 { bottom: 17%; left: -6px; background: var(--metal); }
+  .b-icon .d5 { top: 17%; left: -6px; background: var(--water); }
+  .b-splash {
+    flex-direction: column;
+    padding: 50px 22px;
+    text-align: center;
+  }
+  .b-splash .ring {
+    width: 190px; height: 190px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    margin-bottom: 30px;
+    animation: bSpin 14s linear infinite;
+    box-shadow: inset 0 0 0 6px var(--paper);
+  }
+  @keyframes bSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  /* 한 글자는 회전 반대로 — 글자는 정지된 듯 */
+  .b-splash .ring .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 400;
+    font-size: 78px;
+    color: var(--ink);
+    animation: bSpinReverse 14s linear infinite;
+  }
+  @keyframes bSpinReverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+  .b-splash .dot {
+    width: 18px; height: 18px;
+  }
+  .b-splash .d1 { top: -10px; left: 50%; transform: translateX(-50%); background: var(--wood); }
+  .b-splash .d2 { top: 17%; right: -10px; background: var(--fire); }
+  .b-splash .d3 { bottom: 17%; right: -10px; background: var(--earth); }
+  .b-splash .d4 { bottom: 17%; left: -10px; background: var(--metal); }
+  .b-splash .d5 { top: 17%; left: -10px; background: var(--water); }
+  .b-splash .brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .b-splash .sub {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 12px;
+    color: var(--ink-light);
+    letter-spacing: 1px;
+  }
+  /* 5색 ledger 한 줄 — splash 하단에 木火土金水 letterhead */
+  .b-ledger {
+    display: flex;
+    gap: 14px;
+    margin-top: 26px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .b-ledger span { line-height: 1; font-weight: 500; }
+  .b-ledger .w { color: var(--wood); }
+  .b-ledger .f { color: var(--fire); }
+  .b-ledger .e { color: var(--earth); }
+  .b-ledger .m { color: #6E7C8E; } /* metal 점은 light silver 지만 글자는 가독성 위해 살짝 진한 회청 */
+  .b-ledger .a { color: var(--water); }
+  /* ───────── Mock C — 세로 한자 stack ───────── */
+  .c-icon, .c-splash {
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .c-icon .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .c-icon .stack span {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 38px;
+    line-height: 0.95;
+    color: var(--ink);
+  }
+  .c-icon .stack .accent { color: var(--accent); }
+  .c-splash {
+    flex-direction: column;
+    padding: 50px 22px;
+    text-align: center;
+  }
+  .c-splash .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  .c-splash .stack span {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 90px;
+    line-height: 0.92;
+    color: var(--ink);
+  }
+  .c-splash .stack .accent { color: var(--accent); }
+  .c-splash .brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--ink);
+  }
+  .c-splash .sub {
+    margin-top: 6px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    color: var(--ink-light);
+    letter-spacing: 0.5px;
+  }
+  /* ───────── Mock D — 다크 잉크 / gold ───────── */
+  .d-icon, .d-splash {
+    background: var(--dark-ink);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .d-icon::before, .d-splash::before {
+    content: "";
+    position: absolute;
+    inset: 14% 38% auto 38%;
+    height: 1px;
+    background: rgba(200,164,90,0.35);
+  }
+  .d-icon .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 400;
+    font-size: 58px;
+    color: var(--gold);
+    margin-top: 8px;
+    line-height: 1;
+  }
+  .d-splash {
+    padding: 50px 22px;
+  }
+  .d-splash .brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 6px;
+    color: rgba(200,164,90,0.7);
+    margin-bottom: 36px;
+  }
+  .d-splash .han {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 300;
+    font-size: 96px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .d-splash .sub {
+    margin-top: 28px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    color: rgba(200,164,90,0.6);
+    letter-spacing: 1px;
+  }
+  .foot {
+    margin-top: 30px;
+    padding: 16px 6px 0;
+    border-top: 1px solid var(--line);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--taupe);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="meta">Pillar Seer · 柱</div>
+    <h1>아이콘 / 스플래시 mockup 4 안</h1>
+    <p>좌 = 앱 아이콘 (1024×1024 비율), 우 = 첫 스플래시 화면 (iPhone 9:19.5).<br>
+    네이밍·만세력 톤·해요체 카피·페이퍼 ivory 팔레트 그대로 유지한 외형 시안.</p>
+  </div>
+
+  <!-- Mock A -->
+  <div class="card">
+    <div class="label">Mock A</div>
+    <h2 class="title">古典 — 한지 한 글자</h2>
+    <p class="desc">페이퍼 베이지 위에 일주(日柱)의 "柱" 한 글자. 위에 1픽셀 가는 ink 라인 1줄 — 만세력 책 첫 장 느낌. 사주 본업 신뢰 + 평정.</p>
+    <div class="duo">
+      <div class="icon-wrap">
+        <div class="icon a-icon">
+          <span class="han">柱</span>
+        </div>
+        <div class="tag">App Icon</div>
+      </div>
+      <div class="splash-wrap">
+        <div class="splash a-splash">
+          <div class="brand">PILLAR SEER</div>
+          <div class="han">柱</div>
+          <div class="sub">당신의 네 기둥</div>
+        </div>
+        <div class="tag">Splash</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mock B (선택안 — 비비드 버전) -->
+  <div class="card">
+    <div class="label">Mock B · 선택안 · 비비드</div>
+    <h2 class="title">五行 — 5색 원환 (vivid)</h2>
+    <p class="desc">사용자 mandate "비비드". 5색 채도 ↑ (emerald·vermilion·amber·platinum·cobalt), 점 크기 ↑, ring 굵기 ↑. 스플래시는 ring 이 천천히 회전하고 중앙 "柱" 는 정지된 듯 역회전 — 만세력 우주관의 운행 시각화.</p>
+    <div class="duo">
+      <div class="icon-wrap">
+        <div class="icon b-icon">
+          <div class="ring">
+            <span class="han">柱</span>
+            <span class="dot d1"></span>
+            <span class="dot d2"></span>
+            <span class="dot d3"></span>
+            <span class="dot d4"></span>
+            <span class="dot d5"></span>
+          </div>
+        </div>
+        <div class="tag">App Icon · 1024×1024</div>
+      </div>
+      <div class="splash-wrap">
+        <div class="splash b-splash">
+          <div class="ring">
+            <span class="han">柱</span>
+            <span class="dot d1"></span>
+            <span class="dot d2"></span>
+            <span class="dot d3"></span>
+            <span class="dot d4"></span>
+            <span class="dot d5"></span>
+          </div>
+          <div class="brand">PILLAR SEER</div>
+          <div class="sub">다섯 기운, 네 기둥</div>
+          <div class="b-ledger">
+            <span class="w">木</span>
+            <span class="f">火</span>
+            <span class="e">土</span>
+            <span class="m">金</span>
+            <span class="a">水</span>
+          </div>
+        </div>
+        <div class="tag">Splash · 9:19.5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mock C -->
+  <div class="card">
+    <div class="label">Mock C</div>
+    <h2 class="title">日柱 — 세로 한자 stack</h2>
+    <p class="desc">사주의 핵심 "日柱" 두 글자를 세로 쌓기. "日" 은 부 강조 색(taupe gold), "柱" 는 ink 본 색. 아이콘 안에서도 한자 ID 가 또렷.</p>
+    <div class="duo">
+      <div class="icon-wrap">
+        <div class="icon c-icon">
+          <div class="stack">
+            <span class="accent">日</span>
+            <span>柱</span>
+          </div>
+        </div>
+        <div class="tag">App Icon</div>
+      </div>
+      <div class="splash-wrap">
+        <div class="splash c-splash">
+          <div class="stack">
+            <span class="accent">日</span>
+            <span>柱</span>
+          </div>
+          <div class="brand">PILLAR SEER</div>
+          <div class="sub">사주 풀이 · 만세력</div>
+        </div>
+        <div class="tag">Splash</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mock D -->
+  <div class="card">
+    <div class="label">Mock D</div>
+    <h2 class="title">夜柱 — 다크 잉크 + gold</h2>
+    <p class="desc">다크 ink 바탕에 gold "柱" 한 글자. 만세력·운명 도구의 무게감 + 프리미엄 톤. 라이트 모드 페이퍼 본체와 대조되는 splash 한 화면.</p>
+    <div class="duo">
+      <div class="icon-wrap">
+        <div class="icon d-icon">
+          <span class="han">柱</span>
+        </div>
+        <div class="tag">App Icon</div>
+      </div>
+      <div class="splash-wrap">
+        <div class="splash d-splash">
+          <div class="brand">PILLAR SEER</div>
+          <div class="han">柱</div>
+          <div class="sub">당신의 네 기둥</div>
+        </div>
+        <div class="tag">Splash</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    팔레트: paper #efe6d2 · ink #2a2520 · taupe #8a7960 · accent #b08a4a · gold #c8a45a · dark-ink #1a1814.<br>
+    폰트: Noto Serif KR (한자/serif 본문) · Inter (라벨/letter-spacing).<br>
+    의존성 0 — Google Fonts CDN 만. 모바일 Safari 에서 그대로 열림.
+  </div>
+</div>
+</body>
+</html>
