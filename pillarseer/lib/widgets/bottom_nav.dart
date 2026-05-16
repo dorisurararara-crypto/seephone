@@ -15,10 +15,10 @@ class PillarBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     final items = <_NavItem>[
-      _NavItem(label: l.navHome, route: '/home', glyph: '日'),
-      _NavItem(label: l.navReading, route: '/result', glyph: '柱'),
-      _NavItem(label: l.navReports, route: '/reports', glyph: '譜'),
-      _NavItem(label: l.navProfile, route: '/profile', glyph: '我'),
+      _NavItem(label: l.navHome, route: '/home'),
+      _NavItem(label: l.navReading, route: '/result'),
+      _NavItem(label: l.navReports, route: '/reports'),
+      _NavItem(label: l.navProfile, route: '/profile'),
     ];
     return Container(
       decoration: const BoxDecoration(
@@ -28,7 +28,7 @@ class PillarBottomNav extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 64,
+          height: 56,
           child: Row(
             children: items.asMap().entries.map((entry) {
               final i = entry.key;
@@ -54,27 +54,12 @@ class PillarBottomNav extends StatelessWidget {
                         Text(
                           item.label,
                           style: GoogleFonts.notoSansKr(
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: isActive
                                 ? FontWeight.w500
                                 : FontWeight.w400,
                             letterSpacing: 0.3,
-                            color: isActive
-                                ? AppColors.ink
-                                : AppColors.taupe,
-                          ),
-                        ),
-                        const SizedBox(height: 3),
-                        // 한자는 작은 sub-accent (장식)
-                        Text(
-                          item.glyph,
-                          style: GoogleFonts.notoSerifKr(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w300,
-                            color: isActive
-                                ? AppColors.accent
-                                : AppColors.taupe.withValues(alpha: 0.55),
-                            height: 1.0,
+                            color: isActive ? AppColors.ink : AppColors.taupe,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -100,10 +85,5 @@ class PillarBottomNav extends StatelessWidget {
 class _NavItem {
   final String label;
   final String route;
-  final String glyph;
-  const _NavItem({
-    required this.label,
-    required this.route,
-    required this.glyph,
-  });
+  const _NavItem({required this.label, required this.route});
 }

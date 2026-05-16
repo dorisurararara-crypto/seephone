@@ -1,4 +1,4 @@
-// Pillar Seer — Reports home (Aesop Luxury). 7 chapters in editorial layout.
+// Pillar Seer — More home. Keep only high-signal extra readings.
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,74 +15,41 @@ class ReportsHomeScreen extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    // Round 77 sprint 7 — MZ K-POP 페르소나 mandate: 추천 1순위 = K-POP 궁합.
-    // 신년운세는 light 그룹으로 강등. 어른 한자 jargon 모두 한국어 메인 + 한자 sub.
-    final recommended = <_Card>[
+    // R85 — 메뉴 피로 정리. 토정비결/택일/셀럽 일주 탐색은 숨기고, 사용자가
+    // 바로 이해할 수 있는 4개만 노출한다.
+    final cards = <_Card>[
       _Card(
-        symbol: '韓 流',
-        title: useKo ? 'K-POP 최애와 케미' : 'K-POP Bias Chemistry',
+        eyebrow: useKo ? '연애 · 인간관계' : 'Love & people',
+        title: useKo ? '궁합 보기' : 'Compatibility',
         subtitle: useKo
-            ? '최애 그룹 멤버 50+ 와 케미 비교 · 무대 시너지'
-            : 'Compare with 50+ K-POP idols · stage chemistry',
-        route: '/reports/kpop-compat',
-        badge: useKo ? 'NEW' : 'NEW',
+            ? '두 사람의 끌림, 잘 맞는 지점, 부딪히는 지점을 봐요.'
+            : 'See where two people click, support each other, or clash.',
+        route: '/reports/compatibility',
         size: _CardSize.large,
       ),
-    ];
-
-    // 가볍게 보기 2 — 시즌 운세 + 꿈 풀이
-    final light = <_Card>[
       _Card(
-        symbol: '丙午',
+        eyebrow: useKo ? '올해 흐름' : 'Year ahead',
         title: useKo ? '2026 신년운세' : 'New Year 2026',
         subtitle: useKo
-            ? '올해 한 줄 운세 · 매달 분위기 · 12 영역'
-            : 'Year of Fire Horse · monthly flow · 12 life areas',
+            ? '올해 전체 분위기와 달별로 조심할 포인트를 정리해요.'
+            : 'A year overview with month-by-month points to watch.',
         route: '/reports/new-year-2026',
       ),
       _Card(
-        symbol: '解 夢',
-        title: l.reportsCardDream,
+        eyebrow: useKo ? '가볍게 보기' : 'Light read',
+        title: useKo ? '꿈 풀이' : 'Dream Reading',
         subtitle: useKo
-            ? '꿈 한 컷 → 길흉 · 1,000+ 사전'
-            : 'Dream omens — 1,000+ entries',
+            ? '기억나는 꿈이 신경 쓰일 때만 가볍게 찾아봐요.'
+            : 'Look up a dream when it stays on your mind.',
         route: '/reports/dream',
       ),
-    ];
-
-    // Round 77 sprint 7 — 깊게 보기 4: 어른 단어 한자는 sub 로 내리고 한국어 메인 + 풀이 sub.
-    final deep = <_Card>[
       _Card(
-        symbol: '宮 合',
-        title: useKo ? '둘이 잘 맞아? · 궁합' : l.reportsCardCompatibility,
+        eyebrow: useKo ? '팬심 재미' : 'For fun',
+        title: useKo ? '최애와 케미' : 'Bias Chemistry',
         subtitle: useKo
-            ? '두 사람 케미 · 끌림과 갈등'
-            : l.reportsCardCompatibilityDesc,
-        route: '/reports/compatibility',
-      ),
-      _Card(
-        symbol: '土 亭',
-        title: useKo ? '토정비결' : l.reportsCardTojeong,
-        subtitle: useKo
-            ? '올해 짧은 한 줄 · 12달 흐름'
-            : l.reportsCardTojeongDesc,
-        route: '/reports/tojeong',
-      ),
-      _Card(
-        symbol: '擇 日',
-        title: useKo ? '좋은 날 고르기' : l.reportsCardDatePicking,
-        subtitle: useKo
-            ? '앞으로 30일 길일 · 평일 · 흉일'
-            : l.reportsCardDatePickingDesc,
-        route: '/reports/date-picking',
-      ),
-      _Card(
-        symbol: '名 譜',
-        title: useKo ? '유명인 일주 둘러보기' : l.discoverTitle,
-        subtitle: useKo
-            ? '누가 나랑 같은 일주? · 셀럽 비교'
-            : l.discoverSubtitle,
-        route: '/discover',
+            ? 'K-POP·한국 셀럽과 내 사주의 케미를 비교해요.'
+            : 'Compare your saju chemistry with K-pop and Korean celebrities.',
+        route: '/reports/kpop-compat',
       ),
     ];
 
@@ -97,7 +64,8 @@ class ReportsHomeScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: AppColors.bg,
                 border: Border(
-                    bottom: BorderSide(color: AppColors.line, width: 1)),
+                  bottom: BorderSide(color: AppColors.line, width: 1),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +80,7 @@ class ReportsHomeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    useKo ? '리포트 · 譜' : 'REPORTS · 譜',
+                    useKo ? '더 보기' : 'MORE',
                     style: GoogleFonts.inter(
                       fontSize: 8,
                       fontWeight: FontWeight.w500,
@@ -129,13 +97,14 @@ class ReportsHomeScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: AppColors.bg,
                 border: Border(
-                    bottom: BorderSide(color: AppColors.line, width: 1)),
+                  bottom: BorderSide(color: AppColors.line, width: 1),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    useKo ? '심층 풀이 · 深 章' : 'DEEP CHAPTERS · 深 章',
+                    useKo ? '필요할 때 보는 풀이' : 'EXTRA READINGS',
                     style: GoogleFonts.inter(
                       fontSize: 9,
                       letterSpacing: 5,
@@ -174,12 +143,9 @@ class ReportsHomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _GroupHeader(useKo ? '추천 · 지금 보세요' : 'PICK FOR YOU'),
-            ...recommended.map((c) => _CardRow(card: c, highlight: true)),
-            _GroupHeader(useKo ? '가볍게 보기' : 'QUICK READS'),
-            ...light.map((c) => _CardRow(card: c)),
-            _GroupHeader(useKo ? '깊게 보기' : 'DEEP READS'),
-            ...deep.map((c) => _CardRow(card: c)),
+            ...cards.asMap().entries.map(
+              (e) => _CardRow(card: e.value, highlight: e.key == 0),
+            ),
             const SizedBox(height: 32),
           ],
         ),
@@ -189,42 +155,19 @@ class ReportsHomeScreen extends StatelessWidget {
   }
 }
 
-class _GroupHeader extends StatelessWidget {
-  final String label;
-  const _GroupHeader(this.label);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 14),
-      child: Text(
-        label.toUpperCase(),
-        style: GoogleFonts.inter(
-          fontSize: 9,
-          letterSpacing: 5,
-          fontWeight: FontWeight.w500,
-          color: AppColors.taupe,
-        ),
-      ),
-    );
-  }
-}
-
 enum _CardSize { normal, large }
 
 class _Card {
-  final String symbol;
+  final String eyebrow;
   final String title;
   final String subtitle;
   final String route;
-  final String? badge;
   final _CardSize size;
   const _Card({
-    required this.symbol,
+    required this.eyebrow,
     required this.title,
     required this.subtitle,
     required this.route,
-    this.badge,
     this.size = _CardSize.normal,
   });
 }
@@ -240,7 +183,12 @@ class _CardRow extends StatelessWidget {
     return InkWell(
       onTap: () => context.go(card.route),
       child: Container(
-        padding: EdgeInsets.fromLTRB(24, isLarge ? 28 : 22, 24, isLarge ? 28 : 22),
+        padding: EdgeInsets.fromLTRB(
+          24,
+          isLarge ? 28 : 22,
+          24,
+          isLarge ? 28 : 22,
+        ),
         decoration: BoxDecoration(
           color: highlight ? AppColors.paper : AppColors.bg,
           border: const Border(
@@ -254,6 +202,15 @@ class _CardRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    card.eyebrow,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 11,
+                      color: AppColors.taupe,
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Expanded(
@@ -267,36 +224,7 @@ class _CardRow extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (card.badge != null)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: AppColors.accent, width: 1),
-                          ),
-                          child: Text(
-                            card.badge!,
-                            style: GoogleFonts.inter(
-                              fontSize: 9,
-                              letterSpacing: 3,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.accent,
-                            ),
-                          ),
-                        ),
                     ],
-                  ),
-                  const SizedBox(height: 6),
-                  // 한자는 작은 sub-accent (장식)
-                  Text(
-                    card.symbol,
-                    style: GoogleFonts.notoSerifKr(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 1.5,
-                      color: AppColors.accent,
-                    ),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -315,10 +243,7 @@ class _CardRow extends StatelessWidget {
               padding: const EdgeInsets.only(top: 4),
               child: Text(
                 '→',
-                style: GoogleFonts.inter(
-                  fontSize: 18,
-                  color: AppColors.taupe,
-                ),
+                style: GoogleFonts.inter(fontSize: 18, color: AppColors.taupe),
               ),
             ),
           ],

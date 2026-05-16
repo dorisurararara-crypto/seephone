@@ -78,11 +78,11 @@
 
   "navHome": "오늘",
   "navReading": "내 사주",
-  "navReports": "리포트",
+  "navReports": "더 보기",
   "navProfile": "프로필",
 
-  "placeholderReportsTitle": "리포트",
-  "placeholderReportsDesc": "궁합, 토정비결, 택일, 해몽 리포트를 한곳에서 볼 수 있어요.",
+  "placeholderReportsTitle": "더 보기",
+  "placeholderReportsDesc": "궁합, 신년운세, 꿈 풀이처럼 필요할 때 보는 메뉴를 모았어요.",
   "placeholderDiscoverTitle": "탐색",
   "placeholderDiscoverDesc": "K-pop 사주, K-drama 인물, 한국 운세 이야기를 가볍게 둘러보세요.",
   "placeholderProfileTitle": "프로필",
@@ -299,8 +299,8 @@
   "resultProLocked": "PRO",
   "resultUnlockHint": "심층 기능이 준비되면 더 많은 영역을 볼 수 있어요.",
 
-  "reportsHomeTitle": "심층 리포트",
-  "reportsHomeSubtitle": "일진을 넘어선 깊은 풀이.",
+  "reportsHomeTitle": "더 보기",
+  "reportsHomeSubtitle": "오늘 사주 말고 필요할 때 보는 풀이만 모았어요.",
   "reportsCardCompatibility": "궁합",
   "reportsCardCompatibilityDesc": "두 사주의 케미. 오행 조화 + 기둥 공명.",
   "reportsCardTojeong": "토정비결 (土亭祕訣)",

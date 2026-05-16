@@ -42,7 +42,7 @@ class TodayDeepReading {
   final String cautionEn;
   final String bestTimeKo;
   final String bestTimeEn;
-  final String moodTagKo;  // 한 단어 — 화면 chip
+  final String moodTagKo; // 한 단어 — 화면 chip
   final String moodTagEn;
 
   const TodayDeepReading({
@@ -68,14 +68,14 @@ class TodayDeepService {
   /// suffix 가 body 끝에 derive 되어 같은 십신·dayEnergy 라도 격국·용신 다르면
   /// 본문 phrase 차이 ≥1 보장. ctx null 시 R77 기존 형태 그대로 (회귀 가드).
   static TodayDeepReading build({
-    required String userDayStem,        // 사용자 일간 (천간)
-    required String userDayBranch,      // 사용자 일지
-    required String userMonthBranch,    // 사용자 월지
-    required String userDominantEl,     // 사용자 5행 강함
-    required String userDeficitEl,      // 사용자 5행 약함
-    required String todayPillar,        // 오늘 60갑자 (예: '丙戌')
-    required int todayScore,            // 0-100
-    SajuContext? ctx,                   // Round 78 sprint 4 — 격국·용신 derive
+    required String userDayStem, // 사용자 일간 (천간)
+    required String userDayBranch, // 사용자 일지
+    required String userMonthBranch, // 사용자 월지
+    required String userDominantEl, // 사용자 5행 강함
+    required String userDeficitEl, // 사용자 5행 약함
+    required String todayPillar, // 오늘 60갑자 (예: '丙戌')
+    required int todayScore, // 0-100
+    SajuContext? ctx, // Round 78 sprint 4 — 격국·용신 derive
   }) {
     final todayStem = todayPillar.isNotEmpty ? todayPillar[0] : '甲';
     final todayBranch = todayPillar.length >= 2 ? todayPillar[1] : '子';
@@ -103,20 +103,22 @@ class TodayDeepService {
 
     final hooks = _hooksByEnergy(dayEnergy);
 
-    final headlineKo = '오늘은 ${hooks.moodKo} 분위기의 하루.';
-    final headlineEn = "Today's mood: ${hooks.moodEn}.";
+    final headlineKo = '오늘 사주 총평: ${hooks.moodKo} 날.';
+    final headlineEn = "Today's Saju Summary: ${hooks.moodEn}.";
 
     var bodyKo = _composeBodyKo(
       godKo: godKo,
       branchKo: brKo,
       elementKo: elementMood.ko,
       moodHookKo: hooks.bodyHookKo,
+      energy: dayEnergy,
     );
     var bodyEn = _composeBodyEn(
       godEn: godEn,
       branchEn: brEn,
       elementEn: elementMood.en,
       moodHookEn: hooks.bodyHookEn,
+      energy: dayEnergy,
     );
 
     // Round 78 sprint 4/7 — ctx 주입 시 격국 anchor + 용신 5축 derive suffix +
@@ -126,16 +128,22 @@ class TodayDeepService {
       final gAnchorKo = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'ko');
       final ySuffixKo = DynamicTextResolver.yongsinSuffix(ctx, locale: 'ko');
       final dwAnchorKo = _daewoonAnchor(ctx, locale: 'ko');
-      final extraKo =
-          [dwAnchorKo, gAnchorKo, ySuffixKo].where((p) => p.isNotEmpty).join(' ');
+      final extraKo = [
+        dwAnchorKo,
+        gAnchorKo,
+        ySuffixKo,
+      ].where((p) => p.isNotEmpty).join(' ');
       if (extraKo.isNotEmpty) {
         bodyKo = '$bodyKo $extraKo';
       }
       final gAnchorEn = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'en');
       final ySuffixEn = DynamicTextResolver.yongsinSuffix(ctx, locale: 'en');
       final dwAnchorEn = _daewoonAnchor(ctx, locale: 'en');
-      final extraEn =
-          [dwAnchorEn, gAnchorEn, ySuffixEn].where((p) => p.isNotEmpty).join(' ');
+      final extraEn = [
+        dwAnchorEn,
+        gAnchorEn,
+        ySuffixEn,
+      ].where((p) => p.isNotEmpty).join(' ');
       if (extraEn.isNotEmpty) {
         bodyEn = '$bodyEn $extraEn';
       }
@@ -162,8 +170,7 @@ class TodayDeepService {
     // Round 78 sprint 6 — 공망 발동 시 caution 끝에 anchor join.
     // ctx.gongMangAreas 가 비어있지 않으면 caution 에 "공망 신호" 한 줄 prepend.
     if (ctx != null && ctx.gongMangAreas.isNotEmpty) {
-      cautionKo =
-          '$cautionKo 공망 신호가 도는 날이라 큰돈·계약 결정은 한 번 더 확인해보세요.';
+      cautionKo = '$cautionKo 공망 신호가 도는 날이라 큰돈·계약 결정은 한 번 더 확인해보세요.';
       cautionEn =
           '$cautionEn Void signal day — double-check big money or contract calls.';
     }
@@ -218,7 +225,8 @@ class TodayDeepService {
         '정재': "You are inside a Stable Wealth cycle. Steady stacking flow.",
         '편관': "You are inside a Bold Drive cycle. Challenges layer on.",
         '정관': "You are inside a Stable Office cycle. Position settles in.",
-        '편인': "You are inside an Unconventional Resource cycle. Intuition sharpens.",
+        '편인':
+            "You are inside an Unconventional Resource cycle. Intuition sharpens.",
         '정인': "You are inside a Direct Resource cycle. Learning solidifies.",
       };
       return map[ko] ?? '';
@@ -227,8 +235,16 @@ class TodayDeepService {
 
   static String _elementOfStem(String stem) {
     const map = {
-      '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
-      '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+      '甲': '木',
+      '乙': '木',
+      '丙': '火',
+      '丁': '火',
+      '戊': '土',
+      '己': '土',
+      '庚': '金',
+      '辛': '金',
+      '壬': '水',
+      '癸': '水',
     };
     return map[stem] ?? '木';
   }
@@ -312,39 +328,58 @@ class TodayDeepService {
   static String _godPhraseEn(TenGod g) {
     switch (g) {
       case TenGod.bigyeon:
-        return 'peers come your way — friends or coworkers at your level';
+        return 'people on your level, like friends or coworkers, come closer';
       case TenGod.geopjae:
-        return 'someone at your level pushes back. expect friction';
+        return 'someone at your level may push back, so keep your tone clean';
       case TenGod.siksin:
-        return 'your words land light. expression flows easy';
+        return 'your words come out more easily than usual';
       case TenGod.sanggwan:
-        return 'your talent shines. just watch your tone with the boss';
+        return 'your talent is easier to notice, but tone matters around authority';
       case TenGod.pyeonjae:
-        return 'an unexpected money opening shows up';
+        return 'an unexpected opening around money or opportunity can show up';
       case TenGod.jeongjae:
-        return 'steady income and promises lock in';
+        return 'steady work, income, or promises are easier to organize';
       case TenGod.pyeongwan:
-        return 'a big ask or challenge lands fast';
+        return 'a bigger ask or challenge may arrive quickly';
       case TenGod.jeonggwan:
-        return 'recognition, promotion, or formal moves come in';
+        return 'recognition, responsibility, or formal decisions come into focus';
       case TenGod.pyeonin:
-        return 'deep study and intuition hit strong';
+        return 'study, intuition, and quiet focus run stronger';
       case TenGod.jeongin:
-        return 'learning, mentors, and help come naturally';
+        return 'learning, advice, or helpful support comes more naturally';
     }
   }
 
   static _BranchRelation _branchRelation(String userJi, String todayJi) {
     if (userJi == todayJi) return _BranchRelation.same;
     const hap6 = {
-      '子': '丑', '丑': '子', '寅': '亥', '亥': '寅', '卯': '戌',
-      '戌': '卯', '辰': '酉', '酉': '辰', '巳': '申', '申': '巳',
-      '午': '未', '未': '午',
+      '子': '丑',
+      '丑': '子',
+      '寅': '亥',
+      '亥': '寅',
+      '卯': '戌',
+      '戌': '卯',
+      '辰': '酉',
+      '酉': '辰',
+      '巳': '申',
+      '申': '巳',
+      '午': '未',
+      '未': '午',
     };
     if (hap6[userJi] == todayJi) return _BranchRelation.hap;
     const chung = {
-      '子': '午', '丑': '未', '寅': '申', '卯': '酉', '辰': '戌', '巳': '亥',
-      '午': '子', '未': '丑', '申': '寅', '酉': '卯', '戌': '辰', '亥': '巳',
+      '子': '午',
+      '丑': '未',
+      '寅': '申',
+      '卯': '酉',
+      '辰': '戌',
+      '巳': '亥',
+      '午': '子',
+      '未': '丑',
+      '申': '寅',
+      '酉': '卯',
+      '戌': '辰',
+      '亥': '巳',
     };
     if (chung[userJi] == todayJi) return _BranchRelation.chung;
     return _BranchRelation.neutral;
@@ -353,47 +388,57 @@ class TodayDeepService {
   static String _branchRelationKo(_BranchRelation r) {
     switch (r) {
       case _BranchRelation.same:
-        return '오늘 흐름이 당신 사주랑 같아서 평소 습관이 강하게 나와요';
+        return '오늘은 평소 습관과 말버릇이 더 선명하게 드러나요';
       case _BranchRelation.hap:
-        return '오늘 흐름이 당신 사주랑 잘 맞아서 인연이 자연스럽게 풀려요';
+        return '오늘은 사람 사이 일이 비교적 부드럽게 풀려요';
       case _BranchRelation.chung:
-        return '오늘 흐름이 당신 사주랑 부딪쳐서 마음이 흔들리고 결정이 어려워요';
+        return '오늘은 마음이 쉽게 흔들려 결정이 평소보다 어렵게 느껴질 수 있어요';
       case _BranchRelation.neutral:
-        return '오늘 흐름은 당신 사주랑 크게 안 부딪치고 잔잔하게 가요';
+        return '오늘은 큰 충돌 없이 차분히 지나가는 쪽에 가까워요';
     }
   }
 
   static String _branchRelationEn(_BranchRelation r) {
     switch (r) {
       case _BranchRelation.same:
-        return 'today matches your chart, so your usual habits show up strong';
+        return 'Your usual habits and speaking style stand out more clearly today';
       case _BranchRelation.hap:
-        return 'today fits your chart well, so connections come easy';
+        return 'People-related matters can move more smoothly today';
       case _BranchRelation.chung:
-        return 'today clashes with your chart, so decisions feel shaky';
+        return 'Decisions may feel less steady than usual today';
       case _BranchRelation.neutral:
-        return "today doesn't clash with your chart. things move quietly";
+        return 'The day is relatively calm, without a strong push or clash';
     }
   }
 
-  static ({String ko, String en}) _elementMood(String dominant, String deficit, String todayEl) {
-    const koEl = {'木':'나무','火':'불','土':'흙','金':'쇠','水':'물'};
-    const enEl = {'木':'wood','火':'fire','土':'earth','金':'metal','水':'water'};
+  static ({String ko, String en}) _elementMood(
+    String dominant,
+    String deficit,
+    String todayEl,
+  ) {
+    const koEl = {'木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물'};
+    const enEl = {
+      '木': 'wood',
+      '火': 'fire',
+      '土': 'earth',
+      '金': 'metal',
+      '水': 'water',
+    };
     if (todayEl == dominant) {
       return (
-        ko: '평소 강한 ${koEl[dominant]} 색이 오늘 더 짙어져요',
-        en: 'your strong ${enEl[todayEl]} side gets even stronger today',
+        ko: '평소 강한 ${koEl[dominant]} 성향이 오늘 더 선명해져요',
+        en: 'Your already-strong ${enEl[todayEl]} side is easier to notice today',
       );
     }
     if (todayEl == deficit) {
       return (
-        ko: '평소 부족한 ${koEl[deficit]} 색이 오늘 채워져요',
-        en: 'your weak ${enEl[deficit]} side gets a boost today',
+        ko: '평소 모자라던 ${koEl[deficit]} 쪽이 오늘 조금 보태져요',
+        en: 'Your usually lighter ${enEl[deficit]} side gets some support today',
       );
     }
     return (
-      ko: '오늘은 ${koEl[todayEl]} 색이 강한 하루예요',
-      en: '${enEl[todayEl]} sets the tone today',
+      ko: '오늘은 ${koEl[todayEl]} 성향을 의식하면 균형이 잡혀요',
+      en: 'Paying attention to ${enEl[todayEl]} helps you stay balanced today',
     );
   }
 
@@ -418,28 +463,31 @@ class TodayDeepService {
   // Round 71 — `DayEnergyKind` 기반 hook 변주. actionDay 에 "쉬어가/아끼" 단어 0회,
   // restDay 에 "공식/도전/승진" 단어 0회 (사용자 불만 #3).
   static ({String moodKo, String moodEn, String bodyHookKo, String bodyHookEn})
-      _hooksByEnergy(DayEnergyKind energy) {
+  _hooksByEnergy(DayEnergyKind energy) {
     switch (energy) {
       case DayEnergyKind.actionDay:
         return (
-          moodKo: '활짝 열린',
-          moodEn: 'wide open',
-          bodyHookKo: '평소 못 하던 일을 오늘 시작하면 흐름이 당신 편이에요',
-          bodyHookEn: 'a good day to start what you usually delay',
+          moodKo: '움직임이 살아나는',
+          moodEn: 'active and responsive',
+          bodyHookKo: '미뤄둔 일 하나는 오늘 시작해도 좋아요',
+          bodyHookEn:
+              'Start one thing you have been putting off; today responds better to action than overthinking',
         );
       case DayEnergyKind.mixedDay:
         return (
-          moodKo: '잔잔한',
-          moodEn: 'calm',
-          bodyHookKo: '큰 결정은 미뤄요. 작은 확인 하나만 끝내면 돼요',
-          bodyHookEn: 'skip big calls. just confirm one small thing',
+          moodKo: '차분히 다지는',
+          moodEn: 'steady and measured',
+          bodyHookKo: '큰 결정은 미루고 확인이 필요한 일 하나만 끝내요',
+          bodyHookEn:
+              'Leave major decisions for later and finish one small check first',
         );
       case DayEnergyKind.restDay:
         return (
           moodKo: '쉬어가는',
-          moodEn: 'restful',
-          bodyHookKo: '오늘은 새로 시작하지 않는 게 나아요. 회복 하나가 정답이에요',
-          bodyHookEn: 'not a day to start. recovery is the real win',
+          moodEn: 'quiet and restorative',
+          bodyHookKo: '새로 벌리기보다 몸과 마음을 회복하는 쪽이 맞아요',
+          bodyHookEn:
+              'Do not force a new start today; one clear recovery choice is enough',
         );
     }
   }
@@ -449,10 +497,27 @@ class TodayDeepService {
     required String branchKo,
     required String elementKo,
     required String moodHookKo,
+    required DayEnergyKind energy,
   }) {
     final parts = <String>[];
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        parts.add('오늘은 평소보다 말과 행동이 밖으로 잘 드러나는 날이에요.');
+      case DayEnergyKind.mixedDay:
+        parts.add('오늘은 크게 치고 나가기보다 하던 일을 정리해 힘을 모으는 날이에요.');
+      case DayEnergyKind.restDay:
+        parts.add('오늘은 속도를 늦추고 안쪽을 정리할수록 잘 맞는 날이에요.');
+    }
     if (godKo.isNotEmpty) parts.add('$godKo.');
     parts.add('$branchKo.');
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        parts.add('평소 망설이던 일도 오늘은 한 번 꺼내볼 만해요.');
+      case DayEnergyKind.mixedDay:
+        parts.add('새 판을 벌리기보다 지금 있는 자리를 단단하게 다지는 편이 좋아요.');
+      case DayEnergyKind.restDay:
+        parts.add('억지로 밀어붙이면 지치기 쉬우니, 오늘은 덜어내는 쪽이 더 이득이에요.');
+    }
     parts.add('$elementKo.');
     parts.add('$moodHookKo.');
     return parts.join(' ');
@@ -463,10 +528,33 @@ class TodayDeepService {
     required String branchEn,
     required String elementEn,
     required String moodHookEn,
+    required DayEnergyKind energy,
   }) {
     final parts = <String>[];
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        parts.add('Today brings your natural style closer to the surface.');
+      case DayEnergyKind.mixedDay:
+        parts.add(
+          'Today is better for sorting things out than forcing a big move.',
+        );
+      case DayEnergyKind.restDay:
+        parts.add('Today works best when you slow down and clear some space.');
+    }
     if (godEn.isNotEmpty) parts.add('Today: $godEn.');
     parts.add('$branchEn.');
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        parts.add(
+          'A message, pitch, or small first step can land better than usual.',
+        );
+      case DayEnergyKind.mixedDay:
+        parts.add(
+          'Hold your position and finish what already needs attention.',
+        );
+      case DayEnergyKind.restDay:
+        parts.add('Forcing progress will cost more than it gives back.');
+    }
     parts.add('$elementEn.');
     parts.add('$moodHookEn.');
     return parts.join(' ');
@@ -527,7 +615,9 @@ class TodayDeepService {
     }
     switch (dayEnergy) {
       case DayEnergyKind.actionDay:
-        out.add('Reach out to one person in your field first — small signal, big result.');
+        out.add(
+          'Reach out to one person in your field first — small signal, big result.',
+        );
       case DayEnergyKind.restDay:
         out.add('Recovering today wins more than working today.');
       case DayEnergyKind.mixedDay:

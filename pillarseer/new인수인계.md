@@ -415,6 +415,52 @@ If a rule blocks real progress:
 - Next session first action: If continuing quality audit, start with source-level grep for user-facing `결|기운|Phase 2|Pro|coming soon|dummy|fallback`, then classify by data/code/l10n before edits.
 - quality: routing 9/10, safety 8/10, accuracy 9/10, tests 10/10, content 8/10, efficiency 7/10
 
+### 2026-05-16 — 오늘 탭 호명/일진 카드 제거와 오늘사주 총평화
+
+- Before state: home/today deep dive still had `_FirstFoldGreeting` ("조승현아, 오늘은 금 토끼 분위기가 강해"류) and `_PillarOfTheDay` ("오늘의 일진 토 소"류) cards. R82 tests still expected helper-wire mitigation, which conflicted with the newer user request to remove the surface entirely.
+- After state: home_screen no longer mounts or defines the two cards; TodayDeepService Korean/English output starts with `오늘 사주 총평` / `Today's Saju Summary` and expands bodyKo/bodyEn to a 5+ sentence reading; `/today` now shows TodayDeepReadingSection before TodayEventDetailSection; tests guard absence of the old cards/phrases and the fuller today-saju style.
+- Files intentionally changed:
+  - `lib/screens/home_screen.dart`
+  - `lib/screens/today_screen.dart`
+  - `lib/services/today_deep_service.dart`
+  - `test/round82_animal_context_test.dart`
+  - `test/r85_today_saju_total_reading_test.dart`
+  - `new인수인계.md`
+- Commands proving state:
+  - `flutter analyze` -> No issues found
+  - `flutter test test/round82_animal_context_test.dart test/r85_today_saju_total_reading_test.dart` -> All tests passed
+  - `flutter test test/r85_today_saju_total_reading_test.dart test/round82_animal_context_test.dart test/round84_today_screen_ctx_test.dart` -> All tests passed
+  - `flutter test test/round84_today_screen_ctx_test.dart test/round78_today_deep_ctx_test.dart test/round78_daewoon_newyear_test.dart test/round78_yongsin_axes_test.dart` -> All tests passed
+  - `rg -n "_FirstFoldGreeting|_PillarOfTheDay|오늘은 .*분위기가 강해|오늘의 60갑자|분위기의 하루" lib/screens/home_screen.dart lib/services/today_deep_service.dart` -> no matches
+- New failure learned: Prior "add context helper" mitigation can become stale when the user later wants the UI surface removed. Update source-level regression tests from "helper exists" to "surface absent" when product direction changes.
+- Rule promoted/deprecated: For disliked user-facing cards, remove render path and dead widget definitions together; leaving dead code with the disliked phrase risks future reintroduction.
+- Open risk: This improves generated today reading structure, but it is not a full copy rewrite of every today_event_pool / daily fortune category sentence.
+- Next session first action: If continuing today tab quality, inspect `TodayEventDetailSection` and `today_event_pool.json` for remaining short/event-card tone before changing data.
+- quality: routing 9/10, safety 9/10, accuracy 9/10, tests 10/10, content 9/10, efficiency 7/10
+
+### 2026-05-16 — 메뉴 피로 정리
+
+- Before state: bottom nav had hanja helper glyphs (`日/柱/譜/我`), reports tab was labeled `리포트/Reports`, and Reports home exposed 7 cards including Tojeong, date picking, and celebrity day-pillar browsing with hanja-heavy labels.
+- After state: bottom nav is label-only, reports tab is `더 보기/More`, and the More screen exposes only 4 high-signal cards: compatibility, 2026 yearly flow, dream reading, and bias chemistry. Tojeong/date-picking/discover routes remain for compatibility but are no longer surfaced as menu cards.
+- Files intentionally changed:
+  - `lib/widgets/bottom_nav.dart`
+  - `lib/screens/reports/reports_home_screen.dart`
+  - `lib/l10n/app_ko.arb`
+  - `lib/l10n/app_en.arb`
+  - `lib/l10n/app_localizations_ko.dart`
+  - `lib/l10n/app_localizations_en.dart`
+  - `test/r85_menu_cleanup_test.dart`
+  - `new인수인계.md`
+- Commands proving state:
+  - `flutter analyze` -> No issues found
+  - `flutter test test/r85_menu_cleanup_test.dart test/r85_today_saju_total_reading_test.dart` -> All tests passed
+  - `rg -n "리포트 ·|REPORTS ·|심층 리포트|DEEP CHAPTERS|route: '/reports/tojeong'|route: '/reports/date-picking'|route: '/discover'|土 亭|擇 日|名 譜|glyph" lib/widgets/bottom_nav.dart lib/screens/reports/reports_home_screen.dart lib/l10n/app_ko.arb lib/l10n/app_en.arb lib/l10n/app_localizations_ko.dart lib/l10n/app_localizations_en.dart` -> no matches
+- New failure learned: Hanja helper glyphs and too many niche report cards make the app feel heavier than the user's desired free lifelong-saju style.
+- Rule promoted/deprecated: Keep bottom navigation simple and Korean-first; hide niche/duplicate report tools from primary menus before deleting routes.
+- Open risk: Hidden routes still exist and their individual screens may still have older wording if opened via direct route.
+- Next session first action: If continuing menu polish, inspect Profile and Settings copy for dev/pro/internal-feeling rows.
+- quality: routing 9/10, safety 9/10, accuracy 9/10, tests 10/10, content 9/10, efficiency 8/10
+
 ## 자가 감사 주기
 
 Every 5 sessions or after a major failure:

@@ -78,11 +78,11 @@
 
   "navHome": "Today",
   "navReading": "My Saju",
-  "navReports": "Reports",
+  "navReports": "More",
   "navProfile": "Profile",
 
-  "placeholderReportsTitle": "REPORTS",
-  "placeholderReportsDesc": "Compatibility, Tojeong yearly fortune, date picking, and dream reports in one place.",
+  "placeholderReportsTitle": "More",
+  "placeholderReportsDesc": "Compatibility, yearly flow, and dream readings in one place.",
   "placeholderDiscoverTitle": "DISCOVER",
   "placeholderDiscoverDesc": "Browse K-pop saju, K-drama figures, and Korean fortune-telling stories.",
   "placeholderProfileTitle": "PROFILE",
@@ -299,8 +299,8 @@
   "resultProLocked": "PRO",
   "resultUnlockHint": "More sections will open when deep features are ready.",
 
-  "reportsHomeTitle": "REPORTS",
-  "reportsHomeSubtitle": "Deep readings beyond your daily pillar.",
+  "reportsHomeTitle": "More",
+  "reportsHomeSubtitle": "Extra readings for when you need more than today's summary.",
   "reportsCardCompatibility": "Compatibility",
   "reportsCardCompatibilityDesc": "Two charts, one chemistry. Element match + life-pillar resonance.",
   "reportsCardTojeong": "Tojeong (土亭祕訣)",

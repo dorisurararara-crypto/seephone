@@ -77,11 +77,6 @@ class TodayScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TodayEventDetailSection(
-                result: result,
-                useKo: useKo,
-              ),
-              const SizedBox(height: 24),
               TodayDeepReadingSection(
                 reading: TodayDeepService.build(
                   userDayStem: result.dayPillar.chunGan,
@@ -94,6 +89,8 @@ class TodayScreen extends ConsumerWidget {
                   ctx: ctx,
                 ),
               ),
+              const SizedBox(height: 24),
+              TodayEventDetailSection(result: result, useKo: useKo),
             ],
           ),
         ),

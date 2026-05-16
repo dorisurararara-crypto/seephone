@@ -231,16 +231,16 @@ class AppL10nKo extends AppL10n {
   String get navReading => '내 사주';
 
   @override
-  String get navReports => '리포트';
+  String get navReports => '더 보기';
 
   @override
   String get navProfile => '프로필';
 
   @override
-  String get placeholderReportsTitle => '리포트';
+  String get placeholderReportsTitle => '더 보기';
 
   @override
-  String get placeholderReportsDesc => '궁합, 토정비결, 택일, 해몽 리포트를 한곳에서 볼 수 있어요.';
+  String get placeholderReportsDesc => '궁합, 신년운세, 꿈 풀이처럼 필요할 때 보는 메뉴를 모았어요.';
 
   @override
   String get placeholderDiscoverTitle => '탐색';
@@ -862,10 +862,10 @@ class AppL10nKo extends AppL10n {
   String get resultUnlockHint => '심층 기능이 준비되면 더 많은 영역을 볼 수 있어요.';
 
   @override
-  String get reportsHomeTitle => '심층 리포트';
+  String get reportsHomeTitle => '더 보기';
 
   @override
-  String get reportsHomeSubtitle => '일진을 넘어선 깊은 풀이.';
+  String get reportsHomeSubtitle => '오늘 사주 말고 필요할 때 보는 풀이만 모았어요.';
 
   @override
   String get reportsCardCompatibility => '궁합';

@@ -242,17 +242,17 @@ class AppL10nEn extends AppL10n {
   String get navReading => 'My Saju';
 
   @override
-  String get navReports => 'Reports';
+  String get navReports => 'More';
 
   @override
   String get navProfile => 'Profile';
 
   @override
-  String get placeholderReportsTitle => 'REPORTS';
+  String get placeholderReportsTitle => 'More';
 
   @override
   String get placeholderReportsDesc =>
-      'Compatibility, Tojeong yearly fortune, date picking, and dream reports in one place.';
+      'Compatibility, yearly flow, and dream readings in one place.';
 
   @override
   String get placeholderDiscoverTitle => 'DISCOVER';
@@ -905,10 +905,11 @@ class AppL10nEn extends AppL10n {
       'More sections will open when deep features are ready.';
 
   @override
-  String get reportsHomeTitle => 'REPORTS';
+  String get reportsHomeTitle => 'More';
 
   @override
-  String get reportsHomeSubtitle => 'Deep readings beyond your daily pillar.';
+  String get reportsHomeSubtitle =>
+      'Extra readings for when you need more than today\'s summary.';
 
   @override
   String get reportsCardCompatibility => 'Compatibility';
