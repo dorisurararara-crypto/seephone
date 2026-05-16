@@ -201,17 +201,19 @@ class TodayDeepService {
     if (dwGod == null) return '';
     if (locale == 'ko') {
       final ko = dwGod.ko.split(' ').first; // '정관 (正官)' → '정관'
+      // R86 sprint 4 — 사용자 mandate: 십신 jargon ("식신/겁재/정관" 등) 본문 노출 0.
+      // "대운" 단어 자체는 R78 sprint 7 anchor wire 시그니처 유지 위해 보존.
       const map = {
-        '비견': '비견 대운 안에 있는 지금, 또래와의 비교 흐름이 두 배로 강해져요.',
-        '겁재': '겁재 대운 안에 있는 지금, 경쟁심이 평소보다 한 박자 빨라져요.',
-        '식신': '식신 대운 안에 있는 지금, 표현·창작이 술술 풀리는 시기예요.',
-        '상관': '상관 대운 안에 있는 지금, 한 발 빠른 감각이 빛나는 시기예요.',
-        '편재': '편재 대운 안에 있는 지금, 새로운 거래·기회가 자주 찾아오는 흐름이에요.',
-        '정재': '정재 대운 안에 있는 지금, 차곡차곡 쌓이는 안정 흐름이에요.',
-        '편관': '편관 대운 안에 있는 지금, 도전·승부가 본 사주 위로 한 겹 덧대지는 시기예요.',
-        '정관': '정관 대운 안에 있는 지금, 직장·조직 안에서 자리 잡는 흐름이 두 배로 강해져요.',
-        '편인': '편인 대운 안에 있는 지금, 직관이 평소보다 또렷해지는 시기예요.',
-        '정인': '정인 대운 안에 있는 지금, 배우는 시간이 평소보다 단단하게 쌓여요.',
+        '비견': '지금 대운에서는 또래·동료와의 비교 신호가 평소보다 진하게 도는 시기예요.',
+        '겁재': '지금 대운에서는 경쟁심·승부 욕구가 평소보다 한 박자 빨라지는 시기예요.',
+        '식신': '지금 대운에서는 표현·창작이 잘 풀리는 시기예요.',
+        '상관': '지금 대운에서는 한 발 빠른 감각이 잘 드러나는 시기예요.',
+        '편재': '지금 대운에서는 새로운 거래·기회가 자주 찾아오는 시기예요.',
+        '정재': '지금 대운에서는 차곡차곡 쌓이는 안정감이 강해지는 시기예요.',
+        '편관': '지금 대운에서는 도전·승부 신호가 평소보다 한 겹 더해지는 시기예요.',
+        '정관': '지금 대운에서는 직장·조직 안에서 자리 잡는 안내가 잘 받쳐주는 시기예요.',
+        '편인': '지금 대운에서는 직관이 평소보다 또렷해지는 시기예요.',
+        '정인': '지금 대운에서는 배우는 시간이 평소보다 단단하게 쌓이는 시기예요.',
       };
       return map[ko] ?? '';
     } else {
@@ -301,27 +303,31 @@ class TodayDeepService {
   }
 
   static String _godPhraseKo(TenGod g) {
+    // R86 sprint 4 — 사용자 mandate verbatim:
+    //   "사람이랑 부딪히는데 큰 충돌없이 지나간다니 앞뒤가 안맞아"
+    // 강한 충돌 phrase ("부딪칠 일이 생겨요" 등) 약화 — branch neutral 의 "큰 충돌 없이"
+    // 와 함께 합성돼도 모순 0 보장.
     switch (g) {
       case TenGod.bigyeon:
-        return '오늘은 친구나 동료처럼 당신과 같은 자리 사람이 가까워져요';
+        return '오늘은 친구나 동료처럼 비슷한 자리 사람이 가까워지는 신호가 있어요';
       case TenGod.geopjae:
-        return '오늘은 비슷한 자리 사람이랑 부딪칠 일이 생겨요';
+        return '오늘은 또래 사이 비교·경쟁 신호가 평소보다 신경 쓰일 수 있어요';
       case TenGod.siksin:
         return '오늘은 표현·창작이 잘 풀려서 말과 글이 가벼워져요';
       case TenGod.sanggwan:
-        return '재능이 빛나는 날이에요. 윗사람한테 톤만 한 단계 부드럽게 가요';
+        return '재능이 잘 드러나는 날이라 윗사람한테는 톤만 한 단계 부드럽게 가요';
       case TenGod.pyeonjae:
-        return '뜻밖의 기회나 큰돈 얘기가 당신한테 와요';
+        return '오늘은 뜻밖의 기회나 큰돈 관련 얘기가 다가올 수 있어요';
       case TenGod.jeongjae:
-        return '꾸준한 수입·약속이 자리 잡는 흐름이에요';
+        return '꾸준한 수입·약속이 자리 잡는 안정감이 강해지는 날이에요';
       case TenGod.pyeongwan:
-        return '큰 책임이나 새 도전이 갑자기 당신한테 다가와요';
+        return '오늘은 큰 책임이나 새 도전 신호가 평소보다 가까워질 수 있어요';
       case TenGod.jeonggwan:
-        return '인정받을 일이나 자리 관련 얘기가 오늘 생겨요';
+        return '인정받을 일이나 자리 관련 얘기가 자연스럽게 오가는 날이에요';
       case TenGod.pyeonin:
-        return '오늘은 깊은 공부·직관이 당신한테 강해져요';
+        return '오늘은 깊은 공부·직관이 평소보다 또렷해져요';
       case TenGod.jeongin:
-        return '배움·멘토·도움이 당신한테 자연스럽게 와요';
+        return '배움·멘토·도움이 자연스럽게 가까워지는 날이에요';
     }
   }
 
@@ -386,6 +392,9 @@ class TodayDeepService {
   }
 
   static String _branchRelationKo(_BranchRelation r) {
+    // R86 sprint 4 — neutral phrase 의 "큰 충돌 없이" 표현이 godPhrase 와
+    // 모순(예: 겁재 "부딪칠 일이 생겨요" + neutral "충돌 없이") 을 일으켜 사용자 직발.
+    // 모순 가능성 없는 중립 톤으로 갱신.
     switch (r) {
       case _BranchRelation.same:
         return '오늘은 평소 습관과 말버릇이 더 선명하게 드러나요';
@@ -394,7 +403,7 @@ class TodayDeepService {
       case _BranchRelation.chung:
         return '오늘은 마음이 쉽게 흔들려 결정이 평소보다 어렵게 느껴질 수 있어요';
       case _BranchRelation.neutral:
-        return '오늘은 큰 충돌 없이 차분히 지나가는 쪽에 가까워요';
+        return '오늘은 자기 페이스대로 흘러가는 평탄한 날에 가까워요';
     }
   }
 
@@ -407,7 +416,8 @@ class TodayDeepService {
       case _BranchRelation.chung:
         return 'Decisions may feel less steady than usual today';
       case _BranchRelation.neutral:
-        return 'The day is relatively calm, without a strong push or clash';
+        // R86 sprint 4 — drop "clash" wording (clashed with 겁재 godPhrase).
+        return 'The day flows at your usual pace without much disruption';
     }
   }
 
