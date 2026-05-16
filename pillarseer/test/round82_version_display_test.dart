@@ -13,7 +13,7 @@
 // 본 test 의 testable 행동 (S1+S2+B1+B2):
 //   S1 — settings_screen.dart 에 `'1.0.0'` literal grep 0 (label value 분리).
 //   S2 — package_info_plus import + AppVersionService.load 호출 wire 잔존.
-//   B1 — AppVersionService.formatLabel(ko=true, build=42)  = "버전 1.0.0 · 빌드 42".
+//   B1 — AppVersionService.formatLabel(ko=true, build=43)  = "버전 1.0.0 · 빌드 43".
 //   B2 — Settings widget mount + mock PackageInfo 도착 후 동적 label 표시.
 
 import 'dart:io';
@@ -94,30 +94,30 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+42) — R85 delivery 통합 1.0.0+42 (R82 lock R85 갱신).
+      // pubspec version 자체 (1.0.0+43) — R86 delivery 통합 1.0.0+43 (R82 lock R86 갱신).
       expect(
-        pubspecSrc.contains('version: 1.0.0+42'),
+        pubspecSrc.contains('version: 1.0.0+43'),
         isTrue,
-        reason: 'pubspec version (1.0.0+42) 자체 변경 — R85 delivery 불일치',
+        reason: 'pubspec version (1.0.0+43) 자체 변경 — R86 delivery 불일치',
       );
     });
 
-    test('B1 — formatLabel(ko, version=1.0.0, build=42) = "버전 1.0.0 · 빌드 42"',
+    test('B1 — formatLabel(ko, version=1.0.0, build=43) = "버전 1.0.0 · 빌드 43"',
         () {
       // PackageInfo 직접 생성. (constructor public — package_info_plus 4.x+)
       final info = PackageInfo(
         appName: 'pillarseer',
         packageName: 'com.ganziman.pillarseer',
         version: '1.0.0',
-        buildNumber: '42',
+        buildNumber: '43',
       );
       expect(
         AppVersionService.formatLabel(info, useKo: true),
-        '버전 1.0.0 · 빌드 42',
+        '버전 1.0.0 · 빌드 43',
       );
       expect(
         AppVersionService.formatLabel(info, useKo: false),
-        'Version 1.0.0 (build 42)',
+        'Version 1.0.0 (build 43)',
       );
     });
 
@@ -139,7 +139,7 @@ void main() {
     });
 
     testWidgets(
-        'B2 — Settings widget mount + mock PackageInfo 도착 후 "버전 1.0.0 · 빌드 42" 표시',
+        'B2 — Settings widget mount + mock PackageInfo 도착 후 "버전 1.0.0 · 빌드 43" 표시',
         (tester) async {
       // R82 baseline — Settings ListView 는 393 폭에서 letter-spacing 5 영향
       // _SettingsGroup 라벨이 overflow 가능. 본 test 는 version row 라벨만 검증
@@ -147,12 +147,12 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(600, 900));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      // PackageInfo mock — pubspec 의 1.0.0+42 매칭 (R85 lock 갱신).
+      // PackageInfo mock — pubspec 의 1.0.0+43 매칭 (R86 lock 갱신).
       PackageInfo.setMockInitialValues(
         appName: 'pillarseer',
         packageName: 'com.ganziman.pillarseer',
         version: '1.0.0',
-        buildNumber: '42',
+        buildNumber: '43',
         buildSignature: '',
         installerStore: null,
       );
@@ -211,9 +211,9 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 100));
 
-      // 동적 value — "버전 1.0.0 · 빌드 42" mount.
+      // 동적 value — "버전 1.0.0 · 빌드 43" mount.
       expect(
-        find.text('버전 1.0.0 · 빌드 42'),
+        find.text('버전 1.0.0 · 빌드 43'),
         findsOneWidget,
         reason: 'PackageInfo mock 도착 후 동적 label 미 표시',
       );
