@@ -8,7 +8,6 @@ import 'screens/home_screen.dart';
 import 'screens/discover_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/settings_screen.dart';
-import 'screens/info_saju_calc_screen.dart';
 import 'screens/reports/reports_home_screen.dart';
 import 'screens/reports/compatibility_screen.dart';
 import 'screens/reports/tojeong_screen.dart';
@@ -116,12 +115,9 @@ GoRouter buildRouter(WidgetRef ref) {
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
       ),
-      // Round 83 sprint 2 — "사주 계산 기준 안내" 페이지 (P1-G).
-      // 진태양시 / 자시 학파 / 절기 / 음력 / 출생지 경도 5 영역 readonly 안내.
-      GoRoute(
-        path: '/settings/saju-calc-basis',
-        builder: (context, state) => const InfoSajuCalcScreen(),
-      ),
+      // R88 sprint 2 — 계산 기준 안내 route 제거. 사용자 mandate
+      // ("원래 우리 앱에 있던 나머지 것들은 전부 없애줘"). 관련 widget
+      // 파일은 dead code 로 보존 (sprint 10 baseline 재설정 때 정리).
     ],
   );
 }

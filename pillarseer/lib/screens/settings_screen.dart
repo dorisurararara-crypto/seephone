@@ -253,17 +253,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             _LateNightZasiSwitch(),
           ]),
           _SettingsGroup(label: l.settingsTrust, children: [
-            _InfoRow(
-              title: l.settingsTrustHowCalculated,
-              subtitle: l.settingsTrustHowCalculatedDesc,
-            ),
-            // Round 83 sprint 2 — "사주 계산 기준 안내" 진입점 (P1-G).
-            // 진태양시 / 자시 학파 / 절기 / 음력 / 출생지 경도 5 영역 readonly 안내.
-            _InfoRow(
-              title: l.settingsCalcBasisRow,
-              subtitle: l.settingsCalcBasisRowDesc,
-              onTap: () => context.push('/settings/saju-calc-basis'),
-            ),
+            // R88 sprint 2 — 사용자 mandate "원래 우리 앱에 있던 나머지 것들은 전부
+            // 없애줘". 신뢰 그룹의 상단 두 안내 row (계산 기준 / 풀이 방식) 제거.
+            // arb 키와 관련 widget 파일은 dead code 로 보존 (sprint 10 baseline
+            // 재설정 때 정리). 진입점만 제거.
             _InfoRow(
               title: l.settingsTrustDataLocal,
               subtitle: l.settingsTrustDataLocalDesc,

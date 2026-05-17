@@ -233,25 +233,36 @@ void main() {
     });
 
     // ─────────────── I4: R83 sprint 2~6 anchor source 존재 ───────────────
-    test('I4a — R83 sprint 2 (P1-G) info_saju_calc_screen anchor 보존', () {
-      // P1-G — 사주 계산 기준 안내 페이지 + Settings 진입점.
+    test('I4a — R83 sprint 2 (P1-G) info_saju_calc_screen 파일 보존 (R88 S2 진입점 제거)',
+        () {
+      // R88 sprint 2 사용자 mandate ("원래 우리 앱에 있던 나머지 것들은 전부 없애줘")
+      //   → settings 의 "사주 계산 기준 안내" 진입점 + router `/settings/saju-calc-basis`
+      //   제거. arb 키 / InfoSajuCalcScreen widget 파일 자체는 dead code 로 보존
+      //   (sprint 10 baseline 재설정 때 정리).
+      // R83 sprint 2 의 P1-G 본체 (info 화면 widget) 가 즉시 파괴되지 않았음을 보장.
       final infoFile = File('lib/screens/info_saju_calc_screen.dart');
       expect(infoFile.existsSync(), isTrue,
-          reason: 'R83 sprint 2 — info_saju_calc_screen.dart 파일 존재');
+          reason: 'R83 sprint 2 — info_saju_calc_screen.dart 파일 보존 (dead code OK)');
       final infoSrc = infoFile.readAsStringSync();
       expect(infoSrc.contains('class InfoSajuCalcScreen'), isTrue,
-          reason: 'R83 sprint 2 — InfoSajuCalcScreen widget export');
+          reason: 'R83 sprint 2 — InfoSajuCalcScreen widget class 보존');
+    });
 
-      final arbKo = File('lib/l10n/app_ko.arb').readAsStringSync();
-      expect(arbKo.contains('settingsCalcBasisRow'), isTrue,
-          reason: 'R83 sprint 2 — settingsCalcBasisRow arb key (ko) 보존');
-      final arbEn = File('lib/l10n/app_en.arb').readAsStringSync();
-      expect(arbEn.contains('settingsCalcBasisRow'), isTrue,
-          reason: 'R83 sprint 2 — settingsCalcBasisRow arb key (en) 보존');
+    test('I4a-r88 — R88 sprint 2: settings 진입점 + router route 제거 확인', () {
+      // R88 sprint 2 신규 guard — 사용자 mandate 정확 반영.
+      final settings = File('lib/screens/settings_screen.dart').readAsStringSync();
+      expect(settings.contains('settingsTrustHowCalculated'), isFalse,
+          reason: 'R88 sprint 2 — settingsTrustHowCalculated row 제거됨');
+      expect(settings.contains('settingsCalcBasisRow'), isFalse,
+          reason: 'R88 sprint 2 — settingsCalcBasisRow row 제거됨');
+      expect(settings.contains('/settings/saju-calc-basis'), isFalse,
+          reason: 'R88 sprint 2 — settings 안에서 router push 0');
 
       final router = File('lib/router.dart').readAsStringSync();
-      expect(router.contains('InfoSajuCalcScreen'), isTrue,
-          reason: 'R83 sprint 2 — router 에 InfoSajuCalcScreen 등록 보존');
+      expect(router.contains('InfoSajuCalcScreen'), isFalse,
+          reason: 'R88 sprint 2 — router 의 InfoSajuCalcScreen 등록 제거됨');
+      expect(router.contains("/settings/saju-calc-basis"), isFalse,
+          reason: 'R88 sprint 2 — router 의 `/settings/saju-calc-basis` route 제거됨');
     });
 
     test('I4b — R83 sprint 3 (P1-F) 셀럽 disclosure 라벨 anchor 보존', () {
