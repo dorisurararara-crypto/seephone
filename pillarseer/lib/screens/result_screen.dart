@@ -15,6 +15,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/life_overview_service.dart';
+import '../services/life_paragraph_service.dart';
+import '../services/self_conclusion_service.dart';
 import '../services/gong_mang_service.dart';
 import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
@@ -231,7 +233,7 @@ class ResultScreen extends ConsumerWidget {
                 result: result, reading: reading, useKo: useKo),
             // 3. LIFE OVERVIEW — "내 사주 큰 그림" (R88 sprint 8 LifeOverviewService wire).
             _LifeOverviewHero(result: result, isMale: birth?.isMale ?? true),
-            // 4. 17 카테고리 — placeholder ListView (sprint 5~7 에서 LifeParagraphService wire).
+            // 4. 17 카테고리 — R88 sprint 9 에서 LifeParagraphService wire.
             //    conclusion_self 는 17 카테고리 안 마지막 entry 가 아니라 별도 결론 card 로 분리.
             ...kR88LifeCategories
                 .where((cat) => cat.key != 'conclusion_self')
@@ -239,10 +241,12 @@ class ResultScreen extends ConsumerWidget {
                       categoryKey: cat.key,
                       titleKo: cat.titleKo,
                       previewKo: cat.previewKo,
+                      saju: result,
+                      isMale: birth?.isMale ?? true,
                       useKo: useKo,
                     )),
-            // 5. SELF CONCLUSION — "나는 어떤 사람?" placeholder (sprint 9 에서 SelfConclusionService wire).
-            const _SelfConclusionCard(),
+            // 5. SELF CONCLUSION — "나는 어떤 사람?" (R88 sprint 9 SelfConclusionService wire).
+            _SelfConclusionCard(result: result, isMale: birth?.isMale ?? true),
             // 13. Footer — KASI source.
             _AesopFooter(),
           ],
@@ -355,19 +359,96 @@ class _LifeOverviewHeroState extends State<_LifeOverviewHero> {
   }
 }
 
-/// 17 카테고리 중 한 영역 section card placeholder.
-/// Sprint 5~7 에서 LifeParagraphService 의 일주 60 × 카테고리 17 paragraph 로 교체.
-class _CategorySectionCard extends StatelessWidget {
+/// 17 카테고리 중 한 영역 section card.
+/// R88 sprint 9 — LifeParagraphService 의 paragraph (일간 fallback 적용) 표시.
+/// DB miss 시 previewKo placeholder fallback.
+class _CategorySectionCard extends StatefulWidget {
   final String categoryKey;
   final String titleKo;
   final String previewKo;
+  final SajuResult saju;
+  final bool isMale;
   final bool useKo;
   const _CategorySectionCard({
     required this.categoryKey,
     required this.titleKo,
     required this.previewKo,
+    required this.saju,
+    required this.isMale,
     required this.useKo,
   });
+
+  @override
+  State<_CategorySectionCard> createState() => _CategorySectionCardState();
+}
+
+class _CategorySectionCardState extends State<_CategorySectionCard> {
+  late Future<String> _future;
+
+  static const Map<String, LifeCategory> _keyToEnum = {
+    'early_life': LifeCategory.earlyLife,
+    'mid_life': LifeCategory.midLife,
+    'late_life': LifeCategory.lateLife,
+    'health': LifeCategory.health,
+    'constitution': LifeCategory.constitution,
+    'social': LifeCategory.social,
+    'social_personality': LifeCategory.socialPersonality,
+    'personality': LifeCategory.personality,
+    'innate_tendency': LifeCategory.innateTendency,
+    'innate_character': LifeCategory.innateCharacter,
+    'love_fate': LifeCategory.loveFate,
+    'affection': LifeCategory.affection,
+    'wealth': LifeCategory.wealth,
+    'wealth_gather': LifeCategory.wealthGather,
+    'wealth_loss_prevent': LifeCategory.wealthLossPrevent,
+    'wealth_invest': LifeCategory.wealthInvest,
+    'conclusion_self': LifeCategory.conclusionSelf,
+  };
+
+  // 한자 천간 → 한글.
+  static const Map<String, String> _stemHanToKo = {
+    '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
+    '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+  };
+
+  // 한자 지지 → 한글.
+  static const Map<String, String> _branchHanToKo = {
+    '子': '자', '丑': '축', '寅': '인', '卯': '묘', '辰': '진', '巳': '사',
+    '午': '오', '未': '미', '申': '신', '酉': '유', '戌': '술', '亥': '해',
+  };
+
+  Future<String> _loadParagraph() async {
+    final cat = _keyToEnum[widget.categoryKey];
+    if (cat == null) return '';
+    final stemHan = widget.saju.dayPillar.chunGan;
+    final branchHan = widget.saju.dayPillar.jiJi;
+    final stemKo = _stemHanToKo[stemHan] ?? stemHan;
+    final branchKo = _branchHanToKo[branchHan] ?? branchHan;
+    final dayPillarKo = '$stemKo$branchKo'; // 예: '신묘'.
+    // LifeParagraphService.lookup 자체가 일주 정확 매칭 → 일간 fallback chain 수행.
+    // dayPillarKo (일주 60) 우선 매칭, miss 시 stemKo (일간 1글자) fallback.
+    return LifeParagraphService.paragraphStatic(
+      dayPillar: dayPillarKo,
+      category: cat,
+      gender: widget.isMale ? 'M' : 'F',
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _loadParagraph();
+  }
+
+  @override
+  void didUpdateWidget(covariant _CategorySectionCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.saju != widget.saju ||
+        oldWidget.isMale != widget.isMale ||
+        oldWidget.categoryKey != widget.categoryKey) {
+      _future = _loadParagraph();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +463,9 @@ class _CategorySectionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            useKo ? titleKo : categoryKey.toUpperCase().replaceAll('_', ' '),
+            widget.useKo
+                ? widget.titleKo
+                : widget.categoryKey.toUpperCase().replaceAll('_', ' '),
             style: GoogleFonts.notoSerifKr(
               fontSize: 15,
               fontWeight: FontWeight.w500,
@@ -391,15 +474,29 @@ class _CategorySectionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            useKo
-                ? previewKo
-                : 'Coming soon for "${categoryKey.replaceAll('_', ' ')}".',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 13,
-              color: AppColors.taupe,
-              height: 1.7,
-            ),
+          FutureBuilder<String>(
+            future: _future,
+            builder: (ctx, snap) {
+              final String body;
+              if (snap.hasData && (snap.data ?? '').isNotEmpty) {
+                body = widget.useKo
+                    ? snap.data!
+                    : 'Coming soon for "${widget.categoryKey.replaceAll('_', ' ')}".';
+              } else {
+                // DB miss / 로딩 중 — previewKo fallback.
+                body = widget.useKo
+                    ? widget.previewKo
+                    : 'Coming soon for "${widget.categoryKey.replaceAll('_', ' ')}".';
+              }
+              return Text(
+                body,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 13,
+                  color: AppColors.ink,
+                  height: 1.75,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -407,10 +504,36 @@ class _CategorySectionCard extends StatelessWidget {
   }
 }
 
-/// "나는 어떤 사람?" 결론 card placeholder.
-/// Sprint 9 에서 SelfConclusionService 의 80~200자 paragraph 로 교체.
-class _SelfConclusionCard extends StatelessWidget {
-  const _SelfConclusionCard();
+/// "나는 어떤 사람?" 결론 card.
+/// R88 sprint 9 — SelfConclusionService 의 80~200자 결론 paragraph wire + memoize.
+class _SelfConclusionCard extends StatefulWidget {
+  final SajuResult result;
+  final bool isMale;
+  const _SelfConclusionCard({required this.result, required this.isMale});
+
+  @override
+  State<_SelfConclusionCard> createState() => _SelfConclusionCardState();
+}
+
+class _SelfConclusionCardState extends State<_SelfConclusionCard> {
+  late Future<String> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future =
+        SelfConclusionService.conclude(widget.result, isMale: widget.isMale);
+  }
+
+  @override
+  void didUpdateWidget(covariant _SelfConclusionCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.result != widget.result ||
+        oldWidget.isMale != widget.isMale) {
+      _future =
+          SelfConclusionService.conclude(widget.result, isMale: widget.isMale);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -448,15 +571,29 @@ class _SelfConclusionCard extends StatelessWidget {
           const SizedBox(height: 18),
           Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 18),
-          Text(
-            useKo
-                ? '내가 어떤 사람인지 친구한테 말하듯 한 단락으로 정리해드릴 예정이에요.\n곧 친근한 한국어로 채워드릴게요.'
-                : 'A one-paragraph friendly verdict about who you are — coming soon.',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 14,
-              color: AppColors.ink,
-              height: 1.85,
-            ),
+          FutureBuilder<String>(
+            future: _future,
+            builder: (ctx, snap) {
+              final String ko;
+              if (snap.hasError) {
+                ko = '본인의 한 마디 결론을 잠깐 못 불러왔어요. 앱을 다시 켜주면 다시 시도해요.';
+              } else if (snap.hasData) {
+                ko = snap.data!;
+              } else {
+                ko = '내가 어떤 사람인지 친구한테 말하듯 한 단락으로 정리해드릴게요.';
+              }
+              final body = useKo
+                  ? ko
+                  : 'A one-paragraph friendly verdict about who you are — please switch to Korean.';
+              return Text(
+                body,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 14,
+                  color: AppColors.ink,
+                  height: 1.85,
+                ),
+              );
+            },
           ),
         ],
       ),
