@@ -283,6 +283,68 @@ void main() {
     });
 
     test(
+        'B12c — R88 sprint 5: 일간 fallback wire — 일주 60 매칭 없으면 일간 1글자 base 사용',
+        () async {
+      // sprint 5 의 lookup chain mandate:
+      //   1. 일주 60 정확 매칭 → paragraph
+      //   2. 매칭 없음 + dayPillar 첫 글자 (일간) base 매칭 → 일간 base paragraph
+      //   3. 둘 다 없음 → ''
+      // test 환경: 갑자(일주) + 갑(일간 base) 둘 다 fixture 에 있음.
+      // 일주 = '갑술' (60일주 중 갑 일간 + 술 지지) — 우리 fixture 에 없음 → 일간 '갑' fallback.
+      final pGapsul = await svc.paragraph(
+        dayPillar: '갑술',
+        category: LifeCategory.earlyLife,
+      );
+      final pGap = await svc.paragraph(
+        dayPillar: '갑',
+        category: LifeCategory.earlyLife,
+      );
+      expect(pGapsul.isNotEmpty, isTrue,
+          reason: '갑술 일주 매칭 없으면 갑 일간 fallback 적용 → 빈 값 X');
+      expect(pGapsul, equals(pGap),
+          reason: '갑술 fallback = 갑 일간 base 와 동일');
+      // 갑자 (직접 매칭) 와 갑술 (fallback) 의 paragraph 는 서로 다름.
+      final pGapja = await svc.paragraph(
+        dayPillar: '갑자',
+        category: LifeCategory.earlyLife,
+      );
+      expect(pGapja != pGapsul, isTrue,
+          reason: '갑자 정확 매칭 ≠ 갑술 fallback (갑자 fixture 가 더 풍부)');
+    });
+
+    test('B12d — R88 sprint 5: 일간 fallback 도 성별 분기 정확 동작', () async {
+      // 일간 fallback 시에도 split sub-object {M, F} 정확 처리.
+      final m = await svc.paragraph(
+        dayPillar: '을미',
+        category: LifeCategory.loveFate,
+        gender: 'M',
+      );
+      final f = await svc.paragraph(
+        dayPillar: '을미',
+        category: LifeCategory.loveFate,
+        gender: 'F',
+      );
+      expect(m.isNotEmpty, isTrue,
+          reason: '을미 fallback → 을 일간 + loveFate.M paragraph');
+      expect(f.isNotEmpty, isTrue,
+          reason: '을미 fallback → 을 일간 + loveFate.F paragraph');
+      expect(m != f, isTrue,
+          reason: 'fallback 도 성별 분기 정확 동작');
+    });
+
+    test('B12e — R88 sprint 5: 일간 10 base 모두 fixture 에 채워짐', () async {
+      const stems = ['갑', '을', '병', '정', '무', '기', '경', '신', '임', '계'];
+      for (final stem in stems) {
+        final p = await svc.paragraph(
+          dayPillar: stem,
+          category: LifeCategory.earlyLife,
+        );
+        expect(p.length >= 80, isTrue,
+            reason: 'sprint 5 acceptance: $stem 일간 base early_life ≥80자 (실제 ${p.length}자)');
+      }
+    });
+
+    test(
         'B13 — instance method 호출 형태 `LifeParagraphService().paragraph(...)` 동작 (spec mandate signature)',
         () async {
       // R88 spec sprint 4 verbatim:

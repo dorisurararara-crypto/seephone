@@ -154,38 +154,58 @@ class LifeParagraphService {
   }
 
   /// 동기 lookup — pool map 을 직접 인자로 받음 (LifeOverviewService / SelfConclusionService 합성 용).
+  ///
+  /// R88 sprint 5 fallback chain:
+  ///   1. 일주 60 정확 매칭 (예: '갑자') → paragraph 반환.
+  ///   2. 일주 매칭 없음 + 일주 첫 글자 (일간) base 매칭 (예: '갑') → 일간 base paragraph 반환.
+  ///   3. 둘 다 없음 → ''.
+  /// 일간 fallback 은 sprint 5 의 핵심 — 일주 60 batch (sprint 6) 완성 전에도 service 작동 보장.
   static String lookup(
     Map<String, dynamic> pool, {
     required String dayPillar,
     required LifeCategory category,
     String? gender,
   }) {
-    final pillarEntry = pool[dayPillar];
-    if (pillarEntry == null || pillarEntry is! Map) return '';
     final key = lifeCategoryKey(category);
-    final raw = pillarEntry[key];
-    if (raw == null) return '';
-
-    if (kGenderSplitCategories.contains(category)) {
-      // 성별 분기. sub-object {M, F} 기대.
-      if (raw is Map) {
-        if (gender == 'F' && raw.containsKey('F')) return (raw['F'] ?? '').toString();
-        // gender null 또는 'M' 또는 다른 값 → M fallback.
-        if (raw.containsKey('M')) return (raw['M'] ?? '').toString();
-        // 잘못된 schema (성별 분기인데 string 으로 저장된 경우) — 빈 값.
-        return '';
+    // 1. 일주 60 정확 매칭.
+    final exact = pool[dayPillar];
+    if (exact is Map) {
+      final raw = exact[key];
+      if (raw != null) {
+        return _extract(raw, category: category, gender: gender);
       }
-      // legacy schema (성별 분기인데 string) — gender 무시하고 그대로 반환.
-      return raw.toString();
     }
-    // 성별 분기 X 카테고리 — string 직접 반환 (gender 무시).
+    // 2. 일간 fallback — 일주 첫 글자 (예: '갑자' → '갑').
+    if (dayPillar.isNotEmpty) {
+      final stem = dayPillar.substring(0, 1);
+      final stemEntry = pool[stem];
+      if (stemEntry is Map) {
+        final raw = stemEntry[key];
+        if (raw != null) {
+          return _extract(raw, category: category, gender: gender);
+        }
+      }
+    }
+    // 3. 매칭 없음.
+    return '';
+  }
+
+  /// raw value 에서 gender 분기 적용 후 string 반환.
+  /// raw 가 String 또는 Map {M, F} 둘 다 대응.
+  static String _extract(
+    Object raw, {
+    required LifeCategory category,
+    String? gender,
+  }) {
     if (raw is String) return raw;
-    if (raw is Map) {
-      // 잘못된 schema (string 카테고리인데 {M, F}) — M fallback.
-      if (raw.containsKey('M')) return (raw['M'] ?? '').toString();
-      return '';
+    if (raw is! Map) return raw.toString();
+    // raw is Map — 성별 분기 sub-object {M, F} 가정.
+    if (gender == 'F' && raw.containsKey('F')) {
+      return (raw['F'] ?? '').toString();
     }
-    return raw.toString();
+    // gender null / 'M' / 다른 값 → M fallback (spec 2.2.b).
+    if (raw.containsKey('M')) return (raw['M'] ?? '').toString();
+    return '';
   }
 
   /// 일주가 DB 에 있는지.
