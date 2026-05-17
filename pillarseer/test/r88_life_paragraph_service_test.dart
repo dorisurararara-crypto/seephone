@@ -285,49 +285,47 @@ void main() {
     test(
         'B12c — R88 sprint 5: 일간 fallback wire — 일주 60 매칭 없으면 일간 1글자 base 사용',
         () async {
-      // sprint 5 의 lookup chain mandate:
+      // sprint 5 의 lookup chain mandate (R89 sprint 1 에서 60 일주 완성 후 갱신):
       //   1. 일주 60 정확 매칭 → paragraph
       //   2. 매칭 없음 + dayPillar 첫 글자 (일간) base 매칭 → 일간 base paragraph
       //   3. 둘 다 없음 → ''
-      // test 환경: 갑자(일주) + 갑(일간 base) 둘 다 fixture 에 있음.
-      // 일주 = '갑술' (60일주 중 갑 일간 + 술 지지) — 우리 fixture 에 없음 → 일간 '갑' fallback.
-      final pGapsul = await svc.paragraph(
-        dayPillar: '갑술',
+      // R89 sprint 1 mandate 후: 60 갑자 일주는 모두 fixture 에 채워짐.
+      // fallback 동작 검증은 fixture 에 없는 dummy 일주로 진행 (실제 운영에서는
+      // 변형 일주 입력이나 fixture 부족 시 fallback 안정성 보장).
+      // dummy = '갑Z' (Z 는 fixture 에 등록되지 않은 지지) — '갑' 일간 fallback 보장.
+      const dummyIlju = '갑Z';
+      final pDummy = await svc.paragraph(
+        dayPillar: dummyIlju,
         category: LifeCategory.earlyLife,
       );
       final pGap = await svc.paragraph(
         dayPillar: '갑',
         category: LifeCategory.earlyLife,
       );
-      expect(pGapsul.isNotEmpty, isTrue,
-          reason: '갑술 일주 매칭 없으면 갑 일간 fallback 적용 → 빈 값 X');
-      expect(pGapsul, equals(pGap),
-          reason: '갑술 fallback = 갑 일간 base 와 동일');
-      // 갑자 (직접 매칭) 와 갑술 (fallback) 의 paragraph 는 서로 다름.
-      final pGapja = await svc.paragraph(
-        dayPillar: '갑자',
-        category: LifeCategory.earlyLife,
-      );
-      expect(pGapja != pGapsul, isTrue,
-          reason: '갑자 정확 매칭 ≠ 갑술 fallback (갑자 fixture 가 더 풍부)');
+      expect(pDummy.isNotEmpty, isTrue,
+          reason: '$dummyIlju 일주 매칭 없으면 갑 일간 fallback 적용 → 빈 값 X');
+      expect(pDummy, equals(pGap),
+          reason: '$dummyIlju fallback = 갑 일간 base 와 동일');
     });
 
     test('B12d — R88 sprint 5: 일간 fallback 도 성별 분기 정확 동작', () async {
-      // 일간 fallback 시에도 split sub-object {M, F} 정확 처리.
+      // R89 sprint 1 mandate 후: 60 일주 모두 fixture 에 있어서 직접 매칭.
+      // fallback 동작은 fixture 에 없는 dummy 일주로 검증.
+      const dummyIlju = '을Z';
       final m = await svc.paragraph(
-        dayPillar: '을미',
+        dayPillar: dummyIlju,
         category: LifeCategory.loveFate,
         gender: 'M',
       );
       final f = await svc.paragraph(
-        dayPillar: '을미',
+        dayPillar: dummyIlju,
         category: LifeCategory.loveFate,
         gender: 'F',
       );
       expect(m.isNotEmpty, isTrue,
-          reason: '을미 fallback → 을 일간 + loveFate.M paragraph');
+          reason: '$dummyIlju fallback → 을 일간 + loveFate.M paragraph');
       expect(f.isNotEmpty, isTrue,
-          reason: '을미 fallback → 을 일간 + loveFate.F paragraph');
+          reason: '$dummyIlju fallback → 을 일간 + loveFate.F paragraph');
       expect(m != f, isTrue,
           reason: 'fallback 도 성별 분기 정확 동작');
     });
