@@ -233,19 +233,14 @@ void main() {
     });
 
     // ─────────────── I4: R83 sprint 2~6 anchor source 존재 ───────────────
-    test('I4a — R83 sprint 2 (P1-G) info_saju_calc_screen 파일 보존 (R88 S2 진입점 제거)',
+    test('I4a — R83 sprint 2 (P1-G) info_saju_calc_screen 파일 R89 sprint 4 에서 완전 삭제',
         () {
-      // R88 sprint 2 사용자 mandate ("원래 우리 앱에 있던 나머지 것들은 전부 없애줘")
-      //   → settings 의 "사주 계산 기준 안내" 진입점 + router `/settings/saju-calc-basis`
-      //   제거. arb 키 / InfoSajuCalcScreen widget 파일 자체는 dead code 로 보존
-      //   (sprint 10 baseline 재설정 때 정리).
-      // R83 sprint 2 의 P1-G 본체 (info 화면 widget) 가 즉시 파괴되지 않았음을 보장.
+      // R83 sprint 2 = P1-G info 화면 신규.
+      // R88 sprint 2 = 진입점 + router route 제거 (파일 보존).
+      // R89 sprint 4 = 파일 본체 완전 삭제 (dead code 정리).
       final infoFile = File('lib/screens/info_saju_calc_screen.dart');
-      expect(infoFile.existsSync(), isTrue,
-          reason: 'R83 sprint 2 — info_saju_calc_screen.dart 파일 보존 (dead code OK)');
-      final infoSrc = infoFile.readAsStringSync();
-      expect(infoSrc.contains('class InfoSajuCalcScreen'), isTrue,
-          reason: 'R83 sprint 2 — InfoSajuCalcScreen widget class 보존');
+      expect(infoFile.existsSync(), isFalse,
+          reason: 'R89 sprint 4 — info_saju_calc_screen.dart 파일 완전 삭제 (dead code 정리)');
     });
 
     test('I4a-r88 — R88 sprint 2: settings 진입점 + router route 제거 확인', () {

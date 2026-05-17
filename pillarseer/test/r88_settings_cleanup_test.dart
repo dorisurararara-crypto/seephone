@@ -44,10 +44,12 @@ void main() {
           reason: 'router 의 route path 제거됨');
     });
 
-    test('B3 — info_saju_calc_screen.dart 파일은 dead code 로 보존 (sprint 10 까지)', () {
+    test('B3 — info_saju_calc_screen.dart 파일 완전 삭제 (R89 sprint 4 mandate)', () {
+      // R88 sprint 2 = router 만 제거, 파일 보존.
+      // R89 sprint 4 = 파일 본체 dead code 정리 — 완전 삭제.
       final infoFile = File('lib/screens/info_saju_calc_screen.dart');
-      expect(infoFile.existsSync(), isTrue,
-          reason: 'sprint 2 단계에서는 파일 보존 (sprint 10 baseline 재설정 때 정리)');
+      expect(infoFile.existsSync(), isFalse,
+          reason: 'R89 sprint 4 — info_saju_calc_screen.dart 파일 완전 삭제');
     });
 
     test('B4 — 다른 설정 항목 변경 0', () {
