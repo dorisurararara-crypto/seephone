@@ -34,7 +34,6 @@ import '../services/ziwei_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
-import '../providers/dev_unlock_provider.dart';
 import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
 import '../widgets/bottom_nav.dart';
@@ -51,6 +50,98 @@ const bool kIsZiweiUiHidden = true;
 // 사용자 mandate "내 사주 = 평생사주만". 알림 deep-link 는 `lib/router.dart` 의
 // redirect rule (R79 sprint 7) 로 `/today` 로 처리.
 
+/// R88 sprint 3 — 17 카테고리 인생 분류 카테고리 키 (운세의신 사상만 차용, 본문은 우리 톤 재작성).
+/// Sprint 4 에서 enum + service 로 정식 wire. 본 sprint 는 placeholder UI 만.
+/// previewKo = 카테고리별 placeholder 한 줄 (해요체 / 한자 jargon X / 사용자 친근 톤).
+const List<({String key, String titleKo, String previewKo})>
+    kR88LifeCategories = [
+  (
+    key: 'early_life',
+    titleKo: '초년운',
+    previewKo: '어릴 때 어떤 분위기로 컸는지, 가족 안에서 어떤 자리였는지 곧 풀어드려요.',
+  ),
+  (
+    key: 'mid_life',
+    titleKo: '중년운',
+    previewKo: '20대 후반 ~ 40대에 어떤 흐름을 타는지, 일과 관계 둘 다 곧 보여드려요.',
+  ),
+  (
+    key: 'late_life',
+    titleKo: '말년운',
+    previewKo: '50대 이후 어떤 매력이 짙어지는지, 어떤 자리로 가는지 곧 풀어드려요.',
+  ),
+  (
+    key: 'health',
+    titleKo: '건강운',
+    previewKo: '몸에서 자주 신경 쓰이는 부분, 컨디션 챙기는 법 곧 풀어드려요.',
+  ),
+  (
+    key: 'constitution',
+    titleKo: '체질운',
+    previewKo: '잘 먹으면 좋은 음식, 피하면 좋은 환경까지 곧 정리해드려요.',
+  ),
+  (
+    key: 'social',
+    titleKo: '사회운',
+    previewKo: '바깥에서 사람들이 나를 어떻게 보는지, 어떤 자리에서 빛나는지 곧 보여드려요.',
+  ),
+  (
+    key: 'social_personality',
+    titleKo: '사회적 성격',
+    previewKo: '단체 안에서 내가 어떤 역할로 자리잡는지 곧 한 단락으로 풀어드려요.',
+  ),
+  (
+    key: 'personality',
+    titleKo: '성격운',
+    previewKo: '평소 내 모습 — 친구들이 자주 하는 말이 어떤 건지 곧 풀어드려요.',
+  ),
+  (
+    key: 'innate_tendency',
+    titleKo: '타고난 성향',
+    previewKo: '본능에 가까운 결, 의식 안 해도 자꾸 나오는 부분 곧 정리해드려요.',
+  ),
+  (
+    key: 'innate_character',
+    titleKo: '타고난 인품',
+    previewKo: '남자/여자로서 본래 갖고 있는 분위기, 어떤 무게인지 곧 풀어드려요.',
+  ),
+  (
+    key: 'love_fate',
+    titleKo: '이성운',
+    previewKo: '연애 시작될 때 패턴, 어떤 사람한테 끌리는지 곧 보여드려요.',
+  ),
+  (
+    key: 'affection',
+    titleKo: '애정운',
+    previewKo: '오래 가는 관계로 갈 때 어떤 분위기인지 곧 풀어드려요.',
+  ),
+  (
+    key: 'wealth',
+    titleKo: '재물운',
+    previewKo: '돈 들어오는 큰 흐름, 어느 시기에 빵 터질지 곧 보여드려요.',
+  ),
+  (
+    key: 'wealth_gather',
+    titleKo: '재물 모으는 법',
+    previewKo: '나한테 잘 맞는 저축·소비 방식 곧 정리해드려요.',
+  ),
+  (
+    key: 'wealth_loss_prevent',
+    titleKo: '재물 손실 막는 법',
+    previewKo: '돈이 새 나가는 함정, 조심할 사람·상황 곧 풀어드려요.',
+  ),
+  (
+    key: 'wealth_invest',
+    titleKo: '재테크 비법',
+    previewKo: '나한테 어울리는 투자 톤 (안전형/공격형 등) 곧 가이드해드려요.',
+  ),
+  (
+    key: 'conclusion_self',
+    titleKo: '나는 어떤 사람?',
+    previewKo: '여기까지 풀이를 종합해서 한 단락 자기 소개로 곧 정리해드려요.',
+  ),
+];
+
 class ResultScreen extends ConsumerWidget {
   const ResultScreen({super.key});
 
@@ -63,32 +154,14 @@ class ResultScreen extends ConsumerWidget {
       return const SajuRequiredEmpty();
     }
     final result = resultOrNull;
-    final isPro = ref.watch(devUnlockProvider);
     final overrideLocale = ref.watch(localeProvider);
     final systemLocale = Localizations.maybeLocaleOf(context);
     final lang = (overrideLocale?.languageCode ?? systemLocale?.languageCode ?? 'en');
     final useKo = lang == 'ko';
     final reading = useKo ? result.deepKo : result.deepEn;
 
-    // 깊은 풀이 레이어 — 사용자 입력 있을 때만 계산. 없으면 null 처리.
-    // R83 sprint 5 (P1-E) — 외부 reviewer P0 #4 mandate:
-    //   "시간 모름 = 임의 12시로 계산 금지." 자미두수는 시지 (時支) 가 12궁 배치의
-    //   핵심 입력 — 시간 모름 시 노출하면 거짓 정보. 따라서 unknownTime=true 시
-    //   ziwei=null + crossmatches=빈 list 로 차단 (정직성 우선).
+    // R83 sprint 5 (P1-E) — unknownTime 시 4기둥 시주 영역 흐림 + disclaimer 보존.
     final birth = ref.watch(userBirthInfoProvider);
-    final ZiweiResult? ziwei = (birth != null && !birth.unknownTime)
-        ? ZiweiService.calculate(
-            year: birth.birthDate.year,
-            month: birth.birthDate.month,
-            day: birth.birthDate.day,
-            hour: birth.birthHour,
-            minute: birth.birthMinute,
-            isMale: birth.isMale,
-          )
-        : null;
-    final crossmatches = ziwei != null
-        ? ZiweiCrossmatchService.find(result, ziwei)
-        : const <CrossMatch>[];
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -123,321 +196,226 @@ class ResultScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Round 82 sprint 7 — first-fold 핵심 4 섹션 만 펼침. 나머지 14+ 섹션은
-            // `_CollapsibleSection` wrapper 로 접힘 (사용자 mandate "한눈에 안 들어옴").
-            // 정보 손실 0: 기존 widget 그대로 child 로 mount, R71~R80 시그니처 보존.
+            // R88 sprint 3 — 17 카테고리 인생 분류 skeleton.
             //
-            // 펼침 4 (codex 9.9+ 우선순위):
-            //   1) 일주 한 줄 (_DayMasterHero — R71 _OracleHero)
-            //   2) 5행 분포 (_FiveElementsSection — 1995-10-27 男 17시 16/21/17/41/4 골든)
-            //   3) 8글자 십신 (_SipsinPersonaSection — R73 sprint 3)
-            //   4) 오늘 한 줄 (_ForYouTodaySection — R71 personalization)
+            // 사용자 mandate verbatim ("원래 우리 앱에 있던 나머지 것들은 전부 없애줘.
+            // 운세의신 인생 분류 17 카테고리로 다 갈아엎어"):
+            //   - 8 deep myeongli widget 제거 (build 안에서 mount 0):
+            //     _DayMasterHero / _SipsinPersonaSection / _LifeStageSection /
+            //     _AdditionalLifeSection / _ChartAttributesSection /
+            //     _ThreeStrokesSection / _ReadingSection / _CareerSection /
+            //     _WealthStrategySection / _ForYouTodaySection / _CrossmatchSection /
+            //     _ZiweiPalaceGroup / _GroupSection / _GyeokgukBlock / _YongsinBlock /
+            //     _StrengthBlock / _GongMangBlock / _ShinsaBlock / _TwelveUnsungBlock /
+            //     _HapchungBlock / _CalculationBasisBody / _CollapsibleSection /
+            //     _AccordionRow / _ProHooksSection — 모두 build 안 mount 0.
+            //   - 보존 widget: _FourPillarsSection (4기둥 8글자) /
+            //     _FiveElementsSection (5행 차트 R75 골든 보존).
+            //   - 신규 widget: _LifeOverviewHero (큰 그림 placeholder) /
+            //     _CategorySectionCard (17 카테고리 — sprint 5~7 에서 LifeParagraphService
+            //     wire) / _SelfConclusionCard (나는 어떤 사람? placeholder).
+            //
+            // service-level raw 계산 코드 (lib/services/*.dart) 는 수정 X — 다른 미래
+            // 화면 (sprint 8 의 LifeOverviewService 가 5행/십신/일주 anchor 사용) 이
+            // 참조 가능. unused widget class 들도 sprint 10 baseline 재설정에서 정리.
 
-            // ===== first-fold 펼침 (4 섹션) =====
-            // 1. Hero — 일주 한 줄
-            _DayMasterHero(result: result, reading: reading, useKo: useKo),
-            // 2. FIVE ELEMENTS — 5행 분포 (골든)
-            _FiveElementsSection(
-                result: result, reading: reading, useKo: useKo),
-            // 3. SIPSIN PERSONA — 8글자 십신 (R73 sprint 3)
-            // R83 sprint 5 (P1-E) — unknownTime=true 시 헤더 아래 보조 라벨 mount.
-            _SipsinPersonaSection(
+            // 1. FOUR PILLARS — 4기둥 8글자 (R83 P1-E 시간 모름 처리 보존).
+            _FourPillarsSection(
               result: result,
               useKo: useKo,
               unknownTime: birth?.unknownTime ?? false,
             ),
-            // 4. FOR YOU TODAY — 오늘 한 줄 (R71 personalization)
-            _ForYouTodaySection(result: result, useKo: useKo),
-
-            // ===== 접힘 collapsed (헤더 라벨 + tap 펼침, 정보 손실 0) =====
-            // 친구 자랑 CTA — 첫 fold 4 다음.
-            _CollapsibleSection(
-              label: useKo ? '친구한테 자랑하기' : 'SHARE',
-              preview: useKo
-                  ? '내 사주 카드를 친구한테 보내볼까요.'
-                  : 'Send your saju card to a friend.',
-              background: AppColors.bg,
-              child: _ShareHeroBar(
-                onTap: () => _shareChart(context, result, useKo),
-              ),
-            ),
-            // 2.5 TWIN-LENS — 두 번 봐도 같이 잡힌 강점 (차별점)
-            if (crossmatches.isNotEmpty)
-              _CollapsibleSection(
-                label: useKo ? '두 번 봐도 같이 잡힌 강점' : 'DEEP POINT · 深 點',
-                preview: useKo
-                    ? '깊게 봐도 똑같이 잡힌 사주의 단단한 부분이에요.'
-                    : 'Strengths that hold up even when read twice.',
-                background: AppColors.paper,
-                child: _CrossmatchSection(matches: crossmatches, useKo: useKo),
-              ),
-            // 2.6 LIFE STAGE — 초년/중년/말년 (Round 73 sprint 2)
-            _CollapsibleSection(
-              label: useKo ? '시기별 풀이 (초년·중년·말년)' : 'LIFE STAGE',
-              preview: useKo
-                  ? '초년·중년·말년 시기별로 사주를 풀어드려요.'
-                  : 'Read by life stage.',
-              background: AppColors.bg,
-              child: _LifeStageSection(
-                result: result,
-                useKo: useKo,
-                isMale: birth?.isMale ?? true,
-                userAge: birth != null
-                    ? (DateTime.now().year - birth.birthDate.year)
-                    : null,
-                // R83 sprint 5 (P1-E) — 시간 모름 시 정확도 안내 라벨.
-                unknownTime: birth?.unknownTime ?? false,
-              ),
-            ),
-            // 2.8 CAREER — 직업 추천 (Round 73 sprint 6)
-            _CollapsibleSection(
-              label: useKo ? '나한테 맞는 일 방향' : 'CAREER',
-              preview: useKo
-                  ? '사주에 맞는 일 방향을 추천해드려요.'
-                  : 'Work directions that fit your chart.',
-              background: AppColors.paper,
-              child: _CareerSection(result: result, useKo: useKo),
-            ),
-            // 2.8 WEALTH — 재테크 3 phase (Round 73 sprint 6)
-            _CollapsibleSection(
-              label: useKo ? '돈 들어오는 방식' : 'WEALTH',
-              preview: useKo
-                  ? '돈이 어떻게 들어오고 나가는지 봐드려요.'
-                  : 'How money moves in your chart.',
-              background: AppColors.bg,
-              child: _WealthStrategySection(result: result, useKo: useKo),
-            ),
-            // 2.9 ADDITIONAL 6 — 건강/체질/사회 등 (Round 73 sprint 4)
-            _CollapsibleSection(
-              label: useKo ? '6가지 추가 풀이' : 'ADDITIONAL',
-              preview: useKo
-                  ? '건강·체질·사회성 등 여섯 가지 영역을 추가로 봐요.'
-                  : 'Health, body, social, and three more.',
-              background: AppColors.paper,
-              child: _AdditionalLifeSection(result: result, useKo: useKo),
-            ),
-            // 3. CHART ATTRIBUTES — 2x2 grid
-            _CollapsibleSection(
-              label: useKo ? '사주 핵심 4가지' : 'CHART ATTRIBUTES',
-              preview: useKo
-                  ? '사주 유형·필요한 보충·세기·비어있는 자리 한눈에.'
-                  : 'Format, needed element, strength, void.',
-              background: AppColors.bg,
-              child: _ChartAttributesSection(result: result, useKo: useKo),
-            ),
-            // 4. FOUR PILLARS — 4-column hairline
-            _CollapsibleSection(
-              label: useKo ? '네 기둥 한눈에' : 'FOUR PILLARS',
-              preview: useKo
-                  ? '연주·월주·일주·시주 네 기둥을 카드로 보여드려요.'
-                  : 'Year, Month, Day, Hour pillars.',
-              background: AppColors.paper,
-              // R83 sprint 5 (P1-E) — 시간 모름 시 HOUR 영역 흐림 + disclaimer.
-              child: _FourPillarsSection(
-                result: result,
-                useKo: useKo,
-                unknownTime: birth?.unknownTime ?? false,
-              ),
-            ),
-            // 5. THREE STROKES — magazine 3-hit
-            _CollapsibleSection(
-              label: useKo ? '핵심 세 줄 매거진 풀이' : 'THREE STROKES',
-              preview: useKo
-                  ? '사주 핵심을 매거진 세 줄로 정리해드려요.'
-                  : 'Your chart in three magazine strokes.',
-              background: AppColors.bg,
-              child: _ThreeStrokesSection(
-                  result: result, reading: reading, useKo: useKo),
-            ),
-            // A READING — 사주 5초 요약 (paper bg) — first-fold 에서 collapsed 로 이동.
-            // 사용자 mandate first-fold = 일주/5행/십신/오늘. 본 섹션은 보조 magazine body.
-            _CollapsibleSection(
-              label: useKo ? '내 사주 한눈에 매거진 풀이' : 'A READING',
-              preview: useKo
-                  ? '사주 한 줄 요약을 매거진 본문으로 풀어드려요.'
-                  : 'Magazine summary of your chart.',
-              background: AppColors.paper,
-              child:
-                  _ReadingSection(result: result, reading: reading, useKo: useKo),
-            ),
-            // 7.5 인생 12 영역 풀이 (R70 자미두수 hidden, 라벨 우회 유지).
-            // `_ZiweiPalaceGroup` 자체가 _GroupSection + 12 _AccordionRow 접힘.
-            // 추가 wrap 없이 그대로 mount — 12 row 가 모두 접힌 상태로 시작.
-            if (ziwei != null && kIsZiweiUiHidden)
-              _ZiweiPalaceGroup(
-                ziwei: ziwei,
-                useKo: useKo,
-                sajuResult: result,
-              ),
-            // 8. CORE READING accordion group — 자체 5 _AccordionRow 접힘.
-            // 그룹 자체도 추가 collapse 적용 → 첫 fold 깔끔.
-            _CollapsibleSection(
-              label: useKo ? '기본 풀이 (십신·테마·10년·올해·행운)' : 'CORE READING',
-              preview: useKo
-                  ? '십신·테마·10년 운·올해 운·행운 다섯 가지를 봐드려요.'
-                  : 'Ten gods, themes, 10-year, this year, lucky.',
-              background: AppColors.paper,
-              child: _GroupSection(
-                groupLabel: useKo ? '기본 풀이 · CORE READING' : 'CORE READING',
-                background: AppColors.paper,
-                children: [
-                  _AccordionRow(
-                    title: l.resultTenGodsTitle.toUpperCase(),
-                    hint: l.resultTenGodsTermHint,
-                    locked: !isPro,
-                    note: reading?.tenGodsNote,
-                    child: _TenGodsTable(rows: result.tenGods, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: l.resultLifeThemesTitle.toUpperCase(),
-                    locked: false,
-                    child: _LifeThemesBlock(reading: reading, isPro: isPro),
-                  ),
-                  _AccordionRow(
-                    title: l.resultTenYearLuckTitle.toUpperCase(),
-                    hint: l.resultTenYearLuckTermHint,
-                    locked: !isPro,
-                    child: _LongText(text: reading?.tenYearLuck ?? ''),
-                  ),
-                  _AccordionRow(
-                    title: l.resultThisYearTitle.toUpperCase(),
-                    hint: l.resultThisYearTermHint,
-                    locked: !isPro,
-                    child: _LongText(text: reading?.thisYear ?? ''),
-                  ),
-                  _AccordionRow(
-                    title: l.resultLuckyTitle.toUpperCase(),
-                    locked: !isPro,
-                    child: _LuckyBlock(reading: reading, useKo: useKo),
-                  ),
-                ],
-              ),
-            ),
-            // 9. DEEP MYEONGLI accordion group — 자체 7 _AccordionRow 접힘.
-            // R87 sprint 4 — 사용자 용신 spoiler. 사용자가 collapsed 상태에서도
-            // 자기 용신을 1초 안에 확인 가능하게 preview 에 미리 노출. 사용자가
-            // "용신이 뭐야" 묻는 경우 (UI 발견 실패) 방지.
-            Builder(builder: (context) {
-              final previewEl = result.elements;
-              final previewDm = result.dayPillar.chunGanElement;
-              final previewStrength = StrengthService.judge(
-                dayMasterElement: previewDm,
-                monthJi: result.monthPillar.jiJi,
-                wood: previewEl.wood,
-                fire: previewEl.fire,
-                earth: previewEl.earth,
-                metal: previewEl.metal,
-                water: previewEl.water,
-                dayMaster: result.dayPillar.chunGan,
-                yearJi: result.yearPillar.jiJi,
-                dayJi: result.dayPillar.jiJi,
-                hourJi: result.hourPillar?.jiJi,
-              );
-              final previewYongsin = YongsinService.judge(
-                dayMasterElement: previewDm,
-                strengthLabel: previewStrength.label,
-                wood: previewEl.wood,
-                fire: previewEl.fire,
-                earth: previewEl.earth,
-                metal: previewEl.metal,
-                water: previewEl.water,
-                monthBranch: result.monthPillar.jiJi,
-              );
-              final userYs = previewYongsin.yongsin;
-              return _CollapsibleSection(
-              label: useKo
-                  ? '깊은 사주 풀이 (격국·용신·강약·공망·신살·12운성·합충)'
-                  : 'DEEP MYEONGLI',
-              preview: useKo
-                  ? '내 용신 = $userYs · 격국·강약·공망·신살·12운성·합충 일곱 가지 풀이.'
-                  : 'Your yongsin = $userYs · format, strength, void, shinsa, life cycle, relations.',
-              background: AppColors.bg,
-              child: _GroupSection(
-                groupLabel:
-                    useKo ? '깊은 명리학 · DEEP MYEONGLI' : 'DEEP MYEONGLI',
-                background: AppColors.bg,
-                children: [
-                  _AccordionRow(
-                    title:
-                        useKo ? '격국 · CHART FORMAT' : 'GYEOKGUK · CHART FORMAT',
-                    locked: false,
-                    child: _GyeokgukBlock(result: result, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: useKo
-                        ? '용신 · NEEDED ELEMENT'
-                        : 'YONGSIN · NEEDED ELEMENT',
-                    locked: false,
-                    child: _YongsinBlock(result: result, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: useKo ? '강약 · STRENGTH' : 'STRENGTH',
-                    locked: false,
-                    child: _StrengthBlock(result: result, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: useKo ? '공망 · VOID' : 'VOID BRANCHES',
-                    locked: false,
-                    child: _GongMangBlock(result: result, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: useKo ? '신살 · SHINSA' : 'SHINSA',
-                    locked: false,
-                    child: _ShinsaBlock(result: result, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: useKo
-                        ? '12 운성 · LIFE CYCLE'
-                        : '12 UNSUNG · LIFE CYCLE',
-                    locked: false,
-                    child: _TwelveUnsungBlock(result: result, useKo: useKo),
-                  ),
-                  _AccordionRow(
-                    title: useKo
-                        ? '합·충 · RELATIONS'
-                        : 'HAP & CHUNG · RELATIONS',
-                    locked: false,
-                    child: _HapchungBlock(result: result, useKo: useKo),
-                  ),
-                ],
-              ),
-            );
-            }),
-            // 10. VERIFICATION — 자체 1 _AccordionRow 접힘.
-            _CollapsibleSection(
-              label: useKo ? '계산 기준 확인' : 'VERIFICATION',
-              preview: useKo
-                  ? '사주 계산 기준과 산식 근거를 확인할 수 있어요.'
-                  : 'How the calculation was done.',
-              background: AppColors.paper,
-              child: _GroupSection(
-                groupLabel: useKo ? '검증 · VERIFICATION' : 'VERIFICATION',
-                background: AppColors.paper,
-                children: [
-                  _AccordionRow(
-                    title: l.resultBasisTitle.toUpperCase(),
-                    locked: false,
-                    child:
-                        _CalculationBasisBody(result: result, useKo: useKo),
-                  ),
-                ],
-              ),
-            ),
-            // 11. PRO HOOKS (only free) — bg
-            if (!isPro) ...[
-              _ProHooksSection(),
-            ],
-            // 12. CTA stack — ink (full-width)
-            _CtaStack(
-              isPro: isPro,
-              onShare: () => _shareChart(context, result, useKo),
-            ),
-            // 13. Footer — KASI source
+            // 2. FIVE ELEMENTS — 5행 차트 (R75 골든 16/21/17/41/4 보존).
+            _FiveElementsSection(
+                result: result, reading: reading, useKo: useKo),
+            // 3. LIFE OVERVIEW — "내 사주 큰 그림" placeholder (sprint 8 에서 LifeOverviewService wire).
+            const _LifeOverviewHero(),
+            // 4. 17 카테고리 — placeholder ListView (sprint 5~7 에서 LifeParagraphService wire).
+            //    conclusion_self 는 17 카테고리 안 마지막 entry 가 아니라 별도 결론 card 로 분리.
+            ...kR88LifeCategories
+                .where((cat) => cat.key != 'conclusion_self')
+                .map((cat) => _CategorySectionCard(
+                      categoryKey: cat.key,
+                      titleKo: cat.titleKo,
+                      previewKo: cat.previewKo,
+                      useKo: useKo,
+                    )),
+            // 5. SELF CONCLUSION — "나는 어떤 사람?" placeholder (sprint 9 에서 SelfConclusionService wire).
+            const _SelfConclusionCard(),
+            // 13. Footer — KASI source.
             _AesopFooter(),
           ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 1),
+    );
+  }
+}
+
+// ──────────── R88 sprint 3 — 신규 widget (sprint 5~9 에서 본문 wire) ────────────
+
+/// "내 사주 큰 그림" hero card placeholder.
+/// Sprint 8 에서 LifeOverviewService 의 600~900자 essay 로 교체.
+class _LifeOverviewHero extends StatelessWidget {
+  const _LifeOverviewHero();
+
+  @override
+  Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? '내 사주 큰 그림' : 'YOUR BIG PICTURE',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'LIFE OVERVIEW',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Container(width: 36, height: 1, color: AppColors.line),
+          const SizedBox(height: 18),
+          Text(
+            useKo
+                ? '태어난 날의 느낌과 내 안에 많은 에너지, 인생 흐름을 한 단락으로 묶어\n친근하게 풀어드릴 예정이에요. 곧 채워질 본문이라 잠깐만 기다려 줘요.'
+                : 'A friendly one-paragraph life essay woven from the feel of your birthday — coming soon.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.85,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 17 카테고리 중 한 영역 section card placeholder.
+/// Sprint 5~7 에서 LifeParagraphService 의 일주 60 × 카테고리 17 paragraph 로 교체.
+class _CategorySectionCard extends StatelessWidget {
+  final String categoryKey;
+  final String titleKo;
+  final String previewKo;
+  final bool useKo;
+  const _CategorySectionCard({
+    required this.categoryKey,
+    required this.titleKo,
+    required this.previewKo,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 0.6)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? titleKo : categoryKey.toUpperCase().replaceAll('_', ' '),
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            useKo
+                ? previewKo
+                : 'Coming soon for "${categoryKey.replaceAll('_', ' ')}".',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 13,
+              color: AppColors.taupe,
+              height: 1.7,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// "나는 어떤 사람?" 결론 card placeholder.
+/// Sprint 9 에서 SelfConclusionService 의 80~200자 paragraph 로 교체.
+class _SelfConclusionCard extends StatelessWidget {
+  const _SelfConclusionCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? '나는 어떤 사람?' : 'WHO AM I',
+            style: GoogleFonts.notoSerifKr(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'SELF CONCLUSION',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 2,
+              fontWeight: FontWeight.w400,
+              color: AppColors.taupe.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 18),
+          Container(width: 36, height: 1, color: AppColors.line),
+          const SizedBox(height: 18),
+          Text(
+            useKo
+                ? '내가 어떤 사람인지 친구한테 말하듯 한 단락으로 정리해드릴 예정이에요.\n곧 친근한 한국어로 채워드릴게요.'
+                : 'A one-paragraph friendly verdict about who you are — coming soon.',
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.85,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

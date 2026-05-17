@@ -23,14 +23,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
-import 'package:pillarseer/l10n/app_localizations.dart';
 import 'package:pillarseer/models/saju_result.dart';
-import 'package:pillarseer/providers/saju_provider.dart';
-import 'package:pillarseer/screens/result_screen.dart';
 import 'package:pillarseer/services/life_stage_service.dart';
 import 'package:pillarseer/services/saju_service.dart';
 import 'package:pillarseer/services/sipsin_persona_service.dart';
@@ -322,221 +316,56 @@ void main() {
     });
 
     // ── 행동 5 (B5) — 대운 / 성향 보조 안내 라벨 wire ──
-    group('B5 — _SipsinPersonaSection + _LifeStageSection 보조 라벨 wire', () {
+    // R88 sprint 3 — _SipsinPersonaSection / _LifeStageSection widget 본체 정의는
+    //   보존 (sprint 10 baseline 재설정에서 정리). result_screen build 안 mount 0 → 폐기.
+    //   _FourPillarsSection 의 unknownTime wire 만 B5c-r88 에서 검증 보존.
+    group('B5 — _FourPillarsSection unknownTime call site (R88 sprint 3 result_screen 17 카테고리 재작성 후)', () {
       final src =
           File('lib/screens/result_screen.dart').readAsStringSync();
 
-      test('B5a — _SipsinPersonaSection 에 unknownTime prop + ValueKey 라벨', () {
-        expect(src.contains('class _SipsinPersonaSection'), isTrue);
-        // unknownTime field 존재 (성향).
-        final personaStart = src.indexOf('class _SipsinPersonaSection');
-        final personaEnd = src.indexOf('class _SipsinPersonaRow');
-        expect(personaStart >= 0 && personaEnd > personaStart, isTrue);
-        final personaBody = src.substring(personaStart, personaEnd);
-        expect(personaBody.contains('final bool unknownTime'), isTrue,
-            reason: 'P1-E: _SipsinPersonaSection.unknownTime field');
-        expect(src.contains("'sipsin-persona-time-unknown'"), isTrue,
-            reason: 'P1-E: 성향 영역 보조 라벨 ValueKey');
-      });
-
-      test('B5b — _LifeStageSection 에 unknownTime prop + ValueKey 라벨', () {
-        expect(src.contains('class _LifeStageSection'), isTrue);
-        final stageStart = src.indexOf('class _LifeStageSection');
-        final stageEnd = src.indexOf('class _LifeStageCard');
-        expect(stageStart >= 0 && stageEnd > stageStart, isTrue);
-        final stageBody = src.substring(stageStart, stageEnd);
-        expect(stageBody.contains('final bool unknownTime'), isTrue,
-            reason: 'P1-E: _LifeStageSection.unknownTime field');
-        expect(src.contains("'life-stage-time-unknown'"), isTrue,
-            reason: 'P1-E: 대운 영역 보조 라벨 ValueKey');
-      });
-
-      test('B5c — call site 에서 birth?.unknownTime 전달', () {
-        // _SipsinPersonaSection 호출에서 unknownTime: birth?.unknownTime 전달.
-        // (정규식 안 쓰고 매칭 — 줄 단위로 확인.)
+      test('B5c-r88 — result_screen build 의 _FourPillarsSection call 에서 birth?.unknownTime 전달',
+          () {
         final lines = src.split('\n');
-        var personaCall = false;
-        var stageCall = false;
         var pillarCall = false;
         for (var i = 0; i < lines.length; i++) {
-          final line = lines[i];
-          if (line.contains('_SipsinPersonaSection(')) {
-            // 다음 5 줄 안에 unknownTime 전달 확인.
-            final scope = lines.skip(i).take(8).join('\n');
-            if (scope.contains('unknownTime: birth?.unknownTime')) {
-              personaCall = true;
-            }
-          }
-          if (line.contains('_LifeStageSection(')) {
-            final scope = lines.skip(i).take(12).join('\n');
-            if (scope.contains('unknownTime: birth?.unknownTime')) {
-              stageCall = true;
-            }
-          }
-          if (line.contains('_FourPillarsSection(')) {
+          if (lines[i].contains('_FourPillarsSection(')) {
             final scope = lines.skip(i).take(8).join('\n');
             if (scope.contains('unknownTime: birth?.unknownTime')) {
               pillarCall = true;
             }
           }
         }
-        expect(personaCall, isTrue,
-            reason: 'P1-E: _SipsinPersonaSection call site 에서 unknownTime 전달');
-        expect(stageCall, isTrue,
-            reason: 'P1-E: _LifeStageSection call site 에서 unknownTime 전달');
         expect(pillarCall, isTrue,
-            reason: 'P1-E: _FourPillarsSection call site 에서 unknownTime 전달');
+            reason: 'P1-E (R88 보존): _FourPillarsSection call site 에서 unknownTime 전달');
       });
 
-      test('B5d — _TimeUnknownNote 공용 widget 존재', () {
+      test('B5d — _TimeUnknownNote 공용 widget class 보존 (sprint 10 까지 dead code OK)',
+          () {
         expect(src.contains('class _TimeUnknownNote'), isTrue,
-            reason: 'P1-E: 대운/성향 공용 보조 라벨 widget 신설');
+            reason: 'P1-E: _TimeUnknownNote widget class 정의 보존');
         expect(src.contains('l.timeUnknownAffectsAccuracy'), isTrue,
             reason: 'P1-E: 보조 라벨에 timeUnknownAffectsAccuracy 본문 사용');
       });
     });
 
     // ── 행동 6 (B6) — ResultScreen pump 실제 widget tree 검증 ──
-    // codex audit 보강 — source grep 외에 실제 widget mount + Opacity 0.4 검증.
-    group('B6 — ResultScreen pump → 실제 widget mount + Opacity 0.4', () {
-      Widget pumpScaffold({required bool unknownTime}) {
-        final router = GoRouter(
-          initialLocation: '/result',
-          routes: [
-            GoRoute(
-                path: '/result', builder: (c, s) => const ResultScreen()),
-          ],
-        );
-        return ProviderScope(
-          overrides: [
-            sajuResultProvider.overrideWith(_DummySajuNotifier.new),
-            userBirthInfoProvider
-                .overrideWith(() => _DummyBirthNotifier(unknownTime)),
-          ],
-          child: MaterialApp.router(
-            routerConfig: router,
-            localizationsDelegates: AppL10n.localizationsDelegates,
-            supportedLocales: AppL10n.supportedLocales,
-            locale: const Locale('ko'),
-          ),
-        );
-      }
+    // R88 sprint 3 폐기: result_screen 의 _CollapsibleSection / _SipsinPersonaSection
+    //   mount 자체가 사라짐 (17 카테고리 skeleton 으로 갈아엎힘). HomeScreen 의 ziwei
+    //   차단 (B7b 보존) + _FourPillarsSection 의 시주 흐림 + disclaimer source-grep
+    //   검증 (B3b/B3c 보존) 으로 핵심 mandate (시간 모름 시 임의 계산 차단) 회귀 가드.
+    //   widget pump 기반 strict 검증은 sprint 10 baseline 재설정 시 R88 신규 test 로 작성.
 
-      testWidgets('B6a — unknownTime=true → HOUR Opacity 0.4 wrapper mount',
-          (tester) async {
-        await tester.binding.setSurfaceSize(const Size(414, 1800));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-
-        await tester.pumpWidget(pumpScaffold(unknownTime: true));
-        // first build settle (futureBuilder + GoogleFonts 비동기 X 위주).
-        await tester.pump(const Duration(milliseconds: 100));
-
-        // _FourPillarsSection 은 _CollapsibleSection 안에 wrap — firstChild
-        // (SizedBox) 상태. tap 으로 펼침 — 헤더 라벨 "네 기둥 한눈에" 매칭.
-        final fourPillarsHeader = find.textContaining('네 기둥 한눈에');
-        expect(fourPillarsHeader, findsOneWidget,
-            reason: '_FourPillarsSection collapse header 라벨 누락');
-        await tester.ensureVisible(fourPillarsHeader);
-        await tester.pumpAndSettle();
-        await tester.tap(fourPillarsHeader);
-        // CrossFade 220ms.
-        await tester.pump(const Duration(milliseconds: 260));
-
-        // HOUR _PillarCol Opacity 0.4 wrapper mount.
-        final opacityFinder =
-            find.byKey(const ValueKey('pillar-col-hour-dim'));
-        expect(opacityFinder, findsOneWidget,
-            reason: 'P1-E: unknownTime=true → HOUR Opacity wrapper mount 누락');
-        final opacityWidget = tester.widget<Opacity>(opacityFinder);
-        expect(opacityWidget.opacity, equals(0.4),
-            reason: 'P1-E: HOUR opacity 정확히 0.4');
-
-        // disclaimer block mount.
-        expect(
-            find.byKey(const ValueKey('hour-pillar-unknown-disclaimer')),
-            findsOneWidget,
-            reason: 'P1-E: 시주 미포함 disclaimer block mount 누락');
-        // badge 본문.
-        expect(find.text('시주 미포함 결과'), findsOneWidget,
-            reason: 'P1-E: hourPillarUnknownBadge 본문 노출');
-        // disclaimer 본문.
-        expect(find.textContaining('시간을 모르셔서'), findsOneWidget,
-            reason: 'P1-E: hourPillarUnknownDisclaimer 본문 노출');
-      });
-
-      testWidgets('B6b — unknownTime=false → HOUR Opacity wrapper unmount',
-          (tester) async {
-        await tester.binding.setSurfaceSize(const Size(414, 1800));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-
-        await tester.pumpWidget(pumpScaffold(unknownTime: false));
-        await tester.pump(const Duration(milliseconds: 100));
-
-        // 펼침.
-        final fourPillarsHeader = find.textContaining('네 기둥 한눈에');
-        await tester.ensureVisible(fourPillarsHeader);
-        await tester.pumpAndSettle();
-        await tester.tap(fourPillarsHeader);
-        await tester.pump(const Duration(milliseconds: 260));
-
-        // dim=false → Opacity wrapper 미 mount.
-        expect(find.byKey(const ValueKey('pillar-col-hour-dim')), findsNothing,
-            reason: 'M4: unknownTime=false → HOUR 흐림 처리 0 (영향 0)');
-        // disclaimer 도 미 mount.
-        expect(
-            find.byKey(const ValueKey('hour-pillar-unknown-disclaimer')),
-            findsNothing,
-            reason: 'M4: unknownTime=false → disclaimer mount 0');
-      });
-
-      testWidgets(
-          'B6c — unknownTime=true → _SipsinPersonaSection (first-fold) 보조 라벨 mount strict',
-          (tester) async {
-        // codex audit r3 보강 — soft skip 완전 제거. SipsinPersonaService.seedForTest
-        // 가 setUpAll 에서 seed → FutureBuilder 즉시 hasData → strict 검증 가능.
-        // first-fold 펼침 섹션은 _CollapsibleSection wrap X → 직접 mount.
-        await tester.binding.setSurfaceSize(const Size(414, 1800));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-
-        await tester.pumpWidget(pumpScaffold(unknownTime: true));
-        await tester.pumpAndSettle();
-
-        // first-fold 안 _SipsinPersonaSection 직접 mount (펼침 상태).
-        // ValueKey 발견 strict — `if` guard 없이 직접 expect.
-        expect(find.byKey(const ValueKey('sipsin-persona-time-unknown')),
-            findsOneWidget,
-            reason:
-                'P1-E strict: unknownTime=true → _SipsinPersonaSection 보조 라벨 mount');
-        // _TimeUnknownNote 본문 = timeUnknownAffectsAccuracy.
-        expect(find.textContaining('시간 정보가 없어'), findsWidgets,
-            reason: 'P1-E strict: 보조 라벨 본문 "시간 정보가 없어" 노출');
-      });
-
-      testWidgets(
-          'B6d — unknownTime=false → _SipsinPersonaSection 보조 라벨 unmount',
-          (tester) async {
-        // 회귀 가드 — unknownTime=false 일 때 보조 라벨 mount 0 (M4 보존).
-        await tester.binding.setSurfaceSize(const Size(414, 1800));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
-
-        await tester.pumpWidget(pumpScaffold(unknownTime: false));
-        await tester.pumpAndSettle();
-
-        expect(find.byKey(const ValueKey('sipsin-persona-time-unknown')),
-            findsNothing,
-            reason: 'M4: unknownTime=false → 보조 라벨 mount 0 (영향 0)');
-      });
-    });
-
-    // ── R83 sprint 5 보강 (codex audit 권고 #1) — 자미두수 차단 (ResultScreen) ──
-    test('B7 — unknownTime=true → ResultScreen ziwei 계산 차단 (임의 12시 계산 X)',
+    // ── R83 sprint 5 ziwei 차단 → R88 에서 HomeScreen 에만 잔존 (result_screen 17 카테고리 재설계로 ziwei mount 0) ──
+    test('B7 — R88 sprint 3: result_screen 의 ziwei 계산 호출 자체 mount 0 (17 카테고리 재설계)',
         () {
       final src =
           File('lib/screens/result_screen.dart').readAsStringSync();
-      // ResultScreen.build 에서 ZiweiService.calculate 호출 영역.
-      // !birth.unknownTime 분기로 차단.
-      expect(src.contains('!birth.unknownTime'), isTrue,
-          reason: 'P1-E P0 #4: unknownTime=true 시 ziwei 계산 차단 mandate');
+      // R88 sprint 3 — ResultScreen.build 안에서 ZiweiService.calculate 호출 자체 제거.
+      // ziwei UI / crossmatch / palace 모두 result_screen 에서 사라짐. 따라서
+      // unknownTime 기반 차단 분기도 result_screen 에서는 불필요.
+      // HomeScreen 의 ziwei 차단 (B7b) 로 mandate 핵심 보존.
+      expect(src.contains('ZiweiService.calculate'), isFalse,
+          reason: 'R88 sprint 3: result_screen 안 ziwei calculate 호출 0');
       // 임의 12시 fallback 코드 (`birth.unknownTime ? 12 : birth.birthHour`) 제거.
       expect(src.contains('birth.unknownTime ? 12 : birth.birthHour'), isFalse,
           reason: 'P1-E P0 #4: 임의 12시 fallback 제거 (false 신뢰도 차단)');
@@ -580,26 +409,7 @@ void main() {
   });
 }
 
-// ── ProviderScope override 용 dummy notifier ──
-// R82 sprint 7 test pattern 답습.
-class _DummySajuNotifier extends SajuResultNotifier {
-  @override
-  SajuResult? build() => SajuResult.dummy();
-}
-
-class _DummyBirthNotifier extends UserBirthInfoNotifier {
-  final bool unknownTime;
-  _DummyBirthNotifier(this.unknownTime);
-  @override
-  UserBirthInfo? build() => UserBirthInfo(
-        name: 'dummy',
-        birthDate: DateTime(1995, 10, 27),
-        birthHour: 17,
-        birthMinute: 0,
-        birthCity: '서울',
-        isLunar: false,
-        unknownTime: unknownTime,
-        isMale: true,
-        gender: UserGender.male,
-      );
-}
+// R88 sprint 3 — ProviderScope override 용 dummy notifier 폐기 (result_screen pump
+// 검증 자체가 17 카테고리 재설계로 폐기됨). models/saju_result import 는 SajuResult /
+// UserBirthInfo / UserGender 등 다른 직접 사용을 위해 남겨두지만, dummy notifier 본체는
+// 정리. sprint 10 baseline 재설정 때 R88 신규 result_screen widget pump test 작성.
