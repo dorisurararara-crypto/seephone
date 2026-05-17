@@ -102,29 +102,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AppBarBlock(),
-              // ── First-fold (Round 77 sprint 6 — MZ 페르소나 친밀도) ──
-              // first-fold = OracleHero + TodayEvent 둘만. 닉네임 인사/차트 5종은 deep dive 강등.
+              // ── First-fold (R88 sprint 1 — 사용자 mandate 순서 재배치) ──
+              // 1. 오늘 한 줄 (_OracleHero) — 진입 첫 5초 결정적 한 줄.
+              // 2. 오늘 사주 총평 (TodayDeepReadingSection) — 6줄 가량 본문 + actions.
+              // 3. 오늘 이렇게 해 봐 (_CategoryGuides) — 4영역 가이드.
               _OracleHero(
                 dayPillarChunGan: saju.dayPillar.chunGan,
                 dayEnergy: classifyDayEnergy(fortune.totalScore),
                 ctx: SajuContext.from(saju, today: DateTime.now()),
               ),
-              // Round 76 sprint 5 — 오늘 사건 가능성 카드. CTA → /result 의 상세 섹션.
-              _TodayEventCard(
-                reading: TodayEventService.build(
+              TodayDeepReadingSection(
+                reading: TodayDeepService.build(
                   userDayStem: saju.dayPillar.chunGan,
                   userDayBranch: saju.dayPillar.jiJi,
                   userMonthBranch: saju.monthPillar.jiJi,
+                  userDominantEl: saju.elements.dominant,
+                  userDeficitEl: saju.elements.deficit,
                   todayPillar: fortune.dayPillar,
                   todayScore: fortune.totalScore,
+                  ctx: SajuContext.from(saju, today: DateTime.now()),
                 ),
-                day60ji: saju.dayPillar.text,
-                userDayStem: saju.dayPillar.chunGan,
-                todayPillar: fortune.dayPillar,
               ),
+              _CategoryGuides(fortune: fortune),
               // ── Deep dive (collapsible) — 친구 인사 + 차트 5종 + 일진 + 4영역 + 행운 표 ──
+              // R88 sprint 1: 오늘 사건 가능성 카드 + 4영역 한눈에 + 행운 표 등 기존 위젯
+              // 순서는 그대로 보존. TodayDeepReading 과 CategoryGuides 만 first-fold 로 승격.
               _DeepDiveSection(
                 children: [
+                  // R76 sprint 5 — 오늘 사건 가능성 카드 (deep dive 로 강등 in R88 S1).
+                  _TodayEventCard(
+                    reading: TodayEventService.build(
+                      userDayStem: saju.dayPillar.chunGan,
+                      userDayBranch: saju.dayPillar.jiJi,
+                      userMonthBranch: saju.monthPillar.jiJi,
+                      todayPillar: fortune.dayPillar,
+                      todayScore: fortune.totalScore,
+                    ),
+                    day60ji: saju.dayPillar.text,
+                    userDayStem: saju.dayPillar.chunGan,
+                    todayPillar: fortune.dayPillar,
+                  ),
                   if (sixAxis != null) _SixAxisCard(score: sixAxis),
                   _FiveDayTrendCard(points: fiveDay),
                   _HourlyFlowSection(saju: saju),
@@ -138,20 +155,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   if (chips != null) _LuckyChipsCard(chips: chips),
                   _StreakLine(),
-                  TodayDeepReadingSection(
-                    reading: TodayDeepService.build(
-                      userDayStem: saju.dayPillar.chunGan,
-                      userDayBranch: saju.dayPillar.jiJi,
-                      userMonthBranch: saju.monthPillar.jiJi,
-                      userDominantEl: saju.elements.dominant,
-                      userDeficitEl: saju.elements.deficit,
-                      todayPillar: fortune.dayPillar,
-                      todayScore: fortune.totalScore,
-                      ctx: SajuContext.from(saju, today: DateTime.now()),
-                    ),
-                  ),
                   _CategorySection(fortune: fortune),
-                  _CategoryGuides(fortune: fortune),
                   _LuckySection(fortune: fortune),
                 ],
               ),
