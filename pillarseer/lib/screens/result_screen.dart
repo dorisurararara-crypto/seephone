@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
+import '../services/life_overview_service.dart';
 import '../services/gong_mang_service.dart';
 import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
@@ -228,8 +229,8 @@ class ResultScreen extends ConsumerWidget {
             // 2. FIVE ELEMENTS — 5행 차트 (R75 골든 16/21/17/41/4 보존).
             _FiveElementsSection(
                 result: result, reading: reading, useKo: useKo),
-            // 3. LIFE OVERVIEW — "내 사주 큰 그림" placeholder (sprint 8 에서 LifeOverviewService wire).
-            const _LifeOverviewHero(),
+            // 3. LIFE OVERVIEW — "내 사주 큰 그림" (R88 sprint 8 LifeOverviewService wire).
+            _LifeOverviewHero(result: result, isMale: birth?.isMale ?? true),
             // 4. 17 카테고리 — placeholder ListView (sprint 5~7 에서 LifeParagraphService wire).
             //    conclusion_self 는 17 카테고리 안 마지막 entry 가 아니라 별도 결론 card 로 분리.
             ...kR88LifeCategories
@@ -254,10 +255,38 @@ class ResultScreen extends ConsumerWidget {
 
 // ──────────── R88 sprint 3 — 신규 widget (sprint 5~9 에서 본문 wire) ────────────
 
-/// "내 사주 큰 그림" hero card placeholder.
-/// Sprint 8 에서 LifeOverviewService 의 600~900자 essay 로 교체.
-class _LifeOverviewHero extends StatelessWidget {
-  const _LifeOverviewHero();
+/// "내 사주 큰 그림" hero card.
+/// R88 sprint 8 — LifeOverviewService 의 anchor 10 조합 essay.
+/// Stateful + initState 의 _future 캐시로 rebuild 시 재호출 X.
+class _LifeOverviewHero extends StatefulWidget {
+  final SajuResult result;
+  final bool isMale;
+  const _LifeOverviewHero({required this.result, required this.isMale});
+
+  @override
+  State<_LifeOverviewHero> createState() => _LifeOverviewHeroState();
+}
+
+class _LifeOverviewHeroState extends State<_LifeOverviewHero> {
+  late Future<String> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future =
+        LifeOverviewService.compose(widget.result, isMale: widget.isMale);
+  }
+
+  @override
+  void didUpdateWidget(covariant _LifeOverviewHero oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 사주 result / 성별 변경 시에만 future 갱신.
+    if (oldWidget.result != widget.result ||
+        oldWidget.isMale != widget.isMale) {
+      _future =
+          LifeOverviewService.compose(widget.result, isMale: widget.isMale);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -295,15 +324,30 @@ class _LifeOverviewHero extends StatelessWidget {
           const SizedBox(height: 18),
           Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 18),
-          Text(
-            useKo
-                ? '태어난 날의 느낌과 내 안에 많은 에너지, 인생 흐름을 한 단락으로 묶어\n친근하게 풀어드릴 예정이에요. 곧 채워질 본문이라 잠깐만 기다려 줘요.'
-                : 'A friendly one-paragraph life essay woven from the feel of your birthday — coming soon.',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 14,
-              color: AppColors.ink,
-              height: 1.85,
-            ),
+          FutureBuilder<String>(
+            future: _future,
+            builder: (ctx, snap) {
+              final String ko;
+              if (snap.hasError) {
+                // asset load 실패 시 명시적 fallback (loading 문구와 구분).
+                ko = '본인 사주 큰 그림 본문을 잠깐 못 불러왔어요. 앱을 다시 켜주면 다시 시도해요.';
+              } else if (snap.hasData) {
+                ko = snap.data!;
+              } else {
+                ko = '한 줄 한 줄 모아 본인 사주 큰 그림을 그려드릴게요.';
+              }
+              final body = useKo
+                  ? ko
+                  : 'A single-paragraph life essay — please switch to Korean for the full picture.';
+              return Text(
+                body,
+                style: GoogleFonts.notoSansKr(
+                  fontSize: 14,
+                  color: AppColors.ink,
+                  height: 1.85,
+                ),
+              );
+            },
           ),
         ],
       ),
