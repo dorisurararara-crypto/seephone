@@ -145,11 +145,36 @@ const List<({String key, String titleKo, String previewKo})>
   ),
 ];
 
-class ResultScreen extends ConsumerWidget {
+class ResultScreen extends ConsumerStatefulWidget {
   const ResultScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends ConsumerState<ResultScreen> {
+  // R89 sprint 3 — 17 카테고리 chip nav anchor 16 개 (conclusion_self 제외).
+  // chip tap → Scrollable.ensureVisible(anchor.currentContext) 로 부드럽게 점프.
+  final Map<String, GlobalKey> _anchors = {
+    for (final cat in kR88LifeCategories)
+      if (cat.key != 'conclusion_self') cat.key: GlobalKey(),
+  };
+
+  void _scrollTo(String categoryKey) {
+    final key = _anchors[categoryKey];
+    final ctx = key?.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 320),
+        curve: Curves.easeOutCubic,
+        alignment: 0.05,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l = AppL10n.of(context);
     // Round 77 sprint 8 — SajuResult.dummy() fallback 제거. 사주 null 시 empty state CTA.
     final resultOrNull = ref.watch(sajuResultProvider);
@@ -200,27 +225,7 @@ class ResultScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // R88 sprint 3 — 17 카테고리 인생 분류 skeleton.
-            //
-            // 사용자 mandate verbatim ("원래 우리 앱에 있던 나머지 것들은 전부 없애줘.
-            // 운세의신 인생 분류 17 카테고리로 다 갈아엎어"):
-            //   - 8 deep myeongli widget 제거 (build 안에서 mount 0):
-            //     _DayMasterHero / _SipsinPersonaSection / _LifeStageSection /
-            //     _AdditionalLifeSection / _ChartAttributesSection /
-            //     _ThreeStrokesSection / _ReadingSection / _CareerSection /
-            //     _WealthStrategySection / _ForYouTodaySection / _CrossmatchSection /
-            //     _ZiweiPalaceGroup / _GroupSection / _GyeokgukBlock / _YongsinBlock /
-            //     _StrengthBlock / _GongMangBlock / _ShinsaBlock / _TwelveUnsungBlock /
-            //     _HapchungBlock / _CalculationBasisBody / _CollapsibleSection /
-            //     _AccordionRow / _ProHooksSection — 모두 build 안 mount 0.
-            //   - 보존 widget: _FourPillarsSection (4기둥 8글자) /
-            //     _FiveElementsSection (5행 차트 R75 골든 보존).
-            //   - 신규 widget: _LifeOverviewHero (큰 그림 placeholder) /
-            //     _CategorySectionCard (17 카테고리 — sprint 5~7 에서 LifeParagraphService
-            //     wire) / _SelfConclusionCard (나는 어떤 사람? placeholder).
-            //
-            // service-level raw 계산 코드 (lib/services/*.dart) 는 수정 X — 다른 미래
-            // 화면 (sprint 8 의 LifeOverviewService 가 5행/십신/일주 anchor 사용) 이
-            // 참조 가능. unused widget class 들도 sprint 10 baseline 재설정에서 정리.
+            // R89 sprint 3 — 상단 chip nav 추가 (16 카테고리, conclusion_self 별도).
 
             // 1. FOUR PILLARS — 4기둥 8글자 (R83 P1-E 시간 모름 처리 보존).
             _FourPillarsSection(
@@ -231,13 +236,16 @@ class ResultScreen extends ConsumerWidget {
             // 2. FIVE ELEMENTS — 5행 차트 (R75 골든 16/21/17/41/4 보존).
             _FiveElementsSection(
                 result: result, reading: reading, useKo: useKo),
-            // 3. LIFE OVERVIEW — "내 사주 큰 그림" (R88 sprint 8 LifeOverviewService wire).
+            // 3. R89 sprint 3 — CHIP NAV: 16 카테고리 점프 entry.
+            _CategoryChipNav(onTap: _scrollTo),
+            // 4. LIFE OVERVIEW — "내 사주 큰 그림" (R88 sprint 8 LifeOverviewService wire).
             _LifeOverviewHero(result: result, isMale: birth?.isMale ?? true),
-            // 4. 17 카테고리 — R88 sprint 9 에서 LifeParagraphService wire.
+            // 5. 17 카테고리 — R88 sprint 9 에서 LifeParagraphService wire.
             //    conclusion_self 는 17 카테고리 안 마지막 entry 가 아니라 별도 결론 card 로 분리.
             ...kR88LifeCategories
                 .where((cat) => cat.key != 'conclusion_self')
                 .map((cat) => _CategorySectionCard(
+                      anchorKey: _anchors[cat.key],
                       categoryKey: cat.key,
                       titleKo: cat.titleKo,
                       previewKo: cat.previewKo,
@@ -245,14 +253,92 @@ class ResultScreen extends ConsumerWidget {
                       isMale: birth?.isMale ?? true,
                       useKo: useKo,
                     )),
-            // 5. SELF CONCLUSION — "나는 어떤 사람?" (R88 sprint 9 SelfConclusionService wire).
+            // 6. SELF CONCLUSION — "나는 어떤 사람?" (R88 sprint 9 SelfConclusionService wire).
             _SelfConclusionCard(result: result, isMale: birth?.isMale ?? true),
-            // 13. Footer — KASI source.
+            // 7. Footer — KASI source.
             _AesopFooter(),
           ],
         ),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 1),
+    );
+  }
+}
+
+/// R89 sprint 3 — 17 카테고리 chip nav (상단 sticky 1줄).
+///
+/// Aesop minimal 톤:
+///   - 1px border (0.5px), letterSpacing 1.5, GoogleFonts.notoSansKr
+///   - 색 fill 금지 (underline 없이 통일된 minimal chip)
+///   - chip horizontal scroll, label 한글 17 카테고리 (conclusion_self 제외 16).
+///   - chip tap → Scrollable.ensureVisible (320ms easeOutCubic).
+class _CategoryChipNav extends StatelessWidget {
+  final void Function(String categoryKey) onTap;
+  const _CategoryChipNav({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final items = kR88LifeCategories
+        .where((c) => c.key != 'conclusion_self')
+        .toList();
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(
+          top: BorderSide(color: AppColors.line, width: 1),
+          bottom: BorderSide(color: AppColors.line, width: 1),
+        ),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            for (final cat in items)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: _LifeCategoryChip(
+                  label: cat.titleKo,
+                  onTap: () => onTap(cat.key),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// R89 sprint 3 — 단일 chip widget. Aesop minimal: 0.5px border + 색 fill 없음.
+class _LifeCategoryChip extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  const _LifeCategoryChip({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(99),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.bg,
+          border: Border.all(color: AppColors.line, width: 0.5),
+          borderRadius: BorderRadius.circular(99),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.5,
+            color: AppColors.ink,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -362,7 +448,9 @@ class _LifeOverviewHeroState extends State<_LifeOverviewHero> {
 /// 17 카테고리 중 한 영역 section card.
 /// R88 sprint 9 — LifeParagraphService 의 paragraph (일간 fallback 적용) 표시.
 /// DB miss 시 previewKo placeholder fallback.
+/// R89 sprint 3 — anchorKey: chip nav 점프 anchor (외부 ResultScreen 에서 주입).
 class _CategorySectionCard extends StatefulWidget {
+  final GlobalKey? anchorKey;
   final String categoryKey;
   final String titleKo;
   final String previewKo;
@@ -370,6 +458,7 @@ class _CategorySectionCard extends StatefulWidget {
   final bool isMale;
   final bool useKo;
   const _CategorySectionCard({
+    this.anchorKey,
     required this.categoryKey,
     required this.titleKo,
     required this.previewKo,
@@ -453,6 +542,7 @@ class _CategorySectionCardState extends State<_CategorySectionCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: widget.anchorKey,
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
       decoration: const BoxDecoration(

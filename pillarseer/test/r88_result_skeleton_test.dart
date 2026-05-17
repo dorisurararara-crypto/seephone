@@ -23,11 +23,19 @@ void main() {
     final src = File('lib/screens/result_screen.dart').readAsStringSync();
 
     /// ResultScreen.build() 슬라이스.
+    /// R88 = `class ResultScreen extends ConsumerWidget`,
+    /// R89 sprint 3 = `class ResultScreen extends ConsumerStatefulWidget` + `_ResultScreenState`.
     String buildScope() {
-      final classIdx = src.indexOf('class ResultScreen extends ConsumerWidget');
-      expect(classIdx, greaterThan(-1), reason: 'ResultScreen class 미발견');
+      // R89: stateful 변환 — _ResultScreenState.build() 사용.
+      var classIdx = src.indexOf('class _ResultScreenState extends');
+      if (classIdx < 0) {
+        // R88 fallback (정상 작동 보장).
+        classIdx = src.indexOf('class ResultScreen extends ConsumerWidget');
+      }
+      expect(classIdx, greaterThan(-1),
+          reason: 'ResultScreen build host class 미발견');
       final buildIdx = src.indexOf('Widget build(', classIdx);
-      expect(buildIdx, greaterThan(-1), reason: 'ResultScreen.build 미발견');
+      expect(buildIdx, greaterThan(-1), reason: 'build() 미발견');
       // 다음 `// ────────────` 또는 `}` 단독 class close 까지 잘라냄.
       final end = src.indexOf('// ──────────── R88 sprint 3', buildIdx);
       return src.substring(buildIdx, end > 0 ? end : src.length);
