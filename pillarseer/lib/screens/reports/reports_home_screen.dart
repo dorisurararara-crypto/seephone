@@ -15,9 +15,19 @@ class ReportsHomeScreen extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    // R85 — 메뉴 피로 정리. 토정비결/택일/셀럽 일주 탐색은 숨기고, 사용자가
-    // 바로 이해할 수 있는 4개만 노출한다.
+    // R87 sprint 1 — 사용자 mandate: K-POP 케미가 이 앱의 1순위 컨셉이라
+    // 더보기 탭 최상위 + hero treatment (배지 + accent 강조 + 큰 사이즈).
+    // 기존 '궁합 보기'/'신년운세'/'꿈 풀이'는 케미 아래로 강등.
     final cards = <_Card>[
+      _Card(
+        eyebrow: useKo ? '팬심 1순위 · FAN PICK' : 'FAN PICK · Top',
+        title: useKo ? '최애와 케미' : 'Bias Chemistry',
+        subtitle: useKo
+            ? 'K-POP 아이돌과 내 사주의 케미를 점수로 보고 친구한테 자랑하세요.'
+            : 'Score your K-POP idol chemistry and share it with friends.',
+        route: '/reports/kpop-compat',
+        size: _CardSize.hero,
+      ),
       _Card(
         eyebrow: useKo ? '연애 · 인간관계' : 'Love & people',
         title: useKo ? '궁합 보기' : 'Compatibility',
@@ -42,14 +52,6 @@ class ReportsHomeScreen extends StatelessWidget {
             ? '기억나는 꿈이 신경 쓰일 때만 가볍게 찾아봐요.'
             : 'Look up a dream when it stays on your mind.',
         route: '/reports/dream',
-      ),
-      _Card(
-        eyebrow: useKo ? '팬심 재미' : 'For fun',
-        title: useKo ? '최애와 케미' : 'Bias Chemistry',
-        subtitle: useKo
-            ? 'K-POP·한국 셀럽과 내 사주의 케미를 비교해요.'
-            : 'Compare your saju chemistry with K-pop and Korean celebrities.',
-        route: '/reports/kpop-compat',
       ),
     ];
 
@@ -144,7 +146,11 @@ class ReportsHomeScreen extends StatelessWidget {
               ),
             ),
             ...cards.asMap().entries.map(
-              (e) => _CardRow(card: e.value, highlight: e.key == 0),
+              (e) => _CardRow(
+                card: e.value,
+                highlight: e.key == 0,
+                useKo: useKo,
+              ),
             ),
             const SizedBox(height: 32),
           ],
@@ -155,7 +161,7 @@ class ReportsHomeScreen extends StatelessWidget {
   }
 }
 
-enum _CardSize { normal, large }
+enum _CardSize { normal, large, hero }
 
 class _Card {
   final String eyebrow;
@@ -175,24 +181,36 @@ class _Card {
 class _CardRow extends StatelessWidget {
   final _Card card;
   final bool highlight;
-  const _CardRow({required this.card, this.highlight = false});
+  final bool useKo;
+  const _CardRow({
+    required this.card,
+    this.highlight = false,
+    this.useKo = true,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isHero = card.size == _CardSize.hero;
     final isLarge = card.size == _CardSize.large;
+    final padV = isHero ? 34.0 : (isLarge ? 28.0 : 22.0);
+    final titleSize = isHero ? 26.0 : (isLarge ? 22.0 : 17.0);
     return InkWell(
       onTap: () => context.go(card.route),
       child: Container(
-        padding: EdgeInsets.fromLTRB(
-          24,
-          isLarge ? 28 : 22,
-          24,
-          isLarge ? 28 : 22,
-        ),
+        key: Key('reports_home_card_${card.route}'),
+        padding: EdgeInsets.fromLTRB(24, padV, 24, padV),
         decoration: BoxDecoration(
-          color: highlight ? AppColors.paper : AppColors.bg,
-          border: const Border(
-            top: BorderSide(color: AppColors.line, width: 1),
+          color: isHero
+              ? AppColors.accent.withValues(alpha: 0.06)
+              : (highlight ? AppColors.paper : AppColors.bg),
+          border: Border(
+            top: BorderSide(
+              color: isHero ? AppColors.accent : AppColors.line,
+              width: isHero ? 1.5 : 1,
+            ),
+            bottom: isHero
+                ? const BorderSide(color: AppColors.accent, width: 1.5)
+                : BorderSide.none,
           ),
         ),
         child: Row(
@@ -202,11 +220,39 @@ class _CardRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // R87 sprint 1 — hero 카드에만 "팬심 1순위" badge.
+                  // 사용자 mandate: K-POP 케미가 앱의 1순위 컨셉이라
+                  // 다른 카드들 위로 시각적으로 돋보여야 함.
+                  if (isHero) ...[
+                    Container(
+                      key: const Key('reports_home_hero_badge'),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 9,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.accent,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      child: Text(
+                        useKo ? '팬심 1순위 · TOP PICK' : 'TOP PICK · 팬',
+                        style: GoogleFonts.inter(
+                          fontSize: 9,
+                          letterSpacing: 3,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.bg,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                  ],
                   Text(
                     card.eyebrow,
                     style: GoogleFonts.notoSansKr(
-                      fontSize: 11,
-                      color: AppColors.taupe,
+                      fontSize: isHero ? 11.5 : 11,
+                      fontWeight: isHero ? FontWeight.w500 : FontWeight.w400,
+                      color: isHero ? AppColors.accent : AppColors.taupe,
+                      letterSpacing: isHero ? 0.4 : 0,
                       height: 1.4,
                     ),
                   ),
@@ -217,8 +263,9 @@ class _CardRow extends StatelessWidget {
                         child: Text(
                           card.title,
                           style: GoogleFonts.notoSerifKr(
-                            fontSize: isLarge ? 22 : 17,
-                            fontWeight: FontWeight.w400,
+                            fontSize: titleSize,
+                            fontWeight:
+                                isHero ? FontWeight.w500 : FontWeight.w400,
                             color: AppColors.ink,
                             height: 1.25,
                           ),
@@ -230,7 +277,7 @@ class _CardRow extends StatelessWidget {
                   Text(
                     card.subtitle,
                     style: GoogleFonts.notoSansKr(
-                      fontSize: 13,
+                      fontSize: isHero ? 13.5 : 13,
                       color: AppColors.inkLight,
                       height: 1.7,
                     ),
@@ -243,7 +290,11 @@ class _CardRow extends StatelessWidget {
               padding: const EdgeInsets.only(top: 4),
               child: Text(
                 '→',
-                style: GoogleFonts.inter(fontSize: 18, color: AppColors.taupe),
+                style: GoogleFonts.inter(
+                  fontSize: isHero ? 22 : 18,
+                  fontWeight: isHero ? FontWeight.w600 : FontWeight.w400,
+                  color: isHero ? AppColors.accent : AppColors.taupe,
+                ),
               ),
             ),
           ],

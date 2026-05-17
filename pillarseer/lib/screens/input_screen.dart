@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../data/world_cities.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import '../services/saju_service.dart';
@@ -45,6 +46,11 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   // null 이면 _gender == Gender.other 여도 silent male 처리 0 — 제출 가드가 다시 모달 띄움.
   bool? _calculationIsMaleForOther;
   bool _isLoading = false;
+  // R87 sprint 3 — 해외 출생지 자동완성. _cityController.text 입력 시
+  // WorldCities.search + 한국 도시 핵심 list union 결과를 chip 으로 노출.
+  // _citySelectedLabel 와 controller.text 가 다르면 query 모드.
+  String _cityQuery = '';
+  String? _citySelectedLabel;
 
   @override
   void dispose() {
@@ -388,7 +394,38 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                       ),
                       cursorColor: AppColors.ink,
                       decoration: _underlineDeco(hint: l.inputBirthCityHelper),
+                      onChanged: (v) {
+                        setState(() {
+                          _cityQuery = v;
+                          if (_citySelectedLabel != null &&
+                              v != _citySelectedLabel) {
+                            _citySelectedLabel = null;
+                          }
+                        });
+                      },
                     ),
+                    // R87 sprint 3 — 자동완성 chip bar. 한국·해외 도시 union.
+                    // tap 으로 controller.text 채움 + 국가 helper 표시.
+                    if (_cityQuery.trim().isNotEmpty &&
+                        _citySelectedLabel != _cityController.text) ...[
+                      const SizedBox(height: 10),
+                      _CitySuggestionBar(
+                        query: _cityQuery,
+                        useKo: Localizations.maybeLocaleOf(context)
+                                    ?.languageCode ==
+                                'ko' ||
+                            Localizations.maybeLocaleOf(context) == null,
+                        onPick: (label) {
+                          setState(() {
+                            _cityController.text = label;
+                            _citySelectedLabel = label;
+                            _cityQuery = label;
+                          });
+                          // 키보드 dismiss 위해 unfocus.
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                      ),
+                    ],
                     const SizedBox(height: 32),
                     _SegmentPicker(
                       label: l.inputCalendar,
@@ -1208,6 +1245,142 @@ class _OtherGenderCalcBadge extends StatelessWidget {
             Icon(Icons.edit_outlined,
                 size: 14, color: AppColors.ink.withValues(alpha: 0.7)),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// R87 sprint 3 — 출생지 자동완성 chip bar.
+/// 한국 핵심 도시 12개 + WorldCities (해외 ~150) union 검색.
+/// 한국 도시: 단순 label (예: "서울"). 해외 도시: "도쿄 · 일본" label.
+class _CitySuggestionBar extends StatelessWidget {
+  final String query;
+  final bool useKo;
+  final void Function(String label) onPick;
+  const _CitySuggestionBar({
+    required this.query,
+    required this.useKo,
+    required this.onPick,
+  });
+
+  // 한국 핵심 도시 (검색 union). manseryeok_service._cityLongitudes 가
+  // 진태양시 보정에 사용하는 한국 도시 풀과 겹침.
+  static const List<_KrCity> _krCities = [
+    _KrCity('서울', 'Seoul'),
+    _KrCity('인천', 'Incheon'),
+    _KrCity('부산', 'Busan'),
+    _KrCity('대구', 'Daegu'),
+    _KrCity('대전', 'Daejeon'),
+    _KrCity('광주', 'Gwangju'),
+    _KrCity('울산', 'Ulsan'),
+    _KrCity('수원', 'Suwon'),
+    _KrCity('창원', 'Changwon'),
+    _KrCity('제주', 'Jeju'),
+    _KrCity('전주', 'Jeonju'),
+    _KrCity('청주', 'Cheongju'),
+    _KrCity('포항', 'Pohang'),
+    _KrCity('춘천', 'Chuncheon'),
+    _KrCity('강릉', 'Gangneung'),
+    _KrCity('천안', 'Cheonan'),
+    _KrCity('성남', 'Seongnam'),
+    _KrCity('고양', 'Goyang'),
+    _KrCity('안산', 'Ansan'),
+    _KrCity('부천', 'Bucheon'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final q = query.trim().toLowerCase();
+    final krHits = _krCities
+        .where((c) =>
+            c.ko.toLowerCase().contains(q) ||
+            c.en.toLowerCase().contains(q))
+        .take(6)
+        .toList();
+    final worldHits = WorldCities.search(query, limit: 8);
+    if (krHits.isEmpty && worldHits.isEmpty) {
+      return Padding(
+        key: const Key('city_suggestion_empty'),
+        padding: const EdgeInsets.only(top: 4),
+        child: Text(
+          useKo ? '일치하는 도시가 없어요 — 그냥 적어도 돼요.' : 'No match — you can keep typing.',
+          style: GoogleFonts.notoSansKr(
+            fontSize: 11.5,
+            color: AppColors.taupe,
+            height: 1.5,
+          ),
+        ),
+      );
+    }
+    return SizedBox(
+      key: const Key('city_suggestion_bar'),
+      height: 36,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for (final kr in krHits)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _CityChip(
+                label: useKo ? kr.ko : kr.en,
+                onTap: () => onPick(useKo ? kr.ko : kr.en),
+                isKr: true,
+              ),
+            ),
+          for (final w in worldHits)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _CityChip(
+                label: w.labeled(useKo),
+                onTap: () => onPick(useKo ? w.ko : w.en),
+                isKr: false,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _KrCity {
+  final String ko;
+  final String en;
+  const _KrCity(this.ko, this.en);
+}
+
+class _CityChip extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+  final bool isKr;
+  const _CityChip({
+    required this.label,
+    required this.onTap,
+    required this.isKr,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isKr ? AppColors.paper : AppColors.bg,
+          border: Border.all(
+            color: isKr ? AppColors.ink : AppColors.line,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.notoSansKr(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppColors.ink,
+            letterSpacing: 0.2,
+          ),
         ),
       ),
     );

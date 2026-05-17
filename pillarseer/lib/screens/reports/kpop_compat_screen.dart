@@ -660,6 +660,35 @@ class _StarRow extends StatelessWidget {
     required this.useKo,
   });
 
+  // R87 sprint 2 — 사용자 mandate: top 1 이 아닌 모든 카드도 공유 가능.
+  // 단축 이름 (괄호 제거) + 점수 + 케미 한 줄. share 실패 시 clipboard fallback.
+  String _shareText() {
+    final name = useKo ? star.nameKo : star.nameEn;
+    final shortName = name.contains('(')
+        ? name.split('(').first.trim()
+        : name;
+    return useKo
+        ? '내 케미픽: $shortName · $score점'
+        : 'My pick: $shortName · $score';
+  }
+
+  Future<void> _share(BuildContext context) async {
+    final text = _shareText();
+    try {
+      await SharePlus.instance.share(ShareParams(text: text));
+    } catch (_) {
+      await Clipboard.setData(ClipboardData(text: text));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(useKo ? '복사됐어요' : 'Copied'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isTop = rank <= 3;
@@ -747,6 +776,43 @@ class _StarRow extends StatelessWidget {
                     fontSize: 9,
                     letterSpacing: 1,
                     color: AppColors.taupe,
+                  ),
+                ),
+                // R87 sprint 2 — row-level share button (모든 카드).
+                // tap 시 row 전체 onTap (detail) 안 가게 따로 GestureDetector.
+                const SizedBox(height: 6),
+                GestureDetector(
+                  onTap: () => _share(context),
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    key: Key('kpop_row_share_rank_$rank'),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.taupe, width: 1),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.ios_share,
+                          size: 11,
+                          color: AppColors.taupe,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          useKo ? '공유' : 'SHARE',
+                          style: GoogleFonts.inter(
+                            fontSize: 8.5,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.taupe,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -867,22 +933,51 @@ class _StarRow extends StatelessWidget {
                 ),
                 const SizedBox(height: 22),
                 Container(height: 1, color: AppColors.line),
-                TextButton(
-                  onPressed: () => Navigator.of(ctx).pop(),
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.ink,
-                    minimumSize: const Size(double.infinity, 52),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                  ),
-                  child: Text(
-                    'CLOSE',
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      letterSpacing: 5,
-                      color: AppColors.ink,
+                // R87 sprint 2 — detail dialog 안에도 share. top 1 외 모든 카드.
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.taupe,
+                          minimumSize: const Size(0, 52),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
+                        ),
+                        child: Text(
+                          useKo ? '닫기' : 'CLOSE',
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 4,
+                            color: AppColors.taupe,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(width: 1, height: 52, color: AppColors.line),
+                    Expanded(
+                      child: TextButton(
+                        key: Key('kpop_detail_share_${star.id}'),
+                        onPressed: () => _share(ctx),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.ink,
+                          minimumSize: const Size(0, 52),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero),
+                        ),
+                        child: Text(
+                          useKo ? '공유하기' : 'SHARE',
+                          style: GoogleFonts.inter(
+                            fontSize: 10,
+                            letterSpacing: 4,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.accent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

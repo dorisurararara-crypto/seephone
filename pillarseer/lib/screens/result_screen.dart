@@ -314,13 +314,43 @@ class ResultScreen extends ConsumerWidget {
               ),
             ),
             // 9. DEEP MYEONGLI accordion group — 자체 7 _AccordionRow 접힘.
-            _CollapsibleSection(
+            // R87 sprint 4 — 사용자 용신 spoiler. 사용자가 collapsed 상태에서도
+            // 자기 용신을 1초 안에 확인 가능하게 preview 에 미리 노출. 사용자가
+            // "용신이 뭐야" 묻는 경우 (UI 발견 실패) 방지.
+            Builder(builder: (context) {
+              final previewEl = result.elements;
+              final previewDm = result.dayPillar.chunGanElement;
+              final previewStrength = StrengthService.judge(
+                dayMasterElement: previewDm,
+                monthJi: result.monthPillar.jiJi,
+                wood: previewEl.wood,
+                fire: previewEl.fire,
+                earth: previewEl.earth,
+                metal: previewEl.metal,
+                water: previewEl.water,
+                dayMaster: result.dayPillar.chunGan,
+                yearJi: result.yearPillar.jiJi,
+                dayJi: result.dayPillar.jiJi,
+                hourJi: result.hourPillar?.jiJi,
+              );
+              final previewYongsin = YongsinService.judge(
+                dayMasterElement: previewDm,
+                strengthLabel: previewStrength.label,
+                wood: previewEl.wood,
+                fire: previewEl.fire,
+                earth: previewEl.earth,
+                metal: previewEl.metal,
+                water: previewEl.water,
+                monthBranch: result.monthPillar.jiJi,
+              );
+              final userYs = previewYongsin.yongsin;
+              return _CollapsibleSection(
               label: useKo
                   ? '깊은 사주 풀이 (격국·용신·강약·공망·신살·12운성·합충)'
                   : 'DEEP MYEONGLI',
               preview: useKo
-                  ? '격국·용신·강약·공망·신살·12운성·합충 일곱 가지 사주 깊은 풀이.'
-                  : 'Format, yongsin, strength, void, shinsa, life cycle, relations.',
+                  ? '내 용신 = $userYs · 격국·강약·공망·신살·12운성·합충 일곱 가지 풀이.'
+                  : 'Your yongsin = $userYs · format, strength, void, shinsa, life cycle, relations.',
               background: AppColors.bg,
               child: _GroupSection(
                 groupLabel:
@@ -371,7 +401,8 @@ class ResultScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
+            );
+            }),
             // 10. VERIFICATION — 자체 1 _AccordionRow 접힘.
             _CollapsibleSection(
               label: useKo ? '계산 기준 확인' : 'VERIFICATION',

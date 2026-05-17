@@ -2,10 +2,17 @@
 // klc 패키지: 1391~2050 음양력 변환 + 60갑자.
 // 진태양시 보정 (서울 127.5° vs 일본 동경 135° = 약 32분 차).
 // 시주는 별도 계산 (klc 미지원).
+//
+// R87 sprint 3 — 해외 출생지 지원: WorldCities DB + IANA tz 분기.
+//   - 한국 도시 입력 → 기존 KST/UTC+8:30 + isKoreanDst 분기 (회귀 0).
+//   - 해외 도시 입력 → WorldCities entry 의 standardMeridian + IANA tz DST.
 
 import 'dart:math';
-import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/foundation.dart' show kDebugMode, visibleForTesting;
 import 'package:klc/klc.dart' as klc;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tzdata;
+import '../data/world_cities.dart';
 import '../models/saju_result.dart';
 import 'solar_term_service.dart';
 import 'thong_geun_service.dart';
@@ -130,10 +137,11 @@ class ManseryeokService {
   };
 
   /// 도시 이름에서 경도 추정 (substring 매칭, fallback 서울).
+  /// R87 sprint 3: 한국 도시 미매칭 시 [WorldCities] (해외 ~150개) 보조 매칭.
   static double longitudeForCity(String? city) {
     if (city == null || city.trim().isEmpty) return 126.98; // Seoul default
     final lower = city.trim().toLowerCase();
-    // exact match
+    // exact match (한국 도시)
     if (_cityLongitudes.containsKey(lower)) return _cityLongitudes[lower]!;
     // substring match (e.g., "서울특별시", "Seoul, Korea")
     for (final entry in _cityLongitudes.entries) {
@@ -142,19 +150,68 @@ class ManseryeokService {
         return entry.value;
       }
     }
+    // R87 sprint 3 — 한국 도시 매칭 실패 → 해외 도시 DB 보조 매칭.
+    final worldCity = WorldCities.findByName(city);
+    if (worldCity != null) return worldCity.lon;
     return 126.98; // fallback: Seoul
   }
 
   /// 도시·시대 기반 longitude offset (분).
-  /// KST UTC+9 시기: longitude - 135° → 4분/도.
-  /// KST UTC+8:30 시기 (1954-1961): longitude - 127.5° → 4분/도.
+  /// 한국 도시 (또는 매칭 실패): KST UTC+9 (135°) / 1954-1961 UTC+8:30 (127.5°).
+  /// 해외 도시: [WorldCities] entry 의 standardMeridian 기준.
+  /// 진태양시 = (도시 lon - 표준 meridian) × 4분/도.
   static int longitudeOffsetMinutes(DateTime dt, String? city) {
+    // R87 sprint 3 — 해외 도시면 그 나라 표준시 자오선 사용.
+    final worldCity = WorldCities.findByName(city);
+    if (worldCity != null) {
+      return ((worldCity.lon - worldCity.standardMeridian) * 4).round();
+    }
+    // 한국 fallback — 기존 시기 분기 유지 (회귀 가드).
     final lon = longitudeForCity(city);
     final kst830Start = DateTime(1954, 3, 21);
     final kst830End = DateTime(1961, 8, 10);
     final meridian =
         (!dt.isBefore(kst830Start) && dt.isBefore(kst830End)) ? 127.5 : 135.0;
     return ((lon - meridian) * 4).round();
+  }
+
+  /// 해외 도시 DST 자동 감지 (IANA tz lookup).
+  /// 한국 도시 (또는 매칭 실패) → [isKoreanDst] 로 fallback.
+  /// 해외 도시 → 그 시점의 tz offset 이 standard offset 과 다르면 DST.
+  /// timezone 패키지가 init 안 되어 있으면 lazy init.
+  static bool isDstForCityDate(String? city, DateTime dt) {
+    final worldCity = WorldCities.findByName(city);
+    if (worldCity == null) {
+      return isKoreanDst(dt);
+    }
+    try {
+      _ensureTzInitialized();
+      final loc = tz.getLocation(worldCity.iana);
+      final tzDt = tz.TZDateTime(
+          loc, dt.year, dt.month, dt.day, dt.hour, dt.minute);
+      final standardOffsetMin =
+          (worldCity.standardMeridian / 15.0 * 60).round();
+      final actualOffsetMin = tzDt.timeZoneOffset.inMinutes;
+      return actualOffsetMin != standardOffsetMin;
+    } catch (e) {
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print('manseryeok: tz lookup failed for ${worldCity.iana}: $e');
+      }
+      return false;
+    }
+  }
+
+  /// timezone 패키지 lazy init. notification_service 가 이미 init 했어도 idempotent.
+  static bool _tzInitialized = false;
+  static void _ensureTzInitialized() {
+    if (_tzInitialized) return;
+    try {
+      tzdata.initializeTimeZones();
+    } catch (_) {
+      // 이미 init 되어 있으면 throw — silent OK.
+    }
+    _tzInitialized = true;
   }
 
   /// (deprecated) 균시차 미포함 단순 longitude offset.
@@ -264,13 +321,14 @@ class ManseryeokService {
       }
     }
 
-    // 2. DST 보정 (한국 1948-1988 일부 기간) — 시계가 1h 빨랐으므로 실제 시각 -1h.
+    // 2. DST 보정 — 시계가 1h 빨랐으므로 실제 시각 -1h.
+    // R87 sprint 3: 한국 도시 → isKoreanDst (1948-1988). 해외 도시 → IANA tz lookup.
     int dstY = sYear;
     int dstM = sMonth;
     int dstD = sDay;
     int dstHour = hour;
-    final bool wasDst =
-        isKoreanDst(DateTime(sYear, sMonth, sDay, hour, minute));
+    final bool wasDst = isDstForCityDate(
+        birthCity, DateTime(sYear, sMonth, sDay, hour, minute));
     if (wasDst) {
       final corrected = DateTime(sYear, sMonth, sDay, hour, minute)
           .subtract(const Duration(hours: 1));
