@@ -987,82 +987,248 @@ class _StarRow extends StatelessWidget {
     );
   }
 
-  // Round 77 sprint 7 — 아이돌·배우·스포츠 모두 팬-셀럽 시너지 톤 (무대/컴백/직캠/굿즈/팬싸/명대사/명장면/시즌).
-  // 망상 1:1 로맨스 시나리오 제거 — kind='idol' / 'athlete' / 'actor' 분기로 어휘만 차별.
+  // R93 sprint 2 — 진짜 연인 사주 궁합 톤 (사용자 mandate: K-POP 어휘 X / 무대 X / 팬싸 X / 굿즈 X).
+  // 본인 일주 vs 셀럽 일주 → 사주 9 anchor 기반 4 paragraph 합성 (300~600 char target).
+  //   [1] 첫 인상 (오행 관계 base)
+  //   [2] 일상 호흡 (천간합 / 지지합 / 지지충 / 지지형)
+  //   [3] 깊어지는 결 (점수 band)
+  //   [4] 핵심 한 줄
   String _verdict() {
-    final isIdol = star.kind == 'idol';
-    if (isIdol) {
-      return _verdictIdol();
-    }
-    return _verdictRomance();
+    if (star.dayPillar.length < 2) return '';
+    return _composeVerdict();
   }
 
-  // 아이돌 4 band — 팬-아티스트 시너지 (무대/컴백/카메라/굿즈/직캠/팬싸).
-  // 어휘 mandate: 무대/컴백/직캠/굿즈/팬싸 ≥3개. 망상 톤 0회.
-  String _verdictIdol() {
-    if (score >= 88) {
-      return useKo
-          ? '이 아이돌의 무대가 너의 흐름을 살리는 케미예요. 컴백 곡 첫 소절에 네 기분이 풀려요. 직캠 한 영상으로 하루가 다시 시작되는 타입. 팬싸 줄 서면 너 차례에 분위기가 풀려요. 굿즈 한 장이 일주일을 가게 해줘요.'
-          : "This idol's stage lifts your flow. The first line of a comeback track resets your mood. One fancam can restart your day. In a fansign queue, the room loosens up on your turn. One photocard carries you through a week.";
-    } else if (score >= 70) {
-      return useKo
-          ? '이 아이돌의 컴백 무대 하나가 너의 페이스를 잡아주는 케미예요. 새 앨범 발매일에 너 컨디션이 같이 올라가요. 직캠 영상에서 너랑 결이 닿는 멤버가 보여요. 콘서트 직관 한 번이 분기 전체를 바꿔주는 시너지. 굿즈 한 장도 책상 위에 두면 페이스가 잡혀요.'
-          : "One of this idol's comeback stages tunes your pace. On a new album release your condition rises with theirs. One fancam reveals the member whose grain matches yours. One in-person concert reshapes the whole quarter. Even one photocard on your desk keeps the pace.";
-    } else if (score >= 55) {
-      return useKo
-          ? '이 아이돌의 컴백 주기에 너 흐름이 가끔 닿는 케미예요. 모든 무대가 맞진 않지만 한 직캠은 너의 시그니처가 돼요. 굿즈는 한두 장 정도면 충분한 거리감. 팬싸 줄 까지는 안 가도 좋아요.'
-          : "Your flow touches this idol's comeback cycle once in a while. Not every stage lands, but one fancam becomes your signature. One or two photocards is the right merch distance. No fansign queue needed.";
-    } else {
-      return useKo
-          ? '이 아이돌의 무대 톤이 너의 페이스랑 다른 케미예요. 컴백 직캠 한 번 보면 알아요. 굿즈 살 정도는 아닌 거리감. 한 곡 정도 플레이리스트 끝에 둘 만큼만.'
-          : "This idol's stage tone runs a different pace from yours. One comeback fancam tells you. Not a merch-buying distance. About one track sits well at the bottom of your playlist.";
-    }
-  }
+  String _composeVerdict() {
+    final myGan = me.dayPillar.chunGan;
+    final myJi = me.dayPillar.jiJi;
+    final stGan = star.dayPillar[0];
+    final stJi = star.dayPillar[1];
+    final myEl = me.dayPillar.chunGanElement;
+    final stEl = _KpopAnchors.elementOf(stGan);
+    final sameDay = me.day60ji == star.dayPillar;
+    final sameBranch = myJi == stJi;
+    final ganHap = _KpopAnchors.ganHap[myGan] == stGan;
+    final jiHap6 = _KpopAnchors.jiHap6[myJi] == stJi;
+    final jiSamhap =
+        (_KpopAnchors.jiSamhapPairs[myJi] ?? const []).contains(stJi);
+    final jiClash = _KpopAnchors.ji12clash[myJi] == stJi;
+    final jiHyeong =
+        (_KpopAnchors.jiHyeong[myJi] ?? const []).contains(stJi);
+    final shortName = (useKo ? star.nameKo : star.nameEn).contains('(')
+        ? (useKo ? star.nameKo : star.nameEn).split('(').first.trim()
+        : (useKo ? star.nameKo : star.nameEn);
 
-  // Round 77 sprint 7 — 배우/스포츠 셀럽도 팬-셀럽 시너지 톤으로 통일.
-  // 망상 1:1 시나리오 X. 작품/경기/인터뷰/필모/명장면 어휘로 톤 차별화.
-  String _verdictRomance() {
-    final isAthlete = star.kind == 'athlete';
-    if (score >= 88) {
-      if (isAthlete) {
-        return useKo
-            ? '이 선수의 경기 흐름이 너의 페이스를 살리는 케미예요. 명장면 한 컷이 너의 하루를 다시 켜요. 우승 인터뷰 한 줄이 너 안에 박혀요. 시즌 첫 경기 직관 한 번이 분기를 바꿔줘요. 응원하는 팀 굿즈 한 장이 일주일을 가게 해줘요.'
-            : "This athlete's match flow lifts your pace. One highlight clip restarts your day. One line from a victory interview lands in you. One in-person opening game reshapes the quarter. One team merch piece carries you a week.";
+    // [1] 첫 인상 (오행 관계)
+    final relation = _KpopAnchors.elementRelation(myEl, stEl);
+    String p1;
+    if (useKo) {
+      switch (relation) {
+        case _ElRel.same:
+          p1 = '$shortName과 너는 같은 오행 결을 타고 났어요. 처음 만났을 때 별 설명 없이도 결이 닿고, 좋아하는 음악·말투·결정 속도가 비슷해서 빠르게 편해지는 사이예요. 단, 결이 같은 만큼 약한 자리도 겹쳐서 한 명이 가라앉으면 같이 가라앉기 쉬워요.';
+          break;
+        case _ElRel.iGenerate:
+          p1 = '$shortName과 너는 너의 기운이 상대를 살리는 상생 관계예요. 너의 한 마디 한 행동이 $shortName한테 깊게 닿고, 상대가 자라는 모습을 보면서 네가 더 단단해지는 결이에요. 천천히 가도 시간이 쌓이면 누구도 못 깨는 인연으로 굳어요.';
+          break;
+        case _ElRel.theyGenerate:
+          p1 = '$shortName이 너를 살리는 상생 관계예요. 상대의 결이 너의 부족한 자리를 자연스럽게 채워줘서 가까이 있을수록 네가 편해지는 사이예요. 너는 받는 쪽이라 표현을 자주 안 해도 상대는 알아주지만, 한 번씩 고마움을 말로 전하면 관계가 한 단계 깊어져요.';
+          break;
+        case _ElRel.iOvercome:
+          p1 = '$shortName과 너는 너의 기운이 상대를 누르는 상극 관계예요. 처음엔 네가 주도하는 자리가 자연스럽고 상대 약점을 정확히 짚어내는 코치 같은 결이에요. 다만 톤이 한 단계만 올라가도 통제처럼 느껴질 수 있어서 의도와 표현의 거리를 늘 의식해야 해요.';
+          break;
+        case _ElRel.theyOvercome:
+          p1 = '$shortName이 너를 누르는 상극 관계예요. 상대 한 마디가 너의 페이스를 흔드는 경우가 종종 있고, 가까워질수록 네가 자기 색을 지키는 연습이 필요한 결이에요. 잘 다루면 둘 다 단단해지지만 그 전에 서로의 톤 차이를 인정하는 게 먼저예요.';
+          break;
+        case _ElRel.neutral:
+          p1 = '$shortName과 너는 자극도 충돌도 크지 않은 결이에요. 첫인상은 잔잔하고 편안하지만, 누군가 적극적으로 신호를 보내지 않으면 자연스럽게 거리가 벌어질 수 있어요. 의식적으로 무게를 만들 때 비로소 깊이가 생기는 인연이에요.';
+          break;
       }
-      return useKo
-          ? '이 배우의 필모가 너의 흐름을 살리는 케미예요. 명대사 한 줄에 너 기분이 풀려요. 인터뷰 영상 하나로 하루가 다시 시작되는 타입. 신작 첫 회 직관 한 번이 분기 전체를 바꿔줘요. 작품 OST 한 곡이 일주일 BGM이 돼요.'
-          : "This actor's filmography lifts your flow. One signature line resets your mood. One interview clip can restart your day. One opening-episode in real time reshapes the whole quarter. One OST track carries your week as BGM.";
-    } else if (score >= 70) {
-      if (isAthlete) {
-        return useKo
-            ? '이 선수의 시즌 컨디션이 너의 페이스를 잡아주는 케미예요. 큰 경기 결과에 너 컨디션이 같이 올라가요. 인터뷰 영상에서 너랑 결이 닿는 한 마디가 와요. 시즌 한 번 직관이 분기를 바꿔줘요.'
-            : "This athlete's season condition tunes your pace. On a big-game result your condition rises with theirs. One line from their interview touches your grain. One in-person season visit reshapes the quarter.";
-      }
-      return useKo
-          ? '이 배우의 새 작품 사이클에 너의 페이스가 같이 가는 케미예요. 공개일에 너 컨디션이 같이 올라가요. 인터뷰 한 컷에서 너랑 결이 닿는 멤버. 시즌 한 번 정주행이 분기 전체를 바꿔줘요.'
-          : "Your pace runs along this actor's new-project cycle. On a release date your condition rises with theirs. One interview frame touches your grain. One season binge reshapes the whole quarter.";
-    } else if (score >= 55) {
-      if (isAthlete) {
-        return useKo
-            ? '이 선수의 컨디션 사이클에 너의 흐름이 가끔 닿는 케미예요. 모든 경기가 닿진 않지만 한 경기는 너의 시그니처 게임이 돼요. 직캠보다 인터뷰 한 컷이 더 닿는 타입.'
-            : "Your flow touches this athlete's condition cycle once in a while. Not every game lands, but one becomes your signature match. Their interview clip reaches you more than the highlight reel.";
-      }
-      return useKo
-          ? '이 배우의 작품 사이클에 너의 흐름이 가끔 닿는 케미예요. 모든 작품이 맞진 않지만 한 작품은 너의 인생작이 돼요. 명대사보다 인터뷰 영상이 더 닿는 타입.'
-          : "Your flow touches this actor's project cycle once in a while. Not every project lands, but one becomes your life-show. Their interview reaches you more than the famous quote.";
     } else {
-      if (isAthlete) {
-        return useKo
-            ? '이 선수의 경기 톤이 너의 페이스랑 다른 케미예요. 플레이는 좋지만 너의 일상 페이스 자리에는 잘 안 맞아요. 한 경기 정도 하이라이트로만 둘 만한 거리감.'
-            : "This athlete's game tone runs a different pace from yours. The play is good but doesn't fit your daily rhythm. About one match sits well at the bottom of your highlights.";
+      switch (relation) {
+        case _ElRel.same:
+          p1 = "You and $shortName share the same element grain. Comfort comes quickly — taste in music, tone, decision speed all align. The flip side: shared weak spots, so when one dips, the other dips together.";
+          break;
+        case _ElRel.iGenerate:
+          p1 = "You feed $shortName — your energy quietly grows them. Their growth in turn makes you steadier. Slow but durable; the bond hardens over time.";
+          break;
+        case _ElRel.theyGenerate:
+          p1 = "$shortName feeds you. Their grain fills your gaps without effort. You receive more than you give, so showing thanks out loud once in a while deepens the bond.";
+          break;
+        case _ElRel.iOvercome:
+          p1 = "You overcome $shortName — you lead naturally and read their weak spots like a coach. Watch the tone: one notch sharper reads as control. Intent and delivery must match.";
+          break;
+        case _ElRel.theyOvercome:
+          p1 = "$shortName overcomes you. Their one word can shift your pace. The closer you get, the more you must hold your own color. Handle it well and both grow tougher.";
+          break;
+        case _ElRel.neutral:
+          p1 = "Mild interaction — no spark, no clash. The bond drifts unless someone deliberately builds weight into it.";
+          break;
       }
-      return useKo
-          ? '이 배우의 작품 톤이 너의 페이스랑 다른 케미예요. 작품은 좋지만 너의 일상 BGM 자리에는 잘 안 맞아요. 한 작품 정도 정주행 목록 끝에 둘 만한 거리감.'
-          : "This actor's project tone runs a different pace from yours. The shows are good but don't fit your daily BGM slot. About one project sits well at the bottom of your watch list.";
     }
+
+    // [2] 일상 호흡 (천간합·지지합·삼합·충·형 + sameDay/sameBranch)
+    final p2parts = <String>[];
+    if (useKo) {
+      if (sameDay) {
+        p2parts.add(
+            '같은 일주($shortName도 ${me.day60ji})를 타고 났어요. 60갑자 중 같은 자리에서 시작한 사이라 거울 보듯 닮은 면이 많고, 한 사람이 깨달은 건 다른 사람도 곧 깨달아요.');
+      } else if (sameBranch) {
+        p2parts.add(
+            '같은 일지(띠)를 공유해요. 띠가 같으면 인생 리듬·계절감·체질이 비슷해서 함께 있는 시간 자체가 안정적이에요.');
+      }
+      if (ganHap) {
+        p2parts.add(
+            '천간 오합($myGan·$stGan)이 맺어진 사이예요. 천간합은 사주에서 가장 강한 끌림 중 하나로, 처음 봤을 때부터 끌리는 자석 같은 결이에요. 다만 합이 강한 만큼 한쪽이 자기 색을 잃기 쉬우니 각자의 페이스를 잊지 않는 게 중요해요.');
+      }
+      if (jiHap6) {
+        p2parts.add(
+            '지지 육합($myJi·$stJi)이 있어서 가까워질수록 일상 호흡이 자연스럽게 맞아져요. 같이 살거나 같이 일하는 자리에 잘 어울리는 결이에요.');
+      } else if (jiSamhap) {
+        p2parts.add(
+            '지지 삼합 일부($myJi·$stJi)가 맺어져 있어서 같은 목표를 향해 움직일 때 시너지가 가장 잘 나와요. 함께 프로젝트 하나 만들어가는 자리가 잘 맞아요.');
+      }
+      if (jiClash) {
+        p2parts.add(
+            '지지 충($myJi·$stJi)이 있어요. 큰 결정·이사·여행·돈 결정에서 의견이 자주 엇갈리니까 미리 말로 룰을 정해두면 부딪힘이 줄어요. 충이 있는 사이는 한 번 부딪히고 나면 오히려 깊어지는 경우도 많아요.');
+      }
+      if (jiHyeong) {
+        p2parts.add(
+            '지지 형($myJi·$stJi)이 걸려 있어요. 한 번씩 강한 한 마디가 오갈 수 있는 결이라, 평소에 작은 인정과 칭찬을 자주 챙겨주면 큰 다툼으로 안 가요.');
+      }
+      if (p2parts.isEmpty) {
+        p2parts.add(
+            '천간합·지지합·충·형이 직접 걸려 있지 않아요. 강한 끌림도 강한 부딪힘도 없는, 만남이 시간을 들여야 깊어지는 결이에요.');
+      }
+    } else {
+      if (sameDay) {
+        p2parts.add(
+            "Same day pillar (${me.day60ji}) — a mirror bond. One person's lesson surfaces in the other soon after.");
+      } else if (sameBranch) {
+        p2parts.add(
+            "Shared day branch (zodiac) — life rhythm, season, constitution all align.");
+      }
+      if (ganHap) {
+        p2parts.add(
+            "Heavenly stem union ($myGan·$stGan) — one of the strongest pulls in saju. Magnetic from first sight. Risk: one loses their own color in the union.");
+      }
+      if (jiHap6) {
+        p2parts.add("Six harmony ($myJi·$stJi) — daily breath syncs up. Fits living or working together.");
+      } else if (jiSamhap) {
+        p2parts.add(
+            "Triad partial ($myJi·$stJi) — synergy peaks around shared goals and projects.");
+      }
+      if (jiClash) {
+        p2parts.add(
+            "Branch clash ($myJi·$stJi) — friction in big decisions, moves, money. Pre-agree rules. Often deepens after one real clash.");
+      }
+      if (jiHyeong) {
+        p2parts.add(
+            "Branch punishment ($myJi·$stJi) — sharp words may surface. Small acknowledgments daily prevent the big blow-up.");
+      }
+      if (p2parts.isEmpty) {
+        p2parts.add(
+            "No direct stem-branch union or clash. No strong pull, no strong friction — depth requires time.");
+      }
+    }
+    final p2 = p2parts.join(' ');
+
+    // [3] 깊어지는 결 (점수 band)
+    String p3;
+    if (useKo) {
+      if (score >= 85) {
+        p3 = '점수 $score점 — 사주가 권하는 인연이에요. 평생 친구·연인·동료 어느 자리에 두어도 깊어지는 결이라, 만남이 생겼다면 무리하지 말고 천천히 시간을 쌓아도 돼요.';
+      } else if (score >= 70) {
+        p3 = '점수 $score점 — 사주가 비교적 우호적인 인연이에요. 한쪽이 적극적으로 다가가면 자연스럽게 가까워지고, 좋은 자리에 오래 두기 좋은 결이에요.';
+      } else if (score >= 55) {
+        p3 = '점수 $score점 — 사주가 강하게 권하지도 막지도 않는 결이에요. 적절한 거리에서 천천히 보다 보면 자기에게 맞는 자리가 자연스럽게 정해져요.';
+      } else if (score >= 40) {
+        p3 = '점수 $score점 — 사주는 둘 사이에 조심을 권해요. 가까이 두려면 의식적인 거리 조절과 표현이 필요한 결이라, 부담 없는 자리에서 시작하는 게 좋아요.';
+      } else {
+        p3 = '점수 $score점 — 사주가 깊이 가까이 가는 걸 조심스럽게 보는 결이에요. 가벼운 거리에서 잠깐씩 보는 자리에 잘 맞아요.';
+      }
+    } else {
+      if (score >= 85) {
+        p3 = "Score $score — saju recommends this bond. Friend, partner, colleague — it deepens wherever you place it. Take your time.";
+      } else if (score >= 70) {
+        p3 = "Score $score — saju is broadly favorable. One side moving toward the other closes the distance naturally.";
+      } else if (score >= 55) {
+        p3 = "Score $score — neither push nor block. Right distance shows itself over time.";
+      } else if (score >= 40) {
+        p3 = "Score $score — saju advises care. Tone and distance need conscious adjustment. Start light.";
+      } else {
+        p3 = "Score $score — saju is cautious. Best in light, brief contact.";
+      }
+    }
+
+    return '$p1\n\n$p2\n\n$p3';
   }
 
   // Round 77 sprint 7 — discover 모달 prefill query 생성 (compat 화면 prefill).
+}
+
+/// R93 sprint 2 — _verdict() 합성용 사주 anchor 상수 + 오행 관계 enum.
+enum _ElRel { same, iGenerate, theyGenerate, iOvercome, theyOvercome, neutral }
+
+class _KpopAnchors {
+  static const ganHap = {
+    '甲': '己', '己': '甲', '乙': '庚', '庚': '乙', '丙': '辛',
+    '辛': '丙', '丁': '壬', '壬': '丁', '戊': '癸', '癸': '戊',
+  };
+  static const jiHap6 = {
+    '子': '丑', '丑': '子', '寅': '亥', '亥': '寅', '卯': '戌',
+    '戌': '卯', '辰': '酉', '酉': '辰', '巳': '申', '申': '巳',
+    '午': '未', '未': '午',
+  };
+  static const jiSamhapPairs = {
+    '子': ['辰', '申'],
+    '辰': ['子', '申'],
+    '申': ['子', '辰'],
+    '寅': ['午', '戌'],
+    '午': ['寅', '戌'],
+    '戌': ['寅', '午'],
+    '巳': ['酉', '丑'],
+    '酉': ['巳', '丑'],
+    '丑': ['巳', '酉'],
+    '亥': ['卯', '未'],
+    '卯': ['亥', '未'],
+    '未': ['亥', '卯'],
+  };
+  static const ji12clash = {
+    '子': '午', '丑': '未', '寅': '申', '卯': '酉', '辰': '戌', '巳': '亥',
+    '午': '子', '未': '丑', '申': '寅', '酉': '卯', '戌': '辰', '亥': '巳',
+  };
+  static const jiHyeong = {
+    '寅': ['巳', '申'],
+    '巳': ['寅', '申'],
+    '申': ['寅', '巳'],
+    '丑': ['戌', '未'],
+    '戌': ['丑', '未'],
+    '未': ['丑', '戌'],
+    '子': ['卯'],
+    '卯': ['子'],
+  };
+
+  static String elementOf(String stem) {
+    const map = {
+      '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+      '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+    };
+    return map[stem] ?? '木';
+  }
+
+  static _ElRel elementRelation(String myEl, String stEl) {
+    if (myEl == stEl) return _ElRel.same;
+    const generates = {
+      '木': '火', '火': '土', '土': '金', '金': '水', '水': '木',
+    };
+    const overcomes = {
+      '木': '土', '土': '水', '水': '火', '火': '金', '金': '木',
+    };
+    if (generates[myEl] == stEl) return _ElRel.iGenerate;
+    if (generates[stEl] == myEl) return _ElRel.theyGenerate;
+    if (overcomes[myEl] == stEl) return _ElRel.iOvercome;
+    if (overcomes[stEl] == myEl) return _ElRel.theyOvercome;
+    return _ElRel.neutral;
+  }
 }
 
 /// Round 77 sprint 7 — 셀럽 thumbnail chip (56×56, 오행 5색 + 이니셜).
