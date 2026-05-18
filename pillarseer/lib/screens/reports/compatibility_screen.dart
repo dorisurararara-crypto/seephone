@@ -1,11 +1,11 @@
 // Pillar Seer — Compatibility (Aesop Luxury).
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 // 두 사주의 오행 공명 + 일주 케미 → 점수 + verdict + relationship texture.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
@@ -23,8 +23,20 @@ class CompatibilityScreen extends ConsumerStatefulWidget {
 
 class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
   final _partnerNameCtrl = TextEditingController();
+  // R93 sprint 3 — 사용자 mandate verbatim: "달력이랑 시계같은거 없애주고 키보드로 직접 치게"
+  // input_screen.dart 와 같은 4 TextField (YYYY/MM/DD/HHMM) 패턴.
+  final _yearCtl = TextEditingController();
+  final _monthCtl = TextEditingController();
+  final _dayCtl = TextEditingController();
+  final _timeCtl = TextEditingController();
+  final _yearFocus = FocusNode();
+  final _monthFocus = FocusNode();
+  final _dayFocus = FocusNode();
+  final _timeFocus = FocusNode();
   DateTime? _partnerDate;
   TimeOfDay? _partnerTime;
+  String? _dateError;
+  String? _timeError;
   bool _unknownTime = false;
   SajuResult? _partner;
   int? _score;
@@ -32,6 +44,124 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
   bool _loading = false;
   // Round 77 sprint 7 — discover 모달 prefill 시 셀럽 이름 표시 chip.
   String? _prefilledFromCeleb;
+
+  @override
+  void dispose() {
+    _partnerNameCtrl.dispose();
+    _yearCtl.dispose();
+    _monthCtl.dispose();
+    _dayCtl.dispose();
+    _timeCtl.dispose();
+    _yearFocus.dispose();
+    _monthFocus.dispose();
+    _dayFocus.dispose();
+    _timeFocus.dispose();
+    super.dispose();
+  }
+
+  int _daysInMonth(int year, int month) {
+    if (month == 2) {
+      final leap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+      return leap ? 29 : 28;
+    }
+    const month31 = {1, 3, 5, 7, 8, 10, 12};
+    return month31.contains(month) ? 31 : 30;
+  }
+
+  void _recomputeDate() {
+    final yt = _yearCtl.text;
+    final mt = _monthCtl.text;
+    final dt = _dayCtl.text;
+    if (yt.length != 4 || mt.isEmpty || dt.isEmpty) {
+      setState(() {
+        _partnerDate = null;
+        _dateError = null;
+      });
+      return;
+    }
+    final y = int.tryParse(yt);
+    final m = int.tryParse(mt);
+    final d = int.tryParse(dt);
+    final nowYear = DateTime.now().year;
+    if (y == null || m == null || d == null) {
+      setState(() {
+        _partnerDate = null;
+        _dateError = '숫자만 적어줘.';
+      });
+      return;
+    }
+    if (y < 1900 || y > nowYear) {
+      setState(() {
+        _partnerDate = null;
+        _dateError = '태어난 해는 1900~$nowYear 사이로 적어줘.';
+      });
+      return;
+    }
+    if (m < 1 || m > 12) {
+      setState(() {
+        _partnerDate = null;
+        _dateError = '월은 1~12 중에 골라줘.';
+      });
+      return;
+    }
+    final maxDay = _daysInMonth(y, m);
+    if (d < 1 || d > maxDay) {
+      setState(() {
+        _partnerDate = null;
+        _dateError = '$m월은 $maxDay일까지 있어 — 그 안에서 골라줘.';
+      });
+      return;
+    }
+    setState(() {
+      _partnerDate = DateTime(y, m, d);
+      _dateError = null;
+    });
+  }
+
+  void _recomputeTime() {
+    if (_unknownTime) {
+      setState(() {
+        _partnerTime = null;
+        _timeError = null;
+      });
+      return;
+    }
+    final raw = _timeCtl.text;
+    if (raw.length < 4) {
+      setState(() {
+        _partnerTime = null;
+        _timeError = null;
+      });
+      return;
+    }
+    final h = int.tryParse(raw.substring(0, 2));
+    final m = int.tryParse(raw.substring(2, 4));
+    if (h == null || m == null) {
+      setState(() {
+        _partnerTime = null;
+        _timeError = '숫자만 적어줘.';
+      });
+      return;
+    }
+    if (h < 0 || h > 23) {
+      setState(() {
+        _partnerTime = null;
+        _timeError = '시는 00~23 안에서 적어줘.';
+      });
+      return;
+    }
+    if (m < 0 || m > 59) {
+      setState(() {
+        _partnerTime = null;
+        _timeError = '분은 00~59 안에서 적어줘.';
+      });
+      return;
+    }
+    setState(() {
+      _partnerTime = TimeOfDay(hour: h, minute: m);
+      _timeError = null;
+    });
+  }
 
   @override
   void initState() {
@@ -59,6 +189,9 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
         final iso = pBirth.length >= 10 ? pBirth.substring(0, 10) : pBirth;
         final parsed = DateTime.tryParse(iso);
         if (parsed != null) {
+          _yearCtl.text = parsed.year.toString();
+          _monthCtl.text = parsed.month.toString().padLeft(2, '0');
+          _dayCtl.text = parsed.day.toString().padLeft(2, '0');
           _partnerDate = parsed;
           // 시간 모름 가정 — 셀럽 birth time 알 수 없음.
           _unknownTime = true;
@@ -222,13 +355,35 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
               ),
             _PartnerForm(
               nameCtrl: _partnerNameCtrl,
-              date: _partnerDate,
-              time: _partnerTime,
+              yearCtl: _yearCtl,
+              monthCtl: _monthCtl,
+              dayCtl: _dayCtl,
+              timeCtl: _timeCtl,
+              yearFocus: _yearFocus,
+              monthFocus: _monthFocus,
+              dayFocus: _dayFocus,
+              timeFocus: _timeFocus,
+              dateError: _dateError,
+              timeError: _timeError,
+              hasDate: _partnerDate != null,
+              hasTime: _partnerTime != null,
               unknownTime: _unknownTime,
-              onDate: _pickDate,
-              onTime: _pickTime,
-              onUnknownTime: (v) => setState(() => _unknownTime = v),
-              onSubmit: _loading || _partnerDate == null ? null : _calculate,
+              onYearChanged: (_) => _recomputeDate(),
+              onMonthChanged: (_) => _recomputeDate(),
+              onDayChanged: (_) => _recomputeDate(),
+              onTimeChanged: (_) => _recomputeTime(),
+              onUnknownTime: (v) {
+                setState(() {
+                  _unknownTime = v;
+                  if (v) _timeCtl.clear();
+                });
+                _recomputeTime();
+              },
+              onSubmit: _loading ||
+                      _partnerDate == null ||
+                      (!_unknownTime && _partnerTime == null)
+                  ? null
+                  : _calculate,
               loading: _loading,
               submitLabel: l.compatCalculate,
             ),
@@ -247,34 +402,7 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
     );
   }
 
-  Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      initialDate: _partnerDate ?? DateTime(1995),
-      builder: (ctx, child) => Theme(
-        data: Theme.of(ctx).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppColors.ink,
-            onPrimary: AppColors.bg,
-            surface: AppColors.bg,
-            onSurface: AppColors.ink,
-          ),
-        ),
-        child: child!,
-      ),
-    );
-    if (picked != null) setState(() => _partnerDate = picked);
-  }
-
-  Future<void> _pickTime() async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: _partnerTime ?? TimeOfDay.now(),
-    );
-    if (picked != null) setState(() => _partnerTime = picked);
-  }
+  // R93 sprint 3 — _pickDate / _pickTime 제거 (사용자 mandate: 키보드 직접 입력).
 }
 
 class _PillarHero extends StatelessWidget {
@@ -433,13 +561,27 @@ class _CompatExampleHint extends StatelessWidget {
   }
 }
 
+// R93 sprint 3 — _PartnerForm 키보드 직접 입력 패턴 (input_screen.dart 와 일관).
+// 4 TextField (YYYY / MM / DD / HHMM) + 시간 모름 checkbox + 제출.
 class _PartnerForm extends StatelessWidget {
   final TextEditingController nameCtrl;
-  final DateTime? date;
-  final TimeOfDay? time;
+  final TextEditingController yearCtl;
+  final TextEditingController monthCtl;
+  final TextEditingController dayCtl;
+  final TextEditingController timeCtl;
+  final FocusNode yearFocus;
+  final FocusNode monthFocus;
+  final FocusNode dayFocus;
+  final FocusNode timeFocus;
+  final String? dateError;
+  final String? timeError;
+  final bool hasDate;
+  final bool hasTime;
   final bool unknownTime;
-  final VoidCallback onDate;
-  final VoidCallback onTime;
+  final ValueChanged<String> onYearChanged;
+  final ValueChanged<String> onMonthChanged;
+  final ValueChanged<String> onDayChanged;
+  final ValueChanged<String> onTimeChanged;
   final ValueChanged<bool> onUnknownTime;
   final VoidCallback? onSubmit;
   final bool loading;
@@ -447,11 +589,23 @@ class _PartnerForm extends StatelessWidget {
 
   const _PartnerForm({
     required this.nameCtrl,
-    required this.date,
-    required this.time,
+    required this.yearCtl,
+    required this.monthCtl,
+    required this.dayCtl,
+    required this.timeCtl,
+    required this.yearFocus,
+    required this.monthFocus,
+    required this.dayFocus,
+    required this.timeFocus,
+    required this.dateError,
+    required this.timeError,
+    required this.hasDate,
+    required this.hasTime,
     required this.unknownTime,
-    required this.onDate,
-    required this.onTime,
+    required this.onYearChanged,
+    required this.onMonthChanged,
+    required this.onDayChanged,
+    required this.onTimeChanged,
     required this.onUnknownTime,
     required this.onSubmit,
     required this.loading,
@@ -493,20 +647,90 @@ class _PartnerForm extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           _Label(l.inputBirthday),
-          _TapField(
-            value: date == null ? '—' : DateFormat('yyyy.MM.dd').format(date!),
-            placeholder: date == null,
-            onTap: onDate,
+          // R93 sprint 3 — YYYY · MM · DD 3 TextField (input_screen.dart 패턴 일관).
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 4,
+                child: _DigitField(
+                  controller: yearCtl,
+                  focusNode: yearFocus,
+                  maxLength: 4,
+                  hint: 'YYYY',
+                  nextFocus: monthFocus,
+                  onChanged: onYearChanged,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text('·',
+                  style: GoogleFonts.notoSerifKr(
+                      fontSize: 22,
+                      color: AppColors.taupe,
+                      fontWeight: FontWeight.w300)),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 2,
+                child: _DigitField(
+                  controller: monthCtl,
+                  focusNode: monthFocus,
+                  maxLength: 2,
+                  hint: 'MM',
+                  nextFocus: dayFocus,
+                  onChanged: onMonthChanged,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text('·',
+                  style: GoogleFonts.notoSerifKr(
+                      fontSize: 22,
+                      color: AppColors.taupe,
+                      fontWeight: FontWeight.w300)),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 2,
+                child: _DigitField(
+                  controller: dayCtl,
+                  focusNode: dayFocus,
+                  maxLength: 2,
+                  hint: 'DD',
+                  nextFocus: timeFocus,
+                  onChanged: onDayChanged,
+                ),
+              ),
+            ],
           ),
+          if (dateError != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              dateError!,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 12,
+                color: const Color(0xFFB14A3F),
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
           _Label(l.inputTime),
-          _TapField(
-            value: unknownTime
-                ? l.inputUnknownTime
-                : (time?.format(context) ?? '—'),
-            placeholder: time == null && !unknownTime,
-            onTap: unknownTime ? null : onTime,
+          _DigitField(
+            controller: timeCtl,
+            focusNode: timeFocus,
+            maxLength: 4,
+            hint: 'HHMM (예: 1543)',
+            nextFocus: null,
+            enabled: !unknownTime,
+            onChanged: onTimeChanged,
           ),
+          if (timeError != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              timeError!,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 12,
+                color: const Color(0xFFB14A3F),
+              ),
+            ),
+          ],
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -582,6 +806,71 @@ class _PartnerForm extends StatelessWidget {
       );
 }
 
+/// R93 sprint 3 — 숫자만 받는 underline TextField. maxLength 도달 시 다음 focus 자동 이동.
+class _DigitField extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final int maxLength;
+  final String hint;
+  final FocusNode? nextFocus;
+  final bool enabled;
+  final ValueChanged<String> onChanged;
+
+  const _DigitField({
+    required this.controller,
+    required this.focusNode,
+    required this.maxLength,
+    required this.hint,
+    required this.nextFocus,
+    required this.onChanged,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      enabled: enabled,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(maxLength),
+      ],
+      style: GoogleFonts.notoSerifKr(
+        fontSize: 22,
+        color: enabled ? AppColors.ink : AppColors.taupe,
+        fontWeight: FontWeight.w300,
+        letterSpacing: 1.5,
+      ),
+      cursorColor: AppColors.ink,
+      decoration: InputDecoration(
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        hintText: hint,
+        hintStyle: GoogleFonts.notoSerifKr(
+          fontSize: 16,
+          color: AppColors.taupe,
+          fontWeight: FontWeight.w300,
+        ),
+        filled: false,
+        border: const UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColors.line)),
+        enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColors.line)),
+        focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: AppColors.ink, width: 1.2)),
+      ),
+      onChanged: (v) {
+        onChanged(v);
+        if (v.length == maxLength && nextFocus != null) {
+          nextFocus!.requestFocus();
+        }
+      },
+    );
+  }
+}
+
 class _Label extends StatelessWidget {
   final String text;
   const _Label(this.text);
@@ -597,47 +886,6 @@ class _Label extends StatelessWidget {
           letterSpacing: 4,
           fontWeight: FontWeight.w500,
           color: AppColors.taupe,
-        ),
-      ),
-    );
-  }
-}
-
-class _TapField extends StatelessWidget {
-  final String value;
-  final bool placeholder;
-  final VoidCallback? onTap;
-  const _TapField({
-    required this.value,
-    required this.placeholder,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                value,
-                style: GoogleFonts.notoSerifKr(
-                  fontSize: 18,
-                  color: placeholder
-                      ? AppColors.taupe.withValues(alpha: 0.6)
-                      : AppColors.ink,
-                ),
-              ),
-            ),
-            if (onTap != null)
-              Icon(Icons.expand_more, size: 18, color: AppColors.taupe),
-          ],
         ),
       ),
     );
