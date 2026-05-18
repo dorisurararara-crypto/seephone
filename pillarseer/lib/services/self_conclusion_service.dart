@@ -73,6 +73,8 @@ class SelfConclusionService {
     final prefix = _conclusionPrefix(stemKo, dominant);
 
     // 2. LifeParagraphService 의 conclusion_self paragraph (일간 fallback).
+    //    R90 sprint 5 — conclusion_self 카테고리는 anchor fragment matrix 가 empty 라
+    //    fragment 결합 X (LifeOverviewService 가 anchor 7 직접 빌드). paragraphStatic 유지.
     final dbConcl = await LifeParagraphService.paragraphStatic(
       dayPillar: stemKo,
       category: LifeCategory.conclusionSelf,

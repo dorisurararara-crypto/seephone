@@ -494,30 +494,17 @@ class _CategorySectionCardState extends State<_CategorySectionCard> {
     'conclusion_self': LifeCategory.conclusionSelf,
   };
 
-  // 한자 천간 → 한글.
-  static const Map<String, String> _stemHanToKo = {
-    '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
-    '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
-  };
-
-  // 한자 지지 → 한글.
-  static const Map<String, String> _branchHanToKo = {
-    '子': '자', '丑': '축', '寅': '인', '卯': '묘', '辰': '진', '巳': '사',
-    '午': '오', '未': '미', '申': '신', '酉': '유', '戌': '술', '亥': '해',
-  };
+  // R90 sprint 5 — _stemHanToKo/_branchHanToKo 제거 (paragraphForSajuStatic 내부에서 변환).
 
   Future<String> _loadParagraph() async {
     final cat = _keyToEnum[widget.categoryKey];
     if (cat == null) return '';
-    final stemHan = widget.saju.dayPillar.chunGan;
-    final branchHan = widget.saju.dayPillar.jiJi;
-    final stemKo = _stemHanToKo[stemHan] ?? stemHan;
-    final branchKo = _branchHanToKo[branchHan] ?? branchHan;
-    final dayPillarKo = '$stemKo$branchKo'; // 예: '신묘'.
-    // LifeParagraphService.lookup 자체가 일주 정확 매칭 → 일간 fallback chain 수행.
-    // dayPillarKo (일주 60) 우선 매칭, miss 시 stemKo (일간 1글자) fallback.
-    return LifeParagraphService.paragraphStatic(
-      dayPillar: dayPillarKo,
+    // R90 sprint 5 — 사주 anchor 다층화 mandate (사용자 verbatim):
+    //   "원래 사주는 일주로만 봐?? 내 사주가 곧 평생사주인데 왜 신묘일주만 말하지??"
+    // paragraphForSajuStatic 가 sprint 1 prefix 제거된 base + anchor fragment 1~2 결합.
+    // 같은 일주여도 본인 사주 anchor (월령/십성/격국/5행) 가 다르면 본문 차별화.
+    return LifeParagraphService.paragraphForSajuStatic(
+      saju: widget.saju,
       category: cat,
       gender: widget.isMale ? 'M' : 'F',
     );
