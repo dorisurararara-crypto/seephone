@@ -94,11 +94,11 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+45) — R86 sprint 4 (today saju 모순 fix) 통합 1.0.0+45.
+      // pubspec version 자체 (1.0.0+47) — R90 사주 anchor 다층화 fix.
       expect(
-        pubspecSrc.contains('version: 1.0.0+45'),
+        pubspecSrc.contains('version: 1.0.0+47'),
         isTrue,
-        reason: 'pubspec version (1.0.0+45) 자체 변경 — R86 sprint 4 delivery 불일치',
+        reason: 'pubspec version (1.0.0+47) 자체 변경 — R90 sprint 8 delivery 불일치',
       );
     });
 

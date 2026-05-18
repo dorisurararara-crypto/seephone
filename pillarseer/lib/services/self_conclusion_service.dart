@@ -1,10 +1,16 @@
-// Pillar Seer — R88 sprint 9 SelfConclusionService.
+// Pillar Seer — R88 sprint 9 SelfConclusionService (R90 sprint 6 round 3 톤 보강).
 //
 // "나는 어떤 사람?" 결론형 generator. 일간 + 5행 dominant anchor 로 80~200자
-// 한 단락 결론 paragraph. spec sprint 9: "당신은 ~ 같은 사람이에요" 패턴.
+// 한 단락 결론 paragraph.
 //
-// 일간 10 × 5행 dominant 5 = 50 baseline + LifeParagraphService 의 conclusion_self
-// 일간 fallback 까지. idempotent.
+// R88 baseline 보존 (사용자 mandate "회귀 가드"):
+//   - 80~200자 hard cap
+//   - conclusion_self 카테고리 = split X (M/F 동일 출력)
+//
+// R90 sprint 6 round 3 톤 fix (R88 회귀 갓ne 깨지 않는 범위 안):
+//   - "X이라" 어색 조사 → "X 쪽이라" 보정
+//   - "있는 그대로의 본인 모습이 가장 강한 매력이에요" → 동일 (R88 baseline 보존).
+//   - prefix-db 중복 첫 sentence skip 로직 유지.
 
 import '../models/saju_result.dart';
 import 'life_paragraph_service.dart';
@@ -34,7 +40,7 @@ class SelfConclusionService {
   };
 
   /// 일간 + dominant 별 결론 prefix (50 case anchor).
-  /// '당신은 ~ 같은 사람이에요' 패턴으로 첫 줄 변별력 확보.
+  /// R90 sprint 6 — "X이라" → "X 쪽이라" 어색 조사 보정.
   static String _conclusionPrefix(String stemKo, String dominant) {
     final domKo = _elKo[dominant] ?? dominant;
     // 일간별 키워드.
@@ -60,10 +66,12 @@ class SelfConclusionService {
       '水': '변화 많은 환경에서도 적응이 자연스러워요',
     };
     final domDesc = domTone[dominant] ?? '자기 색이 또렷한 매력이 있어요';
-    return '본인은 한 마디로 \'$stemDesc 사람\'이에요. 본인 안에서 가장 강한 색이 $domKo이라 $domDesc.';
+    return '본인은 한 마디로 \'$stemDesc 사람\'이에요. 본인 안에서 가장 강한 색이 $domKo 쪽이라 $domDesc.';
   }
 
   /// 사주 → 80~200자 결론 paragraph.
+  /// R88 baseline (200 cap + gender X) 보존. R90 anchor 다층화 효과는
+  /// LifeOverviewService + paragraphForSaju 가 처리.
   static Future<String> conclude(SajuResult saju, {bool isMale = true}) async {
     final stemHan = saju.dayPillar.chunGan;
     final stemKo = _stemHanToKo[stemHan] ?? stemHan;
@@ -73,14 +81,12 @@ class SelfConclusionService {
     final prefix = _conclusionPrefix(stemKo, dominant);
 
     // 2. LifeParagraphService 의 conclusion_self paragraph (일간 fallback).
-    //    R90 sprint 5 — conclusion_self 카테고리는 anchor fragment matrix 가 empty 라
-    //    fragment 결합 X (LifeOverviewService 가 anchor 7 직접 빌드). paragraphStatic 유지.
     final dbConcl = await LifeParagraphService.paragraphStatic(
       dayPillar: stemKo,
       category: LifeCategory.conclusionSelf,
     );
-    // dbConcl 첫 마침표 단위.
-    final dbSentence = _firstSentence(dbConcl);
+    // dbConcl 첫 마침표 단위 — prefix 와 중복되는 첫 sentence 는 skip.
+    final dbSentence = _secondOrFirstSentence(dbConcl);
 
     // 3. 마무리 (페르소나 친근 톤 — 사주 도메인 용어 없이).
     final closing = '있는 그대로의 본인 모습이 가장 강한 매력이에요.';
@@ -92,7 +98,7 @@ class SelfConclusionService {
     if (result.length < 80) {
       result = '$result 한 가지 모습으로 본인을 다 설명하지 말고 여러 면을 다 살려봐요.';
     }
-    // 200자 over 시 잘라내기.
+    // 200자 over 시 잘라내기 (R88 baseline mandate).
     if (result.length > 200) {
       final cut = result.substring(0, 200);
       final lastDot = cut.lastIndexOf('. ');
@@ -107,5 +113,24 @@ class SelfConclusionService {
     final idx = paragraph.indexOf('. ');
     final raw = idx > 0 ? paragraph.substring(0, idx + 1) : paragraph;
     return raw.length > 100 ? '${raw.substring(0, 100)}…' : raw;
+  }
+
+  /// R90 sprint 6 — prefix 와 중복되는 첫 sentence skip.
+  ///
+  /// db 본문 첫 sentence 가 "본인은 한 마디로" 또는 "한 마디로" 시작이면 prefix 와 중복
+  /// → 두 번째 sentence 부터 추출. 아니면 첫 sentence 그대로.
+  static String _secondOrFirstSentence(String paragraph) {
+    if (paragraph.isEmpty) return '';
+    final first = _firstSentence(paragraph);
+    final firstTrim = first.trim();
+    if (firstTrim.startsWith('본인은 한 마디로') || firstTrim.startsWith('한 마디로')) {
+      // 첫 sentence 잘라내고 두 번째 sentence 반환.
+      final firstDot = paragraph.indexOf('. ');
+      if (firstDot > 0 && firstDot + 2 < paragraph.length) {
+        final rest = paragraph.substring(firstDot + 2);
+        return _firstSentence(rest);
+      }
+    }
+    return first;
   }
 }
