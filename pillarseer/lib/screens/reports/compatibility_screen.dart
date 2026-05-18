@@ -1185,97 +1185,259 @@ class _DetailSection extends StatelessWidget {
         ),
       );
 
+  // R93 sprint 4 — 사용자 mandate verbatim: "오늘사주나 내 사주느낌으로 자세히 분석하는
+  // 느낌으로 되야하고". 사주 9 anchor 다 활용 + 각 섹션 길이 ×2~3 + 새 섹션 (첫 만남 /
+  // 일상 호흡 / 깊어지는 결).
   _CompatAnalysis _analyze(SajuResult me, SajuResult partner, bool useKo) {
+    final myGan = me.dayPillar.chunGan;
+    final myJi = me.dayPillar.jiJi;
+    final ptGan = partner.dayPillar.chunGan;
+    final ptJi = partner.dayPillar.jiJi;
     final myEl = me.dayPillar.chunGanElement;
     final ptEl = partner.dayPillar.chunGanElement;
+
     const generates = {
       '木': '火', '火': '土', '土': '金', '金': '水', '水': '木',
     };
     const overcomes = {
       '木': '土', '土': '水', '水': '火', '火': '金', '金': '木',
     };
+    const ganHap = {
+      '甲': '己', '己': '甲', '乙': '庚', '庚': '乙', '丙': '辛',
+      '辛': '丙', '丁': '壬', '壬': '丁', '戊': '癸', '癸': '戊',
+    };
+    const jiHap6 = {
+      '子': '丑', '丑': '子', '寅': '亥', '亥': '寅', '卯': '戌',
+      '戌': '卯', '辰': '酉', '酉': '辰', '巳': '申', '申': '巳',
+      '午': '未', '未': '午',
+    };
+    const jiSamhapPairs = {
+      '子': ['辰', '申'], '辰': ['子', '申'], '申': ['子', '辰'],
+      '寅': ['午', '戌'], '午': ['寅', '戌'], '戌': ['寅', '午'],
+      '巳': ['酉', '丑'], '酉': ['巳', '丑'], '丑': ['巳', '酉'],
+      '亥': ['卯', '未'], '卯': ['亥', '未'], '未': ['亥', '卯'],
+    };
     const ji12clash = {
       '子': '午', '丑': '未', '寅': '申', '卯': '酉', '辰': '戌', '巳': '亥',
       '午': '子', '未': '丑', '申': '寅', '酉': '卯', '戌': '辰', '亥': '巳',
     };
-    final clash = ji12clash[me.dayPillar.jiJi] == partner.dayPillar.jiJi;
+    const jiHyeong = {
+      '寅': ['巳', '申'], '巳': ['寅', '申'], '申': ['寅', '巳'],
+      '丑': ['戌', '未'], '戌': ['丑', '未'], '未': ['丑', '戌'],
+      '子': ['卯'], '卯': ['子'],
+    };
+
+    final sameDay = me.day60ji == partner.day60ji;
+    final sameBranch = myJi == ptJi;
+    final isGanHap = ganHap[myGan] == ptGan;
+    final isJiHap6 = jiHap6[myJi] == ptJi;
+    final isJiSamhap = (jiSamhapPairs[myJi] ?? const []).contains(ptJi);
+    final isClash = ji12clash[myJi] == ptJi;
+    final isHyeong = (jiHyeong[myJi] ?? const []).contains(ptJi);
+    final iGenerate = generates[myEl] == ptEl;
+    final theyGenerate = generates[ptEl] == myEl;
+    final iOvercome = overcomes[myEl] == ptEl;
+    final theyOvercome = overcomes[ptEl] == myEl;
     final complementary = me.elements.deficit == partner.elements.dominant ||
         partner.elements.deficit == me.elements.dominant;
 
-    String summary;
-    String attract;
-    String friction;
-    List<String> actions;
-
-    if (myEl == ptEl) {
-      summary = useKo
-          ? '같은 오행 성질을 가진 사이예요. 처음 만남이 빠르게 편안해지지만, 같은 약점이 동시에 드러나기 쉽습니다.'
-          : 'Same element vibe. Comfort comes fast — but the same blind spots also surface at once.';
-      attract = useKo
-          ? '리듬·말투·결정 속도가 비슷해 설명 없이도 통하는 느낌이 큽니다.'
-          : 'Rhythm, tone, and decision speed align — you read each other without explaining.';
-      friction = useKo
-          ? '결핍이 겹쳐 있어 한 사람이 약해진 순간 둘 다 같이 가라앉기 쉽습니다.'
-          : "Shared deficit means one person's dip pulls both down at the same time.";
-    } else if (generates[myEl] == ptEl || generates[ptEl] == myEl) {
-      summary = useKo
-          ? '한쪽이 다른 쪽을 살리는 상생(相生) 관계예요. 시간이 갈수록 깊어지고, 서로의 모서리가 다듬어집니다.'
-          : 'A nourishing (相生) bond — one element feeds the other. Depth compounds over time.';
-      attract = useKo
-          ? '서로 부족한 부분을 자연스럽게 채워주고, 보호받는 느낌이 큽니다.'
-          : "You fill each other's gaps naturally; both feel quietly protected.";
-      friction = useKo
-          ? '한 사람이 계속 주기만 하면 균형이 깨질 수 있어요. 받는 쪽의 표현이 중요합니다.'
-          : "If one keeps giving, balance frays. The receiver's gratitude has to be visible.";
-    } else if (overcomes[myEl] == ptEl || overcomes[ptEl] == myEl) {
-      summary = useKo
-          ? '한쪽이 다른 쪽을 누르는 상극(相剋) 관계입니다. 처음엔 자극이지만, 잘 다루면 둘 다 더 단단해집니다.'
-          : 'A controlling (相剋) bond — friction is structural. Handled well, both grow tougher.';
-      attract = useKo
-          ? '서로 약점을 정확히 짚어주고, 끌어올려 주는 코치 같은 면이 강해요.'
-          : "You both name each other's weak spots cleanly — coach energy, not flatter energy.";
-      friction = useKo
-          ? '말의 톤이 한 단계만 높아져도 통제처럼 느껴질 수 있어요. 의도와 표현의 거리가 중요합니다.'
-          : 'One notch sharper tone can read as control. Distance between intent and delivery is everything.';
+    // ── [1] summary — 첫 만남 + 오행 base + 일상 호흡 anchor (3~5 문장) ─────────
+    final summary = StringBuffer();
+    if (useKo) {
+      if (myEl == ptEl) {
+        summary.write(
+            '두 사람은 같은 오행($myEl) 결을 타고 났어요. 처음 만났을 때부터 별 설명 없이도 결이 닿고, 좋아하는 톤·결정 속도·일상 리듬이 비슷해서 빠르게 편해지는 사이예요. 다만 결이 같은 만큼 약한 자리도 겹쳐서 한 명이 가라앉으면 같이 가라앉기 쉬운 구조예요.');
+      } else if (iGenerate) {
+        summary.write(
+            '내 기운이 상대를 살리는 상생(相生) 관계예요. 내가 한 마디 한 행동이 상대한테 깊게 닿고, 상대가 자라는 모습을 보면서 내가 더 단단해지는 결이에요. 천천히 가도 시간이 쌓이면 누구도 못 깨는 인연으로 자리잡아요.');
+      } else if (theyGenerate) {
+        summary.write(
+            '상대가 나를 살리는 상생(相生) 관계예요. 상대의 결이 내 부족한 자리를 자연스럽게 채워줘서 가까이 있을수록 내가 편해지는 사이예요. 받는 쪽이 표현을 자주 안 해도 상대는 알아주지만, 한 번씩 고마움을 말로 전하면 관계가 한 단계 깊어져요.');
+      } else if (iOvercome) {
+        summary.write(
+            '내 기운이 상대를 누르는 상극(相剋) 관계예요. 처음엔 내가 주도하는 자리가 자연스럽고 상대 약점을 정확히 짚어내는 코치 같은 결이지만, 톤이 한 단계만 올라가도 통제처럼 느껴질 수 있어요. 의도와 표현의 거리를 늘 의식해야 오래 가요.');
+      } else if (theyOvercome) {
+        summary.write(
+            '상대가 나를 누르는 상극(相剋) 관계예요. 상대 한 마디가 내 페이스를 흔드는 경우가 종종 있고, 가까워질수록 내가 자기 색을 지키는 연습이 필요한 결이에요. 잘 다루면 둘 다 단단해지지만 그 전에 서로의 톤 차이를 인정하는 게 먼저예요.');
+      } else {
+        summary.write(
+            '두 사람의 오행이 직접 생극(生剋) 관계가 없어요. 자극도 충돌도 크지 않고, 첫인상은 잔잔하고 편안하지만 누군가 적극적으로 신호를 보내지 않으면 자연스럽게 거리가 벌어질 수 있어요. 의식적으로 무게를 만들 때 비로소 깊이가 생기는 인연이에요.');
+      }
+      // 일주 동일 / 일지 동일 추가 한 줄
+      if (sameDay) {
+        summary.write(
+            ' 게다가 같은 60갑자 일주(${me.day60ji})를 공유해요. 거울 보듯 닮은 면이 많고, 한 사람이 깨달은 건 다른 사람도 곧 깨달아요.');
+      } else if (sameBranch) {
+        summary.write(
+            ' 같은 일지($myJi)를 공유해서 인생 리듬·계절감·체질이 비슷해요. 함께 있는 시간 자체가 안정적인 결이에요.');
+      }
     } else {
-      summary = useKo
-          ? '약한 상호작용 — 충돌도 적고 흥분도 적습니다. 의식적으로 관계의 무게를 만들 때 깊이가 생깁니다.'
-          : 'Mild interaction — neither clash nor spark dominates. You build the texture deliberately.';
-      attract = useKo
-          ? '판단을 강요하지 않는 편안함이 매력입니다.'
-          : "A quiet comfort that doesn't demand alignment.";
-      friction = useKo
-          ? '서로 따로 살 수도 있는 관계라서 적극적인 신호가 없으면 거리감이 늘어요.'
-          : 'You can drift apart easily — without active signals, distance grows.';
+      if (myEl == ptEl) {
+        summary.write(
+            'You two share the same element ($myEl). Comfort arrives quickly — taste, decision speed, and daily rhythm align without explaining. The flip side: shared weak spots, so when one dips the other dips at the same time.');
+      } else if (iGenerate) {
+        summary.write(
+            'You generate (相生) your partner. Your one word quietly grows them, and their growth in turn steadies you. Slow but durable; the bond hardens with time.');
+      } else if (theyGenerate) {
+        summary.write(
+            'Your partner generates (相生) you. Their grain fills your gaps without effort. You receive more than you give, so showing thanks out loud deepens the bond.');
+      } else if (iOvercome) {
+        summary.write(
+            'You overcome (相剋) your partner. You lead naturally and read their weak spots like a coach. But one notch sharper tone reads as control — intent and delivery must match.');
+      } else if (theyOvercome) {
+        summary.write(
+            'Your partner overcomes (相剋) you. Their one word can shift your pace. The closer you get, the more you must hold your own color. Handle well and both grow tougher.');
+      } else {
+        summary.write(
+            'Mild interaction — neither clash nor spark dominates. Distance grows unless someone deliberately builds weight.');
+      }
+      if (sameDay) {
+        summary.write(
+            ' You also share the same day pillar (${me.day60ji}) — a mirror bond.');
+      } else if (sameBranch) {
+        summary.write(' Same day branch ($myJi) — life rhythm aligns.');
+      }
     }
 
-    if (clash) {
-      friction += useKo
-          ? ' 일주 띠끼리 충(沖)이 있어서 결정·여행·이사 같은 큰 선택에서 의견이 엇갈리기 쉬워요.'
-          : ' Day-branch clash (沖) adds friction around big decisions.';
-    }
-    if (complementary) {
-      attract += useKo
-          ? ' 한쪽이 많이 가진 부분이 다른 쪽이 부족한 부분을 정확히 채우는 보완 구조도 있어요.'
-          : " One person's dominant element fills the other's deficit.";
+    // ── [2] attract — 끌리는 지점 (천간합 / 지지합 / 보완 구조) ──────────────────
+    final attract = StringBuffer();
+    if (useKo) {
+      if (isGanHap) {
+        attract.write(
+            '천간 오합($myGan·$ptGan)이 맺어진 사이예요. 천간합은 사주에서 가장 강한 끌림 중 하나로, 처음 봤을 때부터 끌리는 자석 같은 결이에요. 한 번 가까워지면 떨어지기 힘든 구조라, 평생 친구·연인·동업자 어느 자리로 두어도 결이 단단해져요.');
+      } else if (isJiHap6) {
+        attract.write(
+            '지지 육합($myJi·$ptJi)이 있어서 가까워질수록 일상 호흡이 자연스럽게 맞아져요. 같이 살거나 같이 일하는 자리에 잘 어울리고, 의식하지 않아도 둘의 페이스가 합쳐지는 결이에요. 함께 한 공간에 있을 때 가장 빛나는 관계예요.');
+      } else if (isJiSamhap) {
+        attract.write(
+            '지지 삼합 일부($myJi·$ptJi)가 맺어져 있어서 같은 목표를 향해 움직일 때 시너지가 가장 잘 나와요. 함께 프로젝트 하나, 여행 한 번, 가게 하나 만들어가는 자리가 잘 맞고, 결과를 같이 만든 경험이 관계를 두텁게 해요.');
+      } else if (myEl == ptEl) {
+        attract.write(
+            '오행 비화(比和) — 같은 결이라 첫인상이 익숙하고, 둘만의 말투·취향·결정 속도가 빠르게 맞아져요. 굳이 설명 안 해도 통하는 자리에 같이 있을 때 편안함이 가장 커요.');
+      } else if (iGenerate || theyGenerate) {
+        attract.write(
+            '오행 상생(相生) — 한 사람이 다른 사람을 자연스럽게 자라게 하는 결이에요. 받는 쪽은 보호받는 느낌이 크고, 주는 쪽은 자기가 만들어낸 변화에서 보람을 느껴요. 시간이 지날수록 깊어지는 관계예요.');
+      } else {
+        attract.write(
+            '판단을 강요하지 않는 잔잔한 편안함이 매력이에요. 강한 끌림은 없지만 한 번 가까워지면 부담 없이 오래 가는 결이에요.');
+      }
+      if (complementary) {
+        attract.write(
+            ' 게다가 한 사람이 많이 가진 오행이 다른 사람이 부족한 자리를 정확히 채우는 보완 구조도 있어요. 같이 있을 때 둘 다 균형이 잡혀서 결정·건강·돈 흐름이 모두 안정돼요.');
+      }
+    } else {
+      if (isGanHap) {
+        attract.write(
+            'Heavenly stem union ($myGan·$ptGan) — one of the strongest pulls in saju. Magnetic from first sight; once close, hard to separate. Friend, partner, business — the bond holds wherever you place it.');
+      } else if (isJiHap6) {
+        attract.write(
+            'Six harmony ($myJi·$ptJi) — daily breath syncs without effort. Fits living or working together; shines brightest when sharing space.');
+      } else if (isJiSamhap) {
+        attract.write(
+            "Triad partial ($myJi·$ptJi) — synergy peaks around shared goals. Build a project, take a trip, run a shop together — shared outcomes thicken the bond.");
+      } else if (myEl == ptEl) {
+        attract.write(
+            'Same element grain — first impression feels familiar; tone, taste, and decision speed sync fast. Comfort runs highest in shared space.');
+      } else if (iGenerate || theyGenerate) {
+        attract.write(
+            'Generating (相生) bond — one quietly grows the other. The receiver feels protected; the giver finds meaning. Depth compounds over time.');
+      } else {
+        attract.write("A quiet ease that doesn't demand alignment. No strong pull, but durable once close.");
+      }
+      if (complementary) {
+        attract.write(
+            " Dominant element on one side fills the deficit on the other — together, balance shows in decisions, health, money flow.");
+      }
     }
 
-    actions = useKo
-        ? [
-            '매주 한 가지 결정은 상대 의견을 먼저 듣고 정해보기.',
-            '같은 약점이 보이는 날은 둘 중 한 명이 의식적으로 다른 행동 선택.',
-            '서로 부족한 오행을 카드로 공유하고, 색·음식·장소 중 하나로 작게 챙겨보기.',
-          ]
-        : [
-            'Once a week, let the other go first on one real decision.',
-            'On days when shared weak spots show, one of you intentionally picks the opposite move.',
-            "Share each other's deficit element openly — pick one small ritual together.",
-          ];
+    // ── [3] friction — 부딪힘 (지지충 / 형 / 상극 detailed) ──────────────────────
+    final friction = StringBuffer();
+    if (useKo) {
+      if (isClash) {
+        friction.write(
+            '지지 충($myJi·$ptJi)이 있어요. 일주끼리 충이 있으면 큰 결정·이사·여행·돈 결정에서 의견이 자주 엇갈려요. 사주가 말하는 한 가지 — 미리 룰을 정하는 것. "이건 누구 결정으로 가자" 같은 합의를 평소에 해두면 한 번씩 부딪힐 때도 큰 다툼으로 안 가요. 충이 있는 사이는 한 번 제대로 부딪히고 나면 오히려 깊어지는 경우가 많아요.');
+      } else if (isHyeong) {
+        friction.write(
+            '지지 형($myJi·$ptJi)이 걸려 있어요. 한 번씩 강한 한 마디가 오갈 수 있고, 그 한 마디가 평소 누적된 작은 서운함에서 시작되는 경우가 많아요. 평소에 작은 인정과 칭찬을 자주 챙겨주는 게 큰 다툼을 막아요.');
+      } else if (iOvercome || theyOvercome) {
+        friction.write(
+            '오행 상극이 있어서 말의 톤이 한 단계만 높아져도 통제처럼 느껴질 수 있어요. 의도와 표현의 거리가 가장 중요한 사이라, 같은 말이라도 "왜"부터 짚어주는 습관이 필요해요. 한 번 잘 풀면 둘 다 단단해지는 관계예요.');
+      } else if (myEl == ptEl) {
+        friction.write(
+            '결이 같아서 약한 자리도 겹쳐요. 한 사람이 가라앉으면 다른 사람도 같이 가라앉기 쉬운 구조라, 둘 중 한 명이 의식적으로 다른 행동을 선택해주는 룰이 필요해요.');
+      } else {
+        friction.write(
+            '강한 부딪힘은 없지만, 적극적인 신호가 없으면 자연스럽게 거리가 벌어질 수 있어요. 한 사람이 먼저 신호를 보내는 룰을 정해두면 관계가 흔들리지 않아요.');
+      }
+    } else {
+      if (isClash) {
+        friction.write(
+            "Branch clash ($myJi·$ptJi). Friction shows in big decisions, moves, money. Pre-agree rules — 'this kind of decision goes your way' — and small clashes don't escalate. Often deepens after one real clash.");
+      } else if (isHyeong) {
+        friction.write(
+            "Branch punishment ($myJi·$ptJi). Sharp words may surface, usually from accumulated small slights. Daily acknowledgments prevent the big blow-up.");
+      } else if (iOvercome || theyOvercome) {
+        friction.write(
+            'Overcoming bond — one notch sharper tone reads as control. Lead with "why" before "what". Worked through, both grow tougher.');
+      } else if (myEl == ptEl) {
+        friction.write(
+            "Shared element means shared weak spots. When one dips, the other tends to dip with them. One of you must consciously pick the opposite move.");
+      } else {
+        friction.write(
+            "No strong clash, but distance grows without active signals. Agree who reaches out first when there's silence.");
+      }
+    }
+
+    // ── [4] actions — 3 가지 실천 (anchor 따라 맞춤) ─────────────────────────────
+    final List<String> actions;
+    if (useKo) {
+      actions = [
+        if (isClash)
+          '큰 결정 (이사·여행·돈) 은 미리 룰을 정해두기 — "이런 결정은 누구 의견으로 가자" 합의 한 줄이면 충돌이 줄어요.'
+        else if (isGanHap || isJiHap6)
+          '천간합·지지합이 있어서 자연스럽게 가까워지는 결 — 일주일에 한 번 둘만 보내는 시간 만들기.'
+        else
+          '매주 한 가지 결정은 상대 의견을 먼저 듣고 정해보기.',
+        if (myEl == ptEl)
+          '같은 약점이 보이는 날은 둘 중 한 명이 의식적으로 다른 행동 선택 (예: 둘 다 지쳤을 때 한 명은 산책, 한 명은 휴식).'
+        else if (complementary)
+          '서로 부족한 오행을 카드로 공유하고, 색·음식·장소 중 하나로 작게 챙겨주기.'
+        else
+          '한 달에 한 번은 둘이 사주 8글자 같이 보면서 서로 어디가 강하고 어디가 약한지 확인해보기.',
+        if (isHyeong || isClash)
+          '평소에 작은 인정·칭찬 자주 챙기기 — 큰 한 마디 갈등은 작은 누적에서 시작돼요.'
+        else if (iGenerate || theyGenerate)
+          '받는 쪽이 한 번씩 고마움을 말로 전하기 — 보이지 않으면 주는 쪽이 지쳐요.'
+        else
+          '같이 한 가지 작은 루틴 만들기 (예: 매일 밤 한 마디 인사 / 주 1회 같이 산책).',
+      ];
+    } else {
+      actions = [
+        if (isClash)
+          'Pre-agree rules on big decisions (move, travel, money) — one line of consensus prevents escalation.'
+        else if (isGanHap || isJiHap6)
+          'Stem/branch union means natural closeness — protect one weekly time slot for just the two of you.'
+        else
+          'Once a week, let the other go first on one real decision.',
+        if (myEl == ptEl)
+          "When both feel the same dip, one of you picks the opposite move."
+        else if (complementary)
+          "Share each other's deficit element — pick one small ritual (color, food, place)."
+        else
+          "Once a month, look at both 8-character saju together; name strengths and weaknesses.",
+        if (isHyeong || isClash)
+          "Daily small acknowledgments — big-blow-up words start from accumulated small slights."
+        else if (iGenerate || theyGenerate)
+          "The receiver says thanks out loud once in a while — invisible gratitude burns the giver out."
+        else
+          "Build one small shared ritual (nightly greeting, weekly walk).",
+      ];
+    }
 
     return _CompatAnalysis(
-      summary: summary,
-      attract: attract,
-      friction: friction,
+      summary: summary.toString(),
+      attract: attract.toString(),
+      friction: friction.toString(),
       actions: actions,
     );
   }
