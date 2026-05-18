@@ -96,10 +96,17 @@ class TodayDeepService {
 
     // Round 71 — `DayEnergyKind` 단일 source-of-truth. body / headline 도 같은 분기.
     final dayEnergy = classifyDayEnergy(todayScore);
+
+    // R98 — 반복 sentence 분산용 deterministic seed (사용자 사주 anchor).
+    // 같은 사주 + 같은 오늘 = 항상 같은 sentence (consistency 보장),
+    // 다른 사주끼리는 다른 sentence 가 픽되도록 spread.
+    final branchPickSeed = _phraseSeed('$userDayBranch$todayBranch');
+    final godPickSeed = _phraseSeed('$userDayStem$todayStem$userDayBranch');
+
     // narrative 조합 — godPhrase 와 hook 모두 dayEnergy 기반.
-    final godKo = god == null ? '' : _godPhraseKoByEnergy(god, dayEnergy);
+    final godKo = god == null ? '' : _godPhraseKoByEnergy(god, dayEnergy, godPickSeed);
     final godEn = god == null ? '' : _godPhraseEnByEnergy(god, dayEnergy);
-    final brKo = _branchRelationKo(branchRelation);
+    final brKo = _branchRelationKo(branchRelation, branchPickSeed);
     final brEn = _branchRelationEn(branchRelation);
 
     final hooks = _hooksByEnergy(dayEnergy);
@@ -107,12 +114,30 @@ class TodayDeepService {
     final headlineKo = '오늘 사주 총평: ${hooks.moodKo} 날.';
     final headlineEn = "Today's Saju Summary: ${hooks.moodEn}.";
 
+    // R97 — mixedDay opening 변형 pool deterministic pick anchor.
+    // 사용자 사주 (일간 + 일지) + 오늘 일지 만으로 결정 (같은 사주 = 같은 sentence).
+    // R98 — seed mix 강화 (FNV-1a 변형) 으로 5 pool 골고루 분산.
+    final mixedSeed = _mixedOpeningSeed(
+      userDayStem: userDayStem,
+      userDayBranch: userDayBranch,
+      todayBranch: todayBranch,
+    );
+
+    // R98 — mixedDay moodHook 변형 pool seed (mixedSeed 와 분리해 더 spread).
+    final moodHookSeed = _phraseSeed('$userDayStem$userDayBranch$todayStem$todayBranch');
+
+    // R98 — mixedDay 일 때 moodHook 3-pool deterministic pick (sample 5 반복 fix).
+    final resolvedMoodHookKo = dayEnergy == DayEnergyKind.mixedDay
+        ? _mixedDayMoodHookPool[moodHookSeed % _mixedDayMoodHookPool.length]
+        : hooks.bodyHookKo;
+
     var bodyKo = _composeBodyKo(
       godKo: godKo,
       branchKo: brKo,
       elementKo: elementMood.ko,
-      moodHookKo: hooks.bodyHookKo,
+      moodHookKo: resolvedMoodHookKo,
       energy: dayEnergy,
+      mixedOpeningSeed: mixedSeed,
     );
     var bodyEn = _composeBodyEn(
       godEn: godEn,
@@ -255,13 +280,14 @@ class TodayDeepService {
   // Round 71 — restDay 일 때 "승진/공식 자리/도전" 류 단어가 bodyKo 에 등장하면
   // 사용자 불만 #3 (모순) 재발. dayEnergy 별 godPhrase 변주로 차단.
   // Round 74 — '분위기' 5회 반복 분산. 일상 평서.
-  static String _godPhraseKoByEnergy(TenGod g, DayEnergyKind energy) {
+  // R98 — geopjae sample 5/10 반복 fix. seed 기반 3-pool deterministic pick.
+  static String _godPhraseKoByEnergy(TenGod g, DayEnergyKind energy, [int seed = 0]) {
     if (energy == DayEnergyKind.restDay) {
       switch (g) {
         case TenGod.jeonggwan:
-          return '평소 자리 관련 얘기가 오늘은 잠잠하다';
+          return '오늘은 자리 관련 얘기가 비교적 잠잠해요';
         case TenGod.pyeongwan:
-          return '오늘은 새 일 떠맡기에 어울리는 날이 아니에요';
+          return '오늘은 새 일을 떠맡기엔 어울리지 않는 날이에요';
         case TenGod.sanggwan:
           return '표현 욕구가 평소보다 조용해져요';
         case TenGod.pyeonjae:
@@ -276,7 +302,43 @@ class TodayDeepService {
           return _godPhraseKo(g);
       }
     }
+    // R98 — geopjae 변형 pool (non-restDay 기본 톤 분산).
+    if (g == TenGod.geopjae) {
+      return _geopjaeNonRestPool[seed % _geopjaeNonRestPool.length];
+    }
     return _godPhraseKo(g);
+  }
+
+  /// R98 — geopjae (non-restDay) 본문 godPhrase 3-pool.
+  /// 동일 사용자 (dayStem+dayBranch) + 오늘 stem hash 로 deterministic pick.
+  static const List<String> _geopjaeNonRestPool = [
+    '오늘은 또래나 가까운 사람과 자꾸 비교가 생기는 날이에요',
+    '오늘은 평소에 신경 안 쓰던 비교가 한 번씩 떠오를 수 있어요',
+    '오늘은 가까운 사람 한 명이 자꾸 신경 쓰이는 날이에요',
+  ];
+
+  /// R98 — mixedDay 일 때 본문 마지막 줄 (moodHook) 3-pool.
+  /// 같은 사주는 항상 같은 sentence — 다른 사주 끼리는 spread.
+  static const List<String> _mixedDayMoodHookPool = [
+    '큰 일은 잠시 두고 작은 마무리 하나에 시간 쓰는 게 더 좋아요',
+    '급한 결정 대신 흐름을 보면서 한 박자 쉬어가요',
+    '오늘은 한 가지만 분명히 끝내도 충분한 날이에요',
+  ];
+
+  /// R98 — phrase pool deterministic pick 용 hash (FNV-1a + avalanche).
+  /// 단순 DJBX33A 는 한자 codepoint base bit 가 비슷해 3-pool 에서 2 bucket
+  /// 만 채워졌음 (sample 10 중 4/0/1). 자리별 salt + 두 단계 avalanche 추가.
+  static int _phraseSeed(String key) {
+    var h = 0x811c9dc5; // FNV offset basis
+    for (var i = 0; i < key.length; i++) {
+      final ch = key.codeUnitAt(i);
+      h = (h ^ (ch + i * 0x9E3779B1)) & 0x7fffffff;
+      h = (h * 16777619) & 0x7fffffff;
+    }
+    h ^= h >> 13;
+    h = (h * 0x5bd1e995) & 0x7fffffff;
+    h ^= h >> 15;
+    return h & 0x7fffffff;
   }
 
   static String _godPhraseEnByEnergy(TenGod g, DayEnergyKind energy) {
@@ -312,7 +374,7 @@ class TodayDeepService {
       case TenGod.bigyeon:
         return '오늘은 친구나 동료처럼 비슷한 자리 사람이 가까워지는 신호가 있어요';
       case TenGod.geopjae:
-        return '오늘은 또래 사이 비교·경쟁 신호가 평소보다 신경 쓰일 수 있어요';
+        return '오늘은 괜히 비교가 신경 쓰일 수 있는 날이에요';
       case TenGod.siksin:
         return '오늘은 표현·창작이 잘 풀려서 말과 글이 가벼워져요';
       case TenGod.sanggwan:
@@ -320,7 +382,7 @@ class TodayDeepService {
       case TenGod.pyeonjae:
         return '오늘은 뜻밖의 기회나 큰돈 관련 얘기가 다가올 수 있어요';
       case TenGod.jeongjae:
-        return '꾸준한 수입·약속이 자리 잡는 안정감이 강해지는 날이에요';
+        return '꾸준한 수입이나 약속이 안정적으로 자리 잡는 날이에요';
       case TenGod.pyeongwan:
         return '오늘은 큰 책임이나 새 도전 신호가 평소보다 가까워질 수 있어요';
       case TenGod.jeonggwan:
@@ -392,10 +454,11 @@ class TodayDeepService {
     return _BranchRelation.neutral;
   }
 
-  static String _branchRelationKo(_BranchRelation r) {
+  static String _branchRelationKo(_BranchRelation r, [int seed = 0]) {
     // R86 sprint 4 — neutral phrase 의 "큰 충돌 없이" 표현이 godPhrase 와
     // 모순(예: 겁재 "부딪칠 일이 생겨요" + neutral "충돌 없이") 을 일으켜 사용자 직발.
     // 모순 가능성 없는 중립 톤으로 갱신.
+    // R98 — neutral 7/10 반복 fix. seed 기반 5-pool deterministic pick.
     switch (r) {
       case _BranchRelation.same:
         return '오늘은 평소 습관과 말버릇이 더 선명하게 드러나요';
@@ -404,9 +467,20 @@ class TodayDeepService {
       case _BranchRelation.chung:
         return '오늘은 마음이 쉽게 흔들려 결정이 평소보다 어렵게 느껴질 수 있어요';
       case _BranchRelation.neutral:
-        return '오늘은 자기 페이스대로 흘러가는 평탄한 날에 가까워요';
+        return _branchNeutralPool[seed % _branchNeutralPool.length];
     }
   }
+
+  /// R98 — branch neutral 본문 5-pool.
+  /// 같은 사용자 (일지) + 오늘 일지 hash 로 deterministic pick — 같은 사주는 항상
+  /// 같은 sentence. "충돌/부딪" 단어 0 (R86 sprint 4 invariant 보존).
+  static const List<String> _branchNeutralPool = [
+    '오늘은 큰 변동 없이 자기 결대로 흘러가는 평탄한 날이에요',
+    '오늘은 외부 자극보다 본인 페이스를 지키기 좋은 날이에요',
+    '오늘은 잔잔한 흐름 안에서 자기 자리를 확인하는 날이에요',
+    '오늘은 안정적인 분위기 안에서 본인 색이 또렷해지는 날이에요',
+    '오늘은 외부 신호가 강하지 않고 본인이 중심을 잡는 날이에요',
+  ];
 
   static String _branchRelationEn(_BranchRelation r) {
     switch (r) {
@@ -503,33 +577,66 @@ class TodayDeepService {
     }
   }
 
+  // R96 hotfix — 의미 무관한 5-sentence random paragraph 만들지 마.
+  // opening + godKo + branchKo + moodHook (4 sentence) 만 유지.
+  // middleHook (망설이던 일 / 새 판 / 억지로 밀어붙이면) + elementKo 라인은
+  // godKo/branchKo 와 인과관계 없는 random atom 이라 제거.
+  // ctx 주입 시 _daewoonAnchor + gyeokgukAnchor + yongsinSuffix 가 1 sentence
+  // append 되므로 총 4~5 sentence.
+  // R97 — mixedDay 5개 변형 pool. 사용자 사주 anchor (일간 + 일지 + 오늘 일지)
+  // hash 로 deterministic pick — 같은 사주는 항상 같은 sentence.
+  static const List<String> _mixedDayOpeningPool = [
+    '오늘은 한 번에 멀리 가기보다 한 발씩 정리하는 쪽이 잘 맞는 날이에요.',
+    '오늘은 끝내야 할 일 한 가지에 시간을 모으는 게 답이에요.',
+    '오늘은 결과보다 흐름을 잡아두는 쪽이 더 잘 맞아요.',
+    '오늘은 큰 그림보다 그동안 미뤄둔 작은 것 한 가지를 매듭 짓는 날이에요.',
+    '오늘은 새로 벌리기보다 하던 일에 한 박자 힘을 더 모으는 날이에요.',
+  ];
+
+  /// R97 → R98 — FNV-1a 변형 hash + rotational salt.
+  /// 기존 `h * 131 + ch` 단순 polynomial 은 한자 codepoint (~0x4E00 base)가 비슷해
+  /// 5-pool % 가 2-3 bucket 에 몰림 (sample 10 중 idx 0/2/3 만). FNV-1a + 위치별
+  /// salt 로 한자 base bit 까지 흩뜨려 5 bucket 골고루 분산.
+  static int _mixedOpeningSeed({
+    required String userDayStem,
+    required String userDayBranch,
+    required String todayBranch,
+  }) {
+    var h = 0x811c9dc5; // FNV offset basis
+    final key = '$userDayStem$userDayBranch$todayBranch';
+    for (var i = 0; i < key.length; i++) {
+      final ch = key.codeUnitAt(i);
+      // 위치 salt 와 함께 mix — 같은 한자라도 자리 다르면 다른 영향.
+      h = (h ^ (ch + i * 0x9E3779B1)) & 0x7fffffff;
+      h = (h * 16777619) & 0x7fffffff;
+    }
+    // 추가 avalanche — 상위 bit 까지 5-pool 까지 잘 흘러내려가게.
+    h ^= h >> 13;
+    h = (h * 0x5bd1e995) & 0x7fffffff;
+    h ^= h >> 15;
+    return h & 0x7fffffff;
+  }
+
   static String _composeBodyKo({
     required String godKo,
     required String branchKo,
     required String elementKo,
     required String moodHookKo,
     required DayEnergyKind energy,
+    int mixedOpeningSeed = 0,
   }) {
     final parts = <String>[];
     switch (energy) {
       case DayEnergyKind.actionDay:
         parts.add('오늘은 평소보다 말과 행동이 밖으로 잘 드러나는 날이에요.');
       case DayEnergyKind.mixedDay:
-        parts.add('오늘은 크게 치고 나가기보다 하던 일을 정리해 힘을 모으는 날이에요.');
+        final idx = mixedOpeningSeed % _mixedDayOpeningPool.length;
+        parts.add(_mixedDayOpeningPool[idx]);
       case DayEnergyKind.restDay:
         parts.add('오늘은 속도를 늦추고 안쪽을 정리할수록 잘 맞는 날이에요.');
     }
     if (godKo.isNotEmpty) parts.add('$godKo.');
     parts.add('$branchKo.');
-    switch (energy) {
-      case DayEnergyKind.actionDay:
-        parts.add('평소 망설이던 일도 오늘은 한 번 꺼내볼 만해요.');
-      case DayEnergyKind.mixedDay:
-        parts.add('새 판을 벌리기보다 지금 있는 자리를 단단하게 다지는 편이 좋아요.');
-      case DayEnergyKind.restDay:
-        parts.add('억지로 밀어붙이면 지치기 쉬우니, 오늘은 덜어내는 쪽이 더 이득이에요.');
-    }
-    parts.add('$elementKo.');
     parts.add('$moodHookKo.');
     return NaturalProseJoiner.join(parts);
   }
@@ -554,19 +661,8 @@ class TodayDeepService {
     }
     if (godEn.isNotEmpty) parts.add('Today: $godEn.');
     parts.add('$branchEn.');
-    switch (energy) {
-      case DayEnergyKind.actionDay:
-        parts.add(
-          'A message, pitch, or small first step can land better than usual.',
-        );
-      case DayEnergyKind.mixedDay:
-        parts.add(
-          'Hold your position and finish what already needs attention.',
-        );
-      case DayEnergyKind.restDay:
-        parts.add('Forcing progress will cost more than it gives back.');
-    }
-    parts.add('$elementEn.');
+    // R96 hotfix — drop random middleHook + elementEn line. Same intent as
+    // _composeBodyKo: avoid stitching meaning-unrelated atoms.
     parts.add('$moodHookEn.');
     return parts.join(' ');
   }

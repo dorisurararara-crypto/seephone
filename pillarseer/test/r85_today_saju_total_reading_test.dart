@@ -23,11 +23,18 @@ void main() {
       expect(reading.headlineEn.startsWith("Today's Saju Summary"), isTrue);
       expect(reading.headlineEn.contains("Today's mood"), isFalse);
 
+      // R96 hotfix — 의미 무관한 5+ sentence random paragraph 회피.
+      // opening + godKo + branchKo + moodHook = 3~4 sentence (ctx 합성 시 5).
       final sentenceCount = RegExp(r'[.!?。]').allMatches(reading.bodyKo).length;
       expect(
         sentenceCount,
-        greaterThanOrEqualTo(5),
-        reason: '오늘사주 본문은 짧은 일진 메모가 아니라 5문장 이상 총평이어야 함',
+        greaterThanOrEqualTo(3),
+        reason: '오늘사주 본문은 짧은 일진 메모가 아니라 최소 3문장 총평이어야 함',
+      );
+      expect(
+        sentenceCount,
+        lessThanOrEqualTo(5),
+        reason: 'R96 — 의미 무관 atom 5+ 줄짜리 random paragraph 금지',
       );
 
       const rawGanji = '甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥';
@@ -42,13 +49,19 @@ void main() {
       expect(reading.bodyEn.contains('Your chart opens outward'), isFalse);
       expect(reading.bodyEn.contains('Ride this energy'), isFalse);
       expect(reading.bodyEn.contains('Consolidating where you stand'), isFalse);
+      // R96 hotfix — English also capped to 3~5 sentence band.
       final enSentenceCount = RegExp(
         r'[.!?]',
       ).allMatches(reading.bodyEn).length;
       expect(
         enSentenceCount,
-        greaterThanOrEqualTo(5),
-        reason: 'English today-saju body should also read as a full summary',
+        greaterThanOrEqualTo(3),
+        reason: 'English today-saju body should read as a coherent summary',
+      );
+      expect(
+        enSentenceCount,
+        lessThanOrEqualTo(5),
+        reason: 'R96 — no 5+ random-atom paragraph in EN either',
       );
     });
 
