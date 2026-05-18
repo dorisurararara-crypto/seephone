@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# R90 backup of life_paragraphs.json (R89 baseline 1180 prefix)
+assets/data/life_paragraphs.json.bak.*
