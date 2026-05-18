@@ -23,6 +23,9 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _cityController = TextEditingController();
+  // R91 사용자 mandate — 입력 화면 최초 진입 시 커서가 "이름"으로 가야 함.
+  // 이전엔 YYYY autofocus 였어서 사용자가 "생년월일에 커서가 가 있음" 불만 제기.
+  final _nameFocus = FocusNode();
 
   // Round 71 사용자 불만 #1 — 달력/휠 UI 제거. 4 TextField (YYYY/MM/DD/HHMM).
   final _yearCtl = TextEditingController();
@@ -56,6 +59,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   void dispose() {
     _nameController.dispose();
     _cityController.dispose();
+    _nameFocus.dispose();
     _yearCtl.dispose();
     _monthCtl.dispose();
     _dayCtl.dispose();
@@ -244,6 +248,8 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                     _FieldLabel(text: l.inputName),
                     TextFormField(
                       controller: _nameController,
+                      focusNode: _nameFocus,
+                      autofocus: true,
                       style: GoogleFonts.notoSerifKr(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -270,7 +276,6 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                             focusNode: _yearFocus,
                             hint: 'YYYY',
                             maxLen: 4,
-                            autofocus: true,
                             onLengthReached: () => _monthFocus.requestFocus(),
                             onChanged: (_) => _recomputeDate(),
                           ),
@@ -868,7 +873,6 @@ class _NumberField extends StatelessWidget {
   final FocusNode focusNode;
   final String hint;
   final int maxLen;
-  final bool autofocus;
   final bool enabled;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onLengthReached;
@@ -877,7 +881,6 @@ class _NumberField extends StatelessWidget {
     required this.focusNode,
     required this.hint,
     required this.maxLen,
-    this.autofocus = false,
     this.enabled = true,
     this.onChanged,
     this.onLengthReached,
@@ -888,7 +891,6 @@ class _NumberField extends StatelessWidget {
     return TextField(
       controller: controller,
       focusNode: focusNode,
-      autofocus: autofocus,
       enabled: enabled,
       keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,

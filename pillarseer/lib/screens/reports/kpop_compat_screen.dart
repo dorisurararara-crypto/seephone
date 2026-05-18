@@ -1177,146 +1177,87 @@ class _StarRow extends StatelessWidget {
         ? (useKo ? star.nameKo : star.nameEn).split('(').first.trim()
         : (useKo ? star.nameKo : star.nameEn);
 
-    // [1] 첫 인상 (오행 관계)
+    // [1] 첫 인상 — R95 sprint 1 (사용자 mandate "맨 첫문장이 다 똑같아"):
+    // 같은 오행 관계라도 셀럽별 lead (이름·일주명·생년·blurb) 가 선행하도록 분리.
     final relation = _KpopAnchors.elementRelation(myEl, stEl);
-    String p1;
+    final identityLead = _starIdentityLead(star, useKo, shortName);
+    String relationLine;
     if (useKo) {
       switch (relation) {
         case _ElRel.same:
-          p1 = '$shortName과 너는 같은 오행 결을 타고 났어요. 처음 만났을 때 별 설명 없이도 결이 닿고, 좋아하는 음악·말투·결정 속도가 비슷해서 빠르게 편해지는 사이예요. 단, 결이 같은 만큼 약한 자리도 겹쳐서 한 명이 가라앉으면 같이 가라앉기 쉬워요.';
+          relationLine = '이 결이 너의 같은 오행과 만나면 별 설명 없이도 호흡이 닿고, 좋아하는 음악·말투·결정 속도가 비슷해서 빠르게 편해지는 사이예요. 단, 결이 겹친 만큼 약한 자리도 같이 겹쳐서 한 명이 가라앉으면 같이 가라앉기 쉬워요.';
           break;
         case _ElRel.iGenerate:
-          p1 = '$shortName과 너는 너의 기운이 상대를 살리는 상생 관계예요. 너의 한 마디 한 행동이 $shortName한테 깊게 닿고, 상대가 자라는 모습을 보면서 네가 더 단단해지는 결이에요. 천천히 가도 시간이 쌓이면 누구도 못 깨는 인연으로 굳어요.';
+          relationLine = '이 결을 너의 기운이 살리는 상생 자리에 두면, 너의 한 마디 한 행동이 $shortName한테 깊게 닿고 상대가 자라는 모습을 보면서 네가 더 단단해져요. 천천히 가도 시간이 쌓이면 누구도 못 깨는 인연으로 굳어요.';
           break;
         case _ElRel.theyGenerate:
-          p1 = '$shortName이 너를 살리는 상생 관계예요. 상대의 결이 너의 부족한 자리를 자연스럽게 채워줘서 가까이 있을수록 네가 편해지는 사이예요. 너는 받는 쪽이라 표현을 자주 안 해도 상대는 알아주지만, 한 번씩 고마움을 말로 전하면 관계가 한 단계 깊어져요.';
+          relationLine = '이 결이 오히려 너의 부족한 자리를 자연스럽게 채워주는 상생 결이에요. 가까이 있을수록 네가 편해지고, 받는 쪽이라 표현을 자주 안 해도 알아주지만, 한 번씩 고마움을 말로 전하면 관계가 한 단계 깊어져요.';
           break;
         case _ElRel.iOvercome:
-          p1 = '$shortName과 너는 너의 기운이 상대를 누르는 상극 관계예요. 처음엔 네가 주도하는 자리가 자연스럽고 상대 약점을 정확히 짚어내는 코치 같은 결이에요. 다만 톤이 한 단계만 올라가도 통제처럼 느껴질 수 있어서 의도와 표현의 거리를 늘 의식해야 해요.';
+          relationLine = '이 결을 너의 기운이 누르는 상극 자리에 두면, 처음엔 네가 주도하고 상대 약점을 정확히 짚어내는 코치 같은 결이에요. 다만 톤이 한 단계만 올라가도 통제처럼 느껴질 수 있어서 의도와 표현의 거리를 늘 의식해야 해요.';
           break;
         case _ElRel.theyOvercome:
-          p1 = '$shortName이 너를 누르는 상극 관계예요. 상대 한 마디가 너의 페이스를 흔드는 경우가 종종 있고, 가까워질수록 네가 자기 색을 지키는 연습이 필요한 결이에요. 잘 다루면 둘 다 단단해지지만 그 전에 서로의 톤 차이를 인정하는 게 먼저예요.';
+          relationLine = '이 결이 오히려 너의 페이스를 흔드는 상극 자리에 들어와요. 가까워질수록 네가 자기 색을 지키는 연습이 필요한 결이라, 잘 다루면 둘 다 단단해지지만 그 전에 서로의 톤 차이를 인정하는 게 먼저예요.';
           break;
         case _ElRel.neutral:
-          p1 = '$shortName과 너는 자극도 충돌도 크지 않은 결이에요. 첫인상은 잔잔하고 편안하지만, 누군가 적극적으로 신호를 보내지 않으면 자연스럽게 거리가 벌어질 수 있어요. 의식적으로 무게를 만들 때 비로소 깊이가 생기는 인연이에요.';
+          relationLine = '이 결과 너 사이엔 자극도 충돌도 크지 않아서 첫인상은 잔잔하고 편안해요. 누군가 적극적으로 신호를 보내지 않으면 자연스럽게 거리가 벌어질 수 있고, 의식적으로 무게를 만들 때 비로소 깊이가 생기는 인연이에요.';
           break;
       }
     } else {
       switch (relation) {
         case _ElRel.same:
-          p1 = "You and $shortName share the same element grain. Comfort comes quickly — taste in music, tone, decision speed all align. The flip side: shared weak spots, so when one dips, the other dips together.";
+          relationLine = "Place this grain against your same element and comfort comes quickly — taste, tone, decision speed all align. The flip side: shared weak spots, so when one dips, the other dips together.";
           break;
         case _ElRel.iGenerate:
-          p1 = "You feed $shortName — your energy quietly grows them. Their growth in turn makes you steadier. Slow but durable; the bond hardens over time.";
+          relationLine = "Set this grain into your producing position and your energy quietly grows $shortName. Their growth in turn makes you steadier. Slow but durable; the bond hardens over time.";
           break;
         case _ElRel.theyGenerate:
-          p1 = "$shortName feeds you. Their grain fills your gaps without effort. You receive more than you give, so showing thanks out loud once in a while deepens the bond.";
+          relationLine = "This grain fills the gaps in your own without effort. You receive more than you give, so showing thanks out loud once in a while deepens the bond.";
           break;
         case _ElRel.iOvercome:
-          p1 = "You overcome $shortName — you lead naturally and read their weak spots like a coach. Watch the tone: one notch sharper reads as control. Intent and delivery must match.";
+          relationLine = "When this grain meets your overcoming side, you lead naturally and read their weak spots like a coach. Watch the tone: one notch sharper reads as control — intent and delivery must match.";
           break;
         case _ElRel.theyOvercome:
-          p1 = "$shortName overcomes you. Their one word can shift your pace. The closer you get, the more you must hold your own color. Handle it well and both grow tougher.";
+          relationLine = "This grain shifts your pace with a single word. The closer you get, the more you must hold your own color. Handle it well and both grow tougher.";
           break;
         case _ElRel.neutral:
-          p1 = "Mild interaction — no spark, no clash. The bond drifts unless someone deliberately builds weight into it.";
+          relationLine = "Mild interaction with your grain — no spark, no clash. The bond drifts unless someone deliberately builds weight into it.";
           break;
       }
     }
+    final p1 = '$identityLead $relationLine';
 
-    // [2] 일상 호흡 (천간합·지지합·삼합·충·형 + sameDay/sameBranch)
-    final p2parts = <String>[];
-    if (useKo) {
-      if (sameDay) {
-        p2parts.add(
-            '같은 일주($shortName도 ${me.day60ji})를 타고 났어요. 60갑자 중 같은 자리에서 시작한 사이라 거울 보듯 닮은 면이 많고, 한 사람이 깨달은 건 다른 사람도 곧 깨달아요.');
-      } else if (sameBranch) {
-        p2parts.add(
-            '같은 일지(띠)를 공유해요. 띠가 같으면 인생 리듬·계절감·체질이 비슷해서 함께 있는 시간 자체가 안정적이에요.');
-      }
-      if (ganHap) {
-        p2parts.add(
-            '천간 오합($myGan·$stGan)이 맺어진 사이예요. 천간합은 사주에서 가장 강한 끌림 중 하나로, 처음 봤을 때부터 끌리는 자석 같은 결이에요. 다만 합이 강한 만큼 한쪽이 자기 색을 잃기 쉬우니 각자의 페이스를 잊지 않는 게 중요해요.');
-      }
-      if (jiHap6) {
-        p2parts.add(
-            '지지 육합($myJi·$stJi)이 있어서 가까워질수록 일상 호흡이 자연스럽게 맞아져요. 같이 살거나 같이 일하는 자리에 잘 어울리는 결이에요.');
-      } else if (jiSamhap) {
-        p2parts.add(
-            '지지 삼합 일부($myJi·$stJi)가 맺어져 있어서 같은 목표를 향해 움직일 때 시너지가 가장 잘 나와요. 함께 프로젝트 하나 만들어가는 자리가 잘 맞아요.');
-      }
-      if (jiClash) {
-        p2parts.add(
-            '지지 충($myJi·$stJi)이 있어요. 큰 결정·이사·여행·돈 결정에서 의견이 자주 엇갈리니까 미리 말로 룰을 정해두면 부딪힘이 줄어요. 충이 있는 사이는 한 번 부딪히고 나면 오히려 깊어지는 경우도 많아요.');
-      }
-      if (jiHyeong) {
-        p2parts.add(
-            '지지 형($myJi·$stJi)이 걸려 있어요. 한 번씩 강한 한 마디가 오갈 수 있는 결이라, 평소에 작은 인정과 칭찬을 자주 챙겨주면 큰 다툼으로 안 가요.');
-      }
-      if (p2parts.isEmpty) {
-        p2parts.add(
-            '천간합·지지합·충·형이 직접 걸려 있지 않아요. 강한 끌림도 강한 부딪힘도 없는, 만남이 시간을 들여야 깊어지는 결이에요.');
-      }
-    } else {
-      if (sameDay) {
-        p2parts.add(
-            "Same day pillar (${me.day60ji}) — a mirror bond. One person's lesson surfaces in the other soon after.");
-      } else if (sameBranch) {
-        p2parts.add(
-            "Shared day branch (zodiac) — life rhythm, season, constitution all align.");
-      }
-      if (ganHap) {
-        p2parts.add(
-            "Heavenly stem union ($myGan·$stGan) — one of the strongest pulls in saju. Magnetic from first sight. Risk: one loses their own color in the union.");
-      }
-      if (jiHap6) {
-        p2parts.add("Six harmony ($myJi·$stJi) — daily breath syncs up. Fits living or working together.");
-      } else if (jiSamhap) {
-        p2parts.add(
-            "Triad partial ($myJi·$stJi) — synergy peaks around shared goals and projects.");
-      }
-      if (jiClash) {
-        p2parts.add(
-            "Branch clash ($myJi·$stJi) — friction in big decisions, moves, money. Pre-agree rules. Often deepens after one real clash.");
-      }
-      if (jiHyeong) {
-        p2parts.add(
-            "Branch punishment ($myJi·$stJi) — sharp words may surface. Small acknowledgments daily prevent the big blow-up.");
-      }
-      if (p2parts.isEmpty) {
-        p2parts.add(
-            "No direct stem-branch union or clash. No strong pull, no strong friction — depth requires time.");
-      }
-    }
-    final p2 = p2parts.join(' ');
+    // [2] 일상 호흡 — R95 sprint 1: 정확한 천간/지지 쌍 + 셀럽 lead 로 분기별 본문 변별.
+    final p2 = _composeDailyBreathDetail(
+      myGan: myGan,
+      stGan: stGan,
+      myJi: myJi,
+      stJi: stJi,
+      sameDay: sameDay,
+      sameBranch: sameBranch,
+      ganHap: ganHap,
+      jiHap6: jiHap6,
+      jiSamhap: jiSamhap,
+      jiClash: jiClash,
+      jiHyeong: jiHyeong,
+      shortName: shortName,
+      useKo: useKo,
+    );
 
-    // [3] 깊어지는 결 (점수 band)
-    String p3;
-    if (useKo) {
-      if (score >= 85) {
-        p3 = '점수 $score점 — 사주가 권하는 인연이에요. 평생 친구·연인·동료 어느 자리에 두어도 깊어지는 결이라, 만남이 생겼다면 무리하지 말고 천천히 시간을 쌓아도 돼요.';
-      } else if (score >= 70) {
-        p3 = '점수 $score점 — 사주가 비교적 우호적인 인연이에요. 한쪽이 적극적으로 다가가면 자연스럽게 가까워지고, 좋은 자리에 오래 두기 좋은 결이에요.';
-      } else if (score >= 55) {
-        p3 = '점수 $score점 — 사주가 강하게 권하지도 막지도 않는 결이에요. 적절한 거리에서 천천히 보다 보면 자기에게 맞는 자리가 자연스럽게 정해져요.';
-      } else if (score >= 40) {
-        p3 = '점수 $score점 — 사주는 둘 사이에 조심을 권해요. 가까이 두려면 의식적인 거리 조절과 표현이 필요한 결이라, 부담 없는 자리에서 시작하는 게 좋아요.';
-      } else {
-        p3 = '점수 $score점 — 사주가 깊이 가까이 가는 걸 조심스럽게 보는 결이에요. 가벼운 거리에서 잠깐씩 보는 자리에 잘 맞아요.';
-      }
-    } else {
-      if (score >= 85) {
-        p3 = "Score $score — saju recommends this bond. Friend, partner, colleague — it deepens wherever you place it. Take your time.";
-      } else if (score >= 70) {
-        p3 = "Score $score — saju is broadly favorable. One side moving toward the other closes the distance naturally.";
-      } else if (score >= 55) {
-        p3 = "Score $score — neither push nor block. Right distance shows itself over time.";
-      } else if (score >= 40) {
-        p3 = "Score $score — saju advises care. Tone and distance need conscious adjustment. Start light.";
-      } else {
-        p3 = "Score $score — saju is cautious. Best in light, brief contact.";
-      }
-    }
+    // [3] 깊어지는 결 — R95 sprint 1 (사용자 mandate "점수로 매칭하지 말라"):
+    // 점수 anchor 를 사주 anchor 강·약 갯수 + band 톤으로 풀어 1 문장 합성.
+    final p3 = _composeScoreBandTexture(
+      score: score,
+      ganHap: ganHap,
+      jiHap6: jiHap6,
+      jiSamhap: jiSamhap,
+      jiClash: jiClash,
+      jiHyeong: jiHyeong,
+      sameDay: sameDay,
+      sameBranch: sameBranch,
+      shortName: shortName,
+      useKo: useKo,
+    );
 
     // [4] 셀럽 개성 anchor — 같은 일주 셀럽 7명이라도 본인 blurb 가 다르니까
     // blurb 핵심 1줄 + 본인-상대 관계 한 줄로 셀럽별 본문 변별.
@@ -1336,6 +1277,224 @@ class _StarRow extends StatelessWidget {
     }
 
     return p4.isEmpty ? '$p1\n\n$p2\n\n$p3' : '$p1\n\n$p2\n\n$p3\n\n$p4';
+  }
+
+  // R95 sprint 1 — 첫 문장 셀럽별 변별 lead (사용자 mandate "맨 첫문장이 다 똑같아").
+  // shortName + star.dayPillarName + star.birth + star.blurb 의 첫 한 조각으로
+  // 1~2 문장 lead 합성. 같은 element-relation 셀럽 7명이라도 lead 가 모두 다르게 됨.
+  String _starIdentityLead(_Star star, bool useKo, String shortName) {
+    final blurb = useKo ? star.blurbKo : star.blurbEn;
+    // blurb 첫 조각 = 첫 문장 (마침표/물음표/느낌표/줄임표/중점 까지) — 너무 길면 자르기.
+    String blurbHead = '';
+    if (blurb.isNotEmpty) {
+      final end = blurb.indexOf(RegExp(r'[\.\!\?。…]'));
+      blurbHead = (end > 0 && end < 90)
+          ? blurb.substring(0, end + 1).trim()
+          : (blurb.length > 80 ? '${blurb.substring(0, 78).trim()}…' : blurb.trim());
+    }
+    // 생년 4자리 (birth='1991-01-01' 형식).
+    final yearStr =
+        (star.birth.length >= 4) ? star.birth.substring(0, 4) : '';
+    final pillarName = star.dayPillarName.trim();
+    if (useKo) {
+      final birthFrag = yearStr.isNotEmpty ? '$yearStr년생' : '';
+      final pillarFrag = pillarName.isNotEmpty ? '$pillarName 일주' : '';
+      final headFrag = <String>[
+        if (pillarFrag.isNotEmpty) pillarFrag,
+        if (birthFrag.isNotEmpty) birthFrag,
+      ].join(' · ');
+      final lead1 = headFrag.isNotEmpty
+          ? '$shortName — $headFrag.'
+          : '$shortName.';
+      final lead2 =
+          blurbHead.isNotEmpty ? ' $blurbHead' : '';
+      return '$lead1$lead2';
+    } else {
+      final birthFrag = yearStr.isNotEmpty ? 'born $yearStr' : '';
+      final pillarFrag =
+          pillarName.isNotEmpty ? '$pillarName day pillar' : '';
+      final headFrag = <String>[
+        if (pillarFrag.isNotEmpty) pillarFrag,
+        if (birthFrag.isNotEmpty) birthFrag,
+      ].join(' · ');
+      final lead1 = headFrag.isNotEmpty
+          ? '$shortName — $headFrag.'
+          : '$shortName.';
+      final lead2 =
+          blurbHead.isNotEmpty ? ' $blurbHead' : '';
+      return '$lead1$lead2';
+    }
+  }
+
+  // R95 sprint 1 — 일상 호흡 본문 helper. 정확한 myGan/stGan, myJi/stJi 쌍과 flag
+  // 조합으로 셀럽별 본문 분기 (같은 jiHap6 자축 vs 인해 다른 장면 묘사).
+  String _composeDailyBreathDetail({
+    required String myGan,
+    required String stGan,
+    required String myJi,
+    required String stJi,
+    required bool sameDay,
+    required bool sameBranch,
+    required bool ganHap,
+    required bool jiHap6,
+    required bool jiSamhap,
+    required bool jiClash,
+    required bool jiHyeong,
+    required String shortName,
+    required bool useKo,
+  }) {
+    // 지지별 일상 장면 (육합·삼합·충·형 모두 같은 사전 쓰지만 분기별 톤 달라짐).
+    const jiSceneKo = {
+      '子': '늦은 밤 같이 깨어 있는 자리',
+      '丑': '느린 아침과 정리된 책상',
+      '寅': '새로 시작하는 첫 발걸음',
+      '卯': '봄빛 들어오는 창가의 대화',
+      '辰': '큰 그림을 같이 그리는 자리',
+      '巳': '뜨거운 한낮의 결정',
+      '午': '환한 정오의 약속',
+      '未': '오후의 차 한 잔과 정원',
+      '申': '동선이 짧은 도시 산책',
+      '酉': '저녁 빛 아래 정돈된 자리',
+      '戌': '문 닫고 같이 지키는 공간',
+      '亥': '밤바다 같은 깊은 대화',
+    };
+    const jiSceneEn = {
+      '子': 'late-night hours awake together',
+      '丑': 'slow mornings and tidy desks',
+      '寅': 'first steps of something new',
+      '卯': 'spring-light window talks',
+      '辰': 'mapping the big picture together',
+      '巳': 'midday decisions under heat',
+      '午': 'bright noon promises',
+      '未': 'afternoon tea and gardens',
+      '申': 'short-route city walks',
+      '酉': 'tidied evenings under amber light',
+      '戌': 'a door closed, a space kept together',
+      '亥': 'deep night-sea conversations',
+    };
+    final mySceneKo = jiSceneKo[myJi] ?? '둘만 아는 시간대';
+    final stSceneKo = jiSceneKo[stJi] ?? '둘만 아는 시간대';
+    final mySceneEn = jiSceneEn[myJi] ?? 'a time only you two know';
+    final stSceneEn = jiSceneEn[stJi] ?? 'a time only you two know';
+    final parts = <String>[];
+    if (useKo) {
+      if (sameDay) {
+        parts.add(
+            '둘 다 ${me.day60ji} 일주라 거울 보는 자리예요. $shortName이 깨달은 건 너도 곧 깨닫고, 너의 변화도 $shortName한테 빠르게 비쳐요.');
+      } else if (sameBranch) {
+        parts.add(
+            '같은 일지($myJi)를 공유해서 인생 리듬·계절감·체질이 비슷해요. 너의 $mySceneKo가 $shortName한테도 자연스럽게 닿아요.');
+      }
+      if (ganHap) {
+        parts.add(
+            '천간 오합 ($myGan-$stGan)이 정확히 맺힌 사이예요. 처음 본 순간부터 자석처럼 끌리는데, 합이 강한 만큼 한쪽이 자기 색을 잃기 쉬워서 각자 페이스를 지키는 약속이 필요해요.');
+      }
+      if (jiHap6) {
+        parts.add(
+            '지지 육합 ($myJi-$stJi)이 있어 일상 호흡이 자연스럽게 맞아요. 너의 $mySceneKo와 $shortName의 $stSceneKo가 어느새 한 시간대로 흘러요.');
+      } else if (jiSamhap) {
+        parts.add(
+            '지지 삼합 일부 ($myJi-$stJi)가 맺혀 같은 목표를 향해 움직일 때 시너지가 가장 큰 결이에요. $mySceneKo + $stSceneKo = 같이 프로젝트 하나 만들어 가는 자리에 잘 맞아요.');
+      }
+      if (jiClash) {
+        parts.add(
+            '지지 충 ($myJi-$stJi)이 걸려 큰 결정·이사·여행·돈 자리에서 의견이 자주 엇갈려요. 너의 $mySceneKo와 $shortName의 $stSceneKo가 정반대 시간대라, 미리 말로 룰을 정해두면 부딪힘이 줄어요.');
+      }
+      if (jiHyeong) {
+        parts.add(
+            '지지 형 ($myJi-$stJi)이 걸려 있어 한 번씩 강한 한 마디가 오갈 수 있어요. 평소에 작은 인정·칭찬을 자주 챙겨주면 큰 다툼으로 안 가요.');
+      }
+      if (parts.isEmpty) {
+        parts.add(
+            '천간합·지지합·충·형이 직접 걸려 있지 않아요. 너의 $mySceneKo와 $shortName의 $stSceneKo가 자연스럽게 겹치는 순간이 와야 깊어지는 결이라, 시간이 일하는 인연이에요.');
+      }
+    } else {
+      if (sameDay) {
+        parts.add(
+            "Both ${me.day60ji} day pillar — a mirror seat. What $shortName learns surfaces in you soon, and your changes reflect back fast.");
+      } else if (sameBranch) {
+        parts.add(
+            "Shared day branch ($myJi) — life rhythm, season, constitution all align. Your $mySceneEn reaches $shortName naturally.");
+      }
+      if (ganHap) {
+        parts.add(
+            "Heavenly stem union ($myGan-$stGan) — magnetic from first sight. The pull is strong enough that one can lose their own color; an agreed pace matters.");
+      }
+      if (jiHap6) {
+        parts.add(
+            "Six harmony ($myJi-$stJi) — daily breath syncs. Your $mySceneEn and $shortName's $stSceneEn drift into one timeline.");
+      } else if (jiSamhap) {
+        parts.add(
+            "Triad partial ($myJi-$stJi) — synergy peaks around shared goals. Your $mySceneEn plus $stSceneEn fits building one project together.");
+      }
+      if (jiClash) {
+        parts.add(
+            "Branch clash ($myJi-$stJi) — friction in big decisions, moves, money. Your $mySceneEn versus $shortName's $stSceneEn run on opposite clocks; pre-agree rules.");
+      }
+      if (jiHyeong) {
+        parts.add(
+            "Branch punishment ($myJi-$stJi) — sharp words may surface. Small acknowledgments daily prevent the big blow-up.");
+      }
+      if (parts.isEmpty) {
+        parts.add(
+            "No direct stem-branch union or clash. Depth comes only when your $mySceneEn and $shortName's $stSceneEn naturally overlap — time does the work.");
+      }
+    }
+    return parts.join(' ');
+  }
+
+  // R95 sprint 1 — 점수 band 텍스처 helper (사용자 mandate "점수로 매칭하지 말라").
+  // band base + exact score + anchor 강/약 개수 1 sentence. "점수 N점 —" 시작 금지.
+  String _composeScoreBandTexture({
+    required int score,
+    required bool ganHap,
+    required bool jiHap6,
+    required bool jiSamhap,
+    required bool jiClash,
+    required bool jiHyeong,
+    required bool sameDay,
+    required bool sameBranch,
+    required String shortName,
+    required bool useKo,
+  }) {
+    final strong = [sameDay, ganHap, jiHap6, jiSamhap, sameBranch]
+        .where((b) => b)
+        .length;
+    final weak = [jiClash, jiHyeong].where((b) => b).length;
+    String band;
+    if (useKo) {
+      if (score >= 85) {
+        band = '사주가 권하는 인연 — ';
+      } else if (score >= 70) {
+        band = '사주가 비교적 우호적으로 보는 결 — ';
+      } else if (score >= 55) {
+        band = '사주가 강하게 권하지도 막지도 않는 결 — ';
+      } else if (score >= 40) {
+        band = '사주가 조심을 권하는 결 — ';
+      } else {
+        band = '사주가 깊이 가까이 가는 걸 조심스럽게 보는 결 — ';
+      }
+      final anchorLine = (strong + weak == 0)
+          ? '직접 걸리는 anchor 없이 무게가 옅은 자리라 $shortName과의 시간은 의식적으로 깊이를 만들 때만 자라요.'
+          : '강한 anchor $strong개 / 약한 anchor $weak개가 함께 있어서 $shortName과의 시간은 단순한 호감이 아니라 사주 결로 새겨져요.';
+      return '$band$anchorLine';
+    } else {
+      if (score >= 85) {
+        band = 'A bond saju recommends — ';
+      } else if (score >= 70) {
+        band = 'Broadly favorable in the chart — ';
+      } else if (score >= 55) {
+        band = 'Neither pushed nor blocked by the chart — ';
+      } else if (score >= 40) {
+        band = 'The chart asks for care here — ';
+      } else {
+        band = 'The chart is cautious about deep closeness — ';
+      }
+      final anchorLine = (strong + weak == 0)
+          ? 'no direct anchor holds the weight, so time with $shortName grows only when you build depth on purpose.'
+          : '$strong strong / $weak weak anchors sit together, so time with $shortName etches in by the chart, not just by feeling.';
+      return '$band$anchorLine';
+    }
   }
 
   // Round 77 sprint 7 — discover 모달 prefill query 생성 (compat 화면 prefill).

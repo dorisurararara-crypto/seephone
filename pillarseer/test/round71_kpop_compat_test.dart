@@ -63,5 +63,48 @@ void main() {
       expect(block.contains(r'$shortName'), isTrue,
           reason: '본문에 셀럽 이름 동적 inject 없음 — generic hardcode.');
     });
+
+    // R95 sprint 1 — 첫 문장 셀럽별 변별 guard.
+    // 사용자 mandate verbatim: "최애와의 케미에 맨 첫문장이 다 똑같아 점수로 매칭하지
+    // 말라니까 각각 궁합보듯이 하게하라니까".
+    test('R95 — _starIdentityLead helper + 셀럽 고유 lead anchor ≥3/4', () {
+      final src =
+          File('lib/screens/reports/kpop_compat_screen.dart').readAsStringSync();
+      // (1) helper 함수 자체 존재.
+      expect(src.contains('_starIdentityLead('), isTrue,
+          reason: '_starIdentityLead helper 가 없음 (R95 mandate).');
+      // (2) 셀럽 고유 4 신호 중 최소 3개를 lead 가 사용해야 함 (blurbKo/blurbEn,
+      // dayPillarName, birth, 그리고 _composeVerdict 가 lead 를 invoke 하는지).
+      final usesBlurb =
+          src.contains('star.blurbKo') || src.contains('star.blurbEn');
+      final usesPillarName = src.contains('star.dayPillarName');
+      final usesBirth = src.contains('star.birth');
+      final verdictInvokesLead = block.contains('_starIdentityLead(');
+      final hits = [usesBlurb, usesPillarName, usesBirth, verdictInvokesLead]
+          .where((b) => b)
+          .length;
+      expect(hits >= 3, isTrue,
+          reason:
+              'R95 셀럽 lead 신호 hits=$hits — ≥3 필요 (blurb / dayPillarName / birth / verdict invoke).');
+    });
+
+    // R95 sprint 1 — daily breath + score band helper 분리 guard.
+    test('R95 — _composeDailyBreathDetail + _composeScoreBandTexture helper 존재',
+        () {
+      final src =
+          File('lib/screens/reports/kpop_compat_screen.dart').readAsStringSync();
+      expect(src.contains('_composeDailyBreathDetail('), isTrue,
+          reason: '_composeDailyBreathDetail helper 누락 — p2 셀럽별 변별 mandate.');
+      expect(src.contains('_composeScoreBandTexture('), isTrue,
+          reason: '_composeScoreBandTexture helper 누락 — p3 점수 매칭 금지 mandate.');
+    });
+
+    // R95 sprint 1 — p3 "점수 N점 —" prefix 금지 (사용자 mandate "점수로 매칭하지 말라").
+    test('R95 — p3 본문이 "점수 N점 —" 로 시작하는 hardcode 사라짐', () {
+      // 정규식: \$score 가 본문 첫 머리(점수 _점 — ...) 형태로 직접 박혀 있으면 fail.
+      final banned = RegExp(r"'점수 \$score점 —");
+      expect(banned.hasMatch(block), isFalse,
+          reason: '"점수 \$score점 —" hardcode 잔존. helper 로 옮겨야 함.');
+    });
   });
 }

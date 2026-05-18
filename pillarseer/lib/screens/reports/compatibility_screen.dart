@@ -1196,6 +1196,210 @@ class _DetailSection extends StatelessWidget {
         ),
       );
 
+  // R94 sprint 4 — 사용자 mandate verbatim: "이와같이 중복된 패턴있으면 다 수정해".
+  // 같은 element-relation 분기에서 두 사주가 달라도 summary/attract/friction 본문이 동일
+  // 했던 hotspot. 이제 element pair (예: 木→火) / branch pair (예: 子午 충) 별 specific
+  // scene 을 분기 본문 뒤에 추가. 두 사람 고유 8글자 anchor 가 본문에 드러나도록.
+  _RelationshipAnchorProfile _relationshipAnchorProfile(
+      SajuResult me, SajuResult partner) {
+    final myGan = me.dayPillar.chunGan;
+    final myJi = me.dayPillar.jiJi;
+    final ptGan = partner.dayPillar.chunGan;
+    final ptJi = partner.dayPillar.jiJi;
+    final myEl = me.dayPillar.chunGanElement;
+    final ptEl = partner.dayPillar.chunGanElement;
+    return _RelationshipAnchorProfile(
+      myGan: myGan,
+      myJi: myJi,
+      ptGan: ptGan,
+      ptJi: ptJi,
+      myEl: myEl,
+      ptEl: ptEl,
+      elementPair: '$myEl·$ptEl',
+      elementFlow: '$myEl→$ptEl',
+      branchPair: '$myJi·$ptJi',
+      myDay60: me.day60ji,
+      ptDay60: partner.day60ji,
+    );
+  }
+
+  // ── element pair scene (오행 5×5 = 25 분기, 같은 element-relation 안에서 변별) ──
+  String _elementPairSceneKo(_RelationshipAnchorProfile p) {
+    final flow = p.elementFlow;
+    const map = {
+      // 비화 (같은 오행) — 5
+      '木·木': '木·木 결은 봄 숲처럼 같이 자라는 자리. 둘 다 새로운 시작·여행·이직 같은 \'벌리는\' 자리를 좋아하지만, 한 번 끝낸 자리를 정리하는 결은 약해서 미완성 프로젝트가 둘 다 쌓이기 쉬워요.',
+      '火·火': '火·火 결은 같은 화로 같이 타오르는 자리. 둘이 만나면 표현·즐거움·이벤트가 폭발하지만, 식는 자리도 같이 와서 잔잔한 일상을 유지하는 결이 약해요.',
+      '土·土': '土·土 결은 같은 땅에 뿌리내린 자리. 약속·돈·집 같은 기반 결정에서 자연스럽게 합이 맞고 안정적이지만, 변화·모험·새 시도 앞에서는 둘 다 망설이는 자리가 자주 와요.',
+      '金·金': '金·金 결은 같은 칼끝으로 닦이는 자리. 원칙·기준·정리 같은 자리에서 강하게 통하지만, 부드러운 감정 표현이 둘 다 어색해서 의식적으로 톤을 풀어주는 연습이 필요해요.',
+      '水·水': '水·水 결은 같은 강물처럼 흐르는 자리. 깊은 대화·내면 탐색·창작 자리에서 가장 잘 통하지만, 결정 미루기·생각 과잉이 둘 다 와서 행동 트리거가 필요해요.',
+      // 상생 5 — A→B 형태
+      '木→火': '木→火 결은 나무가 불을 피우는 자리. 내가 한 마디 던지면 상대가 그걸 표현·실행으로 펼쳐줘서 아이디어가 빠르게 현실이 되는 결이에요. 창작·발표·이벤트 자리에 둘이 함께 있으면 결과가 두 배로 나와요.',
+      '火→土': '火→土 결은 불이 땅을 데우는 자리. 내 열정이 상대의 안정 자리를 따뜻하게 만들어줘서 상대가 둥지를 만드는 결이에요. 집·살림·기반 자리에 상대가 자연스럽게 자리잡아요.',
+      '土→金': '土→金 결은 땅이 금속을 품는 자리. 내 안정감이 상대의 원칙·기준 자리를 단단하게 만들어줘서 상대가 자기 결을 또렷이 가지는 결이에요. 정리·결정·기준 세우는 자리에 상대가 능력을 펴요.',
+      '金→水': '金→水 결은 금속이 물을 맑게 거르는 자리. 내 분별력이 상대의 깊은 자리를 정제해줘서 상대가 자기 본질에 더 가깝게 가요. 내면 탐색·창작·연구 자리에 상대가 깊어져요.',
+      '水→木': '水→木 결은 물이 나무를 키우는 자리. 내 직관·이해가 상대의 새 시도 자리를 키워줘서 상대가 자기 가능성을 펼치는 결이에요. 시작·도전·확장 자리에 상대가 자라요.',
+      // 반대 상생 5 — B→A 형태 (theyGenerate)
+      '火→木': '火→木 결은 거꾸로, 상대가 불처럼 내 나무 결을 데워주는 자리. 상대가 표현·즐거움을 끌어내줘서 내가 평소 못 내놓던 색을 자연스럽게 펴게 되는 결이에요.',
+      '土→火': '土→火 결은 거꾸로, 상대가 땅처럼 내 불의 자리를 받쳐주는 자리. 상대 곁에 있으면 내가 들떠도 자리가 잡혀서 무리하지 않게 되는 결이에요.',
+      '金→土': '金→土 결은 거꾸로, 상대가 금속의 결로 내 땅을 다듬어주는 자리. 상대 한 마디로 내가 정리해야 할 자리가 보이고, 미루던 결정이 자연스럽게 정해지는 결이에요.',
+      '水→金': '水→金 결은 거꾸로, 상대가 물처럼 내 금속의 결을 흐르게 해주는 자리. 평소 굳어 있던 자리에서 상대 곁에 있으면 부드럽게 풀리는 결이에요.',
+      '木→水': '木→水 결은 거꾸로, 상대가 나무처럼 내 물의 자리를 끌어올려주는 자리. 평소 잠겨 있던 생각이 상대 곁에 있으면 행동으로 자연스럽게 옮겨지는 결이에요.',
+      // 상극 — 10 (A→B + B→A)
+      '木→土': '木→土 결은 나무 뿌리가 땅을 뚫는 자리. 내가 새 시도를 권하면 상대 기반이 흔들리는 자리에 가요. 상대 안정감을 인정한 후 새 시도를 권하는 결이 핵심.',
+      '土→木': '土→木 결은 거꾸로, 땅이 나무를 누르는 자리. 상대가 안정·기반을 우선시할 때 내 새 시도 자리가 막히는 느낌이 와요.',
+      '土→水': '土→水 결은 땅이 물길을 막는 자리. 내가 안정·룰을 권하면 상대 깊은 자리가 막히는 느낌이 와요. 상대 흐름을 먼저 인정한 후 룰을 제안하는 결이 필요.',
+      '水→土': '水→土 결은 거꾸로, 물이 땅을 무너뜨리는 자리. 상대 깊은 질문이 내 안정 자리를 흔드는 자리가 자주 와요.',
+      '水→火': '水→火 결은 물이 불을 끄는 자리. 내 차분한 한 마디가 상대 열정을 식히는 자리에 가요. 상대 불씨를 먼저 인정한 후 톤 조절하는 결이 핵심.',
+      '火→水': '火→水 결은 거꾸로, 불이 물을 끓이는 자리. 상대 열정이 내 잔잔한 자리를 들끓게 만드는 자리가 자주 와요.',
+      '火→金': '火→金 결은 불이 금속을 녹이는 자리. 내 열정·표현이 상대의 정리된 원칙을 녹여서 상대가 자기 기준을 잃는 자리에 가요.',
+      '金→火': '金→火 결은 거꾸로, 금속이 불에 녹는 자리. 상대 원칙·정리가 내 열정을 끊는 자리가 자주 와요.',
+      '金→木': '金→木 결은 금속이 나무를 베는 자리. 내 원칙·기준이 상대 새 시도를 잘라내는 자리에 가요. 상대 시작 자리를 먼저 인정한 후 기준을 적용하는 결이 필요.',
+      '木→金': '木→金 결은 거꾸로, 나무가 금속을 둔하게 만드는 자리. 상대 원칙 자리를 내 새 시도가 흔드는 자리가 자주 와요.',
+    };
+    return map[flow] ?? '';
+  }
+
+  String _elementPairSceneEn(_RelationshipAnchorProfile p) {
+    final flow = p.elementFlow;
+    const map = {
+      '木·木': 'Wood·Wood — both love starting (trips, jobs, ventures) but neither closes well; unfinished projects pile on both sides.',
+      '火·火': 'Fire·Fire — when you meet, expression and events explode; staying steady through quiet days is the weak spot.',
+      '土·土': 'Earth·Earth — stable on promises, money, home; both hesitate at change or adventure.',
+      '金·金': 'Metal·Metal — principles and clarity click; soft emotional expression feels awkward for both.',
+      '水·水': 'Water·Water — deep talk, inner work, creation align; decision-deferring and overthinking show on both sides.',
+      '木→火': 'Wood→Fire — your one word, their expression. Ideas turn into reality fast together.',
+      '火→土': 'Fire→Earth — your warmth heats their soil; they build a nest you keep alive.',
+      '土→金': 'Earth→Metal — your steadiness sharpens their principles; their boundaries grow clear.',
+      '金→水': 'Metal→Water — your discernment clears their depth; they reach their own essence faster.',
+      '水→木': 'Water→Wood — your intuition feeds their new attempts; they grow into their potential.',
+      '火→木': 'Fire→Wood (reverse) — they warm your wood; colors you usually hide come out easily.',
+      '土→火': 'Earth→Fire (reverse) — they ground your fire; even when you spike, you stay anchored.',
+      '金→土': 'Metal→Earth (reverse) — one word from them and the cleanup you postponed becomes clear.',
+      '水→金': 'Water→Metal (reverse) — what felt rigid in you softens beside them.',
+      '木→水': 'Wood→Water (reverse) — submerged thoughts become action when they are near.',
+      '木→土': 'Wood→Earth — your roots crack their soil. Honor their stability first, then suggest the new.',
+      '土→木': 'Earth→Wood (reverse) — when they prioritize stability, your new attempt feels blocked.',
+      '土→水': 'Earth→Water — your rules dam their flow. Honor their current first, then propose structure.',
+      '水→土': 'Water→Earth (reverse) — their deep questions can shake your foundation.',
+      '水→火': 'Water→Fire — your calm word cools their flame. Honor the spark first, then adjust tone.',
+      '火→水': 'Fire→Water (reverse) — their heat boils your stillness.',
+      '火→金': 'Fire→Metal — your heat melts their clean lines; they may lose their standard.',
+      '金→火': 'Metal→Fire (reverse) — their precision cuts off your flame.',
+      '金→木': 'Metal→Wood — your rule cuts their fresh attempt. Honor the start first, then apply standards.',
+      '木→金': 'Wood→Metal (reverse) — your new attempt shakes their principled place.',
+    };
+    return map[flow] ?? '';
+  }
+
+  // ── branch pair scene (지지 충 6 / 육합 6 / 형 / 삼합 partial — 각 분기 다른 microcopy) ──
+  String _branchPairSceneKo(_RelationshipAnchorProfile p) {
+    final pair = '${p.myJi}·${p.ptJi}';
+    // 충 6 (양방향 같은 분기)
+    const clash = {
+      '子·午': '子午 충은 \'밤·낮\' 충돌. 생활 리듬이 정반대로 가요. 한 명이 새벽형, 한 명이 야간형이면 평소 만나는 자리부터 조율이 필요해요. 깊은 결정에서 둘 다 \'내 시간\'을 우선시해서 부딪힘.',
+      '午·子': '子午 충은 \'밤·낮\' 충돌. 생활 리듬이 정반대로 가요. 한 명이 새벽형, 한 명이 야간형이면 평소 만나는 자리부터 조율이 필요해요. 깊은 결정에서 둘 다 \'내 시간\'을 우선시해서 부딪힘.',
+      '卯·酉': '卯酉 충은 \'동·서\' 충돌. 방향성·가치관이 정반대 자리에서 부딪혀요. 한 명이 진보·새로움, 한 명이 보수·전통이면 인생 방향 결정에서 의견이 갈리는 자리가 자주 와요.',
+      '酉·卯': '卯酉 충은 \'동·서\' 충돌. 방향성·가치관이 정반대 자리에서 부딪혀요. 한 명이 진보·새로움, 한 명이 보수·전통이면 인생 방향 결정에서 의견이 갈리는 자리가 자주 와요.',
+      '寅·申': '寅申 충은 \'이동·정착\' 충돌. 한 명은 여행·이사·새 시도, 한 명은 한 자리 깊이 파는 결. 큰 이동 결정 (이사·이직·여행) 앞에서 의견이 정반대로 나오는 자리가 자주 와요.',
+      '申·寅': '寅申 충은 \'이동·정착\' 충돌. 한 명은 여행·이사·새 시도, 한 명은 한 자리 깊이 파는 결. 큰 이동 결정 (이사·이직·여행) 앞에서 의견이 정반대로 나오는 자리가 자주 와요.',
+      '巳·亥': '巳亥 충은 \'드러냄·감춤\' 충돌. 한 명은 표현·공개, 한 명은 사적·내면. SNS·외부 자리 노출도에서 의견이 자주 갈리고, 둘만의 비밀 vs 공개 자리 합의가 필요해요.',
+      '亥·巳': '巳亥 충은 \'드러냄·감춤\' 충돌. 한 명은 표현·공개, 한 명은 사적·내면. SNS·외부 자리 노출도에서 의견이 자주 갈리고, 둘만의 비밀 vs 공개 자리 합의가 필요해요.',
+      '辰·戌': '辰戌 충은 \'기반·정리\' 충돌. 둘 다 土라 평소엔 안정적이지만, 살림·집·재정 정리 자리에서 \'내 방식\'을 양보 못 해서 부딪히는 자리가 자주 와요.',
+      '戌·辰': '辰戌 충은 \'기반·정리\' 충돌. 둘 다 土라 평소엔 안정적이지만, 살림·집·재정 정리 자리에서 \'내 방식\'을 양보 못 해서 부딪히는 자리가 자주 와요.',
+      '丑·未': '丑未 충은 \'겨울·여름 土\' 충돌. 한 명은 보수적·신중, 한 명은 개방적·확장. 가족·돈·시간 분배에서 우선순위가 정반대로 갈리는 자리가 자주 와요.',
+      '未·丑': '丑未 충은 \'겨울·여름 土\' 충돌. 한 명은 보수적·신중, 한 명은 개방적·확장. 가족·돈·시간 분배에서 우선순위가 정반대로 갈리는 자리가 자주 와요.',
+    };
+    if (clash.containsKey(pair)) return clash[pair]!;
+    // 육합 6
+    const hap6 = {
+      '子·丑': '子丑 합은 \'겨울 합\'. 같이 있을 때 잔잔하고 따뜻한 결이 만들어져요. 추운 날 같이 있는 자리, 조용한 카페·집 같은 자리가 가장 잘 어울려요.',
+      '丑·子': '子丑 합은 \'겨울 합\'. 같이 있을 때 잔잔하고 따뜻한 결이 만들어져요. 추운 날 같이 있는 자리, 조용한 카페·집 같은 자리가 가장 잘 어울려요.',
+      '寅·亥': '寅亥 합은 \'생명 합\'. 같이 있을 때 새 시작·도전 자리에 자연스럽게 가요. 여행·창업·이사 같은 큰 시작을 둘이 같이 할 때 결과가 좋아요.',
+      '亥·寅': '寅亥 합은 \'생명 합\'. 같이 있을 때 새 시작·도전 자리에 자연스럽게 가요. 여행·창업·이사 같은 큰 시작을 둘이 같이 할 때 결과가 좋아요.',
+      '卯·戌': '卯戌 합은 \'화 합\'. 같이 있을 때 표현·열정 자리에 자연스럽게 가요. 둘 다 평소엔 차분해도 함께 있으면 활기가 살아나는 결이에요.',
+      '戌·卯': '卯戌 합은 \'화 합\'. 같이 있을 때 표현·열정 자리에 자연스럽게 가요. 둘 다 평소엔 차분해도 함께 있으면 활기가 살아나는 결이에요.',
+      '辰·酉': '辰酉 합은 \'금 합\'. 같이 있을 때 원칙·기준·정리 자리에 자연스럽게 가요. 살림·정리·관리 자리에 둘이 같이 있으면 결과가 빠르게 나와요.',
+      '酉·辰': '辰酉 합은 \'금 합\'. 같이 있을 때 원칙·기준·정리 자리에 자연스럽게 가요. 살림·정리·관리 자리에 둘이 같이 있으면 결과가 빠르게 나와요.',
+      '巳·申': '巳申 합은 \'수 합\'. 같이 있을 때 깊은 대화·내면 탐색 자리에 자연스럽게 가요. 산책·여행·조용한 시간 자리에 가장 잘 어울려요.',
+      '申·巳': '巳申 합은 \'수 합\'. 같이 있을 때 깊은 대화·내면 탐색 자리에 자연스럽게 가요. 산책·여행·조용한 시간 자리에 가장 잘 어울려요.',
+      '午·未': '午未 합은 \'한여름 합\'. 같이 있을 때 즐거움·이벤트·축제 자리에 자연스럽게 가요. 외출·여행·모임 같은 활기찬 자리가 가장 어울려요.',
+      '未·午': '午未 합은 \'한여름 합\'. 같이 있을 때 즐거움·이벤트·축제 자리에 자연스럽게 가요. 외출·여행·모임 같은 활기찬 자리가 가장 어울려요.',
+    };
+    if (hap6.containsKey(pair)) return hap6[pair]!;
+    return '';
+  }
+
+  String _branchPairSceneEn(_RelationshipAnchorProfile p) {
+    final pair = '${p.myJi}·${p.ptJi}';
+    const clash = {
+      '子·午': 'Zi·Wu clash — night vs day rhythm; meeting times themselves need negotiation.',
+      '午·子': 'Zi·Wu clash — night vs day rhythm; meeting times themselves need negotiation.',
+      '卯·酉': 'Mao·You clash — east vs west direction; progressive vs traditional values often split.',
+      '酉·卯': 'Mao·You clash — east vs west direction; progressive vs traditional values often split.',
+      '寅·申': 'Yin·Shen clash — move vs settle; big moves (relocation, job change, travel) bring opposite views.',
+      '申·寅': 'Yin·Shen clash — move vs settle; big moves (relocation, job change, travel) bring opposite views.',
+      '巳·亥': 'Si·Hai clash — exposure vs concealment; SNS, public visibility settings need agreement.',
+      '亥·巳': 'Si·Hai clash — exposure vs concealment; SNS, public visibility settings need agreement.',
+      '辰·戌': 'Chen·Xu clash — both Earth, but household and finance organization styles refuse to yield.',
+      '戌·辰': 'Chen·Xu clash — both Earth, but household and finance organization styles refuse to yield.',
+      '丑·未': 'Chou·Wei clash — winter vs summer Earth; conservative vs expansive priorities split.',
+      '未·丑': 'Chou·Wei clash — winter vs summer Earth; conservative vs expansive priorities split.',
+    };
+    if (clash.containsKey(pair)) return clash[pair]!;
+    const hap6 = {
+      '子·丑': 'Zi·Chou union — quiet winter warmth; cafes and home spaces suit best.',
+      '丑·子': 'Zi·Chou union — quiet winter warmth; cafes and home spaces suit best.',
+      '寅·亥': 'Yin·Hai union — life-spark union; travel, new ventures, moves do well together.',
+      '亥·寅': 'Yin·Hai union — life-spark union; travel, new ventures, moves do well together.',
+      '卯·戌': 'Mao·Xu union — fire union; calm individually, lively together.',
+      '戌·卯': 'Mao·Xu union — fire union; calm individually, lively together.',
+      '辰·酉': 'Chen·You union — metal union; cleanup, organizing produces fast results together.',
+      '酉·辰': 'Chen·You union — metal union; cleanup, organizing produces fast results together.',
+      '巳·申': 'Si·Shen union — water union; walks, travel, quiet time suit best.',
+      '申·巳': 'Si·Shen union — water union; walks, travel, quiet time suit best.',
+      '午·未': 'Wu·Wei union — midsummer union; outings, parties, festivals fit best.',
+      '未·午': 'Wu·Wei union — midsummer union; outings, parties, festivals fit best.',
+    };
+    if (hap6.containsKey(pair)) return hap6[pair]!;
+    return '';
+  }
+
+  // ── stem pair scene (천간합 5 / 천간충 — 각 다른 microcopy) ──
+  String _stemPairSceneKo(_RelationshipAnchorProfile p) {
+    final pair = '${p.myGan}·${p.ptGan}';
+    const ganHapPairs = {
+      '甲·己': '甲己 합은 \'중정의 합\' — 책임감·중심 잡는 자리에 둘이 함께 가요.',
+      '己·甲': '甲己 합은 \'중정의 합\' — 책임감·중심 잡는 자리에 둘이 함께 가요.',
+      '乙·庚': '乙庚 합은 \'인의의 합\' — 원칙·약속 지키는 자리에 둘이 함께 가요.',
+      '庚·乙': '乙庚 합은 \'인의의 합\' — 원칙·약속 지키는 자리에 둘이 함께 가요.',
+      '丙·辛': '丙辛 합은 \'위엄의 합\' — 권위·결정 자리에 둘이 함께 가요.',
+      '辛·丙': '丙辛 합은 \'위엄의 합\' — 권위·결정 자리에 둘이 함께 가요.',
+      '丁·壬': '丁壬 합은 \'인정의 합\' — 표현·예술·연애 자리에 둘이 함께 가요.',
+      '壬·丁': '丁壬 합은 \'인정의 합\' — 표현·예술·연애 자리에 둘이 함께 가요.',
+      '戊·癸': '戊癸 합은 \'무정의 합\' — 깊은 신뢰·오래된 인연 자리에 둘이 함께 가요.',
+      '癸·戊': '戊癸 합은 \'무정의 합\' — 깊은 신뢰·오래된 인연 자리에 둘이 함께 가요.',
+    };
+    return ganHapPairs[pair] ?? '';
+  }
+
+  String _stemPairSceneEn(_RelationshipAnchorProfile p) {
+    final pair = '${p.myGan}·${p.ptGan}';
+    const ganHapPairs = {
+      '甲·己': 'Jia·Ji union — \'central balance\' union; both step into responsibility together.',
+      '己·甲': 'Jia·Ji union — \'central balance\' union; both step into responsibility together.',
+      '乙·庚': 'Yi·Geng union — \'principled\' union; promise-keeping spaces unite you.',
+      '庚·乙': 'Yi·Geng union — \'principled\' union; promise-keeping spaces unite you.',
+      '丙·辛': 'Bing·Xin union — \'authority\' union; decision-making seats fit you both.',
+      '辛·丙': 'Bing·Xin union — \'authority\' union; decision-making seats fit you both.',
+      '丁·壬': 'Ding·Ren union — \'recognition\' union; expression, art, romance bind you.',
+      '壬·丁': 'Ding·Ren union — \'recognition\' union; expression, art, romance bind you.',
+      '戊·癸': 'Wu·Gui union — \'silent trust\' union; deep, longstanding bonds form here.',
+      '癸·戊': 'Wu·Gui union — \'silent trust\' union; deep, longstanding bonds form here.',
+    };
+    return ganHapPairs[pair] ?? '';
+  }
+
   // R93 sprint 4 — 사용자 mandate verbatim: "오늘사주나 내 사주느낌으로 자세히 분석하는
   // 느낌으로 되야하고". 사주 9 anchor 다 활용 + 각 섹션 길이 ×2~3 + 새 섹션 (첫 만남 /
   // 일상 호흡 / 깊어지는 결).
@@ -1238,6 +1442,16 @@ class _DetailSection extends StatelessWidget {
       '子': ['卯'], '卯': ['子'],
     };
 
+    // R94 sprint 4 — 두 사주 고유 anchor profile (element pair / branch pair / stem pair
+    // 별 specific scene microcopy 분기 wire 에 사용).
+    final profile = _relationshipAnchorProfile(me, partner);
+    final elPairKo = _elementPairSceneKo(profile);
+    final elPairEn = _elementPairSceneEn(profile);
+    final brPairKo = _branchPairSceneKo(profile);
+    final brPairEn = _branchPairSceneEn(profile);
+    final stPairKo = _stemPairSceneKo(profile);
+    final stPairEn = _stemPairSceneEn(profile);
+
     final sameDay = me.day60ji == partner.day60ji;
     final sameBranch = myJi == ptJi;
     final isGanHap = ganHap[myGan] == ptGan;
@@ -1274,6 +1488,11 @@ class _DetailSection extends StatelessWidget {
         summary.write(
             '두 사람의 오행이 직접 생극(生剋) 관계가 없는 중립적 결이에요. 자극도 충돌도 크지 않고, 첫인상은 잔잔하고 편안하지만 누군가 적극적으로 신호를 보내지 않으면 자연스럽게 거리가 벌어질 수 있어요. 처음 만났을 때 \'좋네\' 정도의 느낌이 오래 가는 결이라, 가벼운 친구로는 편하지만 깊은 관계로 가려면 의식적인 노력이 필요해요.\n\n자극이 적은 만큼 안정감이 큰 결이라, 한 번 가까워지면 부담 없이 오래 가는 구조예요. 다만 자연스럽게 가까워지는 결이 아니라서 한 명이 먼저 신호를 보내는 룰을 정해두면 관계가 흔들리지 않아요. \'매주 한 번 둘만 보는 시간\', \'매일 짧은 안부 한 마디\' 같은 작은 의식이 있으면 자연스럽게 무게가 쌓여요. 중립의 사이는 의식적으로 무게를 만들 때 비로소 깊이가 생겨요.');
       }
+      // R94 sprint 4 — element pair (예: 木→火, 子·丑) 별 specific scene 추가.
+      // 같은 element-relation 안에서도 두 사주가 다르면 본문이 달라야 한다.
+      if (elPairKo.isNotEmpty) {
+        summary.write('\n\n$elPairKo');
+      }
       // 일주 동일 / 일지 동일 추가 paragraph
       if (sameDay) {
         summary.write(
@@ -1301,6 +1520,9 @@ class _DetailSection extends StatelessWidget {
       } else {
         summary.write(
             'Mild interaction — neither clash nor spark dominates. Distance grows unless someone deliberately builds weight.');
+      }
+      if (elPairEn.isNotEmpty) {
+        summary.write(' $elPairEn');
       }
       if (sameDay) {
         summary.write(
@@ -1336,6 +1558,19 @@ class _DetailSection extends StatelessWidget {
         attract.write(
             '\n\n게다가 한 사람이 많이 가진 오행이 다른 사람이 부족한 자리를 정확히 채우는 보완 구조도 있어요. 사주적으로 가장 안정적인 결 중 하나로, 같이 있을 때 둘 다 균형이 잡혀서 결정·건강·돈 흐름이 모두 안정돼요. 평소 부족하다 느낀 자리가 상대 곁에 있을 때 자연스럽게 채워지는 — 그런 \'완성\' 결이에요.');
       }
+      // R94 sprint 5 — element pair scene 을 attract 본문에도 mirror.
+      // (summary/friction 에는 이미 wire 되어 있었으나 attract 누락 — codex 지적.)
+      if (elPairKo.isNotEmpty) {
+        attract.write('\n\n$elPairKo');
+      }
+      // R94 sprint 4 — 두 사주 고유 gan/ji pair 별 specific scene.
+      // 예: isGanHap 분기 안에서 甲己 vs 乙庚 vs 丙辛 다른 본문.
+      if (stPairKo.isNotEmpty) {
+        attract.write('\n\n$stPairKo');
+      }
+      if (brPairKo.isNotEmpty) {
+        attract.write('\n\n$brPairKo');
+      }
     } else {
       if (isGanHap) {
         attract.write(
@@ -1359,6 +1594,15 @@ class _DetailSection extends StatelessWidget {
         attract.write(
             " Dominant element on one side fills the deficit on the other — together, balance shows in decisions, health, money flow.");
       }
+      if (elPairEn.isNotEmpty) {
+        attract.write(' $elPairEn');
+      }
+      if (stPairEn.isNotEmpty) {
+        attract.write(' $stPairEn');
+      }
+      if (brPairEn.isNotEmpty) {
+        attract.write(' $brPairEn');
+      }
     }
 
     // ── [3] friction — 부딪힘 (9줄+, ~600~900 char) ──────────────────────────────
@@ -1380,6 +1624,14 @@ class _DetailSection extends StatelessWidget {
         friction.write(
             '강한 부딪힘은 없지만, 적극적인 신호가 없으면 자연스럽게 거리가 벌어질 수 있어요. 한 사람이 먼저 신호를 보내는 룰을 정해두면 관계가 흔들리지 않아요. 중립의 사이는 \'잊혀짐\'이 가장 큰 위험이라, 정기적으로 연락하는 약속 하나가 필요해요.\n\n중립이라 충돌이 적은 만큼 깊이도 자연스럽게 안 생기는 결이에요. 그래서 한 명이 \'우리 이번 주 한 번 보자\' 한 마디 먼저 보내는 자리에 자주 가야 관계가 유지돼요. 또 \'특별히 갈등은 없는데 왜 멀어지지\' 라는 느낌이 자주 와요 — 그건 본인들 잘못이 아니라 단순히 자연스러운 끌림이 없는 결이라서 그래요. 의식적인 정성이 깊이를 만드는 사이예요.');
       }
+      // R94 sprint 4 — branch clash 분기 (예: 子午 vs 卯酉 vs 寅申) 별 specific scene.
+      // element pair 도 상극·비화 안에서 변별 (예: 木→土 vs 水→火 다른 본문).
+      if (brPairKo.isNotEmpty) {
+        friction.write('\n\n$brPairKo');
+      }
+      if (elPairKo.isNotEmpty) {
+        friction.write('\n\n$elPairKo');
+      }
     } else {
       if (isClash) {
         friction.write(
@@ -1396,6 +1648,12 @@ class _DetailSection extends StatelessWidget {
       } else {
         friction.write(
             "No strong clash, but distance grows without active signals. Agree who reaches out first when there's silence.");
+      }
+      if (brPairEn.isNotEmpty) {
+        friction.write(' $brPairEn');
+      }
+      if (elPairEn.isNotEmpty) {
+        friction.write(' $elPairEn');
       }
     }
 
@@ -1564,5 +1822,33 @@ class _CompatAnalysis {
     required this.friction,
     required this.loveMarriage,
     required this.actions,
+  });
+}
+
+// R94 sprint 4 — 두 사주 고유 8글자를 분기 본문 microcopy 에 wire 하기 위한 anchor 묶음.
+class _RelationshipAnchorProfile {
+  final String myGan;
+  final String myJi;
+  final String ptGan;
+  final String ptJi;
+  final String myEl;
+  final String ptEl;
+  final String elementPair;
+  final String elementFlow;
+  final String branchPair;
+  final String myDay60;
+  final String ptDay60;
+  const _RelationshipAnchorProfile({
+    required this.myGan,
+    required this.myJi,
+    required this.ptGan,
+    required this.ptJi,
+    required this.myEl,
+    required this.ptEl,
+    required this.elementPair,
+    required this.elementFlow,
+    required this.branchPair,
+    required this.myDay60,
+    required this.ptDay60,
   });
 }

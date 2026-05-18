@@ -62,16 +62,26 @@ void main() {
       );
     }
 
-    testWidgets('첫 YYYY field autofocus — primary focus 가 YYYY FocusNode',
+    testWidgets('첫 이름 field autofocus — primary focus 가 이름 field',
         (tester) async {
+      // R91 사용자 mandate — 입력 화면 진입 시 커서가 "이름" 으로 가야 함.
+      // 이전엔 YYYY autofocus 였어서 "생년월일에 커서가 가 있음" 불만 발생.
       await tester.pumpWidget(scaffold());
       await tester.pumpAndSettle();
-      // YYYY field 의 FocusNode 가 hasFocus 인지 직접 검증.
+      // 이름 TextFormField (autofocus: true 부여한 첫 field) 의 hasFocus 검증.
+      // TextFormField 는 public focusNode getter 가 없어서 내부 TextField 로 확인.
+      // 첫 TextField (이름 입력) 가 primary focus 를 잡고 있어야 함.
+      final firstTextField = find.byType(TextField).first;
+      final ft = tester.widget<TextField>(firstTextField);
+      expect(ft.autofocus, isTrue,
+          reason: 'autofocus 첫 field 는 이름 — 키패드 즉시 등장.');
+      expect(ft.focusNode?.hasFocus, isTrue,
+          reason: '이름 field 의 FocusNode 가 primary focus 잡아야 함.');
+      // 회귀 — YYYY field 는 autofocus 가 아니어야 (이름이 우선).
       final yearField = find.widgetWithText(TextField, 'YYYY');
-      expect(yearField, findsOneWidget);
       final yw = tester.widget<TextField>(yearField);
-      expect(yw.focusNode?.hasFocus, isTrue,
-          reason: 'autofocus 첫 field 는 YYYY — 키패드 즉시 등장.');
+      expect(yw.autofocus, isFalse,
+          reason: 'YYYY 는 더 이상 autofocus 가 아님 — 이름이 우선.');
     });
 
     testWidgets('YYYY 4 자리 도달 → primary focus 가 MM 으로 이동', (tester) async {
