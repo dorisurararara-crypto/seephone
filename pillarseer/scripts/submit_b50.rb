@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
-# Build #49 — R92: entry 단위 codex 9.9+ 목표 quality 정제 4 round
+# Build #50 — R92: entry 단위 codex 9.9+ 목표 quality 정제 4 round
 require_relative '_helpers'
 
-BUILD_NO = 49
+BUILD_NO = 50
 
 # 1. Build id
 code, body = api(:get, "/v1/builds?filter%5Bapp%5D=#{APP_ID}&filter%5Bversion%5D=#{BUILD_NO}&limit=1")
