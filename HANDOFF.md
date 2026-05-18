@@ -68,6 +68,81 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-18 03:00 (Mac 자율 → 다음 세션) — pillarseer R87~R91 완료 + 1.0.0+48 외부 베타 APPROVED, R92 결정 대기
+
+**완료된 작업** (R87 → R91, 4 라운드 연속):
+
+| Round | 내용 | commits | TestFlight |
+|---|---|---|---|
+| R87 | 더보기 탭 케미 hero + 모든 카드 공유 + 해외 출생지 IANA tz + 용신 spoiler | `c382a1e` | 없음 (R88 통합) |
+| R88 | 운세의신 17 카테고리 대전환 (sprint 1-5, 8-10 / 6-7 R89 deferred) | 7 commit | 없음 (R89 통합) |
+| R89 | R88 deferred — 60일주×14 + 성별 360 + chip nav + dead code + 1.0.0+46 | 5 commit | **1.0.0+46 APPROVED** |
+| R90 | 사주 anchor 5축 다층화 (일주 prefix 1211 일소 + 사주 전체 받기 + Jaccard ≥40%) + 1.0.0+47 | 5 commit | **1.0.0+47 APPROVED** |
+| R91 | 잔존 quality 정제 (본인 1035→0 / anchor 48→0 / 일간 prefix 82→0 / fragment 277) + 1.0.0+48 | 8 commit | **1.0.0+48 APPROVED** |
+
+**현재 빌드**: 1.0.0+48 외부 베타 ganzitester APPROVED.
+- Public link: https://testflight.apple.com/join/kRs36R3b
+- pillarseer ASC App ID: **6768096855** (빡신 6764363757 와 다름!)
+- 모든 commit push 완료, `git status` clean (5acb274 이후 정상)
+
+**테스트**: flutter analyze 0 issues / flutter test **855/855 PASS** / R88+R90 baseline 9개 모두 보존 (5행 골든 1995-10-27 男 17시 16/21/17/41/4 / R69 lock / R83 P1-B P1-E / R87 IANA / K-POP 케미 _score 18~99).
+
+---
+
+### ⚠️ R92 결정 대기 — 사용자 verbatim "잔존 퀄리티 다 해결" mandate 90% 충족, codex 9.9 mandate 미달성
+
+**문제**: R91 codex audit peak 8.23 (R90 7.87 보다 진전, but 5 round saturation). R88 sprint 5 의 entry 단위 codex 9.9 PASS fixture (일간 10 base 170 paragraph) 만큼의 자연어 quality 미달.
+
+**근본 원인**: R89 batch 가 LLM 자동 generator 라 본문 패턴 단조. R91 mass fix 로 surface 패턴 (본인/anchor/일간 prefix) 0 됐지만 본문 자체 schema 잔존:
+- mid_life / late_life 등 일부 카테고리 페르소나 mismatch
+- K-POP MZ 페르소나 어휘 강화 여지 (무대/단톡/팬싸 — codex r5 의견)
+
+**3 옵션 (다음 세션 사용자에게 묻고 진행)**:
+
+- **A. 그대로 OK 종결** — 1.0.0+48 외부 베타 APPROVED, 정량 4 baseline 통과. 사용자 실기기 검증 후 본인+여친 차별성 + 자연스러움 체감 OK 면 종결.
+- **B. R92 DB entry 단위 rewrite** — 1400 paragraph 모두 entry 단위 codex 9.9+ PASS 강제 (R88 sprint 5 패턴). 시간 6-24h, token cost ↑↑↑. 결과 = R88 fixture 수준 quality.
+- **C. R92 가벼운 추가 정제** — K-POP 페르소나 어휘 강화 batch + pattern 기반 mass fix. 시간 1-2 sprint. mid 정도 quality 개선.
+
+**다음 세션 첫 명령 권장**: 사용자에게 위 3 옵션 보여주고 결정 받기. AskUserQuestion 1번.
+
+---
+
+### 📂 다음 세션이 알아야 할 reference
+
+**핵심 메모리** (`~/.claude/projects/-Users-seunghyeon-seephone/memory/`):
+- `project_pillarseer_round_88.md` — R88 17 카테고리 대전환
+- `project_pillarseer_round_89.md` — R89 deferred + 1.0.0+46
+- `project_pillarseer_round_90.md` — R90 anchor 5축 + 1.0.0+47
+- `reference_testflight_pipeline.md` — TestFlight 자동화 ground truth
+- `reference_seephone_ids.md` — pillarseer APP_ID 6768096855 / 빡신 6764363757 등
+
+**핵심 service** (R88+R90 ground truth):
+- `pillarseer/lib/services/life_paragraph_service.dart` — paragraphForSaju(SajuResult, LifeCategory, Gender?) 시그니처 (R90 sprint 2)
+- `pillarseer/lib/services/life_category_fragment_service.dart` — 5축 anchor fragment injection (R90 sprint 3-5)
+- `pillarseer/lib/services/life_overview_service.dart` — "내 사주 큰 그림" anchor 6 다층화 (R90 sprint 4)
+- `pillarseer/lib/services/self_conclusion_service.dart` — "나는 어떤 사람?" 결론
+
+**핵심 data**:
+- `pillarseer/assets/data/life_paragraphs.json` — 70 entries × 17 카테고리 (R88+R89+R91 정제)
+- `pillarseer/assets/data/life_fragments.json` — 277 fragment × 5축 (R91 sprint 5)
+
+**핵심 script**:
+- `pillarseer/scripts/submit_b48.rb` — TestFlight 외부 그룹 + Beta Review 자동 제출 (R91 sprint 8). 다음 round 는 `submit_b<N+1>.rb` copy + version 변경.
+- `pillarseer/scripts/strip_pillar_prefix.py` — R90 sprint 1 prefix 일소 패턴 (재사용 가능)
+
+**제거된 것** (R88 사용자 mandate):
+- 격국 / 용신 3종 / 강약 / 공망 / 신살 / 12운성 / 합·충 deep myeongli 7 widget (result_screen)
+- _OracleHero / _DayMasterHero / _SipsinPersonaSection / VERIFICATION / 자미두수 _CrossmatchSection
+- info_saju_calc_screen.dart (R89 sprint 4)
+- 설정 탭 "이 풀이는 어떻게 계산되나요" / "사주 계산 기준 안내"
+
+**유지된 것**:
+- 사주 4기둥 8글자 표시 + 5행 차트 (_FiveElementsSection R75 골든)
+- K-POP 케미 / 더 보기 탭 / 오늘 탭 / 입력 화면 / 일반 설정
+- 만세력 계산 (R83 자시 학파 picker + 시간 모름 차단 + R87 해외 출생지 IANA tz)
+
+---
+
 ### 2026-05-12 03:50 (Mac 야간 자율) — 🏆 codex Round 12 **9.6/10 — v1.0 출시 OK** blessing
 
 사용자 mandate ("3시간+ 회의·반복, 1등이야 할 때까지") 충실히 이행. codex 와 12 라운드 이터레이션 완료.
