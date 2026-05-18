@@ -37,9 +37,16 @@ ARTIFACT_FIXES: list[tuple[str, str]] = [
     (r'30대 후반면', '30대 후반에'),
     (r'40대 후반면', '40대 후반에'),
     (r'(\d+)대 초반면', r'\1대 초반에'),
-    # "자기 인생 황금기는 시간이 지나서 사이가 자주 보여요" — R88 무진 wealth 의미 불명
-    (r'자기 인생 황금기는 시간이 지나서 사이가 자주 보여요',
+    # "자기/그 사람 일주의 인생 황금기는 시간이 지나서 사이가 자주 보여요" — R88 무진/무인 wealth 의미 불명
+    (r'(?:자기|그 사람 일주의)?\s*인생 황금기는 시간이 지나서 사이가 자주 보여요',
      '인생 황금기가 40대 중반 들어 자리잡아요'),
+    (r'그 사람 일주의 황금기는 시간이 지나서 사이가 자주 보여요',
+     '인생 황금기가 40대 중반 들어 자리잡아요'),
+    # 정사/wealth_loss_prevent R88 base broken: 쪽제가/느낌제/톤정하는 의미 불명
+    (r'친구 톡 분위기에 휘말려서 가는 쪽제가 본인 가계부에서 한 달치 새는 구멍이에요',
+     '친구 톡 분위기에 휘말려 가는 결제가 본인 가계부에서 한 달치 새는 구멍이에요'),
+    (r'큰 느낌제 앞에 하룻밤 자고 톤정하는 룰만 들여놔도',
+     '큰 결제 앞에 하룻밤 자고 결정하는 룰만 들여놔도'),
     # "그 사람 일주한테" → "곁에 있는 사람한테"
     (r'그 사람 일주한테', '곁에 있는 사람한테'),
     (r'그 사람 일주에게', '곁에 있는 사람에게'),
@@ -50,8 +57,26 @@ ARTIFACT_FIXES: list[tuple[str, str]] = [
     (r'큰 그림 잡고 만드는 용돈', '큰 그림 잡고 돈 흐름 만드는 방식'),
     # "굴리는 결정" → "투자 결정" (60 일주 wealth_invest 전수)
     (r'굴리는 결정', '투자 결정'),
-    # 어릴 때부터 반복 (early_life entry 자체에 3+ 회 발생 시 2회 일부 → "초년에는" / "그 시절")
-    # 정확 patch 는 entry-aware 함수로 처리 — 여기서는 단순 다 fix 안 함
+    # R92 round 4 — codex r3 지적 잔존
+    # 무진/wealth: "큰 그림 잡고 돈 흐름 만드는 방식" → 자연 표현
+    (r'큰 그림 잡고 돈 흐름 만드는 방식,', '직접 시작한 큰 프로젝트에서 돈 흐름이 만들어지고,'),
+    # 무진/wealth: "용돈이 자기한테 깨끗하게 와요" → "돈이 손에 깨끗하게 모여요"
+    (r'용돈이 자기한테 깨끗하게 와요', '돈이 손에 깨끗하게 모여요'),
+    # 기축/social: "편한 톤이라 합쳐져서" → "편한 분위기와 어우러져"
+    (r'편한 톤이라 합쳐져서', '편한 분위기와 어우러져'),
+    # 병오/health: "텐션이라 강해서" → "텐션이 또렷한 편이라"
+    (r'텐션이라 강해서', '텐션이 또렷한 편이라'),
+    # 무진/wealth 등: "체질이라 강해서" → "체질이 또렷한 편이라"
+    (r'체질이라 강해서', '체질이 또렷한 편이라'),
+    # 신유 / 신유 등: "고유 분위기가 강해서" → "고유 분위기가 또렷한 편이라"
+    (r'고유 분위기가 강해서', '고유 분위기가 또렷한 편이라'),
+    # 일반 "매력이라 강해서" / "결이라 강해서" 추가 잔존
+    (r'매력이라 강해서', '매력이 또렷한 편이라'),
+    (r'에너지라 강해서', '에너지가 또렷한 편이라'),
+    # 갑오 / 을묘 등: "영역이 자리잡아요" 반복 패턴 추가 dedup 처리 (entry-aware)
+    # → 별도 자리잡 stem dedup 함수
+    # "분위기 잡힐 때" → "분위기 잡힐 때마다"
+    (r'분위기 잡힐 때 ', '분위기가 잡힐 때마다 '),
 ]
 
 
@@ -86,7 +111,63 @@ def apply_artifact_fixes(text: str) -> tuple[str, int]:
     # 자리잡아요 반복 dedup
     text, c2 = _dedupe_orun_repeats(text, '자리잡아요', ['굳어가요', '단단해져요', '또렷해져요'])
     n += c2
+    # 자리잡 family cumulative dedup — 같은 entry 안 3+ 합산되면 2번째부터 변형
+    variants = {
+        '자리잡아요': '굳어가요',
+        '자리잡는': '굳어가는',
+        '자리잡으면': '굳으면',
+        '자리잡힐': '굳을',
+    }
+    text, c3 = _dedupe_family(text, variants, threshold=3)
+    n += c3
     return text, n
+
+
+def _dedupe_family(text: str, variants: dict[str, str], threshold: int = 3) -> tuple[str, int]:
+    """variants 사전 = {원형: 치환형}. 모든 원형 총 occurrences 합산해 threshold 이상이면 2번째부터 치환.
+
+    occurrence 순서 = 본문 등장 순. 첫 번째만 원형 유지, 이후 모두 해당 원형의 치환형.
+    """
+    spans = []
+    for src in variants:
+        for m in re.finditer(re.escape(src), text):
+            spans.append((m.start(), m.end(), src))
+    spans.sort()
+    if len(spans) < threshold:
+        return text, 0
+    count = 0
+    out = []
+    last = 0
+    for i, (s, e, src) in enumerate(spans):
+        out.append(text[last:s])
+        if i == 0:
+            out.append(src)
+        else:
+            out.append(variants[src])
+            count += 1
+        last = e
+    out.append(text[last:])
+    return ''.join(out), count
+
+
+def _dedupe_stem_repeats(text: str, stem: str, replacements: list[str], threshold: int = 3) -> tuple[str, int]:
+    """stem (어절 일부) 이 threshold 이상 발견되면 2번째부터 replacement stem 으로 치환."""
+    occurrences = [m.start() for m in re.finditer(re.escape(stem), text)]
+    if len(occurrences) < threshold:
+        return text, 0
+    count = 0
+    out = []
+    last = 0
+    for i, pos in enumerate(occurrences):
+        out.append(text[last:pos])
+        if i < 1:  # 첫 occurrence 만 유지
+            out.append(stem)
+        else:
+            out.append(replacements[(i - 1) % len(replacements)])
+            count += 1
+        last = pos + len(stem)
+    out.append(text[last:])
+    return ''.join(out), count
 
 
 # ── 2. MZ 어휘 inject (카테고리별 자연 위치) ─────────────────────────────────────

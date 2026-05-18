@@ -12,18 +12,41 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / 'assets/data/life_paragraphs.json'
 
-# Stratified sample: 10 entry (2 천간 × 5 카테고리, 일주 diverse)
+# Stratified sample: 30 entry (10 천간 × 3 카테고리, 일주 diverse) — round 4 확대
 SAMPLE = [
+    # 10 천간 (1 entry each)
     ('갑자', 'early_life', None),
-    ('갑오', 'mid_life', None),
     ('을묘', 'late_life', None),
-    ('을미', 'innate_character', 'M'),
     ('병오', 'health', None),
     ('정해', 'love_fate', 'F'),
     ('무진', 'wealth', None),
     ('기축', 'social', None),
     ('경신', 'wealth_invest', None),
     ('신유', 'affection', 'M'),
+    ('임자', 'innate_character', 'M'),
+    ('계미', 'conclusion_self', None),
+    # 추가 1 cat 카테고리 다양화
+    ('갑오', 'mid_life', None),
+    ('을미', 'innate_character', 'F'),
+    ('병자', 'wealth_gather', None),
+    ('정사', 'wealth_loss_prevent', None),
+    ('무자', 'personality', None),
+    ('기사', 'innate_tendency', None),
+    ('경자', 'constitution', None),
+    ('신축', 'social_personality', None),
+    ('임신', 'wealth_invest', None),
+    ('계축', 'health', None),
+    # 추가 dim diversity
+    ('갑신', 'social', None),
+    ('을사', 'love_fate', 'M'),
+    ('병인', 'early_life', None),
+    ('정묘', 'affection', 'F'),
+    ('무인', 'wealth', None),
+    ('기해', 'mid_life', None),
+    ('경오', 'late_life', None),
+    ('신해', 'conclusion_self', None),
+    ('임술', 'personality', None),
+    ('계사', 'wealth_gather', None),
 ]
 
 RUBRIC = """다음 사주 운세 paragraph 를 5 axis 로 평가하라. 각 axis 0-10 점, 소수점 1자리.
