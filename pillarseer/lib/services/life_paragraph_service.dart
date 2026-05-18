@@ -44,6 +44,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/saju_result.dart';
 import 'life_category_fragment_service.dart';
+import 'natural_prose_joiner.dart';
 
 /// R88 sprint 4 — 17 카테고리 + conclusion_self enum.
 /// 카테고리 ordinal 은 운세의신 인생 분류 구조 + 사용자 mandate 의 화면 순서를 따름.
@@ -158,8 +159,7 @@ class LifeParagraphService {
     required LifeCategory category,
     String? gender,
   }) =>
-      paragraphStatic(
-          dayPillar: dayPillar, category: category, gender: gender);
+      paragraphStatic(dayPillar: dayPillar, category: category, gender: gender);
 
   /// **R90 sprint 2 — 새 메인 method (사주 전체 + fragment injection)**.
   ///
@@ -203,9 +203,11 @@ class LifeParagraphService {
     required SajuResult saju,
     required LifeCategory category,
     String? gender,
-  }) =>
-      const LifeParagraphService()
-          .paragraphForSaju(saju: saju, category: category, gender: gender);
+  }) => const LifeParagraphService().paragraphForSaju(
+    saju: saju,
+    category: category,
+    gender: gender,
+  );
 
   /// 기존 일주 단독 anchor signature (R88 호환).
   ///
@@ -218,19 +220,41 @@ class LifeParagraphService {
     String? gender,
   }) async {
     final pool = await _pool();
-    return lookup(pool,
-        dayPillar: dayPillar, category: category, gender: gender);
+    return lookup(
+      pool,
+      dayPillar: dayPillar,
+      category: category,
+      gender: gender,
+    );
   }
 
   /// SajuResult → '신묘' 같은 한글 일주 key.
   static String _dayPillarKo(SajuResult saju) {
     const stemKo = {
-      '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
-      '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+      '甲': '갑',
+      '乙': '을',
+      '丙': '병',
+      '丁': '정',
+      '戊': '무',
+      '己': '기',
+      '庚': '경',
+      '辛': '신',
+      '壬': '임',
+      '癸': '계',
     };
     const branchKo = {
-      '子': '자', '丑': '축', '寅': '인', '卯': '묘', '辰': '진', '巳': '사',
-      '午': '오', '未': '미', '申': '신', '酉': '유', '戌': '술', '亥': '해',
+      '子': '자',
+      '丑': '축',
+      '寅': '인',
+      '卯': '묘',
+      '辰': '진',
+      '巳': '사',
+      '午': '오',
+      '未': '미',
+      '申': '신',
+      '酉': '유',
+      '戌': '술',
+      '亥': '해',
     };
     final s = stemKo[saju.dayPillar.chunGan] ?? saju.dayPillar.chunGan;
     final b = branchKo[saju.dayPillar.jiJi] ?? saju.dayPillar.jiJi;
@@ -244,22 +268,7 @@ class LifeParagraphService {
   /// - fragment 가 마침표로 끝나지 않으면 '.' 보강.
   static String _mergeFragments(String base, List<String> fragments) {
     if (fragments.isEmpty) return base;
-    final buf = StringBuffer(base.trimRight());
-    for (final f in fragments) {
-      final t = f.trim();
-      if (t.isEmpty) continue;
-      // base 가 마침표/물음표/느낌표/문자열 끝이 아니면 마침표 보강.
-      final last = buf.isEmpty ? '' : buf.toString().substring(buf.length - 1);
-      if (last.isNotEmpty && !'.!?'.contains(last)) {
-        buf.write('.');
-      }
-      buf.write(' ');
-      buf.write(t);
-      if (!t.endsWith('.') && !t.endsWith('!') && !t.endsWith('?')) {
-        buf.write('.');
-      }
-    }
-    return buf.toString();
+    return NaturalProseJoiner.append(base, fragments);
   }
 
   /// 동기 lookup — pool map 을 직접 인자로 받음 (LifeOverviewService / SelfConclusionService 합성 용).

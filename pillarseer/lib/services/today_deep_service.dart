@@ -27,6 +27,7 @@
 import '../models/saju_result.dart';
 import 'daily_service.dart' show DayEnergyKind, classifyDayEnergy;
 import 'dynamic_text_resolver.dart';
+import 'natural_prose_joiner.dart';
 import 'saju_context.dart';
 import 'ten_gods_service.dart';
 import 'yongsin_service.dart';
@@ -134,7 +135,7 @@ class TodayDeepService {
         ySuffixKo,
       ].where((p) => p.isNotEmpty).join(' ');
       if (extraKo.isNotEmpty) {
-        bodyKo = '$bodyKo $extraKo';
+        bodyKo = NaturalProseJoiner.append(bodyKo, [extraKo]);
       }
       final gAnchorEn = DynamicTextResolver.gyeokgukAnchor(ctx, locale: 'en');
       final ySuffixEn = DynamicTextResolver.yongsinSuffix(ctx, locale: 'en');
@@ -530,7 +531,7 @@ class TodayDeepService {
     }
     parts.add('$elementKo.');
     parts.add('$moodHookKo.');
-    return parts.join(' ');
+    return NaturalProseJoiner.join(parts);
   }
 
   static String _composeBodyEn({

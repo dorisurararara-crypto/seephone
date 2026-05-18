@@ -94,11 +94,11 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+53) — R94 sprint 5 ship.
+      // pubspec version 자체 (1.0.0+55) — R96 sprint ship.
       expect(
-        pubspecSrc.contains('version: 1.0.0+53'),
+        pubspecSrc.contains('version: 1.0.0+55'),
         isTrue,
-        reason: 'pubspec version (1.0.0+53) 자체 변경 — R94 sprint 5 delivery 불일치',
+        reason: 'pubspec version (1.0.0+55) 자체 변경 — R96 sprint ship delivery 불일치',
       );
     });
 

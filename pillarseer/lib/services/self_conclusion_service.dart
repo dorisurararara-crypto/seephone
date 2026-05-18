@@ -14,6 +14,7 @@
 
 import '../models/saju_result.dart';
 import 'life_paragraph_service.dart';
+import 'natural_prose_joiner.dart';
 
 class SelfConclusionService {
   /// 한자 천간 → 한글.
@@ -91,12 +92,18 @@ class SelfConclusionService {
     // 3. 마무리 (페르소나 친근 톤 — 사주 도메인 용어 없이).
     final closing = '있는 그대로의 본인 모습이 가장 강한 매력이에요.';
 
-    final parts = <String>[prefix, if (dbSentence.isNotEmpty) dbSentence, closing];
-    var result = parts.join(' ');
+    final parts = <String>[
+      prefix,
+      if (dbSentence.isNotEmpty) dbSentence,
+      closing,
+    ];
+    var result = NaturalProseJoiner.join(parts);
 
     // 80자 미만이면 anchor padding (예외 상황 방어).
     if (result.length < 80) {
-      result = '$result 한 가지 모습으로 본인을 다 설명하지 말고 여러 면을 다 살려봐요.';
+      result = NaturalProseJoiner.append(result, [
+        '한 가지 모습으로 본인을 다 설명하지 말고 여러 면을 다 살려봐요.',
+      ]);
     }
     // 200자 over 시 잘라내기 (R88 baseline mandate).
     if (result.length > 200) {

@@ -10,6 +10,7 @@ import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/dynamic_text_resolver.dart';
 import '../../services/jol_calendar_2026.dart';
+import '../../services/natural_prose_joiner.dart';
 import '../../services/saju_context.dart';
 import '../../services/seun_service.dart';
 import '../../services/strength_service.dart';
@@ -31,20 +32,23 @@ class NewYear2026Screen extends ConsumerWidget {
     required SajuContext ctx,
     required int index,
     required bool useKo,
-  }) =>
-      _MonthlyFlow.moodFor(ctx: ctx, index: index, useKo: useKo);
+  }) => _MonthlyFlow.moodFor(ctx: ctx, index: index, useKo: useKo);
 
   /// R93 sprint 6 — public test API.
   /// 12 area dynamic readings (CAREER ~ LEGACY) — 사주 anchor 반영.
   /// 위임: _TwelveAreas._buildAreaReadings.
   static List<(String, String)> areaReadingsFor({
     required SajuResult saju,
-    required ({String themeKo, String themeEn, dynamic godGan, dynamic godJi}) theme,
+    required ({String themeKo, String themeEn, dynamic godGan, dynamic godJi})
+    theme,
     required bool useKo,
   }) {
     final ctx = SajuContext.from(saju, today: DateTime(year, 1, 1));
-    return _TwelveAreas(theme: theme, saju: saju, useKo: useKo)
-        ._buildAreaReadings(theme: theme, saju: saju, ctx: ctx, useKo: useKo);
+    return _TwelveAreas(
+      theme: theme,
+      saju: saju,
+      useKo: useKo,
+    )._buildAreaReadings(theme: theme, saju: saju, ctx: ctx, useKo: useKo);
   }
 
   @override
@@ -68,8 +72,11 @@ class NewYear2026Screen extends ConsumerWidget {
     final strength = StrengthService.judge(
       dayMasterElement: saju.dayPillar.chunGanElement,
       monthJi: saju.monthPillar.jiJi,
-      wood: el.wood, fire: el.fire, earth: el.earth,
-      metal: el.metal, water: el.water,
+      wood: el.wood,
+      fire: el.fire,
+      earth: el.earth,
+      metal: el.metal,
+      water: el.water,
       dayMaster: saju.dayPillar.chunGan,
       yearJi: saju.yearPillar.jiJi,
       dayJi: saju.dayPillar.jiJi,
@@ -78,8 +85,11 @@ class NewYear2026Screen extends ConsumerWidget {
     final yongsin = YongsinService.judge(
       dayMasterElement: saju.dayPillar.chunGanElement,
       strengthLabel: strength.label,
-      wood: el.wood, fire: el.fire, earth: el.earth,
-      metal: el.metal, water: el.water,
+      wood: el.wood,
+      fire: el.fire,
+      earth: el.earth,
+      metal: el.metal,
+      water: el.water,
     );
 
     return Scaffold(
@@ -229,11 +239,11 @@ class _AnnualThemeSection extends StatelessWidget {
     final yongIn2026 = yongsin == '火';
     final advice = useKo
         ? (yongIn2026
-            ? '용신이 ${elKo(yongsin)} — 병오년이 당신을 직접 살려주는 해입니다. 큰 결정에 적합.'
-            : '용신은 ${elKo(yongsin)}. 병오년 화기에 휘둘리지 않도록 ${elKo(yongsin)}을 의식적으로 보충하세요.')
+              ? '용신이 ${elKo(yongsin)} — 병오년이 당신을 직접 살려주는 해입니다. 큰 결정에 적합.'
+              : '용신은 ${elKo(yongsin)}. 병오년 화기에 휘둘리지 않도록 ${elKo(yongsin)}을 의식적으로 보충하세요.')
         : (yongIn2026
-            ? 'Your yongsin is $yongsin — 2026 directly nourishes your chart. A year for the big decisions.'
-            : 'Your yongsin is $yongsin. Replenish it deliberately so the year\'s fire does not deplete you.');
+              ? 'Your yongsin is $yongsin — 2026 directly nourishes your chart. A year for the big decisions.'
+              : 'Your yongsin is $yongsin. Replenish it deliberately so the year\'s fire does not deplete you.');
 
     return Container(
       width: double.infinity,
@@ -256,7 +266,9 @@ class _AnnualThemeSection extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            themeText.isEmpty ? (useKo ? '비화 — 동등한 결' : 'Peer — equal vibe') : themeText,
+            themeText.isEmpty
+                ? (useKo ? '비화 — 동등한 결' : 'Peer — equal vibe')
+                : themeText,
             style: GoogleFonts.notoSerifKr(
               fontSize: 18,
               fontWeight: FontWeight.w400,
@@ -310,7 +322,11 @@ class _AnnualSummary extends StatelessWidget {
   });
 
   static const Map<String, String> _elKoMap = {
-    '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
+    '木': '나무',
+    '火': '불',
+    '土': '흙',
+    '金': '쇠',
+    '水': '물',
   };
 
   String _elKo(String e) => _elKoMap[e] ?? e;
@@ -390,80 +406,117 @@ class _AnnualSummary extends StatelessWidget {
     final body = StringBuffer();
 
     if (useKo) {
+      // R96 — 사용자 mandate "...에요로 계속 끝나니까 툭툭 끊기는 느낌 ... ai같아".
+      // 7 문단 각각을 NaturalProseJoiner.polish() 로 통과시켜 paragraph 내부
+      // 문장 사이에 connector + 어미 다양화 주입. 7 문단 구조 (writeln('') 빈 줄)
+      // 는 그대로 보존 — 마지막 join 단계만 utility swap.
+      void writePara(String text) =>
+          body.writeln(NaturalProseJoiner.polish(text));
+
       // [1] 큰 흐름 (오행 관계 base + R93 sprint 6 일지 vs 午 micro) — 300자+α
       switch (rel) {
         case 'same':
-          body.writeln(
-              '2026년 병오년은 당신과 같은 오행(火) 결을 가진 한 해입니다. 한 해의 본기가 당신의 일간 본성과 같은 결이라 자기 색이 가장 또렷이 드러나는 시기이고, 평소에 망설였던 표현·창작·무대형 결정이 자연스럽게 풀려요. 다만 같은 오행이 너무 강하게 겹치면 한 박자만 잘못 밟아도 과열로 가기 쉬워서, 의식적인 휴식 한 주를 한여름 어딘가에 미리 박아두는 것이 한 해 풍요를 좌우합니다. 오행이 같다는 건 끌어주는 도움도 적다는 뜻이라, 큰 결정 앞에서는 한 번 더 객관 의견을 들어보는 습관이 필요해요.$branchMicro');
+          writePara(
+            '2026년 병오년은 당신과 같은 오행(火) 결을 가진 한 해입니다. 한 해의 본기가 당신의 일간 본성과 같은 결이라 자기 색이 가장 또렷이 드러나는 시기이고, 평소에 망설였던 표현·창작·무대형 결정이 자연스럽게 풀려요. 다만 같은 오행이 너무 강하게 겹치면 한 박자만 잘못 밟아도 과열로 가기 쉬워서, 의식적인 휴식 한 주를 한여름 어딘가에 미리 박아두는 것이 한 해 풍요를 좌우합니다. 오행이 같다는 건 끌어주는 도움도 적다는 뜻이라, 큰 결정 앞에서는 한 번 더 객관 의견을 들어보는 습관이 필요해요.$branchMicro',
+          );
           break;
         case 'iGenerate':
-          body.writeln(
-              '2026년 병오년은 당신이 한 해를 직접 키우는 상생(相生) 흐름의 시기입니다. 당신의 일간(${_elKo(myEl)})이 병오년 본기(火)를 직접 살리는 자리에 있어서, 한 해 동안 당신이 손대는 일·관계·창작에서 결과물이 자연스럽게 자라요. 다만 주는 쪽 자리라 자기 페이스를 잃기 쉬워서, 한 달에 한 번은 자기를 위한 작은 회복 의식을 두는 게 좋아요. 상생의 해는 시간이 지난 뒤 결실이 보이는 구조라, 5월~7월의 노력은 가을·겨울에 한꺼번에 돌아오니까 그때까지 페이스를 잃지 않는 게 핵심이에요.$branchMicro');
+          writePara(
+            '2026년 병오년은 당신이 한 해를 직접 키우는 상생(相生) 흐름의 시기입니다. 당신의 일간(${_elKo(myEl)})이 병오년 본기(火)를 직접 살리는 자리에 있어서, 한 해 동안 당신이 손대는 일·관계·창작에서 결과물이 자연스럽게 자라요. 다만 주는 쪽 자리라 자기 페이스를 잃기 쉬워서, 한 달에 한 번은 자기를 위한 작은 회복 의식을 두는 게 좋아요. 상생의 해는 시간이 지난 뒤 결실이 보이는 구조라, 5월~7월의 노력은 가을·겨울에 한꺼번에 돌아오니까 그때까지 페이스를 잃지 않는 게 핵심이에요.$branchMicro',
+          );
           break;
         case 'theyGenerate':
-          body.writeln(
-              '2026년 병오년은 한 해가 당신을 직접 살리는 상생(相生) 흐름의 시기입니다. 한 해의 본기(火)가 당신의 일간(${_elKo(myEl)})을 자연스럽게 자라게 해주는 자리라, 평소에 부족하다 느꼈던 자리 — 표현·인지도·기회 — 가 한꺼번에 채워지는 한 해입니다. 가만히 있어도 좋은 흐름이 들어오는 해지만, 받는 만큼 표현하는 습관을 같이 챙겨야 한 해가 다 지나기 전에 관계가 두텁게 굳어요. 한 해 동안 만나는 사람들 한 명 한 명에게 작은 표현을 자주 해두면, 이 한 해가 평생 가는 인연으로 남는 구조입니다.$branchMicro');
+          writePara(
+            '2026년 병오년은 한 해가 당신을 직접 살리는 상생(相生) 흐름의 시기입니다. 한 해의 본기(火)가 당신의 일간(${_elKo(myEl)})을 자연스럽게 자라게 해주는 자리라, 평소에 부족하다 느꼈던 자리 — 표현·인지도·기회 — 가 한꺼번에 채워지는 한 해입니다. 가만히 있어도 좋은 흐름이 들어오는 해지만, 받는 만큼 표현하는 습관을 같이 챙겨야 한 해가 다 지나기 전에 관계가 두텁게 굳어요. 한 해 동안 만나는 사람들 한 명 한 명에게 작은 표현을 자주 해두면, 이 한 해가 평생 가는 인연으로 남는 구조입니다.$branchMicro',
+          );
           break;
         case 'iOvercome':
-          body.writeln(
-              '2026년 병오년은 당신이 한 해의 흐름을 제어하는 상극(相剋) 시기입니다. 당신의 일간(${_elKo(myEl)})이 병오년 본기(火)를 제어하는 자리에 있어서, 한 해의 강한 화기에 휘둘리지 않고 자기 페이스로 결정을 내릴 수 있는 위치예요. 다만 제어하는 자리는 늘 외로워서 큰 결정 앞에서 의지할 사람이 없다 느낄 수 있는데, 그때마다 객관적인 데이터(가계부·일정·만난 사람 list)를 들여다보는 습관이 큰 도움이 됩니다. 한 해의 본기가 강한데 자기가 그 위에 있다는 건, 한 번에 큰 도약을 만들 수 있는 자리라는 뜻입니다.$branchMicro');
+          writePara(
+            '2026년 병오년은 당신이 한 해의 흐름을 제어하는 상극(相剋) 시기입니다. 당신의 일간(${_elKo(myEl)})이 병오년 본기(火)를 제어하는 자리에 있어서, 한 해의 강한 화기에 휘둘리지 않고 자기 페이스로 결정을 내릴 수 있는 위치예요. 다만 제어하는 자리는 늘 외로워서 큰 결정 앞에서 의지할 사람이 없다 느낄 수 있는데, 그때마다 객관적인 데이터(가계부·일정·만난 사람 list)를 들여다보는 습관이 큰 도움이 됩니다. 한 해의 본기가 강한데 자기가 그 위에 있다는 건, 한 번에 큰 도약을 만들 수 있는 자리라는 뜻입니다.$branchMicro',
+          );
           break;
         case 'theyOvercome':
-          body.writeln(
-              '2026년 병오년은 한 해의 본기(火)가 당신의 일간(${_elKo(myEl)})을 제어하는 상극(相剋) 시기입니다. 한 해의 강한 화기가 당신을 직접 누르는 자리라, 평소보다 페이스를 잃기 쉽고 결정·관계·돈 흐름에서 휘둘리는 순간이 자주 옵니다. 다만 상극의 해는 그 압박을 잘 견디면 한 단계 강해지는 구조라, "올해는 무리하지 말자"는 한 줄을 한 해 내내 자기에게 자주 되뇌어주는 게 큰 도움이 돼요. 한여름(5~7월) 화기 정점은 의식적으로 차분한 시기를 만들고, 가을 이후에 한 해의 진짜 성장이 시작됩니다.$branchMicro');
+          writePara(
+            '2026년 병오년은 한 해의 본기(火)가 당신의 일간(${_elKo(myEl)})을 제어하는 상극(相剋) 시기입니다. 한 해의 강한 화기가 당신을 직접 누르는 자리라, 평소보다 페이스를 잃기 쉽고 결정·관계·돈 흐름에서 휘둘리는 순간이 자주 옵니다. 다만 상극의 해는 그 압박을 잘 견디면 한 단계 강해지는 구조라, "올해는 무리하지 말자"는 한 줄을 한 해 내내 자기에게 자주 되뇌어주는 게 큰 도움이 돼요. 한여름(5~7월) 화기 정점은 의식적으로 차분한 시기를 만들고, 가을 이후에 한 해의 진짜 성장이 시작됩니다.$branchMicro',
+          );
           break;
         default:
-          body.writeln(
-              '2026년 병오년은 당신의 일간(${_elKo(myEl)})과 한 해 본기(火) 사이에 직접 생극 관계가 없는 중립적 흐름의 시기입니다. 한 해의 색이 본인의 색과 직접 겹치지도, 직접 맞부딪치지도 않아서 자기 색을 그대로 유지하면서 한 해를 보내기 좋은 구조예요. 다만 강한 끌림도 강한 자극도 없는 해라, 가만히 흘러가다 보면 한 해가 빨리 지나갈 수 있어요. 작은 도전 한 가지, 새로운 만남 한 명, 새 루틴 한 가지를 의식적으로 만들어두면 이 한 해가 의미 있는 한 해로 남습니다.$branchMicro');
+          writePara(
+            '2026년 병오년은 당신의 일간(${_elKo(myEl)})과 한 해 본기(火) 사이에 직접 생극 관계가 없는 중립적 흐름의 시기입니다. 한 해의 색이 본인의 색과 직접 겹치지도, 직접 맞부딪치지도 않아서 자기 색을 그대로 유지하면서 한 해를 보내기 좋은 구조예요. 다만 강한 끌림도 강한 자극도 없는 해라, 가만히 흘러가다 보면 한 해가 빨리 지나갈 수 있어요. 작은 도전 한 가지, 새로운 만남 한 명, 새 루틴 한 가지를 의식적으로 만들어두면 이 한 해가 의미 있는 한 해로 남습니다.$branchMicro',
+          );
       }
 
       // [2] 격국 — 200~300자
       body.writeln('');
       final gyeokguk = ctx.gyeokgukShort.isEmpty ? '비전형' : ctx.gyeokgukShort;
-      body.writeln(
-          '본인 본격(格局)은 "$gyeokguk"입니다. 격국은 한 사람의 본업·천명 자리를 가리키는 큰 그림인데, 병오년 한 해 동안 이 본격이 어떻게 자극받는지가 한 해의 진짜 결정을 만듭니다. 격국의 본질을 잊지 않고 그 흐름 위에서 한 해의 결정을 내리면, 1년이 끝났을 때 자기 자리에 가장 가까운 모습으로 도착해 있을 거예요. 본격을 거스르는 일·관계·돈 결정은 한 해 동안 한 번씩 피곤하게 돌아옵니다.');
+      writePara(
+        '본인 본격(格局)은 "$gyeokguk"입니다. 격국은 한 사람의 본업·천명 자리를 가리키는 큰 그림인데, 병오년 한 해 동안 이 본격이 어떻게 자극받는지가 한 해의 진짜 결정을 만듭니다. 격국의 본질을 잊지 않고 그 흐름 위에서 한 해의 결정을 내리면, 1년이 끝났을 때 자기 자리에 가장 가까운 모습으로 도착해 있을 거예요. 본격을 거스르는 일·관계·돈 결정은 한 해 동안 한 번씩 피곤하게 돌아옵니다.',
+      );
 
       // [3] 용신/희신/기신 — 250~400자
       body.writeln('');
-      body.writeln(
-          '한 해 동안 가장 의식적으로 챙겨야 할 5행은 용신(用神) "${_elKo(ctx.yongsin)}"입니다. 용신은 사주의 균형을 잡아주는 핵심 5행으로, 한 해의 결정·만남·환경 선택에서 이 5행을 늘 가까이 두면 자연스럽게 흐름이 풀립니다. 희신은 "${_elKo(ctx.huisin)}" — 용신을 돕는 보조 5행이라 같이 의식하면 좋고, 반대로 기신 "${_elKo(ctx.gisin)}"은 가까이 두면 한 해 페이스가 흔들리는 5행이라 의도적으로 거리를 두는 게 좋아요. 색깔·음식·공간·만나는 사람 결까지 — 이 세 5행의 균형이 한 해의 운기를 좌우합니다.${ctx.yongsin == '火' ? ' 특히 용신이 火 → 병오년이 직접 당신을 살리는 해라서 큰 결정에 가장 적합한 한 해예요.' : ctx.gisin == '火' ? ' 다만 기신이 火 → 병오년 화기가 한 해 동안 가장 큰 부담이 되니, 의식적으로 수기(水)·금기(金) 자리를 가까이 두는 게 핵심입니다.' : ''}');
+      writePara(
+        '한 해 동안 가장 의식적으로 챙겨야 할 5행은 용신(用神) "${_elKo(ctx.yongsin)}"입니다. 용신은 사주의 균형을 잡아주는 핵심 5행으로, 한 해의 결정·만남·환경 선택에서 이 5행을 늘 가까이 두면 자연스럽게 흐름이 풀립니다. 희신은 "${_elKo(ctx.huisin)}" — 용신을 돕는 보조 5행이라 같이 의식하면 좋고, 반대로 기신 "${_elKo(ctx.gisin)}"은 가까이 두면 한 해 페이스가 흔들리는 5행이라 의도적으로 거리를 두는 게 좋아요. 색깔·음식·공간·만나는 사람 결까지 — 이 세 5행의 균형이 한 해의 운기를 좌우합니다.${ctx.yongsin == '火'
+            ? ' 특히 용신이 火 → 병오년이 직접 당신을 살리는 해라서 큰 결정에 가장 적합한 한 해예요.'
+            : ctx.gisin == '火'
+            ? ' 다만 기신이 火 → 병오년 화기가 한 해 동안 가장 큰 부담이 되니, 의식적으로 수기(水)·금기(金) 자리를 가까이 두는 게 핵심입니다.'
+            : ''}',
+      );
 
       // [4] 십신 강세 — 200자
       body.writeln('');
       final topGod = _topTenGod(ctx);
       if (topGod != null) {
-        body.writeln(
-            '본인 사주에서 가장 강한 십신은 "$topGod"입니다. 이 십신이 강하다는 건 한 해 동안 이 영역에서 흐름이 가장 많이 일어난다는 뜻이에요. ${_godHint(topGod)} 병오년이 이 영역을 자극해서 한 해 동안 가장 큰 변화가 이 자리에서 일어날 가능성이 높으니, 미리 마음의 준비를 해두면 좋아요.');
+        writePara(
+          '본인 사주에서 가장 강한 십신은 "$topGod"입니다. 이 십신이 강하다는 건 한 해 동안 이 영역에서 흐름이 가장 많이 일어난다는 뜻이에요. ${_godHint(topGod)} 병오년이 이 영역을 자극해서 한 해 동안 가장 큰 변화가 이 자리에서 일어날 가능성이 높으니, 미리 마음의 준비를 해두면 좋아요.',
+        );
       }
 
       // [5] 길흉 시기 — 250~350자
       body.writeln('');
-      body.writeln(
-          '월별 큰 흐름은 다음과 같이 잡혀요. 2~4월(봄 절기 입춘·경칩·청명)은 한 해의 씨앗을 심는 시기 — 새 결정·새 관계·새 루틴 시작하기 좋아요. 5~7월(여름 절기 입하·망종·소서)은 병오년 화기 정점 — 무대·표현·인지도 자리에 가장 큰 결과가 나오지만, 한 번씩 의식적인 휴식을 두지 않으면 과열로 갑니다. 8~10월(가을 절기 입추·백로·한로)은 결실의 시기 — 봄·여름에 심은 씨앗이 돌아오는 자리예요. 11~12월(겨울 절기 입동·대설)은 다음 해를 위한 저장의 시기 — 큰 결정보다 정리와 비축에 시간을 두는 게 좋습니다.');
+      writePara(
+        '월별 큰 흐름은 다음과 같이 잡혀요. 2~4월(봄 절기 입춘·경칩·청명)은 한 해의 씨앗을 심는 시기 — 새 결정·새 관계·새 루틴 시작하기 좋아요. 5~7월(여름 절기 입하·망종·소서)은 병오년 화기 정점 — 무대·표현·인지도 자리에 가장 큰 결과가 나오지만, 한 번씩 의식적인 휴식을 두지 않으면 과열로 갑니다. 8~10월(가을 절기 입추·백로·한로)은 결실의 시기 — 봄·여름에 심은 씨앗이 돌아오는 자리예요. 11~12월(겨울 절기 입동·대설)은 다음 해를 위한 저장의 시기 — 큰 결정보다 정리와 비축에 시간을 두는 게 좋습니다.',
+      );
 
       // [6] 사람·관계·돈 — 250~350자
       body.writeln('');
-      body.writeln(
-          '관계 영역은 봄에 정리, 여름에 확장, 가을에 정착의 흐름이에요. 오래된 친구·연인과의 거리감이 봄에 한 번 자연스럽게 정리되고, 여름 무대에서 새 인연이 한 명 정도 깊게 들어와요. 가을 이후에 두텁게 굳어지는 인연이 한 해의 가장 큰 선물이 될 가능성이 높아요. 돈 흐름은 정재(고정 수입)보다 편재(기회·투자) 성격의 한 해라, 큰 한 흐름이 한 번은 지나갑니다. 그 한 번을 놓치지 않으려면 1~3월의 정보 수집과 4~5월의 결정 모드가 가장 중요해요. 큰 돈이 들어왔을 때 바로 쓰지 않고 한 박자 보관하는 습관이 가을·겨울 안정을 만듭니다.');
+      writePara(
+        '관계 영역은 봄에 정리, 여름에 확장, 가을에 정착의 흐름이에요. 오래된 친구·연인과의 거리감이 봄에 한 번 자연스럽게 정리되고, 여름 무대에서 새 인연이 한 명 정도 깊게 들어와요. 가을 이후에 두텁게 굳어지는 인연이 한 해의 가장 큰 선물이 될 가능성이 높아요. 돈 흐름은 정재(고정 수입)보다 편재(기회·투자) 성격의 한 해라, 큰 한 흐름이 한 번은 지나갑니다. 그 한 번을 놓치지 않으려면 1~3월의 정보 수집과 4~5월의 결정 모드가 가장 중요해요. 큰 돈이 들어왔을 때 바로 쓰지 않고 한 박자 보관하는 습관이 가을·겨울 안정을 만듭니다.',
+      );
 
       // [7] 마무리 조언 — 200자
       body.writeln('');
-      body.writeln(
-          '한 해의 한 줄 조언은 — "${_oneLineCounsel(rel)}" — 이 한 줄을 한 해 내내 자기에게 되뇌어주세요. 병오년은 빛이 강한 만큼 그림자도 함께 자라는 해입니다. 자기 색을 잃지 않으면서 한 해의 흐름을 타려면, 매달 한 번 자기 페이스를 점검하는 작은 의식 한 가지를 두는 게 가장 큰 보약이에요. 12월 31일 밤에 한 해를 한 줄로 적을 때, 그 한 줄이 2027년의 첫 결정을 만듭니다.');
+      writePara(
+        '한 해의 한 줄 조언은 — "${_oneLineCounsel(rel)}" — 이 한 줄을 한 해 내내 자기에게 되뇌어주세요. 병오년은 빛이 강한 만큼 그림자도 함께 자라는 해입니다. 자기 색을 잃지 않으면서 한 해의 흐름을 타려면, 매달 한 번 자기 페이스를 점검하는 작은 의식 한 가지를 두는 게 가장 큰 보약이에요. 12월 31일 밤에 한 해를 한 줄로 적을 때, 그 한 줄이 2027년의 첫 결정을 만듭니다.',
+      );
     } else {
       // English — condensed (Korean is primary mandate; English keeps length similar but shorter).
       body.writeln(
-          '2026 (Bing Wu / Fire Horse) places your day master ($myEl) in a ${rel == 'same' ? 'matching' : rel == 'iGenerate' ? 'generating (you → year)' : rel == 'theyGenerate' ? 'generating (year → you)' : rel == 'iOvercome' ? 'controlling (you → year)' : rel == 'theyOvercome' ? 'controlling (year → you)' : 'neutral'} relation with the year stem.$branchMicro');
+        '2026 (Bing Wu / Fire Horse) places your day master ($myEl) in a ${rel == 'same'
+            ? 'matching'
+            : rel == 'iGenerate'
+            ? 'generating (you → year)'
+            : rel == 'theyGenerate'
+            ? 'generating (year → you)'
+            : rel == 'iOvercome'
+            ? 'controlling (you → year)'
+            : rel == 'theyOvercome'
+            ? 'controlling (year → you)'
+            : 'neutral'} relation with the year stem.$branchMicro',
+      );
       body.writeln(
-          'Your gyeokguk is "${ctx.gyeokgukShort.isEmpty ? 'unconventional' : ctx.gyeokgukShort}". The year activates this primary chart structure — decisions aligned with it leave you closer to your true position by year-end.');
+        'Your gyeokguk is "${ctx.gyeokgukShort.isEmpty ? 'unconventional' : ctx.gyeokgukShort}". The year activates this primary chart structure — decisions aligned with it leave you closer to your true position by year-end.',
+      );
       body.writeln(
-          'Yongsin: ${ctx.yongsin}. Huisin: ${ctx.huisin}. Gisin: ${ctx.gisin}. Keep yongsin and huisin close (colors, food, spaces, people grain); deliberately distance the gisin.');
+        'Yongsin: ${ctx.yongsin}. Huisin: ${ctx.huisin}. Gisin: ${ctx.gisin}. Keep yongsin and huisin close (colors, food, spaces, people grain); deliberately distance the gisin.',
+      );
       body.writeln(
-          'Spring (Feb–Apr): plant new seeds. Summer (May–Jul): fire peaks — visibility but burnout risk. Autumn (Aug–Oct): harvest. Winter (Nov–Dec): store and prepare for 2027.');
+        'Spring (Feb–Apr): plant new seeds. Summer (May–Jul): fire peaks — visibility but burnout risk. Autumn (Aug–Oct): harvest. Winter (Nov–Dec): store and prepare for 2027.',
+      );
       body.writeln(
-          'Relationships: spring sorts old ties, summer opens new ones, autumn settles depth. Money: more windfall than fixed — the one big flow comes once; collect info Jan–Mar and decide Apr–May.');
-      body.writeln(
-          'One-line counsel: ${_oneLineCounsel(rel)}');
+        'Relationships: spring sorts old ties, summer opens new ones, autumn settles depth. Money: more windfall than fixed — the one big flow comes once; collect info Jan–Mar and decide Apr–May.',
+      );
+      body.writeln('One-line counsel: ${_oneLineCounsel(rel)}');
     }
 
     return Container(
@@ -621,6 +674,7 @@ class _MonthlyFlow extends StatelessWidget {
     final ySuffix = DynamicTextResolver.yongsinSuffix(ctx, locale: locale);
     final parts = [gAnchor, ySuffix].where((p) => p.isNotEmpty).toList();
     if (parts.isEmpty) return base;
+    if (useKo) return NaturalProseJoiner.append(base, parts);
     return '$base\n${parts.join(' ')}';
   }
 
@@ -841,7 +895,8 @@ class _TwelveAreas extends StatelessWidget {
   //   SPIRIT     ← yongsin + 인성
   //   LEGACY     ← gyeokguk + 60일주 hint
   List<(String, String)> _buildAreaReadings({
-    required ({String themeKo, String themeEn, dynamic godGan, dynamic godJi}) theme,
+    required ({String themeKo, String themeEn, dynamic godGan, dynamic godJi})
+    theme,
     required SajuResult saju,
     required SajuContext ctx,
     required bool useKo,
@@ -850,8 +905,7 @@ class _TwelveAreas extends StatelessWidget {
     String el(String e) => useKo ? (elKo[e] ?? e) : SajuContext.elementEn(e);
 
     final gFreq = ctx.tenGodFrequency;
-    int sumOf(List<TenGod> keys) =>
-        keys.fold(0, (a, k) => a + (gFreq[k] ?? 0));
+    int sumOf(List<TenGod> keys) => keys.fold(0, (a, k) => a + (gFreq[k] ?? 0));
     final wealth = sumOf([TenGod.pyeonjae, TenGod.jeongjae]);
     final officer = sumOf([TenGod.pyeongwan, TenGod.jeonggwan]);
     final scholar = sumOf([TenGod.pyeonin, TenGod.jeongin]);
@@ -891,19 +945,22 @@ class _TwelveAreas extends StatelessWidget {
     final hasYangin = ctx.activeShinsa.contains('양인');
 
     if (useKo) {
+      (String, String) area(String label, String body) =>
+          (label, NaturalProseJoiner.polish(body));
+
       final careerAnchor = officer >= 2
           ? '본인 사주에서 관성(편관·정관)이 두텁게 자리해서 공식 라인·승진·자격 쪽 결정이 유리해요.'
           : scholar >= 2
-              ? '인성(편인·정인)이 강해서 학습·자격·전문가 트랙에서 한 단계 올라가는 자리예요.'
-              : express >= 2
-                  ? '식상(식신·상관)이 살아 있어서 표현·창작·강연·콘텐츠 쪽이 본업의 자원이 됩니다.'
-                  : '본업은 $gShort 결을 그대로 따라가는 것이 한 해 정답이에요.';
+          ? '인성(편인·정인)이 강해서 학습·자격·전문가 트랙에서 한 단계 올라가는 자리예요.'
+          : express >= 2
+          ? '식상(식신·상관)이 살아 있어서 표현·창작·강연·콘텐츠 쪽이 본업의 자원이 됩니다.'
+          : '본업은 $gShort 결을 그대로 따라가는 것이 한 해 정답이에요.';
 
       final wealthAnchor = wealth >= 3
           ? '재성이 두텁게 자리한 사주라 큰 흐름 한 번에 자산 그림이 바뀔 가능성이 높아요.'
           : wealth >= 1
-              ? '재성이 한 자리 있어서 한 해에 한 번 큰 결정 자리가 와요.'
-              : '재성이 거의 없는 사주라 한 해의 돈 흐름은 정재(고정 수입)보다 인연·기회 쪽 우회 경로로 들어와요.';
+          ? '재성이 한 자리 있어서 한 해에 한 번 큰 결정 자리가 와요.'
+          : '재성이 거의 없는 사주라 한 해의 돈 흐름은 정재(고정 수입)보다 인연·기회 쪽 우회 경로로 들어와요.';
       final wealthYong = yongIsFire
           ? '용신이 火 — 병오년이 직접 살리는 해라 큰 결정에 가장 적합해요.'
           : '용신 $yong을 가까이 두면 돈 흐름이 한 박자 안정돼요.';
@@ -929,24 +986,24 @@ class _TwelveAreas extends StatelessWidget {
       final healthAnchor = fireOverload && gisinIsFire
           ? '본인 사주가 이미 火가 강한데 기신도 火 — 병오년 화기는 직접 부담이 큰 영역이에요.'
           : fireOverload
-              ? '본인 사주가 火 비중이 높아서 한 해 화기에 더해지면 과열되기 쉬워요.'
-              : gisinIsFire
-                  ? '기신이 火 — 병오년 한 해는 의식적인 수분·휴식이 필수.'
-                  : yongIsFire
-                      ? '용신이 火 — 병오년 화기는 오히려 회복의 자원이에요.'
-                      : '본인 사주 화 균형이 무난해서 평소 페이스를 지키면 무리 없는 한 해예요.';
+          ? '본인 사주가 火 비중이 높아서 한 해 화기에 더해지면 과열되기 쉬워요.'
+          : gisinIsFire
+          ? '기신이 火 — 병오년 한 해는 의식적인 수분·휴식이 필수.'
+          : yongIsFire
+          ? '용신이 火 — 병오년 화기는 오히려 회복의 자원이에요.'
+          : '본인 사주 화 균형이 무난해서 평소 페이스를 지키면 무리 없는 한 해예요.';
 
       final familyAnchor = peer >= 3
           ? '비견·겁재가 두텁게 자리해서 형제·또래·동료와의 거리감이 한 해의 큰 흐름이에요.'
           : peer >= 1
-              ? '비견·겁재가 한 자리 있어서 가족·또래 자리에서 한 번 정리 흐름이 와요.'
-              : '비견·겁재가 거의 없는 사주라 가족·또래보다 한 박자 떨어진 자리에서 한 해를 보내요.';
+          ? '비견·겁재가 한 자리 있어서 가족·또래 자리에서 한 번 정리 흐름이 와요.'
+          : '비견·겁재가 거의 없는 사주라 가족·또래보다 한 박자 떨어진 자리에서 한 해를 보내요.';
 
       final studyAnchor = scholar >= 3
           ? '인성(편인·정인)이 두텁게 자리해서 학습·자격·전문가 트랙이 한 해의 큰 자원이에요.'
           : scholar >= 1
-              ? '인성이 한 자리 있어서 짧은 코스·자격증 한 개가 한 해의 키예요.'
-              : '인성이 거의 없는 사주라 학습은 폭주력보다 정밀도 — 짧고 굵게.';
+          ? '인성이 한 자리 있어서 짧은 코스·자격증 한 개가 한 해의 키예요.'
+          : '인성이 거의 없는 사주라 학습은 폭주력보다 정밀도 — 짧고 굵게.';
 
       final friendsAnchor = peer >= 3
           ? '동료·또래 자리에서 한 해의 흐름이 가장 많이 일어나요.'
@@ -955,10 +1012,12 @@ class _TwelveAreas extends StatelessWidget {
       String travelAnchor;
       switch (branchRel) {
         case 'clash':
-          travelAnchor = '일지 子 vs 병오년 午 충이라 이동·환경 변화가 평소보다 자주 일어나요 — 봄·여름 단거리 위주, 가을엔 의미 있는 장거리.';
+          travelAnchor =
+              '일지 子 vs 병오년 午 충이라 이동·환경 변화가 평소보다 자주 일어나요 — 봄·여름 단거리 위주, 가을엔 의미 있는 장거리.';
           break;
         case 'samhap':
-          travelAnchor = '일지 $myJi 와 병오년 午가 삼합으로 묶여서, 여름 이동·출장 자리에서 큰 인연이 들어오기 좋아요.';
+          travelAnchor =
+              '일지 $myJi 와 병오년 午가 삼합으로 묶여서, 여름 이동·출장 자리에서 큰 인연이 들어오기 좋아요.';
           break;
         case 'hap6':
           travelAnchor = '일지 未 vs 午 육합 — 동행 이동이 한 해의 결을 만들어요.';
@@ -973,8 +1032,8 @@ class _TwelveAreas extends StatelessWidget {
       final growthAnchor = express >= 3
           ? '식상이 두텁게 자리해서 표현·창작·콘텐츠가 한 해 자원의 본류예요.'
           : express >= 1
-              ? '식상이 한 자리 있어서 한 가지 외부 활동을 꾸준히 끌고 가면 큰 결과로 돌아와요.'
-              : '식상이 거의 없는 사주라 표현보다 내실 — 본인 본업 안에서 한 단계 깊어지는 한 해예요.';
+          ? '식상이 한 자리 있어서 한 가지 외부 활동을 꾸준히 끌고 가면 큰 결과로 돌아와요.'
+          : '식상이 거의 없는 사주라 표현보다 내실 — 본인 본업 안에서 한 단계 깊어지는 한 해예요.';
 
       final legalAnchor = officer >= 2
           ? '관성이 두텁게 자리해서 공식 서류·계약 자리가 한 해의 큰 흐름이에요.'
@@ -985,81 +1044,73 @@ class _TwelveAreas extends StatelessWidget {
           : '평소 안 쪽 시간을 두지 않는 결의 사주 — 6-7월에 의식적인 침묵의 일주일 한 번이 큰 보약.';
 
       return [
-        (
+        area(
           'CAREER · 仕事',
-          '$gShort 본격 위에서 한 해가 움직여요. $careerAnchor 병오년 화기 정점인 5-7월은 노출이 커지는 만큼 갈등도 같이 올 수 있으니 조심.'
+          '$gShort 본격 위에서 한 해가 움직여요. $careerAnchor 병오년 화기 정점인 5-7월은 노출이 커지는 만큼 갈등도 같이 올 수 있으니 조심.',
         ),
-        (
+        area(
           'WEALTH · 財',
-          '$wealthAnchor $wealthYong 정재보다 편재 성격의 한 해 — 1-3월 정보 수집, 4-5월 결정 모드.'
+          '$wealthAnchor $wealthYong 정재보다 편재 성격의 한 해 — 1-3월 정보 수집, 4-5월 결정 모드.',
         ),
-        (
-          'LOVE · 緣',
-          '$loveAnchor 깊이는 가을(9-10월) 이후, 봄·여름엔 가벼움이 정답이에요.'
-        ),
-        (
+        area('LOVE · 緣', '$loveAnchor 깊이는 가을(9-10월) 이후, 봄·여름엔 가벼움이 정답이에요.'),
+        area(
           'HEALTH · 養生',
-          '$healthAnchor 심장·혈압·눈 영역 6-7월 의식적 휴식. 용신 $yong / 희신 $hui을 가까이.'
+          '$healthAnchor 심장·혈압·눈 영역 6-7월 의식적 휴식. 용신 $yong / 희신 $hui을 가까이.',
         ),
-        (
-          'FAMILY · 家',
-          '$familyAnchor 명절·생일을 의식적으로 챙기면 자연스럽게 흐릅니다.'
-        ),
-        (
-          'STUDY · 學',
-          '$studyAnchor 5월·11월 시험·자격 시도에 유리해요.'
-        ),
-        (
+        area('FAMILY · 家', '$familyAnchor 명절·생일을 의식적으로 챙기면 자연스럽게 흐릅니다.'),
+        area('STUDY · 學', '$studyAnchor 5월·11월 시험·자격 시도에 유리해요.'),
+        area(
           'FRIENDS · 友',
-          '$friendsAnchor${hasYeokma ? ' 역마 활성 — 한 해 동안 새 만남이 평소보다 자주 와요.' : ''}'
+          '$friendsAnchor${hasYeokma ? ' 역마 활성 — 한 해 동안 새 만남이 평소보다 자주 와요.' : ''}',
         ),
-        (
-          'TRAVEL · 行',
-          '$travelAnchor 11월 이후 장기 이동은 보류가 좋아요.'
-        ),
-        (
+        area('TRAVEL · 行', '$travelAnchor 11월 이후 장기 이동은 보류가 좋아요.'),
+        area(
           'GROWTH · 進',
-          '$growthAnchor 병오년 본기는 "$themeText" — 이 결과 본인 식상이 만나는 자리에서 결과가 나와요.'
+          '$growthAnchor 병오년 본기는 "$themeText" — 이 결과 본인 식상이 만나는 자리에서 결과가 나와요.',
         ),
-        (
+        area(
           'LEGAL · 訟',
-          '$legalAnchor 5-7월 화기 항진기 피하기, 봄(2-4월)·가을 후반(10-11월)이 안정.${hasGoegang || hasYangin ? ' 괴강·양인 활성 — 강한 결정 자리에서 한 번 더 검토.' : ''}'
+          '$legalAnchor 5-7월 화기 항진기 피하기, 봄(2-4월)·가을 후반(10-11월)이 안정.${hasGoegang || hasYangin ? ' 괴강·양인 활성 — 강한 결정 자리에서 한 번 더 검토.' : ''}',
         ),
-        (
+        area(
           'SPIRIT · 心',
-          '$spiritAnchor 용신 $yong / 희신 $hui을 가까이 두는 시간이 한 해의 회복력을 만들어요.'
+          '$spiritAnchor 용신 $yong / 희신 $hui을 가까이 두는 시간이 한 해의 회복력을 만들어요.',
         ),
-        (
+        area(
           'LEGACY · 名',
-          '$gShort 본격의 본질이 한 해의 결과물로 남아요. 연말 정산기에 한 해를 한 줄로 적으면, 그 한 줄이 2027년의 첫 결정을 만듭니다.'
+          '$gShort 본격의 본질이 한 해의 결과물로 남아요. 연말 정산기에 한 해를 한 줄로 적으면, 그 한 줄이 2027년의 첫 결정을 만듭니다.',
         ),
       ];
     } else {
       final careerAnchor = officer >= 2
           ? 'Officer stars (gwan) are strong — formal lines, promotions, and credentials favor you.'
           : scholar >= 2
-              ? 'Scholar stars (in) are strong — learning, certification, and expert tracks step up.'
-              : express >= 2
-                  ? 'Output stars (sik/sang) are strong — expression, writing, and content become your resource.'
-                  : 'Your $gShort structure sets the year\'s baseline.';
+          ? 'Scholar stars (in) are strong — learning, certification, and expert tracks step up.'
+          : express >= 2
+          ? 'Output stars (sik/sang) are strong — expression, writing, and content become your resource.'
+          : 'Your $gShort structure sets the year\'s baseline.';
       final wealthAnchor = wealth >= 3
           ? 'Wealth stars are dense — one big flow reshapes your asset picture.'
           : wealth >= 1
-              ? 'Wealth stars present — one decisive moment per year.'
-              : 'No wealth star — money arrives through people and opportunity rather than fixed income.';
+          ? 'Wealth stars present — one decisive moment per year.'
+          : 'No wealth star — money arrives through people and opportunity rather than fixed income.';
       String loveAnchor;
       switch (branchRel) {
         case 'sameWu':
-          loveAnchor = 'Day branch 午 matches the year — connections arrive directly at your seat.';
+          loveAnchor =
+              'Day branch 午 matches the year — connections arrive directly at your seat.';
           break;
         case 'clash':
-          loveAnchor = 'Day branch 子 clashes with 午 — one round of relational reshuffle.';
+          loveAnchor =
+              'Day branch 子 clashes with 午 — one round of relational reshuffle.';
           break;
         case 'hap6':
-          loveAnchor = 'Day branch 未 six-harmonies with 午 — partnership bonds tighten.';
+          loveAnchor =
+              'Day branch 未 six-harmonies with 午 — partnership bonds tighten.';
           break;
         case 'samhap':
-          loveAnchor = 'Day branch $myJi joins the 寅午戌 fire triad — stage-style encounters open.';
+          loveAnchor =
+              'Day branch $myJi joins the 寅午戌 fire triad — stage-style encounters open.';
           break;
         default:
           loveAnchor = 'Day branch $myJi keeps a steady distance from 午.';
@@ -1067,47 +1118,52 @@ class _TwelveAreas extends StatelessWidget {
       final healthAnchor = fireOverload && gisinIsFire
           ? 'Your chart already runs hot and gisin is Fire — the year\'s fire lands heavy.'
           : fireOverload
-              ? 'High fire baseline — pace yourself when the year piles more on.'
-              : gisinIsFire
-                  ? 'Gisin is Fire — hydration and rest are non-negotiable.'
-                  : yongIsFire
-                      ? 'Yongsin is Fire — the year is restorative.'
-                      : 'Fire balance is steady; keep your usual pace.';
+          ? 'High fire baseline — pace yourself when the year piles more on.'
+          : gisinIsFire
+          ? 'Gisin is Fire — hydration and rest are non-negotiable.'
+          : yongIsFire
+          ? 'Yongsin is Fire — the year is restorative.'
+          : 'Fire balance is steady; keep your usual pace.';
       final familyAnchor = peer >= 3
           ? 'Peer stars are dense — siblings, peers, and team dynamics drive the year.'
           : peer >= 1
-              ? 'One peer star — one round of family/peer reshuffle.'
-              : 'Peer stars are scarce — you observe family from a step back.';
+          ? 'One peer star — one round of family/peer reshuffle.'
+          : 'Peer stars are scarce — you observe family from a step back.';
       final studyAnchor = scholar >= 3
           ? 'Scholar stars are dense — study and certification are your big resource.'
           : scholar >= 1
-              ? 'One scholar star — a single short course unlocks the year.'
-              : 'No scholar star — precision over volume; short and sharp.';
+          ? 'One scholar star — a single short course unlocks the year.'
+          : 'No scholar star — precision over volume; short and sharp.';
       final friendsAnchor = peer >= 3
           ? 'Peer/sibling axis drives the year\'s social flow.'
           : 'Old ties get sorted in spring; new ones arrive on the summer stage.';
       String travelAnchor;
       switch (branchRel) {
         case 'clash':
-          travelAnchor = 'Day branch 子 vs year 午 clash — movement comes often; long-haul saved for autumn.';
+          travelAnchor =
+              'Day branch 子 vs year 午 clash — movement comes often; long-haul saved for autumn.';
           break;
         case 'samhap':
-          travelAnchor = 'Day branch $myJi joins 寅午戌 with 午 — summer trips yield big introductions.';
+          travelAnchor =
+              'Day branch $myJi joins 寅午戌 with 午 — summer trips yield big introductions.';
           break;
         case 'hap6':
-          travelAnchor = 'Day branch 未 + 午 six-harmony — travel with partners shapes the year.';
+          travelAnchor =
+              'Day branch 未 + 午 six-harmony — travel with partners shapes the year.';
           break;
         case 'sameWu':
-          travelAnchor = 'Day branch 午 doubled — familiar ground defines the year. Stay close.';
+          travelAnchor =
+              'Day branch 午 doubled — familiar ground defines the year. Stay close.';
           break;
         default:
-          travelAnchor = 'Day branch $myJi keeps a free distance from 午 — travel on your own rhythm.';
+          travelAnchor =
+              'Day branch $myJi keeps a free distance from 午 — travel on your own rhythm.';
       }
       final growthAnchor = express >= 3
           ? 'Output stars are dense — creation and expression are your main current.'
           : express >= 1
-              ? 'One output star — sustained outward activity returns big.'
-              : 'No output star — depth over breadth; deepen your craft.';
+          ? 'One output star — sustained outward activity returns big.'
+          : 'No output star — depth over breadth; deepen your craft.';
       final legalAnchor = officer >= 2
           ? 'Officer stars strong — formal documents and contracts matter this year.'
           : 'Officer stars weak — defer large contracts when possible.';
@@ -1118,51 +1174,45 @@ class _TwelveAreas extends StatelessWidget {
       return [
         (
           'CAREER',
-          '$gShort structure sets the year. $careerAnchor Watch conflict during the fire peak May–July.'
+          '$gShort structure sets the year. $careerAnchor Watch conflict during the fire peak May–July.',
         ),
         (
           'WEALTH',
-          '$wealthAnchor ${yongIsFire ? 'Yongsin Fire — the year directly nourishes you, ideal for big calls.' : 'Keep yongsin $yong close to steady the flow.'} Collect info Jan–Mar, decide Apr–May.'
+          '$wealthAnchor ${yongIsFire ? 'Yongsin Fire — the year directly nourishes you, ideal for big calls.' : 'Keep yongsin $yong close to steady the flow.'} Collect info Jan–Mar, decide Apr–May.',
         ),
         (
           'LOVE',
-          '$loveAnchor Depth arrives after September; spring and summer reward lightness.'
+          '$loveAnchor Depth arrives after September; spring and summer reward lightness.',
         ),
         (
           'HEALTH',
-          '$healthAnchor Heart, blood pressure, eyes — rest deliberately in June–July. Yongsin $yong / huisin $hui close.'
+          '$healthAnchor Heart, blood pressure, eyes — rest deliberately in June–July. Yongsin $yong / huisin $hui close.',
         ),
         (
           'FAMILY',
-          '$familyAnchor Show up for birthdays and holidays — the rest flows by itself.'
+          '$familyAnchor Show up for birthdays and holidays — the rest flows by itself.',
         ),
-        (
-          'STUDY',
-          '$studyAnchor May and November are auspicious for exams.'
-        ),
+        ('STUDY', '$studyAnchor May and November are auspicious for exams.'),
         (
           'FRIENDS',
-          '$friendsAnchor${hasYeokma ? ' Yeokma active — new encounters arrive more often.' : ''}'
+          '$friendsAnchor${hasYeokma ? ' Yeokma active — new encounters arrive more often.' : ''}',
         ),
-        (
-          'TRAVEL',
-          '$travelAnchor Defer long-haul plans after November.'
-        ),
+        ('TRAVEL', '$travelAnchor Defer long-haul plans after November.'),
         (
           'GROWTH',
-          '$growthAnchor The year\'s engine — "$themeText" — meets your output stars there.'
+          '$growthAnchor The year\'s engine — "$themeText" — meets your output stars there.',
         ),
         (
           'LEGAL',
-          '$legalAnchor Avoid contracts during fire-peak May–July; spring (Feb–Apr) and late autumn most stable.${hasGoegang || hasYangin ? ' Goegang/Yangin active — double-check strong decisions.' : ''}'
+          '$legalAnchor Avoid contracts during fire-peak May–July; spring (Feb–Apr) and late autumn most stable.${hasGoegang || hasYangin ? ' Goegang/Yangin active — double-check strong decisions.' : ''}',
         ),
         (
           'SPIRIT',
-          '$spiritAnchor Keep yongsin $yong and huisin $hui close to rebuild.'
+          '$spiritAnchor Keep yongsin $yong and huisin $hui close to rebuild.',
         ),
         (
           'LEGACY',
-          "Your $gShort structure leaves the year's mark. Write the year in one line at the end — that line shapes the first decision of 2027."
+          "Your $gShort structure leaves the year's mark. Write the year in one line at the end — that line shapes the first decision of 2027.",
         ),
       ];
     }
@@ -1238,9 +1288,7 @@ class _Footer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 22, 24, 30),
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        color: AppColors.bg,
-      ),
+      decoration: const BoxDecoration(color: AppColors.bg),
       child: Text(
         '입춘 2026.02.04 · KASI 절기력',
         style: GoogleFonts.inter(

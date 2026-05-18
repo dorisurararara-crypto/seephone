@@ -23,6 +23,7 @@ import '../models/saju_result.dart';
 import 'gyeokguk_service.dart';
 import 'life_category_fragment_service.dart';
 import 'life_paragraph_service.dart';
+import 'natural_prose_joiner.dart';
 import 'ten_gods_service.dart';
 
 class LifeOverviewService {
@@ -37,16 +38,32 @@ class LifeOverviewService {
 
   /// 천간 한자 → 한글.
   static const Map<String, String> _stemHanToKo = {
-    '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
-    '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+    '甲': '갑',
+    '乙': '을',
+    '丙': '병',
+    '丁': '정',
+    '戊': '무',
+    '己': '기',
+    '庚': '경',
+    '辛': '신',
+    '壬': '임',
+    '癸': '계',
   };
 
   /// 지지 한자 → 계절.
   static const Map<String, String> _branchSeason = {
-    '寅': '봄', '卯': '봄', '辰': '봄',
-    '巳': '여름', '午': '여름', '未': '여름',
-    '申': '가을', '酉': '가을', '戌': '가을',
-    '亥': '겨울', '子': '겨울', '丑': '겨울',
+    '寅': '봄',
+    '卯': '봄',
+    '辰': '봄',
+    '巳': '여름',
+    '午': '여름',
+    '未': '여름',
+    '申': '가을',
+    '酉': '가을',
+    '戌': '가을',
+    '亥': '겨울',
+    '子': '겨울',
+    '丑': '겨울',
   };
 
   /// Anchor 1 — 일간 형용 (10천간 → 자연 형용 한 줄).
@@ -183,7 +200,9 @@ class LifeOverviewService {
     final rows = TenGodsService.tableFor(saju);
     final freq = <TenGod, int>{};
     for (final r in rows) {
-      if (r.chunGanGod != null) freq[r.chunGanGod!] = (freq[r.chunGanGod!] ?? 0) + 1;
+      if (r.chunGanGod != null) {
+        freq[r.chunGanGod!] = (freq[r.chunGanGod!] ?? 0) + 1;
+      }
       if (r.jiJiGod != null) freq[r.jiJiGod!] = (freq[r.jiJiGod!] ?? 0) + 1;
     }
     TenGod topGod = TenGod.bigyeon;
@@ -221,11 +240,14 @@ class LifeOverviewService {
     final parts = [a1, a2, a3, a4, a5, a6, a7]
         .where((s) => s.trim().isNotEmpty)
         .map((s) {
-      var t = s.trim();
-      if (!t.endsWith('.') && !t.endsWith('!') && !t.endsWith('?')) t = '$t.';
-      return t;
-    }).toList();
-    var essay = parts.join(' ');
+          var t = s.trim();
+          if (!t.endsWith('.') && !t.endsWith('!') && !t.endsWith('?')) {
+            t = '$t.';
+          }
+          return t;
+        })
+        .toList();
+    var essay = NaturalProseJoiner.join(parts);
 
     // 600자 미만이면 fragment 보강 (anchor 추가 — innateTendency + lateLife).
     // 중복 방지: essay 안에 이미 있는 fragment 는 추가 X.
@@ -251,7 +273,7 @@ class LifeOverviewService {
           continue;
         }
         seen.add(t);
-        essay = '$essay ${t.endsWith('.') ? t : '$t.'}';
+        essay = NaturalProseJoiner.append(essay, [t]);
       }
     }
 
@@ -263,7 +285,9 @@ class LifeOverviewService {
     ];
     var padIdx = 0;
     while (essay.length < 600) {
-      essay = '$essay ${padSentences[padIdx % padSentences.length]}';
+      essay = NaturalProseJoiner.append(essay, [
+        padSentences[padIdx % padSentences.length],
+      ]);
       padIdx += 1;
       if (padIdx > 10) break;
     }
@@ -272,7 +296,9 @@ class LifeOverviewService {
     if (essay.length > 900) {
       final cut = essay.substring(0, 900);
       final lastSentenceEnd = cut.lastIndexOf('. ');
-      essay = lastSentenceEnd > 600 ? cut.substring(0, lastSentenceEnd + 1) : cut;
+      essay = lastSentenceEnd > 600
+          ? cut.substring(0, lastSentenceEnd + 1)
+          : cut;
     }
     return essay;
   }

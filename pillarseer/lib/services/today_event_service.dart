@@ -19,6 +19,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../models/saju_result.dart';
 import 'daily_service.dart' show DayEnergyKind, classifyDayEnergy;
 import 'hapchung_service.dart';
+import 'natural_prose_joiner.dart';
 import 'shinsa_service.dart';
 import 'ten_gods_service.dart';
 
@@ -148,7 +149,11 @@ class TodayEventService {
     final group = _groupOf(god);
 
     // 2. 신살 — 오늘 지지 가 사용자 일간/일지 기준 신살에 해당하면 활성.
-    final active = _activeShinsa(userDayStem: userDayStem, userDayBranch: userDayBranch, todayBranch: branch);
+    final active = _activeShinsa(
+      userDayStem: userDayStem,
+      userDayBranch: userDayBranch,
+      todayBranch: branch,
+    );
 
     // 3. 합/충/형/파/해 — 오늘 지지 vs 사용자 일지.
     final relation = _branchRelation(userDayBranch, branch);
@@ -232,7 +237,10 @@ class TodayEventService {
         body = '오늘은 도움이나 정보가 들어오는 흐름이 강해요. 사람들과 가볍게 소통해보세요.';
         break;
     }
-    return body.length > 300 ? '${body.substring(0, 297)}...' : body;
+    final polished = NaturalProseJoiner.polish(body);
+    return polished.length > 300
+        ? '${polished.substring(0, 297)}...'
+        : polished;
   }
 
   // ─────────────── Round 77 sprint 2 — today_event_pool.json wire ───────────────
@@ -243,6 +251,7 @@ class TodayEventService {
   // 또는 키 미스 시 6분기 fallback 으로 graceful.
 
   static Map<String, List<_TodayEventPoolEntry>>? _poolCache;
+
   /// Round 78 sprint 6 — 신살 16 key + 합/충/형/파/해 36 key 단일 line cache.
   static Map<String, String>? _shinsaCache;
   static Map<String, String>? _hapchungCache;
@@ -253,26 +262,33 @@ class TodayEventService {
   static Future<void> ensurePoolLoaded() async {
     if (_poolLoaded) return;
     try {
-      final raw = await rootBundle.loadString('assets/data/today_event_pool.json');
+      final raw = await rootBundle.loadString(
+        'assets/data/today_event_pool.json',
+      );
       final root = jsonDecode(raw) as Map<String, dynamic>;
       final events = (root['events'] as Map).cast<String, dynamic>();
       final out = <String, List<_TodayEventPoolEntry>>{};
       events.forEach((key, value) {
         final list = (value as List)
-            .map((e) =>
-                _TodayEventPoolEntry.fromJson((e as Map).cast<String, dynamic>()))
+            .map(
+              (e) => _TodayEventPoolEntry.fromJson(
+                (e as Map).cast<String, dynamic>(),
+              ),
+            )
             .toList();
         out[key] = list;
       });
       _poolCache = out;
       // Round 78 sprint 6 — shinsa / hapchung 캐시.
-      _shinsaCache = (root['shinsa'] as Map?)
-              ?.cast<String, dynamic>()
-              .map((k, v) => MapEntry(k, v as String)) ??
+      _shinsaCache =
+          (root['shinsa'] as Map?)?.cast<String, dynamic>().map(
+            (k, v) => MapEntry(k, v as String),
+          ) ??
           <String, String>{};
-      _hapchungCache = (root['hapchung'] as Map?)
-              ?.cast<String, dynamic>()
-              .map((k, v) => MapEntry(k, v as String)) ??
+      _hapchungCache =
+          (root['hapchung'] as Map?)?.cast<String, dynamic>().map(
+            (k, v) => MapEntry(k, v as String),
+          ) ??
           <String, String>{};
     } catch (_) {
       _poolCache = <String, List<_TodayEventPoolEntry>>{};
@@ -326,9 +342,30 @@ class TodayEventService {
 
   /// 24 신살 우선순위 list — primaryShinsaLine + 향후 UI 표시 정렬 공용.
   static const shinsaPriority = [
-    '천을귀인', '도화', '역마', '문창귀인', '양인', '괴강', '백호', '화개',
-    '공망', '겁살', '재살', '월살', '망신', '천살', '장성', '반안', '지살',
-    '육해', '삼합', '방합', '삼재', '암록', '년살', '화개살',
+    '천을귀인',
+    '도화',
+    '역마',
+    '문창귀인',
+    '양인',
+    '괴강',
+    '백호',
+    '화개',
+    '공망',
+    '겁살',
+    '재살',
+    '월살',
+    '망신',
+    '천살',
+    '장성',
+    '반안',
+    '지살',
+    '육해',
+    '삼합',
+    '방합',
+    '삼재',
+    '암록',
+    '년살',
+    '화개살',
   ];
 
   /// composeBodyKoWithAnchor 단계 1 (신살 우선) 에서 사용할 핵심 신살 — 강한 신호 8개만.
@@ -336,7 +373,15 @@ class TodayEventService {
   /// (일지 삼합 그룹 기준 9 cell cover) 이므로 anchor 항상 hit 되어 천간합·지지 hapchung
   /// 우선순위가 뒤집힘. 따라서 anchor 단계 1 은 사용자 사주 고유 "강한" 신살만.
   static const _coreShinsaForAnchor = {
-    '천을귀인', '도화', '역마', '문창귀인', '양인', '괴강', '백호', '화개', '공망',
+    '천을귀인',
+    '도화',
+    '역마',
+    '문창귀인',
+    '양인',
+    '괴강',
+    '백호',
+    '화개',
+    '공망',
   };
 
   /// composeBodyKoWithAnchor 가 사용하는 anchor 1차 — 핵심 신살만.
@@ -364,7 +409,8 @@ class TodayEventService {
     final key = '${groupKo}_$catKey';
     final list = cache[key];
     if (list == null || list.isEmpty) return null;
-    final seed = (date.year * 366 + date.month * 31 + date.day) ^
+    final seed =
+        (date.year * 366 + date.month * 31 + date.day) ^
         day60ji.codeUnits.fold<int>(0, (a, b) => a + b) ^
         reading.tenGodGroup.index ^
         reading.categoryDominant.index;
@@ -377,8 +423,7 @@ class TodayEventService {
     required TodayEventReading reading,
     required DateTime date,
     required String day60ji,
-  }) =>
-      _pickPoolEntry(reading: reading, date: date, day60ji: day60ji) != null;
+  }) => _pickPoolEntry(reading: reading, date: date, day60ji: day60ji) != null;
 
   /// 한국어 본문 1줄. pool entry 우선, 미스 시 composeNotificationLine fallback.
   /// 결과는 항상 ≤300자.
@@ -387,9 +432,16 @@ class TodayEventService {
     required DateTime date,
     required String day60ji,
   }) {
-    final entry = _pickPoolEntry(reading: reading, date: date, day60ji: day60ji);
+    final entry = _pickPoolEntry(
+      reading: reading,
+      date: date,
+      day60ji: day60ji,
+    );
     final body = entry?.body ?? composeNotificationLine(reading);
-    return body.length > 300 ? '${body.substring(0, 297)}...' : body;
+    final polished = NaturalProseJoiner.polish(body);
+    return polished.length > 300
+        ? '${polished.substring(0, 297)}...'
+        : polished;
   }
 
   /// Round 78 sprint 6 — composeBodyKo + 신살·합충 anchor 1줄 prepend.
@@ -408,8 +460,10 @@ class TodayEventService {
     // 천간합·지지 hapchung 우선순위가 뒤집히지 않게 1차 anchor 에서 제외.
     final shinsaLine = _coreShinsaAnchor(reading.activeShinsa.toSet());
     if (shinsaLine != null) {
-      final combined = '$shinsaLine\n$body';
-      return combined.length > 400 ? '${combined.substring(0, 397)}...' : combined;
+      final combined = NaturalProseJoiner.append(shinsaLine, [body]);
+      return combined.length > 400
+          ? '${combined.substring(0, 397)}...'
+          : combined;
     }
     // 2차: 천간합 anchor (userDayStem + todayStem 둘 다 제공 시).
     if (userDayStem != null && todayStem != null) {
@@ -417,8 +471,10 @@ class TodayEventService {
         final catKey = reading.categoryDominant.key;
         final hapLine = hapchungLineKo('천간합', catKey);
         if (hapLine != null) {
-          final combined = '$hapLine\n$body';
-          return combined.length > 400 ? '${combined.substring(0, 397)}...' : combined;
+          final combined = NaturalProseJoiner.append(hapLine, [body]);
+          return combined.length > 400
+              ? '${combined.substring(0, 397)}...'
+              : combined;
         }
       }
     }
@@ -428,8 +484,10 @@ class TodayEventService {
       final catKey = reading.categoryDominant.key;
       final hapLine = hapchungLineKo(relKey, catKey);
       if (hapLine != null) {
-        final combined = '$hapLine\n$body';
-        return combined.length > 400 ? '${combined.substring(0, 397)}...' : combined;
+        final combined = NaturalProseJoiner.append(hapLine, [body]);
+        return combined.length > 400
+            ? '${combined.substring(0, 397)}...'
+            : combined;
       }
     }
     return body;
@@ -464,8 +522,7 @@ class TodayEventService {
     required TodayEventReading reading,
     required DateTime date,
     required String day60ji,
-  }) =>
-      _pickPoolEntry(reading: reading, date: date, day60ji: day60ji)?.caution;
+  }) => _pickPoolEntry(reading: reading, date: date, day60ji: day60ji)?.caution;
 
   /// pool entry 의 recommend. 미스 시 null.
   static String? composeRecommendKo({
@@ -534,27 +591,63 @@ class TodayEventService {
   /// 본 메서드는 그 외 9 살 (겁살·재살·천살·지살·월살·망신·장성·반안·육해) emit.
   static List<String> _twelveShinsaFor(String userBranch, String todayBranch) {
     const samhapGroup = {
-      '申': '水', '子': '水', '辰': '水',
-      '巳': '金', '酉': '金', '丑': '金',
-      '寅': '火', '午': '火', '戌': '火',
-      '亥': '木', '卯': '木', '未': '木',
+      '申': '水',
+      '子': '水',
+      '辰': '水',
+      '巳': '金',
+      '酉': '金',
+      '丑': '金',
+      '寅': '火',
+      '午': '火',
+      '戌': '火',
+      '亥': '木',
+      '卯': '木',
+      '未': '木',
     };
     const map = {
       '水': {
-        '겁살': '巳', '재살': '午', '천살': '未', '지살': '申',
-        '월살': '戌', '망신': '亥', '장성': '子', '반안': '丑', '육해': '卯',
+        '겁살': '巳',
+        '재살': '午',
+        '천살': '未',
+        '지살': '申',
+        '월살': '戌',
+        '망신': '亥',
+        '장성': '子',
+        '반안': '丑',
+        '육해': '卯',
       },
       '金': {
-        '겁살': '寅', '재살': '卯', '천살': '辰', '지살': '巳',
-        '월살': '未', '망신': '申', '장성': '酉', '반안': '戌', '육해': '子',
+        '겁살': '寅',
+        '재살': '卯',
+        '천살': '辰',
+        '지살': '巳',
+        '월살': '未',
+        '망신': '申',
+        '장성': '酉',
+        '반안': '戌',
+        '육해': '子',
       },
       '火': {
-        '겁살': '亥', '재살': '子', '천살': '丑', '지살': '寅',
-        '월살': '辰', '망신': '巳', '장성': '午', '반안': '未', '육해': '酉',
+        '겁살': '亥',
+        '재살': '子',
+        '천살': '丑',
+        '지살': '寅',
+        '월살': '辰',
+        '망신': '巳',
+        '장성': '午',
+        '반안': '未',
+        '육해': '酉',
       },
       '木': {
-        '겁살': '申', '재살': '酉', '천살': '戌', '지살': '亥',
-        '월살': '丑', '망신': '寅', '장성': '卯', '반안': '辰', '육해': '午',
+        '겁살': '申',
+        '재살': '酉',
+        '천살': '戌',
+        '지살': '亥',
+        '월살': '丑',
+        '망신': '寅',
+        '장성': '卯',
+        '반안': '辰',
+        '육해': '午',
       },
     };
     final group = samhapGroup[userBranch];
@@ -572,13 +665,29 @@ class TodayEventService {
   static List<String> _gongmangBranches(String dayStem, String dayBranch) {
     // 60갑자 인덱스 idx → soon = idx ~/ 10. 6 순 × 2 지지 = 공망 list.
     const stems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-    const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+    const branches = [
+      '子',
+      '丑',
+      '寅',
+      '卯',
+      '辰',
+      '巳',
+      '午',
+      '未',
+      '申',
+      '酉',
+      '戌',
+      '亥',
+    ];
     final g = stems.indexOf(dayStem);
     final j = branches.indexOf(dayBranch);
     if (g < 0 || j < 0) return const [];
     int idx = -1;
     for (int i = 0; i < 60; i++) {
-      if (i % 10 == g && i % 12 == j) { idx = i; break; }
+      if (i % 10 == g && i % 12 == j) {
+        idx = i;
+        break;
+      }
     }
     if (idx < 0) return const [];
     final soon = idx ~/ 10;
@@ -629,9 +738,7 @@ class TodayEventService {
     required String relation,
     required DayEnergyKind energy,
   }) {
-    final s = <EventCategory, int>{
-      for (final c in EventCategory.values) c: 1,
-    };
+    final s = <EventCategory, int>{for (final c in EventCategory.values) c: 1};
 
     void add(EventCategory c, int v) => s[c] = (s[c] ?? 0) + v;
 
@@ -706,8 +813,10 @@ class TodayEventService {
       case '파':
       case '해':
         add(EventCategory.work, 1);
-        s[EventCategory.health] =
-            math.max(1, (s[EventCategory.health] ?? 1) - 1);
+        s[EventCategory.health] = math.max(
+          1,
+          (s[EventCategory.health] ?? 1) - 1,
+        );
         break;
     }
 
@@ -751,8 +860,8 @@ class TodayEventService {
     final shinPart = activeShinsa.isEmpty
         ? ''
         : " 거기에 '${activeShinsa.first}' 분위기까지 들어와서"
-            "${activeShinsa.length > 1 ? " '${activeShinsa[1]}' 까지" : ''}"
-            ' $catKo 가능성이 더 커지기 쉬워요.';
+              "${activeShinsa.length > 1 ? " '${activeShinsa[1]}' 까지" : ''}"
+              ' $catKo 가능성이 더 커지기 쉬워요.';
     String relPart;
     switch (relation) {
       case '합':
@@ -788,8 +897,8 @@ class TodayEventService {
     final shinPart = activeShinsa.isEmpty
         ? ''
         : " A '${activeShinsa.first}' vibe is also showing up,"
-            "${activeShinsa.length > 1 ? " plus '${activeShinsa[1]}'," : ''}"
-            ' nudging the $catEn track stronger.';
+              "${activeShinsa.length > 1 ? " plus '${activeShinsa[1]}'," : ''}"
+              ' nudging the $catEn track stronger.';
     String relPart;
     switch (relation) {
       case '합':

@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/saju_result.dart';
+import 'natural_prose_joiner.dart';
 
 class AdditionalLifeReading {
   final String healthKo;
@@ -64,21 +65,23 @@ class AdditionalLifeService {
   static Future<AdditionalLifeReading> compute(SajuResult saju) async {
     final pool = await _pool();
     final dom = saju.elements.dominant;
-    final entry = (pool[dom] as Map<String, dynamic>?) ??
+    final entry =
+        (pool[dom] as Map<String, dynamic>?) ??
         (pool['土'] as Map<String, dynamic>); // fallback 土
+    String ko(String key) => NaturalProseJoiner.polish(entry[key] as String);
 
     return AdditionalLifeReading(
-      healthKo: entry['healthKo'] as String,
+      healthKo: ko('healthKo'),
       healthEn: entry['healthEn'] as String,
-      bodyKo: entry['bodyKo'] as String,
+      bodyKo: ko('bodyKo'),
       bodyEn: entry['bodyEn'] as String,
-      socialKo: entry['socialKo'] as String,
+      socialKo: ko('socialKo'),
       socialEn: entry['socialEn'] as String,
-      socialPersonaKo: entry['socialPersonaKo'] as String,
+      socialPersonaKo: ko('socialPersonaKo'),
       socialPersonaEn: entry['socialPersonaEn'] as String,
-      innateNatureKo: entry['innateNatureKo'] as String,
+      innateNatureKo: ko('innateNatureKo'),
       innateNatureEn: entry['innateNatureEn'] as String,
-      innateCharacterKo: entry['innateCharacterKo'] as String,
+      innateCharacterKo: ko('innateCharacterKo'),
       innateCharacterEn: entry['innateCharacterEn'] as String,
       dominantEl: dom,
     );
