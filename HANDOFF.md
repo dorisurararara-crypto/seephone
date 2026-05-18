@@ -68,7 +68,75 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-05-18 03:00 (Mac 자율 → 다음 세션) — pillarseer R87~R91 완료 + 1.0.0+48 외부 베타 APPROVED, R92 결정 대기
+### 2026-05-18 13:55 (Mac 자율 → 사용자) — pillarseer R92 완료 + **1.0.0+50 외부 베타 자동 제출**
+
+사용자 mandate "B. R92 entry rewrite (heavy)" 선택 → 4 round algorithmic 정제 진행.
+
+**완료 sprint 6/6**:
+
+| sprint | 내용 | 결과 |
+|---|---|---|
+| 1 baseline audit | 1400 entry 5축 quality 정량 → entry-간 첫 문장 dup 245그룹/1190 영향 + len<100 120 + MZ vocab 1186 발견 | 진단 완료 |
+| 2 entry-간 dup 일소 | 천간 6 trait × 17 cat modifier × 받침 grammar 정확 prepend (`scripts/r92_prepend_gan_anchor.py`) | dup 245→1 |
+| 3+4 artifact + MZ | R88 generator artifact 899 substitution + MZ K-POP 어휘 1200 entry inject (`scripts/r92_artifact_fix.py`) | codex 6.2→7.9 |
+| 5 deep enrich | 천간 deep persona append (10×3 phrase) + MZ 2nd sentence (`scripts/r92_deep_enrich.py`) | codex 7.9→8.4 |
+| 5b critical fix | 갑오 dedup 오탈자 / 정사 의미불명 / 무인 황금기 patch + family dedup | broken 0 |
+| 6 ship | submit_b50.rb 외부 그룹 ganzitester + Beta Review 자동 제출 | **VALID/제출 완료** |
+
+**현재 빌드**: 1.0.0+50 외부 베타 ganzitester 제출 완료, Apple Review 대기.
+- Public link: https://testflight.apple.com/join/kRs36R3b
+- Build #50 ASC VALID (즉시) / Delivery 020f96aa-2d65-4885-a3d0-09c43321e6ca
+- 모든 commit push 완료 (085ab7d 까지)
+
+**테스트**:
+- flutter analyze 0 issues / flutter test **855/855 PASS**
+- R88+R90+R91 baseline 모두 보존 (5행 골든 1995-10-27 男 17시 16/21/17/41/4 / R69 lock / R83 P1-B P1-E / R87 IANA / 케미 _score / R77 한자 jargon 0 / R89 B4 직장인 jargon 0)
+- codex sample 30 entry 평균 **8.4** (R91 saturation peak 7.87 대비 **+0.5**)
+
+**정량 변화**:
+- entry-간 첫 문장 중복 245 → 1 (남은 1 = 일간 갑/경 fallback, 사용자 노출 X)
+- MZ 어휘 적용 1200 entry × 2 sentence = 2400 신규 K-POP MZ 문장 (단톡/덕질/플레이리스트/응원봉/팬싸/본진)
+- 천간 deep persona 1020 sentence append
+- artifact 899 substitution
+
+---
+
+### ⚠️ R93 deferred (사용자 결정 필요) — codex 9.9+ artisan zone
+
+R92 algorithmic saturation. 평균 8.4 / peak 8.7. 9.9 까지 1.5점 = artisan zone.
+
+**남은 codex 지적 패턴** (모든 entry 공통):
+- persona depth: "구체적 장면·디테일 더 필요" (R88 base 본문 자체 일반론)
+- 일주별 anchor: "신유의 섬세한 금기운 / 정해의 불·물 대비 더 압축" (codex 가 일주 별 색 더 함축 요구)
+- MZ vibe: 1~2 sentence inject 정도, "강한 친밀 톤까지는 아니다" 평가
+
+**R93 옵션**:
+- **a. 1.0.0+50 외부 베타 APPROVED 후 사용자 실기기 검증 OK → 종결** (가장 효율적)
+- **b. R93 = 60 일주 × 17 cat × codex entry-단위 9.9+ PASS 강제** (heavy, 6~12h, 5M+ tokens — 본 세션 후 background)
+- **c. R93 = sample 60 entry (early_life 1 cat) codex 9.9 PASS pilot → 패턴 추출 → 다른 cat 확장** (mid scope, 2~3h)
+
+**다음 세션 권장**: 사용자에게 1.0.0+50 실기기 검증 결과 받고 위 3 옵션 결정.
+
+---
+
+### 📂 R92 새 reference (script + 메모리)
+
+**신규 scripts** (`pillarseer/scripts/`):
+- `r92_prepend_gan_anchor.py` — 천간 modifier prepend (idempotent, _strip_old_r92_prefix re-run 가능)
+- `r92_gan_anchors.json` — 10 천간 × 6 trait + 17 cat × 2 (이/가) modifier pool
+- `r92_artifact_fix.py` — R88 base 본문 artifact fix + MZ inject + family dedup
+- `r92_deep_enrich.py` — 천간 deep persona + MZ 2nd sentence append
+- `r92_codex_eval.py` — codex sample audit (30 entry stratified)
+- `submit_b50.rb` — 1.0.0+50 외부 베타 자동 제출 template (다음 round 는 `submit_b<N+1>.rb` copy)
+
+**R92 회귀 가드** (이미 PASS):
+- R91 baseline 4 (본인 3+ 0 / 일간 prefix 0 / anchor 5+ 0 / fragment ≥200)
+- R89 B4 lint (포트폴리오/직장인 jargon 등)
+- R77 한자 jargon (마음의 결/본인의 결/본질이에요/본성이에요/운기가/운기는)
+
+---
+
+### 2026-05-18 03:00 (Mac 자율) — pillarseer R87~R91 완료 + 1.0.0+48 외부 베타 APPROVED, R92 결정 대기
 
 **완료된 작업** (R87 → R91, 4 라운드 연속):
 
