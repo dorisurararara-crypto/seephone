@@ -45,7 +45,32 @@ ARTIFACT_FIXES: list[tuple[str, str]] = [
     (r'그 사람 일주에게', '곁에 있는 사람에게'),
     # "닭띠 분위기" 같은 표현 = 잘못된 anchor inject — 일주는 일지 띠와 무관 (사용자가 띠 헷갈림)
     (r'\b(쥐띠|소띠|호랑이띠|토끼띠|용띠|뱀띠|말띠|양띠|원숭이띠|닭띠|개띠|돼지띠) 분위기', '고유 분위기'),
+    # R92 sprint 5 — codex r2 지적 잔존 어절
+    # "큰 그림 잡고 만드는 용돈" → "큰 그림 잡고 돈 흐름 만드는"
+    (r'큰 그림 잡고 만드는 용돈', '큰 그림 잡고 돈 흐름 만드는 방식'),
+    # "굴리는 결정" → "투자 결정" (60 일주 wealth_invest 전수)
+    (r'굴리는 결정', '투자 결정'),
+    # 어릴 때부터 반복 (early_life entry 자체에 3+ 회 발생 시 2회 일부 → "초년에는" / "그 시절")
+    # 정확 patch 는 entry-aware 함수로 처리 — 여기서는 단순 다 fix 안 함
 ]
+
+
+def _dedupe_orun_repeats(text: str, word: str, replacements: list[str], threshold: int = 3) -> tuple[str, int]:
+    """word 가 threshold 이상 반복되면 2번째부터 replacements 로 cyclic 치환."""
+    if text.count(word) < threshold:
+        return text, 0
+    count = 0
+    chunks = text.split(word)
+    new_chunks = [chunks[0]]
+    for i, chunk in enumerate(chunks[1:], 1):
+        if i == 1:  # 첫 번째 word 는 유지
+            new_chunks.append(word)
+            new_chunks.append(chunk)
+        else:
+            new_chunks.append(replacements[(i - 2) % len(replacements)])
+            new_chunks.append(chunk)
+            count += 1
+    return ''.join(new_chunks), count
 
 
 def apply_artifact_fixes(text: str) -> tuple[str, int]:
@@ -55,6 +80,12 @@ def apply_artifact_fixes(text: str) -> tuple[str, int]:
         new_text, count = re.subn(pat, repl, text)
         n += count
         text = new_text
+    # 어릴 때부터 3+ 반복 dedup
+    text, c1 = _dedupe_orun_repeats(text, '어릴 때부터', ['그 시절부터', '초년에는', '어렸을 때', '그때부터'])
+    n += c1
+    # 자리잡아요 반복 dedup
+    text, c2 = _dedupe_orun_repeats(text, '자리잡아요', ['굳어가요', '단단해져요', '또렷해져요'])
+    n += c2
     return text, n
 
 
