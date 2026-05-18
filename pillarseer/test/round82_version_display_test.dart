@@ -94,11 +94,11 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+47) — R90 사주 anchor 다층화 fix.
+      // pubspec version 자체 (1.0.0+48) — R91 본문 톤 정제.
       expect(
-        pubspecSrc.contains('version: 1.0.0+47'),
+        pubspecSrc.contains('version: 1.0.0+48'),
         isTrue,
-        reason: 'pubspec version (1.0.0+47) 자체 변경 — R90 sprint 8 delivery 불일치',
+        reason: 'pubspec version (1.0.0+48) 자체 변경 — R91 sprint 8 delivery 불일치',
       );
     });
 
