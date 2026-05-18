@@ -2,6 +2,7 @@
 import 'package:go_router/go_router.dart';
 // 20+ K-POP 스타와 내 사주 궁합을 비교 → 일주 케미 + 오행 공명 점수 + 매니지먼트 인사이트.
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle, Clipboard, ClipboardData;
@@ -25,6 +26,11 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
   List<_Star> _stars = [];
   bool _loaded = false;
   String _filter = 'idol'; // K-POP 팬 page → 아이돌이 기본. all/idol/actor/athlete.
+  // R94 sprint 2 — 사용자 mandate verbatim "여자아이돌팬이여서 여자랑 궁합보고
+  // 싶을수도있잖아" — gender 자동 reverse 필터 → 사용자 manual selection.
+  // null = 사용자 default (반대 성별 — 기존 R82 sprint 9 로직 유지)
+  // 'all' = 전체 / 'M' = 남자 / 'F' = 여자
+  String? _genderFilterOverride;
   // R86 — 사용자 mandate: 이름/그룹명 검색.
   String _query = '';
   final TextEditingController _queryCtrl = TextEditingController();
@@ -98,20 +104,24 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
 
   Widget _buildLoadedBody(
       BuildContext context, SajuResult me, dynamic userInfo, bool useKo) {
-    // Round 82 sprint 9 — Gender.other 사용자 silent 필터링 fix (외부 review P0 #6).
-    // 원본 성별이 UserGender.other 면 반대 성별 셀럽 필터를 끔 — 사용자 의도 존중.
-    // 사용자 정보 없거나 other 면 전체 노출.
-    String? preferredGender;
-    if (userInfo != null) {
+    // R94 sprint 2 — _genderFilterOverride 가 null 이면 사용자 default (반대 성별
+    // — R82 sprint 9 로직 유지), 'all' 이면 모든 셀럽, 'M'/'F' 면 해당 성별만.
+    String? effectiveGender;
+    if (_genderFilterOverride == 'all') {
+      effectiveGender = null; // no filter
+    } else if (_genderFilterOverride == 'M' || _genderFilterOverride == 'F') {
+      effectiveGender = _genderFilterOverride;
+    } else if (userInfo != null) {
+      // default = 반대 성별 (R82 sprint 9 외부 review P0 #6 fix 보존).
       final UserGender userOriginalGender =
           (userInfo is UserBirthInfo) ? userInfo.gender : UserGender.male;
       if (userOriginalGender == UserGender.male) {
-        preferredGender = 'F';
+        effectiveGender = 'F';
       } else if (userOriginalGender == UserGender.female) {
-        preferredGender = 'M';
-      } else {
-        // UserGender.other — 반대 성별 필터 끔, 모든 셀럽 노출.
-        preferredGender = null;
+        effectiveGender = 'M';
+      } else if (userOriginalGender == UserGender.other) {
+        // UserGender.other → silent 필터 끔 (사용자 의도 존중, R82 sprint 9 mandate).
+        effectiveGender = null;
       }
     }
     // R86 — 사용자 mandate: 이름/그룹명 substring 검색 + 화면 전체 스크롤.
@@ -119,9 +129,9 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
     final filtered = _stars
         .where((s) => _filter == 'all' || s.kind == _filter)
         .where((s) =>
-            preferredGender == null ||
+            effectiveGender == null ||
             s.gender.isEmpty ||
-            s.gender == preferredGender)
+            s.gender == effectiveGender)
         .where((s) {
           if (query.isEmpty) return true;
           return s.nameKo.toLowerCase().contains(query) ||
@@ -148,6 +158,16 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
           child: _FilterRow(
             current: _filter,
             onChanged: (id) => setState(() => _filter = id),
+            useKo: useKo,
+          ),
+        ),
+        // R94 sprint 2 — gender 필터 chip row (전체/남자/여자).
+        SliverToBoxAdapter(
+          child: _GenderFilterRow(
+            current: _genderFilterOverride ?? '__default__',
+            onChanged: (id) => setState(() {
+              _genderFilterOverride = id == '__default__' ? null : id;
+            }),
             useKo: useKo,
           ),
         ),
@@ -290,7 +310,48 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
       '卯': ['子'],
     };
     if ((jiHyeong[myJi] ?? const []).contains(stJi)) base -= 4;
+    // R94 sprint 1 — 같은 일주 셀럽이라도 birth year 별 미세 변별
+    // (사용자 불만: 같은 일주 7명 모두 92점 동일).
+    // birth year ganji 의 연간 (year stem) 와 사용자 일주 천간 사이
+    // 5합/극 관계로 ±2~5 점 미세 변동.
+    base += _yearMicroAdjust(myGan, star.birth);
     return base.clamp(18, 99);
+  }
+
+  /// R94 sprint 1 — birth year stem → 사용자 일주 천간 사이 미세 anchor.
+  /// 같은 일주 셀럽 7명이라도 birth year 가 다르면 ±2~5 차이.
+  int _yearMicroAdjust(String myGan, String birth) {
+    if (birth.length < 4) return 0;
+    final year = int.tryParse(birth.substring(0, 4));
+    if (year == null) return 0;
+    // year ganji: (year - 4) % 10 = stem index (甲=0, 乙=1, ... 癸=9)
+    const stems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+    final stemIdx = (year - 4) % 10;
+    if (stemIdx < 0 || stemIdx >= 10) return 0;
+    final yearStem = stems[stemIdx];
+    int adj = 0;
+    // 천간합 (5합) = +3
+    const ganHap5 = {
+      '甲': '己', '己': '甲', '乙': '庚', '庚': '乙', '丙': '辛',
+      '辛': '丙', '丁': '壬', '壬': '丁', '戊': '癸', '癸': '戊',
+    };
+    if (ganHap5[myGan] == yearStem) adj += 3;
+    // 천간 같음 (비견) = +2
+    if (myGan == yearStem) adj += 2;
+    // 천간 극 (剋) = -2
+    const ganOvercomes = {
+      '甲': '戊', '乙': '己', '丙': '庚', '丁': '辛', '戊': '壬',
+      '己': '癸', '庚': '甲', '辛': '乙', '壬': '丙', '癸': '丁',
+    };
+    if (ganOvercomes[myGan] == yearStem || ganOvercomes[yearStem] == myGan) {
+      adj -= 2;
+    }
+    // birth month (1-12) seed → ±1 미세 마무리
+    if (birth.length >= 7) {
+      final m = int.tryParse(birth.substring(5, 7)) ?? 0;
+      adj += (m % 3) - 1; // -1, 0, +1
+    }
+    return adj.clamp(-4, 5);
   }
 
   static String _elementOf(String stem) {
@@ -531,8 +592,83 @@ class _FilterRow extends StatelessWidget {
   }
 }
 
+// R94 sprint 2 — gender 필터 chip row (사용자 mandate: 전체/남자/여자 manual selection).
+class _GenderFilterRow extends StatelessWidget {
+  final String current; // '__default__' / 'all' / 'M' / 'F'
+  final ValueChanged<String> onChanged;
+  final bool useKo;
+  const _GenderFilterRow({
+    required this.current,
+    required this.onChanged,
+    required this.useKo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final items = useKo
+        ? const [
+            ('__default__', '내 기준'),
+            ('all', '전체'),
+            ('M', '남자'),
+            ('F', '여자'),
+          ]
+        : const [
+            ('__default__', 'MY DEFAULT'),
+            ('all', 'ALL'),
+            ('M', 'MALE'),
+            ('F', 'FEMALE'),
+          ];
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.paper,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: SizedBox(
+        height: 42,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          itemCount: items.length,
+          itemBuilder: (ctx, i) {
+            final item = items[i];
+            final selected = current == item.$1;
+            return GestureDetector(
+              onTap: () => onChanged(item.$1),
+              child: Container(
+                margin: const EdgeInsets.only(right: 22),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: selected ? AppColors.accent : Colors.transparent,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  item.$2,
+                  style: GoogleFonts.inter(
+                    fontSize: 9.5,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w500,
+                    color: selected ? AppColors.accent : AppColors.taupe,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 // R86 — 사용자 mandate: 이름/그룹 검색바. 가벼운 한 줄, 키보드 띄우면 자동 스크롤.
-class _SearchBar extends StatelessWidget {
+// R94 sprint 4 — 사용자 mandate verbatim "카리나를 검색하려고 하니 ㅋ 만 치니까
+// 검색이 되버리네 커서를 유지하고 있어야지". 한글 IME 자모 조합 중에 매 keystroke
+// onChanged 가 발화되어 필터가 즉시 작동 → list 가 reflow 되며 커서가 깨짐.
+// 해결: 280ms debounce — 사용자가 타이핑을 잠시 멈춰야 필터 발화.
+class _SearchBar extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
   final bool useKo;
@@ -543,7 +679,29 @@ class _SearchBar extends StatelessWidget {
   });
 
   @override
+  State<_SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<_SearchBar> {
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onTextChanged(String v) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 280), () {
+      widget.onChanged(v);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final controller = widget.controller;
+    final useKo = widget.useKo;
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
       decoration: const BoxDecoration(
@@ -552,7 +710,7 @@ class _SearchBar extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        onChanged: onChanged,
+        onChanged: _onTextChanged,
         textInputAction: TextInputAction.search,
         style: GoogleFonts.notoSansKr(
           fontSize: 13,
@@ -579,7 +737,8 @@ class _SearchBar extends StatelessWidget {
                   icon: const Icon(Icons.close, color: AppColors.taupe),
                   onPressed: () {
                     controller.clear();
-                    onChanged('');
+                    _debounce?.cancel();
+                    widget.onChanged('');
                   },
                 ),
           border: OutlineInputBorder(
@@ -1159,7 +1318,24 @@ class _StarRow extends StatelessWidget {
       }
     }
 
-    return '$p1\n\n$p2\n\n$p3';
+    // [4] 셀럽 개성 anchor — 같은 일주 셀럽 7명이라도 본인 blurb 가 다르니까
+    // blurb 핵심 1줄 + 본인-상대 관계 한 줄로 셀럽별 본문 변별.
+    String p4;
+    final blurb = useKo ? star.blurbKo : star.blurbEn;
+    if (blurb.isNotEmpty) {
+      final blurbTail = blurb.length > 120 ? '${blurb.substring(0, 117)}...' : blurb;
+      if (useKo) {
+        p4 = '$shortName의 결 — $blurbTail 이 결이 너의 일상에 한 자락 더해질 때, '
+            '두 사람만의 시그니처 케미가 만들어져요.';
+      } else {
+        p4 = "$shortName's grain — $blurbTail When this grain layers into your "
+            "daily rhythm, the two of you build a signature chemistry.";
+      }
+    } else {
+      p4 = '';
+    }
+
+    return p4.isEmpty ? '$p1\n\n$p2\n\n$p3' : '$p1\n\n$p2\n\n$p3\n\n$p4';
   }
 
   // Round 77 sprint 7 — discover 모달 prefill query 생성 (compat 화면 prefill).

@@ -94,11 +94,11 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+50) — R92 entry-단위 quality 정제.
+      // pubspec version 자체 (1.0.0+52) — R93 사용자 4 mandate ship.
       expect(
-        pubspecSrc.contains('version: 1.0.0+50'),
+        pubspecSrc.contains('version: 1.0.0+52'),
         isTrue,
-        reason: 'pubspec version (1.0.0+50) 자체 변경 — R92 sprint 6 delivery 불일치',
+        reason: 'pubspec version (1.0.0+52) 자체 변경 — R93 sprint 6 delivery 불일치',
       );
     });
 
