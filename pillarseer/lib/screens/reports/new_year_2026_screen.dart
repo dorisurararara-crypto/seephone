@@ -103,6 +103,10 @@ class NewYear2026Screen extends ConsumerWidget {
               yongsin: yongsin.yongsin,
               useKo: useKo,
             ),
+            // R93 sprint 5 — 사용자 mandate verbatim: "한해 어떨지 쭉 매우 길게 총평이
+            // 있어야지 너무 짧아". 사주 anchor (일간 5행 vs 2026 화 / 격국 / 용신
+            // / 십신 / 신강·신약) 기반 1000~1500자 총평 새 섹션.
+            _AnnualSummary(saju: saju, yongsin: yongsin.yongsin, useKo: useKo),
             // R86 — 사용자 mandate: 신년운세 화면에서 12절기 카드 섹션 제거.
             // moodFor static API 는 R78 sprint 7 test 가 의존 → class 유지.
             // _MonthlyFlow(saju: saju, year: year, useKo: useKo),
@@ -270,6 +274,225 @@ class _AnnualThemeSection extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// R93 sprint 5 — 신년운세 사용자 맞춤 매우 긴 총평 (1000~1500자).
+///
+/// 사용자 mandate verbatim: "한해 어떨지 쭉 매우 길게 총평이 있어야지 너무 짧아
+/// 다른 사이트이나 앱은 어떻게 했나 봐봐"
+///
+/// unsin / 점신 / 한경운세 벤치마크:
+///   - 총평 long-form 800~1500자 (한경 무료 대비 2~3배)
+///   - 사주 anchor 기반 personalize (일간 5행 vs 세운 5행 + 격국 + 용신)
+///   - 5~7 문단 구조 (큰 흐름 / 격국 / 용신 / 십신 / 길흉 시기 / 조언)
+class _AnnualSummary extends StatelessWidget {
+  final SajuResult saju;
+  final String yongsin;
+  final bool useKo;
+  const _AnnualSummary({
+    required this.saju,
+    required this.yongsin,
+    required this.useKo,
+  });
+
+  static const Map<String, String> _elKoMap = {
+    '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
+  };
+
+  String _elKo(String e) => _elKoMap[e] ?? e;
+
+  /// 2026 = 丙午 (병오년) = 火 강왕. 사용자 일간 5행 vs 火 관계 매핑.
+  String _yearRelation(String myEl) {
+    const generates = {'木': '火', '火': '土', '土': '金', '金': '水', '水': '木'};
+    const overcomes = {'木': '土', '土': '水', '水': '火', '火': '金', '金': '木'};
+    if (myEl == '火') return 'same';
+    if (generates[myEl] == '火') return 'iGenerate'; // 木 → 火
+    if (generates['火'] == myEl) return 'theyGenerate'; // 火 → 土
+    if (overcomes[myEl] == '火') return 'iOvercome'; // 水 → 火
+    if (overcomes['火'] == myEl) return 'theyOvercome'; // 火 → 金
+    return 'neutral';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ctx = SajuContext.from(saju, today: DateTime(2026, 1, 1));
+    final myEl = saju.dayPillar.chunGanElement;
+    final rel = _yearRelation(myEl);
+
+    // 7 문단 구조: 큰 흐름 / 격국 / 용신/희신/기신 / 십신 강세 / 길흉 시기 /
+    // 사람·관계·돈 큰 그림 / 마무리 조언 — 평균 200~300자 × 7 = 1400~2100자 (헷지: 길게).
+    final body = StringBuffer();
+
+    if (useKo) {
+      // [1] 큰 흐름 (오행 관계 base) — 300자
+      switch (rel) {
+        case 'same':
+          body.writeln(
+              '2026년 병오년은 당신과 같은 오행(火) 결을 가진 한 해입니다. 한 해의 본기가 당신의 일간 본성과 같은 결이라 자기 색이 가장 또렷이 드러나는 시기이고, 평소에 망설였던 표현·창작·무대형 결정이 자연스럽게 풀려요. 다만 같은 오행이 너무 강하게 겹치면 한 박자만 잘못 밟아도 과열로 가기 쉬워서, 의식적인 휴식 한 주를 한여름 어딘가에 미리 박아두는 것이 한 해 풍요를 좌우합니다. 오행이 같다는 건 끌어주는 도움도 적다는 뜻이라, 큰 결정 앞에서는 한 번 더 객관 의견을 들어보는 습관이 필요해요.');
+          break;
+        case 'iGenerate':
+          body.writeln(
+              '2026년 병오년은 당신이 한 해를 직접 키우는 상생(相生) 흐름의 시기입니다. 당신의 일간(${_elKo(myEl)})이 병오년 본기(火)를 직접 살리는 자리에 있어서, 한 해 동안 당신이 손대는 일·관계·창작에서 결과물이 자연스럽게 자라요. 다만 주는 쪽 자리라 자기 페이스를 잃기 쉬워서, 한 달에 한 번은 자기를 위한 작은 회복 의식을 두는 게 좋아요. 상생의 해는 시간이 지난 뒤 결실이 보이는 구조라, 5월~7월의 노력은 가을·겨울에 한꺼번에 돌아오니까 그때까지 페이스를 잃지 않는 게 핵심이에요.');
+          break;
+        case 'theyGenerate':
+          body.writeln(
+              '2026년 병오년은 한 해가 당신을 직접 살리는 상생(相生) 흐름의 시기입니다. 한 해의 본기(火)가 당신의 일간(${_elKo(myEl)})을 자연스럽게 자라게 해주는 자리라, 평소에 부족하다 느꼈던 자리 — 표현·인지도·기회 — 가 한꺼번에 채워지는 한 해입니다. 가만히 있어도 좋은 흐름이 들어오는 해지만, 받는 만큼 표현하는 습관을 같이 챙겨야 한 해가 다 지나기 전에 관계가 두텁게 굳어요. 한 해 동안 만나는 사람들 한 명 한 명에게 작은 표현을 자주 해두면, 이 한 해가 평생 가는 인연으로 남는 구조입니다.');
+          break;
+        case 'iOvercome':
+          body.writeln(
+              '2026년 병오년은 당신이 한 해의 흐름을 제어하는 상극(相剋) 시기입니다. 당신의 일간(${_elKo(myEl)})이 병오년 본기(火)를 제어하는 자리에 있어서, 한 해의 강한 화기에 휘둘리지 않고 자기 페이스로 결정을 내릴 수 있는 위치예요. 다만 제어하는 자리는 늘 외로워서 큰 결정 앞에서 의지할 사람이 없다 느낄 수 있는데, 그때마다 객관적인 데이터(가계부·일정·만난 사람 list)를 들여다보는 습관이 큰 도움이 됩니다. 한 해의 본기가 강한데 자기가 그 위에 있다는 건, 한 번에 큰 도약을 만들 수 있는 자리라는 뜻입니다.');
+          break;
+        case 'theyOvercome':
+          body.writeln(
+              '2026년 병오년은 한 해의 본기(火)가 당신의 일간(${_elKo(myEl)})을 제어하는 상극(相剋) 시기입니다. 한 해의 강한 화기가 당신을 직접 누르는 자리라, 평소보다 페이스를 잃기 쉽고 결정·관계·돈 흐름에서 휘둘리는 순간이 자주 옵니다. 다만 상극의 해는 그 압박을 잘 견디면 한 단계 강해지는 구조라, "올해는 무리하지 말자"는 한 줄을 한 해 내내 자기에게 자주 되뇌어주는 게 큰 도움이 돼요. 한여름(5~7월) 화기 정점은 의식적으로 차분한 시기를 만들고, 가을 이후에 한 해의 진짜 성장이 시작됩니다.');
+          break;
+        default:
+          body.writeln(
+              '2026년 병오년은 당신의 일간(${_elKo(myEl)})과 한 해 본기(火) 사이에 직접 생극 관계가 없는 중립적 흐름의 시기입니다. 한 해의 색이 본인의 색과 직접 겹치지도, 직접 맞부딪치지도 않아서 자기 색을 그대로 유지하면서 한 해를 보내기 좋은 구조예요. 다만 강한 끌림도 강한 자극도 없는 해라, 가만히 흘러가다 보면 한 해가 빨리 지나갈 수 있어요. 작은 도전 한 가지, 새로운 만남 한 명, 새 루틴 한 가지를 의식적으로 만들어두면 이 한 해가 의미 있는 한 해로 남습니다.');
+      }
+
+      // [2] 격국 — 200~300자
+      body.writeln('');
+      final gyeokguk = ctx.gyeokgukShort.isEmpty ? '비전형' : ctx.gyeokgukShort;
+      body.writeln(
+          '본인 본격(格局)은 "$gyeokguk"입니다. 격국은 한 사람의 본업·천명 자리를 가리키는 큰 그림인데, 병오년 한 해 동안 이 본격이 어떻게 자극받는지가 한 해의 진짜 결정을 만듭니다. 격국의 본질을 잊지 않고 그 흐름 위에서 한 해의 결정을 내리면, 1년이 끝났을 때 자기 자리에 가장 가까운 모습으로 도착해 있을 거예요. 본격을 거스르는 일·관계·돈 결정은 한 해 동안 한 번씩 피곤하게 돌아옵니다.');
+
+      // [3] 용신/희신/기신 — 250~400자
+      body.writeln('');
+      body.writeln(
+          '한 해 동안 가장 의식적으로 챙겨야 할 5행은 용신(用神) "${_elKo(ctx.yongsin)}"입니다. 용신은 사주의 균형을 잡아주는 핵심 5행으로, 한 해의 결정·만남·환경 선택에서 이 5행을 늘 가까이 두면 자연스럽게 흐름이 풀립니다. 희신은 "${_elKo(ctx.huisin)}" — 용신을 돕는 보조 5행이라 같이 의식하면 좋고, 반대로 기신 "${_elKo(ctx.gisin)}"은 가까이 두면 한 해 페이스가 흔들리는 5행이라 의도적으로 거리를 두는 게 좋아요. 색깔·음식·공간·만나는 사람 결까지 — 이 세 5행의 균형이 한 해의 운기를 좌우합니다.${ctx.yongsin == '火' ? ' 특히 용신이 火 → 병오년이 직접 당신을 살리는 해라서 큰 결정에 가장 적합한 한 해예요.' : ctx.gisin == '火' ? ' 다만 기신이 火 → 병오년 화기가 한 해 동안 가장 큰 부담이 되니, 의식적으로 수기(水)·금기(金) 자리를 가까이 두는 게 핵심입니다.' : ''}');
+
+      // [4] 십신 강세 — 200자
+      body.writeln('');
+      final topGod = _topTenGod(ctx);
+      if (topGod != null) {
+        body.writeln(
+            '본인 사주에서 가장 강한 십신은 "$topGod"입니다. 이 십신이 강하다는 건 한 해 동안 이 영역에서 흐름이 가장 많이 일어난다는 뜻이에요. ${_godHint(topGod)} 병오년이 이 영역을 자극해서 한 해 동안 가장 큰 변화가 이 자리에서 일어날 가능성이 높으니, 미리 마음의 준비를 해두면 좋아요.');
+      }
+
+      // [5] 길흉 시기 — 250~350자
+      body.writeln('');
+      body.writeln(
+          '월별 큰 흐름은 다음과 같이 잡혀요. 2~4월(봄 절기 입춘·경칩·청명)은 한 해의 씨앗을 심는 시기 — 새 결정·새 관계·새 루틴 시작하기 좋아요. 5~7월(여름 절기 입하·망종·소서)은 병오년 화기 정점 — 무대·표현·인지도 자리에 가장 큰 결과가 나오지만, 한 번씩 의식적인 휴식을 두지 않으면 과열로 갑니다. 8~10월(가을 절기 입추·백로·한로)은 결실의 시기 — 봄·여름에 심은 씨앗이 돌아오는 자리예요. 11~12월(겨울 절기 입동·대설)은 다음 해를 위한 저장의 시기 — 큰 결정보다 정리와 비축에 시간을 두는 게 좋습니다.');
+
+      // [6] 사람·관계·돈 — 250~350자
+      body.writeln('');
+      body.writeln(
+          '관계 영역은 봄에 정리, 여름에 확장, 가을에 정착의 흐름이에요. 오래된 친구·연인과의 거리감이 봄에 한 번 자연스럽게 정리되고, 여름 무대에서 새 인연이 한 명 정도 깊게 들어와요. 가을 이후에 두텁게 굳어지는 인연이 한 해의 가장 큰 선물이 될 가능성이 높아요. 돈 흐름은 정재(고정 수입)보다 편재(기회·투자) 성격의 한 해라, 큰 한 흐름이 한 번은 지나갑니다. 그 한 번을 놓치지 않으려면 1~3월의 정보 수집과 4~5월의 결정 모드가 가장 중요해요. 큰 돈이 들어왔을 때 바로 쓰지 않고 한 박자 보관하는 습관이 가을·겨울 안정을 만듭니다.');
+
+      // [7] 마무리 조언 — 200자
+      body.writeln('');
+      body.writeln(
+          '한 해의 한 줄 조언은 — "${_oneLineCounsel(rel)}" — 이 한 줄을 한 해 내내 자기에게 되뇌어주세요. 병오년은 빛이 강한 만큼 그림자도 함께 자라는 해입니다. 자기 색을 잃지 않으면서 한 해의 흐름을 타려면, 매달 한 번 자기 페이스를 점검하는 작은 의식 한 가지를 두는 게 가장 큰 보약이에요. 12월 31일 밤에 한 해를 한 줄로 적을 때, 그 한 줄이 2027년의 첫 결정을 만듭니다.');
+    } else {
+      // English — condensed (Korean is primary mandate; English keeps length similar but shorter).
+      body.writeln(
+          '2026 (Bing Wu / Fire Horse) places your day master ($myEl) in a ${rel == 'same' ? 'matching' : rel == 'iGenerate' ? 'generating (you → year)' : rel == 'theyGenerate' ? 'generating (year → you)' : rel == 'iOvercome' ? 'controlling (you → year)' : rel == 'theyOvercome' ? 'controlling (year → you)' : 'neutral'} relation with the year stem. ');
+      body.writeln(
+          'Your gyeokguk is "${ctx.gyeokgukShort.isEmpty ? 'unconventional' : ctx.gyeokgukShort}". The year activates this primary chart structure — decisions aligned with it leave you closer to your true position by year-end.');
+      body.writeln(
+          'Yongsin: ${ctx.yongsin}. Huisin: ${ctx.huisin}. Gisin: ${ctx.gisin}. Keep yongsin and huisin close (colors, food, spaces, people grain); deliberately distance the gisin.');
+      body.writeln(
+          'Spring (Feb–Apr): plant new seeds. Summer (May–Jul): fire peaks — visibility but burnout risk. Autumn (Aug–Oct): harvest. Winter (Nov–Dec): store and prepare for 2027.');
+      body.writeln(
+          'Relationships: spring sorts old ties, summer opens new ones, autumn settles depth. Money: more windfall than fixed — the one big flow comes once; collect info Jan–Mar and decide Apr–May.');
+      body.writeln(
+          'One-line counsel: ${_oneLineCounsel(rel)}');
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? 'ANNUAL  SUMMARY · 總 評' : 'ANNUAL  SUMMARY · 總 評',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            body.toString().trim(),
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.95,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 십신 빈도 최강 1개 라벨 (KR).
+  String? _topTenGod(SajuContext ctx) {
+    if (ctx.tenGodFrequency.isEmpty) return null;
+    final sorted = ctx.tenGodFrequency.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    final top = sorted.first;
+    if (top.value == 0) return null;
+    const labels = {
+      TenGod.bigyeon: '비견',
+      TenGod.geopjae: '겁재',
+      TenGod.siksin: '식신',
+      TenGod.sanggwan: '상관',
+      TenGod.pyeonjae: '편재',
+      TenGod.jeongjae: '정재',
+      TenGod.pyeongwan: '편관',
+      TenGod.jeonggwan: '정관',
+      TenGod.pyeonin: '편인',
+      TenGod.jeongin: '정인',
+    };
+    return labels[top.key];
+  }
+
+  String _godHint(String label) {
+    switch (label) {
+      case '비견':
+      case '겁재':
+        return '동료·친구·경쟁자 자리에서 한 해의 흐름이 가장 많이 일어나요. 공동작업·창업·팀 결정 자리에서 큰 흐름이 옵니다.';
+      case '식신':
+      case '상관':
+        return '표현·창작·아이디어 자리에서 한 해의 흐름이 가장 많이 일어나요. 글·콘텐츠·강의·SNS 등 외부로 표현하는 활동이 한 해의 자원이 됩니다.';
+      case '편재':
+      case '정재':
+        return '돈·자산·재산 자리에서 한 해의 흐름이 가장 많이 일어나요. 큰 결정 한 번이 한 해 재산 그림을 바꿉니다.';
+      case '편관':
+      case '정관':
+        return '직장·권위·책임 자리에서 한 해의 흐름이 가장 많이 일어나요. 승진·이직·자격증 등 공식적인 결정이 한 해의 큰 흐름을 만듭니다.';
+      case '편인':
+      case '정인':
+        return '학습·공부·자기 안 들여다보는 시간 자리에서 한 해의 흐름이 가장 많이 일어나요. 책·강의·자격증·명상 등 안으로 들어가는 활동이 한 해의 자원이 됩니다.';
+      default:
+        return '본인 본업 자리에서 한 해의 흐름이 가장 많이 일어나요.';
+    }
+  }
+
+  String _oneLineCounsel(String rel) {
+    switch (rel) {
+      case 'same':
+        return '같은 색의 해 — 무리하지 말고, 한 번 더 자기에게 묻고 결정';
+      case 'iGenerate':
+        return '주는 해 — 페이스를 잃지 않으면서 끝까지';
+      case 'theyGenerate':
+        return '받는 해 — 받는 만큼 표현으로 돌려주기';
+      case 'iOvercome':
+        return '제어하는 해 — 큰 도약 자리, 데이터로 결정';
+      case 'theyOvercome':
+        return '눌리는 해 — 무리 금지, 가을 이후 진짜 성장';
+      default:
+        return '중립의 해 — 작은 도전 한 가지로 의미를 만들기';
+    }
   }
 }
 
