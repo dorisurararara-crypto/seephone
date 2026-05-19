@@ -15,6 +15,8 @@ import 'screens/reports/date_picking_screen.dart';
 import 'screens/reports/dream_screen.dart';
 import 'screens/reports/new_year_2026_screen.dart';
 import 'screens/reports/kpop_compat_screen.dart';
+import 'screens/reports/past_life_screen.dart';
+import 'screens/reports/music_pharmacy_screen.dart';
 import 'providers/saju_provider.dart';
 
 /// 전역 라우터. extra 의존 제거.
@@ -36,6 +38,8 @@ GoRouter buildRouter(WidgetRef ref) {
         '/reports/dream',
         '/reports/new-year-2026',
         '/reports/kpop-compat',
+        '/reports/past-life',
+        '/reports/music-pharmacy',
         '/discover',
         '/profile',
         '/settings',
@@ -103,6 +107,16 @@ GoRouter buildRouter(WidgetRef ref) {
         path: '/reports/kpop-compat',
         builder: (context, state) => const KpopCompatScreen(),
       ),
+      // R101 sprint 5 — 전생 시나리오 (팬심 1순위).
+      GoRoute(
+        path: '/reports/past-life',
+        builder: (context, state) => const PastLifeScreen(),
+      ),
+      // R101 sprint 6 — 디지털 기운 처방전 (팬심 2순위) 본 화면 wire.
+      GoRoute(
+        path: '/reports/music-pharmacy',
+        builder: (context, state) => const MusicPharmacyScreen(),
+      ),
       GoRoute(
         path: '/discover',
         builder: (context, state) => const DiscoverScreen(),
@@ -121,3 +135,5 @@ GoRouter buildRouter(WidgetRef ref) {
     ],
   );
 }
+
+// R101 sprint 5 placeholder 는 sprint 6 가 MusicPharmacyScreen 으로 교체했어요.

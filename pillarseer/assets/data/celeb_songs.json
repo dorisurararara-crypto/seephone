@@ -1,0 +1,1786 @@
+{
+  "iu": [
+    {
+      "titleKo": "내 손을 잡아",
+      "artistKo": "아이유",
+      "element": "fire",
+      "moodKo": "곁에 머무는 따뜻한 빛"
+    }
+  ],
+  "v": [
+    {
+      "titleKo": "슬로 댄싱",
+      "artistKo": "뷔",
+      "element": "wood",
+      "moodKo": "나무 결의 잔잔한 새벽"
+    }
+  ],
+  "jennie": [
+    {
+      "titleKo": "솔로",
+      "artistKo": "제니",
+      "element": "water",
+      "moodKo": "물빛 도시의 밤"
+    }
+  ],
+  "karina": [
+    {
+      "titleKo": "드라마",
+      "artistKo": "에스파",
+      "element": "earth",
+      "moodKo": "흙빛 카리스마"
+    }
+  ],
+  "jisoo": [
+    {
+      "titleKo": "플라워",
+      "artistKo": "지수",
+      "element": "wood",
+      "moodKo": "나무 결의 봄꽃"
+    }
+  ],
+  "jungkook": [
+    {
+      "titleKo": "골든",
+      "artistKo": "정국",
+      "element": "fire",
+      "moodKo": "불빛 별의 한가운데"
+    }
+  ],
+  "rose": [
+    {
+      "titleKo": "아파트",
+      "artistKo": "로제",
+      "element": "wood",
+      "moodKo": "나무 결의 청량함"
+    }
+  ],
+  "lisa": [
+    {
+      "titleKo": "머니",
+      "artistKo": "리사",
+      "element": "earth",
+      "moodKo": "흙빛 무대 위 단단함"
+    }
+  ],
+  "lee-junho": [
+    {
+      "titleKo": "아 진짜요",
+      "artistKo": "이준호",
+      "element": "metal",
+      "moodKo": "쾌청한 청춘 발걸음"
+    }
+  ],
+  "song-hyekyo": [
+    {
+      "titleKo": "오로라",
+      "artistKo": "헌정",
+      "element": "wood",
+      "moodKo": "스크린 너머의 잔향"
+    }
+  ],
+  "park-seojoon": [
+    {
+      "titleKo": "좋은 날",
+      "artistKo": "헌정",
+      "element": "wood",
+      "moodKo": "햇빛 깊은 출발"
+    }
+  ],
+  "kim-yuna": [
+    {
+      "titleKo": "아디오스",
+      "artistKo": "김연아 헌정",
+      "element": "water",
+      "moodKo": "얼음 위의 결단"
+    }
+  ],
+  "son-heungmin": [
+    {
+      "titleKo": "챔피언",
+      "artistKo": "응원곡",
+      "element": "wood",
+      "moodKo": "푸른 잔디 위의 결단"
+    }
+  ],
+  "hyunjin": [
+    {
+      "titleKo": "케이스 143",
+      "artistKo": "스트레이 키즈",
+      "element": "fire",
+      "moodKo": "불빛 강렬함"
+    }
+  ],
+  "hwasa": [
+    {
+      "titleKo": "마리아",
+      "artistKo": "화사",
+      "element": "wood",
+      "moodKo": "나무 결의 당당함"
+    }
+  ],
+  "taeyeon": [
+    {
+      "titleKo": "아이엔유",
+      "artistKo": "태연",
+      "element": "earth",
+      "moodKo": "흙빛 깊은 가을"
+    }
+  ],
+  "gdragon": [
+    {
+      "titleKo": "무제",
+      "artistKo": "지드래곤",
+      "element": "wood",
+      "moodKo": "나무 결의 새벽"
+    }
+  ],
+  "jin": [
+    {
+      "titleKo": "디 애스트로넛",
+      "artistKo": "진",
+      "element": "wood",
+      "moodKo": "나무 결의 별 사이"
+    }
+  ],
+  "jin-seyeon": [
+    {
+      "titleKo": "러브 시그널",
+      "artistKo": "헌정",
+      "element": "earth",
+      "moodKo": "흙빛 안정의 미소"
+    }
+  ],
+  "squidgame-lee": [
+    {
+      "titleKo": "롤리팝",
+      "artistKo": "헌정",
+      "element": "metal",
+      "moodKo": "쇠빛 결단의 무대"
+    }
+  ],
+  "minji_njs": [
+    {
+      "titleKo": "디토",
+      "artistKo": "뉴진스",
+      "element": "fire",
+      "moodKo": "불빛 미니 무비"
+    }
+  ],
+  "hanni_njs": [
+    {
+      "titleKo": "쿠키",
+      "artistKo": "뉴진스",
+      "element": "earth",
+      "moodKo": "흙빛 발랄 청춘"
+    }
+  ],
+  "danielle_njs": [
+    {
+      "titleKo": "하우 스위트",
+      "artistKo": "뉴진스",
+      "element": "wood",
+      "moodKo": "나무 결의 풋풋한 산책"
+    }
+  ],
+  "haerin_njs": [
+    {
+      "titleKo": "어택 온 마이",
+      "artistKo": "뉴진스",
+      "element": "wood",
+      "moodKo": "나무 결의 시원한 청량함"
+    }
+  ],
+  "hyein_njs": [
+    {
+      "titleKo": "ETA",
+      "artistKo": "뉴진스",
+      "element": "metal",
+      "moodKo": "쇠빛 또렷한 펀치"
+    }
+  ],
+  "yujin_ive": [
+    {
+      "titleKo": "아이 엠",
+      "artistKo": "아이브",
+      "element": "fire",
+      "moodKo": "불빛 자신감"
+    }
+  ],
+  "gaeul_ive": [
+    {
+      "titleKo": "러브 다이브",
+      "artistKo": "아이브",
+      "element": "wood",
+      "moodKo": "나무 결의 도도함"
+    }
+  ],
+  "rei_ive": [
+    {
+      "titleKo": "키치",
+      "artistKo": "아이브",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "wonyoung_ive": [
+    {
+      "titleKo": "애프터 라이크",
+      "artistKo": "아이브",
+      "element": "water",
+      "moodKo": "물빛 화려함"
+    }
+  ],
+  "liz_ive": [
+    {
+      "titleKo": "일레븐",
+      "artistKo": "아이브",
+      "element": "wood",
+      "moodKo": "나무 결의 청순함"
+    }
+  ],
+  "leeseo_ive": [
+    {
+      "titleKo": "배디 인 러브",
+      "artistKo": "아이브",
+      "element": "fire",
+      "moodKo": "불빛 사랑스러움"
+    }
+  ],
+  "sakura_les": [
+    {
+      "titleKo": "이지",
+      "artistKo": "르세라핌",
+      "element": "wood",
+      "moodKo": "나무 결의 능숙함"
+    }
+  ],
+  "chaewon_les": [
+    {
+      "titleKo": "앤티프래자일",
+      "artistKo": "르세라핌",
+      "element": "metal",
+      "moodKo": "쇠빛 단단함"
+    }
+  ],
+  "kazuha_les": [
+    {
+      "titleKo": "퍼펙트 나잇",
+      "artistKo": "르세라핌",
+      "element": "wood",
+      "moodKo": "나무 결의 당찬 출발"
+    }
+  ],
+  "eunchae_les": [
+    {
+      "titleKo": "스마트",
+      "artistKo": "르세라핌",
+      "element": "water",
+      "moodKo": "물빛 똑똑한 발랄"
+    }
+  ],
+  "yeji_itzy": [
+    {
+      "titleKo": "워너비",
+      "artistKo": "있지",
+      "element": "wood",
+      "moodKo": "나무 결의 자존감"
+    }
+  ],
+  "lia_itzy": [
+    {
+      "titleKo": "러브지",
+      "artistKo": "있지",
+      "element": "metal",
+      "moodKo": "쇠빛 부드러움"
+    }
+  ],
+  "ryujin_itzy": [
+    {
+      "titleKo": "체셔",
+      "artistKo": "있지",
+      "element": "metal",
+      "moodKo": "쇠빛 또렷한 카리스마"
+    }
+  ],
+  "chaeryeong_itzy": [
+    {
+      "titleKo": "스니커즈",
+      "artistKo": "있지",
+      "element": "metal",
+      "moodKo": "쇠빛 시크함"
+    }
+  ],
+  "yuna_itzy": [
+    {
+      "titleKo": "디지",
+      "artistKo": "있지",
+      "element": "fire",
+      "moodKo": "불빛 청춘"
+    }
+  ],
+  "winter_aespa": [
+    {
+      "titleKo": "아이엠 위드 유",
+      "artistKo": "에스파",
+      "element": "wood",
+      "moodKo": "나무 결의 청량함"
+    }
+  ],
+  "giselle_aespa": [
+    {
+      "titleKo": "스파이시",
+      "artistKo": "에스파",
+      "element": "metal",
+      "moodKo": "쇠빛 도시 감성"
+    }
+  ],
+  "ningning_aespa": [
+    {
+      "titleKo": "위플래쉬",
+      "artistKo": "에스파",
+      "element": "wood",
+      "moodKo": "나무 결의 통통 튐"
+    }
+  ],
+  "heeseung_eh": [
+    {
+      "titleKo": "페이스 더 라이트",
+      "artistKo": "엔하이픈",
+      "element": "metal",
+      "moodKo": "쇠빛 진중함"
+    }
+  ],
+  "jay_eh": [
+    {
+      "titleKo": "폴리시 옵 마이 하트",
+      "artistKo": "엔하이픈",
+      "element": "earth",
+      "moodKo": "흙빛 단단한 매력"
+    }
+  ],
+  "jake_eh": [
+    {
+      "titleKo": "기븐 테이큰",
+      "artistKo": "엔하이픈",
+      "element": "fire",
+      "moodKo": "불빛 청춘의 시작"
+    }
+  ],
+  "sunghoon_eh": [
+    {
+      "titleKo": "드렁크 데이지",
+      "artistKo": "엔하이픈",
+      "element": "metal",
+      "moodKo": "쇠빛 우아함"
+    }
+  ],
+  "sunoo_eh": [
+    {
+      "titleKo": "팻 캣",
+      "artistKo": "엔하이픈",
+      "element": "earth",
+      "moodKo": "흙빛 사랑스러움"
+    }
+  ],
+  "jungwon_eh": [
+    {
+      "titleKo": "블러디 메리",
+      "artistKo": "엔하이픈",
+      "element": "earth",
+      "moodKo": "흙빛 차분한 리더십"
+    }
+  ],
+  "niki_eh": [
+    {
+      "titleKo": "스위트 베놈",
+      "artistKo": "엔하이픈",
+      "element": "fire",
+      "moodKo": "불빛 무대의 중심"
+    }
+  ],
+  "joshua_svt": [
+    {
+      "titleKo": "히어",
+      "artistKo": "세븐틴",
+      "element": "wood",
+      "moodKo": "나무 결의 차분한 빛"
+    }
+  ],
+  "mingyu_svt": [
+    {
+      "titleKo": "매직",
+      "artistKo": "세븐틴",
+      "element": "earth",
+      "moodKo": "흙빛 즐거움"
+    }
+  ],
+  "vernon_svt": [
+    {
+      "titleKo": "러브 콜",
+      "artistKo": "세븐틴",
+      "element": "fire",
+      "moodKo": "불빛 도시 감성"
+    }
+  ],
+  "dk_svt": [
+    {
+      "titleKo": "러브, 머니, 페임",
+      "artistKo": "세븐틴",
+      "element": "metal",
+      "moodKo": "쇠빛 청량 보컬"
+    }
+  ],
+  "woozi_svt": [
+    {
+      "titleKo": "점거",
+      "artistKo": "세븐틴",
+      "element": "water",
+      "moodKo": "물빛 작곡가의 깊은 결"
+    }
+  ],
+  "yeonjun_txt": [
+    {
+      "titleKo": "크라운",
+      "artistKo": "투바투",
+      "element": "earth",
+      "moodKo": "흙빛 풋풋함"
+    }
+  ],
+  "soobin_txt": [
+    {
+      "titleKo": "이리오너라",
+      "artistKo": "투바투",
+      "element": "fire",
+      "moodKo": "불빛 청춘"
+    }
+  ],
+  "beomgyu_txt": [
+    {
+      "titleKo": "디오디",
+      "artistKo": "투바투",
+      "element": "wood",
+      "moodKo": "나무 결의 청량함"
+    }
+  ],
+  "taehyun_txt": [
+    {
+      "titleKo": "러브 송",
+      "artistKo": "투바투",
+      "element": "wood",
+      "moodKo": "나무 결의 잔잔함"
+    }
+  ],
+  "huening_txt": [
+    {
+      "titleKo": "아이 노 아이 러브 유",
+      "artistKo": "투바투",
+      "element": "wood",
+      "moodKo": "나무 결의 사랑스러움"
+    }
+  ],
+  "wonbin_riize": [
+    {
+      "titleKo": "겟 어 기타",
+      "artistKo": "라이즈",
+      "element": "wood",
+      "moodKo": "나무 결의 청량함"
+    }
+  ],
+  "anton_riize": [
+    {
+      "titleKo": "부 시아 시아",
+      "artistKo": "라이즈",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "rm": [
+    {
+      "titleKo": "들꽃놀이",
+      "artistKo": "알엠",
+      "element": "metal",
+      "moodKo": "쇠빛 사색"
+    }
+  ],
+  "suga": [
+    {
+      "titleKo": "대취타",
+      "artistKo": "어거스트 디",
+      "element": "earth",
+      "moodKo": "흙빛 묵직한 비트"
+    }
+  ],
+  "jhope": [
+    {
+      "titleKo": "아리랑",
+      "artistKo": "제이홉",
+      "element": "wood",
+      "moodKo": "나무 결의 햇살"
+    }
+  ],
+  "jimin": [
+    {
+      "titleKo": "라이크 크레이지",
+      "artistKo": "지민",
+      "element": "fire",
+      "moodKo": "불빛 일렁임"
+    }
+  ],
+  "bangchan_skz": [
+    {
+      "titleKo": "락",
+      "artistKo": "스트레이 키즈",
+      "element": "earth",
+      "moodKo": "흙빛 묵직한 리더십"
+    }
+  ],
+  "leeknow_skz": [
+    {
+      "titleKo": "매니악",
+      "artistKo": "스트레이 키즈",
+      "element": "wood",
+      "moodKo": "나무 결의 매끄러움"
+    }
+  ],
+  "changbin_skz": [
+    {
+      "titleKo": "델리셔스",
+      "artistKo": "스트레이 키즈",
+      "element": "wood",
+      "moodKo": "나무 결의 거침"
+    }
+  ],
+  "han_skz": [
+    {
+      "titleKo": "스트레이 키즈 백 도어",
+      "artistKo": "스트레이 키즈",
+      "element": "wood",
+      "moodKo": "나무 결의 위트"
+    }
+  ],
+  "felix_skz": [
+    {
+      "titleKo": "호프",
+      "artistKo": "스트레이 키즈",
+      "element": "fire",
+      "moodKo": "불빛 따뜻함"
+    }
+  ],
+  "seungmin_skz": [
+    {
+      "titleKo": "이지",
+      "artistKo": "스트레이 키즈",
+      "element": "water",
+      "moodKo": "물빛 청량 보컬"
+    }
+  ],
+  "in_skz": [
+    {
+      "titleKo": "크리스마스 이브엘",
+      "artistKo": "스트레이 키즈",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "hongjoong_atz": [
+    {
+      "titleKo": "워크",
+      "artistKo": "에이티즈",
+      "element": "earth",
+      "moodKo": "흙빛 리더의 광채"
+    }
+  ],
+  "seonghwa_atz": [
+    {
+      "titleKo": "새비지",
+      "artistKo": "에이티즈",
+      "element": "metal",
+      "moodKo": "쇠빛 단단한 매력"
+    }
+  ],
+  "yunho_atz": [
+    {
+      "titleKo": "골든 아워",
+      "artistKo": "에이티즈",
+      "element": "wood",
+      "moodKo": "나무 결의 햇살"
+    }
+  ],
+  "yeosang_atz": [
+    {
+      "titleKo": "어레이",
+      "artistKo": "에이티즈",
+      "element": "earth",
+      "moodKo": "흙빛 우아함"
+    }
+  ],
+  "san_atz": [
+    {
+      "titleKo": "크레이지 폼",
+      "artistKo": "에이티즈",
+      "element": "water",
+      "moodKo": "물빛 무대 폭발"
+    }
+  ],
+  "mingi_atz": [
+    {
+      "titleKo": "뱀파이어",
+      "artistKo": "에이티즈",
+      "element": "water",
+      "moodKo": "물빛 묵직한 저음"
+    }
+  ],
+  "wooyoung_atz": [
+    {
+      "titleKo": "브링 백 더 타임",
+      "artistKo": "에이티즈",
+      "element": "water",
+      "moodKo": "물빛 청춘"
+    }
+  ],
+  "jongho_atz": [
+    {
+      "titleKo": "할라할라",
+      "artistKo": "에이티즈",
+      "element": "water",
+      "moodKo": "물빛 호소력"
+    }
+  ],
+  "nayeon_twice": [
+    {
+      "titleKo": "팝",
+      "artistKo": "나연",
+      "element": "fire",
+      "moodKo": "불빛 발랄"
+    }
+  ],
+  "jeongyeon_twice": [
+    {
+      "titleKo": "티티",
+      "artistKo": "트와이스",
+      "element": "water",
+      "moodKo": "물빛 시원함"
+    }
+  ],
+  "momo_twice": [
+    {
+      "titleKo": "페이크 앤 트루",
+      "artistKo": "모모",
+      "element": "metal",
+      "moodKo": "쇠빛 또렷함"
+    }
+  ],
+  "sana_twice": [
+    {
+      "titleKo": "필 스페셜",
+      "artistKo": "사나",
+      "element": "metal",
+      "moodKo": "쇠빛 사랑스러움"
+    }
+  ],
+  "jihyo_twice": [
+    {
+      "titleKo": "킬린 미 굿",
+      "artistKo": "지효",
+      "element": "wood",
+      "moodKo": "나무 결의 보컬"
+    }
+  ],
+  "mina_twice": [
+    {
+      "titleKo": "페이스 마이 페이스",
+      "artistKo": "트와이스",
+      "element": "wood",
+      "moodKo": "나무 결의 우아함"
+    }
+  ],
+  "dahyun_twice": [
+    {
+      "titleKo": "스카우트",
+      "artistKo": "트와이스",
+      "element": "wood",
+      "moodKo": "나무 결의 위트"
+    }
+  ],
+  "chaeyoung_twice": [
+    {
+      "titleKo": "폼",
+      "artistKo": "트와이스",
+      "element": "wood",
+      "moodKo": "나무 결의 트렌디함"
+    }
+  ],
+  "tzuyu_twice": [
+    {
+      "titleKo": "러비두비",
+      "artistKo": "트와이스",
+      "element": "fire",
+      "moodKo": "불빛 청순"
+    }
+  ],
+  "sumin_stayc": [
+    {
+      "titleKo": "바운시",
+      "artistKo": "스테이씨",
+      "element": "wood",
+      "moodKo": "나무 결의 발랄"
+    }
+  ],
+  "sieun_stayc": [
+    {
+      "titleKo": "애즈브브",
+      "artistKo": "스테이씨",
+      "element": "fire",
+      "moodKo": "불빛 청량함"
+    }
+  ],
+  "isa_stayc": [
+    {
+      "titleKo": "스타투고",
+      "artistKo": "스테이씨",
+      "element": "metal",
+      "moodKo": "쇠빛 단정함"
+    }
+  ],
+  "seeun_stayc": [
+    {
+      "titleKo": "티즈미",
+      "artistKo": "스테이씨",
+      "element": "earth",
+      "moodKo": "흙빛 사랑스러움"
+    }
+  ],
+  "yoon_stayc": [
+    {
+      "titleKo": "어쩌다 가족",
+      "artistKo": "스테이씨",
+      "element": "water",
+      "moodKo": "물빛 부드러움"
+    }
+  ],
+  "j_stayc": [
+    {
+      "titleKo": "샵 아저씨",
+      "artistKo": "스테이씨",
+      "element": "water",
+      "moodKo": "물빛 또렷함"
+    }
+  ],
+  "kim-soohyun": [
+    {
+      "titleKo": "드림",
+      "artistKo": "헌정",
+      "element": "metal",
+      "moodKo": "쇠빛 잔잔한 결심"
+    }
+  ],
+  "lee-minho": [
+    {
+      "titleKo": "스트레인저",
+      "artistKo": "헌정",
+      "element": "water",
+      "moodKo": "물빛 신비"
+    }
+  ],
+  "cha-eunwoo": [
+    {
+      "titleKo": "기적 같은 이야기",
+      "artistKo": "차은우",
+      "element": "metal",
+      "moodKo": "쇠빛 단정함"
+    }
+  ],
+  "song-kang": [
+    {
+      "titleKo": "러브 인 더 무드",
+      "artistKo": "헌정",
+      "element": "earth",
+      "moodKo": "흙빛 부드러움"
+    }
+  ],
+  "byeon-wooseok": [
+    {
+      "titleKo": "선재 업고 튀어",
+      "artistKo": "헌정",
+      "element": "wood",
+      "moodKo": "나무 결의 풋풋함"
+    }
+  ],
+  "hwang-inyoup": [
+    {
+      "titleKo": "선풀",
+      "artistKo": "헌정",
+      "element": "earth",
+      "moodKo": "흙빛 따뜻함"
+    }
+  ],
+  "kim-seonho": [
+    {
+      "titleKo": "스타트",
+      "artistKo": "헌정",
+      "element": "water",
+      "moodKo": "물빛 신선함"
+    }
+  ],
+  "ji-changwook": [
+    {
+      "titleKo": "멜로디",
+      "artistKo": "지창욱",
+      "element": "wood",
+      "moodKo": "나무 결의 잔잔함"
+    }
+  ],
+  "kim-jiwon": [
+    {
+      "titleKo": "러브 송",
+      "artistKo": "헌정",
+      "element": "earth",
+      "moodKo": "흙빛 차분함"
+    }
+  ],
+  "kim-hyeyoon": [
+    {
+      "titleKo": "청춘",
+      "artistKo": "헌정",
+      "element": "metal",
+      "moodKo": "쇠빛 단단한 마음"
+    }
+  ],
+  "han-sohee": [
+    {
+      "titleKo": "나의 아저씨",
+      "artistKo": "헌정",
+      "element": "water",
+      "moodKo": "물빛 깊은 시선"
+    }
+  ],
+  "bae-suzy": [
+    {
+      "titleKo": "행복한 척",
+      "artistKo": "수지",
+      "element": "earth",
+      "moodKo": "흙빛 잔잔한 봄"
+    }
+  ],
+  "lily_nmixx": [
+    {
+      "titleKo": "디지 댐 디지",
+      "artistKo": "엔믹스",
+      "element": "earth",
+      "moodKo": "흙빛 발성"
+    }
+  ],
+  "haewon_nmixx": [
+    {
+      "titleKo": "러브 미 라이크 디스",
+      "artistKo": "엔믹스",
+      "element": "earth",
+      "moodKo": "흙빛 청량 보컬"
+    }
+  ],
+  "sullyoon_nmixx": [
+    {
+      "titleKo": "씨 댓",
+      "artistKo": "엔믹스",
+      "element": "wood",
+      "moodKo": "나무 결의 우아함"
+    }
+  ],
+  "bae_nmixx": [
+    {
+      "titleKo": "탱크",
+      "artistKo": "엔믹스",
+      "element": "metal",
+      "moodKo": "쇠빛 호소력"
+    }
+  ],
+  "jiwoo_nmixx": [
+    {
+      "titleKo": "오에이오",
+      "artistKo": "엔믹스",
+      "element": "fire",
+      "moodKo": "불빛 트렌디함"
+    }
+  ],
+  "kyujin_nmixx": [
+    {
+      "titleKo": "러브 미 라이크 디스",
+      "artistKo": "엔믹스",
+      "element": "wood",
+      "moodKo": "나무 결의 활기"
+    }
+  ],
+  "scoups_svt": [
+    {
+      "titleKo": "미친 듯이",
+      "artistKo": "세븐틴",
+      "element": "metal",
+      "moodKo": "쇠빛 단단함"
+    }
+  ],
+  "jeonghan_svt": [
+    {
+      "titleKo": "러브 스리 러브",
+      "artistKo": "세븐틴",
+      "element": "earth",
+      "moodKo": "흙빛 잔잔한 매력"
+    }
+  ],
+  "jun_svt": [
+    {
+      "titleKo": "아주 나이스",
+      "artistKo": "세븐틴",
+      "element": "earth",
+      "moodKo": "흙빛 부드러움"
+    }
+  ],
+  "hoshi_svt": [
+    {
+      "titleKo": "스파이더",
+      "artistKo": "세븐틴",
+      "element": "water",
+      "moodKo": "물빛 강렬함"
+    }
+  ],
+  "wonwoo_svt": [
+    {
+      "titleKo": "러브, 머니, 페임",
+      "artistKo": "세븐틴",
+      "element": "wood",
+      "moodKo": "나무 결의 깊은 음성"
+    }
+  ],
+  "the8_svt": [
+    {
+      "titleKo": "아주 나이스",
+      "artistKo": "세븐틴",
+      "element": "water",
+      "moodKo": "물빛 우아함"
+    }
+  ],
+  "seungkwan_svt": [
+    {
+      "titleKo": "스노 데이",
+      "artistKo": "세븐틴",
+      "element": "water",
+      "moodKo": "물빛 따뜻한 보컬"
+    }
+  ],
+  "dino_svt": [
+    {
+      "titleKo": "힙",
+      "artistKo": "세븐틴",
+      "element": "wood",
+      "moodKo": "나무 결의 활기"
+    }
+  ],
+  "shotaro_riize": [
+    {
+      "titleKo": "센티멘탈",
+      "artistKo": "라이즈",
+      "element": "fire",
+      "moodKo": "불빛 우아함"
+    }
+  ],
+  "eunseok_riize": [
+    {
+      "titleKo": "이매저너리 프렌드",
+      "artistKo": "라이즈",
+      "element": "metal",
+      "moodKo": "쇠빛 차분함"
+    }
+  ],
+  "sungchan_riize": [
+    {
+      "titleKo": "팻 캣",
+      "artistKo": "라이즈",
+      "element": "earth",
+      "moodKo": "흙빛 따뜻함"
+    }
+  ],
+  "sohee_riize": [
+    {
+      "titleKo": "나인 데이즈",
+      "artistKo": "라이즈",
+      "element": "earth",
+      "moodKo": "흙빛 청춘"
+    }
+  ],
+  "yunjin_les": [
+    {
+      "titleKo": "이브, 사이코, 블러디 메리",
+      "artistKo": "르세라핌",
+      "element": "wood",
+      "moodKo": "나무 결의 강단"
+    }
+  ],
+  "miyeon_idle": [
+    {
+      "titleKo": "나의 봄",
+      "artistKo": "아이들",
+      "element": "water",
+      "moodKo": "물빛 청순"
+    }
+  ],
+  "minnie_idle": [
+    {
+      "titleKo": "페이크 러브",
+      "artistKo": "아이들",
+      "element": "earth",
+      "moodKo": "흙빛 매력"
+    }
+  ],
+  "soyeon_idle": [
+    {
+      "titleKo": "토마토 소스",
+      "artistKo": "아이들",
+      "element": "wood",
+      "moodKo": "나무 결의 카리스마"
+    }
+  ],
+  "yuqi_idle": [
+    {
+      "titleKo": "이드 윈",
+      "artistKo": "아이들",
+      "element": "earth",
+      "moodKo": "흙빛 호소력"
+    }
+  ],
+  "shuhua_idle": [
+    {
+      "titleKo": "러브 콜",
+      "artistKo": "아이들",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "ruka_bm": [
+    {
+      "titleKo": "배터 업",
+      "artistKo": "베이비몬스터",
+      "element": "fire",
+      "moodKo": "불빛 트렌디함"
+    }
+  ],
+  "pharita_bm": [
+    {
+      "titleKo": "두 라이크 댓",
+      "artistKo": "베이비몬스터",
+      "element": "water",
+      "moodKo": "물빛 청춘"
+    }
+  ],
+  "asa_bm": [
+    {
+      "titleKo": "스턱 인 더 미들",
+      "artistKo": "베이비몬스터",
+      "element": "fire",
+      "moodKo": "불빛 또렷함"
+    }
+  ],
+  "ahyeon_bm": [
+    {
+      "titleKo": "드립",
+      "artistKo": "베이비몬스터",
+      "element": "wood",
+      "moodKo": "나무 결의 발성"
+    }
+  ],
+  "rami_bm": [
+    {
+      "titleKo": "배터 업",
+      "artistKo": "베이비몬스터",
+      "element": "wood",
+      "moodKo": "나무 결의 청량 보컬"
+    }
+  ],
+  "rora_bm": [
+    {
+      "titleKo": "쉬크",
+      "artistKo": "베이비몬스터",
+      "element": "fire",
+      "moodKo": "불빛 사랑스러움"
+    }
+  ],
+  "chiquita_bm": [
+    {
+      "titleKo": "스턱 인 더 미들",
+      "artistKo": "베이비몬스터",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "yunah_illit": [
+    {
+      "titleKo": "매직",
+      "artistKo": "아일릿",
+      "element": "water",
+      "moodKo": "물빛 청춘"
+    }
+  ],
+  "minju_illit": [
+    {
+      "titleKo": "러키 걸 신드롬",
+      "artistKo": "아일릿",
+      "element": "metal",
+      "moodKo": "쇠빛 사랑스러움"
+    }
+  ],
+  "moka_illit": [
+    {
+      "titleKo": "미드나잇 파이트",
+      "artistKo": "아일릿",
+      "element": "metal",
+      "moodKo": "쇠빛 청량함"
+    }
+  ],
+  "wonhee_illit": [
+    {
+      "titleKo": "점핑 잭",
+      "artistKo": "아일릿",
+      "element": "metal",
+      "moodKo": "쇠빛 발랄"
+    }
+  ],
+  "iroha_illit": [
+    {
+      "titleKo": "도 더 댄스",
+      "artistKo": "아일릿",
+      "element": "wood",
+      "moodKo": "나무 결의 청춘"
+    }
+  ],
+  "julie_kiof": [
+    {
+      "titleKo": "불러바드",
+      "artistKo": "키스오브라이프",
+      "element": "fire",
+      "moodKo": "불빛 우아함"
+    }
+  ],
+  "natty_kiof": [
+    {
+      "titleKo": "내츄럴",
+      "artistKo": "키스오브라이프",
+      "element": "earth",
+      "moodKo": "흙빛 도시 감성"
+    }
+  ],
+  "belle_kiof": [
+    {
+      "titleKo": "샤프",
+      "artistKo": "키스오브라이프",
+      "element": "earth",
+      "moodKo": "흙빛 보컬"
+    }
+  ],
+  "haneul_kiof": [
+    {
+      "titleKo": "이그조틱",
+      "artistKo": "키스오브라이프",
+      "element": "earth",
+      "moodKo": "흙빛 화려함"
+    }
+  ],
+  "sung_hanbin_zb1": [
+    {
+      "titleKo": "크레이즈",
+      "artistKo": "제로베이스원",
+      "element": "earth",
+      "moodKo": "흙빛 리더십"
+    }
+  ],
+  "kim_jiwoong_zb1": [
+    {
+      "titleKo": "러브, 러브, 러브",
+      "artistKo": "제로베이스원",
+      "element": "wood",
+      "moodKo": "나무 결의 우아함"
+    }
+  ],
+  "zhang_hao_zb1": [
+    {
+      "titleKo": "필름 아웃",
+      "artistKo": "제로베이스원",
+      "element": "wood",
+      "moodKo": "나무 결의 보컬"
+    }
+  ],
+  "seok_matthew_zb1": [
+    {
+      "titleKo": "스위트 매기",
+      "artistKo": "제로베이스원",
+      "element": "fire",
+      "moodKo": "불빛 청춘"
+    }
+  ],
+  "kim_taerae_zb1": [
+    {
+      "titleKo": "이매저너리",
+      "artistKo": "제로베이스원",
+      "element": "water",
+      "moodKo": "물빛 호소력"
+    }
+  ],
+  "kim_gyuvin_zb1": [
+    {
+      "titleKo": "러브 송",
+      "artistKo": "제로베이스원",
+      "element": "metal",
+      "moodKo": "쇠빛 발랄"
+    }
+  ],
+  "park_gunwook_zb1": [
+    {
+      "titleKo": "러브 인 더 무드",
+      "artistKo": "제로베이스원",
+      "element": "wood",
+      "moodKo": "나무 결의 풋풋함"
+    }
+  ],
+  "han_yujin_zb1": [
+    {
+      "titleKo": "스카우트",
+      "artistKo": "제로베이스원",
+      "element": "water",
+      "moodKo": "물빛 청량 보컬"
+    }
+  ],
+  "ricky_zb1": [
+    {
+      "titleKo": "위 아 영",
+      "artistKo": "제로베이스원",
+      "element": "earth",
+      "moodKo": "흙빛 청춘"
+    }
+  ],
+  "sungho_bnd": [
+    {
+      "titleKo": "어스 위 워크",
+      "artistKo": "보이넥스트도어",
+      "element": "metal",
+      "moodKo": "쇠빛 부드러움"
+    }
+  ],
+  "riwoo_bnd": [
+    {
+      "titleKo": "팻 캣",
+      "artistKo": "보이넥스트도어",
+      "element": "earth",
+      "moodKo": "흙빛 따뜻함"
+    }
+  ],
+  "jaehyun_bnd": [
+    {
+      "titleKo": "어스 위 워크",
+      "artistKo": "보이넥스트도어",
+      "element": "metal",
+      "moodKo": "쇠빛 단정함"
+    }
+  ],
+  "taesan_bnd": [
+    {
+      "titleKo": "어스 위 워크",
+      "artistKo": "보이넥스트도어",
+      "element": "metal",
+      "moodKo": "쇠빛 매끄러움"
+    }
+  ],
+  "leehan_bnd": [
+    {
+      "titleKo": "이프 아이 세이, 아이 러브 유",
+      "artistKo": "보이넥스트도어",
+      "element": "water",
+      "moodKo": "물빛 청춘"
+    }
+  ],
+  "woonhak_bnd": [
+    {
+      "titleKo": "러브 송",
+      "artistKo": "보이넥스트도어",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "shinyu_tws": [
+    {
+      "titleKo": "오 마이 갓",
+      "artistKo": "투어스",
+      "element": "wood",
+      "moodKo": "나무 결의 청춘"
+    }
+  ],
+  "dohoon_tws": [
+    {
+      "titleKo": "플롯 인 러브",
+      "artistKo": "투어스",
+      "element": "wood",
+      "moodKo": "나무 결의 풋풋함"
+    }
+  ],
+  "youngjae_tws": [
+    {
+      "titleKo": "이프 아이 머스트",
+      "artistKo": "투어스",
+      "element": "wood",
+      "moodKo": "나무 결의 보컬"
+    }
+  ],
+  "hanjin_tws": [
+    {
+      "titleKo": "오 마이 갓",
+      "artistKo": "투어스",
+      "element": "wood",
+      "moodKo": "나무 결의 활기"
+    }
+  ],
+  "jihoon_tws": [
+    {
+      "titleKo": "오 마이 갓",
+      "artistKo": "투어스",
+      "element": "fire",
+      "moodKo": "불빛 청춘"
+    }
+  ],
+  "kyungmin_tws": [
+    {
+      "titleKo": "플롯 인 러브",
+      "artistKo": "투어스",
+      "element": "earth",
+      "moodKo": "흙빛 따뜻함"
+    }
+  ],
+  "mark_nct": [
+    {
+      "titleKo": "이즈티즈",
+      "artistKo": "엔시티 드림",
+      "element": "fire",
+      "moodKo": "불빛 리더십"
+    }
+  ],
+  "renjun_nct": [
+    {
+      "titleKo": "브로큰 멜로디스",
+      "artistKo": "엔시티 드림",
+      "element": "metal",
+      "moodKo": "쇠빛 보컬"
+    }
+  ],
+  "jeno_nct": [
+    {
+      "titleKo": "스무드",
+      "artistKo": "엔시티 드림",
+      "element": "metal",
+      "moodKo": "쇠빛 시크함"
+    }
+  ],
+  "haechan_nct": [
+    {
+      "titleKo": "리듬",
+      "artistKo": "엔시티 드림",
+      "element": "wood",
+      "moodKo": "나무 결의 활기"
+    }
+  ],
+  "jaemin_nct": [
+    {
+      "titleKo": "러브 잼",
+      "artistKo": "엔시티 드림",
+      "element": "water",
+      "moodKo": "물빛 사랑스러움"
+    }
+  ],
+  "chenle_nct": [
+    {
+      "titleKo": "크리스마스 러브",
+      "artistKo": "엔시티 드림",
+      "element": "earth",
+      "moodKo": "흙빛 청량 보컬"
+    }
+  ],
+  "jisung_nct": [
+    {
+      "titleKo": "스무드",
+      "artistKo": "엔시티 드림",
+      "element": "wood",
+      "moodKo": "나무 결의 청춘"
+    }
+  ],
+  "sion_wish": [
+    {
+      "titleKo": "위시",
+      "artistKo": "엔시티 위시",
+      "element": "earth",
+      "moodKo": "흙빛 청춘"
+    }
+  ],
+  "riku_wish": [
+    {
+      "titleKo": "송버드",
+      "artistKo": "엔시티 위시",
+      "element": "water",
+      "moodKo": "물빛 발랄"
+    }
+  ],
+  "yushi_wish": [
+    {
+      "titleKo": "스틸 위시",
+      "artistKo": "엔시티 위시",
+      "element": "wood",
+      "moodKo": "나무 결의 청량함"
+    }
+  ],
+  "jaehee_wish": [
+    {
+      "titleKo": "위시",
+      "artistKo": "엔시티 위시",
+      "element": "fire",
+      "moodKo": "불빛 청춘"
+    }
+  ],
+  "ryo_wish": [
+    {
+      "titleKo": "스틸 위시",
+      "artistKo": "엔시티 위시",
+      "element": "metal",
+      "moodKo": "쇠빛 보컬"
+    }
+  ],
+  "sakuya_wish": [
+    {
+      "titleKo": "위시",
+      "artistKo": "엔시티 위시",
+      "element": "fire",
+      "moodKo": "불빛 호소력"
+    }
+  ],
+  "jurin_xg": [
+    {
+      "titleKo": "우드랜드",
+      "artistKo": "엑스지",
+      "element": "earth",
+      "moodKo": "흙빛 단단함"
+    }
+  ],
+  "chisa_xg": [
+    {
+      "titleKo": "샬라라",
+      "artistKo": "엑스지",
+      "element": "wood",
+      "moodKo": "나무 결의 자신감"
+    }
+  ],
+  "hinata_xg": [
+    {
+      "titleKo": "뉴 댄스",
+      "artistKo": "엑스지",
+      "element": "metal",
+      "moodKo": "쇠빛 또렷함"
+    }
+  ],
+  "harvey_xg": [
+    {
+      "titleKo": "그래 그래",
+      "artistKo": "엑스지",
+      "element": "metal",
+      "moodKo": "쇠빛 트렌디함"
+    }
+  ],
+  "juria_xg": [
+    {
+      "titleKo": "좀비",
+      "artistKo": "엑스지",
+      "element": "metal",
+      "moodKo": "쇠빛 시크함"
+    }
+  ],
+  "maya_xg": [
+    {
+      "titleKo": "우 아",
+      "artistKo": "엑스지",
+      "element": "fire",
+      "moodKo": "불빛 호소력"
+    }
+  ],
+  "cocona_xg": [
+    {
+      "titleKo": "프야 잇",
+      "artistKo": "엑스지",
+      "element": "wood",
+      "moodKo": "나무 결의 시원함"
+    }
+  ],
+  "sophia_katseye": [
+    {
+      "titleKo": "터치",
+      "artistKo": "캣츠아이",
+      "element": "water",
+      "moodKo": "물빛 도시 감성"
+    }
+  ],
+  "manon_katseye": [
+    {
+      "titleKo": "터치",
+      "artistKo": "캣츠아이",
+      "element": "wood",
+      "moodKo": "나무 결의 우아함"
+    }
+  ],
+  "daniela_katseye": [
+    {
+      "titleKo": "부 아이 러브 유",
+      "artistKo": "캣츠아이",
+      "element": "metal",
+      "moodKo": "쇠빛 사랑스러움"
+    }
+  ],
+  "lara_katseye": [
+    {
+      "titleKo": "디바",
+      "artistKo": "캣츠아이",
+      "element": "metal",
+      "moodKo": "쇠빛 호소력"
+    }
+  ],
+  "megan_katseye": [
+    {
+      "titleKo": "디바",
+      "artistKo": "캣츠아이",
+      "element": "metal",
+      "moodKo": "쇠빛 트렌디함"
+    }
+  ],
+  "yoonchae_katseye": [
+    {
+      "titleKo": "터치",
+      "artistKo": "캣츠아이",
+      "element": "wood",
+      "moodKo": "나무 결의 청춘"
+    }
+  ],
+  "irene_rv": [
+    {
+      "titleKo": "필 마이 리듬",
+      "artistKo": "레드벨벳",
+      "element": "earth",
+      "moodKo": "흙빛 우아함"
+    }
+  ],
+  "seulgi_rv": [
+    {
+      "titleKo": "덤덤",
+      "artistKo": "레드벨벳",
+      "element": "fire",
+      "moodKo": "불빛 또렷함"
+    }
+  ],
+  "wendy_rv": [
+    {
+      "titleKo": "라이크 워터",
+      "artistKo": "레드벨벳",
+      "element": "earth",
+      "moodKo": "흙빛 보컬"
+    }
+  ],
+  "joy_rv": [
+    {
+      "titleKo": "코스믹",
+      "artistKo": "레드벨벳",
+      "element": "water",
+      "moodKo": "물빛 사랑스러움"
+    }
+  ],
+  "yeri_rv": [
+    {
+      "titleKo": "러브 미 두",
+      "artistKo": "레드벨벳",
+      "element": "fire",
+      "moodKo": "불빛 청춘"
+    }
+  ],
+  "solar_mamamoo": [
+    {
+      "titleKo": "스파이트",
+      "artistKo": "솔라",
+      "element": "water",
+      "moodKo": "물빛 자신감"
+    }
+  ],
+  "moonbyul_mamamoo": [
+    {
+      "titleKo": "러프",
+      "artistKo": "문별",
+      "element": "water",
+      "moodKo": "물빛 단단함"
+    }
+  ],
+  "wheein_mamamoo": [
+    {
+      "titleKo": "월플라워",
+      "artistKo": "휘인",
+      "element": "earth",
+      "moodKo": "흙빛 호소력"
+    }
+  ],
+  "somi_solo": [
+    {
+      "titleKo": "덤덤",
+      "artistKo": "전소미",
+      "element": "metal",
+      "moodKo": "쇠빛 또렷한 자신감"
+    }
+  ],
+  "chungha_solo": [
+    {
+      "titleKo": "스니커즈",
+      "artistKo": "청하",
+      "element": "fire",
+      "moodKo": "불빛 도시 야경"
+    }
+  ],
+  "sunmi_solo": [
+    {
+      "titleKo": "꼬리",
+      "artistKo": "선미",
+      "element": "earth",
+      "moodKo": "흙빛 섬세한 결"
+    }
+  ],
+  "eunbi_solo": [
+    {
+      "titleKo": "러브세이프티",
+      "artistKo": "권은비",
+      "element": "metal",
+      "moodKo": "쇠빛 발랄"
+    }
+  ],
+  "hyunsuk_trsr": [
+    {
+      "titleKo": "티 셔츠",
+      "artistKo": "트레저",
+      "element": "water",
+      "moodKo": "물빛 청춘"
+    }
+  ],
+  "jihoon_trsr": [
+    {
+      "titleKo": "점프",
+      "artistKo": "트레저",
+      "element": "metal",
+      "moodKo": "쇠빛 청량함"
+    }
+  ],
+  "yoshi_trsr": [
+    {
+      "titleKo": "부메랑",
+      "artistKo": "트레저",
+      "element": "water",
+      "moodKo": "물빛 도시 감성"
+    }
+  ],
+  "junkyu_trsr": [
+    {
+      "titleKo": "브링 잇 백",
+      "artistKo": "트레저",
+      "element": "metal",
+      "moodKo": "쇠빛 청춘"
+    }
+  ],
+  "jaehyuk_trsr": [
+    {
+      "titleKo": "점프",
+      "artistKo": "트레저",
+      "element": "fire",
+      "moodKo": "불빛 발랄"
+    }
+  ],
+  "asahi_trsr": [
+    {
+      "titleKo": "러브 송",
+      "artistKo": "트레저",
+      "element": "wood",
+      "moodKo": "나무 결의 우아함"
+    }
+  ],
+  "doyoung_trsr": [
+    {
+      "titleKo": "호버링",
+      "artistKo": "트레저",
+      "element": "metal",
+      "moodKo": "쇠빛 또렷함"
+    }
+  ],
+  "haruto_trsr": [
+    {
+      "titleKo": "점프",
+      "artistKo": "트레저",
+      "element": "wood",
+      "moodKo": "나무 결의 무대 카리스마"
+    }
+  ],
+  "jeongwoo_trsr": [
+    {
+      "titleKo": "티 셔츠",
+      "artistKo": "트레저",
+      "element": "metal",
+      "moodKo": "쇠빛 보컬"
+    }
+  ],
+  "junghwan_trsr": [
+    {
+      "titleKo": "점프",
+      "artistKo": "트레저",
+      "element": "water",
+      "moodKo": "물빛 발성"
+    }
+  ],
+  "keeho_p1h": [
+    {
+      "titleKo": "키리 키리",
+      "artistKo": "피원하모니",
+      "element": "water",
+      "moodKo": "물빛 호소력"
+    }
+  ],
+  "theo_p1h": [
+    {
+      "titleKo": "뎁스",
+      "artistKo": "피원하모니",
+      "element": "wood",
+      "moodKo": "나무 결의 청춘"
+    }
+  ],
+  "jiung_p1h": [
+    {
+      "titleKo": "키리 키리",
+      "artistKo": "피원하모니",
+      "element": "water",
+      "moodKo": "물빛 청량 보컬"
+    }
+  ],
+  "intak_p1h": [
+    {
+      "titleKo": "뎁스",
+      "artistKo": "피원하모니",
+      "element": "fire",
+      "moodKo": "불빛 폭발"
+    }
+  ],
+  "soul_p1h": [
+    {
+      "titleKo": "키리 키리",
+      "artistKo": "피원하모니",
+      "element": "fire",
+      "moodKo": "불빛 트렌디함"
+    }
+  ],
+  "jongseob_p1h": [
+    {
+      "titleKo": "뎁스",
+      "artistKo": "피원하모니",
+      "element": "fire",
+      "moodKo": "불빛 발랄"
+    }
+  ]
+}

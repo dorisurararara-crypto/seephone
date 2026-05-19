@@ -1603,9 +1603,9 @@ class _DetailSection extends StatelessWidget {
           '중립 결. $pSubj 너랑 \'좋네\' 정도의 잔잔한 첫인상이 오래 가는 자리. 가벼운 친구로는 편하지만 깊이는 의식적으로 만들어야 해요.\n\n\'매주 한 번 둘만 보는 시간\', \'매일 짧은 안부\' 같은 작은 의식이 있으면 자연스럽게 무게가 쌓여요.',
           '직접 생극 없는 중립의 사이. 강한 끌림은 없지만 강한 부딪힘도 없는 안정 결.\n\n자연스럽게 가까워지는 결이 아니라 한 명이 먼저 신호 보내는 룰을 정해두면 결이 흔들리지 않아요. 의식적으로 무게를 만들 때 비로소 깊이가 생겨요.',
           '$pTop 너와 자극은 작지만 편안함은 큰 결. 가까워질수록 \'없으면 허전한\' 자리에 천천히 자리잡는 결이에요.\n\n중립 결끼리는 적극적인 신호가 없으면 멀어지기 쉬워서, 정기 연락 약속 하나가 결을 길게 가게 해요.',
-          '오행 직접 anchor 없는 자리. 평소 잘 맞는다는 느낌은 약해도, $pName${withWith(pName)} 자기 페이스 지키며 같이 있는 시간이 가장 편안한 결.\n\n적극적인 끌림 없는 만큼 한 명이 먼저 \'우리 이번 주 한 번 보자\' 보내는 자리에 자주 가야 관계가 유지돼요.',
+          '오행 직접 신호가 없는 자리. 평소 잘 맞는다는 느낌은 약해도, $pName${withWith(pName)} 자기 페이스 지키며 같이 있는 시간이 가장 편안한 결.\n\n적극적인 끌림 없는 만큼 한 명이 먼저 \'우리 이번 주 한 번 보자\' 보내는 자리에 자주 가야 관계가 유지돼요.',
           '중립 자리. 강하게 자극되는 결은 아니지만 \'부담 없이 오래 가는\' 가장 편한 결 중 하나예요. 시간이 흐를수록 잔잔한 깊이가 쌓여요.\n\n자연스러운 끌림이 없으니까 한 명이 먼저 의식적인 한 걸음을 가져오는 게 핵심.',
-          '$pName${withWith(pName)} 직접 anchor 없는 결. 첫 만남에서 강한 자극은 없지만 점점 가까워질수록 \'편한 사람\' 자리에 단단히 자리잡아요.\n\n중립의 사이는 적극적 신호가 없으면 자연스럽게 멀어지는 결이라, 한 명이 먼저 룰 만드는 자리가 가장 중요해요.',
+          '$pName${withWith(pName)} 직접 신호가 없는 결. 첫 만남에서 강한 자극은 없지만 점점 가까워질수록 \'편한 사람\' 자리에 단단히 자리잡아요.\n\n중립의 사이는 적극적 신호가 없으면 자연스럽게 멀어지는 결이라, 한 명이 먼저 룰 만드는 자리가 가장 중요해요.',
         ],
       };
       final summaryPool = summaryPoolsKo[elBranchKey] ?? summaryPoolsKo['neut']!;
@@ -1779,7 +1779,7 @@ class _DetailSection extends StatelessWidget {
       if (complementary) {
         const complementaryPool = [
           '\n\n게다가 한 사람이 많이 가진 오행이 다른 사람이 부족한 자리를 정확히 채우는 보완 구조도 있어요. 사주적으로 가장 안정적인 결 중 하나로, 결정·건강·돈 흐름이 모두 안정돼요.',
-          '\n\n오행 보완 anchor 까지 추가로 걸려 있어요. 평소 부족하다 느끼던 자리가 곁에 있을 때 자연스럽게 채워지는 \'완성\' 결.',
+          '\n\n오행 보완 신호까지 추가로 걸려 있어요. 평소 부족하다 느끼던 자리가 곁에 있을 때 자연스럽게 채워지는 \'완성\' 결.',
         ];
         attract.write(complementaryPool[pick('attract-complement-ko', complementaryPool.length)]);
       }
@@ -1899,7 +1899,7 @@ class _DetailSection extends StatelessWidget {
           '강한 부딪힘은 없지만 적극적인 신호가 없으면 자연스럽게 거리가 벌어질 수 있어요. $pName${withWith(pName)} 정기적으로 연락하는 약속 하나가 결을 지켜요.\n\n\'잊혀짐\'이 가장 큰 위험. \'우리 이번 주 한 번 보자\' 한 마디 먼저 보내는 자리에 자주 가야 관계가 유지돼요.',
           '중립 결이라 충돌이 적은 만큼 깊이도 자연스럽게 안 생겨요. $pSubj \'특별히 갈등은 없는데 왜 멀어지지\' 느낌이 올 때, 그건 자연스러운 끌림이 없는 결이라서 그래요.\n\n의식적인 정성이 깊이를 만드는 사이. 한 명이 먼저 신호를 보내는 룰을 정해두면 결이 흔들리지 않아요.',
           '$pTop 자극도 충돌도 큰 자리가 아니에요. 잔잔한 결인 만큼 한 명이 신경 안 쓰면 자연스럽게 거리가 벌어지는 결.\n\n매주 정기 약속 하나, 매일 짧은 안부 한 마디 — 작은 의식이 결을 지켜요.',
-          '직접 anchor 없는 중립. $pName${withWith(pName)} 부딪힘이 거의 없는 자리지만 그만큼 끌림도 약해요. 의식적으로 정성 들이는 결이 깊이를 만들어요.',
+          '직접 신호가 없는 중립. $pName${withWith(pName)} 부딪힘이 거의 없는 자리지만 그만큼 끌림도 약해요. 의식적으로 정성 들이는 결이 깊이를 만들어요.',
         ],
       };
       final frictionPool = frictionPoolsKo[frictionBranchKey] ?? frictionPoolsKo['mild']!;
@@ -2006,7 +2006,7 @@ class _DetailSection extends StatelessWidget {
           '【사주 같이 보기】 한 달에 한 번은 둘이 사주 8글자 같이 보면서 서로 어디가 강하고 어디가 약한지 확인해보세요.',
           '【$pPossKo 8글자 한 번 점검】 $pName${withWith(pName)} 사주 강한 자리·약한 자리를 한 번 같이 본 적이 있나요? 한 번이라도 같이 보면 결이 깊어져요.',
           '【월 1회 결 점검 자리】 한 달에 한 번 \'요즘 우리 결\' 자리 한 시간을 두세요. 잘 풀린 자리, 아쉬운 자리, 다음 달 한 가지 — 세 줄이면 충분해요.',
-          '【객관적 anchor 자리】 평소엔 안 보이던 자기 단점이 사주 8글자에는 객관적으로 보여요. 같이 점검하는 결이 평소엔 안 나오는 대화를 만들어줘요.',
+          '【객관적 기준 자리】 평소엔 안 보이던 자기 단점이 사주 8글자에는 객관적으로 보여요. 같이 점검하는 결이 평소엔 안 나오는 대화를 만들어줘요.',
         ];
       }
       // slot3 — 일상 의식
@@ -2243,7 +2243,7 @@ class _DetailSection extends StatelessWidget {
           '【연애】 중립 결이라 자연스러운 끌림은 약하지만 의식적으로 가까워지면 부담 없이 오래 가는 연애 결이에요. $pName${withWith(pName)} 정기적인 데이트 약속이 핵심.',
           '【연애】 중립의 연애 — 한 명이 먼저 다가가는 룰이 필요하지만, 일단 가까워지면 잔잔하고 안정적인 결.',
           '【연애】 자극도 충돌도 큰 자리가 아니에요. $pTop 의식적으로 정성 들이는 결이 깊이를 만드는 사랑.',
-          '【연애】 직접 anchor 없는 중립 결. 끌림이 약한 대신 \'편함이 가장 큰 매력\' — 평생 곁에 둘 사람.',
+          '【연애】 직접 신호가 없는 중립 결. 끌림이 약한 대신 \'편함이 가장 큰 매력\' — 평생 곁에 둘 사람.',
         ],
       };
       final lovePool = lovePoolsKo[loveBranchKey] ?? lovePoolsKo['neut']!;
@@ -2504,6 +2504,32 @@ CompatAnalysisForTest analyzeCompatForTest({
     loveMarriage: r.loveMarriage,
     actions: r.actions,
   );
+}
+
+/// R101 sprint 3 — public wrapper.
+///
+/// `_DetailSection` 은 widget 트리 안에서 5섹션 (`summary` / `attract` /
+/// `friction` / `loveMarriage` / `actions`) 본문을 mount 한다. kpop_compat 의
+/// detail dialog 가 같은 본문 엔진을 재사용할 수 있도록 동일 widget 을 그대로
+/// 노출만 한다. 본문 합성 로직 (`_analyze`) 은 변경 0 — `analyzeCompatForTest`
+/// public wrapper 와 동일한 코드 경로.
+///
+/// 사용자 mandate verbatim: "우리 궁합보는거 그대로 사용해서 설명나오게 해줘".
+class CompatDetailSection extends StatelessWidget {
+  final SajuResult me;
+  final SajuResult partner;
+  final String? partnerName;
+  const CompatDetailSection({
+    super.key,
+    required this.me,
+    required this.partner,
+    this.partnerName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _DetailSection(me: me, partner: partner, partnerName: partnerName);
+  }
 }
 
 // R94 sprint 4 — 두 사주 고유 8글자를 분기 본문 microcopy 에 wire 하기 위한 anchor 묶음.

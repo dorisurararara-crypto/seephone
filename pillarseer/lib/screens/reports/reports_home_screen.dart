@@ -15,18 +15,37 @@ class ReportsHomeScreen extends StatelessWidget {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
-    // R87 sprint 1 — 사용자 mandate: K-POP 케미가 이 앱의 1순위 컨셉이라
-    // 더보기 탭 최상위 + hero treatment (배지 + accent 강조 + 큰 사이즈).
-    // 기존 '궁합 보기'/'신년운세'/'꿈 풀이'는 케미 아래로 강등.
+    // R101 sprint 5 — 사용자 mandate verbatim: "팬심 1순위 = 전생 시나리오 / 2순위 =
+    // 디지털 기운 처방전 / 3순위 = 최애와의 궁합보기". 본 sprint 에서 메뉴 최종 재배치.
+    // music_pharmacy (2순위) 본 화면은 sprint 6 가 owner. sprint 5 는 route placeholder
+    // 만 두어 broken navigation 방지.
     final cards = <_Card>[
       _Card(
-        eyebrow: useKo ? '팬심 1순위 · FAN PICK' : 'FAN PICK · Top',
-        title: useKo ? '최애와 케미' : 'Bias Chemistry',
+        eyebrow: useKo ? '팬심 1순위 · 전생 인연' : 'FAN PICK · Past Life',
+        title: useKo ? '전생의 악연/인연 시나리오' : 'Past Life Scenario',
         subtitle: useKo
-            ? 'K-POP 아이돌과 내 사주의 케미를 점수로 보고 친구한테 자랑하세요.'
-            : 'Score your K-POP idol chemistry and share it with friends.',
-        route: '/reports/kpop-compat',
+            ? '나와 최애가 어떤 시대에 어떤 관계였는지, 사주의 합·충·원진살로 풀어드립니다.'
+            : 'See how you and your bias were tied in a past life — by hap, chung, and wonjin.',
+        route: '/reports/past-life',
         size: _CardSize.hero,
+      ),
+      _Card(
+        eyebrow: useKo ? '팬심 2순위 · 기운 처방' : 'FAN PICK · Energy Rx',
+        title: useKo ? '디지털 기운 처방전' : 'Digital Energy Prescription',
+        subtitle: useKo
+            ? '오늘 내게 필요한 기운을 채워줄 최애와 노래를 처방해 드립니다.'
+            : 'A daily prescription of the bias and song that complete your energy.',
+        route: '/reports/music-pharmacy',
+        size: _CardSize.large,
+      ),
+      _Card(
+        eyebrow: useKo ? '팬심 3순위 · 최애 궁합' : 'FAN PICK · Bias',
+        title: useKo ? '최애와의 궁합보기' : 'Bias Compatibility',
+        subtitle: useKo
+            ? '내가 좋아하는 K-POP 아이돌과 우리 둘만의 궁합을 사주 풀이 그대로 봐요.'
+            : 'See your saju compatibility with a K-POP bias, written like a real reading.',
+        route: '/reports/kpop-compat',
+        size: _CardSize.large,
       ),
       _Card(
         eyebrow: useKo ? '연애 · 인간관계' : 'Love & people',
@@ -35,7 +54,6 @@ class ReportsHomeScreen extends StatelessWidget {
             ? '두 사람의 끌림, 잘 맞는 지점, 부딪히는 지점을 봐요.'
             : 'See where two people click, support each other, or clash.',
         route: '/reports/compatibility',
-        size: _CardSize.large,
       ),
       _Card(
         eyebrow: useKo ? '올해 흐름' : 'Year ahead',
@@ -235,7 +253,8 @@ class _CardRow extends StatelessWidget {
                         borderRadius: BorderRadius.circular(2),
                       ),
                       child: Text(
-                        useKo ? '팬심 1순위 · TOP PICK' : 'TOP PICK · 팬',
+                        // R101 sprint 5 — 사용자 mandate: 전생 시나리오 = 팬심 1순위 hero.
+                        useKo ? '팬심 1순위 · 전생 인연' : 'FAN PICK · Past Life',
                         style: GoogleFonts.inter(
                           fontSize: 9,
                           letterSpacing: 3,

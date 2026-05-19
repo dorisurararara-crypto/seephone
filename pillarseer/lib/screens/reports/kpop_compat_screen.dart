@@ -16,6 +16,7 @@ import '../../providers/saju_provider.dart';
 import '../../services/korean_josa.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import 'compatibility_screen.dart' show CompatDetailSection;
 
 class KpopCompatScreen extends ConsumerStatefulWidget {
   const KpopCompatScreen({super.key});
@@ -1117,7 +1118,11 @@ class _StarRow extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '${star.dayPillar} · ${star.dayPillarName}',
+                  // R101 sprint 3 — KO 분기에서 영문 element+animal (예: "Water Rabbit")
+                  // 노출 금지. 한국어는 일주 한자 + "계묘일주" 형식.
+                  useKo
+                      ? '${star.dayPillar} · ${_pillarKoFromHanja(star.dayPillar)}일주'
+                      : '${star.dayPillar} · ${star.dayPillarName}',
                   style: GoogleFonts.notoSerifKr(
                     fontSize: 15,
                     fontWeight: FontWeight.w300,
@@ -1126,18 +1131,17 @@ class _StarRow extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 22),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  color: AppColors.paper,
-                  width: double.infinity,
-                  child: Text(
-                    _verdict(),
-                    style: GoogleFonts.notoSansKr(
-                      fontSize: 13.5,
-                      color: AppColors.ink,
-                      height: 1.85,
-                    ),
-                  ),
+                // R101 sprint 3 — 사용자 mandate verbatim: "최애와의 궁합보기로 메뉴명을
+                // 바꾸고 우리 궁합보는거 그대로 사용해서 설명나오게 해줘". 기존
+                // `_verdict()` (=`_composeVerdict()`) 4 paragraph 본문 합성 path 는
+                // dead path 로 보존 (R71/R96/R100 source-level guard 회귀 방지) 하고
+                // detail dialog 본문은 `compatibility_screen.dart` 의 5섹션
+                // (`summary` / `attract` / `friction` / `loveMarriage` / `actions`)
+                // 본문을 그대로 mount.
+                CompatDetailSection(
+                  me: me,
+                  partner: _starToSajuResult(star),
+                  partnerName: _starShortName(star, useKo: useKo),
                 ),
                 const SizedBox(height: 18),
                 Text(
@@ -1151,7 +1155,10 @@ class _StarRow extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  useKo ? star.blurbKo : star.blurbEn,
+                  // R101 sprint 3 — KO 분기 blurbKo 의 영문 그룹명 head (예: "LE SSERAFIM
+                  // 홍은채") 를 한국어 표기 (예: "르세라핌 홍은채") 로 정규화. 매핑되지
+                  // 않는 그룹은 원문 보존.
+                  useKo ? _localizeGroupPrefixKo(star.blurbKo) : star.blurbEn,
                   style: GoogleFonts.notoSansKr(
                     fontSize: 13,
                     color: AppColors.inkLight,
@@ -4349,4 +4356,172 @@ String composeKpopVerdictForTest({
     rank: rank,
     useKo: useKo,
   ).composeVerdictForTest();
+}
+
+/// R101 sprint 3 — 셀럽 일주 한자(예: `癸卯`) → 한국어 음(예: `계묘`).
+///
+/// `compatibility_screen.dart` 의 `Pillar.pairKorean` 헬퍼와 동일한 매핑이지만,
+/// `_Star.dayPillar` 가 string field (한자 2자) 라 별도 inline helper 로 둔다.
+/// KO 분기 detail header 와 `_starToSajuResult` adapter 모두에서 재사용.
+String _pillarKoFromHanja(String dayPillar) {
+  if (dayPillar.length < 2) return '';
+  const ganKo = {
+    '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
+    '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+  };
+  const jiKo = {
+    '子': '자', '丑': '축', '寅': '인', '卯': '묘',
+    '辰': '진', '巳': '사', '午': '오', '未': '미',
+    '申': '신', '酉': '유', '戌': '술', '亥': '해',
+  };
+  final g = ganKo[dayPillar[0]] ?? '';
+  final j = jiKo[dayPillar[1]] ?? '';
+  return '$g$j';
+}
+
+/// R101 sprint 3 — 셀럽 한 명의 K-POP 그룹명 영문 prefix 를 한국어 표기로 정규화.
+///
+/// 사용자 mandate verbatim: "왜 한국어에 영어가 들어와". celebrities.json 의
+/// `blurbKo` 가 "LE SSERAFIM 홍은채. 기본 성향은..." 같이 영문 그룹명으로 시작하는
+/// 케이스가 62/223 (28%). KO 분기에서 본문을 그대로 보여주면 한국어 사용자에게
+/// 영문 그룹명이 leak. 한국 미디어 표준 표기로 매핑.
+///
+/// 매핑되지 않은 그룹명은 원문 보존 (예: `BTS`, `BLACKPINK` 처럼 한국 미디어에서도
+/// 영문 그대로 통용되는 케이스는 의도적으로 매핑하지 않거나 사용자 추가 mandate 시
+/// 확장 가능).
+@visibleForTesting
+String localizeGroupPrefixKoForTest(String input) => _localizeGroupPrefixKo(input);
+
+String _localizeGroupPrefixKo(String input) {
+  if (input.isEmpty) return input;
+  // longest-first 매핑 — "NCT DREAM" 처럼 공백 포함 prefix 가 "NCT" 보다 먼저
+  // 매칭되도록.
+  const groupMap = <String, String>{
+    'LE SSERAFIM': '르세라핌',
+    'NCT DREAM': '엔시티 드림',
+    'NCT WISH': '엔시티 위시',
+    'NCT 127': '엔시티 127',
+    'NewJeans': '뉴진스',
+    'BLACKPINK': '블랙핑크',
+    'SEVENTEEN': '세븐틴',
+    'ENHYPEN': '엔하이픈',
+    'BABYMONSTER': '베이비몬스터',
+    'ZEROBASEONE': '제로베이스원',
+    'BOYNEXTDOOR': '보이넥스트도어',
+    'Stray Kids': '스트레이키즈',
+    'KISS OF LIFE': '키스오브라이프',
+    'MAMAMOO': '마마무',
+    'tripleS': '트리플에스',
+    'fromis_9': '프로미스나인',
+    'BTS': '방탄소년단',
+    'TWICE': '트와이스',
+    'ATEEZ': '에이티즈',
+    'RIIZE': '라이즈',
+    'ITZY': '있지',
+    'IVE': '아이브',
+    'aespa': '에스파',
+    'TXT': '투모로우바이투게더',
+    'TWS': '투어스',
+    'XG': '엑스지',
+    'ILLIT': '아일릿',
+    'NCT': '엔시티',
+    'EXO': '엑소',
+    'SHINee': '샤이니',
+    'MEOVV': '미야오',
+    'VIVIZ': '비비지',
+    'STAYC': '스테이씨',
+    'fromis': '프로미스나인',
+    'fifty fifty': '피프티피프티',
+    '2PM': '투피엠',
+  };
+  // longest-first 정렬.
+  final keys = groupMap.keys.toList()
+    ..sort((a, b) => b.length.compareTo(a.length));
+  for (final k in keys) {
+    if (input.startsWith('$k ') || input.startsWith('$k.')) {
+      return groupMap[k]! + input.substring(k.length);
+    }
+  }
+  return input;
+}
+
+/// R101 sprint 3 — 셀럽 표시 이름 단축형 (괄호 제거 + trim).
+///
+/// celebrities.json 의 `nameKo` 는 `"홍은채 (LE SSERAFIM)"` 같은 괄호 표기가 일부
+/// 포함됨. partnerName 으로 inject 할 때 본문 첫머리에 영문 그룹명이 노출되지
+/// 않도록 short form 만 사용.
+String _starShortName(_Star star, {required bool useKo}) {
+  final raw = (useKo ? star.nameKo : star.nameEn).trim();
+  if (raw.isEmpty) return raw;
+  final cut = raw.contains('(') ? raw.split('(').first.trim() : raw;
+  return cut;
+}
+
+/// R101 sprint 3 — `_Star` → `SajuResult` light adapter.
+///
+/// 셀럽 데이터는 `birth` (YYYY-MM-DD) + `dayPillar` (일주 한자 2자) 만 가지고
+/// year/month/hour pillar 는 보강 불가. `compatibility_screen._analyze()` 가
+/// 본문 합성에 사용하는 필드만 정확히 채운다:
+///
+/// - `dayPillar.chunGan` / `.jiJi` — 본문 모든 합/충/형/생극 분기.
+/// - `day60ji` — variant pool seed.
+/// - `elements.deficit` / `.dominant` — complementary 한 분기 (line 1525).
+/// - `elements` 분포 — 셀럽 dayPillar chunGan 5행 가중치만 줘서 dominant 일관성.
+///
+/// 시간 모름 mandate (R83 sprint P1-E) 와 동일하게 `hourPillar=null`.
+/// year/month pillar 도 보강 불가하므로 `dayPillar` 로 임시 채움 — `_analyze` 가
+/// year/month 를 직접 참조하지 않음 (감사: `lib/screens/reports/compatibility_screen.dart`
+/// `_analyze` 본문 grep, `partner.yearPillar`/`partner.monthPillar` 직접 호출 0).
+///
+/// 위험: 향후 `_analyze` 가 5행 분포 외 year/month 8자를 직접 사용하도록 확장될
+/// 경우 본 adapter 가 silent partial reading 을 만들 수 있음. 위 grep 결과
+/// 시점은 R101 sprint 3 작성 시점 — 후속 sprint 에서 확인 필요.
+@visibleForTesting
+SajuResult starToSajuResultForTest(Map<String, dynamic> starJson) =>
+    _starToSajuResult(_Star.fromJson(starJson));
+
+SajuResult _starToSajuResult(_Star star) {
+  // dayPillar 한자 2자 보강.
+  final dp = star.dayPillar.length >= 2
+      ? star.dayPillar
+      : '甲子';  // R83 sprint P1-E 와 같이 fallback (실제 데이터 entry 223개 모두 2자 보장).
+  final dayGan = dp[0];
+  final dayJi = dp[1];
+  // 셀럽 5행 분포 — dayPillar chunGan 5행에만 무게 부여. dominant 만 일관되면
+  // `_analyze` 의 complementary 분기 (me.elements.deficit == partner.elements.dominant
+  // 또는 그 역) 가 dayPillar 5행 기준으로 안전하게 평가됨.
+  const elMap = {
+    '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
+    '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+  };
+  final ganEl = elMap[dayGan] ?? '木';
+  int v(String k) => ganEl == k ? 60 : 10;
+  final fe = FiveElements(
+    wood: v('木'),
+    fire: v('火'),
+    earth: v('土'),
+    metal: v('金'),
+    water: v('水'),
+  );
+  final pillar = Pillar(chunGan: dayGan, jiJi: dayJi);
+  DateTime? birthDt;
+  try {
+    if (star.birth.isNotEmpty) {
+      birthDt = DateTime.parse(star.birth);
+    }
+  } catch (_) {
+    birthDt = null;
+  }
+  return SajuResult(
+    yearPillar: pillar,     // year/month 직접 미사용 — dayPillar 로 채움.
+    monthPillar: pillar,
+    dayPillar: pillar,
+    hourPillar: null,       // 시간 모름 — R83 sprint P1-E 와 동일.
+    elements: fe,
+    dayMaster: dayGan,
+    dayMasterName: star.dayPillarName,
+    summary: '',
+    categoryReadings: const {},
+    birthDateTime: birthDt,
+  );
 }
