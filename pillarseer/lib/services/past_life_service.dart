@@ -366,13 +366,42 @@ class PastLifeService {
     final tpl = templates[primary.key] as Map<String, dynamic>;
     final intros = (tpl['intros'] as List).cast<String>();
     final tails = (tpl['tails'] as List).cast<String>();
-    final bodies = (bodyLines[primary.key] as List).cast<String>();
+
+    // R102 sprint 2: body_lines 가 4 phase 구조 (setup/event/turn/resolution).
+    // 구버전(flat list) 호환을 위해 List 분기 유지.
+    final bodyEntry = bodyLines[primary.key];
+    final List<String> setupLines;
+    final List<String> eventLines;
+    final List<String> turnLines;
+    final List<String> resolutionLines;
+    if (bodyEntry is Map) {
+      setupLines = (bodyEntry['setup'] as List).cast<String>();
+      eventLines = (bodyEntry['event'] as List).cast<String>();
+      turnLines = (bodyEntry['turn'] as List).cast<String>();
+      resolutionLines = (bodyEntry['resolution'] as List).cast<String>();
+    } else if (bodyEntry is List) {
+      // 구버전 fallback — 같은 풀을 4 phase 로 split (균등 분배).
+      final flat = bodyEntry.cast<String>();
+      setupLines = flat.isNotEmpty ? [flat[0]] : <String>['$userName과 $celebName의 전생이 시작됐어요.'];
+      eventLines = flat.length > 1 ? [flat[1]] : <String>['두 사람 사이엔 깊은 결이 흘렀어요.'];
+      turnLines = flat.length > 2 ? [flat[2]] : <String>['시간이 두 사람을 갈라놓았어요.'];
+      resolutionLines = <String>['그 결의 여운이 이번 생까지 따라왔어요.'];
+    } else {
+      setupLines = <String>['$userName과 $celebName의 전생이 시작됐어요.'];
+      eventLines = <String>['두 사람 사이엔 깊은 결이 흘렀어요.'];
+      turnLines = <String>['시간이 두 사람을 갈라놓았어요.'];
+      resolutionLines = <String>['그 결의 여운이 이번 생까지 따라왔어요.'];
+    }
 
     final era = eras[rng.nextInt(eras.length)];
     final rel = relations[rng.nextInt(relations.length)];
     final ending = endings[rng.nextInt(endings.length)];
     final intro = intros[rng.nextInt(intros.length)];
     final tail = tails[rng.nextInt(tails.length)];
+    final setup = setupLines[rng.nextInt(setupLines.length)];
+    final event = eventLines[rng.nextInt(eventLines.length)];
+    final turn = turnLines[rng.nextInt(turnLines.length)];
+    final resolution = resolutionLines[rng.nextInt(resolutionLines.length)];
 
     // 한국어 조사 — 받침 여부에 따라 이/가, 은/는, 을/를, 과/와 자동 결정.
     // 풀의 모든 한국어 템플릿은 placeholder + 공백 + 조사 (예: `$userName 과`) 형태로
@@ -384,42 +413,133 @@ class PastLifeService {
       return hasFinal ? '$role이었' : '$role였';
     }
 
+    // R102 sprint 2: 모든 placeholder × 조사 패턴 자연 결합.
+    // 받침 의존 조사 (과/와 · 은/는 · 이/가 · 을/를 · 로/으로) 는 helper 로 받침 맞춤.
+    // 받침 무관 조사 (도 · 에게 · 에서 · 에 · 부터 · 까지 · 보다 · 만 · 처럼
+    //   · 조차 · 마저 · 뿐 · 한테 · 께) 는 공백만 strip.
+    //
+    // 풀에 `$X 조사` (공백 있음) 또는 `$X조사` (공백 없음) 둘 다 작성 가능.
+    // inject 는 공백 유무 모두 처리.
+    //
+    // 처리 순서가 중요:
+    //   - 받침 의존 조사를 placeholder 직후 즉시 잡지 못하면 plain fallback 에서
+    //     placeholder 만 풀린 채 조사가 잔존.
+    //   - 그래서 모든 받침 의존 / 받침 무관 조사를 placeholder 별로 다 잡은 후 plain
+    //     fallback.
+    const conJosas = ['과', '와']; // with
+    const topJosas = ['은', '는']; // topic
+    const subJosas = ['이', '가']; // subject
+    const objJosas = ['을', '를']; // object
+    const loJosas = ['로', '으로']; // direction
+    // 받침 무관 (공백 strip 만, 받침 보정 X).
+    const bareJosas = [
+      '도', '에게', '한테', '께', '에서', '에', '부터', '까지',
+      '보다', '만', '처럼', '조차', '마저', '뿐',
+    ];
+    // single-char trailing 조사 (의 등) — 받침 보정 불필요, "$X의" 형태로 결합.
+    const dirJosas = ['의'];
+
+    String replacePh(
+      String src,
+      String ph, // e.g. r'$userName'
+      String name, // injected value
+    ) {
+      var t = src;
+      // 1) 받침 의존 조사 — 공백 있는 형태 + 없는 형태 모두.
+      String comp(List<String> set, String resolved) {
+        return resolved;
+      }
+      // with — 과/와.
+      final withRes = josa.withWith(name);
+      for (final j in conJosas) {
+        t = t.replaceAll('$ph $j', '$name${comp(conJosas, withRes)}');
+        t = t.replaceAll('$ph$j', '$name${comp(conJosas, withRes)}');
+      }
+      // topic — 은/는.
+      final topRes = josa.withTop(name);
+      for (final j in topJosas) {
+        t = t.replaceAll('$ph $j', '$name$topRes');
+        t = t.replaceAll('$ph$j', '$name$topRes');
+      }
+      // subj — 이/가.
+      final subRes = josa.withSubj(name);
+      for (final j in subJosas) {
+        t = t.replaceAll('$ph $j', '$name$subRes');
+        t = t.replaceAll('$ph$j', '$name$subRes');
+      }
+      // obj — 을/를.
+      final objRes = josa.withObj(name);
+      for (final j in objJosas) {
+        t = t.replaceAll('$ph $j', '$name$objRes');
+        t = t.replaceAll('$ph$j', '$name$objRes');
+      }
+      // direction — 로/으로.
+      //   받침 무: "로"   (예: 악사 → 악사로)
+      //   ㄹ 받침: "로"   (예: 단골 → 단골로) — 한국어 예외
+      //   기타 받침: "으로" (예: 행상 → 행상으로)
+      String loRes;
+      if (name.isEmpty) {
+        loRes = '로';
+      } else {
+        final last = name.substring(name.length - 1);
+        final cu = last.codeUnitAt(0);
+        if (cu >= 0xAC00 && cu <= 0xD7A3) {
+          final jong = (cu - 0xAC00) % 28;
+          if (jong == 0) {
+            loRes = '로'; // 받침 없음
+          } else if (jong == 8) {
+            loRes = '로'; // ㄹ 받침 예외
+          } else {
+            loRes = '으로';
+          }
+        } else {
+          loRes = josa.hasFinalConsonant(name) ? '으로' : '로';
+        }
+      }
+      for (final j in loJosas) {
+        t = t.replaceAll('$ph $j', '$name$loRes');
+        t = t.replaceAll('$ph$j', '$name$loRes');
+      }
+      // dir — 의 (받침 무관).
+      for (final j in dirJosas) {
+        t = t.replaceAll('$ph $j', '$name$j');
+        t = t.replaceAll('$ph$j', '$name$j');
+      }
+      // bare — 도/에게/etc (받침 무관, 공백 strip).
+      for (final j in bareJosas) {
+        t = t.replaceAll('$ph $j', '$name$j');
+        // 공백 없는 형태는 풀에 거의 없지만 방어적.
+        t = t.replaceAll('$ph$j', '$name$j');
+      }
+      return t;
+    }
+
+    // "이었던" / "이었어요" 같은 copula + 어미 받침 보정 fragment.
+    //   받침 있음: "행상" + "이었던" = "행상이었던"
+    //   받침 없음: "악사" + "였던" = "악사였던"
+    String wasParticiple(String role) {
+      return josa.hasFinalConsonant(role) ? '$role이었던' : '$role였던';
+    }
+
     String inject(String tmpl) {
       var s = tmpl;
-      // userName 조사 — 공백 strip + 받침 맞춤.
-      s = s.replaceAll(
-          r'$userName 과', '$userName${josa.withWith(userName)}');
-      s = s.replaceAll(
-          r'$userName 와', '$userName${josa.withWith(userName)}');
-      s = s.replaceAll(r'$userName 은', '$userName${josa.withTop(userName)}');
-      s = s.replaceAll(r'$userName 는', '$userName${josa.withTop(userName)}');
-      s = s.replaceAll(r'$userName 이', '$userName${josa.withSubj(userName)}');
-      s = s.replaceAll(r'$userName 을', '$userName${josa.withObj(userName)}');
-      s = s.replaceAll(r'$userName 의', '$userName의');
-      // celebName 조사.
-      s = s.replaceAll(
-          r'$celebName 과', '$celebName${josa.withWith(celebName)}');
-      s = s.replaceAll(
-          r'$celebName 와', '$celebName${josa.withWith(celebName)}');
-      s = s.replaceAll(
-          r'$celebName 은', '$celebName${josa.withTop(celebName)}');
-      s = s.replaceAll(
-          r'$celebName 는', '$celebName${josa.withTop(celebName)}');
-      s = s.replaceAll(
-          r'$celebName 이', '$celebName${josa.withSubj(celebName)}');
-      s = s.replaceAll(
-          r'$celebName 을', '$celebName${josa.withObj(celebName)}');
-      s = s.replaceAll(r'$celebName 의', '$celebName의');
-      // userRole + 였 → 받침 맞춰 "이었" 또는 "였".
+      s = replacePh(s, r'$userName', userName);
+      s = replacePh(s, r'$celebName', celebName);
+      // role placeholder — 받침 의존 어미 (이었던 / 였 / 로/으로) 별도 처리.
+      // 1) "$userRole 이었던" → "악사였던" 등 받침 보정.
+      s = s.replaceAll(r'$userRole 이었던', wasParticiple(rel.user));
+      s = s.replaceAll(r'$userRole이었던', wasParticiple(rel.user));
+      s = s.replaceAll(r'$celebRole 이었던', wasParticiple(rel.celeb));
+      s = s.replaceAll(r'$celebRole이었던', wasParticiple(rel.celeb));
+      // 2) "$userRole 였" → fixCopula 결과 (예: "악사였" / "행상이었").
       s = s.replaceAll(r'$userRole 였', fixCopula(rel.user));
-      s = s.replaceAll(r'$userRole 은', '${rel.user}${josa.withTop(rel.user)}');
-      // celebRole + 였.
+      s = s.replaceAll(r'$userRole였', fixCopula(rel.user));
       s = s.replaceAll(r'$celebRole 였', fixCopula(rel.celeb));
-      s = s.replaceAll(
-          r'$celebRole 은', '${rel.celeb}${josa.withTop(rel.celeb)}');
-      s = s.replaceAll(
-          r'$celebRole 이', '${rel.celeb}${josa.withSubj(rel.celeb)}');
-      // Plain placeholder fallback — 남은 placeholder 모두 치환.
+      s = s.replaceAll(r'$celebRole였', fixCopula(rel.celeb));
+      // 3) 그 외 조사 (은/는/이/가/을/를/과/와/로/으로/의/도/에게/...).
+      s = replacePh(s, r'$userRole', rel.user);
+      s = replacePh(s, r'$celebRole', rel.celeb);
+      // 4) Plain placeholder fallback — 남은 조사 없는 placeholder.
       s = s.replaceAll(r'$celebName', celebName);
       s = s.replaceAll(r'$userName', userName);
       s = s.replaceAll(r'$userRole', rel.user);
@@ -432,17 +552,31 @@ class PastLifeService {
     final headerSentence =
         '$userName${josa.withWith(userName)} $celebName${josa.withTop(celebName)} $era에서 처음 마주쳤어요.';
 
+    // R102 sprint 2 — 3막 흐름:
+    //   배경: header + intro + setup (사용자 / 셀럽 역할 + 시대)
+    //   사건+전환: event (사주살 기반 사건) + turn (해결/미해결)
+    //   이번 생 여운: resolution + ending + tail
     final sentences = <String>[
       headerSentence,
       inject(intro),
-      ...bodies.map(inject),
+      inject(setup),
+      inject(event),
+      inject(turn),
+      inject(resolution),
       inject(ending),
       inject(tail),
     ];
 
-    // 5~8 문장으로 다듬기 — body 3 + 4 fixed = 7. 안전 범위.
-    final composed = sentences.where((s) => s.trim().isNotEmpty).join(' ');
-    final headline = '$userName 과 $celebName 의 전생 — ${primary.labelKo} 결';
+    // R102 sprint 2 — 반복 어휘 cap:
+    //   "두 사람은" ≤ 2 / "자연스럽게" ≤ 1 / "결" (단독 어절) ≤ 2 /
+    //   "당신과 X" 헤더 ≤ 2 / "이었어요" 결말 ≤ 3.
+    final composedRaw = sentences.where((s) => s.trim().isNotEmpty).join(' ');
+    final composed = _diversifyEndings(_capRepetition(composedRaw, rng), rng);
+
+    // R102 sprint 2 headline — josa helper 적용.
+    //   "X{와/과} Y의 전생 — {labelKo} 결"
+    final headline = '$userName${josa.withWith(userName)} '
+        '$celebName의 전생 — ${primary.labelKo} 결';
 
     return PastLifeScenario(
       keywords: keywords,
@@ -492,6 +626,138 @@ class PastLifeService {
   /// hard fallback — 풀 미로드 시 안전한 한국어 문장.
   static String _hardFallback(
       {required String userName, required String celebName}) {
-    return '$userName 과 $celebName 의 전생 이야기는 곧 들려드릴게요. 잠시만 기다려 주세요.';
+    // R102 sprint 2: josa helper 사용 — 받침 무관 공백 strip.
+    return '$userName${josa.withWith(userName)} '
+        '$celebName의 전생 이야기는 곧 들려드릴게요. 잠시만 기다려 주세요.';
+  }
+
+  // ─── 내부: 반복 어휘 cap ────────────────────────────────────────────
+  //
+  // R102 sprint 2 — 사용자 불만 "툭툭 끊김 / 반복" 대응.
+  //   "두 사람은" ≤ 2회
+  //   "자연스럽게" ≤ 1회
+  //   "결" (단독 어절, 조사 없이) ≤ 2회
+  //   "이었어요" 결말 ≤ 3회
+  // 초과 분은 동의 표현으로 대체. 첫 등장은 그대로 둠.
+  static String _capRepetition(String text, Random rng) {
+    var s = text;
+
+    // 1) "두 사람은" 치환 후보 (3회째부터).
+    const twoPeopleAlts = <String>[
+      '둘은', '서로는', '둘 다', '함께 있던 두 사람은',
+    ];
+    s = _cap(s, '두 사람은', 2, twoPeopleAlts, rng);
+
+    // 2) "자연스럽게" — 2회째부터 다른 부사.
+    const naturalAlts = <String>[
+      '어색함 없이', '부드럽게', '익숙하게', '잔잔하게',
+    ];
+    s = _cap(s, '자연스럽게', 1, naturalAlts, rng);
+
+    // 3) "결" 단독 어절 — `\b결\b` 와 비슷한 패턴.
+    //   다음 글자가 한글 음절 (조사/접미)이 아니고 앞 글자도 한글이 아닌 경우.
+    //   "결을" "결이" 등 조사 붙은 형태는 제외, "결 " "결." 등만 카운트.
+    s = _capStandaloneJiel(s, 2, rng);
+
+    return s;
+  }
+
+  static String _cap(
+      String text, String needle, int maxCount, List<String> alts, Random rng) {
+    final out = StringBuffer();
+    var cursor = 0;
+    var hit = 0;
+    while (true) {
+      final idx = text.indexOf(needle, cursor);
+      if (idx < 0) {
+        out.write(text.substring(cursor));
+        break;
+      }
+      out.write(text.substring(cursor, idx));
+      hit++;
+      if (hit <= maxCount) {
+        out.write(needle);
+      } else {
+        out.write(alts[rng.nextInt(alts.length)]);
+      }
+      cursor = idx + needle.length;
+    }
+    return out.toString();
+  }
+
+  /// "결" 단독 어절 cap — 조사 안 붙은 형태만 카운트.
+  static String _capStandaloneJiel(String text, int maxCount, Random rng) {
+    const alts = <String>['흐름', '인연', '자국'];
+    final out = StringBuffer();
+    var hit = 0;
+    for (var i = 0; i < text.length; i++) {
+      final ch = text[i];
+      if (ch != '결') {
+        out.write(ch);
+        continue;
+      }
+      // 다음 글자가 조사 (을/이/은/의/과/도/에/만/까지/로/등) 면 단독 아님.
+      final next = i + 1 < text.length ? text[i + 1] : '';
+      const attached = {
+        '을', '이', '은', '의', '과', '도', '에', '만', '까지', '로',
+        '에서', '부터', '보다', '처럼', '한테', '치', '단',
+      };
+      // attached 는 한 글자라 next 한 글자 비교.
+      if (attached.contains(next)) {
+        out.write(ch);
+        continue;
+      }
+      // 단독 어절로 판정.
+      hit++;
+      if (hit <= maxCount) {
+        out.write(ch);
+      } else {
+        out.write(alts[rng.nextInt(alts.length)]);
+      }
+    }
+    return out.toString();
+  }
+
+  /// "이었어요" / "였어요" 결말 다양화 — 3회 초과 시 변형 적용.
+  static String _diversifyEndings(String text, Random rng) {
+    // 문장 끝 어미 "이었어요." / "였어요." 등장 횟수 카운트.
+    const variantsIeotEoyo = <String>[
+      '이었어요.', '이었답니다.', '이었대요.', '이었대.',
+    ];
+    const variantsYeotEoyo = <String>[
+      '였어요.', '였답니다.', '였대요.', '였대.',
+    ];
+    var s = text;
+    s = _diversifyOne(s, '이었어요.', variantsIeotEoyo, 3, rng);
+    s = _diversifyOne(s, '였어요.', variantsYeotEoyo, 3, rng);
+    return s;
+  }
+
+  static String _diversifyOne(
+      String text, String needle, List<String> variants, int maxKeep, Random rng) {
+    final out = StringBuffer();
+    var cursor = 0;
+    var hit = 0;
+    while (true) {
+      final idx = text.indexOf(needle, cursor);
+      if (idx < 0) {
+        out.write(text.substring(cursor));
+        break;
+      }
+      out.write(text.substring(cursor, idx));
+      hit++;
+      if (hit <= maxKeep) {
+        out.write(needle);
+      } else {
+        // 변형 (단, 동일 needle 은 회피).
+        var pick = variants[rng.nextInt(variants.length)];
+        if (pick == needle) {
+          pick = variants[(rng.nextInt(variants.length - 1) + 1) % variants.length];
+        }
+        out.write(pick);
+      }
+      cursor = idx + needle.length;
+    }
+    return out.toString();
   }
 }

@@ -143,16 +143,23 @@ class MusicPharmacyService {
     final element = _hanjaToEnKey(deficitHanja);
     final elementKo = _elementKoLabel(element);
 
-    // 후보 — 셀럽 dayPillar 천간 5행 == deficit.
+    // 후보 — 셀럽 dayPillar 천간 5행 == deficit + musicEligible (가수 only).
+    // R102 Sprint 3: actor / athlete / icon 은 music pharmacy 처방 불가
+    // (한소희 / 김연아 / 손흥민 등이 처방되던 버그 차단). 단 idol 활동
+    // 이력이 있는 actor 4명 (차은우 / 이준호 / 배수지 / 지드래곤) 은 예외 retain.
     final candidates = celebs.where((c) {
+      if (!c.musicEligible) return false;
       final chun = c.dayPillar.isNotEmpty ? c.dayPillar[0] : '';
       return _chunGanToEnKey(chun) == element;
     }).where((c) => songs.containsKey(c.id)).toList();
 
-    // fallback — 후보 0 일 경우 전체 셀럽 중 곡 데이터 있는 자.
+    // fallback — 후보 0 일 경우 musicEligible 셀럽 중 곡 데이터 있는 자.
+    // (가드 동일 — fallback 으로 actor/athlete 가 빠지면 X.)
     final pool = candidates.isNotEmpty
         ? candidates
-        : celebs.where((c) => songs.containsKey(c.id)).toList();
+        : celebs
+            .where((c) => c.musicEligible && songs.containsKey(c.id))
+            .toList();
     if (pool.isEmpty) return null;
 
     // deterministic seed.
@@ -422,15 +429,47 @@ class _Celeb {
   final String id;
   final String nameKo;
   final String dayPillar;
+
+  /// celebrities.json 의 kind — "idol" / "actor" / "athlete" / "icon".
+  /// 누락된 entry 는 "idol" 로 안전 기본값 (legacy seedForTest 호환).
+  final String kind;
+
   const _Celeb({
     required this.id,
     required this.nameKo,
     required this.dayPillar,
+    required this.kind,
   });
+
+  /// R102 Sprint 3 — music pharmacy 처방 가능 여부.
+  /// 기본 정책:
+  ///   - kind == 'idol' → true
+  ///   - kind == 'actor' / 'athlete' / 'icon' → false
+  /// 예외 (idol 활동 이력 있는 actor / icon — Sprint 4 데이터 cleanup 전까지
+  ///       hardcoded retain):
+  ///   - cha-eunwoo (ASTRO 멤버)
+  ///   - lee-junho (2PM 멤버)
+  ///   - bae-suzy (Miss A → 솔로 수지)
+  ///   - gdragon (BIGBANG / 솔로)
+  bool get musicEligible {
+    if (_musicEligibleException.contains(id)) return true;
+    return kind == 'idol';
+  }
+
+  static const Set<String> _musicEligibleException = <String>{
+    'cha-eunwoo',
+    'lee-junho',
+    'bae-suzy',
+    'gdragon',
+  };
+
   factory _Celeb.fromJson(Map<String, dynamic> j) => _Celeb(
         id: j['id'] as String? ?? '',
         nameKo: j['nameKo'] as String? ?? '',
         dayPillar: j['dayPillar'] as String? ?? '',
+        kind: (j['kind'] as String?)?.trim().isNotEmpty == true
+            ? (j['kind'] as String).trim()
+            : 'idol',
       );
 }
 

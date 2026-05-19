@@ -81,7 +81,8 @@ void main() {
       expect((pool['endings'] as List).length, greaterThanOrEqualTo(12));
     });
 
-    test('8 keyword 각각 templates intros/tails ≥ 3, body_lines ≥ 3', () {
+    test('8 keyword 각각 templates intros/tails ≥ 3, body_lines 4 phase ≥ 12 (R102)',
+        () {
       const keys = [
         'wonjin',
         'dohwa',
@@ -101,8 +102,15 @@ void main() {
             reason: 'intros < 3 for $k');
         expect((tpl['tails'] as List).length, greaterThanOrEqualTo(3),
             reason: 'tails < 3 for $k');
-        expect((bodies[k] as List).length, greaterThanOrEqualTo(3),
-            reason: 'body_lines < 3 for $k');
+        // R102 sprint 2 — body_lines 는 Map (setup/event/turn/resolution) 4 phase.
+        final entry = bodies[k];
+        expect(entry, isA<Map>(),
+            reason: 'body_lines[$k] must be 4-phase Map (R102)');
+        final m = entry as Map<String, dynamic>;
+        for (final phase in ['setup', 'event', 'turn', 'resolution']) {
+          expect((m[phase] as List).length, greaterThanOrEqualTo(12),
+              reason: 'body_lines[$k].$phase variant < 12 (R102)');
+        }
       }
     });
   });

@@ -71,38 +71,6 @@
       "moodKo": "쾌청한 청춘 발걸음"
     }
   ],
-  "song-hyekyo": [
-    {
-      "titleKo": "오로라",
-      "artistKo": "헌정",
-      "element": "wood",
-      "moodKo": "스크린 너머의 잔향"
-    }
-  ],
-  "park-seojoon": [
-    {
-      "titleKo": "좋은 날",
-      "artistKo": "헌정",
-      "element": "wood",
-      "moodKo": "햇빛 깊은 출발"
-    }
-  ],
-  "kim-yuna": [
-    {
-      "titleKo": "아디오스",
-      "artistKo": "김연아 헌정",
-      "element": "water",
-      "moodKo": "얼음 위의 결단"
-    }
-  ],
-  "son-heungmin": [
-    {
-      "titleKo": "챔피언",
-      "artistKo": "응원곡",
-      "element": "wood",
-      "moodKo": "푸른 잔디 위의 결단"
-    }
-  ],
   "hyunjin": [
     {
       "titleKo": "케이스 143",
@@ -141,22 +109,6 @@
       "artistKo": "진",
       "element": "wood",
       "moodKo": "나무 결의 별 사이"
-    }
-  ],
-  "jin-seyeon": [
-    {
-      "titleKo": "러브 시그널",
-      "artistKo": "헌정",
-      "element": "earth",
-      "moodKo": "흙빛 안정의 미소"
-    }
-  ],
-  "squidgame-lee": [
-    {
-      "titleKo": "롤리팝",
-      "artistKo": "헌정",
-      "element": "metal",
-      "moodKo": "쇠빛 결단의 무대"
     }
   ],
   "minji_njs": [
@@ -767,92 +719,12 @@
       "moodKo": "물빛 또렷함"
     }
   ],
-  "kim-soohyun": [
-    {
-      "titleKo": "드림",
-      "artistKo": "헌정",
-      "element": "metal",
-      "moodKo": "쇠빛 잔잔한 결심"
-    }
-  ],
-  "lee-minho": [
-    {
-      "titleKo": "스트레인저",
-      "artistKo": "헌정",
-      "element": "water",
-      "moodKo": "물빛 신비"
-    }
-  ],
   "cha-eunwoo": [
     {
       "titleKo": "기적 같은 이야기",
       "artistKo": "차은우",
       "element": "metal",
       "moodKo": "쇠빛 단정함"
-    }
-  ],
-  "song-kang": [
-    {
-      "titleKo": "러브 인 더 무드",
-      "artistKo": "헌정",
-      "element": "earth",
-      "moodKo": "흙빛 부드러움"
-    }
-  ],
-  "byeon-wooseok": [
-    {
-      "titleKo": "선재 업고 튀어",
-      "artistKo": "헌정",
-      "element": "wood",
-      "moodKo": "나무 결의 풋풋함"
-    }
-  ],
-  "hwang-inyoup": [
-    {
-      "titleKo": "선풀",
-      "artistKo": "헌정",
-      "element": "earth",
-      "moodKo": "흙빛 따뜻함"
-    }
-  ],
-  "kim-seonho": [
-    {
-      "titleKo": "스타트",
-      "artistKo": "헌정",
-      "element": "water",
-      "moodKo": "물빛 신선함"
-    }
-  ],
-  "ji-changwook": [
-    {
-      "titleKo": "멜로디",
-      "artistKo": "지창욱",
-      "element": "wood",
-      "moodKo": "나무 결의 잔잔함"
-    }
-  ],
-  "kim-jiwon": [
-    {
-      "titleKo": "러브 송",
-      "artistKo": "헌정",
-      "element": "earth",
-      "moodKo": "흙빛 차분함"
-    }
-  ],
-  "kim-hyeyoon": [
-    {
-      "titleKo": "청춘",
-      "artistKo": "헌정",
-      "element": "metal",
-      "moodKo": "쇠빛 단단한 마음"
-    }
-  ],
-  "han-sohee": [
-    {
-      "titleKo": "나의 아저씨",
-      "artistKo": "헌정",
-      "element": "water",
-      "moodKo": "물빛 깊은 시선"
     }
   ],
   "bae-suzy": [
