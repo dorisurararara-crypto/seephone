@@ -740,7 +740,7 @@ class TodayDeepService {
       // 공식 자리·도전·발표 → 회복·정리·짧은 한 줄.
       switch (god) {
         case TenGod.jeonggwan:
-          return '오늘은 격식 있는 자리 잡지 마세요. 자료 하나 다듬는 게 정답이에요.';
+          return '오늘은 격식 있는 자리 잡지 마세요. 자료 하나 다듬는 편이 좋아요.';
         case TenGod.pyeongwan:
           return '오늘은 새 일 떠맡지 마세요. 받기 전 한 박자 쉬어요.';
         case TenGod.sanggwan:

@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
+import '../../services/korean_josa.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
 
@@ -1440,11 +1441,11 @@ class _StarRow extends StatelessWidget {
     if (useKo) {
       if (sameDay) {
         parts.add(
-          '둘 다 ${me.day60ji} 일주라 거울 보는 자리예요. $shortName이 깨달은 건 너도 곧 깨닫고, 너의 변화도 $shortName한테 빠르게 비쳐요.',
+          '둘 다 ${me.day60ji} 일주라 거울 보는 자리예요. $shortName${withSubj(shortName)} 깨달은 건 너도 곧 깨닫고, 너의 변화도 $shortName한테 빠르게 비쳐요.',
         );
       } else if (sameBranch) {
         parts.add(
-          '같은 일지($myJi)를 공유해서 인생 리듬·계절감·체질이 비슷해요. 너의 $mySceneKo가 $shortName한테도 자연스럽게 닿아요.',
+          '같은 일지($myJi)를 공유해서 인생 리듬·계절감·체질이 비슷해요. 너의 $mySceneKo${withSubj(mySceneKo)} $shortName한테도 자연스럽게 닿아요.',
         );
       }
       if (ganHap) {
@@ -1454,7 +1455,7 @@ class _StarRow extends StatelessWidget {
       }
       if (jiHap6) {
         parts.add(
-          '지지 육합 ($myJi-$stJi)이 있어 일상 호흡이 자연스럽게 맞아요. 너의 $mySceneKo와 $shortName의 $stSceneKo가 어느새 한 시간대로 흘러요.',
+          '지지 육합 ($myJi-$stJi)이 있어 일상 호흡이 자연스럽게 맞아요. 너의 $mySceneKo${withWith(mySceneKo)} $shortName의 $stSceneKo${withSubj(stSceneKo)} 어느새 한 시간대로 흘러요.',
         );
       } else if (jiSamhap) {
         parts.add(
@@ -1463,7 +1464,7 @@ class _StarRow extends StatelessWidget {
       }
       if (jiClash) {
         parts.add(
-          '지지 충 ($myJi-$stJi)이 걸려 큰 결정·이사·여행·돈 자리에서 의견이 자주 엇갈려요. 너의 $mySceneKo와 $shortName의 $stSceneKo가 정반대 시간대라, 미리 말로 룰을 정해두면 부딪힘이 줄어요.',
+          '지지 충 ($myJi-$stJi)이 걸려 큰 결정·이사·여행·돈 자리에서 의견이 자주 엇갈려요. 너의 $mySceneKo${withWith(mySceneKo)} $shortName의 $stSceneKo${withSubj(stSceneKo)} 정반대 시간대라, 미리 말로 룰을 정해두면 부딪힘이 줄어요.',
         );
       }
       if (jiHyeong) {
@@ -1473,7 +1474,7 @@ class _StarRow extends StatelessWidget {
       }
       if (parts.isEmpty) {
         parts.add(
-          '천간합·지지합·충·형이 직접 걸려 있지 않아요. 너의 $mySceneKo와 $shortName의 $stSceneKo가 자연스럽게 겹치는 순간이 와야 깊어지는 관계라, 시간이 일하는 인연이에요.',
+          '천간합·지지합·충·형이 직접 걸려 있지 않아요. 너의 $mySceneKo${withWith(mySceneKo)} $shortName의 $stSceneKo${withSubj(stSceneKo)} 자연스럽게 겹치는 순간이 와야 깊어지는 관계라, 시간이 일하는 인연이에요.',
         );
       }
     } else {
@@ -1557,14 +1558,14 @@ class _StarRow extends StatelessWidget {
       final String anchorLine;
       if (strong + weak == 0) {
         anchorLine =
-            '직접 걸린 큰 자극 없이 무게가 옅은 자리라 $shortName과의 시간은 의식적으로 깊이를 만들 때만 자라요.';
+            '직접 걸린 큰 자극 없이 무게가 옅은 자리라 $shortName${withWith(shortName)}의 시간은 의식적으로 깊이를 만들 때만 자라요.';
       } else {
         final parts = <String>[];
         if (strong > 0) parts.add('강하게 끌어주는 자리 $strong개');
         if (weak > 0) parts.add('조심해야 할 자리 $weak개');
         final anchorSummary = parts.join(' / ');
         anchorLine =
-            '$anchorSummary가 함께 있어서 $shortName과의 시간은 단순한 호감이 아니라 사주 흐름으로 새겨져요.';
+            '$anchorSummary${withSubj(anchorSummary)} 함께 있어서 $shortName${withWith(shortName)}의 시간은 단순한 호감이 아니라 사주 흐름으로 새겨져요.';
       }
       return '$band$anchorLine';
     } else {
@@ -1895,7 +1896,7 @@ class _KpopAnchors {
     // + p2/p3/p4 의 셀럽별 변별이 본문 unique 성을 끝까지 보장한다.
     final idx = seed % pool.length;
     var line = pool[idx];
-    line = line.replaceAll(r'$shortName', shortName);
+    line = _injectShortName(line, shortName);
     // 강·약 anchor 갯수에 따른 1 절 micro-tail (같은 pool index 라도 anchor 조합이
     // 다르면 마지막 한 절이 달라져 본문이 더 갈라진다).
     final myElName =
@@ -1946,9 +1947,39 @@ class _KpopAnchors {
     // seed shift — relation pool 과 같은 index 가 나오지 않도록 13 회전.
     final idx = ((seed >> 5) + 13) % pool.length;
     var line = pool[idx];
-    line = line.replaceAll(r'$shortName', shortName);
+    line = _injectShortName(line, shortName);
     line = line.replaceAll(r'$blurbTail', blurbTail);
     return line;
+  }
+
+  // R98 sprint 1 — shortName placeholder + 인접 조사 한 번에 보정.
+  // raw string pool 안의 `$shortName과 / $shortName이 / $shortName을 / $shortName은`
+  // 등이 받침 없는 셀럽 이름(예: 미나)일 때 `미나과` 어색 발생 — withWith/withSubj/
+  // withObj/withTop helper 로 보정해서 placeholder 치환과 동시에 조사가 자연스럽게
+  // 붙도록 한다. 영어 raw pool 도 동일 패턴을 가지지만 영어에서는 조사 보정 불필요라
+  // 단순 치환만 수행한다.
+  static String _injectShortName(String line, String shortName) {
+    // 1) 한국어 조사 결합 placeholder 4 쌍 우선 매칭 (먼저 처리해야 일반 치환과
+    //    충돌 안 함).
+    final particleMap = <String, String Function(String)>{
+      r'$shortName과': withWith, // 과/와
+      r'$shortName와': withWith,
+      r'$shortName이': withSubj, // 이/가
+      r'$shortName가': withSubj,
+      r'$shortName은': withTop, // 은/는
+      r'$shortName는': withTop,
+      r'$shortName을': withObj, // 을/를
+      r'$shortName를': withObj,
+    };
+    var result = line;
+    particleMap.forEach((placeholder, picker) {
+      if (result.contains(placeholder)) {
+        result = result.replaceAll(placeholder, '$shortName${picker(shortName)}');
+      }
+    });
+    // 2) 남은 일반 placeholder (조사 없는 형태) 단순 치환.
+    result = result.replaceAll(r'$shortName', shortName);
+    return result;
   }
 }
 

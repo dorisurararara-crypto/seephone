@@ -283,7 +283,7 @@ class PersonalizationEngine {
   // ──────── Fallbacks (atom 매치 실패 시)
 
   static String _fallbackHeadKo(PillarProfile p) =>
-      '당신은 {dm}이에요. 오늘은 {dom} 쪽이 강한 날이에요.'
+      '너는 {dm}이에요. 오늘은 {dom} 쪽이 강한 날이에요.'
           .replaceAll('{dm}', _gnameKo(p.dayMaster))
           .replaceAll('{dom}', _elNameKo(p.dominantEl));
 
@@ -291,7 +291,7 @@ class PersonalizationEngine {
       'Your ${_gnameEn(p.dayMaster)} day master under ${_elNameEn(p.dominantEl)} dominance shapes today.';
 
   static String _fallbackBodyKo(PillarProfile p) =>
-      '오늘은 한 가지에 집중하면 보상이 따라요. 당신은 ${_seasonKo(p.season)}에 태어난 사람이에요.';
+      '오늘은 한 가지에 집중하면 보상이 따라요. 너는 ${_seasonKo(p.season)}에 태어난 사람이에요.';
 
   static String _fallbackBodyEn(PillarProfile p) =>
       'Today, focus on one thing — you carry ${_seasonEn(p.season)}-born momentum.';
@@ -338,7 +338,7 @@ class PersonalizationEngine {
       topic: 'identity',
       priority: 90,
       koTpl:
-          '당신은 {dm}이에요. 안에 든 {dom}이 강하게 작동해서, 결정한 일은 끝까지 밀어붙이는 추진력이 자연스럽게 살아 있어요.',
+          '너는 {dm}이에요. 안에 든 {dom}이 강하게 작동해서, 결정한 일은 끝까지 밀어붙이는 추진력이 자연스럽게 살아 있어요.',
       enTpl:
           'You are {dmEn}. The strong {domEn} inside drives your decisions hard — once you commit, you push it to the finish.',
       condition: (p, t) => p.isStrong,
@@ -346,7 +346,7 @@ class PersonalizationEngine {
     InsightAtom(
       topic: 'identity',
       priority: 80,
-      koTpl: '당신은 {dm}이에요. {def}이 좀 부족해서, 결정 전에 한 번 더 생각하고 다듬는 신중한 면이 강해요.',
+      koTpl: '너는 {dm}이에요. {def}이 좀 부족해서, 결정 전에 한 번 더 생각하고 다듬는 신중한 면이 강해요.',
       enTpl:
           'You are {dmEn}. With less {defEn} inside, you tend to think twice and refine before acting — a careful style.',
       condition: (p, t) => !p.isStrong,
@@ -355,7 +355,7 @@ class PersonalizationEngine {
       topic: 'identity',
       priority: 70,
       koTpl:
-          '당신은 {dm}, 그리고 {season}에 태어났어요. 타고난 성격과 계절 기운이 같은 방향이라 큰 갈등 없이 자기 길을 갈 수 있는 사주예요.',
+          '너는 {dm}, 그리고 {season}에 태어났어요. 타고난 성격과 계절 기운이 같은 방향이라 큰 갈등 없이 자기 길을 갈 수 있는 사주예요.',
       enTpl:
           'You are {dmEn}, born in {seasonEn}. Your nature and your birth season pull the same way — you can walk your path without inner friction.',
       condition: (p, t) =>
@@ -379,7 +379,7 @@ class PersonalizationEngine {
       topic: 'today',
       priority: 75,
       koTpl:
-          '오늘은 {dom}이 강하게 흐르는 날이에요. 당신 본래의 색이 더 뚜렷하게 드러나는 흐름이라서, 평소보다 자기 의견을 분명하게 말해도 잘 받아들여져요.',
+          '오늘은 {dom}이 강하게 흐르는 날이에요. 너의 본래 색이 더 뚜렷하게 드러나는 흐름이라서, 평소보다 자기 의견을 분명하게 말해도 잘 받아들여져요.',
       enTpl:
           'Today\'s {domEn} flows strong, and your true style comes through clearer than usual. Speaking your mind more openly today actually lands well.',
       condition: (p, t) => true,
@@ -407,7 +407,7 @@ class PersonalizationEngine {
       topic: 'action',
       priority: 80,
       koTpl:
-          '당신에게 살짝 부족한 {def}을 의식적으로 보충해 보세요. {compKo} 같은 작은 행동 하나면 충분하고, 그 하나가 오늘 흐름을 부드럽게 풀어줘요.',
+          '너에게 살짝 부족한 {def}을 의식적으로 보충해 보세요. {compKo} 같은 작은 행동 하나면 충분하고, 그 하나가 오늘 흐름을 부드럽게 풀어줘요.',
       enTpl:
           'Add one conscious touch of {defEn} ({compEn}). One small action is enough — it softens the day visibly.',
       condition: (p, t) => true,
@@ -427,7 +427,7 @@ class PersonalizationEngine {
       topic: 'caution',
       priority: 85,
       koTpl:
-          '오늘은 당신 안의 {dom}이 평소보다 강해서, 말의 폭이 좁아질 수 있어요. 한 박자 늦춰서 상대 말이 끝난 뒤에 답하고, "다시 생각해보면…" 같은 한 문장만 끼워 넣어도 분위기가 부드러워져요.',
+          '오늘은 너 안의 {dom}이 평소보다 강해서, 말의 폭이 좁아질 수 있어요. 한 박자 늦춰서 상대 말이 끝난 뒤에 답하고, "다시 생각해보면…" 같은 한 문장만 끼워 넣어도 분위기가 부드러워져요.',
       enTpl:
           'Your {domEn} runs heavy today and may narrow your tone. Slow one beat, let the other finish, and add one phrase like "thinking again..." — the room softens instantly.',
       condition: (p, t) => p.isStrong,
@@ -455,7 +455,7 @@ class PersonalizationEngine {
       topic: 'identity',
       priority: 60,
       koTpl:
-          '당신은 환절기({season})에 태어난 {dm}이에요. 분위기가 바뀌는 순간을 다른 사람보다 빠르게 알아채는 감각이 있어요.',
+          '너는 환절기({season})에 태어난 {dm}이에요. 분위기가 바뀌는 순간을 다른 사람보다 빠르게 알아채는 감각이 있어요.',
       enTpl:
           'You are {dmEn} born in {seasonEn} transition. You read shifts in mood faster than most.',
       condition: (p, t) => p.season == 'transition',
@@ -485,7 +485,7 @@ class PersonalizationEngine {
       topic: 'identity',
       priority: 75,
       koTpl:
-          '당신은 {dm}이에요. 새 흐름을 직접 만들기보다 이미 흐르는 흐름을 정확히 읽어내는 쪽이 강점이에요. 변화를 주도하지 않아도, 잘 따라가서 결국 가장 깊이 도달하는 타입이에요.',
+          '너는 {dm}이에요. 새 흐름을 직접 만들기보다 이미 흐르는 흐름을 정확히 읽어내는 쪽이 강점이에요. 변화를 주도하지 않아도, 잘 따라가서 결국 가장 깊이 도달하는 타입이에요.',
       enTpl:
           'You are {dmEn}. You read existing currents better than you create new ones — and by riding the right one, you reach the deepest spot.',
       condition: (p, t) =>
@@ -495,7 +495,7 @@ class PersonalizationEngine {
       topic: 'identity',
       priority: 75,
       koTpl:
-          '당신은 {dm}이에요. 시작은 빠른데, 진짜 마음은 천천히 표현하는 면이 있어서, 처음 본 사람과 오래 본 사람이 느끼는 당신이 꽤 달라요.',
+          '너는 {dm}이에요. 시작은 빠른데, 진짜 마음은 천천히 표현하는 면이 있어서, 처음 본 사람과 오래 본 사람이 느끼는 인상이 꽤 달라요.',
       enTpl:
           'You are {dmEn}. Quick to start, slow to reveal real feeling — first impressions and long-time impressions of you can differ noticeably.',
       condition: (p, t) =>
@@ -505,7 +505,7 @@ class PersonalizationEngine {
       topic: 'identity',
       priority: 70,
       koTpl:
-          '당신은 {dm}이에요. 흐름을 직접 만들지 않아도, 결국 가장 깊은 곳까지 도달하는 힘이 있어요. 서두르지 않아도 자기 자리를 찾는 사람이에요.',
+          '너는 {dm}이에요. 흐름을 직접 만들지 않아도, 결국 가장 깊은 곳까지 도달하는 힘이 있어요. 서두르지 않아도 자기 자리를 찾는 사람이에요.',
       enTpl:
           'You are {dmEn}. You don\'t need to force the current — you reach the deepest place anyway. You find your place without rushing.',
       condition: (p, t) => p.dayMasterElement == '水',
@@ -553,7 +553,7 @@ class PersonalizationEngine {
       topic: 'action',
       priority: 65,
       koTpl:
-          '겨울 — 당신에게 부족한 {def}을 따뜻한 색과 음식({compKo})으로 보충하는 시기예요. 따뜻한 차 한 잔, 노란 조명, 따끈한 국 한 그릇이 효과가 커요.',
+          '겨울 — 너에게 부족한 {def}을 따뜻한 색과 음식({compKo})으로 보충하는 시기예요. 따뜻한 차 한 잔, 노란 조명, 따끈한 국 한 그릇이 효과가 커요.',
       enTpl:
           'Winter — bring missing {defEn} via warm colors and food ({compEn}). A hot cup, yellow lighting, a warm soup do real work.',
       condition: (p, t) => t.month >= 12 || t.month <= 2,
