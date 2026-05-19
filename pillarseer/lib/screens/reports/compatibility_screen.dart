@@ -1580,7 +1580,7 @@ class _DetailSection extends StatelessWidget {
             'Six harmony ($myJi·$ptJi) — daily breath syncs without effort. Fits living or working together; shines brightest when sharing space.');
       } else if (isJiSamhap) {
         attract.write(
-            "Triad partial ($myJi·$ptJi) — synergy peaks around shared goals. Build a project, take a trip, run a shop together — shared outcomes thicken the bond.");
+            "Triad partial ($myJi·$ptJi) — you click hardest around a shared goal. Run a project, plan a trip, or build something together; shared outcomes thicken the bond.");
       } else if (myEl == ptEl) {
         attract.write(
             'Same element grain — first impression feels familiar; tone, taste, and decision speed sync fast. Comfort runs highest in shared space.');
@@ -1635,19 +1635,19 @@ class _DetailSection extends StatelessWidget {
     } else {
       if (isClash) {
         friction.write(
-            "Branch clash ($myJi·$ptJi). Friction shows in big decisions, moves, money. Pre-agree rules — 'this kind of decision goes your way' — and small clashes don't escalate. Often deepens after one real clash.");
+            "Branch clash ($myJi·$ptJi). The friction shows up in big calls — moves, money, travel. Agree on the rule first ('this kind of call goes your way'), and the small bumps stop turning into fights. The bond often deepens after one honest clash.");
       } else if (isHyeong) {
         friction.write(
-            "Branch punishment ($myJi·$ptJi). Sharp words may surface, usually from accumulated small slights. Daily acknowledgments prevent the big blow-up.");
+            "Branch punishment ($myJi·$ptJi). Sharp words can surface, usually from small things piling up. A daily 'thanks' or 'good job' keeps the big blow-up away.");
       } else if (iOvercome || theyOvercome) {
         friction.write(
             'Overcoming bond — one notch sharper tone reads as control. Lead with "why" before "what". Worked through, both grow tougher.');
       } else if (myEl == ptEl) {
         friction.write(
-            "Shared element means shared weak spots. When one dips, the other tends to dip with them. One of you must consciously pick the opposite move.");
+            "Sharing the same element also means sharing the same weak spots. When one of you dips, the other tends to follow. One of you needs to make a different choice on those days.");
       } else {
         friction.write(
-            "No strong clash, but distance grows without active signals. Agree who reaches out first when there's silence.");
+            "No sharp clash, but the gap can widen without small signals. Agree on who reaches out first when the chat goes quiet.");
       }
       if (brPairEn.isNotEmpty) {
         friction.write(' $brPairEn');
@@ -1694,17 +1694,17 @@ class _DetailSection extends StatelessWidget {
         else
           'Once a week, let the other go first on one real decision.',
         if (myEl == ptEl)
-          "When both feel the same dip, one of you picks the opposite move."
+          "On the days you both feel low, one of you picks the opposite move."
         else if (complementary)
-          "Share each other's deficit element — pick one small ritual (color, food, place)."
+          "Cover each other's weaker element — one small habit each (color, food, place)."
         else
-          "Once a month, look at both 8-character saju together; name strengths and weaknesses.",
+          "Once a month, sit down with both eight-character charts and name where each of you is strong and weak.",
         if (isHyeong || isClash)
-          "Daily small acknowledgments — big-blow-up words start from accumulated small slights."
+          "A small 'thanks' or 'good job' every day — most big fights start from small slights piling up."
         else if (iGenerate || theyGenerate)
-          "The receiver says thanks out loud once in a while — invisible gratitude burns the giver out."
+          "The one being supported says 'thanks' out loud once in a while — silent gratitude burns the giver out."
         else
-          "Build one small shared ritual (nightly greeting, weekly walk).",
+          "Build one small shared habit (a nightly text, a weekly walk).",
       ];
     }
 

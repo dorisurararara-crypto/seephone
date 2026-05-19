@@ -1508,7 +1508,7 @@ class _StarRow extends StatelessWidget {
       }
       if (jiHyeong) {
         parts.add(
-          "Branch punishment ($myJi-$stJi) — sharp words may surface. Small acknowledgments daily prevent the big blow-up.",
+          "Branch punishment ($myJi-$stJi) — sharp words can surface. A short 'thanks' or 'good job' every day keeps the big blow-up away.",
         );
       }
       if (parts.isEmpty) {
@@ -1811,14 +1811,14 @@ class _KpopAnchors {
       r"Same energy, so daily conversation tones lock in naturally. Because your paces tie together so easily, scheduling regular solo time for each of you is the secret to a bond that lasts.",
     ],
     _ElRel.iGenerate: [
-      r"Your energy feeds theirs (producing flow). What you say lands deep with $shortName, and watching them grow makes you steadier in return.",
-      r"You're the giving side here. It can feel uneven day-to-day, but over time the bond hardens into something hard to break. Slow is the right pace.",
-      r"Your color grows theirs, so $shortName tends to be more honest around you than around most people. Once you settle into giving, check your own pace.",
-      r"The producing arrow runs from you to them. Words you toss off stay with $shortName for a long time — own that weight and the bond grows healthier.",
-      r"Your energy quietly warms $shortName's weak spots. The result isn't visible day to day; read this bond in seasons, not weeks, and keep going even when the change looks slow.",
-      r"You're the one giving light first, so $shortName carries more confidence near you than alone. Reserve real recharge time for yourself — your battery is the relationship's baseline.",
-      r"You pave the road first, so $shortName following naturally feels right. Watching only your own pace, though, costs them their breath; practicing the reverse — letting them lead sometimes — is a healthy balance.",
-      r"Your current grows theirs in a clear producing flow. Watching $shortName step up around you, name not just the results but the small process shifts — that's where the bond hardens.",
+      r"You feed them (producing flow). What you say lands deep with $shortName, and watching them grow steadies you in return.",
+      r"You're the giving side here. Day to day it can feel uneven, but the bond hardens over time into something hard to break. Slow is the right pace.",
+      r"Your color quietly grows theirs, so $shortName tends to be more honest around you than around most people. Once you settle into giving, check your own pace.",
+      r"The producing arrow runs from you to them. Words you toss off stay with $shortName a long time — own that weight and the bond grows healthier.",
+      r"You quietly warm $shortName's weak spots. The change isn't visible day to day; read this bond in seasons, not weeks, and keep going even when the shift looks slow.",
+      r"You give light first, so $shortName carries more confidence near you than alone. Save real recharge time for yourself — your battery is the bond's baseline.",
+      r"You pave the road first, so $shortName following naturally feels right. Watching only your own pace, though, costs them their breath; practicing the reverse — letting them lead sometimes — keeps it balanced.",
+      r"You feed their growth in a clear producing flow. As $shortName steps up around you, name not just the results but the small process shifts — that's where the bond hardens.",
     ],
     _ElRel.theyGenerate: [
       r"They fill the gaps in yours without effort (producing flow toward you). You receive more than you give, so naming the gratitude out loud deepens the bond.",
@@ -1831,13 +1831,13 @@ class _KpopAnchors {
       r"A producing arrow runs your way, so your honest self shows up more easily around $shortName. Leaning is natural, but keeping your own ground (hobby, work, friends) makes sure the receiving never turns into a burden.",
     ],
     _ElRel.iOvercome: [
-      r"Your energy controls theirs (overcoming flow). You lead naturally and read their weak spots like a coach. One notch sharper reads as control — intent and delivery must match.",
-      r"You overcome them, so short words land hard. $shortName may shrink near you without meaning to; building in a softer beat keeps it healthy.",
+      r"You control them (overcoming flow). You lead naturally and read their weak spots like a coach. One notch sharper reads as control — intent and delivery must match.",
+      r"You overcome them, so short words land hard. $shortName may shrink around you without meaning to; building in a softer beat keeps it healthy.",
       r"Leadership drifts to your side naturally. Used well it's a mentor bond; used badly it becomes one-way instruction. Always leave room for their own color.",
-      r"Your energy refines theirs, so $shortName's flaws show clearly when you're close. How you point them out decides everything — questions land better than verdicts.",
-      r"You compress $shortName's flow without meaning to, so even a flat-toned sentence can read as a verdict. Double your visible praise and keep corrections private — that single rule reshapes the whole weight of the bond.",
+      r"You refine them, so $shortName's flaws show clearly when you're close. How you point them out decides everything — questions land better than verdicts.",
+      r"You compress $shortName's flow without meaning to, so even a flat-toned sentence can read as a verdict. Double your visible praise and keep corrections private — that one rule reshapes the whole weight of the bond.",
       r'''Leadership lands on your side by default. It's easier to drive than to wait, but $shortName loses chances to speak first; build a deliberate "what do you think?" beat in before every decision.''',
-      r"Your energy keeps $shortName tidied up, so on most days you read as the steady older one. But when they keep adjusting to you, their own color fades — practice just following their lead from time to time.",
+      r"You keep $shortName tidied up, so on most days you read as the steady older one. But when they keep adjusting to you, their own color fades — practice just following their lead from time to time.",
       r"You're the one refining them, so your precision can land as both fuel and pressure on $shortName. Letting them reach the answer themselves, instead of handing it over, is the line between mentor and controller.",
     ],
     _ElRel.theyOvercome: [

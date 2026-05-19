@@ -13,7 +13,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get splashTagline =>
-      'Your vibe today,\nfrom the four pillars of your birth.';
+      'Your day, read from\nthe four pillars of your birth.';
 
   @override
   String get splashTapToSkip => 'tap to skip';
@@ -22,7 +22,7 @@ class AppL10nEn extends AppL10n {
   String get splashSkipSemantic => 'Skip splash and continue';
 
   @override
-  String get inputTitle => 'ENTER YOUR FATE';
+  String get inputTitle => 'TELL US ABOUT YOU';
 
   @override
   String get inputName => 'Name / Nickname';
@@ -120,7 +120,7 @@ class AppL10nEn extends AppL10n {
       'Please select a time or check \'I don\'t know\'';
 
   @override
-  String get resultTitle => 'YOUR LIFE PATH';
+  String get resultTitle => 'YOUR FOUR PILLARS';
 
   @override
   String get resultPillarYear => 'YEAR';
@@ -194,7 +194,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get homeExplanationLow =>
-      'Today\'s pillar challenges your day master. Take it slow and ground yourself.';
+      'Today\'s pillar pushes against your day master. Take it slow and stay close to your basics.';
 
   @override
   String get homeExplanationMid =>
@@ -202,7 +202,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get homeExplanationHigh =>
-      'Today\'s energy aligns with your nature. Move boldly.';
+      'Today lines up well with your day master. A good day to move on something.';
 
   @override
   String get homeCategoryLove => 'LOVE';
@@ -327,7 +327,7 @@ class AppL10nEn extends AppL10n {
   String get homeNotifDisabledSnack => 'Daily notification turned off.';
 
   @override
-  String get homeNotifSampleTitle => 'Pillar Seer · Today\'s Energy';
+  String get homeNotifSampleTitle => 'Pillar Seer · Your day, in one line';
 
   @override
   String get homeNotifSampleBody =>

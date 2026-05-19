@@ -106,7 +106,7 @@ abstract class AppL10n {
   /// No description provided for @splashTagline.
   ///
   /// In en, this message translates to:
-  /// **'Your vibe today,\nfrom the four pillars of your birth.'**
+  /// **'Your day, read from\nthe four pillars of your birth.'**
   String get splashTagline;
 
   /// No description provided for @splashTapToSkip.
@@ -124,7 +124,7 @@ abstract class AppL10n {
   /// No description provided for @inputTitle.
   ///
   /// In en, this message translates to:
-  /// **'ENTER YOUR FATE'**
+  /// **'TELL US ABOUT YOU'**
   String get inputTitle;
 
   /// No description provided for @inputName.
@@ -304,7 +304,7 @@ abstract class AppL10n {
   /// No description provided for @resultTitle.
   ///
   /// In en, this message translates to:
-  /// **'YOUR LIFE PATH'**
+  /// **'YOUR FOUR PILLARS'**
   String get resultTitle;
 
   /// No description provided for @resultPillarYear.
@@ -448,7 +448,7 @@ abstract class AppL10n {
   /// No description provided for @homeExplanationLow.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s pillar challenges your day master. Take it slow and ground yourself.'**
+  /// **'Today\'s pillar pushes against your day master. Take it slow and stay close to your basics.'**
   String get homeExplanationLow;
 
   /// No description provided for @homeExplanationMid.
@@ -460,7 +460,7 @@ abstract class AppL10n {
   /// No description provided for @homeExplanationHigh.
   ///
   /// In en, this message translates to:
-  /// **'Today\'s energy aligns with your nature. Move boldly.'**
+  /// **'Today lines up well with your day master. A good day to move on something.'**
   String get homeExplanationHigh;
 
   /// No description provided for @homeCategoryLove.
@@ -694,7 +694,7 @@ abstract class AppL10n {
   /// No description provided for @homeNotifSampleTitle.
   ///
   /// In en, this message translates to:
-  /// **'Pillar Seer · Today\'s Energy'**
+  /// **'Pillar Seer · Your day, in one line'**
   String get homeNotifSampleTitle;
 
   /// No description provided for @homeNotifSampleBody.

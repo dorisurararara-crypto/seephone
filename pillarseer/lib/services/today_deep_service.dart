@@ -245,17 +245,17 @@ class TodayDeepService {
     } else {
       final ko = dwGod.ko.split(' ').first;
       const map = {
-        '비견': "You are inside a Peer luck cycle. Peer dynamics double up now.",
-        '겁재': "You are inside a Rival cycle. Competitive edge sharpens.",
-        '식신': "You are inside an Output cycle. Expression flows easy.",
-        '상관': "You are inside a Sharp Output cycle. Quick reads stand out.",
-        '편재': "You are inside a Windfall Wealth cycle. New deals show up.",
-        '정재': "You are inside a Stable Wealth cycle. Steady stacking flow.",
-        '편관': "You are inside a Bold Drive cycle. Challenges layer on.",
-        '정관': "You are inside a Stable Office cycle. Position settles in.",
+        '비견': "You're inside a Peer luck cycle — peer dynamics show up more strongly than usual.",
+        '겁재': "You're inside a Rival cycle — your competitive edge sharpens.",
+        '식신': "You're inside an Output cycle — expression comes out more easily.",
+        '상관': "You're inside a Sharp Output cycle — quick reads and sharp takes stand out.",
+        '편재': "You're inside a Windfall Wealth cycle — new deals tend to show up.",
+        '정재': "You're inside a Stable Wealth cycle — steady, layered savings work.",
+        '편관': "You're inside a Bold Drive cycle — challenges keep stacking on.",
+        '정관': "You're inside a Stable Office cycle — your position settles in.",
         '편인':
-            "You are inside an Unconventional Resource cycle. Intuition sharpens.",
-        '정인': "You are inside a Direct Resource cycle. Learning solidifies.",
+            "You're inside an Unconventional Resource cycle — intuition sharpens.",
+        '정인': "You're inside a Direct Resource cycle — what you learn now sticks.",
       };
       return map[ko] ?? '';
     }
