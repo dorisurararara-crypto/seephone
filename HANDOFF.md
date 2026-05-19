@@ -68,7 +68,68 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-05-18 13:55 (Mac 자율 → 사용자) — pillarseer R92 완료 + **1.0.0+50 외부 베타 자동 제출**
+### 2026-05-19 (Mac 자율 → 다음 세션) — pillarseer R97 + R96 sprint 1 완료 + **1.0.0+57 외부 베타 자동 제출** + Option A workflow 운영 중
+
+**현재 빌드**: 1.0.0+57 ASC VALID + 외부 베타 ganzitester 자동 제출 ✅
+- Public link: https://testflight.apple.com/join/kRs36R3b
+- pillarseer ASC App ID: **6768096855**
+- 마지막 commit: `3e49eb1` (R96 sprint 1 release)
+- git status clean (모든 push 완료)
+
+**진행 history (R92 → R97 → R96 sprint 1)**:
+
+| Round | 내용 | ship build | codex score |
+|---|---|---|---|
+| R92 | entry 단위 quality (천간 prepend / artifact / MZ / deep enrich) | 1.0.0+50 | 8.4 |
+| R93 | 사용자 4 mandate (K-POP 케미 톤 / 궁합 UI 키보드 / 본문 ×2 / 신년운세 _AnnualSummary) | 1.0.0+52 | 9.95 |
+| R94 | 셀럽 변별 (birth year score) / gender chip / 본문 ×3 / 검색 IME debounce | 1.0.0+53 | 9.95 |
+| R95 | input autofocus 이름 / _starIdentityLead / 4 영역 중복 fix / **Option A workflow 시작** | 1.0.0+54 | 9.95 |
+| R96 | NaturalProseJoiner connector inject → 실기기 "AI 같다" 보고 → 잘못된 9.9 (surface metric) | 1.0.0+55 | **자체 철회 3~4** |
+| R97 | connector 제거 + sentence 5→3~4 + 4 broken fix + 4 variant pool | 1.0.0+56 | 9.55 GO |
+| R96 sprint 1 | 최애 케미 복붙 fix (FNV-1a seed + relation pool 96 / anchor/결 jargon 제거) | **1.0.0+57** | 9.5 GO |
+
+**테스트**: 871/871 PASS / flutter analyze 0 / R71/R77/R78/R82~R86/R88~R97 baseline 모두 보존.
+
+---
+
+### ⭐ Option A workflow (R95+ 사용자 mandate)
+
+사용자 verbatim (2026-05-18): "codex가 머리 + Claude 가 메신저 + 서브에이전트 가 코딩".
+
+다음 세션 protocol:
+1. `git pull --rebase` (clean 예상)
+2. HANDOFF.md "## 최신" read
+3. 사용자 다음 mandate 받으면 → **codex 에 verbatim 전달** (context inject 금지)
+4. codex 답변 → 사용자에게 **그대로 paste** (요약/번역/sale 금지)
+5. 서브에이전트 디스패치 (codex spec 그대로)
+6. 완료 후 "완료" 한 줄 보고
+7. codex 검수 받고 9.5+ GO 까지 rework 반복
+8. ship 도 서브 위임 (commit + deploy + submit_b{N+1}.rb + push)
+
+**핵심 룰**: codex 가 surface metric 만 보면 안 됨. **실제 본문 sample 직접 한국어 native read** 후 평가. R96 잘못된 9.9 교훈.
+
+핵심 메모리:
+- `feedback_workflow_option_a.md` — Option A 운영 룰
+- `project_pillarseer_round_97.md` — R92~R97 ship 로그
+- `reference_testflight_pipeline.md` — ship pipeline ground truth
+- `reference_seephone_ids.md` — APP_ID 6768096855
+
+---
+
+### ⚠️ 사용자 실기기 1.0.0+57 검증 대기 항목
+
+Apple Review APPROVED 후 사용자 실기기 확인:
+- 최애 케미 같은 일주 (戊戌 7명) 본문 unique (R96 sprint 1)
+- 본문에 "anchor" / "결" 잔존 0 (KO 만)
+- 오늘 탭 본문 자연 흐름 (R97 connector 제거)
+- 신년운세 _TwelveAreas 다른 사주 다른 본문 (R95)
+- 입력 첫 focus = 이름 (R95)
+- 궁합 본문 5 섹션 9줄+ + 연애·결혼·자녀 (R94)
+- gender chip / 검색 IME (R94)
+
+---
+
+### 2026-05-18 13:55 (Mac 자율) — pillarseer R92 완료 + 1.0.0+50 외부 베타 자동 제출
 
 사용자 mandate "B. R92 entry rewrite (heavy)" 선택 → 4 round algorithmic 정제 진행.
 
