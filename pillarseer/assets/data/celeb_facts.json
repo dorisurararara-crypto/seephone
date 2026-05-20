@@ -1,0 +1,1543 @@
+{
+  "_meta": {
+    "round": "R105",
+    "sprint": "3A",
+    "purpose": "최애의 사주 — 셀럽별 위키 검증 사실 저장소. 셀럽 사주 본문(celeb_saju_readings.json)은 이 파일의 verified fact 만 인용한다.",
+    "schema": {
+      "<celebId>": {
+        "sources": [
+          {
+            "id": "source 고유 id (예: wiki_ko)",
+            "type": "wikipedia | official_profile",
+            "url": "출처 URL — wikipedia.org 또는 공식 allowlist 만",
+            "retrievedAt": "YYYY-MM-DD"
+          }
+        ],
+        "facts": [
+          {
+            "id": "fact 고유 id",
+            "claimKo": "한국어 사실 한 줄. 위키/공식 출처 검증된 것만.",
+            "sourceIds": ["이 사실을 뒷받침하는 source id 1개 이상"],
+            "confidence": "verified | unverified",
+            "publicness": "well_known | less_known | fanKnown"
+          }
+        ]
+      }
+    },
+    "rules": [
+      "출처 없는 사실 주장 금지. confidence=verified 인 fact 만 본문에서 인용 가능.",
+      "source URL 은 wikipedia.org 또는 sourceAllowlist 의 공식 도메인만 허용.",
+      "출생 시(時)·시주 관련 사실은 셀럽 시간 미상이므로 절대 기재하지 않는다.",
+      "celeb_saju_readings.json 의 usedFactIds 는 모두 이 파일에 존재해야 한다 (r105 가드)."
+    ],
+    "sourceAllowlist": [
+      "wikipedia.org",
+      "ko.wikipedia.org",
+      "en.wikipedia.org"
+    ],
+    "todoSprint2": "DONE — top 12 셀럽 위키 검증 fact + source URL 채움. confidence=verified 만 본문 인용.",
+    "todoSprint3A": "DONE — Top 30 확장 첫 9명(v/jimin/jin/jisoo/rose/lisa/winter_aespa/yujin_ive/kim-soohyun) 위키 검증 fact 추가. boundary_ambiguous 7명 제외.",
+    "todoSprint3B": "DONE — Top 30 마지막 9명(lee-minho/cha-eunwoo/park-seojoon/lee-junho/bae-suzy/han-sohee/kim-jiwon/byeon-wooseok/kim-hyeyoon) 위키 검증 fact 추가. Top 30 완성. boundary_ambiguous 7명 제외."
+  },
+  "iu": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/아이유",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/IU_(singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "iu_debut_2008",
+        "claimKo": "2008년 9월 데뷔 EP로 가요계에 처음 나섰다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "iu_singer_songwriter",
+        "claimKo": "직접 작사·작곡에 참여하는 싱어송라이터로, 첫 자작곡 '내 손을 잡아'(2011)를 시작으로 앨범 전반에서 가사와 곡 작업을 주도해 왔다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "iu_chatshire_producer",
+        "claimKo": "미니앨범 '챗셔(CHAT-SHIRE)'(2015)는 본인이 직접 제작에 깊이 관여한 작품이다.",
+        "sourceIds": ["wiki_ko"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "iu_acting_my_mister",
+        "claimKo": "드라마 '나의 아저씨'(2018)에서 이지안 역을 연기했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "iu_stadium_first",
+        "claimKo": "한국 여성 솔로 가수 최초로 서울 올림픽 주경기장 단독 공연을 열었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "rm": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/RM_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/RM_(musician)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "rm_bts_leader",
+        "claimKo": "2013년 6월 데뷔한 방탄소년단의 리더이자 메인 래퍼다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "rm_underground_runch_randa",
+        "claimKo": "데뷔 전 'Runch Randa'라는 이름으로 언더그라운드 힙합 신에서 랩을 했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "rm_songwriting_credits",
+        "claimKo": "방탄소년단 곡 다수의 작사·작곡에 참여했고, 한국음악저작권협회에 100곡이 넘는 작품을 등록했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "rm_solo_mixtapes",
+        "claimKo": "믹스테이프 'RM'(2015)과 'Mono'(2018)를 발표하며 솔로 작업을 이어 왔다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "rm_solo_album_indigo",
+        "claimKo": "솔로 정규 앨범 'Indigo'(2022)를 발표했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "jungkook": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/정국_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jungkook",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "jungkook_bts_maknae",
+        "claimKo": "2013년 데뷔한 방탄소년단의 막내이자 메인 보컬이다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "jungkook_solo_album_golden",
+        "claimKo": "솔로 정규 앨범 'GOLDEN'(2023)을 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jungkook_seven_hot100",
+        "claimKo": "솔로 싱글 'Seven'(2023)이 빌보드 핫100 1위에 올랐다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jungkook_worldcup_dreamers",
+        "claimKo": "2022 FIFA 월드컵 사운드트랙 'Dreamers'를 불렀다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jungkook_songwriting",
+        "claimKo": "'Magic Shop' 등 방탄소년단 일부 곡의 작사·작곡에 참여했다.",
+        "sourceIds": ["wiki_ko"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "jennie": {
+    "sources": [
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jennie_(singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "jennie_blackpink_2016",
+        "claimKo": "2016년 8월 데뷔한 블랙핑크의 멤버로, 그룹의 첫 공개 멤버였다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "jennie_newzealand_years",
+        "claimKo": "어린 시절 뉴질랜드에서 유학하다가 2010년 한국으로 돌아왔다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jennie_trainee_six_years",
+        "claimKo": "데뷔 전 약 6년간 연습생 생활을 했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jennie_solo_2018",
+        "claimKo": "솔로 싱글 'SOLO'(2018)를 발표했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jennie_odd_atelier",
+        "claimKo": "2023년 본인의 독립 레이블 오드아틀리에(Odd Atelier)를 설립했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "karina": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/카리나_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Karina_(South_Korean_singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "karina_aespa_leader",
+        "claimKo": "2020년 11월 데뷔한 에스파의 리더다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "karina_predebut_taemin_mv",
+        "claimKo": "데뷔 전 동료 가수 태민의 'Want' 뮤직비디오(2019)에 출연했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "karina_got_the_beat",
+        "claimKo": "프로젝트 그룹 갓 더 비트(GOT the beat)의 멤버이기도 하다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "karina_solo_up_2024",
+        "claimKo": "2024년 솔로곡 'Up'으로 음악 방송 1위를 차지했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "wonyoung_ive": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/장원영",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jang_Won-young",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "wonyoung_produce48_first",
+        "claimKo": "오디션 프로그램 '프로듀스 48'(2018)에서 최종 1위를 차지해 아이즈원의 센터가 되었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "wonyoung_izone",
+        "claimKo": "2018년부터 2021년까지 아이즈원 멤버로 활동했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "wonyoung_ive_debut",
+        "claimKo": "2021년 12월 걸그룹 아이브로 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "wonyoung_musicbank_mc",
+        "claimKo": "2021년부터 약 1년 4개월간 KBS '뮤직뱅크'의 고정 MC를 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "taeyeon": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/태연",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Taeyeon",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "taeyeon_snsd_leader",
+        "claimKo": "2007년 데뷔한 소녀시대의 리더이자 메인 보컬이다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "taeyeon_solo_ep_i",
+        "claimKo": "2015년 첫 솔로 EP 'I'를 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "taeyeon_subunits",
+        "claimKo": "소녀시대-태티서, 소녀시대-Oh!GG 등 유닛 활동에도 참여했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "taeyeon_ost_singer",
+        "claimKo": "여러 드라마 OST를 부른 가수로 알려져 있다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "gdragon": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/지드래곤",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/G-Dragon",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "gdragon_bigbang_leader",
+        "claimKo": "2006년 데뷔한 빅뱅의 리더이자 메인 래퍼다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "gdragon_child_performer",
+        "claimKo": "어린 시절 아동 그룹 '꼬마 룰라'로 활동했고, 이후 약 5년간 SM 엔터테인먼트 연습생으로 지냈다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "gdragon_songwriting_no1",
+        "claimKo": "'거짓말' 등 빅뱅 대표곡을 직접 작사·작곡했고, 한국음악저작권협회에 180곡이 넘는 작품을 올렸다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "gdragon_solo_heartbreaker",
+        "claimKo": "솔로 앨범 'Heartbreaker'(2009)를 발표하며 솔로 활동을 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "song-hyekyo": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/송혜교",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Song_Hye-kyo",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "songhyekyo_model_contest_debut",
+        "claimKo": "1996년 교복 모델 콘테스트에 입상하며 연예계 활동을 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "songhyekyo_autumn_in_my_heart",
+        "claimKo": "드라마 '가을동화'(2000)로 큰 인기를 얻으며 한류 스타로 자리 잡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "songhyekyo_descendants_of_the_sun",
+        "claimKo": "'태양의 후예'(2016)로 KBS 연기대상 대상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "songhyekyo_the_glory",
+        "claimKo": "넷플릭스 시리즈 '더 글로리'(2022~2023)로 백상예술대상 TV부문 연기상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "squidgame-lee": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/이정재_(배우)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lee_Jung-jae",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "leejungjae_model_debut_1993",
+        "claimKo": "패션 모델로 출발해 1993년 드라마 '공룡선생'으로 연기자 데뷔를 했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leejungjae_films_thieves_newworld",
+        "claimKo": "'도둑들'(2012), '신세계'(2013), '관상'(2013) 등 흥행작에 출연했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leejungjae_squidgame_emmy",
+        "claimKo": "넷플릭스 '오징어 게임'(2021)의 성기훈 역으로 프라임타임 에미상 남우주연상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leejungjae_director_hunt",
+        "claimKo": "2022년 영화 '헌트'로 감독 데뷔를 했고, 이 작품은 칸 영화제에 초청됐다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "kim-yuna": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/김연아",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Kim_Yuna",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "kim_yuna_olympic_gold_2010",
+        "claimKo": "2010년 밴쿠버 동계올림픽 피겨스케이팅 여자 싱글에서 금메달을 땄다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "kim_yuna_olympic_silver_2014",
+        "claimKo": "2014년 소치 동계올림픽에서 은메달을 땄다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kim_yuna_worlds_200",
+        "claimKo": "2009년 세계선수권에서 우승하며 ISU 채점제 기준 여자 선수 최초로 200점을 넘었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kim_yuna_pyeongchang_ambassador",
+        "claimKo": "은퇴 후 2018 평창 동계올림픽 유치 홍보대사로 활동했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "son-heungmin": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/손흥민",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Son_Heung-min",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "son_clubs_europe",
+        "claimKo": "독일 함부르크와 레버쿠젠을 거쳐 2015년 잉글랜드 토트넘 홋스퍼에 입단했고, 2025년 미국 메이저 리그 사커의 로스앤젤레스 FC로 이적했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "son_golden_boot_2022",
+        "claimKo": "2021-22 시즌 아시아 선수 최초로 프리미어리그 득점왕에 올랐다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "son_puskas_2020",
+        "claimKo": "2020년 FIFA 푸스카스상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "son_captain",
+        "claimKo": "토트넘 주장을 지냈고 대한민국 축구 국가대표팀의 주장도 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "v": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/뷔",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/V_(singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "v_bts_member",
+        "claimKo": "2013년 6월 데뷔한 방탄소년단의 멤버다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "v_acting_hwarang",
+        "claimKo": "드라마 '화랑'(2016~2017)에서 연기를 맡으며 배우로도 활동했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "v_ost_sweet_night",
+        "claimKo": "드라마 '이태원 클라쓰' OST 'Sweet Night'(2020)를 불렀다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "v_solo_ep_layover",
+        "claimKo": "솔로 EP 'Layover'(2023)를 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "v_predebut_soundcloud",
+        "claimKo": "'Scenery', 'Winter Bear'(2019) 등 자작곡을 사운드클라우드에 직접 공개해 왔다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "jimin": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/지민_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jimin",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "jimin_bts_dancer",
+        "claimKo": "2013년 데뷔한 방탄소년단의 메인 댄서이자 보컬이다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "jimin_solo_album_face",
+        "claimKo": "첫 솔로 앨범 'FACE'(2023)를 발표했고, 전곡 작업에 참여했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jimin_like_crazy_hot100",
+        "claimKo": "솔로곡 'Like Crazy'(2023)로 한국 솔로 가수 최초로 빌보드 핫100 1위에 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jimin_second_album_muse",
+        "claimKo": "두 번째 솔로 앨범 'MUSE'(2024)를 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jimin_promise_songwriting",
+        "claimKo": "자작곡 'Promise'(2018)를 비롯해 솔로곡 작사·작곡에 참여해 왔다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "jin": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/진_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jin_(singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "jin_bts_eldest",
+        "claimKo": "2013년 데뷔한 방탄소년단의 보컬이자 일곱 멤버 중 맏형이다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "jin_solo_astronaut",
+        "claimKo": "첫 솔로 싱글 'The Astronaut'(2022)를 콜드플레이와 함께 작업해 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jin_solo_ep_happy",
+        "claimKo": "솔로 미니앨범 'Happy'(2024)를 발표했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jin_bt21_rj",
+        "claimKo": "라인프렌즈와의 협업 캐릭터 프로젝트 BT21에서 캐릭터 'RJ'를 디자인했다.",
+        "sourceIds": ["wiki_ko"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jin_solo_tracks",
+        "claimKo": "'Awake'(2016), 'Epiphany'(2018), 'Moon'(2020) 등 방탄소년단 앨범 속 솔로곡을 맡아 왔다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "jisoo": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/지수_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jisoo",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "jisoo_blackpink_2016",
+        "claimKo": "2016년 8월 데뷔한 블랙핑크의 멤버다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "jisoo_solo_me_2023",
+        "claimKo": "첫 솔로 싱글 앨범 'ME'(2023)를 타이틀곡 'FLOWER'와 함께 발표했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jisoo_acting_snowdrop",
+        "claimKo": "JTBC 드라마 '설강화'(2021~2022)에서 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jisoo_label_blissoo",
+        "claimKo": "2024년 본인의 레이블 블리수(Blissoo)를 설립했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "jisoo_predebut_cameo",
+        "claimKo": "데뷔 전 드라마 '프로듀사'(2015)에 카메오로 출연한 이력이 있다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "rose": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/로제_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ros%C3%A9_(singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "rose_blackpink_vocalist",
+        "claimKo": "2016년 8월 데뷔한 블랙핑크의 보컬이다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "rose_australia_audition",
+        "claimKo": "오스트레일리아에서 자랐고, 2012년 시드니 오디션을 거쳐 약 4년간 연습생 생활을 했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "rose_solo_r_2021",
+        "claimKo": "첫 솔로 싱글 앨범 'R'(2021)을 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "rose_album_rosie_2024",
+        "claimKo": "솔로 앨범 'rosie'(2024)를 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "rose_apt_collab",
+        "claimKo": "브루노 마스와 함께한 'APT.'(2024)를 발표했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "lisa": {
+    "sources": [
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lisa_(rapper)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "lisa_blackpink_dancer",
+        "claimKo": "2016년 8월 데뷔한 블랙핑크의 메인 댄서이자 래퍼다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "lisa_thailand_audition",
+        "claimKo": "태국 출신으로, 2010년 태국 오디션을 통해 연습생으로 합류했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "lisa_solo_lalisa_2021",
+        "claimKo": "첫 솔로 싱글 앨범 'LALISA'(2021)를 발표했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "lisa_solo_album_alter_ego",
+        "claimKo": "솔로 정규 앨범 'Alter Ego'(2025)를 발표했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "lisa_acting_white_lotus",
+        "claimKo": "미국 드라마 '화이트 로터스' 시즌 3(2025)에 출연하며 연기에 처음 도전했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "winter_aespa": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/윈터_(가수)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Winter_(singer)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "winter_aespa_member",
+        "claimKo": "2020년 데뷔한 에스파의 멤버로, 보컬과 댄스를 맡고 있다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "winter_dancefest_cast",
+        "claimKo": "학교 댄스 행사에서 SM 엔터테인먼트 관계자의 눈에 띄어 연습생이 되었다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "winter_got_the_beat",
+        "claimKo": "프로젝트 그룹 갓 더 비트(Got the beat)의 멤버로도 활동했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "winter_collab_floral_sense",
+        "claimKo": "예성과 함께한 'Floral Sense'(2023) 등 협업 음원에 참여했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "yujin_ive": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/안유진",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/An_Yu-jin",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "yujin_produce48_fifth",
+        "claimKo": "오디션 프로그램 '프로듀스 48'(2018)에서 최종 5위에 올라 아이즈원으로 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "yujin_izone",
+        "claimKo": "2018년부터 2021년까지 아이즈원 멤버로 활동했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "yujin_ive_leader",
+        "claimKo": "2021년 12월 데뷔한 걸그룹 아이브의 리더이자 보컬이다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "yujin_mc_roles",
+        "claimKo": "SBS '인기가요' 등 여러 음악 프로그램의 진행을 맡아 왔다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "kim-soohyun": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/김수현_(1988년)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Kim_Soo-hyun",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "kimsoohyun_sitcom_debut_2007",
+        "claimKo": "2007년 시트콤 '김치 치즈 스마일'로 연기를 시작했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimsoohyun_dream_high_2011",
+        "claimKo": "드라마 '드림하이'(2011)로 폭넓은 인지도를 얻었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimsoohyun_moon_sun_2012",
+        "claimKo": "사극 '해를 품은 달'(2012)에서 이훤 역을 맡아 높은 시청률을 기록했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimsoohyun_star_2013",
+        "claimKo": "드라마 '별에서 온 그대'(2013~2014)로 아시아 전역에서 큰 인기를 얻었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimsoohyun_okay_2020",
+        "claimKo": "드라마 '사이코지만 괜찮아'(2020)로 5년 만에 드라마 주연으로 복귀했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimsoohyun_queen_of_tears_2024",
+        "claimKo": "드라마 '눈물의 여왕'(2024)에서 백현우 역을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "lee-minho": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/이민호_(1987년)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lee_Min-ho_(actor,_born_1987)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "leeminho_model_predebut",
+        "claimKo": "정식 연기 활동에 앞서 잡지 모델로 일하며 연예계와 인연을 맺었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leeminho_debut_2006",
+        "claimKo": "2006년 EBS 드라마 '비밀의 교정'으로 정식 연기자 데뷔를 했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leeminho_boys_over_flowers",
+        "claimKo": "드라마 '꽃보다 남자'(2009)에서 구준표 역을 맡아 폭넓은 인기를 얻었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "leeminho_city_hunter_heirs",
+        "claimKo": "'시티헌터'(2011), '상속자들'(2013) 등 드라마 주연을 이어 갔다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leeminho_film_award",
+        "claimKo": "영화 '강남 1970'(2015)으로 대종상 신인상을 받았다.",
+        "sourceIds": ["wiki_ko"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "cha-eunwoo": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/차은우",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Cha_Eun-woo",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "chaeunwoo_film_debut_2014",
+        "claimKo": "2014년 영화 '두근두근 내 인생'에 작은 배역으로 출연하며 배우로 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "chaeunwoo_astro_debut",
+        "claimKo": "2016년 2월 그룹 아스트로(Astro)의 멤버로 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "chaeunwoo_gangnam_beauty",
+        "claimKo": "드라마 '내 아이디는 강남미인'(2018)에서 첫 드라마 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "chaeunwoo_music_core_mc",
+        "claimKo": "2016년부터 2018년까지 음악 방송 '쇼! 음악중심'의 진행을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "chaeunwoo_rookie_historian",
+        "claimKo": "'신입사관 구해령'(2019)에서 지상파 드라마 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "park-seojoon": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/박서준",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Park_Seo-joon",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "parkseojoon_mv_debut_2011",
+        "claimKo": "2011년 방용국의 'I Remember' 뮤직비디오에 출연하며 연예계 활동을 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "parkseojoon_kill_me_heal_me",
+        "claimKo": "드라마 '킬미, 힐미'(2015)에 출연하며 인지도를 넓혔다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "parkseojoon_fight_for_my_way",
+        "claimKo": "'쌈, 마이웨이'(2017), '김비서가 왜 그럴까'(2018) 등 드라마 주연을 이어 갔다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "parkseojoon_midnight_runners",
+        "claimKo": "영화 '청년경찰'(2017)로 대종상 신인상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "parkseojoon_marvels",
+        "claimKo": "할리우드 영화 '더 마블스'(2023)에 얀 왕자 역으로 출연했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "lee-junho": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/준호",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lee_Junho",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "leejunho_2pm_debut",
+        "claimKo": "2008년 그룹 투피엠(2PM)의 멤버로 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "leejunho_audition_2006",
+        "claimKo": "2006년 오디션 프로그램 '슈퍼스타 서바이벌'에서 우승하며 연습생이 되었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leejunho_drama_debut_2016",
+        "claimKo": "2016년 tvN 드라마 '기억'으로 드라마 연기에 나섰다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leejunho_red_sleeve_baeksang",
+        "claimKo": "드라마 '옷소매 붉은 끝동'(2021~2022)으로 백상예술대상 TV부문 남자 최우수연기상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "leejunho_king_the_land",
+        "claimKo": "드라마 '킹더랜드'(2023)에서 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "bae-suzy": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/배수지",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Bae_Suzy",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "suzy_miss_a_debut",
+        "claimKo": "2010년 걸그룹 미쓰에이(Miss A)의 멤버로 데뷔했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "suzy_drama_debut_dream_high",
+        "claimKo": "2011년 KBS 드라마 '드림하이'로 연기를 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "suzy_architecture_101",
+        "claimKo": "영화 '건축학개론'(2012)으로 백상예술대상 영화부문 신인연기상을 받았다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "suzy_solo_music_2017",
+        "claimKo": "2017년 솔로 EP 'Yes? No?'를 발표하며 솔로 음악 활동도 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "suzy_startup_2020",
+        "claimKo": "드라마 '스타트업'(2020) 등 여러 작품에서 주연을 이어 갔다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "han-sohee": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/한소희",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Han_So-hee",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "hansohee_acting_debut_2017",
+        "claimKo": "2017년 드라마 '다시 만난 세계'에 작은 배역으로 출연하며 연기를 시작했다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "hansohee_world_of_married",
+        "claimKo": "드라마 '부부의 세계'(2020)로 폭넓은 인지도를 얻었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "hansohee_my_name_2021",
+        "claimKo": "넷플릭스 시리즈 '마이 네임'(2021)에서 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "hansohee_aaa_awards",
+        "claimKo": "아시아 아티스트 어워즈에서 2021년과 2022년 베스트 아티스트상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "kim-jiwon": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/김지원_(배우)",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Kim_Ji-won_(actress)",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "kimjiwon_film_debut_2011",
+        "claimKo": "영화 '로맨틱 헤븐'(2011)으로 연기를 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimjiwon_descendants_of_the_sun",
+        "claimKo": "드라마 '태양의 후예'(2016)로 폭넓은 인지도를 얻었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "kimjiwon_fight_for_my_way",
+        "claimKo": "'쌈, 마이웨이'(2017)에서 첫 드라마 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimjiwon_my_liberation_notes",
+        "claimKo": "드라마 '나의 해방일지'(2022)로 백상예술대상 여자 최우수연기상 후보에 올랐다.",
+        "sourceIds": ["wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimjiwon_queen_of_tears_2024",
+        "claimKo": "드라마 '눈물의 여왕'(2024)에서 홍해인 역을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  },
+  "byeon-wooseok": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/변우석",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Byeon_Woo-seok",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "byeonwooseok_model_debut_2010",
+        "claimKo": "2010년 패션 모델로 활동을 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "byeonwooseok_acting_debut_2016",
+        "claimKo": "2016년 tvN 드라마 '디어 마이 프렌즈'로 연기에 나섰다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "byeonwooseok_20th_century_baeksang",
+        "claimKo": "영화 '20세기 소녀'(2022)로 백상예술대상 영화부문 남자 신인연기상을 받았다.",
+        "sourceIds": ["wiki_ko"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "byeonwooseok_lovely_runner",
+        "claimKo": "드라마 '선재 업고 튀어'(2024)에서 류선재 역을 맡아 큰 반응을 얻었다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      }
+    ]
+  },
+  "kim-hyeyoon": {
+    "sources": [
+      {
+        "id": "wiki_ko",
+        "type": "wikipedia",
+        "url": "https://ko.wikipedia.org/wiki/김혜윤",
+        "retrievedAt": "2026-05-20"
+      },
+      {
+        "id": "wiki_en",
+        "type": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Kim_Hye-yoon",
+        "retrievedAt": "2026-05-20"
+      }
+    ],
+    "facts": [
+      {
+        "id": "kimhyeyoon_debut_2013",
+        "claimKo": "2013년 KBS TV소설 '삼생이'에 출연하며 연기 활동을 시작했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimhyeyoon_sky_castle_baeksang",
+        "claimKo": "드라마 'SKY 캐슬'(2018~2019)에서 강예서 역을 맡아 백상예술대상 TV부문 여자 신인연기상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "well_known"
+      },
+      {
+        "id": "kimhyeyoon_extraordinary_you",
+        "claimKo": "'어쩌다 발견한 하루'(2019)에서 첫 드라마 주연을 맡았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimhyeyoon_bulldozer_award",
+        "claimKo": "영화 '불도저에 탄 소녀'(2022)로 청룡영화상 신인여우상을 받았다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      },
+      {
+        "id": "kimhyeyoon_lovely_runner",
+        "claimKo": "드라마 '선재 업고 튀어'(2024)에 출연했다.",
+        "sourceIds": ["wiki_ko", "wiki_en"],
+        "confidence": "verified",
+        "publicness": "less_known"
+      }
+    ]
+  }
+}

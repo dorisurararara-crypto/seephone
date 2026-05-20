@@ -47,6 +47,16 @@ class ReportsHomeScreen extends StatelessWidget {
         route: '/reports/kpop-compat',
         size: _CardSize.large,
       ),
+      // R105 — 팬심 4순위 · 최애의 사주. 최애궁합(kpop-compat) 카드 바로 아래.
+      _Card(
+        eyebrow: useKo ? '팬심 4순위 · 최애의 사주' : 'FAN PICK · Bias Saju',
+        title: useKo ? '최애의 사주' : 'My Bias’ Saju',
+        subtitle: useKo
+            ? '내 최애는 어떤 사주를 타고났는지, 공개된 생일로 풀어드립니다.'
+            : 'See the saju your bias was born with — read from a public birthday.',
+        route: '/reports/celebrity-saju',
+        size: _CardSize.large,
+      ),
       _Card(
         eyebrow: useKo ? '연애 · 인간관계' : 'Love & people',
         title: useKo ? '궁합 보기' : 'Compatibility',
@@ -164,11 +174,8 @@ class ReportsHomeScreen extends StatelessWidget {
               ),
             ),
             ...cards.asMap().entries.map(
-              (e) => _CardRow(
-                card: e.value,
-                highlight: e.key == 0,
-                useKo: useKo,
-              ),
+              (e) =>
+                  _CardRow(card: e.value, highlight: e.key == 0, useKo: useKo),
             ),
             const SizedBox(height: 32),
           ],
@@ -283,8 +290,9 @@ class _CardRow extends StatelessWidget {
                           card.title,
                           style: GoogleFonts.notoSerifKr(
                             fontSize: titleSize,
-                            fontWeight:
-                                isHero ? FontWeight.w500 : FontWeight.w400,
+                            fontWeight: isHero
+                                ? FontWeight.w500
+                                : FontWeight.w400,
                             color: AppColors.ink,
                             height: 1.25,
                           ),

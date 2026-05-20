@@ -17,6 +17,7 @@ import 'screens/reports/new_year_2026_screen.dart';
 import 'screens/reports/kpop_compat_screen.dart';
 import 'screens/reports/past_life_screen.dart';
 import 'screens/reports/music_pharmacy_screen.dart';
+import 'screens/reports/celebrity_saju_screen.dart';
 import 'providers/saju_provider.dart';
 
 /// 전역 라우터. extra 의존 제거.
@@ -40,6 +41,9 @@ GoRouter buildRouter(WidgetRef ref) {
         '/reports/kpop-compat',
         '/reports/past-life',
         '/reports/music-pharmacy',
+        // R105 주의: 최애의 사주 route 는 의도적으로 이 protected 목록에서 제외했다.
+        // 그 화면은 셀럽 데이터만 읽고 사용자 본인 사주(sajuResult)가 불필요하므로,
+        // result == null 이어도 /input redirect 없이 접근 가능해야 한다.
         '/discover',
         '/profile',
         '/settings',
@@ -58,27 +62,15 @@ GoRouter buildRouter(WidgetRef ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: '/input',
-        builder: (context, state) => const InputScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+      GoRoute(path: '/input', builder: (context, state) => const InputScreen()),
       GoRoute(
         path: '/result',
         builder: (context, state) => const ResultScreen(),
       ),
       // Round 79 sprint 7 — 신규 `/today` route (사용자 mandate "내 사주 = 평생사주만").
-      GoRoute(
-        path: '/today',
-        builder: (context, state) => const TodayScreen(),
-      ),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
-      ),
+      GoRoute(path: '/today', builder: (context, state) => const TodayScreen()),
+      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
       GoRoute(
         path: '/reports',
         builder: (context, state) => const ReportsHomeScreen(),
@@ -116,6 +108,11 @@ GoRouter buildRouter(WidgetRef ref) {
       GoRoute(
         path: '/reports/music-pharmacy',
         builder: (context, state) => const MusicPharmacyScreen(),
+      ),
+      // R105 — 최애의 사주 (팬심 4순위). 사용자 본인 사주 불필요 — 셀럽 데이터만.
+      GoRoute(
+        path: '/reports/celebrity-saju',
+        builder: (context, state) => const CelebritySajuScreen(),
       ),
       GoRoute(
         path: '/discover',
