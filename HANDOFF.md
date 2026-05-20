@@ -68,6 +68,34 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-20 (Mac → 다음 세션) — pillarseer R98~R103 완료 + **1.0.0+64 (R103) ship 진행 중**
+
+**현재 빌드**: 1.0.0+64 (R103) — 사용자 "출시" 승인 후 ship sub-agent 진행 중
+- Public link: https://testflight.apple.com/join/kRs36R3b
+- pillarseer ASC App ID: **6768096855**
+
+**진행 요약**: R98 한국어 본문 / R99 영어 본문 / R100 케미 반복감 / R101 팬심 카테고리 재정의 (전생 시나리오 + 디지털 기운 처방전 신규) / R102 전생 자연화 + 처방전 데이터 / R103 전생 본문 재설계 + 곡 73 정정 + 입력 focus + 스크롤. 빌드 +58~+64 (+61 은 1.1.0 사고로 expired).
+
+### ⭐⭐ 새 세션 "이어서" 한마디 = 작업 방식 100% 복원
+
+다음 세션에서 사용자가 "이어서" 한 마디 하면:
+1. `git pull --rebase`
+2. HANDOFF.md "## 최신" (이 블록) read
+3. **메모리 `feedback_workflow_option_a.md` read** — codex 호출법(stdin redirect) / sprint 패턴 / ship 룰 전부
+4. **메모리 `project_pillarseer_round_103.md` read** — R98~R103 ship 로그 + 현재 빌드
+5. `ruby pillarseer/scripts/check_build_status.rb` + `check_beta_review.rb` 로 1.0.0+64 상태 확인
+6. 사용자 mandate 받으면 → **codex 에 verbatim 전달** (1등 앱 / 퀄리티 우선 / 회귀 0 mandate prepend)
+
+**작업 방식 핵심** (feedback_workflow_option_a.md 가 ground truth):
+- codex (GPT-5.5) = 모든 의사결정 / main Claude = 메신저 / 서브에이전트(opus) = 코딩
+- codex 호출 = prompt 를 /tmp 파일에 Write → `codex exec --skip-git-repo-check --sandbox read-only --cd /Users/seunghyeon/seephone/pillarseer < /tmp/file.txt > /tmp/out.txt 2>&1` run_in_background (heredoc 인자 = hang)
+- codex 답변 그대로 사용자에게 paste
+- sprint 별 sub-agent dispatch (codex 가 준 prompt 그대로)
+- ship = 사용자 "출시" 한마디 (자동 ship 금지) / version bump = 사용자 결정
+- 1등 앱 / 퀄리티 우선 / 회귀 0 = 최상위 mandate
+
+---
+
 ### 2026-05-19 (Mac 자율 → 다음 세션) — pillarseer R97 + R96 sprint 1 완료 + **1.0.0+57 외부 베타 자동 제출** + Option A workflow 운영 중
 
 **현재 빌드**: 1.0.0+57 ASC VALID + 외부 베타 ganzitester 자동 제출 ✅

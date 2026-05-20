@@ -1,64 +1,89 @@
 ---
 name: workflow-option-a-codex-brain
-description: "pillarseer R95+ 부터 사용자 mandate 새 workflow — codex 두뇌, 서브에이전트 코딩, Claude (Opus 4.7) 메신저+보고. Option A = pure passthrough."
-metadata: 
+description: "pillarseer R95+ 작업 방식 — codex(GPT5.5) 두뇌, 서브에이전트(Opus) 코딩, main Claude 메신저. 새 세션 '이어서' 한마디로 이 방식 100% 복원. codex 호출법·sprint 패턴·ship 룰 전부 포함."
+metadata:
   node_type: memory
   type: feedback
   originSessionId: b7388865-d3ed-4b0b-8946-5130910483e5
 ---
 
-사용자가 직접 mandate (2026-05-18 대화):
-
-> "잠깐 하네스 방식을 바꾸자 너는 codex에게 내가 보낸 말만 보내주고 codex가 머리이고
-> 너가 (claude opus4.7) 이 코딩을 잘하니까 코딩만 시키게하자 그리고 코딩도 너가 직접하는게아니라
-> 서브에이전트 시켜서 하고 너는 그냥 나랑 대화만하고 codex한테 내 대화 그대로 전달만 하고
-> codex답변을 나한테 알려주고 완료되었다 이정도만 말하는걸로 바꾸자"
-
-그 후 사용자가 Option A 선택:
-> "A" (= 완전 passthrough 옵션)
+사용자 mandate (2026-05-18 + 2026-05-20 강화):
+- "codex가 머리 + Claude(메신저) + 서브에이전트가 코딩"
+- "1등앱이 목표 / 퀄리티 우선" (2026-05-20)
+- "다음 세션에서 이어서 한마디면 전부 지금이랑 완전 똑같이 되도록" (2026-05-20)
 
 ## 역할 분담 (절대 룰)
 
 - **사용자**: mandate 만
-- **codex**: 두뇌 — planning, spec 결정, evaluator (한국어 native read)
-- **Claude Opus 4.7 (나)**: 메신저 + 서브에이전트 디스패치 + 보고만
-- **서브에이전트** (general-purpose): 실제 코딩
+- **codex (GPT-5.5)**: 두뇌 — 모든 의사결정, sprint 구조, dispatch spec, 검수
+- **main Claude (Opus 4.7, 나)**: 메신저 — codex 호출 + 답변 paste + 서브 dispatch + 보고. **직접 코딩·결정 X**
+- **서브에이전트 (general-purpose, model: opus)**: 실제 코딩
 
-## Option A 룰
+예외 — main Claude 가 직접 해도 되는 것: codex 가 명시 위임한 1줄 fix / 메모리 파일 작성 / git 상태 확인 / TaskCreate 추적.
 
-1. **사용자 메시지 → codex 에 그대로 전달**. context inject 금지 (project 정보·이전 회차 결과 추가 X).
-   - 명령: `echo "사용자 verbatim 메시지" | codex exec --skip-git-repo-check 2>&1 | tail -N`
-   - 또는 heredoc 으로 사용자 메시지만
+## 최상위 mandate (모든 codex 호출에 prepend)
 
-2. **codex 답변 → 사용자에게 그대로 paste**. 요약·번역·sale 금지.
-   - "codex 답변 그대로:" 한 줄 + 답변 전체 paste
+**"한국 사주 앱 1등 목표 / 퀄리티 우선 / 회귀 0"**
+- 속도·토큰 절약보다 사용자 체감 quality
+- threshold 절대 낮추지 X (scope creep 사유 reject)
+- 사용자가 한 번 본 fix 회귀 X (R98~R103 모든 가드 유지)
 
-3. **서브에이전트 디스패치는 codex spec 그대로** 받아서 위임. 내가 spec 만들지 마.
+## codex 호출법 (정확히 — 안 그러면 hang)
 
-4. **서브에이전트 완료 → "완료" 한 단어 보고**. 길게 요약 X.
+heredoc 인자 방식은 stdin 대기로 **hang 됨**. 반드시:
 
-5. **검수도 codex 가** — 서브 결과 sample 보내서 한국어 native 기준 read 받기.
+1. prompt 를 `/tmp/codex_xxx.txt` 에 Write 로 작성
+2. `codex exec --skip-git-repo-check --sandbox read-only --cd /Users/seunghyeon/seephone/pillarseer < /tmp/codex_xxx.txt > /tmp/codex_out.txt 2>&1` 를 **run_in_background: true** 로 실행
+3. 완료 알림 받으면 `grep -n "^codex$\|tokens used" /tmp/codex_out.txt` 로 섹션 마커 찾기
+4. 마지막 `codex` 마커 ~ `tokens used` 사이를 Read (offset/limit) — 그게 최종 답변
+5. codex auth = ChatGPT 구독 모드 (`~/.codex/auth.json` auth_mode "chatgpt"). apikey 모드면 사용자에게 알림.
 
-6. **ship 도 codex 가 GO 줄 때까지 rework 반복**. Claude 가 "괜찮아 보임" 판단 X.
+codex 에 보내는 prompt 구조: 사용자 verbatim + 현 상태 요약 + `=== 결정 요청 ===` Q1~QN + "paste-ready dispatch prompt 작성해줘".
 
-## R97 까지 검수 progress (왜 정직히 codex 답변 그대로 paste 해야 하나)
+## Round 진행 패턴 (R98~R103 검증된 흐름)
 
-- R96 — 내가 codex 의 "9.9/10 SHIP" 만 알려줌. 사실 codex 는 surface metric 만 봤음.
-- 실기기 검증 후 사용자: "Codex한테 9.9 테스트 받은거 맞아???"
-- codex 자체 철회: 실기기 sample 기준 **3~4/10**.
-- 교훈: codex 답변 sale 금지. 사용자가 codex 평가 raw 그대로 봐야 함.
+1. 사용자 mandate → codex 에 verbatim 전달 (Q1~QN 결정 요청 + dispatch prompt 요청)
+2. codex 답변 그대로 사용자에게 paste (요약·sale 금지)
+3. codex 가 sprint 구조 + 각 sprint paste-ready dispatch prompt 제공
+4. Sprint 1 = baseline 진단 (보통 read-only, docs/operating_memory/rNNN_sprintN_baseline.md 산출)
+5. baseline 결과 codex 에 보고 → codex 가 Sprint 2+ dispatch spec
+6. sprint 별 sub-agent (general-purpose, model opus, run_in_background) dispatch — 파일 소유권 분리되면 병렬
+7. 각 sub-agent 결과 codex 에 보고 → 다음 sprint
+8. 마지막 sprint = 통합 QA + ship
+9. TaskCreate 로 sprint 추적
 
-## 이어서 할 때 (다음 세션)
+## sub-agent dispatch 룰
 
-사용자가 "이어서" / "체크해줘" 한 마디 → Claude 가:
-1. `git pull --rebase` (변경 없으면 OK)
+codex 가 준 prompt 그대로 + 추가:
+- 파일 소유권 명시 (수정 허용 / 수정 금지 — 병렬 sub-agent 충돌 방지)
+- `.codex_backups/` 에 backup 먼저
+- 신규 test 작성 + flutter test + flutter analyze
+- 보고 형식 명시 (<= N words)
+- model: opus, run_in_background: true
+
+## ship 룰 (R103 부터 — 사용자 승인 필수)
+
+- **자동 ship 금지. 사용자 "출시" 한마디 받고 ship.** (R98~R102 는 자동 ship 했으나 R103 codex 결정으로 사용자 승인 필수 전환)
+- **version bump 는 사용자 결정** (R101 에서 codex 가 1.1.0 minor bump 했다가 사용자가 1.0.0 원함 → 사고. ASC 는 marketing version 다운 못 함. 단 기존 preReleaseVersion 살아있으면 가능했음)
+- ship sub-agent: flutter clean → pub get → pod install → flutter build ipa → altool upload (`--apple-id 6768096855` 명시, Xcode 26 silent fail 회피) → build VALID 폴링 → submit_b{N}.rb → 외부 그룹 ganzitester + Beta Review → git commit + push
+- ship sub-agent 가 polling 단계에서 일찍 종료하면 main 이 상태 확인 후 continuation sub-agent dispatch
+
+## 교훈
+
+- R96: codex 가 surface metric 만 보고 9.9 줌 → 실기기 "AI 같다" → 자체 철회 3~4/10. **codex 는 실제 본문 sample 한국어 native read 해야 함**
+- codex 답변 sale 금지 — 사용자가 raw 그대로 봐야 함
+
+## 이어서 할 때 (새 세션 "이어서" 한마디)
+
+1. 머신 식별 (`uname` Darwin = Mac) + `git pull --rebase`
 2. HANDOFF.md "## 최신" block read
-3. 마지막 ship build # 확인 (`ruby scripts/check_build_status.rb`)
-4. 사용자 다음 mandate 대기
-
-다음 mandate 받으면 → **즉시 codex 에 verbatim 전달** (context 없이) → codex 답변 그대로 paste → 서브 위임 → 완료 한 줄.
+3. `ruby pillarseer/scripts/check_build_status.rb` + `check_beta_review.rb` 로 ship 상태
+4. 이 메모리 ([[feedback_workflow_option_a]]) + [[project_pillarseer_round_103]] read
+5. 사용자 다음 mandate 대기 → codex 에 verbatim 전달 (1등 앱 mandate prepend)
 
 ## 관련
 
-- [[reference_testflight_pipeline]] — ship pipeline (deploy_testflight.sh + submit_b{N}.rb)
-- [[project_pillarseer_round_97]] — R95~R97 진행 결과 (별도 memory)
+- [[project_pillarseer_round_103]] — R98~R103 ship 로그 + 현재 빌드
+- [[reference_testflight_pipeline]] — ship pipeline
+- [[reference_seephone_ids]] — pillarseer APP_ID 6768096855
+- [[reference_xcodebuild_signing]] — xcodebuild ASC API key 패턴
