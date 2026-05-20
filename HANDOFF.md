@@ -68,16 +68,18 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-05-20 (Mac → 다음 세션) — pillarseer R104 완료 + **1.0.0+65 외부 베타 APPROVED** ✅
+### 2026-05-20 (Mac → 다음 세션) — pillarseer R105 완료 + **1.0.0+66 외부 베타 APPROVED** ✅
 
-**현재 빌드**: 1.0.0+65 (R104) — ASC VALID + Beta Review APPROVED, ganzitester 외부 베타 라이브
+**현재 빌드**: 1.0.0+66 (R105) — ASC VALID + Beta Review APPROVED, ganzitester 외부 베타 라이브
 - Public link: https://testflight.apple.com/join/kRs36R3b
 - pillarseer ASC App ID: **6768096855**
-- build 64 = R103 (APPROVED) / build 65 = R104 (APPROVED). commit `277ac65`(전생) + `39d5d39`(release).
+- build 64=R103 / 65=R104 / 66=R105 — 전부 APPROVED. R105 commit `526ba99`.
 
-**R104 진행**: 전생 본문을 slot 랜덤조립 → keyword×storyArc 완결 시나리오(8×8=64, 기승전결)로 재설계 / 다시뽑기 제거 + 셀럽 선택 시 picker hide / seed 고정 제거 / pre-existing 8건(late_life·관성·골든·본인415·anchor·version·호칭) + 조사 50건 + 오염 토큰 102건 일소. codex 9.1/10 GO, full test +1177 -0.
+**R105 진행**: 신규 메뉴 "최애의 사주" (팬심 4순위) — DB 셀럽 Top 30 의 실제 생년월일로 年月日 3주 사주를 풀고, 위키백과로 검증한 알려진 사실을 본문에 티 안 나게 침투. celeb_facts.json(사실+출처 URL) + celeb_saju_readings.json(7섹션 본문) 분리, 거짓말 0 가드 테스트. codex 8.6/10 GO, full test 1204/1204. 나머지 193명은 "준비 중" — 차기 라운드 단계 확장.
 
-**이전 (R98~R103)**: 1.0.0+58~+64 모두 APPROVED. R98 한국어 / R99 영어 / R100 케미 / R101 팬심 카테고리 / R102 전생 자연화 / R103 전생 4막 재설계 (+61 은 1.1.0 사고로 expired).
+**R104**: 전생 본문 keyword×storyArc 완결 시나리오(64 arc, 기승전결) + 다시뽑기 제거 + pre-existing 8건/조사/오염 일소. codex 9.1/10.
+
+**이전 (R98~R103)**: 1.0.0+58~+64 모두 APPROVED. R98 한국어 / R99 영어 / R100 케미 / R101 팬심 / R102 전생 자연화 / R103 전생 4막 (+61 은 1.1.0 사고로 expired).
 
 ### ⭐⭐ 새 세션 "이어서" 한마디 = 작업 방식 100% 복원
 
