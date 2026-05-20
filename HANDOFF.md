@@ -68,13 +68,16 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
-### 2026-05-20 (Mac → 다음 세션) — pillarseer R98~R103 완료 + **1.0.0+64 (R103) ship 진행 중**
+### 2026-05-20 (Mac → 다음 세션) — pillarseer R104 완료 + **1.0.0+65 외부 베타 APPROVED** ✅
 
-**현재 빌드**: 1.0.0+64 (R103) — 사용자 "출시" 승인 후 ship sub-agent 진행 중
+**현재 빌드**: 1.0.0+65 (R104) — ASC VALID + Beta Review APPROVED, ganzitester 외부 베타 라이브
 - Public link: https://testflight.apple.com/join/kRs36R3b
 - pillarseer ASC App ID: **6768096855**
+- build 64 = R103 (APPROVED) / build 65 = R104 (APPROVED). commit `277ac65`(전생) + `39d5d39`(release).
 
-**진행 요약**: R98 한국어 본문 / R99 영어 본문 / R100 케미 반복감 / R101 팬심 카테고리 재정의 (전생 시나리오 + 디지털 기운 처방전 신규) / R102 전생 자연화 + 처방전 데이터 / R103 전생 본문 재설계 + 곡 73 정정 + 입력 focus + 스크롤. 빌드 +58~+64 (+61 은 1.1.0 사고로 expired).
+**R104 진행**: 전생 본문을 slot 랜덤조립 → keyword×storyArc 완결 시나리오(8×8=64, 기승전결)로 재설계 / 다시뽑기 제거 + 셀럽 선택 시 picker hide / seed 고정 제거 / pre-existing 8건(late_life·관성·골든·본인415·anchor·version·호칭) + 조사 50건 + 오염 토큰 102건 일소. codex 9.1/10 GO, full test +1177 -0.
+
+**이전 (R98~R103)**: 1.0.0+58~+64 모두 APPROVED. R98 한국어 / R99 영어 / R100 케미 / R101 팬심 카테고리 / R102 전생 자연화 / R103 전생 4막 재설계 (+61 은 1.1.0 사고로 expired).
 
 ### ⭐⭐ 새 세션 "이어서" 한마디 = 작업 방식 100% 복원
 
@@ -82,8 +85,8 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 1. `git pull --rebase`
 2. HANDOFF.md "## 최신" (이 블록) read
 3. **메모리 `feedback_workflow_option_a.md` read** — codex 호출법(stdin redirect) / sprint 패턴 / ship 룰 전부
-4. **메모리 `project_pillarseer_round_103.md` read** — R98~R103 ship 로그 + 현재 빌드
-5. `ruby pillarseer/scripts/check_build_status.rb` + `check_beta_review.rb` 로 1.0.0+64 상태 확인
+4. **메모리 `project_pillarseer_round_103.md` read** — R98~R104 ship 로그 + 현재 빌드
+5. `ruby pillarseer/scripts/check_build_status.rb` + `check_beta_review.rb` 로 1.0.0+65 상태 확인 (build 번호 stale 트랩 주의 — 재조회 확인)
 6. 사용자 mandate 받으면 → **codex 에 verbatim 전달** (1등 앱 / 퀄리티 우선 / 회귀 0 mandate prepend)
 
 **작업 방식 핵심** (feedback_workflow_option_a.md 가 ground truth):
