@@ -407,7 +407,7 @@ class PersonalizationEngine {
       topic: 'action',
       priority: 80,
       koTpl:
-          '너에게 살짝 부족한 {def}을 의식적으로 보충해 보세요. {compKo} 같은 작은 행동 하나면 충분하고, 그 하나가 오늘 흐름을 부드럽게 풀어줘요.',
+          '당신에게 살짝 부족한 {def}을 의식적으로 보충해 보세요. {compKo} 같은 작은 행동 하나면 충분하고, 그 하나가 오늘 흐름을 부드럽게 풀어줘요.',
       enTpl:
           'Add one conscious touch of {defEn} ({compEn}). One small action is enough — it softens the day visibly.',
       condition: (p, t) => true,
@@ -553,7 +553,7 @@ class PersonalizationEngine {
       topic: 'action',
       priority: 65,
       koTpl:
-          '겨울 — 너에게 부족한 {def}을 따뜻한 색과 음식({compKo})으로 보충하는 시기예요. 따뜻한 차 한 잔, 노란 조명, 따끈한 국 한 그릇이 효과가 커요.',
+          '겨울 — 당신에게 부족한 {def}을 따뜻한 색과 음식({compKo})으로 보충하는 시기예요. 따뜻한 차 한 잔, 노란 조명, 따끈한 국 한 그릇이 효과가 커요.',
       enTpl:
           'Winter — bring missing {defEn} via warm colors and food ({compEn}). A hot cup, yellow lighting, a warm soup do real work.',
       condition: (p, t) => t.month >= 12 || t.month <= 2,

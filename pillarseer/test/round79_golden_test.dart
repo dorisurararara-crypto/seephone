@@ -78,10 +78,14 @@ void main() {
       expect(reading.cautionKo.isNotEmpty, isTrue, reason: 'cautionKo');
       // bodyKo — 격국 anchor 8개 중 하나 포함 (Round 79 sprint 5).
       // R86 — 사용자 mandate: 격국 jargon ("정인격" 등) 본문 노출 0 → 평어 phrase 매칭.
+      // R104 sprint 6 — golden phrase 갱신: 정인격 anchor 는 R98(1.0.0+58,
+      // commit eff85eb) 자연 한국어 정제에서 '배움이 잘 자리잡는 흐름이에요' →
+      // '새로 익히는 게 머리에 잘 남는 날이에요' 로 의도적으로 교체됨.
+      // golden 리스트가 R98 시점 갱신 누락 → stale. 현 anchor 로 동기화.
       const gPhrases = [
         '안정적인 일 흐름이 받쳐줘요',
         '추진력이 한 박자 강해지는 분위기예요',
-        '배움이 잘 자리잡는 흐름이에요',
+        '새로 익히는 게 머리에 잘 남는 날이에요',
         '직관이 평소보다 또렷해지는 분위기예요',
         '차곡차곡 쌓이는 흐름이에요',
         '새 거래 신호가 자주 오는 분위기예요',
@@ -92,9 +96,11 @@ void main() {
       expect(hasGyeokguk, isTrue,
           reason: 'G6 bodyKo 격국 anchor (R86 평어): ${reading.bodyKo}');
       // actionKo — 용신 5축 keyword 중 하나 포함 (Round 79 sprint 5 / DynamicTextResolver.yongsinSuffix).
-      // 5행 5종 (초록·산책 / 햇볕 / 단맛 / 책상 정리 / 충분한 수면) 중 하나.
+      // R104 sprint 6 — 5행 水 anchor 는 R98(1.0.0+58, commit eff85eb) 자연
+      // 한국어 정제에서 '충분한 수면 한 시간' → '잠을 조금만 더 챙겨도' 로
+      // 의도적으로 교체됨. golden 리스트가 R98 시점 갱신 누락 → stale. 동기화.
       const ySoftMap = [
-        '초록·산책', '햇볕 받는', '단맛 간식', '책상 정리', '충분한 수면',
+        '초록·산책', '햇볕 받는', '단맛 간식', '책상 정리', '잠을 조금만 더 챙겨도',
       ];
       final hasYongsin = ySoftMap.any((y) => reading.actionKo.contains(y));
       expect(hasYongsin, isTrue,

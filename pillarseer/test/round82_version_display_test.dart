@@ -94,11 +94,13 @@ void main() {
         isTrue,
         reason: 'pubspec dependency 누락',
       );
-      // pubspec version 자체 (1.0.0+57) — R96 sprint 1 ship.
+      // pubspec version 자체 — R104 sprint 6 ship target.
+      // 이 핀은 R96 sprint 1 당시 '1.0.0+57' 로 하드코딩됐고 이후 매 ship 마다
+      // 갱신 누락 → stale. 현 ship target 1.0.0+64 (pubspec.yaml) 로 동기화.
       expect(
-        pubspecSrc.contains('version: 1.0.0+57'),
+        pubspecSrc.contains('version: 1.0.0+64'),
         isTrue,
-        reason: 'pubspec version (1.0.0+57) 자체 변경 — R96 sprint 1 ship delivery 불일치',
+        reason: 'pubspec version (1.0.0+64) 자체 변경 — R104 sprint 6 ship delivery 불일치',
       );
     });
 
