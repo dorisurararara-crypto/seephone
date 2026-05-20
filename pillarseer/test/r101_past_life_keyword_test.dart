@@ -1,12 +1,20 @@
-// R101 Sprint 4 — 전생 시나리오(팬심 1순위) keyword 회귀 가드.
+// R101 Sprint 4 → R104 — 전생 시나리오(팬심 1순위) keyword 회귀 가드.
 //
 // 목표:
 //   1. past_life_pool.json parse OK + 구조 무결성
 //   2. 원진살 6쌍 양방향 감지 (子-未 / 丑-午 / 寅-酉 / 卯-申 / 辰-亥 / 巳-戌)
-//   3. 8 keyword 모두 최소 1개 시나리오 생성 가능 (template 3 minimum)
+//   3. 8 keyword 모두 최소 1개 시나리오 생성 가능
 //   4. 8 keyword × 최소 3 sample = 24 case → 한국어 출력 0 영어 leak
 //   5. seed deterministic — 같은 seed → 같은 시나리오 / 다른 seed → 다른 시나리오
 //   6. KO 본문에 anchor / Water Rabbit / 그룹명 영문 head 0
+//
+// R104 sprint 3 주의:
+//   본문 엔진이 slot 조립 → story arc 단일 선택으로 전환됐다. 계산/keyword/
+//   wonjin/KO-leak/seed-determinism 가드는 엔진 무관하므로 그대로 유지한다.
+//   slot 풀 크기(intros/tails/body_lines 4 phase)는 story arc fallback 경로가
+//   여전히 사용하므로 "하위호환 가드" 로 남긴다 — slot 키 삭제 금지 mandate +
+//   Sprint 4 content 전 fallback 안전망. story_arcs schema 전용 검증은
+//   test/r104_past_life_arc_test.dart 가 담당한다.
 
 import 'dart:convert';
 import 'dart:io';
@@ -47,10 +55,16 @@ void main() {
       yearPillar: Pillar(chunGan: yGan, jiJi: yJi),
       monthPillar: Pillar(chunGan: mGan, jiJi: mJi),
       dayPillar: Pillar(chunGan: dGan, jiJi: dJi),
-      hourPillar:
-          hGan != null && hJi != null ? Pillar(chunGan: hGan, jiJi: hJi) : null,
+      hourPillar: hGan != null && hJi != null
+          ? Pillar(chunGan: hGan, jiJi: hJi)
+          : null,
       elements: const FiveElements(
-          wood: 20, fire: 20, earth: 20, metal: 20, water: 20),
+        wood: 20,
+        fire: 20,
+        earth: 20,
+        metal: 20,
+        water: 20,
+      ),
       dayMaster: dGan,
       dayMasterName: 'Test',
       summary: 'test',
@@ -81,38 +95,83 @@ void main() {
       expect((pool['endings'] as List).length, greaterThanOrEqualTo(12));
     });
 
-    test('8 keyword 각각 templates intros/tails ≥ 3, body_lines 4 phase ≥ 12 (R102)',
-        () {
-      const keys = [
-        'wonjin',
-        'dohwa',
-        'yeokma',
-        'cheoneul',
-        'gongmang',
-        'hap',
-        'chung',
-        'hyeong',
-      ];
-      final templates = pool['templates'] as Map<String, dynamic>;
-      final bodies = pool['body_lines'] as Map<String, dynamic>;
-      for (final k in keys) {
-        final tpl = templates[k] as Map<String, dynamic>?;
-        expect(tpl, isNotNull, reason: 'missing template: $k');
-        expect((tpl!['intros'] as List).length, greaterThanOrEqualTo(3),
-            reason: 'intros < 3 for $k');
-        expect((tpl['tails'] as List).length, greaterThanOrEqualTo(3),
-            reason: 'tails < 3 for $k');
-        // R102 sprint 2 — body_lines 는 Map (setup/event/turn/resolution) 4 phase.
-        final entry = bodies[k];
-        expect(entry, isA<Map>(),
-            reason: 'body_lines[$k] must be 4-phase Map (R102)');
-        final m = entry as Map<String, dynamic>;
-        for (final phase in ['setup', 'event', 'turn', 'resolution']) {
-          expect((m[phase] as List).length, greaterThanOrEqualTo(12),
-              reason: 'body_lines[$k].$phase variant < 12 (R102)');
+    test(
+      '8 keyword slot 풀 — templates intros/tails + body_lines 4 phase (하위호환 가드)',
+      () {
+        // R104: 본문은 story arc 으로 전환됐지만 slot 키는 fallback 경로(=story_arcs
+        // 미존재/invalid 시)가 그대로 사용한다. 삭제 금지 mandate + fallback 안전망
+        // 으로 slot 풀 크기를 하위호환 가드로 유지.
+        const keys = [
+          'wonjin',
+          'dohwa',
+          'yeokma',
+          'cheoneul',
+          'gongmang',
+          'hap',
+          'chung',
+          'hyeong',
+        ];
+        final templates = pool['templates'] as Map<String, dynamic>;
+        final bodies = pool['body_lines'] as Map<String, dynamic>;
+        for (final k in keys) {
+          final tpl = templates[k] as Map<String, dynamic>?;
+          expect(tpl, isNotNull, reason: 'missing template: $k');
+          expect(
+            (tpl!['intros'] as List).length,
+            greaterThanOrEqualTo(3),
+            reason: 'intros < 3 for $k',
+          );
+          expect(
+            (tpl['tails'] as List).length,
+            greaterThanOrEqualTo(3),
+            reason: 'tails < 3 for $k',
+          );
+          // body_lines 는 Map (setup/event/turn/resolution) 4 phase — slot fallback.
+          final entry = bodies[k];
+          expect(
+            entry,
+            isA<Map>(),
+            reason: 'body_lines[$k] must be 4-phase Map (slot fallback)',
+          );
+          final m = entry as Map<String, dynamic>;
+          for (final phase in ['setup', 'event', 'turn', 'resolution']) {
+            expect(
+              (m[phase] as List).length,
+              greaterThanOrEqualTo(12),
+              reason: 'body_lines[$k].$phase variant < 12 (slot fallback)',
+            );
+          }
         }
-      }
-    });
+      },
+    );
+
+    test(
+      'R104 story_arcs 키 — 존재 시 8 keyword 와 동일 키 사용 (Sprint 4 content 후)',
+      () {
+        // story_arcs 는 Sprint 4 가 추가한다. 추가 전에는 키 자체가 없을 수 있으므로
+        // "없으면 통과" — 단 존재할 때는 기존 8 keyword 와 동일한 키만 써야 한다.
+        final sa = pool['story_arcs'];
+        if (sa == null) return; // Sprint 4 전.
+        expect(sa, isA<Map>(), reason: 'story_arcs 는 Map 이어야 함');
+        const validKeys = {
+          'wonjin',
+          'dohwa',
+          'yeokma',
+          'cheoneul',
+          'gongmang',
+          'hap',
+          'chung',
+          'hyeong',
+        };
+        for (final k in (sa as Map).keys) {
+          expect(
+            validKeys.contains(k),
+            isTrue,
+            reason: 'story_arcs 에 알 수 없는 keyword 키: $k',
+          );
+        }
+      },
+    );
   });
 
   // ───────────────── 2. 원진살 양방향 6쌍 ─────────────────
@@ -151,92 +210,148 @@ void main() {
   group('PastLifeService.extractKeywords', () {
     test('원진살 (사용자 子일지 + 셀럽 未일지) → wonjin', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '己', dJi: '未');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '己',
+        dJi: '未',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.wonjin));
     });
 
     test('지지합 (子-丑) → hap', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '辛', dJi: '丑');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '辛',
+        dJi: '丑',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.hap));
     });
 
     test('지지충 (子-午) → chung', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '辛', dJi: '午');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '辛',
+        dJi: '午',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.chung));
     });
 
     test('천간합 (甲-己) → hap', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '甲', dJi: '寅');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '甲',
+        dJi: '寅',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '己', dJi: '丑');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '己',
+        dJi: '丑',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.hap));
     });
 
     test('도화 (사용자 子일지의 도화 = 酉, 셀럽 일지 酉) → dohwa', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       // 셀럽 일지 = 酉 (사용자 도화). 단 子-酉 = 파(破)지만 충/합/원진 아님
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '丑',
-          dGan: '辛', dJi: '酉');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '丑',
+        dGan: '辛',
+        dJi: '酉',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.dohwa));
     });
 
     test('역마 (사용자 子일지의 역마 = 寅, 셀럽 일지 寅) → yeokma', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '辰',
-          mGan: '丙', mJi: '午',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '辰',
+        mGan: '丙',
+        mJi: '午',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '甲', dJi: '寅');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '甲',
+        dJi: '寅',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.yeokma));
     });
 
     test('천을귀인 (甲 일간 → 丑/未, 셀럽 일지 丑) → cheoneul', () {
       final u = makeSaju(
-          yGan: '癸', yJi: '亥',
-          mGan: '丙', mJi: '辰',
-          dGan: '甲', dJi: '寅');
+        yGan: '癸',
+        yJi: '亥',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '甲',
+        dJi: '寅',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '辛', dJi: '丑');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '辛',
+        dJi: '丑',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.cheoneul));
     });
@@ -244,13 +359,21 @@ void main() {
     test('공망 (甲子 일주 → 戌/亥 공망, 셀럽 일지 戌) → gongmang', () {
       // 甲子 일주
       final u = makeSaju(
-          yGan: '甲', yJi: '辰',
-          mGan: '丙', mJi: '寅',
-          dGan: '甲', dJi: '子');
+        yGan: '甲',
+        yJi: '辰',
+        mGan: '丙',
+        mJi: '寅',
+        dGan: '甲',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '戊', dJi: '戌');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '戊',
+        dJi: '戌',
+      );
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, contains(PastLifeKeyword.gongmang));
     });
@@ -265,17 +388,28 @@ void main() {
       // 셀럽 pillars 에 寅(=hour borrow) + 자기 巳·申 동시 등장 0.
       // 사용자 천간: 丙(丙-辛 합 가능) 셀럽 천간 乙 (丙-乙 합 X).
       final u = makeSaju(
-          yGan: '癸', yJi: '亥', // 亥 — 사용자 본인 1회만, 자형 회피
-          mGan: '乙', mJi: '卯',
-          dGan: '丙', dJi: '寅'); // 丙寅 일주, 공망 戌/亥 (셀럽 일지와 무관)
+        yGan: '癸',
+        yJi: '亥', // 亥 — 사용자 본인 1회만, 자형 회피
+        mGan: '乙',
+        mJi: '卯',
+        dGan: '丙',
+        dJi: '寅',
+      ); // 丙寅 일주, 공망 戌/亥 (셀럽 일지와 무관)
       final c = makeSaju(
-          yGan: '丙', yJi: '寅', // 寅 — 셀럽 본인 1회
-          mGan: '辛', mJi: '卯',
-          dGan: '乙', dJi: '丑'); // 乙丑 일주, 공망 申/酉
+        yGan: '丙',
+        yJi: '寅', // 寅 — 셀럽 본인 1회
+        mGan: '辛',
+        mJi: '卯',
+        dGan: '乙',
+        dJi: '丑',
+      ); // 乙丑 일주, 공망 申/酉
       final kws = PastLifeService.extractKeywords(u, c);
       expect(kws, isNotEmpty);
-      expect(kws, contains(PastLifeKeyword.hap),
-          reason: 'fallback should be hap. got=$kws');
+      expect(
+        kws,
+        contains(PastLifeKeyword.hap),
+        reason: 'fallback should be hap. got=$kws',
+      );
     });
   });
 
@@ -301,90 +435,185 @@ void main() {
 
     // 24 케이스 = 8 keyword × 3 (다른 seed).
     // 각 케이스를 만들기 위해 keyword 별 user/celeb saju 1개 + seed 3개 회전.
-    final cases = <(String, PastLifeKeyword, SajuResult Function(),
-        SajuResult Function())>[
-      // wonjin: 子-未
-      ('wonjin#1', PastLifeKeyword.wonjin,
-          () => makeSaju(
-              yGan: '甲', yJi: '寅',
-              mGan: '丙', mJi: '辰',
-              dGan: '戊', dJi: '子'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '己', dJi: '未')),
-      // dohwa: 卯 일지의 도화 = 子. 사용자 卯 + 셀럽 子.
-      ('dohwa#1', PastLifeKeyword.dohwa,
-          () => makeSaju(
-              yGan: '癸', yJi: '亥',
-              mGan: '乙', mJi: '丑',
-              dGan: '甲', dJi: '卯'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '丙', dJi: '子')),
-      // yeokma: 子 일지의 역마 = 寅. 사용자 子 + 셀럽 寅.
-      ('yeokma#1', PastLifeKeyword.yeokma,
-          () => makeSaju(
-              yGan: '甲', yJi: '辰',
-              mGan: '丙', mJi: '午',
-              dGan: '戊', dJi: '子'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '甲', dJi: '寅')),
-      // cheoneul: 甲 일간 천을 = 丑/未. 사용자 甲 + 셀럽 丑.
-      ('cheoneul#1', PastLifeKeyword.cheoneul,
-          () => makeSaju(
-              yGan: '癸', yJi: '亥',
-              mGan: '丙', mJi: '辰',
-              dGan: '甲', dJi: '寅'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '辛', dJi: '丑')),
-      // gongmang: 甲子 일주 → 戌/亥. 셀럽 戌.
-      ('gongmang#1', PastLifeKeyword.gongmang,
-          () => makeSaju(
-              yGan: '甲', yJi: '辰',
-              mGan: '丙', mJi: '寅',
-              dGan: '甲', dJi: '子'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '戊', dJi: '戌')),
-      // hap: 子-丑 지지합.
-      ('hap#1', PastLifeKeyword.hap,
-          () => makeSaju(
-              yGan: '甲', yJi: '寅',
-              mGan: '丙', mJi: '辰',
-              dGan: '戊', dJi: '子'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '辛', dJi: '丑')),
-      // chung: 子-午 지지충.
-      ('chung#1', PastLifeKeyword.chung,
-          () => makeSaju(
-              yGan: '甲', yJi: '寅',
-              mGan: '丙', mJi: '辰',
-              dGan: '戊', dJi: '子'),
-          () => makeSaju(
-              yGan: '乙', yJi: '巳',
-              mGan: '丁', mJi: '酉',
-              dGan: '辛', dJi: '午')),
-      // hyeong: 寅巳申 三刑 — 사용자 寅·巳 + 셀럽 申 (申은 셀럽 일지) → hour 슬롯 borrow.
-      // 사용자 yearJi 寅 + monthJi 巳 + dayJi 子, 셀럽 dayJi 申.
-      ('hyeong#1', PastLifeKeyword.hyeong,
-          () => makeSaju(
-              yGan: '甲', yJi: '寅',
-              mGan: '丁', mJi: '巳',
-              dGan: '戊', dJi: '子'),
-          () => makeSaju(
-              yGan: '乙', yJi: '丑',
-              mGan: '丁', mJi: '酉',
-              dGan: '庚', dJi: '申')),
-    ];
+    final cases =
+        <
+          (
+            String,
+            PastLifeKeyword,
+            SajuResult Function(),
+            SajuResult Function(),
+          )
+        >[
+          // wonjin: 子-未
+          (
+            'wonjin#1',
+            PastLifeKeyword.wonjin,
+            () => makeSaju(
+              yGan: '甲',
+              yJi: '寅',
+              mGan: '丙',
+              mJi: '辰',
+              dGan: '戊',
+              dJi: '子',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '己',
+              dJi: '未',
+            ),
+          ),
+          // dohwa: 卯 일지의 도화 = 子. 사용자 卯 + 셀럽 子.
+          (
+            'dohwa#1',
+            PastLifeKeyword.dohwa,
+            () => makeSaju(
+              yGan: '癸',
+              yJi: '亥',
+              mGan: '乙',
+              mJi: '丑',
+              dGan: '甲',
+              dJi: '卯',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '丙',
+              dJi: '子',
+            ),
+          ),
+          // yeokma: 子 일지의 역마 = 寅. 사용자 子 + 셀럽 寅.
+          (
+            'yeokma#1',
+            PastLifeKeyword.yeokma,
+            () => makeSaju(
+              yGan: '甲',
+              yJi: '辰',
+              mGan: '丙',
+              mJi: '午',
+              dGan: '戊',
+              dJi: '子',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '甲',
+              dJi: '寅',
+            ),
+          ),
+          // cheoneul: 甲 일간 천을 = 丑/未. 사용자 甲 + 셀럽 丑.
+          (
+            'cheoneul#1',
+            PastLifeKeyword.cheoneul,
+            () => makeSaju(
+              yGan: '癸',
+              yJi: '亥',
+              mGan: '丙',
+              mJi: '辰',
+              dGan: '甲',
+              dJi: '寅',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '辛',
+              dJi: '丑',
+            ),
+          ),
+          // gongmang: 甲子 일주 → 戌/亥. 셀럽 戌.
+          (
+            'gongmang#1',
+            PastLifeKeyword.gongmang,
+            () => makeSaju(
+              yGan: '甲',
+              yJi: '辰',
+              mGan: '丙',
+              mJi: '寅',
+              dGan: '甲',
+              dJi: '子',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '戊',
+              dJi: '戌',
+            ),
+          ),
+          // hap: 子-丑 지지합.
+          (
+            'hap#1',
+            PastLifeKeyword.hap,
+            () => makeSaju(
+              yGan: '甲',
+              yJi: '寅',
+              mGan: '丙',
+              mJi: '辰',
+              dGan: '戊',
+              dJi: '子',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '辛',
+              dJi: '丑',
+            ),
+          ),
+          // chung: 子-午 지지충.
+          (
+            'chung#1',
+            PastLifeKeyword.chung,
+            () => makeSaju(
+              yGan: '甲',
+              yJi: '寅',
+              mGan: '丙',
+              mJi: '辰',
+              dGan: '戊',
+              dJi: '子',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '巳',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '辛',
+              dJi: '午',
+            ),
+          ),
+          // hyeong: 寅巳申 三刑 — 사용자 寅·巳 + 셀럽 申 (申은 셀럽 일지) → hour 슬롯 borrow.
+          // 사용자 yearJi 寅 + monthJi 巳 + dayJi 子, 셀럽 dayJi 申.
+          (
+            'hyeong#1',
+            PastLifeKeyword.hyeong,
+            () => makeSaju(
+              yGan: '甲',
+              yJi: '寅',
+              mGan: '丁',
+              mJi: '巳',
+              dGan: '戊',
+              dJi: '子',
+            ),
+            () => makeSaju(
+              yGan: '乙',
+              yJi: '丑',
+              mGan: '丁',
+              mJi: '酉',
+              dGan: '庚',
+              dJi: '申',
+            ),
+          ),
+        ];
 
     final seeds = <int>[1, 2, 3];
     final celebNames = <String>['솔라', '아이유', '뷔'];
@@ -394,38 +623,55 @@ void main() {
       for (var i = 0; i < seeds.length; i++) {
         final seed = seeds[i];
         final celebName = celebNames[i];
-        test('$label seed=$seed celeb=$celebName — 한국어 leak 0 + keyword 포함',
-            () {
-          final u = mkU();
-          final c2 = mkC();
-          final kws = PastLifeService.extractKeywords(u, c2);
-          expect(kws, contains(expectedKw),
-              reason: '$label expected $expectedKw, got=$kws');
-          final scenario = PastLifeService.generateScenario(
-            user: u,
-            celeb: c2,
-            celebName: celebName,
-            userName: '너',
-            seed: seed,
-          );
-          expect(scenario.length, greaterThanOrEqualTo(80),
-              reason: 'scenario too short: $scenario');
-          // 사용자 이름 / 셀럽 이름 inject 검증.
-          expect(scenario.contains(celebName), isTrue,
-              reason: 'celebName not injected: $scenario');
-          expect(scenario.contains('너'), isTrue,
-              reason: 'userName not injected: $scenario');
-          // 영어 leak 0.
-          for (final f in forbidden) {
-            expect(scenario.contains(f), isFalse,
-                reason: 'forbidden "$f" in $label seed=$seed: $scenario');
-          }
-          // placeholder 잔존 0.
-          expect(scenario.contains(r'$celebName'), isFalse);
-          expect(scenario.contains(r'$userName'), isFalse);
-          expect(scenario.contains(r'$userRole'), isFalse);
-          expect(scenario.contains(r'$celebRole'), isFalse);
-        });
+        test(
+          '$label seed=$seed celeb=$celebName — 한국어 leak 0 + keyword 포함',
+          () {
+            final u = mkU();
+            final c2 = mkC();
+            final kws = PastLifeService.extractKeywords(u, c2);
+            expect(
+              kws,
+              contains(expectedKw),
+              reason: '$label expected $expectedKw, got=$kws',
+            );
+            final scenario = PastLifeService.generateScenario(
+              user: u,
+              celeb: c2,
+              celebName: celebName,
+              userName: '너',
+              seed: seed,
+            );
+            expect(
+              scenario.length,
+              greaterThanOrEqualTo(80),
+              reason: 'scenario too short: $scenario',
+            );
+            // 사용자 이름 / 셀럽 이름 inject 검증.
+            expect(
+              scenario.contains(celebName),
+              isTrue,
+              reason: 'celebName not injected: $scenario',
+            );
+            expect(
+              scenario.contains('너'),
+              isTrue,
+              reason: 'userName not injected: $scenario',
+            );
+            // 영어 leak 0.
+            for (final f in forbidden) {
+              expect(
+                scenario.contains(f),
+                isFalse,
+                reason: 'forbidden "$f" in $label seed=$seed: $scenario',
+              );
+            }
+            // placeholder 잔존 0.
+            expect(scenario.contains(r'$celebName'), isFalse);
+            expect(scenario.contains(r'$userName'), isFalse);
+            expect(scenario.contains(r'$userRole'), isFalse);
+            expect(scenario.contains(r'$celebRole'), isFalse);
+          },
+        );
       }
     }
   });
@@ -435,13 +681,21 @@ void main() {
   group('PastLifeService — seed determinism', () {
     test('같은 seed → 같은 시나리오', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '己', dJi: '未');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '己',
+        dJi: '未',
+      );
       final a = PastLifeService.generateScenario(
         user: u,
         celeb: c,
@@ -461,13 +715,21 @@ void main() {
 
     test('다른 seed → 다른 시나리오 (대부분 케이스)', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '己', dJi: '未');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '己',
+        dJi: '未',
+      );
       // 10개 seed 중 적어도 5개는 seed=0 결과와 달라야 한다 — variance 가드.
       final base = PastLifeService.generateScenario(
         user: u,
@@ -487,23 +749,42 @@ void main() {
         );
         if (other != base) diff++;
       }
-      expect(diff, greaterThanOrEqualTo(5),
-          reason: 'seed variance too low: $diff/10 differ from seed=0');
+      expect(
+        diff,
+        greaterThanOrEqualTo(5),
+        reason: 'seed variance too low: $diff/10 differ from seed=0',
+      );
     });
 
     test('seed 미명시 → 같은 사주짝이면 deterministic (재호출 결과 같음)', () {
       final u = makeSaju(
-          yGan: '甲', yJi: '寅',
-          mGan: '丙', mJi: '辰',
-          dGan: '戊', dJi: '子');
+        yGan: '甲',
+        yJi: '寅',
+        mGan: '丙',
+        mJi: '辰',
+        dGan: '戊',
+        dJi: '子',
+      );
       final c = makeSaju(
-          yGan: '乙', yJi: '巳',
-          mGan: '丁', mJi: '酉',
-          dGan: '己', dJi: '未');
+        yGan: '乙',
+        yJi: '巳',
+        mGan: '丁',
+        mJi: '酉',
+        dGan: '己',
+        dJi: '未',
+      );
       final a = PastLifeService.generateScenario(
-          user: u, celeb: c, celebName: '솔라', userName: '너');
+        user: u,
+        celeb: c,
+        celebName: '솔라',
+        userName: '너',
+      );
       final b = PastLifeService.generateScenario(
-          user: u, celeb: c, celebName: '솔라', userName: '너');
+        user: u,
+        celeb: c,
+        celebName: '솔라',
+        userName: '너',
+      );
       expect(a, equals(b));
     });
   });

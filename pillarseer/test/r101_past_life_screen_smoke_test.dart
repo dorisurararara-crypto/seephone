@@ -32,49 +32,71 @@ void main() {
   // ────────────────── 1. source string grep ──────────────────
 
   group('past_life_screen.dart — source string grep', () {
-    final src =
-        File('lib/screens/reports/past_life_screen.dart').readAsStringSync();
+    final src = File(
+      'lib/screens/reports/past_life_screen.dart',
+    ).readAsStringSync();
 
     test('hero eyebrow / title / subtitle KO 노출', () {
-      expect(src.contains('팬심 1순위 · 전생 인연'), isTrue,
-          reason: 'hero eyebrow 누락');
-      expect(src.contains('전생의 악연 혹은 인연'), isTrue,
-          reason: 'hero title 누락');
-      expect(src.contains('합·충·원진살'), isTrue,
-          reason: 'hero subtitle 누락');
+      expect(src.contains('팬심 1순위 · 전생 인연'), isTrue, reason: 'hero eyebrow 누락');
+      expect(src.contains('전생의 악연 혹은 인연'), isTrue, reason: 'hero title 누락');
+      expect(src.contains('합·충·원진살'), isTrue, reason: 'hero subtitle 누락');
     });
 
     test('userName 빈 칸 → "당신" inject helper + 안내 문구', () {
-      expect(src.contains(r"raw.isEmpty ? '당신' : raw"), isTrue,
-          reason: '빈 이름 → "당신" 기본값 helper 누락');
+      expect(
+        src.contains(r"raw.isEmpty ? '당신' : raw"),
+        isTrue,
+        reason: '빈 이름 → "당신" 기본값 helper 누락',
+      );
       expect(src.contains('“당신”'), isTrue, reason: '안내 문구 누락');
     });
 
-    test('다시 뽑기 버튼 + reroll seed 회전 진입점', () {
-      expect(src.contains("'다시 뽑기'"), isTrue, reason: '다시 뽑기 라벨 누락');
-      expect(src.contains('past_life_reroll_button'), isTrue,
-          reason: 'reroll 버튼 key 누락');
-      expect(src.contains('reroll: true'), isTrue,
-          reason: '_compose(reroll: true) 진입점 누락');
+    test('R104 — 다시 뽑기 완전 제거 + 다른 최애 고르기 버튼', () {
+      // R104 sprint 2 mandate: 사용자가 "다시 뽑기" 가 있으면 안 된다고 명시.
+      // 버튼 라벨 / key / reroll seed 회전 진입점이 모두 사라져야 한다.
+      expect(src.contains('다시 뽑기'), isFalse, reason: 'R104: 다시 뽑기 라벨 잔존');
+      expect(
+        src.contains('past_life_reroll_button'),
+        isFalse,
+        reason: 'R104: reroll 버튼 key 잔존',
+      );
+      expect(
+        src.contains('reroll: true'),
+        isFalse,
+        reason: 'R104: _compose(reroll: true) 진입점 잔존',
+      );
+      // 대신 "다른 최애 고르기" 로 picker 복귀 경로가 있어야 한다.
+      expect(
+        src.contains('past_life_choose_other_star_button'),
+        isTrue,
+        reason: 'R104: 다른 최애 고르기 버튼 key 누락',
+      );
+      expect(
+        src.contains('다른 최애 고르기'),
+        isTrue,
+        reason: 'R104: 다른 최애 고르기 라벨 누락',
+      );
     });
 
     test('RepaintBoundary 로 결과 카드 감쌈 (sprint 7 공유 대비)', () {
-      expect(src.contains('RepaintBoundary'), isTrue,
-          reason: 'RepaintBoundary 누락 — 공유 기능 대비 깨짐');
-      expect(src.contains('past_life_repaint_boundary'), isTrue,
-          reason: 'RepaintBoundary key 누락');
+      expect(
+        src.contains('RepaintBoundary'),
+        isTrue,
+        reason: 'RepaintBoundary 누락 — 공유 기능 대비 깨짐',
+      );
+      expect(
+        src.contains('past_life_repaint_boundary'),
+        isTrue,
+        reason: 'RepaintBoundary key 누락',
+      );
     });
 
     test('영어 텍스트 leak 0 (화면 라벨)', () {
       // 화면이 한국어 only. 단, dart:convert / try/catch 등 영문 코드는 무관.
       // 사용자 노출 영문 문구 (라벨 / 안내) 가 0 이어야 함.
-      const forbiddenInScreen = [
-        "'Past Life Scenario'",
-        "'reroll'",
-      ];
+      const forbiddenInScreen = ["'Past Life Scenario'", "'reroll'"];
       for (final f in forbiddenInScreen) {
-        expect(src.contains(f), isFalse,
-            reason: 'screen 라벨에 "$f" 영문 leak');
+        expect(src.contains(f), isFalse, reason: 'screen 라벨에 "$f" 영문 leak');
       }
     });
 
@@ -96,53 +118,73 @@ void main() {
   // ────────────────── 2. reports_home 메뉴 순서 ──────────────────
 
   group('reports_home_screen.dart — 메뉴 최종 순서', () {
-    final src = File('lib/screens/reports/reports_home_screen.dart')
-        .readAsStringSync();
+    final src = File(
+      'lib/screens/reports/reports_home_screen.dart',
+    ).readAsStringSync();
 
-    test('순서: past-life → music-pharmacy → kpop-compat → compatibility → new-year-2026 → dream',
-        () {
-      final idxPast = src.indexOf('/reports/past-life');
-      final idxMusic = src.indexOf('/reports/music-pharmacy');
-      final idxKpop = src.indexOf('/reports/kpop-compat');
-      final idxCompat = src.indexOf('/reports/compatibility');
-      final idxNy = src.indexOf('/reports/new-year-2026');
-      final idxDream = src.indexOf('/reports/dream');
-      for (final pair in [
-        ('past-life', idxPast),
-        ('music-pharmacy', idxMusic),
-        ('kpop-compat', idxKpop),
-        ('compatibility', idxCompat),
-        ('new-year-2026', idxNy),
-        ('dream', idxDream),
-      ]) {
-        expect(pair.$2 > 0, isTrue,
-            reason: '${pair.$1} route 가 reports_home 에 없음');
-      }
-      expect(idxPast < idxMusic, isTrue,
-          reason: '순서 위반: past-life >= music-pharmacy');
-      expect(idxMusic < idxKpop, isTrue,
-          reason: '순서 위반: music-pharmacy >= kpop-compat');
-      expect(idxKpop < idxCompat, isTrue,
-          reason: '순서 위반: kpop-compat >= compatibility');
-      expect(idxCompat < idxNy, isTrue,
-          reason: '순서 위반: compatibility >= new-year-2026');
-      expect(idxNy < idxDream, isTrue,
-          reason: '순서 위반: new-year-2026 >= dream');
-    });
+    test(
+      '순서: past-life → music-pharmacy → kpop-compat → compatibility → new-year-2026 → dream',
+      () {
+        final idxPast = src.indexOf('/reports/past-life');
+        final idxMusic = src.indexOf('/reports/music-pharmacy');
+        final idxKpop = src.indexOf('/reports/kpop-compat');
+        final idxCompat = src.indexOf('/reports/compatibility');
+        final idxNy = src.indexOf('/reports/new-year-2026');
+        final idxDream = src.indexOf('/reports/dream');
+        for (final pair in [
+          ('past-life', idxPast),
+          ('music-pharmacy', idxMusic),
+          ('kpop-compat', idxKpop),
+          ('compatibility', idxCompat),
+          ('new-year-2026', idxNy),
+          ('dream', idxDream),
+        ]) {
+          expect(
+            pair.$2 > 0,
+            isTrue,
+            reason: '${pair.$1} route 가 reports_home 에 없음',
+          );
+        }
+        expect(
+          idxPast < idxMusic,
+          isTrue,
+          reason: '순서 위반: past-life >= music-pharmacy',
+        );
+        expect(
+          idxMusic < idxKpop,
+          isTrue,
+          reason: '순서 위반: music-pharmacy >= kpop-compat',
+        );
+        expect(
+          idxKpop < idxCompat,
+          isTrue,
+          reason: '순서 위반: kpop-compat >= compatibility',
+        );
+        expect(
+          idxCompat < idxNy,
+          isTrue,
+          reason: '순서 위반: compatibility >= new-year-2026',
+        );
+        expect(
+          idxNy < idxDream,
+          isTrue,
+          reason: '순서 위반: new-year-2026 >= dream',
+        );
+      },
+    );
 
     test('eyebrow 1순위 / 2순위 / 3순위 라벨', () {
-      expect(src.contains('팬심 1순위 · 전생 인연'), isTrue,
-          reason: '1순위 eyebrow 누락');
-      expect(src.contains('팬심 2순위 · 기운 처방'), isTrue,
-          reason: '2순위 eyebrow 누락');
-      expect(src.contains('팬심 3순위 · 최애 궁합'), isTrue,
-          reason: '3순위 eyebrow 누락');
+      expect(src.contains('팬심 1순위 · 전생 인연'), isTrue, reason: '1순위 eyebrow 누락');
+      expect(src.contains('팬심 2순위 · 기운 처방'), isTrue, reason: '2순위 eyebrow 누락');
+      expect(src.contains('팬심 3순위 · 최애 궁합'), isTrue, reason: '3순위 eyebrow 누락');
     });
 
     test('hero badge 가 1순위 (past-life) 라벨', () {
-      expect(src.contains("'팬심 1순위 · 전생 인연' : 'FAN PICK · Past Life'"),
-          isTrue,
-          reason: 'hero badge 가 sprint 5 라벨이 아님');
+      expect(
+        src.contains("'팬심 1순위 · 전생 인연' : 'FAN PICK · Past Life'"),
+        isTrue,
+        reason: 'hero badge 가 sprint 5 라벨이 아님',
+      );
     });
   });
 
@@ -154,8 +196,11 @@ void main() {
     test('past-life + music-pharmacy route + PastLifeScreen 진입점', () {
       expect(src.contains("'/reports/past-life'"), isTrue);
       expect(src.contains("'/reports/music-pharmacy'"), isTrue);
-      expect(src.contains('PastLifeScreen()'), isTrue,
-          reason: 'PastLifeScreen 진입점 누락');
+      expect(
+        src.contains('PastLifeScreen()'),
+        isTrue,
+        reason: 'PastLifeScreen 진입점 누락',
+      );
     });
   });
 
@@ -221,9 +266,11 @@ void main() {
     late Map<String, dynamic> pool;
 
     setUpAll(() async {
-      pool = json.decode(
-              await File('assets/data/past_life_pool.json').readAsString())
-          as Map<String, dynamic>;
+      pool =
+          json.decode(
+                await File('assets/data/past_life_pool.json').readAsString(),
+              )
+              as Map<String, dynamic>;
     });
 
     setUp(() {
@@ -243,8 +290,11 @@ void main() {
         userName: '당신',
         seed: 1,
       );
-      expect(scenario.contains('당신'), isTrue,
-          reason: '"당신" inject 실패: $scenario');
+      expect(
+        scenario.contains('당신'),
+        isTrue,
+        reason: '"당신" inject 실패: $scenario',
+      );
       expect(scenario.contains(r'$userName'), isFalse);
       expect(scenario.contains(r'$celebName'), isFalse);
       expect(scenario.contains(r'$userRole'), isFalse);
@@ -270,8 +320,11 @@ void main() {
         );
         if (other != base) diff++;
       }
-      expect(diff, greaterThanOrEqualTo(5),
-          reason: 'seed variance 부족: $diff/10');
+      expect(
+        diff,
+        greaterThanOrEqualTo(5),
+        reason: 'seed variance 부족: $diff/10',
+      );
     });
   });
 }

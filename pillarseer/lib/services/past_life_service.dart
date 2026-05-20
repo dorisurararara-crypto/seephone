@@ -1,7 +1,13 @@
 // Pillar Seer — 전생 시나리오 서비스 (R101 sprint 4, 팬심 1순위).
 //
-// 입력: 사용자 사주 + 셀럽 사주 + 이름 2종.
-// 출력: keyword Set + KO 전생 시나리오 한 편 (5~8 문장).
+// 입력: 사용자 사주 + 셀럽 사주 + 이름 2종 (+ R104: 셀럽 kind).
+// 출력: keyword Set + KO 전생 시나리오 한 편.
+//
+// R104 sprint 3 — story arc 엔진:
+//   - story_arcs[keywordId] 가 있으면 arc 단위 단일 선택 (완결 기승전결,
+//     4문단 8~10문장, kind별 현대 punchline). seed deterministic.
+//   - story_arcs 가 없거나 invalid 하면 기존 slot 조립으로 fallback —
+//     Sprint 4 content 추가 전 중간 상태에서도 앱이 정상 동작.
 //
 // 재사용:
 //   - ShinsaService    — 역마 / 도화 / 천을귀인
@@ -198,7 +204,10 @@ class PastLifeService {
   ///   - 공망: 사용자 일주 기준 공망지에 셀럽 일지 포함, 또는 반대 → gongmang
   ///
   /// 한 개도 매칭 안 되면 fallback 으로 `hap` 1종 반환 — 시나리오 생성이 항상 가능하게.
-  static Set<PastLifeKeyword> extractKeywords(SajuResult user, SajuResult celeb) {
+  static Set<PastLifeKeyword> extractKeywords(
+    SajuResult user,
+    SajuResult celeb,
+  ) {
     final keywords = <PastLifeKeyword>{};
 
     final uJi = user.dayPillar.jiJi;
@@ -282,10 +291,14 @@ class PastLifeService {
     return keywords;
   }
 
-  /// keyword + 셀럽 메타 → 시나리오 한 편 (5~8 문장).
+  /// keyword + 셀럽 메타 → 시나리오 한 편.
+  ///
+  /// R104 sprint 3: story_arcs 가 있으면 arc 단위 단일 선택(완결 기승전결,
+  /// 4문단 8~10문장). 없으면 기존 slot 조립으로 fallback.
   ///
   /// [seed] 가 주어지면 deterministic. 같은 seed → 같은 시나리오.
-  /// 다른 seed → 다른 era / role / ending 조합.
+  /// [kind] 는 셀럽 분류 (idol/actor/athlete/icon). story arc 의 현대 punchline
+  /// 분기에 쓰이며, unknown / 미명시 시 icon fallback.
   ///
   /// 풀 캐시가 비어 있으면 동기적으로 fallback 시나리오를 반환하므로
   /// 실 사용 전에 [seedForTest] 또는 [primeCache] 로 캐시를 채워 둬야 함.
@@ -295,6 +308,7 @@ class PastLifeService {
     required String celebName,
     required String userName,
     int? seed,
+    String kind = 'icon',
   }) {
     final pool = _cache;
     if (pool == null) {
@@ -302,7 +316,7 @@ class PastLifeService {
       return _hardFallback(userName: userName, celebName: celebName);
     }
     final keywords = extractKeywords(user, celeb);
-    final scenario = _composeFromPool(
+    final scenario = _compose(
       pool: pool,
       keywords: keywords,
       user: user,
@@ -310,6 +324,7 @@ class PastLifeService {
       celebName: celebName,
       userName: userName,
       seed: seed ?? _deriveSeed(user, celeb),
+      kind: kind,
     );
     return scenario.scenarioKo;
   }
@@ -321,10 +336,11 @@ class PastLifeService {
     required String celebName,
     required String userName,
     int? seed,
+    String kind = 'icon',
   }) async {
     final pool = await _pool();
     final keywords = extractKeywords(user, celeb);
-    return _composeFromPool(
+    return _compose(
       pool: pool,
       keywords: keywords,
       user: user,
@@ -332,6 +348,7 @@ class PastLifeService {
       celebName: celebName,
       userName: userName,
       seed: seed ?? _deriveSeed(user, celeb),
+      kind: kind,
     );
   }
 
@@ -340,7 +357,199 @@ class PastLifeService {
     await _pool();
   }
 
-  // ─── 내부: 시나리오 합성 ────────────────────────────────────────────
+  // ─── 내부: 시나리오 합성 dispatcher (R104 sprint 3) ───────────────────
+  //
+  // story_arcs[keyword] 가 존재하고 비어 있지 않으면 arc 단위 단일 선택 경로.
+  // 그렇지 않으면 (Sprint 4 content 추가 전 상태 포함) 기존 slot 조립 경로로
+  // fallback — R104 중간 상태에서 앱이 깨지지 않게 보장.
+  static PastLifeScenario _compose({
+    required Map<String, dynamic> pool,
+    required Set<PastLifeKeyword> keywords,
+    required SajuResult user,
+    required SajuResult celeb,
+    required String celebName,
+    required String userName,
+    required int seed,
+    required String kind,
+  }) {
+    final primary = _pickPrimary(keywords);
+    final arc = _selectStoryArc(pool, primary.key, seed);
+    if (arc != null) {
+      return _composeFromStoryArc(
+        pool: pool,
+        arc: arc,
+        keywords: keywords,
+        primary: primary,
+        celebName: celebName,
+        userName: userName,
+        seed: seed,
+        kind: kind,
+      );
+    }
+    // story_arcs 미존재 / invalid → 기존 slot 조립 fallback.
+    return _composeFromPool(
+      pool: pool,
+      keywords: keywords,
+      user: user,
+      celeb: celeb,
+      celebName: celebName,
+      userName: userName,
+      seed: seed,
+    );
+  }
+
+  /// story_arcs[keywordId] 에서 seed deterministic 하게 arc 1개 선택.
+  ///
+  /// story_arcs 키가 없거나, 해당 keyword 가 없거나, 리스트가 비어 있거나,
+  /// 유효한 arc(=gi/seung/jeon/gyeol 4문단 string 보유)가 하나도 없으면 null.
+  /// null 이면 호출부는 slot fallback 으로 동작.
+  static Map<String, dynamic>? _selectStoryArc(
+    Map<String, dynamic> pool,
+    String keywordId,
+    int seed,
+  ) {
+    final storyArcsRaw = pool['story_arcs'];
+    if (storyArcsRaw is! Map) return null;
+    final arcsRaw = storyArcsRaw[keywordId];
+    if (arcsRaw is! List || arcsRaw.isEmpty) return null;
+    // 유효한 arc 만 후보로. invalid arc 는 skip 하되, 하나라도 유효하면 사용.
+    final valid = <Map<String, dynamic>>[];
+    for (final a in arcsRaw) {
+      if (a is Map && _isValidArc(a)) {
+        valid.add(a.cast<String, dynamic>());
+      }
+    }
+    if (valid.isEmpty) return null;
+    // seed deterministic 선택 — 같은 seed → 같은 arc.
+    final idx = Random(seed).nextInt(valid.length);
+    return valid[idx];
+  }
+
+  /// arc shape 검증 — paragraphs gi/seung/jeon/gyeol 4 string 필수.
+  static bool _isValidArc(Map arc) {
+    final p = arc['paragraphs'];
+    if (p is! Map) return false;
+    for (final k in const ['gi', 'seung', 'jeon', 'gyeol']) {
+      final v = p[k];
+      if (v is! String || v.trim().isEmpty) return false;
+    }
+    return true;
+  }
+
+  /// kind → modernPunchlineByKind 키 정규화. unknown 은 icon fallback.
+  static String _normalizeKind(String kind) {
+    const known = {'idol', 'actor', 'athlete', 'icon'};
+    return known.contains(kind) ? kind : 'icon';
+  }
+
+  // ─── 내부: story arc 단위 합성 (R104 sprint 3) ────────────────────────
+  //
+  // arc 하나가 원인→사건→전환→이번 생 punchline 의 완결 단편. 4문단(기/승/전/결)
+  // + kind별 현대 punchline 을 조합. 슬롯 random 조립이 아니므로 항상 기승전결.
+  static PastLifeScenario _composeFromStoryArc({
+    required Map<String, dynamic> pool,
+    required Map<String, dynamic> arc,
+    required Set<PastLifeKeyword> keywords,
+    required PastLifeKeyword primary,
+    required String celebName,
+    required String userName,
+    required int seed,
+    required String kind,
+  }) {
+    final rng = Random(seed);
+
+    // $era — arc 의 eraHints 중 seed deterministic 선택, 없으면 전역 eras fallback.
+    final eraHints = (arc['eraHints'] is List)
+        ? (arc['eraHints'] as List).whereType<String>().toList()
+        : const <String>[];
+    final String era;
+    if (eraHints.isNotEmpty) {
+      era = eraHints[rng.nextInt(eraHints.length)];
+    } else {
+      final eras = (pool['eras'] is List)
+          ? (pool['eras'] as List).whereType<String>().toList()
+          : const <String>[];
+      era = eras.isNotEmpty ? eras[rng.nextInt(eras.length)] : '먼 옛날';
+    }
+
+    // $userRole / $celebRole — arc 가 직접 명시. 누락 시 전역 relations fallback.
+    String userRole = (arc['userRole'] as String?)?.trim() ?? '';
+    String celebRole = (arc['celebRole'] as String?)?.trim() ?? '';
+    if (userRole.isEmpty || celebRole.isEmpty) {
+      final relations = (pool['relations'] is List)
+          ? (pool['relations'] as List).whereType<Map>().toList()
+          : const <Map>[];
+      if (relations.isNotEmpty) {
+        final rel = relations[rng.nextInt(relations.length)];
+        if (userRole.isEmpty) userRole = (rel['user'] as String?) ?? '나그네';
+        if (celebRole.isEmpty) celebRole = (rel['celeb'] as String?) ?? '벗';
+      } else {
+        if (userRole.isEmpty) userRole = '나그네';
+        if (celebRole.isEmpty) celebRole = '벗';
+      }
+    }
+
+    // placeholder inject — 기존 josa 보정 로직 재사용.
+    final injector = _PlaceholderInjector(
+      userName: userName,
+      celebName: celebName,
+      userRole: userRole,
+      celebRole: celebRole,
+      era: era,
+    );
+
+    final paragraphs = arc['paragraphs'] as Map;
+    final gi = injector.inject(paragraphs['gi'] as String);
+    final seung = injector.inject(paragraphs['seung'] as String);
+    final jeon = injector.inject(paragraphs['jeon'] as String);
+    var gyeol = injector.inject(paragraphs['gyeol'] as String);
+
+    // kind 별 현대 punchline — gyeol 마지막에 append. unknown → icon fallback.
+    final punchlineRaw = _arcPunchline(arc, kind);
+    if (punchlineRaw.isNotEmpty) {
+      final punchline = injector.inject(punchlineRaw);
+      gyeol = '${gyeol.trim()} ${punchline.trim()}';
+    }
+
+    // 4문단 join → 반복 어구 cap / 결말 다양화 (기존 회귀 가드 보존).
+    final composedRaw = [
+      gi,
+      seung,
+      jeon,
+      gyeol,
+    ].map((s) => s.trim()).where((s) => s.isNotEmpty).join(' ');
+    final composed = _diversifyEndings(_capRepetition(composedRaw, rng), rng);
+
+    // headline — 기존 josa helper 패턴 보존.
+    final headline =
+        '$userName${josa.withWith(userName)} '
+        '$celebName의 전생 — ${primary.labelKo} 결';
+
+    return PastLifeScenario(
+      keywords: keywords,
+      scenarioKo: composed,
+      headlineKo: headline,
+      celebName: celebName,
+      userName: userName,
+      era: era,
+      userRole: userRole,
+      celebRole: celebRole,
+    );
+  }
+
+  /// arc 의 modernPunchlineByKind 에서 kind 별 punchline. unknown → icon fallback.
+  static String _arcPunchline(Map<String, dynamic> arc, String kind) {
+    final byKind = arc['modernPunchlineByKind'];
+    if (byKind is! Map) return '';
+    final norm = _normalizeKind(kind);
+    final v = byKind[norm];
+    if (v is String && v.trim().isNotEmpty) return v;
+    // norm 에 해당 키가 비어 있으면 icon 으로 한 번 더 fallback.
+    final fb = byKind['icon'];
+    return (fb is String) ? fb : '';
+  }
+
+  // ─── 내부: slot 조립 합성 (fallback 경로 — R103 이하 호환) ──────────────
   static PastLifeScenario _composeFromPool({
     required Map<String, dynamic> pool,
     required Set<PastLifeKeyword> keywords,
@@ -400,7 +609,9 @@ class PastLifeService {
     } else if (bodyEntry is List) {
       // 구버전 fallback — 같은 풀을 4 phase 로 split (균등 분배).
       final flat = bodyEntry.cast<String>();
-      setupLines = flat.isNotEmpty ? [flat[0]] : <String>['$userName과 $celebName의 전생이 시작됐어요.'];
+      setupLines = flat.isNotEmpty
+          ? [flat[0]]
+          : <String>['$userName과 $celebName의 전생이 시작됐어요.'];
       eventLines = flat.length > 1 ? [flat[1]] : <String>['깊은 결이 흘렀어요.'];
       eventSubLines = const <String>[];
       bridgeLines = const <String>[];
@@ -465,8 +676,20 @@ class PastLifeService {
     const loJosas = ['로', '으로']; // direction
     // 받침 무관 (공백 strip 만, 받침 보정 X).
     const bareJosas = [
-      '도', '에게', '한테', '께', '에서', '에', '부터', '까지',
-      '보다', '만', '처럼', '조차', '마저', '뿐',
+      '도',
+      '에게',
+      '한테',
+      '께',
+      '에서',
+      '에',
+      '부터',
+      '까지',
+      '보다',
+      '만',
+      '처럼',
+      '조차',
+      '마저',
+      '뿐',
     ];
     // single-char trailing 조사 (의 등) — 받침 보정 불필요, "$X의" 형태로 결합.
     const dirJosas = ['의'];
@@ -481,6 +704,7 @@ class PastLifeService {
       String comp(List<String> set, String resolved) {
         return resolved;
       }
+
       // with — 과/와.
       final withRes = josa.withWith(name);
       for (final j in conJosas) {
@@ -711,7 +935,8 @@ class PastLifeService {
 
     // R102 sprint 2 headline — josa helper 적용.
     //   "X{와/과} Y의 전생 — {labelKo} 결"
-    final headline = '$userName${josa.withWith(userName)} '
+    final headline =
+        '$userName${josa.withWith(userName)} '
         '$celebName의 전생 — ${primary.labelKo} 결';
 
     return PastLifeScenario(
@@ -754,14 +979,17 @@ class PastLifeService {
 
   /// seed 미명시 시 deterministic seed — 두 사주 day pillar + 사용자 나이.
   static int _deriveSeed(SajuResult user, SajuResult celeb) {
-    final s = '${user.dayPillar.text}|${celeb.dayPillar.text}|'
+    final s =
+        '${user.dayPillar.text}|${celeb.dayPillar.text}|'
         '${user.yearPillar.text}|${celeb.yearPillar.text}';
     return s.hashCode & 0x7fffffff;
   }
 
   /// hard fallback — 풀 미로드 시 안전한 한국어 문장.
-  static String _hardFallback(
-      {required String userName, required String celebName}) {
+  static String _hardFallback({
+    required String userName,
+    required String celebName,
+  }) {
     // R102 sprint 2: josa helper 사용 — 받침 무관 공백 strip.
     return '$userName${josa.withWith(userName)} '
         '$celebName의 전생 이야기는 곧 들려드릴게요. 잠시만 기다려 주세요.';
@@ -785,52 +1013,28 @@ class PastLifeService {
     var s = text;
 
     // R103 sprint 1 — "사주상" cap 1.
-    const sajuSangAlts = <String>[
-      '사주에 박힌',
-      '사주의 결로',
-      '사주에 새겨진',
-      '사주가 짜 놓은 대로',
-    ];
+    const sajuSangAlts = <String>['사주에 박힌', '사주의 결로', '사주에 새겨진', '사주가 짜 놓은 대로'];
     s = _cap(s, '사주상', 1, sajuSangAlts, rng);
 
     // R103 sprint 1 — "이번 생" cap 1.
-    const ibunSaengAlts = <String>[
-      '지금 생',
-      '오늘의 생',
-      '여기 이 생',
-      '이쪽 생',
-    ];
+    const ibunSaengAlts = <String>['지금 생', '오늘의 생', '여기 이 생', '이쪽 생'];
     s = _cap(s, '이번 생', 1, ibunSaengAlts, rng);
 
     // R103 sprint 1 — "그 옛" cap 1.
     // 주의: alts 에 "그 옛" substring 이 포함되면 안 됨 (반복 매치 함정).
-    const gyeoutAlts = <String>[
-      '그때의',
-      '그 시절',
-      '오래전',
-      '예전의',
-    ];
+    const gyeoutAlts = <String>['그때의', '그 시절', '오래전', '예전의'];
     s = _cap(s, '그 옛', 1, gyeoutAlts, rng);
 
     // R103 sprint 1 — "두 사람은" cap 0 (모두 치환).
-    const twoPeopleAlts = <String>[
-      '둘은', '서로는', '둘 다',
-    ];
+    const twoPeopleAlts = <String>['둘은', '서로는', '둘 다'];
     s = _cap(s, '두 사람은', 0, twoPeopleAlts, rng);
 
     // R103 sprint 1 — "결이 두 사람 사이에" cap 0 (모두 치환).
-    const jielSaiAlts = <String>[
-      '결이 둘 사이에',
-      '그 결이 옅게',
-      '결의 여운이',
-      '결의 흔적이',
-    ];
+    const jielSaiAlts = <String>['결이 둘 사이에', '그 결이 옅게', '결의 여운이', '결의 흔적이'];
     s = _cap(s, '결이 두 사람 사이에', 0, jielSaiAlts, rng);
 
     // R102 — "자연스럽게" 2회째부터 다른 부사.
-    const naturalAlts = <String>[
-      '어색함 없이', '부드럽게', '익숙하게', '잔잔하게',
-    ];
+    const naturalAlts = <String>['어색함 없이', '부드럽게', '익숙하게', '잔잔하게'];
     s = _cap(s, '자연스럽게', 1, naturalAlts, rng);
 
     // R102 — "결" 단독 어절 cap 2.
@@ -840,7 +1044,12 @@ class PastLifeService {
   }
 
   static String _cap(
-      String text, String needle, int maxCount, List<String> alts, Random rng) {
+    String text,
+    String needle,
+    int maxCount,
+    List<String> alts,
+    Random rng,
+  ) {
     final out = StringBuffer();
     var cursor = 0;
     var hit = 0;
@@ -878,8 +1087,23 @@ class PastLifeService {
       // 결제/결단 등) 는 JSON pool 차원에서 제거.
       final next = i + 1 < text.length ? text[i + 1] : '';
       const attached = {
-        '을', '이', '은', '의', '과', '도', '에', '만', '까지', '로',
-        '에서', '부터', '보다', '처럼', '한테', '치', '단',
+        '을',
+        '이',
+        '은',
+        '의',
+        '과',
+        '도',
+        '에',
+        '만',
+        '까지',
+        '로',
+        '에서',
+        '부터',
+        '보다',
+        '처럼',
+        '한테',
+        '치',
+        '단',
       };
       // attached 는 한 글자라 next 한 글자 비교.
       if (attached.contains(next)) {
@@ -900,12 +1124,8 @@ class PastLifeService {
   /// "이었어요" / "였어요" 결말 다양화 — 3회 초과 시 변형 적용.
   static String _diversifyEndings(String text, Random rng) {
     // 문장 끝 어미 "이었어요." / "였어요." 등장 횟수 카운트.
-    const variantsIeotEoyo = <String>[
-      '이었어요.', '이었답니다.', '이었대요.', '이었대.',
-    ];
-    const variantsYeotEoyo = <String>[
-      '였어요.', '였답니다.', '였대요.', '였대.',
-    ];
+    const variantsIeotEoyo = <String>['이었어요.', '이었답니다.', '이었대요.', '이었대.'];
+    const variantsYeotEoyo = <String>['였어요.', '였답니다.', '였대요.', '였대.'];
     var s = text;
     s = _diversifyOne(s, '이었어요.', variantsIeotEoyo, 3, rng);
     s = _diversifyOne(s, '였어요.', variantsYeotEoyo, 3, rng);
@@ -913,7 +1133,12 @@ class PastLifeService {
   }
 
   static String _diversifyOne(
-      String text, String needle, List<String> variants, int maxKeep, Random rng) {
+    String text,
+    String needle,
+    List<String> variants,
+    int maxKeep,
+    Random rng,
+  ) {
     final out = StringBuffer();
     var cursor = 0;
     var hit = 0;
@@ -931,12 +1156,193 @@ class PastLifeService {
         // 변형 (단, 동일 needle 은 회피).
         var pick = variants[rng.nextInt(variants.length)];
         if (pick == needle) {
-          pick = variants[(rng.nextInt(variants.length - 1) + 1) % variants.length];
+          pick =
+              variants[(rng.nextInt(variants.length - 1) + 1) %
+                  variants.length];
         }
         out.write(pick);
       }
       cursor = idx + needle.length;
     }
     return out.toString();
+  }
+}
+
+/// R104 sprint 3 — story arc 텍스트용 placeholder injector.
+///
+/// `_composeFromPool` 안의 nested `inject` 클로저와 동일한 josa / copula 보정
+/// 규칙을 standalone 클래스로 추출. story arc 경로가 슬롯 fallback 과 같은 품질
+/// (받침 보정 / compound suffix / collision 방지) 을 보장하도록 한다.
+///
+/// 지원 placeholder: `$userName` / `$celebName` / `$userRole` / `$celebRole`
+/// / `$era`. `$era` 는 받침 무관 단순 치환.
+class _PlaceholderInjector {
+  _PlaceholderInjector({
+    required this.userName,
+    required this.celebName,
+    required this.userRole,
+    required this.celebRole,
+    required this.era,
+  });
+
+  final String userName;
+  final String celebName;
+  final String userRole;
+  final String celebRole;
+  final String era;
+
+  // 받침 의존 / 무관 조사 set — slot 경로와 동일.
+  static const _conJosas = ['과', '와'];
+  static const _topJosas = ['은', '는'];
+  static const _subJosas = ['이', '가'];
+  static const _objJosas = ['을', '를'];
+  static const _loJosas = ['로', '으로'];
+  static const _bareJosas = [
+    '도',
+    '에게',
+    '한테',
+    '께',
+    '에서',
+    '에',
+    '부터',
+    '까지',
+    '보다',
+    '만',
+    '처럼',
+    '조차',
+    '마저',
+    '뿐',
+  ];
+  static const _dirJosas = ['의'];
+
+  String _fixCopula(String role) =>
+      josa.hasFinalConsonant(role) ? '$role이었' : '$role였';
+
+  String _wasParticiple(String role) =>
+      josa.hasFinalConsonant(role) ? '$role이었던' : '$role였던';
+
+  String _copulaIraneun(String w) =>
+      josa.hasFinalConsonant(w) ? '$w이라는' : '$w라는';
+
+  String _copulaIeoteoyo(String w) =>
+      josa.hasFinalConsonant(w) ? '$w이었어요' : '$w였어요';
+
+  String _copulaIeotgo(String w) =>
+      josa.hasFinalConsonant(w) ? '$w이었고' : '$w였고';
+
+  String _copulaIeyo(String w) => josa.hasFinalConsonant(w) ? '$w이에요' : '$w예요';
+
+  /// compound suffix 를 길이 우선으로 모두 치환 — generic josa 보다 먼저.
+  String _resolveCompound(String src, String ph, String word) {
+    var t = src;
+    t = t.replaceAll('$ph 이었어요', _copulaIeoteoyo(word));
+    t = t.replaceAll('$ph이었어요', _copulaIeoteoyo(word));
+    t = t.replaceAll('$ph 이라는', _copulaIraneun(word));
+    t = t.replaceAll('$ph이라는', _copulaIraneun(word));
+    t = t.replaceAll('$ph 이었고', _copulaIeotgo(word));
+    t = t.replaceAll('$ph이었고', _copulaIeotgo(word));
+    t = t.replaceAll('$ph 이에요', _copulaIeyo(word));
+    t = t.replaceAll('$ph이에요', _copulaIeyo(word));
+    // 이름 noun — placeholder collision 방지. 공백 유지.
+    t = t.replaceAll('$ph 이름', '$word 이름');
+    t = t.replaceAll('$ph이름', '$word 이름');
+    // 이번 noun — subj josa `이` collision 방지.
+    t = t.replaceAll('$ph 이번', '$word 이번');
+    t = t.replaceAll('$ph이번', '$word 이번');
+    return t;
+  }
+
+  /// generic josa 치환 — slot 경로 `replacePh` 와 동일.
+  String _replacePh(String src, String ph, String name) {
+    var t = src;
+    final withRes = josa.withWith(name);
+    for (final j in _conJosas) {
+      t = t.replaceAll('$ph $j', '$name$withRes');
+      t = t.replaceAll('$ph$j', '$name$withRes');
+    }
+    final topRes = josa.withTop(name);
+    for (final j in _topJosas) {
+      t = t.replaceAll('$ph $j', '$name$topRes');
+      t = t.replaceAll('$ph$j', '$name$topRes');
+    }
+    final subRes = josa.withSubj(name);
+    for (final j in _subJosas) {
+      t = t.replaceAll('$ph $j', '$name$subRes');
+      t = t.replaceAll('$ph$j', '$name$subRes');
+    }
+    final objRes = josa.withObj(name);
+    for (final j in _objJosas) {
+      t = t.replaceAll('$ph $j', '$name$objRes');
+      t = t.replaceAll('$ph$j', '$name$objRes');
+    }
+    String loRes;
+    if (name.isEmpty) {
+      loRes = '로';
+    } else {
+      final last = name.substring(name.length - 1);
+      final cu = last.codeUnitAt(0);
+      if (cu >= 0xAC00 && cu <= 0xD7A3) {
+        final jong = (cu - 0xAC00) % 28;
+        if (jong == 0) {
+          loRes = '로';
+        } else if (jong == 8) {
+          loRes = '로';
+        } else {
+          loRes = '으로';
+        }
+      } else {
+        loRes = josa.hasFinalConsonant(name) ? '으로' : '로';
+      }
+    }
+    for (final j in _loJosas) {
+      t = t.replaceAll('$ph $j', '$name$loRes');
+      t = t.replaceAll('$ph$j', '$name$loRes');
+    }
+    for (final j in _dirJosas) {
+      t = t.replaceAll('$ph $j', '$name$j');
+      t = t.replaceAll('$ph$j', '$name$j');
+    }
+    for (final j in _bareJosas) {
+      t = t.replaceAll('$ph $j', '$name$j');
+      t = t.replaceAll('$ph$j', '$name$j');
+    }
+    return t;
+  }
+
+  /// arc paragraph / punchline 한 줄 inject — slot 경로 `inject` 와 동일 단계.
+  String inject(String tmpl) {
+    var s = tmpl;
+
+    // $era — 받침 무관 단순 치환.
+    s = s.replaceAll(r'$era', era);
+
+    // STEP 0 — compound suffix 우선 (Name + Role 4종).
+    s = _resolveCompound(s, r'$userName', userName);
+    s = _resolveCompound(s, r'$celebName', celebName);
+    s = _resolveCompound(s, r'$userRole', userRole);
+    s = _resolveCompound(s, r'$celebRole', celebRole);
+
+    // STEP 1 — Role placeholder 의 "이었던" / "였" (R102 호환).
+    s = s.replaceAll(r'$userRole 이었던', _wasParticiple(userRole));
+    s = s.replaceAll(r'$userRole이었던', _wasParticiple(userRole));
+    s = s.replaceAll(r'$celebRole 이었던', _wasParticiple(celebRole));
+    s = s.replaceAll(r'$celebRole이었던', _wasParticiple(celebRole));
+    s = s.replaceAll(r'$userRole 였', _fixCopula(userRole));
+    s = s.replaceAll(r'$userRole였', _fixCopula(userRole));
+    s = s.replaceAll(r'$celebRole 였', _fixCopula(celebRole));
+    s = s.replaceAll(r'$celebRole였', _fixCopula(celebRole));
+
+    // STEP 2 — Name + Role generic josa.
+    s = _replacePh(s, r'$userName', userName);
+    s = _replacePh(s, r'$celebName', celebName);
+    s = _replacePh(s, r'$userRole', userRole);
+    s = _replacePh(s, r'$celebRole', celebRole);
+
+    // STEP 3 — Plain placeholder fallback.
+    s = s.replaceAll(r'$celebName', celebName);
+    s = s.replaceAll(r'$userName', userName);
+    s = s.replaceAll(r'$userRole', userRole);
+    s = s.replaceAll(r'$celebRole', celebRole);
+    return s;
   }
 }

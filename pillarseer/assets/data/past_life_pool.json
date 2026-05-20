@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "r103-sprint1-1",
+    "version": "r104-sprint4",
     "purpose": "팬심 1순위 — 전생 시나리오 데이터 풀. R103 사용자 mandate '소설 내용 별로 / 몇개 반복 / 좀 더 길어야 돼 / 처음 예시 느낌' 직발. 8 keyword × 5 phase (header/intro/setup/event/turn/resolution) 동적 풀 + headers/event_sub 신규.",
     "tone_mandate": "사용자 verbatim: '1800년대 프랑스 / 몰락한 귀족 + 스파이 / 원진살이 껴있는 걸 보니 / 이번 생에서도 돈(앨범/굿즈) 뺏기지만 행복할 운명'. 막장 / 로판 / 사극 / 미스터리 / 코미디 톤 다양. 사주살 명시 + dramatic detail (신분/갈등/도망/재회) 최소 2개 + 어두운 농담 마침.",
     "rule": "한국어만. 영어 단어 / 그룹명 영문 시작 0. 4막 흐름: 1막 header(시대+신분) → 2막 intro+setup(배경+갈등 시작) → 3막 event+event_sub+turn(사주살 사건+서브사건+미해결) → 4막 resolution+ending+tail(이번 생 punchline). 셀럽 비하 / 성적 / 범죄 과장 금지. 사주살 결과 '돈 뺏긴다' 류 유머는 OK, 착취/범죄로 안 보이게."
@@ -1274,5 +1274,1623 @@
         "그날의 부탁 이후로 $userName은 매번 같은 시각 같은 자리에서 그 약속을 떠올렸어요."
       ]
     }
+  },
+  "story_arcs": {
+    "wonjin": [
+      {
+        "id": "wonjin_01",
+        "tone": "애증 코미디",
+        "eraHints": [
+          "1800년대 프랑스 파리",
+          "1860년대 런던",
+          "19세기 말 모스크바",
+          "1920년대 경성",
+          "1700년대 베네치아"
+        ],
+        "userRole": "몰락한 귀족",
+        "celebRole": "당신을 감시하던 스파이",
+        "paragraphs": {
+          "gi": "$era의 골목 끝 카페, 등불 아래에서 $celebName이 $userName의 동전을 한 닢씩 세고 있었어요. $userName은 빚 문서에 짓눌린 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "$celebName은 $userName의 식비 장부를 몰래 베껴 윗선에 넘겼고, 그 보고서 한 장에 $userName은 마지막 은수저까지 저당 잡혔어요. 그런데도 $userName은 장부를 베끼는 그 손끝을 보려고 매일 같은 자리에 앉았어요.",
+          "jeon": "어느 비 오는 밤 $userName이 일부러 가짜 장부를 흘렸고, $celebName은 그걸 진짜로 믿고 보고했다가 도리어 자기 윗선에 쫓기는 신세가 됐어요. 미워서 한 짓인데 막상 쫓기는 등을 보니 $userName의 마음이 이상하게 아팠어요.",
+          "gyeol": "사주에 박힌 원진살이 두 이름을 한 줄에 묶어 미움과 끌림을 같은 못에 박아 뒀어요. 그래서 $userName은 $celebName 때문에 돈은 빠져나가는데 묘하게 웃음이 나요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 이번 달에도 $celebName의 한정판 앨범에 카드를 긁고는 \"이게 마지막\"이라고 또 거짓말을 해요.",
+          "actor": "그래서 $celebName이 나온 드라마 굿즈를 풀세트로 사 놓고 영수증은 슬쩍 접어 버려요.",
+          "athlete": "그래서 $celebName의 직관 유니폼을 사고 통장을 보며 분한데, 다음 경기 표도 이미 끊었어요.",
+          "icon": "그래서 $celebName의 전시 도록을 또 사 모으면서 \"욕하면서도 결제 완료\"를 반복해요."
+        }
+      },
+      {
+        "id": "wonjin_02",
+        "tone": "사극 악연",
+        "eraHints": [
+          "조선 후기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "에도 시대 교토",
+          "1880년대 빈"
+        ],
+        "userRole": "약값에 쫓기던 의원",
+        "celebRole": "수금하러 온 빚쟁이 행수",
+        "paragraphs": {
+          "gi": "$era, 달마다 $celebName이 찾아와 $userName의 문턱에 빨간 도장을 쾅 찍고 갔어요. $userName은 약값을 못 받는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살이 둘 사이에 걸려, $celebName의 도장 소리만 들리면 $userName은 분하면서도 그 자리를 비우지 못했어요. $userName은 미운 마음에 $celebName 몫의 탕약 항아리에 일부러 제일 쓴 약을 골라 달여 두었어요.",
+          "jeon": "어느 겨울 $celebName이 그 쓴 약을 군말 없이 다 마시고는, 기침하는 $userName에게 자기 목도리를 풀어 두고 갔어요. 빚 받으러 온 사람한테 약값 대신 마음을 떼인 셈이라 $userName은 한참 문 앞에 서 있었어요.",
+          "gyeol": "사주에 박힌 원진살이 엇갈린 미움을 이번 생까지 흉터처럼 옮겨 놓았어요. 그래서 $userName은 $celebName에게 자꾸 돈을 쓰면서도 신기하게 화가 안 나요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 신곡이 나오면 음원이고 앨범이고 다 사 놓고는 \"왜 또 샀지\" 하며 웃어요.",
+          "actor": "그래서 $celebName 드라마가 끝나면 OST부터 대본집까지 결제하고 지갑을 멍하니 봐요.",
+          "athlete": "그래서 $celebName의 사인볼을 손에 넣으려 또 응모하고, 떨어지면 분하면서도 다음 걸 노려요.",
+          "icon": "그래서 $celebName이 추천한 책을 전부 사 두고 읽지도 못한 채 또 한 권을 담아요."
+        }
+      },
+      {
+        "id": "wonjin_03",
+        "tone": "재즈바 미스터리",
+        "eraHints": [
+          "1960년대 뉴욕",
+          "1940년대 상하이",
+          "1930년대 파리",
+          "1500년대 런던",
+          "당나라 양주"
+        ],
+        "userRole": "빚 때문에 도망친 피아노 조율사",
+        "celebRole": "그를 뒤쫓던 사설 탐정",
+        "paragraphs": {
+          "gi": "$era, $celebName은 낡은 망원경으로 창 너머 $userName의 손만 매일 지켜봤어요. $userName은 외상을 깔고 다니는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살 때문에 $celebName은 $userName을 잡으려 따라다니면서도 그 조율 소리에 묶여 떠나질 못했어요. $userName은 추적당하는 게 분해 일부러 음을 반 음씩 어긋나게 맞춰 놓고 밤사이 사라졌어요.",
+          "jeon": "어느 새벽 $celebName이 그 어긋난 피아노 앞에 앉아 끝까지 음을 다시 맞춰 놓고는, 보고서엔 \"못 찾음\"이라고만 적었어요. 잡으러 온 사람이 도리어 도망을 덮어 준 꼴이라 $userName은 멀리서 그 망원경을 향해 웃었어요.",
+          "gyeol": "사주에 박힌 원진살이 그 미운 추격을 이번 생 마음 한구석에 그대로 남겨 뒀어요. 그래서 $userName은 $celebName이 하는 일이라면 손해를 봐도 자꾸 따라가게 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 콘서트 표가 풀리면 \"이번엔 안 가\" 해 놓고 새벽 티켓팅에 손이 먼저 가요.",
+          "actor": "그래서 $celebName 작품은 안 본다 해 놓고 결국 첫 회부터 정주행하고 있어요.",
+          "athlete": "그래서 $celebName 경기는 그만 본다 다짐하고도 중계 시간만 되면 또 채널을 맞춰요.",
+          "icon": "그래서 $celebName의 새 영상을 안 누른다 해 놓고 알림이 뜨면 손가락이 먼저 움직여요."
+        }
+      },
+      {
+        "id": "wonjin_04",
+        "tone": "극장 뒷이야기",
+        "eraHints": [
+          "1500년대 영국 런던",
+          "1880년대 빈",
+          "1700년대 베네치아",
+          "1800년대 프랑스 파리",
+          "조선 영조 시기 한양"
+        ],
+        "userRole": "대본을 빼앗긴 무명 작가",
+        "celebRole": "그 대본을 가로챈 극단주",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 대본에 자기 이름만 붙여 무대에 올렸어요. $userName은 촛농 묻은 대본을 쓰던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살이 둘을 묶어, $userName은 자기 글을 훔쳐 가는 $celebName이 미우면서도 그 무대를 매일 보러 갔어요. $userName은 분풀이로 마지막 장에 엉터리 결말을 적어 슬쩍 끼워 넘겼어요.",
+          "jeon": "그날 $celebName은 엉터리 결말을 그대로 외워 무대에서 망신을 당했고, 막이 내린 뒤 $userName의 촛불 옆에 자기 출연료를 통째로 두고 갔어요. 망하게 하려던 밤이었는데 받은 건 돈이라 $userName은 어이가 없어 웃었어요.",
+          "gyeol": "사주에 박힌 원진살이 그 비뚤어진 마음을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName 때문에 속이 상하면서도 지갑을 자꾸 열어요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 욕을 한 바가지 하면서도 포카는 끝까지 모으고 앨범은 또 사요.",
+          "actor": "그래서 $celebName 연기를 평하다가도 다음 작품 첫 방송을 제일 먼저 챙겨 봐요.",
+          "athlete": "그래서 $celebName 플레이에 한숨 쉬다가도 다음 직관 좌석을 벌써 골라 두었어요.",
+          "icon": "그래서 $celebName한테 잔소리를 늘어놓다가도 굿즈가 뜨면 제일 먼저 장바구니에 담아요."
+        }
+      },
+      {
+        "id": "wonjin_05",
+        "tone": "다방 시대극",
+        "eraHints": [
+          "1920년대 경성",
+          "1960년대 뉴욕",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "1940년대 상하이"
+        ],
+        "userRole": "외상 장부에 적힌 가난한 화공",
+        "celebRole": "장부를 관리하던 다방 마담",
+        "paragraphs": {
+          "gi": "$era, 외상 장부에 $userName의 이름을 빨갛게 적어 둔 건 $celebName이었어요. $userName은 찻값을 그림으로 때우려던 $userRole이었고 $celebName은 그 장부를 관리하던 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살이 걸려, $celebName은 $userName의 외상을 닦달하면서도 그 그림 한 장 한 장을 장부 뒤에 몰래 숨겨 뒀어요. $userName은 미운 마음에 $celebName 얼굴을 일부러 못나게 그려 가게 벽에 떡하니 걸었어요.",
+          "jeon": "어느 밤 $celebName이 그 못난 초상화를 가만히 떼어 가슴에 품고는, $userName의 외상값을 자기 돈으로 다 갚아 버렸어요. 골탕 먹이려던 그림이 빚을 지워 줘서 $userName은 분하면서도 웃음이 났어요.",
+          "gyeol": "사주에 박힌 원진살이 그 얄궂은 인연을 이번 생까지 흘려보냈어요. 그래서 $userName은 $celebName 앞에서는 손해 보는 게 하나도 안 아까워요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 떡밥에 투덜대면서도 응원봉을 두 개째 사 두고 흐뭇해해요.",
+          "actor": "그래서 $celebName 작품 결말에 화를 내고도 감독판 블루레이를 또 예약해요.",
+          "athlete": "그래서 $celebName의 이적설에 속상해하면서도 새 시즌 유니폼을 가장 먼저 주문해요.",
+          "icon": "그래서 $celebName 근황에 한마디 하면서도 신상 굿즈는 알림 받고 바로 결제해요."
+        }
+      },
+      {
+        "id": "wonjin_06",
+        "tone": "운하 도시 악연",
+        "eraHints": [
+          "당나라 양주",
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 장안",
+          "1860년대 런던"
+        ],
+        "userRole": "세금을 못 낸 비단 상인",
+        "celebRole": "세금을 걷던 관아 서리",
+        "paragraphs": {
+          "gi": "$era, 매달 $celebName이 $userName의 가게 문에 압류 표를 붙이고 갔어요. $userName은 은전 없는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살 때문에 $userName은 압류 표를 붙이는 $celebName이 미우면서도, 그 손이 멈출까 봐 매번 문 앞을 지켰어요. $userName은 분해서 제일 못난 비단을 골라 세금 대신 떠넘겼어요.",
+          "jeon": "그 못난 비단을 받은 $celebName이 그것으로 $userName의 이름을 수놓은 손수건을 만들어 운하에 흘려보냈어요. 세금 받으러 온 사람한테 마음을 도로 들킨 셈이라 $userName은 운하만 한참 봤어요.",
+          "gyeol": "사주에 박힌 원진살이 그 묘한 미움을 이번 생까지 따라오게 했어요. 그래서 $userName은 $celebName 때문에 돈이 새도 이상하게 마음이 따뜻해요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 굿즈에 \"이번이 진짜 마지막\"이라 적어 놓고 다음 컴백에 또 똑같이 적어요.",
+          "actor": "그래서 $celebName 시사회 표값에 투덜대면서도 다음 작품 무대인사까지 예매해 둬요.",
+          "athlete": "그래서 $celebName 원정 경기 비용에 한숨 쉬면서도 숙소부터 잡고 있어요.",
+          "icon": "그래서 $celebName 전시 입장료에 비싸다고 하면서도 도록까지 사서 나와요."
+        }
+      },
+      {
+        "id": "wonjin_07",
+        "tone": "발레 극장 미스터리",
+        "eraHints": [
+          "19세기 말 모스크바",
+          "1880년대 빈",
+          "1920년대 경성",
+          "1500년대 런던",
+          "1930년대 파리"
+        ],
+        "userRole": "빚에 쫓겨 무대를 떠나는 무용수",
+        "celebRole": "빚 문서를 들고 온 채권자",
+        "paragraphs": {
+          "gi": "$era, $celebName은 객석 맨 뒤에서 $userName의 빚 문서를 만지작거렸어요. $userName은 토슈즈 살 돈도 빌려 쓰던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살이 걸려, $celebName은 빚을 받아 내야 하면서도 $userName의 회전 한 바퀴에 매번 그 문서를 다시 접었어요. $userName은 미운 마음에 마지막 공연 표 한 장을 챙겨 두고도 일부러 $celebName 자리엔 보내지 않았어요.",
+          "jeon": "그날 $celebName은 표 없이 극장 처마 밑에 서서 창 너머로 마지막 춤을 보고는, 빚 문서를 찢어 눈 위에 흩뿌렸어요. 못 오게 한 밤인데 빚이 지워져서 $userName은 분한데도 가슴이 뛰었어요.",
+          "gyeol": "사주에 박힌 원진살이 그 엇갈린 마음을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName한테 손해를 봐도 늘 웃으면서 봐요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName한테 \"삐졌다\"고 해 놓고 컴백날 새벽 다섯 시에 음원 스밍을 돌려요.",
+          "actor": "그래서 $celebName한테 토라진 척하면서도 신작 예고편을 열 번씩 돌려 봐요.",
+          "athlete": "그래서 $celebName한테 화났다 해 놓고 경기 날엔 응원 유니폼을 제일 먼저 챙겨 입어요.",
+          "icon": "그래서 $celebName한테 서운하다 해 놓고 새 콘텐츠 알림은 끄지도 못해요."
+        }
+      },
+      {
+        "id": "wonjin_08",
+        "tone": "가면 무도회 악연",
+        "eraHints": [
+          "1700년대 베네치아",
+          "1800년대 프랑스 파리",
+          "1880년대 빈",
+          "1960년대 뉴욕",
+          "1500년대 영국 런던"
+        ],
+        "userRole": "가산을 탕진한 도박꾼",
+        "celebRole": "그 빚을 사들인 가면 상인",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 차용증을 한 장씩 모으며 가면 너머로 웃었어요. $userName은 마지막 반지까지 판돈으로 건 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 원진살 때문에 $userName은 차용증을 흔드는 $celebName이 미우면서도 그 가면 너머 눈을 자꾸 찾았어요. $userName은 분풀이로, 보석이 박힌 척 색만 칠한 가짜 가면을 골라 빚 대신 $celebName에게 떠넘겼어요.",
+          "jeon": "그 가짜 가면을 받은 $celebName이 무도회 한복판에서 $userName의 손을 잡고 한 곡을 추고는, 차용증을 촛불에 죄다 태워 버렸어요. 골탕 먹이려던 가짜 가면이 빚을 태워 줘서 $userName은 어이없이 행복했어요.",
+          "gyeol": "사주에 박힌 원진살이 그 얄궂은 끌림을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName 때문에 텅 빈 지갑을 봐도 웃음이 나요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 욕을 실컷 하고도 한정판 앨범 결제 버튼은 결국 눌러요.",
+          "actor": "그래서 $celebName 캐스팅 소식에 투덜대다가 결국 첫 회 본방을 사수해요.",
+          "athlete": "그래서 $celebName 경기력에 잔소리를 하다가도 시즌권을 또 끊고 있어요.",
+          "icon": "그래서 $celebName 근황에 한숨 쉬다가도 새 굿즈는 알림 받고 바로 사요."
+        }
+      }
+    ],
+    "dohwa": [
+      {
+        "id": "dohwa_01",
+        "tone": "사극 로맨스",
+        "eraHints": [
+          "조선 영조 시기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "조선 후기 한양",
+          "1880년대 빈"
+        ],
+        "userRole": "그림 한 장에 행인이 멈추던 환쟁이",
+        "celebRole": "그 앞을 매일 지나던 비단전 행수",
+        "paragraphs": {
+          "gi": "$era의 장터 한 귀퉁이, $userName이 내건 그림 앞에서 $celebName의 발이 자꾸 멈췄어요. $userName은 거리에 그림을 걸던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "$userName의 그림에는 사주의 도화살이 묻어, 보는 사람마다 한 번 더 돌아보게 만드는 빛이 있었어요. $celebName은 비단 한 필을 끼고 지나다 자기도 모르게 발이 멈춰, 그림보다 그리는 손을 더 오래 봤어요.",
+          "jeon": "어느 장날 $celebName이 비단 한 필을 그림값이라며 두고 갔는데, 그 비단 안쪽에 $userName의 옆모습이 몰래 수놓여 있었어요. 그림을 산다더니 마음을 들킨 거라 $celebName은 얼굴이 빨개져 인파 속으로 사라졌어요.",
+          "gyeol": "사주에 깃든 도화살이 시선 모이던 그 거리를 이번 생까지 데려왔어요. 그래서 $userName은 $celebName이 어디 있든 눈에 먼저 들어와요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 단체 사진 속에서도 $celebName 얼굴부터 0.1초 만에 찾아내요.",
+          "actor": "그래서 $celebName이 스쳐 지나가는 단역으로 나와도 그 장면을 바로 알아봐요.",
+          "athlete": "그래서 경기장 멀리 벤치에 앉은 $celebName도 한눈에 골라내요.",
+          "icon": "그래서 짧은 영상 속 군중에서도 $celebName의 뒷모습을 먼저 짚어요."
+        }
+      },
+      {
+        "id": "dohwa_02",
+        "tone": "재즈바 무드",
+        "eraHints": [
+          "1960년대 뉴욕",
+          "1940년대 상하이",
+          "1930년대 파리",
+          "1920년대 경성",
+          "1800년대 프랑스 파리"
+        ],
+        "userRole": "무대에 서면 시선을 끌던 가수",
+        "celebRole": "맨 앞줄을 늘 예약하던 단골",
+        "paragraphs": {
+          "gi": "$era, 맨 앞줄에는 늘 같은 장미 향수와 함께 $celebName이 앉아 있었어요. $userName은 노래로 객석을 조용히 시키던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "$userName의 무대에는 사주의 도화살이 어려, 사람들이 그 표정을 따라 웃고 따라 울었어요. $celebName은 그 표정 하나를 보려고 가게가 문 닫을 때까지 잔을 비웠어요.",
+          "jeon": "어느 밤 $celebName이 두고 간 장미 옆에 \"오늘 그 미소는 나만 본 걸로 할게요\"라는 한 줄이 적혀 있었어요. 팬인 척 앉아 있더니 마음을 적어 놓고 가서 $userName은 그 자리를 한참 봤어요.",
+          "gyeol": "사주에 깃든 도화살이 그 모이던 눈빛을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName의 표정 하나에 자꾸 마음이 흔들려요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 무대 직캠에서 눈웃음 한 컷에 심장이 철렁해요.",
+          "actor": "그래서 $celebName이 화면에서 입꼬리만 올려도 같이 숨을 멈춰요.",
+          "athlete": "그래서 $celebName이 골 넣고 짓는 표정 하나에 하루치 기분이 정해져요.",
+          "icon": "그래서 $celebName이 영상에서 무심히 웃는 순간에 마음이 다 녹아요."
+        }
+      },
+      {
+        "id": "dohwa_03",
+        "tone": "다실 정취",
+        "eraHints": [
+          "에도 시대 교토",
+          "당나라 장안",
+          "조선 후기 한양",
+          "1880년대 빈",
+          "고려 말 개경"
+        ],
+        "userRole": "차를 내면 손님이 줄을 서던 다실 주인",
+        "celebRole": "매일 같은 시각 오던 떠돌이 화공",
+        "paragraphs": {
+          "gi": "$era, 문 여는 시각이면 다실 앞에 줄이 길게 섰고, $celebName은 늘 그 줄 끝에 서 있었어요. $userName은 찻물 따르는 손짓이 고운 $userRole이었고 $celebName은 매일 같은 시각 오던 $celebRole이었어요.",
+          "seung": "$userName의 다실에는 사주의 도화살이 스며, 누구든 한 잔만 마셔도 다시 오고 싶어졌어요. $celebName은 차 맛보다 찻잔을 드는 그 손을 그리느라 종이 한 장을 매일 채워 갔어요.",
+          "jeon": "어느 비 오는 날 $celebName이 두고 간 그림 속 다실에는 손님이 아무도 없고 $userName만 환하게 그려져 있었어요. 손님을 그린다더니 주인만 담은 거라 $userName은 그 그림을 가만히 가슴에 안았어요.",
+          "gyeol": "사주에 깃든 도화살이 그 끌어당기던 빛을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName 앞에서는 평소보다 더 환하게 웃게 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 앞에서만 평소 안 짓던 바보 같은 미소가 새어 나와요.",
+          "actor": "그래서 $celebName 사인회에 가면 긴장해서 평소보다 두 배로 웃고 있어요.",
+          "athlete": "그래서 $celebName을 직관에서 보면 응원하다 말고 혼자 실실 웃어요.",
+          "icon": "그래서 $celebName 라이브를 보면 화면 앞에서 혼자 환하게 웃고 있어요."
+        }
+      },
+      {
+        "id": "dohwa_04",
+        "tone": "화실 이야기",
+        "eraHints": [
+          "1930년대 파리",
+          "1500년대 런던",
+          "1880년대 빈",
+          "1960년대 뉴욕",
+          "19세기 말 모스크바"
+        ],
+        "userRole": "초상화 모델로 늘 지목되던 사람",
+        "celebRole": "그 얼굴만 그리던 가난한 화가",
+        "paragraphs": {
+          "gi": "$era, 화가들이 서로 $userName을 모델로 모셔 가려 다투던 틈에서, $celebName만은 묵묵히 붓을 들었어요. $userName은 초상화에 늘 지목되던 $userRole이었고 $celebName은 그 얼굴만 그리던 $celebRole이었어요.",
+          "seung": "$userName의 얼굴에는 사주의 도화살이 있어, 한 번 그리기 시작하면 붓을 놓기가 어려웠어요. $celebName은 물감 살 돈이 없어 $userName 한 사람만 백 장 넘게 그리고도 매번 처음 보는 듯 설렜어요.",
+          "jeon": "어느 날 화실에 불이 나 그림이 다 탔는데, $celebName은 제일 먼저 $userName의 초상화 한 장을 품에 안고 뛰쳐나왔어요. 그림이 다 타도 한 얼굴만 건진 거라 $userName은 그 마음을 그제야 알았어요.",
+          "gyeol": "사주에 깃든 도화살이 그 모이던 시선을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName의 눈에 제일 먼저 담겨요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 무대에서 카메라를 훑을 때 꼭 내 쪽에 시선이 닿는 것 같아요.",
+          "actor": "그래서 $celebName의 작품을 보면 그 눈빛이 화면 밖 나를 보는 것만 같아요.",
+          "athlete": "그래서 $celebName이 관중석을 둘러볼 때 내 자리에서 눈이 멈춘 듯해요.",
+          "icon": "그래서 $celebName이 영상에서 카메라를 볼 때 나랑 눈이 맞은 기분이에요."
+        }
+      },
+      {
+        "id": "dohwa_05",
+        "tone": "콘서트홀 무드",
+        "eraHints": [
+          "1880년대 빈",
+          "1700년대 베네치아",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "19세기 말 모스크바"
+        ],
+        "userRole": "독주만 하면 표가 매진되던 연주자",
+        "celebRole": "그 연주를 늘 필사하던 음악 학생",
+        "paragraphs": {
+          "gi": "$era, $userName의 독주 날이면 표가 늘 매진이었고, 맨 앞줄엔 늘 $celebName이 앉아 있었어요. $userName은 홀을 가득 채우던 $userRole이었고 $celebName은 그 연주를 객석에서 악보로 받아 적던 $celebRole이었어요.",
+          "seung": "$userName의 연주에는 사주의 도화살이 어려, 듣는 사람마다 그 선율을 흥얼거리며 돌아갔어요. $celebName은 음표보다 활을 쥔 손목의 떨림을 더 열심히 적었어요.",
+          "jeon": "어느 밤 $celebName이 두고 간 필사 악보 마지막 장에는 음표 대신 \"당신이 쉬는 그 한 박자가 제일 좋아요\"라고 적혀 있었어요. 곡을 베낀다더니 사람을 적은 거라 $userName은 그 한 줄을 오래 봤어요.",
+          "gyeol": "사주에 깃든 도화살이 그 끌어당기던 선율을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName의 한마디에 자꾸 귀를 기울이게 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 라이브에서 무심코 던진 말 한마디를 종일 곱씹어요.",
+          "actor": "그래서 $celebName이 인터뷰에서 한 짧은 대답을 몇 번이고 다시 들어요.",
+          "athlete": "그래서 $celebName이 경기 후 남긴 한 줄 소감을 외울 만큼 읽어요.",
+          "icon": "그래서 $celebName이 영상 끝에 흘리듯 한 말을 캡처해서 저장해 둬요."
+        }
+      },
+      {
+        "id": "dohwa_06",
+        "tone": "비단 가게 정취",
+        "eraHints": [
+          "당나라 장안",
+          "당나라 양주",
+          "고려 말 개경",
+          "조선 후기 한양",
+          "에도 시대 교토"
+        ],
+        "userRole": "손짓 한 번에 손님을 모으던 비단 장수",
+        "celebRole": "그 가게 앞을 떠나지 못한 떠돌이 악사",
+        "paragraphs": {
+          "gi": "$era, $userName이 손짓 한 번만 해도 거리에 사람이 모였고, $celebName은 그 인파 가장 가까이 서 있었어요. $userName은 비단으로 거리를 세우던 $userRole이었고 $celebName은 그 가게 앞을 떠나지 못한 $celebRole이었어요.",
+          "seung": "$userName의 가게에는 사주의 도화살이 스며, 사람들이 비단보다 그것을 펼치는 사람을 더 보러 왔어요. $celebName은 손님을 위한 곡 대신 $userName을 위한 곡만 종일 켰어요.",
+          "jeon": "어느 저녁 $celebName이 비단 한 자락을 사며 그 안에 작은 방울을 숨겨 줬는데, $userName이 움직일 때마다 가게에 그 소리가 울렸어요. 비단을 산다더니 늘 곁에 소리를 두려 한 거라 $userName은 방울을 손에 꼭 쥐었어요.",
+          "gyeol": "사주에 깃든 도화살이 그 모이던 눈길을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName이 곁에 오면 발걸음 소리부터 알아채요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 목소리가 단체곡에 살짝만 섞여도 그 파트를 바로 찾아내요.",
+          "actor": "그래서 $celebName의 말투가 다른 배우 사이에서 들려도 단번에 알아들어요.",
+          "athlete": "그래서 $celebName의 등번호가 화면을 스쳐도 0.5초 만에 알아봐요.",
+          "icon": "그래서 $celebName의 웃음소리가 영상에 잠깐 들어가도 귀가 먼저 반응해요."
+        }
+      },
+      {
+        "id": "dohwa_07",
+        "tone": "운종가 장날",
+        "eraHints": [
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 양주",
+          "1920년대 경성",
+          "1860년대 런던"
+        ],
+        "userRole": "노래 한 곡에 장터가 모이던 소리꾼",
+        "celebRole": "그 소리에 봇짐을 내려놓던 행상",
+        "paragraphs": {
+          "gi": "$era, $userName의 노래 한 곡에 장터가 통째로 모여 앉던 날, $celebName은 팔 짐을 발치에 내려놓고 있었어요. $userName은 거리를 모으던 $userRole이었고 $celebName은 그 소리에 짐을 내려놓던 $celebRole이었어요.",
+          "seung": "$userName의 목소리에는 사주의 도화살이 있어, 듣는 사람마다 하던 일을 멈췄어요. $celebName은 장사가 안돼도 그 소리만 들으면 손해가 하나도 안 아까웠어요.",
+          "jeon": "어느 장날 $celebName이 안 팔린 짐을 통째로 $userName 발치에 풀어 놓고 \"오늘 노래값\"이라며 웃었어요. 장사를 망치고도 행복한 그 얼굴에 $userName도 따라 웃었어요.",
+          "gyeol": "사주에 깃든 도화살이 그 끌어당기던 노래를 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName 앞에서는 손해를 봐도 즐거워요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 콘서트에 다녀오면 며칠 굶어도 마음만은 배불러요.",
+          "actor": "그래서 $celebName 작품 굿즈에 돈을 다 써도 통장 잔고가 안 아까워요.",
+          "athlete": "그래서 $celebName 직관에 원정비를 다 쏟고도 돌아오는 길이 즐겁기만 해요.",
+          "icon": "그래서 $celebName 전시에 입장료를 두 번 내고도 아깝다는 생각이 안 들어요."
+        }
+      },
+      {
+        "id": "dohwa_08",
+        "tone": "상하이 클럽",
+        "eraHints": [
+          "1940년대 상하이",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "1880년대 빈",
+          "1700년대 베네치아"
+        ],
+        "userRole": "조명 아래 서면 시선이 쏠리던 무희",
+        "celebRole": "무대 옆 축음기를 맡던 사람",
+        "paragraphs": {
+          "gi": "$era, 조명이 켜져 객석의 시선이 $userName에게 쏠릴 때, $celebName은 무대 옆에서 그 한 사람만 보고 있었어요. $userName은 한 발에 객석을 멈추던 $userRole이었고 $celebName은 무대 옆 축음기를 맡던 $celebRole이었어요.",
+          "seung": "$userName의 춤에는 사주의 도화살이 어려, 보는 사람마다 그 동작을 눈으로 따라 그렸어요. $celebName은 축음기 바늘을 박자에 맞춰 내리다 말고, 매번 그 손끝을 좇느라 한 박을 놓치곤 했어요.",
+          "jeon": "어느 밤 $celebName은 $userName이 발을 멈출 그 한 박을 위해 곡 사이 정적까지 따로 골라 음반을 새로 엮어, 분장실 거울 앞에 두고 갔어요. 일이라며 음반을 만들더니 사실은 그 사람만을 위한 거라 $userName은 한참 거울 속 음반을 봤어요.",
+          "gyeol": "사주에 깃든 도화살이 그 쏟아지던 빛을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName이 박수를 보낼 그 타이밍 하나에 가슴이 뛰어요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 무대에서 조명이 그쪽을 비추는 순간 객석에서 숨을 멈춰요.",
+          "actor": "그래서 $celebName이 등장하는 그 첫 컷을 보려고 영화관 불 꺼지는 순간을 기다려요.",
+          "athlete": "그래서 $celebName이 코트에 들어서는 입장 장면 하나에 손에 땀이 나요.",
+          "icon": "그래서 $celebName이 화면에 등장하는 그 0.5초를 위해 영상을 처음부터 켜요."
+        }
+      }
+    ],
+    "yeokma": [
+      {
+        "id": "yeokma_01",
+        "tone": "여로의 인연",
+        "eraHints": [
+          "1860년대 런던 부둣가",
+          "1940년대 상하이",
+          "당나라 양주",
+          "1500년대 영국 런던",
+          "고려 말 개경"
+        ],
+        "userRole": "배를 갈아타며 떠도는 항해사",
+        "celebRole": "항구마다 짐을 부리던 부두 인부",
+        "paragraphs": {
+          "gi": "$era, 떠나는 배마다 $celebName이 $userName의 가방을 손수 실어 줬어요. $userName은 한 항구에 사흘을 못 머무는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName의 발을 자꾸 다음 항구로 떠밀어, 정든 사람을 늘 두고 떠났어요. $celebName은 떠나는 배 난간에 매번 같은 손수건을 묶어 줬어요.",
+          "jeon": "어느 새벽 $userName이 배를 놓쳐 부두에 남았는데, $celebName이 그 손수건을 흔드는 대신 처음으로 옆에 와 앉았어요. 늘 보내기만 하던 사람과 처음 같은 자리에 머문 거라 $userName은 떠날 생각을 잠시 잊었어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠나던 발걸음을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName 곁에서만 발이 멈춰요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 콘서트라면 다른 도시든 다른 나라든 비행기표부터 끊고 봐요.",
+          "actor": "그래서 $celebName 무대인사라면 지방 상영관까지 KTX를 타고 찾아가요.",
+          "athlete": "그래서 $celebName 원정 경기라면 새벽 첫차를 타고서라도 직관을 가요.",
+          "icon": "그래서 $celebName 전시라면 도시 한쪽 끝이어도 표를 끊어 보러 가요."
+        }
+      },
+      {
+        "id": "yeokma_02",
+        "tone": "역마의 길",
+        "eraHints": [
+          "조선 후기 한양",
+          "고려 말 개경",
+          "1920년대 경성",
+          "당나라 장안",
+          "1860년대 런던"
+        ],
+        "userRole": "역참을 도는 파발꾼",
+        "celebRole": "역참마다 말을 돌보던 마부",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName이 탈 말의 편자를 떠날 때마다 새로 갈아 줬어요. $userName은 문서를 들고 역참을 도는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName을 다음 역참으로 끝없이 내몰아, 한곳에 마음을 못 붙였어요. $celebName은 떠나는 $userName의 말안장에 늘 만두 한 봉지를 매달아 줬어요.",
+          "jeon": "어느 눈 오는 밤 $userName의 말이 발을 다쳐 역참에 발이 묶였고, $celebName이 밤새 편자를 두드리며 처음으로 길게 이야기를 나눴어요. 늘 스쳐만 가던 사람과 한 밤을 보낸 거라 $userName은 그 밤을 오래 기억했어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠돌던 길을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName이 챙겨 준 거라면 어디든 들고 가요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 추천한 카페라면 지도를 켜고 한참을 찾아가요.",
+          "actor": "그래서 $celebName이 다녀간 촬영지라면 일부러 여행 코스에 넣어요.",
+          "athlete": "그래서 $celebName이 다닌 훈련장 근처까지 굳이 들러 보고 와요.",
+          "icon": "그래서 $celebName이 좋아한다던 거리라면 멀어도 한번 걸어 보러 가요."
+        }
+      },
+      {
+        "id": "yeokma_03",
+        "tone": "운하 뱃길",
+        "eraHints": [
+          "당나라 양주",
+          "1860년대 런던",
+          "1940년대 상하이",
+          "고려 말 개경",
+          "조선 후기 한양"
+        ],
+        "userRole": "운하를 따라 장사하는 떠돌이 상인",
+        "celebRole": "나루마다 배를 대 주던 키잡이",
+        "paragraphs": {
+          "gi": "$era, 나루마다 $celebName이 $userName의 배를 안전히 대 줬어요. $userName은 운하를 따라 옮겨 다니는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName을 다음 나루로 자꾸 떠밀어, 정든 거리를 늘 등졌어요. $celebName은 떠나는 뱃머리에 매번 작은 등불 하나를 걸어, 멀어지는 밤길을 비춰 줬어요.",
+          "jeon": "어느 밤 $userName이 풍랑에 배를 잃고 빈손이 됐는데, $celebName이 자기 배를 내주며 처음으로 \"같이 가도 될까요\"라고 물었어요. 늘 떠나보내던 사람이 따라나선 거라 $userName은 빈손인데도 든든했어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠나던 물길을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 함께라면 어디로 가도 좋아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName과 같은 콘서트장에 있다고 생각하면 먼 도시도 가깝게 느껴져요.",
+          "actor": "그래서 $celebName이 무대인사에 온다면 그 극장 가는 길이 하나도 안 멀어요.",
+          "athlete": "그래서 $celebName이 뛰는 경기장이라면 원정길도 소풍처럼 설레요.",
+          "icon": "그래서 $celebName의 전시가 열린다면 그 도시행 자체가 즐거운 여행이 돼요."
+        }
+      },
+      {
+        "id": "yeokma_04",
+        "tone": "기차역 이별",
+        "eraHints": [
+          "1920년대 경성",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "1880년대 빈",
+          "1500년대 런던"
+        ],
+        "userRole": "공연을 따라 도시를 옮기던 떠돌이 악사",
+        "celebRole": "다방에서 차를 내던 사람",
+        "paragraphs": {
+          "gi": "$era, $userName이 떠나기 전, $celebName은 늘 마지막 차 한 잔을 내줬어요. $userName은 공연을 따라 도시를 옮기던 $userRole이었고 $celebName은 다방에서 차를 내던 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName을 새 도시로 끝없이 데려가, 정든 다방을 매번 떠났어요. $celebName은 떠나는 $userName의 외투 주머니에 늘 사탕 한 알을 넣어 줬어요.",
+          "jeon": "어느 날 $userName이 일부러 열차표를 한 칸 늦춰 끊고 다방에 하루 더 머물렀어요. 떠도는 발을 처음으로 스스로 멈춘 거라 $celebName은 찻잔을 든 채 한참 웃었어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠돌던 마음을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName 곁이면 떠날 일정을 자꾸 미뤄요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 짧은 라이브가 켜지면 나가려던 약속도 슬쩍 뒤로 미뤄요.",
+          "actor": "그래서 $celebName 드라마가 한 회 남으면 자던 시간도 미루고 끝까지 봐요.",
+          "athlete": "그래서 $celebName 경기가 연장에 가면 다음 일정을 통째로 밀어 버려요.",
+          "icon": "그래서 $celebName의 새 영상이 길어도 끄지 못하고 할 일을 자꾸 미뤄요."
+        }
+      },
+      {
+        "id": "yeokma_05",
+        "tone": "사막 대상",
+        "eraHints": [
+          "당나라 장안",
+          "당나라 양주",
+          "고려 말 개경",
+          "1860년대 런던",
+          "조선 후기 한양"
+        ],
+        "userRole": "비단길을 오가는 대상의 길잡이",
+        "celebRole": "오아시스마다 물을 파는 장사꾼",
+        "paragraphs": {
+          "gi": "$era의 모래언덕을 넘을 때마다 $celebName이 오아시스에서 $userName의 물통을 채워 줬어요. $userName은 사막을 가로지르는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName을 다음 모래언덕으로 끝없이 떠밀어, 한 우물가에 오래 머물지 못했어요. $celebName은 떠나는 $userName의 손에 마른 대추 한 줌과 작은 물주머니 하나를 늘 쥐여 줬어요.",
+          "jeon": "어느 해 모래폭풍에 길을 잃은 $userName을, $celebName이 자기 그늘과 남은 물을 나눠 가며 이틀 밤을 버티게 했어요. 늘 스쳐만 가던 사람이 자기 몫까지 내준 거라 $userName은 떠날 마음을 잃었어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠나던 모랫길을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName이 있는 곳이면 멀어도 가게 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 콘서트라면 비행기를 갈아타서라도 그 도시에 닿아요.",
+          "actor": "그래서 $celebName 시사회라면 차로 몇 시간이 걸려도 그날 다녀와요.",
+          "athlete": "그래서 $celebName 원정 경기라면 낯선 도시 숙소부터 미리 잡아요.",
+          "icon": "그래서 $celebName 전시라면 멀어도 당일치기로 표를 끊어 다녀와요."
+        }
+      },
+      {
+        "id": "yeokma_06",
+        "tone": "유랑 극단",
+        "eraHints": [
+          "1500년대 영국 런던",
+          "1880년대 빈",
+          "1920년대 경성",
+          "1930년대 파리",
+          "19세기 말 모스크바"
+        ],
+        "userRole": "도시를 옮겨 다니는 유랑 배우",
+        "celebRole": "마을마다 무대를 세워 주던 목수",
+        "paragraphs": {
+          "gi": "$era, 마을마다 $celebName이 $userName의 무대를 새로 짜 줬어요. $userName은 도시를 옮겨 다니는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName을 다음 마을로 자꾸 데려가, 정든 광장을 늘 떠났어요. $celebName은 헐어 낸 무대 널빤지마다 작은 별을 새겨, 다음 마을 무대에 다시 끼워 줬어요.",
+          "jeon": "어느 봄 $userName이 떠나는 마차를 세우고 처음으로 \"이번엔 같이 가요\"라고 말했어요. 늘 무대만 짓고 남던 사람을 데려가게 된 거라 $userName은 길이 외롭지 않았어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠돌던 무대를 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 함께라면 어느 도시든 설레요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName 투어 소식이 뜨면 다음 도시 일정을 먼저 검색해 봐요.",
+          "actor": "그래서 $celebName의 다음 작품 촬영지를 미리 알아보며 설레어해요.",
+          "athlete": "그래서 $celebName의 다음 원정지가 발표되면 그 도시부터 찾아봐요.",
+          "icon": "그래서 $celebName의 다음 전시가 어느 도시일지 미리 기대하며 기다려요."
+        }
+      },
+      {
+        "id": "yeokma_07",
+        "tone": "역참 파발",
+        "eraHints": [
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 장안",
+          "1860년대 런던",
+          "1500년대 영국 런던"
+        ],
+        "userRole": "변방으로 소식을 나르는 전령",
+        "celebRole": "시장 어귀에서 짐을 꾸려 주던 봇짐장수",
+        "paragraphs": {
+          "gi": "$era, $userName이 변방으로 떠나기 전, $celebName이 늘 그 짐을 단단히 묶어 줬어요. $userName은 변방으로 소식을 나르던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName의 발을 변방으로 끝없이 보내, 한 거리에 마음을 못 뒀어요. $celebName은 떠나는 $userName의 손에 늘 따뜻한 주먹밥을 쥐여 줬어요.",
+          "jeon": "어느 겨울 $userName이 길에서 발을 다쳐 돌아왔는데, $celebName이 시장 일을 접고 사흘을 곁에서 발을 싸매 줬어요. 떠나보내기만 하던 사람이 머물러 준 거라 $userName은 그 사흘이 길처럼 길게 느껴졌어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠나던 발걸음을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName이 묶어 준 짐이라면 어디든 들고 가요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 추천한 노래라면 출퇴근길 내내 그것만 들어요.",
+          "actor": "그래서 $celebName이 좋아한다는 작품이라면 끝까지 찾아 챙겨 봐요.",
+          "athlete": "그래서 $celebName이 신는다는 운동화를 굳이 알아보고 따라 신어요.",
+          "icon": "그래서 $celebName이 쓴다는 물건이라면 멀리서라도 구해 와요."
+        }
+      },
+      {
+        "id": "yeokma_08",
+        "tone": "항구 작별",
+        "eraHints": [
+          "1940년대 상하이",
+          "1860년대 런던 부둣가",
+          "1960년대 뉴욕",
+          "당나라 양주",
+          "1920년대 경성"
+        ],
+        "userRole": "배편을 따라 옮겨 다니던 떠돌이 연주자",
+        "celebRole": "부두 클럽에서 표를 팔던 사람",
+        "paragraphs": {
+          "gi": "$era, $userName이 떠날 때면 $celebName이 다음 항구의 지도를 챙겨 줬어요. $userName은 배편을 따라 옮겨 다니던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 박힌 역마살이 $userName을 새 항구로 자꾸 실어 가, 정든 무대를 늘 비웠어요. $celebName은 떠나는 $userName의 악기 가방에 작은 나침반을 넣어 줬어요.",
+          "jeon": "어느 새벽 $userName이 막 떠나는 배를 일부러 보내고 부두에 남아 $celebName 옆에 앉았어요. 늘 떠나기만 하던 사람이 처음 머문 거라 $celebName은 지도를 접고 같이 바다를 봤어요.",
+          "gyeol": "사주에 박힌 역마살이 그 떠돌던 뱃길을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName이 있는 항구로만 마음이 향해요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 어느 도시에 가도 $celebName 콘서트가 열린 곳부터 떠올라요.",
+          "actor": "그래서 여행을 가도 $celebName이 촬영한 장소를 먼저 찾게 돼요.",
+          "athlete": "그래서 낯선 도시에 가면 $celebName이 뛴 경기장부터 가 보고 싶어요.",
+          "icon": "그래서 어디를 가든 $celebName의 전시가 열렸던 곳에 마음이 먼저 가요."
+        }
+      }
+    ],
+    "cheoneul": [
+      {
+        "id": "cheoneul_01",
+        "tone": "위기의 은인",
+        "eraHints": [
+          "조선 후기 한양",
+          "고려 말 개경",
+          "조선 영조 시기 한양",
+          "당나라 장안",
+          "1920년대 경성"
+        ],
+        "userRole": "누명을 쓰고 쫓기던 선비",
+        "celebRole": "그를 숨겨 준 객줏집 주인",
+        "paragraphs": {
+          "gi": "$era, 늦은 밤 $celebName이 쫓기던 $userName을 위해 말없이 문을 열어 줬어요. $userName은 거짓 고발에 쫓기던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 위기 한복판에서 $userName 곁에 $celebName을 데려다 놓았어요. $celebName은 추격꾼이 오는 길목마다 등불을 일부러 꺼, $userName의 발소리를 어둠으로 덮어 줬어요.",
+          "jeon": "어느 새벽 $celebName이 자기 호패를 $userName 손에 쥐여 주며 가짜 신분으로 성문을 빠져나가게 했어요. 자기 이름을 통째로 내준 셈이라 $userName은 그 호패를 평생 품에 지녔어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 구해 준 손길을 이번 생까지 데려왔어요. 그래서 $userName은 힘들 때면 늘 $celebName 쪽으로 마음이 기울어요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 하루가 무너진 밤이면 $celebName의 노래 한 곡을 틀고 겨우 숨을 골라요.",
+          "actor": "그래서 마음이 바닥일 때면 $celebName이 나온 작품을 다시 켜고 위로를 받아요.",
+          "athlete": "그래서 다 포기하고 싶은 날이면 $celebName의 경기 영상을 보며 다시 일어서요.",
+          "icon": "그래서 막막한 밤이면 $celebName이 남긴 영상 한 편을 붙들고 마음을 다잡아요."
+        }
+      },
+      {
+        "id": "cheoneul_02",
+        "tone": "눈보라의 도움",
+        "eraHints": [
+          "19세기 말 모스크바",
+          "1880년대 빈",
+          "1930년대 파리",
+          "1960년대 뉴욕",
+          "1500년대 런던"
+        ],
+        "userRole": "무대에서 쓰러진 무용수",
+        "celebRole": "그를 업고 뛴 무대 의상 담당",
+        "paragraphs": {
+          "gi": "$era, $userName이 무대에서 쓰러지자 $celebName이 곧장 들쳐 업고 눈보라를 뚫었어요. $userName은 굶주린 채 무대에 오르던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 쓰러지는 그 순간 $userName 곁에 $celebName을 세워 뒀어요. $celebName은 공연이 채 끝나기도 전에 분장실 천막을 박차고 나왔어요.",
+          "jeon": "그 밤 $celebName이 자기 외투와 담요를 다 내주고, 자기는 추위에 떨며 $userName의 손을 녹였어요. 가진 걸 다 벗어 준 사람이라 $userName은 그 온기를 오래 기억했어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 지켜 준 마음을 이번 생까지 닿게 했어요. 그래서 $userName은 추운 날이면 $celebName이 제일 먼저 생각나요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 마음이 시린 날이면 $celebName의 따뜻한 발라드가 담요처럼 감싸 줘요.",
+          "actor": "그래서 외로운 밤이면 $celebName이 나온 작품 한 편이 곁에 있어 줘요.",
+          "athlete": "그래서 의욕이 식은 날이면 $celebName이 뛰는 모습에 다시 가슴이 뜨거워져요.",
+          "icon": "그래서 추운 마음일 때면 $celebName이 남긴 말 한마디에 온기가 돌아와요."
+        }
+      },
+      {
+        "id": "cheoneul_03",
+        "tone": "재즈바의 구원",
+        "eraHints": [
+          "1960년대 뉴욕",
+          "1940년대 상하이",
+          "1920년대 경성",
+          "1800년대 프랑스 파리",
+          "1930년대 파리"
+        ],
+        "userRole": "빚쟁이에게 쫓기던 무명 가수",
+        "celebRole": "그를 무대 뒤에 숨긴 바텐더",
+        "paragraphs": {
+          "gi": "$era, 빚쟁이가 들이닥치자 $celebName이 $userName을 술 창고에 숨기고 태연히 잔을 닦았어요. $userName은 갚을 길 없는 빚에 쫓기던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 쫓기던 그 밤 $userName의 길목에 $celebName을 세워 뒀어요. $celebName은 카운터 안쪽, $userName만 아는 그 문을 일부러 늘 열어 두었어요.",
+          "jeon": "그 밤 $celebName이 자기 한 달치 급료를 봉투째 $userName 주머니에 찔러 주며 \"먼저 도망쳐요\"라고 말했어요. 남의 빚을 자기 돈으로 막아 준 거라 $userName은 그 봉투를 차마 다 못 썼어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 살려 준 손을 이번 생까지 데려왔어요. 그래서 $userName은 막막할 때마다 $celebName 목소리가 위로가 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 숨이 막히는 날이면 $celebName의 목소리 하나에 마음이 풀려요.",
+          "actor": "그래서 답답한 밤이면 $celebName의 인터뷰 영상을 틀어 놓고 마음을 가라앉혀요.",
+          "athlete": "그래서 무너질 것 같을 때 $celebName의 경기 한 장면이 응원처럼 다가와요.",
+          "icon": "그래서 막막할 때면 $celebName이 남긴 말 한 줄이 손을 잡아 주는 것 같아요."
+        }
+      },
+      {
+        "id": "cheoneul_04",
+        "tone": "전란의 보호",
+        "eraHints": [
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 양주",
+          "1920년대 경성",
+          "당나라 장안"
+        ],
+        "userRole": "난리 통에 가족을 잃은 아이",
+        "celebRole": "그 아이를 거둔 떠돌이 약초상",
+        "paragraphs": {
+          "gi": "$era, 전란이 휩쓸고 간 시장 모퉁이, $celebName이 홀로 남은 $userName을 가만히 지켜봤어요. $userName은 가족을 잃은 어린 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 가장 막막한 날 $userName 앞에 $celebName을 데려다 놓았어요. $celebName은 자기 끼니를 줄여 $userName에게 매일 약초죽을 끓여 주고 담요를 덮어 줬어요.",
+          "jeon": "어느 겨울 $celebName이 자기 솜저고리를 벗어 $userName에게 입히고, 자기는 얇은 옷으로 장터에 섰어요. 추위를 대신 떠안은 사람이라 $userName은 그 저고리를 평생 간직했어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 거둬 준 정을 이번 생까지 이어 줬어요. 그래서 $userName은 외로울 때면 $celebName이 곁에 있는 것 같아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 혼자인 밤이면 $celebName의 노래가 옆에 있어 주는 친구 같아요.",
+          "actor": "그래서 쓸쓸한 날이면 $celebName이 나온 드라마가 함께 있어 줘요.",
+          "athlete": "그래서 기운 없는 날이면 $celebName의 경기가 곁에서 응원해 주는 듯해요.",
+          "icon": "그래서 외로운 시간이면 $celebName이 남긴 영상이 든든한 동행이 돼요."
+        }
+      },
+      {
+        "id": "cheoneul_05",
+        "tone": "다실의 위로",
+        "eraHints": [
+          "에도 시대 교토",
+          "당나라 장안",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "1880년대 빈"
+        ],
+        "userRole": "파산해 거리에 나앉은 상인",
+        "celebRole": "따뜻한 차를 내어 준 다실 주인",
+        "paragraphs": {
+          "gi": "$era, 비 오는 처마 밑에 서 있던 $userName을 $celebName이 말없이 안으로 들였어요. $userName은 가게가 망해 갈 곳 없던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 제일 어두운 밤 $userName 곁에 $celebName을 세워 뒀어요. $celebName은 손님이 없는 시각에도 $userName을 위해 늘 화로를 데우고 무릎에 담요를 펴 뒀어요.",
+          "jeon": "어느 날 $celebName이 다실 한 칸을 내주며 \"여기서 다시 시작해요\"라고 찻잔을 건넸어요. 빈손인 사람에게 자리를 내준 거라 $userName은 그 찻잔을 두 손으로 받았어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 받쳐 준 손을 이번 생까지 닿게 했어요. 그래서 $userName은 슬럼프가 와도 $celebName이 있으면 다시 일어서요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 의욕이 바닥난 날이면 $celebName의 응원 멘트를 다시 찾아 들어요.",
+          "actor": "그래서 마음이 주저앉을 때면 $celebName이 나온 작품 속 대사에 힘을 얻어요.",
+          "athlete": "그래서 포기하고 싶을 때면 $celebName이 끝까지 뛰는 모습에 다시 발을 떼요.",
+          "icon": "그래서 다 그만두고 싶을 때 $celebName이 남긴 한마디가 자리를 다시 잡아 줘요."
+        }
+      },
+      {
+        "id": "cheoneul_06",
+        "tone": "사막의 은인",
+        "eraHints": [
+          "당나라 장안",
+          "당나라 양주",
+          "1860년대 런던",
+          "고려 말 개경",
+          "조선 후기 한양"
+        ],
+        "userRole": "길을 잃고 쓰러진 행상",
+        "celebRole": "그를 발견한 우물지기",
+        "paragraphs": {
+          "gi": "$era, 외딴 우물가에서 $celebName이 쓰러진 $userName을 발견했어요. $userName은 사막에서 길을 잃은 $userRole이었고 $celebName은 그 우물을 지키던 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 모래밭에 쓰러진 $userName 곁으로 $celebName을 보냈어요. $celebName은 자기 우물물을 한 모금씩 아껴, 마른 $userName의 입술을 며칠이고 적셔 줬어요.",
+          "jeon": "그 길에서 $celebName이 자기 낙타를 내주며 $userName을 다음 도시까지 데려다줬어요. 자기 발을 통째로 내준 사람이라 $userName은 그 낙타 방울 소리를 오래도록 잊지 못했어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 구해 준 마음을 이번 생까지 데려왔어요. 그래서 $userName은 지칠 때마다 $celebName 생각에 힘이 나요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 기운이 다 빠진 날이면 $celebName의 노래 한 곡이 물 한 모금처럼 느껴져요.",
+          "actor": "그래서 메마른 하루 끝에 $celebName이 나온 장면 하나가 마음을 적셔 줘요.",
+          "athlete": "그래서 지친 날이면 $celebName이 끝까지 달리는 모습에 다시 숨이 트여요.",
+          "icon": "그래서 막막한 날이면 $celebName이 남긴 영상 한 편이 길을 다시 보여 줘요."
+        }
+      },
+      {
+        "id": "cheoneul_07",
+        "tone": "옥살이의 도움",
+        "eraHints": [
+          "조선 영조 시기 한양",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "1920년대 경성",
+          "당나라 장안"
+        ],
+        "userRole": "억울하게 갇힌 죄수",
+        "celebRole": "면회를 거르지 않은 옛 이웃",
+        "paragraphs": {
+          "gi": "$era, 옥에 갇힌 $userName의 면회를 $celebName은 한 번도 거르지 않았어요. $userName은 누명으로 갇힌 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 가장 캄캄한 옥 안으로 $celebName의 발길을 이어 줬어요. $celebName은 면회 때마다 따뜻한 주먹밥과 격려 한 줄을 빠짐없이 넣어 줬어요.",
+          "jeon": "어느 날 $celebName이 모은 돈을 다 풀어 $userName의 누명을 벗길 증인을 끝내 찾아냈어요. 자기 살림을 털어 남을 꺼낸 사람이라 $userName은 옥문을 나서며 한참 울었어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 살려 준 손길을 이번 생까지 이어 줬어요. 그래서 $userName은 무너질 것 같을 때 $celebName이 가장 큰 응원이 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 주저앉고 싶은 날이면 $celebName의 응원 영상을 보고 다시 일어나요.",
+          "actor": "그래서 힘든 시기마다 $celebName이 나온 작품 속 대사에 마음을 기대요.",
+          "athlete": "그래서 다 포기하고 싶을 때 $celebName이 역전하는 장면에 가슴이 다시 뛰어요.",
+          "icon": "그래서 캄캄한 날이면 $celebName이 남긴 한 줄이 등불처럼 마음을 밝혀요."
+        }
+      },
+      {
+        "id": "cheoneul_08",
+        "tone": "병상의 은인",
+        "eraHints": [
+          "1880년대 빈",
+          "1960년대 뉴욕",
+          "19세기 말 모스크바",
+          "1930년대 파리",
+          "1500년대 런던"
+        ],
+        "userRole": "쓰러져 무대를 잃은 연주자",
+        "celebRole": "곁을 지킨 무대 조율사",
+        "paragraphs": {
+          "gi": "$era, 병으로 활을 놓은 $userName 곁을, $celebName이 분장실에서 악기를 손보며 지켰어요. $userName은 무대를 잃은 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 깃든 천을귀인이 가장 약해진 날 $userName 곁에 $celebName을 머물게 했어요. $celebName은 공연이 없는 밤에도 $userName의 병상 곁에서 줄을 골라 두고 담요를 여며 줬어요.",
+          "jeon": "어느 새벽 $celebName이 $userName의 손에 꼭 맞춰 새로 깎은 활을 쥐여 주며 \"다시 켜질 거예요\"라고 말했어요. 다시 일어설 자리를 만들어 준 사람이라 $userName은 그 활을 평생 썼어요.",
+          "gyeol": "사주에 깃든 천을귀인이 그 받쳐 준 정을 이번 생까지 닿게 했어요. 그래서 $userName은 힘든 시기마다 $celebName의 다정함에 기대게 돼요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 마음이 약해진 날이면 $celebName의 다정한 노래에 기대어 쉬어요.",
+          "actor": "그래서 지친 밤이면 $celebName이 건넨 작품 속 위로에 마음을 맡겨요.",
+          "athlete": "그래서 무릎이 꺾일 것 같을 때 $celebName이 다시 일어서는 모습에 힘을 얻어요.",
+          "icon": "그래서 흔들리는 날이면 $celebName이 남긴 다정한 말 한마디를 다시 들어요."
+        }
+      }
+    ],
+    "gongmang": [
+      {
+        "id": "gongmang_01",
+        "tone": "빈자리의 정",
+        "eraHints": [
+          "1920년대 경성",
+          "1960년대 뉴욕",
+          "조선 후기 한양",
+          "1930년대 파리",
+          "고려 말 개경"
+        ],
+        "userRole": "늘 한 자리를 비워 두던 다방 손님",
+        "celebRole": "그 자리를 모른 척 둔 다방 종업원",
+        "paragraphs": {
+          "gi": "$era, 창가 한 자리가 늘 비어 있었고, $celebName은 그 빈 의자를 매번 모른 척 닦아 뒀어요. $userName은 그 자리를 비워 두던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 곁에 늘 한 자리를 비워 둬, 누구도 그 자리를 채우지 못했어요. $celebName은 그 빈자리에 매일 따뜻한 차 한 잔을 말없이 놓아 두고 갔어요.",
+          "jeon": "어느 비 오는 밤 $celebName이 그 빈 의자에 처음으로 앉아 \"오늘은 제가 채워도 될까요\"라고 물었어요. 비어 있던 자리에 사람이 들어온 거라 $userName은 찻잔을 든 채 한참 말을 잃었어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 자리를 이번 생까지 데려왔어요. 그래서 $userName은 $celebName이 있으면 마음 한구석이 채워져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 마음이 헛헛한 밤이면 $celebName의 발라드가 그 빈자리에 들어와 앉아요.",
+          "actor": "그래서 적적한 저녁이면 $celebName이 나온 드라마가 옆자리에 가만히 함께해 줘요.",
+          "athlete": "그래서 쓸쓸한 시간이면 $celebName의 경기 영상이 빈 시간 곁에 켜져 있어 줘요.",
+          "icon": "그래서 허전한 날이면 $celebName이 남긴 영상 한 편이 마음 한 칸에 온기를 놓아 줘요."
+        }
+      },
+      {
+        "id": "gongmang_02",
+        "tone": "새벽의 발라드",
+        "eraHints": [
+          "1960년대 뉴욕",
+          "1940년대 상하이",
+          "1880년대 빈",
+          "1920년대 경성",
+          "1800년대 프랑스 파리"
+        ],
+        "userRole": "문 닫은 뒤 홀로 노래하던 가수",
+        "celebRole": "청소를 핑계로 남던 가게 막내",
+        "paragraphs": {
+          "gi": "$era, 손님이 다 떠난 새벽, 빈 객석을 향해 $userName이 홀로 노래할 때 $celebName만 남아 있었어요. $userName은 새벽까지 노래하던 $userRole이었고 $celebName은 청소를 핑계로 남던 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 무대 한쪽을 늘 비워 둬, 그 새벽 객석엔 아무도 없었어요. $celebName은 텅 빈 의자 맨 앞줄을 매번 깨끗이 닦아 두고 자기 자리로 삼았어요.",
+          "jeon": "어느 새벽 $celebName이 빈 객석에서 박수를 치며 \"이 빈자리 제가 다 맡을게요\"라고 말했어요. 비어 있던 새벽에 한 사람이 들어선 거라 $userName은 노래를 끝까지 잇지 못했어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 새벽을 이번 생까지 닿게 했어요. 그래서 $userName은 외로운 밤이면 $celebName의 한마디가 자장가처럼 들려요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 잠 안 오는 새벽이면 $celebName의 라이브 방송이 곁에서 말동무가 돼요.",
+          "actor": "그래서 적막한 밤이면 $celebName이 나온 드라마가 빈 방을 채워 줘요.",
+          "athlete": "그래서 혼자인 새벽이면 $celebName의 경기 다시보기가 시간을 같이 보내 줘요.",
+          "icon": "그래서 고요한 밤이면 $celebName이 남긴 영상이 빈자리에 소리를 놓아 줘요."
+        }
+      },
+      {
+        "id": "gongmang_03",
+        "tone": "텅 빈 다실",
+        "eraHints": [
+          "에도 시대 교토",
+          "당나라 장안",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "1880년대 빈"
+        ],
+        "userRole": "손님 끊긴 다실을 지키던 주인",
+        "celebRole": "찾아오는 단 한 사람의 손님",
+        "paragraphs": {
+          "gi": "$era의 빈 다실, 식어 가는 찻물 위로 김이 사그라들 때면 $celebName이 문을 열고 들어왔어요. $userName은 손님 끊긴 다실을 지키던 $userRole이었고 $celebName은 찾아오는 단 한 사람이었어요.",
+          "seung": "사주의 공망이 $userName의 다실을 늘 비워 둬, 문풍지 떠는 소리만 방 안을 채웠어요. $celebName은 식은 화로에 숯을 새로 올리고, 김 빠진 찻물을 다시 데우며 그 적막을 천천히 메웠어요.",
+          "jeon": "어느 날 $celebName이 빈 다실 한복판에 앉아 \"여기 비어 있어서 제 자리가 있는 거예요\"라고 웃었어요. 빈자리를 흠이 아니라 자리로 바꿔 준 거라 $userName은 코끝이 시큰했어요.",
+          "gyeol": "사주에 박힌 공망이 그 텅 비어 있던 다실을 이번 생까지 데려왔어요. 그래서 $userName은 마음이 식어 갈 때면 $celebName이 들어와 다시 데워 줘요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 마음이 가라앉는 날이면 $celebName의 따뜻한 노래가 화로처럼 방을 데워 줘요.",
+          "actor": "그래서 적적한 저녁이면 $celebName이 나온 작품이 식어 가던 마음을 다시 데워 줘요.",
+          "athlete": "그래서 쓸쓸한 시간이면 $celebName의 경기 한 장면이 차게 식은 기분을 데워 줘요.",
+          "icon": "그래서 헛헛한 밤이면 $celebName이 남긴 영상 한 편이 빈방의 온기가 돼 줘요."
+        }
+      },
+      {
+        "id": "gongmang_04",
+        "tone": "빈 객석의 연주",
+        "eraHints": [
+          "1880년대 빈",
+          "19세기 말 모스크바",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "1500년대 런던"
+        ],
+        "userRole": "관객 없는 홀에서 연습하던 연주자",
+        "celebRole": "청소부로 남아 듣던 사람",
+        "paragraphs": {
+          "gi": "$era, 관객 없는 홀에서 $userName이 활을 켜는 동안, $celebName이 빈 객석을 쓸며 그 소리를 들었어요. $userName은 빈 홀에서 연습하던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 홀을 늘 비워 둬, 박수 소리 한 번이 닿지 않았어요. $celebName은 텅 빈 의자에 자기 외투를 걸어 두며 \"여기 한 사람은 있어요\"라고 표시해 뒀어요.",
+          "jeon": "어느 밤 $celebName이 빈 객석 한가운데서 마지막 음까지 듣고 처음으로 박수를 쳤어요. 비어 있던 홀에 처음 소리가 돌아온 거라 $userName은 활을 내려놓고 한참 서 있었어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 객석을 이번 생까지 이어 줬어요. 그래서 $userName은 쓸쓸할 때면 $celebName의 박수가 먼저 떠올라요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 아무도 없는 듯한 날이면 $celebName의 응원 멘트가 박수처럼 들려와요.",
+          "actor": "그래서 외로운 밤이면 $celebName이 나온 작품이 객석을 함께 채워 줘요.",
+          "athlete": "그래서 혼자인 시간이면 $celebName의 경기 함성이 빈자리를 메워 줘요.",
+          "icon": "그래서 적적한 밤이면 $celebName이 남긴 한마디가 박수처럼 마음에 닿아요."
+        }
+      },
+      {
+        "id": "gongmang_05",
+        "tone": "달빛 부둣가",
+        "eraHints": [
+          "1860년대 런던 부둣가",
+          "1940년대 상하이",
+          "당나라 양주",
+          "1500년대 영국 런던",
+          "1960년대 뉴욕"
+        ],
+        "userRole": "아무도 마중 나오지 않던 뱃사람",
+        "celebRole": "부두에 늘 남아 있던 등대지기",
+        "paragraphs": {
+          "gi": "$era, 배가 닿아도 마중 나오는 이가 없던 부두 끝에서, $celebName은 늘 $userName을 위해 불을 켜 뒀어요. $userName은 마중이 없던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 자리를 늘 비워 둬, 돌아와도 반겨 주는 사람이 없었어요. $celebName은 $userName의 배가 들어올 시각이면 등불을 한 칸 더 밝게 올려 줬어요.",
+          "jeon": "어느 밤 $celebName이 부두 끝까지 마중 나와 \"이제 빈 부두 아니에요\"라고 손을 흔들었어요. 비어 있던 마중 자리에 한 사람이 선 거라 $userName은 짐을 내려놓고 웃었어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 부두를 이번 생까지 닿게 했어요. 그래서 $userName은 혼자라 느낄 때 $celebName이 곁에 있어 줘요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 마음이 어두운 밤이면 $celebName의 노래가 등불처럼 길을 밝혀 줘요.",
+          "actor": "그래서 쓸쓸한 저녁이면 $celebName이 나온 작품이 마중 나온 듯 반겨 줘요.",
+          "athlete": "그래서 지친 하루 끝에 $celebName의 경기 영상이 기다려 준 것처럼 켜져요.",
+          "icon": "그래서 외로운 밤이면 $celebName이 남긴 영상이 불 켜진 창처럼 느껴져요."
+        }
+      },
+      {
+        "id": "gongmang_06",
+        "tone": "빈 화실",
+        "eraHints": [
+          "1930년대 파리",
+          "1500년대 런던",
+          "1880년대 빈",
+          "1960년대 뉴욕",
+          "19세기 말 모스크바"
+        ],
+        "userRole": "그림은 다 팔리고 빈방만 남은 화가",
+        "celebRole": "빈 화실을 매일 들여다보던 이웃",
+        "paragraphs": {
+          "gi": "$era, 그림이 다 팔리고 빈 벽만 남은 화실을, $celebName이 매일 들여다봤어요. $userName은 빈방에 남은 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 화실 벽을 늘 비워 둬, 못 자국만 남고 그림은 없었어요. $celebName은 그 빈 벽에 들꽃 한 송이씩을 꽂아 두며 자리를 채워 줬어요.",
+          "jeon": "어느 날 $celebName이 빈 벽 앞에 서서 \"여기 비어 있으니까 다음 그림이 들어올 자리가 있죠\"라고 말했어요. 텅 빈 벽을 기대의 자리로 바꿔 준 거라 $userName은 다시 붓을 들었어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 벽을 이번 생까지 데려왔어요. 그래서 $userName은 마음이 헛헛할 때 $celebName이 그 빈자리를 메워 줘요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 마음이 텅 빈 듯한 날이면 $celebName의 새 노래가 그 자리에 들어와 머물러요.",
+          "actor": "그래서 허전한 저녁이면 $celebName이 나온 작품이 빈 벽에 걸린 그림처럼 곁에 있어 줘요.",
+          "athlete": "그래서 공허한 시간이면 $celebName의 경기 영상이 비어 있던 하루에 온기를 놓아 줘요.",
+          "icon": "그래서 헛헛한 밤이면 $celebName이 남긴 영상 한 편이 빈 마음에 가만히 자리를 잡아요."
+        }
+      },
+      {
+        "id": "gongmang_07",
+        "tone": "텅 빈 객줏집",
+        "eraHints": [
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 양주",
+          "당나라 장안",
+          "1860년대 런던"
+        ],
+        "userRole": "손님 없는 객줏집을 지키던 주인",
+        "celebRole": "매일 같은 방을 찾던 나그네",
+        "paragraphs": {
+          "gi": "$era, 빈방만 가득한 객줏집에서, $celebName은 늘 그 객줏집의 같은 방을 찾았어요. $userName은 객줏집을 지키던 $userRole이었고 $celebName은 매일 같은 방을 찾던 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 객줏집을 늘 비워 둬, 등불을 켜도 손님이 들지 않았어요. $celebName은 빈방마다 창을 열어 두며 \"바람이라도 채워 둬요\"라고 말했어요.",
+          "jeon": "어느 밤 $celebName이 빈방 하나를 오래 빌리며 \"이 빈자리, 제가 지킬게요\"라고 약속했어요. 비어 있던 방에 머무는 사람이 생긴 거라 $userName은 처음으로 등불을 환히 밝혔어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 방을 이번 생까지 이어 줬어요. 그래서 $userName은 새벽에 외로워도 $celebName이 채워 주는 게 느껴져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 잠 못 드는 새벽이면 $celebName의 노래가 빈방에 머물러 줘요.",
+          "actor": "그래서 적적한 밤이면 $celebName이 나온 드라마가 빈자리를 지켜 줘요.",
+          "athlete": "그래서 혼자인 시간이면 $celebName의 경기 영상이 곁방처럼 켜져 있어요.",
+          "icon": "그래서 헛헛한 새벽이면 $celebName이 남긴 영상이 빈방의 불빛이 돼 줘요."
+        }
+      },
+      {
+        "id": "gongmang_08",
+        "tone": "빈 무대",
+        "eraHints": [
+          "1940년대 상하이",
+          "1960년대 뉴욕",
+          "1920년대 경성",
+          "1880년대 빈",
+          "1930년대 파리"
+        ],
+        "userRole": "관객이 떠난 무대에 홀로 선 무희",
+        "celebRole": "마지막까지 불을 끄지 않던 조명 담당",
+        "paragraphs": {
+          "gi": "$era, 관객이 다 떠난 무대에 $userName이 홀로 섰고, $celebName은 마지막 조명 한 줄을 끄지 않았어요. $userName은 빈 무대에 남던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주의 공망이 $userName의 무대를 늘 비워 둬, 박수도 환호도 닿지 않았어요. $celebName은 빈 객석을 향해 조명을 비추며 \"여기 한 사람은 보고 있어요\"라고 했어요.",
+          "jeon": "어느 밤 $celebName이 마지막 곡까지 빈 객석을 지키며 혼자 끝까지 박수를 쳤어요. 비어 있던 무대에 처음 소리가 돌아온 거라 $userName은 무대 위에서 한참 멈춰 섰어요.",
+          "gyeol": "사주에 박힌 공망이 그 비어 있던 무대를 이번 생까지 닿게 했어요. 그래서 $userName은 마음이 빌 때면 $celebName이 곁에서 메워 줘요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 텅 빈 듯한 밤이면 $celebName의 노래가 무대 조명처럼 마음을 비춰 줘요.",
+          "actor": "그래서 쓸쓸한 저녁이면 $celebName이 나온 작품이 옆자리에 함께 앉아 있어 줘요.",
+          "athlete": "그래서 공허한 시간이면 $celebName의 경기 영상이 그 시간에 잔잔히 함께해 줘요.",
+          "icon": "그래서 적막한 밤이면 $celebName이 남긴 영상 한 편이 곁을 지켜 줘요."
+        }
+      }
+    ],
+    "hap": [
+      {
+        "id": "hap_01",
+        "tone": "취향이 맞던 사이",
+        "eraHints": [
+          "조선 영조 시기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "조선 후기 한양",
+          "1920년대 경성"
+        ],
+        "userRole": "책을 베껴 파는 필사 서생",
+        "celebRole": "같은 책만 골라 가던 단골",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 가게에서 늘 같은 시집만 골라 갔어요. $userName은 밤새 책을 베껴 파는 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 합의 기운이 둘의 취향을 한 줄로 묶어, $userName이 좋아하는 구절을 $celebName도 똑같이 좋아했어요. $celebName은 책을 살 때마다 마음에 든 줄에 작은 점 하나를 찍어 돌려줬어요.",
+          "jeon": "어느 날 $userName이 그 점들을 따라 읽다 보니, 자기 마음과 똑같은 자리에 점이 찍혀 있었어요. 말도 안 했는데 취향이 포개진 거라 $userName은 그 책을 차마 못 팔았어요.",
+          "gyeol": "그렇게 맞물리던 기운이 그 마음을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName이 좋아하는 거라면 미리 알 것 같아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 푼 플레이리스트를 들으면 이미 내가 좋아하던 곡들이 줄지어 있어요.",
+          "actor": "그래서 $celebName이 추천한 작품은 보기도 전에 내 취향일 걸 알아요.",
+          "athlete": "그래서 $celebName이 좋아한다던 경기 스타일이 신기하게 내가 즐겨 보던 그것이에요.",
+          "icon": "그래서 $celebName이 만든 영상은 편집 리듬부터 내가 늘 좋아하던 호흡이에요."
+        }
+      },
+      {
+        "id": "hap_02",
+        "tone": "같은 단골 카페",
+        "eraHints": [
+          "1930년대 파리",
+          "1960년대 뉴욕",
+          "1880년대 빈",
+          "1500년대 런던",
+          "1800년대 프랑스 파리"
+        ],
+        "userRole": "그림을 그리던 가난한 화가",
+        "celebRole": "같은 카페 구석을 쓰던 시인",
+        "paragraphs": {
+          "gi": "$era, $celebName은 카페 옆 구석에서 $userName을 보며 시를 썼어요. $userName은 창가에서 그림을 그리던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 서로 맞는 흐름이 둘을 묶어, $userName이 그린 풍경을 $celebName이 시로 옮기면 신기하게 들어맞았어요. $celebName은 시 한 편을 쓰면 늘 $userName의 그림 뒷장에 편지처럼 적어 뒀어요.",
+          "jeon": "어느 날 카페 주인이 두 사람 작품을 나란히 걸었더니, 손님들이 한 사람이 만든 줄 알았어요. 따로 만들었는데 손길이 포개진 거라 $userName과 $celebName은 마주 보고 웃었어요.",
+          "gyeol": "그렇게 맞물리던 기운이 그 호흡을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 있으면 일상이 자연스럽게 어울려요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 좋아하는 무대 콘셉트가 늘 내가 제일 아끼던 그 무대예요.",
+          "actor": "그래서 $celebName이 인생작이라 꼽은 작품이 신기하게 내 인생작과 같아요.",
+          "athlete": "그래서 $celebName이 명승부라 부르는 경기가 내가 다시 보던 그 경기였어요.",
+          "icon": "그래서 $celebName이 영감받는다는 작품들이 내 취향 목록과 거의 겹쳐요."
+        }
+      },
+      {
+        "id": "hap_03",
+        "tone": "같은 가락의 악사",
+        "eraHints": [
+          "당나라 장안",
+          "당나라 양주",
+          "고려 말 개경",
+          "조선 후기 한양",
+          "에도 시대 교토"
+        ],
+        "userRole": "거리에서 줄을 켜던 악사",
+        "celebRole": "박자를 맞춰 주던 북잡이",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 옆에서 북을 치며 박자를 맞췄어요. $userName은 거리에서 줄을 켜며 노래하던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 맞물리는 기운이 둘의 박자를 하나로 묶어, 한 번도 맞춰 본 적 없는 곡도 척척 들어맞았어요. $celebName은 $userName이 음을 바꾸기 직전마다 북을 한 박 먼저 비워 줬어요.",
+          "jeon": "어느 장날 둘이 즉흥으로 새 곡을 켰는데, 장터 사람들이 미리 짠 줄 알고 박수를 쳤어요. 약속도 안 했는데 손발이 맞은 거라 $userName은 그 북소리를 오래 기억했어요.",
+          "gyeol": "그렇게 맞아떨어지던 흐름이 그 가락을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName과는 말 안 해도 호흡이 맞아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 다음에 부를 노래를 떠올리면 늘 내가 듣고 싶던 곡과 같아요.",
+          "actor": "그래서 $celebName이 다음에 맡을 역할을 상상하면 내 바람과 신기하게 겹쳐요.",
+          "athlete": "그래서 $celebName이 다음 경기에서 시도할 플레이가 내 예감과 자주 맞아떨어져요.",
+          "icon": "그래서 $celebName이 다음에 만들 콘텐츠를 예상하면 내 기대와 거의 일치해요."
+        }
+      },
+      {
+        "id": "hap_04",
+        "tone": "한 상을 차리던 사이",
+        "eraHints": [
+          "1920년대 경성",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "1880년대 빈",
+          "1500년대 런던"
+        ],
+        "userRole": "다방에서 음식을 만들던 사람",
+        "celebRole": "차를 내던 종업원",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 옆에서 손님에게 차를 냈어요. $userName은 다방에서 음식을 만들던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 합의 기운이 둘을 묶어, $userName이 만든 음식에 $celebName이 고른 차가 늘 딱 어울렸어요. $celebName은 새 차가 들어오면 어울릴 간식을 적어 $userName에게 먼저 건넸어요.",
+          "jeon": "어느 날 손님이 \"이 집은 누가 차림표를 짜느냐\"고 물었는데, 두 사람 다 서로를 가리켰어요. 따로 골랐는데 한 사람 솜씨처럼 맞은 거라 $userName은 슬며시 기분이 좋았어요.",
+          "gyeol": "그렇게 어울리던 흐름이 그 손맛을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과 함께면 일상이 잘 굴러가요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 짠 콘서트 셋리스트가 늘 내가 듣고 싶던 순서 그대로예요.",
+          "actor": "그래서 $celebName이 고른 차기작이 내가 보고 싶던 장르와 딱 맞아요.",
+          "athlete": "그래서 $celebName이 짜는 경기 운영 방식이 내가 좋아하는 흐름과 들어맞아요.",
+          "icon": "그래서 $celebName이 기획한 콘텐츠 구성이 내 취향 순서와 그대로 겹쳐요."
+        }
+      },
+      {
+        "id": "hap_05",
+        "tone": "같은 책을 읽던 사이",
+        "eraHints": [
+          "1500년대 영국 런던",
+          "1880년대 빈",
+          "1700년대 베네치아",
+          "19세기 말 모스크바",
+          "1930년대 파리"
+        ],
+        "userRole": "대본을 읽어 주던 무대 낭독자",
+        "celebRole": "같은 대목을 좋아하던 무대 화공",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 목소리를 들으며 무대 배경을 칠했어요. $userName은 배우에게 대본을 읽어 주던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 서로 맞는 흐름이 둘을 묶어, $userName이 가장 좋아하는 장면을 $celebName이 늘 제일 정성껏 칠했어요. $celebName은 그 장면 배경 구석에 늘 작은 표식 하나를 슬쩍 숨겨 뒀어요.",
+          "jeon": "어느 날 $userName이 그 표식들을 모아 보니, 자기가 밑줄 친 대목과 똑같았어요. 한마디도 안 맞췄는데 마음이 겹친 거라 $userName은 그 배경 그림을 한참 봤어요.",
+          "gyeol": "그렇게 포개지던 기운이 그 취향을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName이 고른 거라면 늘 마음에 들어요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 직접 고른 수록곡이 늘 앨범에서 내가 제일 아끼는 트랙이에요.",
+          "actor": "그래서 $celebName이 명장면이라 꼽는 대목이 신기하게 내가 돌려 보던 그 장면이에요.",
+          "athlete": "그래서 $celebName이 최고로 치는 명승부가 내가 명경기로 꼽던 바로 그것이에요.",
+          "icon": "그래서 $celebName이 가장 아낀다는 작업물이 내가 제일 좋아하던 그 영상이에요."
+        }
+      },
+      {
+        "id": "hap_06",
+        "tone": "같은 길을 걷던 사이",
+        "eraHints": [
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 양주",
+          "당나라 장안",
+          "1860년대 런던"
+        ],
+        "userRole": "장터를 도는 봇짐장수",
+        "celebRole": "같은 길을 도는 엿장수",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName과 늘 같은 시각, 같은 골목에서 마주쳤어요. $userName은 장터를 도는 $userRole이었고 $celebName은 같은 길을 도는 $celebRole이었어요.",
+          "seung": "사주에 새겨진 맞물리는 기운이 둘의 발길을 한 줄로 묶어, 어느 골목에서든 둘은 같은 시각에 마주쳤어요. $celebName은 마주칠 때마다 $userName 짐 위에 엿 한 가락을 슬쩍 끼워 줬어요.",
+          "jeon": "어느 비 오는 날 둘이 약속도 없이 같은 처마 밑으로 동시에 뛰어들었어요. 짠 적도 없는데 길이 겹친 거라 $userName은 빗소리 속에서 웃음이 났어요.",
+          "gyeol": "그렇게 맞물리던 기운이 그 발걸음을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과는 가는 길이 늘 같아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 새로 빠진 장르가 마침 내가 요즘 듣던 그것이에요.",
+          "actor": "그래서 $celebName이 요즘 본다는 작품이 내 정주행 목록과 똑같아요.",
+          "athlete": "그래서 $celebName이 즐겨 본다는 종목이 내가 챙겨 보던 바로 그 종목이에요.",
+          "icon": "그래서 $celebName이 요즘 관심 둔 분야가 내가 파고들던 그 주제와 겹쳐요."
+        }
+      },
+      {
+        "id": "hap_07",
+        "tone": "같은 차를 마시던 사이",
+        "eraHints": [
+          "에도 시대 교토",
+          "당나라 장안",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "1880년대 빈"
+        ],
+        "userRole": "다실에서 차를 고르던 주인",
+        "celebRole": "늘 같은 차를 시키던 손님",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName의 다실에서 매번 같은 차만 시켰어요. $userName은 손님에게 맞는 차를 고르던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 합의 기운이 둘을 묶어, $userName이 그날 추천하려던 차를 $celebName이 먼저 시키곤 했어요. $celebName은 찻잔을 비우면 늘 같은 자리에 같은 모양으로 돌려놨어요.",
+          "jeon": "어느 날 $userName이 새 차를 내며 시험 삼아 물었더니, $celebName이 $userName이 적어 둔 표현 그대로 맛을 말했어요. 가르친 적 없는데 입맛이 겹친 거라 $userName은 조용히 놀랐어요.",
+          "gyeol": "그렇게 맞아떨어지던 흐름이 그 취향을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName과 함께면 마음이 잔잔하게 맞아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 최애곡이라 꼽은 노래가 늘 내 최애 플레이리스트 맨 위에 있어요.",
+          "actor": "그래서 $celebName이 다시 보고 싶다는 작품이 내가 또 보던 그 작품이에요.",
+          "athlete": "그래서 $celebName이 좋아하는 경기 운영이 내가 늘 응원하던 그 스타일이에요.",
+          "icon": "그래서 $celebName이 즐겨 본다는 영상이 내 시청 기록과 거의 겹쳐요."
+        }
+      },
+      {
+        "id": "hap_08",
+        "tone": "같은 별을 보던 사이",
+        "eraHints": [
+          "1880년대 빈",
+          "1960년대 뉴욕",
+          "19세기 말 모스크바",
+          "1930년대 파리",
+          "1700년대 베네치아"
+        ],
+        "userRole": "공연 뒤 옥상에 오르던 연주자",
+        "celebRole": "같은 옥상에서 별을 보던 무대 담당",
+        "paragraphs": {
+          "gi": "$era, 공연이 끝나면 $celebName은 늘 $userName보다 먼저 옥상에 올라 별을 보고 있었어요. $userName은 옥상에 별을 보러 오르던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 서로 맞는 흐름이 둘을 묶어, $userName이 좋아하는 별자리를 $celebName도 똑같이 가리켰어요. $celebName은 별이 잘 보이는 자리에 늘 방석 두 개를 미리 깔아 뒀어요.",
+          "jeon": "어느 밤 둘이 동시에 같은 별을 향해 손을 들어, 서로 마주 보고 웃었어요. 약속도 없었는데 시선이 겹친 거라 $userName은 그 밤하늘을 오래 기억했어요.",
+          "gyeol": "그렇게 포개지던 기운이 그 마음을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과는 보는 방향이 늘 같아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 무대에서 강조하는 포인트가 늘 내가 제일 좋아하던 그 부분이에요.",
+          "actor": "그래서 $celebName이 작품에서 아끼는 장면이 내가 캡처해 둔 바로 그 장면이에요.",
+          "athlete": "그래서 $celebName이 명장면으로 꼽는 순간이 내가 다시 돌려 보던 그 순간이에요.",
+          "icon": "그래서 $celebName이 영상에서 공들인 대목이 내 마음을 늘 먼저 사로잡아요."
+        }
+      }
+    ],
+    "chung": [
+      {
+        "id": "chung_01",
+        "tone": "흔들리며 단단해진 사이",
+        "eraHints": [
+          "조선 후기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "조선 영조 시기 한양",
+          "1920년대 경성"
+        ],
+        "userRole": "고집 센 젊은 대장장이",
+        "celebRole": "맞은편 가게의 깐깐한 칼 장수",
+        "paragraphs": {
+          "gi": "$era, 맞은편 가게의 $celebName은 $userName의 칼이 무디다며 매번 트집을 잡았어요. $userName은 자기 방식만 옳다 믿던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 부딪치는 기운이 둘을 맞세워, $userName은 $celebName과 만날 때마다 말다툼으로 하루를 보냈어요. $celebName은 트집을 잡으면서도 $userName의 망치를 더 좋은 쇠로 슬쩍 바꿔 놓고 갔어요.",
+          "jeon": "어느 날 $userName이 그 새 쇠로 벼린 칼이 어느 때보다 잘 들어 깜짝 놀랐어요. 늘 부딪치던 사람이 실은 칼을 다듬어 준 거라 $userName은 화내려다 말문이 막혔어요.",
+          "gyeol": "그렇게 부딪치며 서로를 다듬던 기운이 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과 티격태격해도 결국 마음이 더 단단해져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 콘셉트 변신에 처음엔 갸웃하다가도 결국 누구보다 크게 응원해요.",
+          "actor": "그래서 $celebName의 파격 변신에 낯설어하다가 끝내 그 작품을 제일 아끼게 돼요.",
+          "athlete": "그래서 $celebName의 새 포지션에 의심하다가도 결국 가장 굳게 믿고 응원해요.",
+          "icon": "그래서 $celebName의 새 시도에 갸우뚱하다가 끝내 더 깊이 빠져들어요."
+        }
+      },
+      {
+        "id": "chung_02",
+        "tone": "맞부딪치던 무대",
+        "eraHints": [
+          "1500년대 영국 런던",
+          "1880년대 빈",
+          "1700년대 베네치아",
+          "19세기 말 모스크바",
+          "1930년대 파리"
+        ],
+        "userRole": "주연을 맡은 배우",
+        "celebRole": "대사를 두고 늘 다투던 또 다른 배우",
+        "paragraphs": {
+          "gi": "$era, 같은 장면이면 $celebName은 늘 $userName과 대사를 두고 맞붙었어요. $userName은 자기 대사를 안 굽히던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 맞서는 흐름이 둘을 부딪쳐, 연습 때마다 대본을 두고 큰소리가 오갔어요. $celebName은 다투고 나면 늘 $userName이 약한 대목에 받쳐 줄 동작을 따로 적어 왔어요.",
+          "jeon": "어느 밤 무대에서 $userName이 대사를 잊자, $celebName이 다툼은 잊고 자연스럽게 그 빈자리를 메워 줬어요. 늘 부딪치던 사람이 실은 받쳐 주고 있던 거라 $userName은 막이 내리자 손을 내밀었어요.",
+          "gyeol": "그렇게 부딪치며 다져지던 호흡을 맞서는 흐름이 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 부딪쳐도 결국 손발이 맞아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 새 앨범 방향을 두고 마음이 흔들려도 결국 한 곡 한 곡 다 챙겨 들어요.",
+          "actor": "그래서 $celebName의 작품 선택에 토를 달다가도 끝내 그 작품을 가장 좋아하게 돼요.",
+          "athlete": "그래서 $celebName의 경기 운영에 답답해하다가도 결국 더 굳게 응원해요.",
+          "icon": "그래서 $celebName의 콘텐츠 변화에 의견이 갈려도 끝내 더 깊이 빠져들어요."
+        }
+      },
+      {
+        "id": "chung_03",
+        "tone": "티격태격 동업",
+        "eraHints": [
+          "1920년대 경성",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "1880년대 빈",
+          "1500년대 런던"
+        ],
+        "userRole": "다방을 새로 연 주인",
+        "celebRole": "운영 방식을 두고 다투던 동업자",
+        "paragraphs": {
+          "gi": "$era, 차림표 하나까지 $celebName은 $userName에게 사사건건 반대했어요. $userName은 가게를 자기 뜻대로 꾸미려던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 서로를 밀어 다듬는 기운이 둘을 부딪쳐, 다방 문 닫는 시각까지 의견이 갈렸어요. $celebName은 반대를 하면서도 $userName이 놓친 손님 명단을 꼼꼼히 적어 건넸어요.",
+          "jeon": "어느 달 그 명단 덕에 가게가 처음으로 흑자를 냈고, $userName은 다투던 말들이 다 가게를 위한 거였단 걸 알았어요. 부딪치던 상대가 실은 같이 끌어 준 거라 $userName은 멋쩍게 웃었어요.",
+          "gyeol": "그렇게 흔들리며 자리 잡던 흐름을 그 기운이 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName과 의견이 갈려도 결국 더 나아져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 컴백 콘셉트에 처음엔 반대하다가 무대를 보고 마음을 완전히 바꿔요.",
+          "actor": "그래서 $celebName의 캐스팅 소식에 갸웃하다가 본방을 보고 푹 빠져들어요.",
+          "athlete": "그래서 $celebName의 전술 변화에 불안해하다가 경기 결과를 보고 인정하게 돼요.",
+          "icon": "그래서 $celebName의 새 기획에 회의적이다가 결과물을 보고 생각을 고쳐먹어요."
+        }
+      },
+      {
+        "id": "chung_04",
+        "tone": "맞붙던 검객",
+        "eraHints": [
+          "조선 영조 시기 한양",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "1500년대 영국 런던"
+        ],
+        "userRole": "이름난 젊은 검객",
+        "celebRole": "그를 늘 도발하던 떠돌이 검객",
+        "paragraphs": {
+          "gi": "$era, $celebName은 $userName을 만날 때마다 시비를 걸어 왔어요. $userName은 누구와도 안 지려던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 부딪치는 기운이 둘을 맞세워, 마주칠 때마다 목검이 오가는 대결로 번졌어요. $celebName은 대결이 끝날 무렵이면 \"오늘은 왼발이 늦었네\"라고 한마디 던지고 사라졌어요.",
+          "jeon": "어느 날 $userName이 큰 시합 마지막 한 합에서, $celebName이 흘리듯 짚어 준 그 왼발을 떠올려 승부를 뒤집었어요. \"이긴 건 너지만 자세는 내가 봐 준 거다\"라던 그 말이 그제야 진심이었음을 알고, $userName은 빈자리를 한참 봤어요.",
+          "gyeol": "그렇게 부딪치며 서로를 벼리던 기운이 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과 부딪힐수록 약점이 하나씩 메워져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 쓴소리 같던 라이브 멘트가 결국 나를 한 뼘 자라게 해요.",
+          "actor": "그래서 $celebName의 까칠한 인터뷰 한마디가 곱씹을수록 깊은 조언이 돼요.",
+          "athlete": "그래서 $celebName의 날카로운 경기 평가가 들을수록 나를 더 단단하게 해요.",
+          "icon": "그래서 $celebName의 직설적인 한마디가 처음엔 따끔해도 결국 나를 키워 줘요."
+        }
+      },
+      {
+        "id": "chung_05",
+        "tone": "엇갈리던 항해",
+        "eraHints": [
+          "1860년대 런던 부둣가",
+          "1940년대 상하이",
+          "당나라 양주",
+          "1500년대 영국 런던",
+          "1960년대 뉴욕"
+        ],
+        "userRole": "고집 센 젊은 선장",
+        "celebRole": "항로를 두고 다투던 항해사",
+        "paragraphs": {
+          "gi": "$era, 갑판에서 $celebName은 늘 $userName과 다른 항로를 주장했어요. $userName은 자기 항로만 옳다 믿던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 맞서는 흐름이 둘을 부딪쳐, 항해 내내 항로를 두고 언성이 높았어요. $celebName은 다투면서도 $userName이 놓친 암초 위치를 적은 메모를 항해 지도 한쪽 귀퉁이에 몰래 끼워 뒀어요.",
+          "jeon": "어느 밤 폭풍 속에서 그 표시 덕에 배가 암초를 피했고, $userName은 다투던 말들이 다 배를 살리려던 거였음을 알았어요. 부딪치던 사람이 실은 같이 키를 잡고 있던 거라 $userName은 고개를 숙였어요.",
+          "gyeol": "그렇게 흔들리며 잡히던 항로를 맞서는 흐름이 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 부딪쳐도 결국 같은 방향으로 가요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 활동 방향을 두고 갸웃하다가도 끝내 같은 곳을 바라보게 돼요.",
+          "actor": "그래서 $celebName의 작품 선택에 다른 의견이다가도 결국 함께 응원하게 돼요.",
+          "athlete": "그래서 $celebName의 경기 전략에 의견이 갈려도 끝내 같은 결과를 바라요.",
+          "icon": "그래서 $celebName의 콘텐츠 노선에 토를 달다가도 결국 같은 편에 서요."
+        }
+      },
+      {
+        "id": "chung_06",
+        "tone": "맞서던 화공",
+        "eraHints": [
+          "1930년대 파리",
+          "1500년대 런던",
+          "1880년대 빈",
+          "1960년대 뉴욕",
+          "19세기 말 모스크바"
+        ],
+        "userRole": "자기 화풍을 고집하던 화가",
+        "celebRole": "그 그림을 늘 혹평하던 동료 화가",
+        "paragraphs": {
+          "gi": "$era, 화실에서 만나면 $celebName은 $userName의 그림 앞에서 늘 흠을 짚었어요. $userName은 자기 색만 옳다 믿던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 서로를 밀어 다듬는 기운이 둘을 부딪쳐, 색 하나를 두고도 다퉜어요. $celebName은 혹평을 하면서도 $userName의 팔레트에 부족한 색을 말없이 채워 두고 갔어요.",
+          "jeon": "어느 날 $userName의 그림이 처음으로 팔렸는데, 그 그림을 살린 색이 전부 $celebName이 채워 준 것이었어요. 부딪치던 사람이 실은 그림을 받쳐 준 거라 $userName은 붓을 내려놓고 웃었어요.",
+          "gyeol": "그렇게 부딪치며 짙어지던 기운이 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName과 다퉈도 결국 더 좋은 게 나와요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 신곡 평가로 팬들과 다투다가도 결국 그 곡을 제일 아껴요.",
+          "actor": "그래서 $celebName의 연기 해석을 두고 입씨름하다가 끝내 그 작품에 더 빠져요.",
+          "athlete": "그래서 $celebName의 플레이를 두고 논쟁하다가도 결국 더 깊이 응원해요.",
+          "icon": "그래서 $celebName의 작업물을 두고 의견이 갈려도 끝내 더 좋아하게 돼요."
+        }
+      },
+      {
+        "id": "chung_07",
+        "tone": "엇갈리던 동문",
+        "eraHints": [
+          "1880년대 빈",
+          "19세기 말 모스크바",
+          "1960년대 뉴욕",
+          "1500년대 런던",
+          "1930년대 파리"
+        ],
+        "userRole": "재능을 다투던 젊은 연주자",
+        "celebRole": "같은 스승 밑의 경쟁자",
+        "paragraphs": {
+          "gi": "$era, $celebName은 모든 무대에서 $userName과 1등을 두고 맞붙었어요. $userName은 자리를 안 내주려던 $userRole이었고 $celebName은 같은 스승 밑의 $celebRole이었어요.",
+          "seung": "사주에 걸린 부딪치는 기운이 둘을 맞세워, 연습실에서 만나면 서로 더 어려운 곡으로 기를 죽이려 했어요. $celebName은 그러면서도 $userName이 막히는 소절의 운지법을 악보 모서리에 적어 뒀어요.",
+          "jeon": "어느 큰 무대에서 $userName이 그 운지법 덕에 가장 어려운 소절을 넘겼어요. 늘 다투던 경쟁자가 실은 길을 터 준 거라 $userName은 무대 인사 때 그쪽을 먼저 봤어요.",
+          "gyeol": "그렇게 부딪치며 함께 자라던 기운이 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과 경쟁해도 결국 같이 커요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 음원 순위에 마음 졸이다가도 끝내 더 열심히 스밍을 돌려요.",
+          "actor": "그래서 $celebName의 시상식 경쟁에 조마조마하다가 결국 더 깊이 응원해요.",
+          "athlete": "그래서 $celebName의 순위 다툼에 가슴 졸이다가도 끝내 더 굳게 응원해요.",
+          "icon": "그래서 $celebName의 조회수 경쟁에 마음 쓰다가도 결국 더 즐겁게 챙겨 봐요."
+        }
+      },
+      {
+        "id": "chung_08",
+        "tone": "맞붙던 장사꾼",
+        "eraHints": [
+          "당나라 양주",
+          "당나라 장안",
+          "고려 말 개경",
+          "조선 후기 한양",
+          "1860년대 런던"
+        ],
+        "userRole": "값을 안 깎던 비단 상인",
+        "celebRole": "맞은편 가게의 떠들썩한 상인",
+        "paragraphs": {
+          "gi": "$era, 맞은편 가게의 $celebName은 $userName의 값이 비싸다는 소문을 매일 거리에 퍼뜨렸어요. $userName은 자기 값을 안 굽히던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 걸린 맞서는 흐름이 둘을 부딪쳐, 운하 거리에 두 사람 다투는 소리가 늘 울렸어요. $celebName은 그렇게 소문을 내면서도, 비단을 찾는 손님은 꼭 $userName의 가게로 보냈어요.",
+          "jeon": "어느 달 $userName의 가게가 거리에서 제일 잘됐는데, 그 손님 절반이 $celebName이 보낸 사람이었어요. 그 못된 소문이 실은 장사를 밀어 준 거라 $userName은 따지러 갔다가 웃고 말았어요.",
+          "gyeol": "그렇게 흔들리며 단단해지던 흐름이 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 부딪쳐도 결국 서로를 키워요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName과 의견이 부딪치는 팬과도 결국 같이 응원봉을 흔들게 돼요.",
+          "actor": "그래서 $celebName의 작품 해석으로 다투던 사람과 끝내 같은 팬이 돼요.",
+          "athlete": "그래서 $celebName의 경기를 두고 언쟁하던 사람과도 결국 같은 자리에서 응원해요.",
+          "icon": "그래서 $celebName을 두고 입씨름하던 사람과 끝내 같이 콘텐츠를 챙겨 봐요."
+        }
+      }
+    ],
+    "hyeong": [
+      {
+        "id": "hyeong_01",
+        "tone": "약속에 묶인 사이",
+        "eraHints": [
+          "조선 후기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "조선 영조 시기 한양",
+          "1920년대 경성"
+        ],
+        "userRole": "비밀 결사의 어린 단원",
+        "celebRole": "같은 맹세를 한 동지",
+        "paragraphs": {
+          "gi": "$era, 같은 날 같은 종이에 $userName과 $celebName이 나란히 손도장을 찍었어요. $userName은 나라를 바꾸자 맹세한 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 무거운 약속의 기운이 둘을 한 맹세로 깊게 묶어, 어떤 일이 있어도 서로를 지키기로 했어요. $celebName은 위험한 임무가 생기면 늘 자기 이름을 먼저 명단에 올렸어요.",
+          "jeon": "어느 밤 단속이 들이닥치자 $celebName이 동지들의 이름이 적힌 명단을 품에 숨기고, 대신 의심을 뒤집어쓴 채 끌려갔어요. 약속을 책임으로 갚은 사람이라 $userName은 그 빈자리를 오래 못 메웠어요.",
+          "gyeol": "그 무거운 약속의 기운이 깊게 묶인 책임을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과의 약속이라면 무엇이든 끝까지 지켜요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 컴백 날이라면 몇 달 전부터 그날 일정을 통째로 비워 둬요.",
+          "actor": "그래서 $celebName의 신작 개봉일이라면 그 주 약속을 미리 다 빼 놔요.",
+          "athlete": "그래서 $celebName의 경기 날이라면 무슨 일이 있어도 그 시간을 지켜요.",
+          "icon": "그래서 $celebName의 새 작업 공개일이라면 그날만큼은 다른 일을 안 잡아요."
+        }
+      },
+      {
+        "id": "hyeong_02",
+        "tone": "맹세한 검의 형제",
+        "eraHints": [
+          "조선 영조 시기 한양",
+          "조선 후기 한양",
+          "고려 말 개경",
+          "당나라 장안",
+          "1500년대 영국 런던"
+        ],
+        "userRole": "호위무사가 된 노비 출신 검객",
+        "celebRole": "같은 주군을 지키기로 한 동료 무사",
+        "paragraphs": {
+          "gi": "$era, 같은 날 같은 칼에 $userName과 $celebName이 나란히 손을 얹었어요. $userName은 주군을 지키기로 맹세한 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 책임으로 묶인 흐름이 둘을 한 맹세로 깊게 묶어, 등을 맡길 수 있는 사이가 됐어요. $celebName은 야간 경비 때면 늘 $userName 몫의 위험한 길목을 먼저 골라 섰어요.",
+          "jeon": "어느 밤 거짓 밀서가 돌아 $userName이 누명을 쓸 뻔하자, $celebName이 그 문서를 자기가 숨겼다며 대신 의심을 받았어요. 약속을 책임으로 지킨 사람이라 $userName은 그 마음을 평생 새겼어요.",
+          "gyeol": "그 책임으로 묶인 흐름이 깊은 다짐을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 한 약속은 몇 해가 가도 잊지 않아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 활동이 뜸한 달에도 응원봉을 손 닿는 자리에 그대로 둬요.",
+          "actor": "그래서 $celebName이 한동안 작품이 없어도 팬심이 식는 일 없이 한결같아요.",
+          "athlete": "그래서 $celebName이 부진한 시기에도 응원하는 마음이 한 칸도 줄지 않아요.",
+          "icon": "그래서 $celebName이 한참 잠잠해도 알림 설정은 늘 켜 둔 채로 기다려요."
+        }
+      },
+      {
+        "id": "hyeong_03",
+        "tone": "한배를 탄 책임",
+        "eraHints": [
+          "1860년대 런던 부둣가",
+          "1940년대 상하이",
+          "당나라 양주",
+          "1500년대 영국 런던",
+          "1960년대 뉴욕"
+        ],
+        "userRole": "선원들을 책임진 젊은 갑판장",
+        "celebRole": "같이 배를 맡기로 한 항해사",
+        "paragraphs": {
+          "gi": "$era, 같은 항해 일지에 $userName과 $celebName이 나란히 이름을 적었어요. $userName은 선원을 무사히 데려가기로 한 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 깊은 다짐이 둘을 한 책임으로 묶어, 누구 하나 잃지 않기로 약속했어요. $celebName은 폭풍이 오면 늘 자기 구명줄을 풀어 어린 선원에게 먼저 건넸어요.",
+          "jeon": "어느 밤 큰 파도에 한 선원이 휩쓸리자, $celebName이 자기 줄로 그를 묶어 살리고 자기는 갑판 난간을 밤새 붙들고 버텼어요. 약속을 끝까지 지킨 사람이라 $userName은 그 항해 일지를 평생 간직했어요.",
+          "gyeol": "그 깊은 다짐이 묵직한 책임을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName과 한 다짐이라면 평생 짊어져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 앨범은 타이틀곡만이 아니라 수록곡 끝 트랙까지 다 들어요.",
+          "actor": "그래서 $celebName이 나온 작품은 1화부터 마지막 회까지 한 편도 안 건너뛰어요.",
+          "athlete": "그래서 $celebName의 경기는 전반만이 아니라 끝나는 휘슬까지 다 챙겨 봐요.",
+          "icon": "그래서 $celebName의 영상은 짧든 길든 마지막 장면까지 끝까지 다 봐요."
+        }
+      },
+      {
+        "id": "hyeong_04",
+        "tone": "맹세한 의형제",
+        "eraHints": [
+          "고려 말 개경",
+          "조선 후기 한양",
+          "당나라 양주",
+          "당나라 장안",
+          "1920년대 경성"
+        ],
+        "userRole": "굶주린 거리의 아이",
+        "celebRole": "같은 처마 밑에서 의형제를 맺은 아이",
+        "paragraphs": {
+          "gi": "$era, 추운 거리, 같은 처마 밑에서 $userName과 $celebName이 의형제를 맺었어요. $userName은 추위에 떨던 거리의 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 무거운 약속의 기운이 둘을 한 맹세로 깊게 묶어, 끼니든 추위든 같이 나누기로 했어요. $celebName은 동냥한 떡이 한 덩이뿐이어도 늘 큰 쪽을 $userName에게 줬어요.",
+          "jeon": "어느 겨울 $celebName이 자기 솜옷을 $userName에게 입히고, 자기는 빈 가마니를 덮고 밤을 났어요. 약속을 끝까지 지킨 사람이라 $userName은 그 가마니를 평생 잊지 못했어요.",
+          "gyeol": "그 무거운 약속의 기운이 깊게 묶인 정을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과의 약속이라면 무슨 일이 있어도 지켜요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 컴백 시즌이면 응원 루틴이 거의 한 해 행사처럼 돌아와요.",
+          "actor": "그래서 $celebName의 새 작품이 나올 때면 챙겨 보는 흐름이 계절처럼 반복돼요.",
+          "athlete": "그래서 $celebName의 시즌이 열리면 경기 보는 일과가 매년 똑같이 자리 잡아요.",
+          "icon": "그래서 $celebName의 정기 콘텐츠 요일이면 그 시간이 일주일 루틴으로 박혀 있어요."
+        }
+      },
+      {
+        "id": "hyeong_05",
+        "tone": "함께 진 빚",
+        "eraHints": [
+          "1920년대 경성",
+          "1960년대 뉴욕",
+          "1930년대 파리",
+          "1880년대 빈",
+          "1500년대 런던"
+        ],
+        "userRole": "다방을 같이 연 동업자",
+        "celebRole": "같은 빚 문서에 이름을 올린 동업자",
+        "paragraphs": {
+          "gi": "$era, 같은 빚 문서에 $userName과 $celebName이 나란히 이름을 올렸어요. $userName은 가게를 일으키려 빚을 진 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 책임으로 묶인 흐름이 둘을 한 약조로 깊게 묶어, 빚도 가게도 끝까지 같이 지기로 했어요. $celebName은 형편이 어려운 달이면 늘 자기 몫을 먼저 갚겠다고 나섰어요.",
+          "jeon": "어느 해 가게가 위기에 몰리자, $celebName이 자기 살림을 다 팔아 빚을 막고 $userName 몫까지 떠안았어요. 약속을 손해로 갚은 사람이라 $userName은 그 마음을 평생 새겼어요.",
+          "gyeol": "그 책임으로 묶인 흐름이 깊은 다짐을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 한 약속은 몇 해가 지나도 흐려지지 않아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 무대 영상과 굿즈를 폴더별로 차곡차곡 모아 둬요.",
+          "actor": "그래서 $celebName이 나온 작품의 명장면을 캡처해 따로 보관해 둬요.",
+          "athlete": "그래서 $celebName의 명경기 기록과 하이라이트를 빠짐없이 저장해 둬요.",
+          "icon": "그래서 $celebName이 올린 영상은 혹시 몰라 즐겨찾기와 백업으로 챙겨 둬요."
+        }
+      },
+      {
+        "id": "hyeong_06",
+        "tone": "맹세한 동문",
+        "eraHints": [
+          "1880년대 빈",
+          "19세기 말 모스크바",
+          "1960년대 뉴욕",
+          "1500년대 런던",
+          "1930년대 파리"
+        ],
+        "userRole": "함께 무대를 약속한 연주자",
+        "celebRole": "같은 무대를 맹세한 동료 연주자",
+        "paragraphs": {
+          "gi": "$era, 같은 악보에 $userName과 $celebName이 나란히 서명했어요. $userName은 큰 무대에 같이 서기로 약속한 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 깊은 다짐이 둘을 한 약속으로 묶어, 어느 한쪽도 먼저 포기하지 않기로 했어요. $celebName은 $userName이 흔들릴 때면 늘 그 약속이 적힌 악보를 꺼내 보여 줬어요.",
+          "jeon": "어느 해 $celebName이 손을 다쳐 무대를 못 서게 되자, 자기 자리를 $userName에게 넘기고 객석에서 끝까지 응원했어요. 약속을 양보로 지킨 사람이라 $userName은 그 악보를 평생 펼쳐 봤어요.",
+          "gyeol": "그 깊은 다짐이 묵직한 책임을 이번 생까지 이어 줬어요. 그래서 $userName은 $celebName과 한 다짐이라면 평생 붙들어요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 신곡 공개 시각이면 카운트다운을 켜 놓고 정각을 기다려요.",
+          "actor": "그래서 $celebName의 신작 공개일이면 디데이를 세며 그날을 손꼽아 기다려요.",
+          "athlete": "그래서 $celebName의 경기 일정이 뜨면 그 시각을 미리 알람으로 맞춰 둬요.",
+          "icon": "그래서 $celebName의 새 영상 예고가 뜨면 공개 시각만 기다리며 새로고침해요."
+        }
+      },
+      {
+        "id": "hyeong_07",
+        "tone": "함께한 비밀",
+        "eraHints": [
+          "1500년대 영국 런던",
+          "1880년대 빈",
+          "1700년대 베네치아",
+          "조선 후기 한양",
+          "1930년대 파리"
+        ],
+        "userRole": "금지된 대본을 지키던 작가",
+        "celebRole": "그 비밀을 함께 맹세한 배우",
+        "paragraphs": {
+          "gi": "$era, $userName과 $celebName이 금지된 대본 하나를 함께 지키기로 맹세했어요. $userName은 그 대본을 숨겨 지키던 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 무거운 약속의 기운이 둘을 한 맹세로 깊게 묶어, 대본도 서로도 끝까지 지키기로 했어요. $celebName은 단속이 들 때면 늘 자기가 먼저 의심을 뒤집어쓰겠다고 나섰어요.",
+          "jeon": "어느 밤 단속이 들이닥치자, $celebName이 대본 대신 자기 가방을 일부러 빼앗기며 시간을 벌었어요. 약속을 위험으로 갚은 사람이라 $userName은 그 대본을 평생 소중히 간직했어요.",
+          "gyeol": "그 무거운 약속의 기운이 깊은 다짐을 이번 생까지 데려왔어요. 그래서 $userName은 $celebName과의 약속이라면 무엇이든 끝까지 책임져요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName의 무대 하나를 봐도 가볍게 흘리지 않고 진지하게 마음에 담아요.",
+          "actor": "그래서 $celebName의 연기를 볼 때면 한 장면도 허투루 넘기지 않게 돼요.",
+          "athlete": "그래서 $celebName의 경기를 볼 때면 한 플레이도 무게 있게 새겨 봐요.",
+          "icon": "그래서 $celebName의 작업물을 볼 때면 그 안에 담긴 공을 진중하게 들여다봐요."
+        }
+      },
+      {
+        "id": "hyeong_08",
+        "tone": "맹세한 길동무",
+        "eraHints": [
+          "당나라 장안",
+          "당나라 양주",
+          "고려 말 개경",
+          "조선 후기 한양",
+          "1860년대 런던"
+        ],
+        "userRole": "비단길을 함께 가기로 한 상인",
+        "celebRole": "같은 길을 맹세한 길동무",
+        "paragraphs": {
+          "gi": "$era, 같은 약조 문서에 $userName과 $celebName이 나란히 손을 얹었어요. $userName은 사막을 끝까지 건너기로 한 $userRole이었고 $celebName은 $celebRole이었어요.",
+          "seung": "사주에 새겨진 책임으로 묶인 흐름이 둘을 한 약조로 깊게 묶어, 어느 누구도 길에 두고 가지 않기로 했어요. $celebName은 물이 줄면 늘 자기 몫을 먼저 $userName의 물주머니에 부어 줬어요.",
+          "jeon": "어느 모래폭풍에 $userName이 쓰러지자, $celebName이 자기 낙타까지 내주며 사흘을 끌고 갔어요. 약속을 끝까지 지킨 사람이라 $userName은 그 약조 문서를 평생 품에 지녔어요.",
+          "gyeol": "그 책임으로 묶인 흐름이 깊은 다짐을 이번 생까지 닿게 했어요. 그래서 $userName은 $celebName과 한 약속은 평생 흔들리지 않아요."
+        },
+        "modernPunchlineByKind": {
+          "idol": "그래서 $celebName이 힘든 시기를 지날 때도 응원석을 떠나지 않고 곁을 지켜요.",
+          "actor": "그래서 $celebName이 혹평받는 작품을 만나도 끝까지 옆에 남아 응원해요.",
+          "athlete": "그래서 $celebName이 슬럼프에 빠진 시즌에도 끝까지 같은 자리에서 응원해요.",
+          "icon": "그래서 $celebName이 주춤하는 때에도 구독을 끊지 않고 끝까지 따라가요."
+        }
+      }
+    ]
   }
 }

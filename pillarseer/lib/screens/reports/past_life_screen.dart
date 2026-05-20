@@ -4,12 +4,16 @@
 //   "새로운 메뉴를 만들거야 이 메뉴야 이걸 팬심 1순위로 해주고 ... 이번 생에서도
 //    솔라에게 돈 뺏기지만 행복할 운명".
 //
-// 화면 구조:
-//   1) 셀럽 picker — celebrities.json 의 _StarLite list. 검색 + 일주 한자 표시.
-//   2) userName TextField — 빈 값이면 "당신" 으로 inject (사용자 mandate verbatim).
+// 화면 구조 (R104 sprint 2 — reroll 제거 + 셀럽 선택 시 picker hide):
+//   1) 셀럽 미선택 상태 — userName TextField + 검색 + picker 노출.
+//      · userName TextField — 빈 값이면 "당신" 으로 inject (사용자 mandate verbatim).
+//      · picker — celebrities.json 의 _StarLite list. 검색 + 일주 한자 표시.
+//   2) 셀럽 선택 + 결과 생성 후 — name field / search / picker 는 mount 하지 않고
+//      결과 카드만 노출. 상단에 "선택한 최애: X" 표시 + "다른 최애 고르기" 버튼.
 //   3) 결과 카드 — PastLifeScenario.scenarioKo 본문 + keyword chip. RepaintBoundary
 //      로 감싸서 Sprint 7 공유 기능 대비.
-//   4) "다시 뽑기" 버튼 — seed 회전 → 같은 사주짝이라도 시대/관계/결말이 달라짐.
+//   4) "다른 최애 고르기" 버튼 — _selected / _scenario 초기화 후 picker 화면으로 복귀.
+//      (R104: 사용자 mandate 로 이전 seed 회전 reroll 기능은 완전 제거.)
 //
 // 의존:
 //   - PastLifeService.primeCache / generate — Sprint 4 에서 신규 작성.
@@ -50,7 +54,6 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
   final TextEditingController _searchCtl = TextEditingController();
   String _query = '';
 
-  int _seed = 1;
   PastLifeScenario? _scenario;
   bool _composing = false;
 
@@ -100,13 +103,12 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
     return raw.isEmpty ? '당신' : raw;
   }
 
-  Future<void> _compose({bool reroll = false}) async {
+  Future<void> _compose() async {
     final me = ref.read(sajuResultProvider);
     final star = _selected;
     if (me == null || star == null) return;
     setState(() {
       _composing = true;
-      if (reroll) _seed = (_seed + 1) & 0x7fffffff;
     });
     final celeb = _starLiteToSajuResult(star);
     try {
@@ -115,7 +117,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
         celeb: celeb,
         celebName: _starShortName(star),
         userName: _effectiveUserName(),
-        seed: _seed,
+        kind: star.kind,
       );
       if (!mounted) return;
       setState(() {
@@ -159,45 +161,63 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
         child: me == null
             ? _NeedSajuState()
             : !_loaded
-                ? const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(32),
-                      child: CircularProgressIndicator(
-                        color: AppColors.accent,
-                        strokeWidth: 2,
-                      ),
-                    ),
-                  )
-                : _buildBody(context),
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: CircularProgressIndicator(
+                    color: AppColors.accent,
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+            : _buildBody(context),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 
+  /// R104 sprint 2 — "다른 최애 고르기" tap. 선택/시나리오를 초기화해
+  /// picker / search / name input 화면으로 복귀한다. (검색어는 보존해
+  /// 직전에 찾던 목록을 그대로 다시 보여준다.)
+  void _chooseOtherStar() {
+    setState(() {
+      _selected = null;
+      _scenario = null;
+      _composing = false;
+    });
+  }
+
   Widget _buildBody(BuildContext context) {
     // R103 sprint 2 — page-level single primary scroll. picker 의 nested ListView
     // 가 NeverScrollable 로 설정되어 모든 vertical gesture 가 이 ListView 로 흐른다.
+    //
+    // R104 sprint 2 — 셀럽 선택 후 결과가 있으면 name field / search / picker 를
+    // mount 하지 않고 결과 카드만 노출 (사용자 mandate: "선택하면 밑에 목록은
+    // 사라지고 결과가 나와야지"). picker 복귀는 "다른 최애 고르기" 버튼으로만.
+    final hasResult = _selected != null && _scenario != null;
     return ListView(
       key: const Key('past_life_primary_scroll'),
       padding: EdgeInsets.zero,
       children: [
         _Hero(),
-        _NameField(controller: _nameCtl),
-        _SearchBar(
-          controller: _searchCtl,
-          onChanged: (q) => setState(() => _query = q),
-        ),
-        _StarPickerList(
-          stars: _filteredStars(),
-          selectedId: _selected?.id,
-          onPick: (s) {
-            setState(() {
-              _selected = s;
-              _scenario = null;
-            });
-            _compose();
-          },
-        ),
+        if (!hasResult) ...[
+          _NameField(controller: _nameCtl),
+          _SearchBar(
+            controller: _searchCtl,
+            onChanged: (q) => setState(() => _query = q),
+          ),
+          _StarPickerList(
+            stars: _filteredStars(),
+            selectedId: _selected?.id,
+            onPick: (s) {
+              setState(() {
+                _selected = s;
+                _scenario = null;
+              });
+              _compose();
+            },
+          ),
+        ],
         if (_selected != null) ...[
           const SizedBox(height: 8),
           if (_composing)
@@ -216,7 +236,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
               scenario: _scenario!,
               celebName: _starShortName(_selected!),
               userName: _effectiveUserName(),
-              onReroll: () => _compose(reroll: true),
+              onChooseOther: _chooseOtherStar,
             ),
         ],
         const SizedBox(height: 28),
@@ -244,9 +264,7 @@ class _Hero extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
       decoration: const BoxDecoration(
         color: AppColors.bg,
-        border: Border(
-          bottom: BorderSide(color: AppColors.line, width: 1),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,10 +326,7 @@ class _NameField extends StatelessWidget {
           TextField(
             key: const Key('past_life_name_field'),
             controller: controller,
-            style: GoogleFonts.notoSansKr(
-              fontSize: 15,
-              color: AppColors.ink,
-            ),
+            style: GoogleFonts.notoSansKr(fontSize: 15, color: AppColors.ink),
             decoration: InputDecoration(
               hintText: '예) 승현',
               hintStyle: GoogleFonts.notoSansKr(
@@ -319,8 +334,10 @@ class _NameField extends StatelessWidget {
                 color: AppColors.taupe,
               ),
               isDense: true,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 12,
+              ),
               filled: true,
               fillColor: AppColors.paper,
               border: const OutlineInputBorder(
@@ -359,13 +376,20 @@ class _SearchBar extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           hintText: '최애 이름으로 검색',
-          hintStyle:
-              GoogleFonts.notoSansKr(fontSize: 13, color: AppColors.taupe),
+          hintStyle: GoogleFonts.notoSansKr(
+            fontSize: 13,
+            color: AppColors.taupe,
+          ),
           isDense: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          prefixIcon:
-              const Icon(Icons.search, color: AppColors.taupe, size: 18),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 12,
+          ),
+          prefixIcon: const Icon(
+            Icons.search,
+            color: AppColors.taupe,
+            size: 18,
+          ),
           filled: true,
           fillColor: AppColors.bg,
           border: const OutlineInputBorder(
@@ -429,11 +453,8 @@ class _StarPickerList extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: stars.length,
-        separatorBuilder: (_, _) => const Divider(
-          height: 1,
-          thickness: 1,
-          color: AppColors.line,
-        ),
+        separatorBuilder: (_, _) =>
+            const Divider(height: 1, thickness: 1, color: AppColors.line),
         itemBuilder: (ctx, i) {
           final s = stars[i];
           final isSelected = s.id == selectedId;
@@ -493,13 +514,15 @@ class _ResultCard extends StatelessWidget {
   final PastLifeScenario scenario;
   final String celebName;
   final String userName;
-  final VoidCallback onReroll;
+
+  /// R104 sprint 2 — "다른 최애 고르기" tap. picker 화면으로 복귀.
+  final VoidCallback onChooseOther;
   const _ResultCard({
     super.key,
     required this.scenario,
     required this.celebName,
     required this.userName,
-    required this.onReroll,
+    required this.onChooseOther,
   });
 
   @override
@@ -507,106 +530,149 @@ class _ResultCard extends StatelessWidget {
     final keywords = scenario.keywords.map((k) => k.labelKo).toList();
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
-      child: RepaintBoundary(
-        key: const Key('past_life_repaint_boundary'),
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.paper,
-            border: Border.all(color: AppColors.accent, width: 1.2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // R104 sprint 2 — 결과 카드 상단에 선택한 최애를 명시 + picker 복귀 경로.
+          _SelectedStarBar(
+            key: const Key('past_life_selected_star_bar'),
+            celebName: celebName,
+            onChooseOther: onChooseOther,
           ),
-          padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '전생 · 緣',
-                style: GoogleFonts.inter(
-                  fontSize: 9,
-                  letterSpacing: 5,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.accent,
-                ),
+          const SizedBox(height: 12),
+          RepaintBoundary(
+            key: const Key('past_life_repaint_boundary'),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.paper,
+                border: Border.all(color: AppColors.accent, width: 1.2),
               ),
-              const SizedBox(height: 12),
-              Text(
-                scenario.headlineKo,
-                style: GoogleFonts.notoSerifKr(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.ink,
-                  height: 1.35,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
+              padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final k in keywords)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.bg,
-                        border: Border.all(color: AppColors.line, width: 1),
-                      ),
-                      child: Text(
-                        k,
-                        style: GoogleFonts.notoSansKr(
-                          fontSize: 11,
-                          color: AppColors.inkLight,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
+                  Text(
+                    '전생 · 緣',
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      letterSpacing: 5,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.accent,
                     ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Container(height: 1, color: AppColors.line),
-              const SizedBox(height: 18),
-              Text(
-                scenario.scenarioKo,
-                key: const Key('past_life_result_body'),
-                style: GoogleFonts.notoSansKr(
-                  fontSize: 14.5,
-                  color: AppColors.ink,
-                  height: 1.85,
-                ),
-              ),
-              const SizedBox(height: 22),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      key: const Key('past_life_reroll_button'),
-                      onPressed: onReroll,
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.ink,
-                        side: const BorderSide(
-                            color: AppColors.accent, width: 1),
-                        minimumSize: const Size(0, 48),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    scenario.headlineKo,
+                    style: GoogleFonts.notoSerifKr(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.ink,
+                      height: 1.35,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      for (final k in keywords)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.bg,
+                            border: Border.all(color: AppColors.line, width: 1),
+                          ),
+                          child: Text(
+                            k,
+                            style: GoogleFonts.notoSansKr(
+                              fontSize: 11,
+                              color: AppColors.inkLight,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        '다시 뽑기',
-                        style: GoogleFonts.notoSansKr(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.5,
-                          color: AppColors.accent,
-                        ),
-                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Container(height: 1, color: AppColors.line),
+                  const SizedBox(height: 18),
+                  Text(
+                    scenario.scenarioKo,
+                    key: const Key('past_life_result_body'),
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 14.5,
+                      color: AppColors.ink,
+                      height: 1.85,
                     ),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
+      ),
+    );
+  }
+}
+
+/// R104 sprint 2 — 결과 카드 상단 바. 선택한 최애 이름을 명시하고,
+/// "다른 최애 고르기" 로 picker 화면 복귀 경로를 제공한다.
+class _SelectedStarBar extends StatelessWidget {
+  final String celebName;
+  final VoidCallback onChooseOther;
+  const _SelectedStarBar({
+    super.key,
+    required this.celebName,
+    required this.onChooseOther,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+      decoration: BoxDecoration(
+        color: AppColors.bg,
+        border: Border.all(color: AppColors.line, width: 1),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '선택한 최애: $celebName',
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.ink,
+                letterSpacing: 0.2,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            key: const Key('past_life_choose_other_star_button'),
+            onPressed: onChooseOther,
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.accent,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              minimumSize: const Size(0, 36),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
+            ),
+            child: Text(
+              '다른 최애 고르기',
+              style: GoogleFonts.notoSansKr(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.3,
+                color: AppColors.accent,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -689,13 +755,13 @@ class _StarLite {
   });
 
   factory _StarLite.fromJson(Map<String, dynamic> j) => _StarLite(
-        id: j['id'] as String? ?? '',
-        nameKo: j['nameKo'] as String? ?? '',
-        nameEn: j['nameEn'] as String? ?? '',
-        kind: j['kind'] as String? ?? 'icon',
-        birth: j['birth'] as String? ?? '',
-        dayPillar: j['dayPillar'] as String? ?? '',
-      );
+    id: j['id'] as String? ?? '',
+    nameKo: j['nameKo'] as String? ?? '',
+    nameEn: j['nameEn'] as String? ?? '',
+    kind: j['kind'] as String? ?? 'icon',
+    birth: j['birth'] as String? ?? '',
+    dayPillar: j['dayPillar'] as String? ?? '',
+  );
 }
 
 /// `nameKo` 의 괄호 (예: "홍은채 (LE SSERAFIM)") 안 영문 그룹명을 잘라낸 짧은 표시명.
@@ -710,13 +776,30 @@ String _starShortName(_StarLite s) {
 String _pillarKoFromHanja(String dayPillar) {
   if (dayPillar.length < 2) return '';
   const ganKo = {
-    '甲': '갑', '乙': '을', '丙': '병', '丁': '정', '戊': '무',
-    '己': '기', '庚': '경', '辛': '신', '壬': '임', '癸': '계',
+    '甲': '갑',
+    '乙': '을',
+    '丙': '병',
+    '丁': '정',
+    '戊': '무',
+    '己': '기',
+    '庚': '경',
+    '辛': '신',
+    '壬': '임',
+    '癸': '계',
   };
   const jiKo = {
-    '子': '자', '丑': '축', '寅': '인', '卯': '묘',
-    '辰': '진', '巳': '사', '午': '오', '未': '미',
-    '申': '신', '酉': '유', '戌': '술', '亥': '해',
+    '子': '자',
+    '丑': '축',
+    '寅': '인',
+    '卯': '묘',
+    '辰': '진',
+    '巳': '사',
+    '午': '오',
+    '未': '미',
+    '申': '신',
+    '酉': '유',
+    '戌': '술',
+    '亥': '해',
   };
   final g = ganKo[dayPillar[0]] ?? '';
   final j = jiKo[dayPillar[1]] ?? '';
@@ -730,8 +813,16 @@ SajuResult _starLiteToSajuResult(_StarLite s) {
   final dayGan = dp[0];
   final dayJi = dp[1];
   const elMap = {
-    '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
-    '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
+    '甲': '木',
+    '乙': '木',
+    '丙': '火',
+    '丁': '火',
+    '戊': '土',
+    '己': '土',
+    '庚': '金',
+    '辛': '金',
+    '壬': '水',
+    '癸': '水',
   };
   final ganEl = elMap[dayGan] ?? '木';
   int v(String k) => ganEl == k ? 60 : 10;

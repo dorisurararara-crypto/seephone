@@ -1,11 +1,15 @@
-// R102 sprint 2 — 4 phase 구조 + 사주 용어 등장 + 8~10 문장.
+// R102 → R104 — 전생 시나리오 구조 가드.
 //
-// 구조:
-//   1. body_lines[k] 가 Map (setup/event/turn/resolution) 형태.
-//   2. 각 phase variant ≥ 12.
-//   3. scenarioKo 가 8~10 문장 범위.
-//   4. event 문장에 사주 용어("원진살" / "합" / "충" / "도화" / "공망" / "역마" /
-//      "천을귀인" / "형") 1회 이상 등장.
+// 이력:
+//   R102: body_lines 4 phase (setup/event/turn/resolution) slot 풀 구조.
+//   R104: story arc 단위 단일 선택 — arc 하나가 4문단(기/승/전/결) 완결 단편.
+//
+// R104 sprint 3 변경:
+//   - story_arcs 가 있으면 4문단 8~10문장, fallback 이면 R103 7~14 허용.
+//   - 기존 slot 키(body_lines 4 phase)는 fallback 용도로 잔존 — 하위호환
+//     가드로 "존재" 만 확인하고, 크기 강제는 유지(아직 slot fallback 이 실제로
+//     쓰이므로 회귀 가드). story_arcs schema 검증은 r104_past_life_arc_test 로 분리.
+//   - keyword extraction / 사주 용어 등장 / 기승전결 흐름 같은 무관 회귀 가드는 보존.
 
 import 'dart:convert';
 import 'dart:io';
@@ -31,20 +35,37 @@ void main() {
   });
 
   SajuResult mk(String dJi) => SajuResult(
-        yearPillar: const Pillar(chunGan: '甲', jiJi: '寅'),
-        monthPillar: const Pillar(chunGan: '丙', jiJi: '辰'),
-        dayPillar: Pillar(chunGan: '戊', jiJi: dJi),
-        hourPillar: null,
-        elements: const FiveElements(
-            wood: 20, fire: 20, earth: 20, metal: 20, water: 20),
-        dayMaster: '戊',
-        dayMasterName: 'Test',
-        summary: 'test',
-        categoryReadings: const {},
-      );
+    yearPillar: const Pillar(chunGan: '甲', jiJi: '寅'),
+    monthPillar: const Pillar(chunGan: '丙', jiJi: '辰'),
+    dayPillar: Pillar(chunGan: '戊', jiJi: dJi),
+    hourPillar: null,
+    elements: const FiveElements(
+      wood: 20,
+      fire: 20,
+      earth: 20,
+      metal: 20,
+      water: 20,
+    ),
+    dayMaster: '戊',
+    dayMasterName: 'Test',
+    summary: 'test',
+    categoryReadings: const {},
+  );
 
-  group('R102 — pool body_lines 4 phase 구조', () {
-    test('8 키워드 모두 setup/event/turn/resolution 4 phase 존재', () {
+  bool hasStoryArcs(String keywordId) {
+    final sa = pool['story_arcs'];
+    if (sa is! Map) return false;
+    final arcs = sa[keywordId];
+    return arcs is List && arcs.isNotEmpty;
+  }
+
+  int sentenceCount(String s) =>
+      s.split(RegExp(r'[.!?]\s*')).where((e) => e.trim().isNotEmpty).length;
+
+  group('R104 — slot fallback body_lines 4 phase (하위호환 가드)', () {
+    test('8 키워드 모두 setup/event/turn/resolution 4 phase 존재 (slot fallback)', () {
+      // story_arcs 가 모든 keyword 를 덮으면 slot 은 안 쓰이지만, schema 정리는
+      // 별도 round 로 미뤄 slot 키는 보존(삭제 금지). fallback 안전망으로 유지.
       const keys = [
         'wonjin',
         'dohwa',
@@ -61,23 +82,36 @@ void main() {
         expect(entry, isA<Map>(), reason: '$k body_lines 가 Map 이 아님');
         final m = entry as Map<String, dynamic>;
         for (final phase in ['setup', 'event', 'turn', 'resolution']) {
-          expect(m[phase], isA<List>(),
-              reason: '$k.$phase 누락 또는 List 아님');
-          expect((m[phase] as List).length, greaterThanOrEqualTo(12),
-              reason: '$k.$phase variant < 12 (got ${(m[phase] as List).length})');
+          expect(m[phase], isA<List>(), reason: '$k.$phase 누락 또는 List 아님');
+          expect(
+            (m[phase] as List).length,
+            greaterThanOrEqualTo(12),
+            reason: '$k.$phase variant < 12 (got ${(m[phase] as List).length})',
+          );
         }
       }
     });
   });
 
-  group('R102 — scenario 흐름 / 사주 용어 등장', () {
-    // 사주 용어 stopword pool — event phase 가 이 중 하나를 포함해야 함.
+  group('R104 — scenario 흐름 / 사주 용어 등장', () {
+    // 사주 용어 stopword pool — 본문이 이 중 하나를 포함해야 함.
     const sajuTerms = <String>[
-      '원진살', '도화살', '역마살', '천을귀인', '공망',
-      '합 결', '충 결', '형 결', '도화 결', '역마 결',
-      '공망 결', '천을귀인 결', '원진살이', '도화살이',
-      // 일반 형태도 허용.
-      '사주상', '사주에',
+      '원진살',
+      '도화살',
+      '역마살',
+      '천을귀인',
+      '공망',
+      '합 결',
+      '충 결',
+      '형 결',
+      '도화 결',
+      '역마 결',
+      '공망 결',
+      '천을귀인 결',
+      '원진살이',
+      '도화살이',
+      '사주상',
+      '사주에',
     ];
 
     final cases = <(String, SajuResult Function(), SajuResult Function())>[
@@ -87,9 +121,13 @@ void main() {
       ('gongmang', () => mk('子'), () => mk('戌')),
     ];
 
-    test('시나리오 8~10 문장 (마침표 기준) + 사주 용어 1회 이상', () {
+    test('시나리오 문장 수 (arc 8~10 / fallback 7~14) + 사주 용어 1회 이상', () {
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        // R104 arc mode 면 8~10, fallback 이면 R103 호환 7~14 허용.
+        final arcMode = hasStoryArcs(label);
+        final lo = arcMode ? 8 : 7;
+        final hi = arcMode ? 10 : 14;
         for (var seed = 0; seed < 5; seed++) {
           final scenario = PastLifeService.generateScenario(
             user: mkU(),
@@ -98,26 +136,27 @@ void main() {
             userName: '당신',
             seed: seed,
           );
-          // 문장 수 — 마침표 / 느낌표 / 물음표 기준.
-          final sentences = scenario
-              .split(RegExp(r'[.!?]\s*'))
-              .where((s) => s.trim().isNotEmpty)
-              .toList();
-          expect(sentences.length, inInclusiveRange(7, 14),
-              reason:
-                  '[$label seed=$seed] 문장 수 ${sentences.length} 범위 밖. body=$scenario');
-          // 사주 용어 1회 이상.
+          final n = sentenceCount(scenario);
+          expect(
+            n,
+            inInclusiveRange(lo, hi),
+            reason:
+                '[$label seed=$seed mode=${arcMode ? "arc" : "slot"}] '
+                '문장 수 $n 범위 밖. body=$scenario',
+          );
+          // 사주 용어는 arc/fallback 양쪽에서 1회 이상이어야 함 (회귀 가드).
           final hasTerm = sajuTerms.any((t) => scenario.contains(t));
-          expect(hasTerm, isTrue,
-              reason: '[$label seed=$seed] 사주 용어 없음: $scenario');
+          expect(
+            hasTerm,
+            isTrue,
+            reason: '[$label seed=$seed] 사주 용어 없음: $scenario',
+          );
         }
       }
     });
 
-    test('3막 흐름 — 배경/사건/여운 모두 등장', () {
-      // 배경 = userRole + celebRole 등장 + "당신"+"솔라" 헤더 시작.
-      // 사건 = "사주" 단어 1회 (event phase 표식).
-      // 여운 = "이번 생" 단어 1회 (resolution / tail phase 표식).
+    test('기승전결 흐름 — 배경/사건/여운 모두 등장', () {
+      // 배경 = 이름 inject 등장. 사건 = "사주" 단어. 여운 = "이번 생" / "지금 생"류.
       final scenario = PastLifeService.generateScenario(
         user: mk('子'),
         celeb: mk('未'),
@@ -127,10 +166,24 @@ void main() {
       );
       expect(scenario.contains('당신'), isTrue);
       expect(scenario.contains('솔라'), isTrue);
-      expect(scenario.contains('사주'), isTrue,
-          reason: 'event phase 사주 단어 미포함: $scenario');
-      expect(scenario.contains('이번 생'), isTrue,
-          reason: 'resolution phase 이번 생 단어 미포함: $scenario');
+      expect(
+        scenario.contains('사주'),
+        isTrue,
+        reason: '사건 단계 사주 단어 미포함: $scenario',
+      );
+      // resolution(결) 표식 — _capRepetition 이 "이번 생" 을 변형할 수 있으므로
+      // 변형 alt("지금 생"/"오늘의 생"/"여기 이 생"/"이쪽 생") 도 허용.
+      final hasResolutionMarker =
+          scenario.contains('이번 생') ||
+          scenario.contains('지금 생') ||
+          scenario.contains('오늘의 생') ||
+          scenario.contains('여기 이 생') ||
+          scenario.contains('이쪽 생');
+      expect(
+        hasResolutionMarker,
+        isTrue,
+        reason: '결(여운) 단계 "이번 생"류 단어 미포함: $scenario',
+      );
     });
   });
 }
