@@ -36,6 +36,10 @@ class _InputScreenState extends ConsumerState<InputScreen> {
   final _monthFocus = FocusNode();
   final _dayFocus = FocusNode();
   final _timeFocus = FocusNode();
+  // R103 sprint 3 — mandate "시간치면 자동으로 태어난 지역으로 안넘어가 / 태어난지역 끝났으면
+  // 키보드가 닫혀야하고" verbatim 직발. HHMM 4자 도달 → _cityFocus.requestFocus() chain +
+  // city TextFormField 에 focusNode + textInputAction.done + onFieldSubmitted unfocus wire.
+  final _cityFocus = FocusNode();
   // raw text → 파생값. submit 시 _selectedDate / _selectedTime 채움.
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
@@ -68,6 +72,7 @@ class _InputScreenState extends ConsumerState<InputScreen> {
     _monthFocus.dispose();
     _dayFocus.dispose();
     _timeFocus.dispose();
+    _cityFocus.dispose();
     super.dispose();
   }
 
@@ -328,7 +333,9 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                       maxLen: 4,
                       enabled: !_unknownTime,
                       onChanged: (_) => _recomputeTime(),
-                      onLengthReached: null,
+                      // R103 sprint 3 — 사용자 mandate "시간치면 자동으로 태어난 지역으로
+                      // 안넘어가" 직발. HHMM 4자 입력 완료 시 city TextFormField 로 focus 이동.
+                      onLengthReached: () => _cityFocus.requestFocus(),
                     ),
                     if (_timeError != null) ...[
                       const SizedBox(height: 6),
@@ -393,6 +400,13 @@ class _InputScreenState extends ConsumerState<InputScreen> {
                     _FieldLabel(text: l.inputBirthCity),
                     TextFormField(
                       controller: _cityController,
+                      // R103 sprint 3 — 사용자 mandate "태어난지역 끝났으면 키보드가 닫혀야" 직발.
+                      // focusNode + textInputAction.done + onFieldSubmitted unfocus 3종 wire
+                      // (iOS Done 키 / Android ✓ 키 모두 1차로 keyboard dismiss).
+                      focusNode: _cityFocus,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) =>
+                          FocusManager.instance.primaryFocus?.unfocus(),
                       style: GoogleFonts.notoSerifKr(
                         fontSize: 18,
                         color: AppColors.ink,

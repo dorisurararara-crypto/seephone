@@ -175,7 +175,10 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
   }
 
   Widget _buildBody(BuildContext context) {
+    // R103 sprint 2 — page-level single primary scroll. picker 의 nested ListView
+    // 가 NeverScrollable 로 설정되어 모든 vertical gesture 가 이 ListView 로 흐른다.
     return ListView(
+      key: const Key('past_life_primary_scroll'),
       padding: EdgeInsets.zero,
       children: [
         _Hero(),
@@ -407,9 +410,11 @@ class _StarPickerList extends StatelessWidget {
         ),
       );
     }
-    // Picker 영역은 inline 화면 안에 들어가야 해서 maxHeight 제한.
+    // R103 sprint 2 — nested ListView + Container(height:260) 제거.
+    //   부모 ListView (build _buildBody) 가 page 단일 primary scroll 을 가져가고,
+    //   picker 는 그 자식으로 흐른다. lazy build 는 ListView.builder + shrinkWrap +
+    //   NeverScrollableScrollPhysics 조합으로 보존 (시각 영역 밖 item 은 build 지연).
     return Container(
-      height: 260,
       decoration: const BoxDecoration(
         color: AppColors.bg,
         border: Border(
@@ -418,7 +423,11 @@ class _StarPickerList extends StatelessWidget {
         ),
       ),
       child: ListView.separated(
+        key: const Key('past_life_star_picker_list'),
         padding: EdgeInsets.zero,
+        // 부모 ListView 가 single primary scroll — picker 는 gesture 안 가져감.
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: stars.length,
         separatorBuilder: (_, _) => const Divider(
           height: 1,

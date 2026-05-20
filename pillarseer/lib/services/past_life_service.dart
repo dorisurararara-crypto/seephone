@@ -366,30 +366,52 @@ class PastLifeService {
     final tpl = templates[primary.key] as Map<String, dynamic>;
     final intros = (tpl['intros'] as List).cast<String>();
     final tails = (tpl['tails'] as List).cast<String>();
+    // R103 sprint 1: header pool — 8+ variant 동적 선택. 누락 시 R102 hard-coded format fallback.
+    final List<String> headers;
+    if (tpl['headers'] is List) {
+      headers = (tpl['headers'] as List).cast<String>();
+    } else {
+      headers = const <String>[];
+    }
 
     // R102 sprint 2: body_lines 가 4 phase 구조 (setup/event/turn/resolution).
+    // R103 sprint 1: event_sub 추가 (사건 strand).
     // 구버전(flat list) 호환을 위해 List 분기 유지.
     final bodyEntry = bodyLines[primary.key];
     final List<String> setupLines;
     final List<String> eventLines;
+    final List<String> eventSubLines;
+    final List<String> bridgeLines;
     final List<String> turnLines;
     final List<String> resolutionLines;
     if (bodyEntry is Map) {
       setupLines = (bodyEntry['setup'] as List).cast<String>();
       eventLines = (bodyEntry['event'] as List).cast<String>();
+      // event_sub 는 R103 신규. 없으면 빈 리스트로 두고 합성 단계에서 skip.
+      eventSubLines = bodyEntry['event_sub'] is List
+          ? (bodyEntry['event_sub'] as List).cast<String>()
+          : const <String>[];
+      // bridge 는 R103 신규 — event_sub 와 turn 사이 잔향 한 줄. 풀 ≥ 10 sentence 보장.
+      bridgeLines = bodyEntry['bridge'] is List
+          ? (bodyEntry['bridge'] as List).cast<String>()
+          : const <String>[];
       turnLines = (bodyEntry['turn'] as List).cast<String>();
       resolutionLines = (bodyEntry['resolution'] as List).cast<String>();
     } else if (bodyEntry is List) {
       // 구버전 fallback — 같은 풀을 4 phase 로 split (균등 분배).
       final flat = bodyEntry.cast<String>();
       setupLines = flat.isNotEmpty ? [flat[0]] : <String>['$userName과 $celebName의 전생이 시작됐어요.'];
-      eventLines = flat.length > 1 ? [flat[1]] : <String>['두 사람 사이엔 깊은 결이 흘렀어요.'];
-      turnLines = flat.length > 2 ? [flat[2]] : <String>['시간이 두 사람을 갈라놓았어요.'];
+      eventLines = flat.length > 1 ? [flat[1]] : <String>['깊은 결이 흘렀어요.'];
+      eventSubLines = const <String>[];
+      bridgeLines = const <String>[];
+      turnLines = flat.length > 2 ? [flat[2]] : <String>['시간이 갈라놓았어요.'];
       resolutionLines = <String>['그 결의 여운이 이번 생까지 따라왔어요.'];
     } else {
       setupLines = <String>['$userName과 $celebName의 전생이 시작됐어요.'];
-      eventLines = <String>['두 사람 사이엔 깊은 결이 흘렀어요.'];
-      turnLines = <String>['시간이 두 사람을 갈라놓았어요.'];
+      eventLines = <String>['깊은 결이 흘렀어요.'];
+      eventSubLines = const <String>[];
+      bridgeLines = const <String>[];
+      turnLines = <String>['시간이 갈라놓았어요.'];
       resolutionLines = <String>['그 결의 여운이 이번 생까지 따라왔어요.'];
     }
 
@@ -400,8 +422,18 @@ class PastLifeService {
     final tail = tails[rng.nextInt(tails.length)];
     final setup = setupLines[rng.nextInt(setupLines.length)];
     final event = eventLines[rng.nextInt(eventLines.length)];
+    final eventSub = eventSubLines.isNotEmpty
+        ? eventSubLines[rng.nextInt(eventSubLines.length)]
+        : '';
+    final bridge = bridgeLines.isNotEmpty
+        ? bridgeLines[rng.nextInt(bridgeLines.length)]
+        : '';
     final turn = turnLines[rng.nextInt(turnLines.length)];
     final resolution = resolutionLines[rng.nextInt(resolutionLines.length)];
+    // R103 sprint 1: header variant — pool에서 선택. 누락 시 R102 hard-coded.
+    final headerTemplate = headers.isNotEmpty
+        ? headers[rng.nextInt(headers.length)]
+        : '';
 
     // 한국어 조사 — 받침 여부에 따라 이/가, 은/는, 을/를, 과/와 자동 결정.
     // 풀의 모든 한국어 템플릿은 placeholder + 공백 + 조사 (예: `$userName 과`) 형태로
@@ -521,25 +553,115 @@ class PastLifeService {
       return josa.hasFinalConsonant(role) ? '$role이었던' : '$role였던';
     }
 
+    // R103 sprint 5A — 받침 보정 + 길이 우선 compound suffix 처리.
+    //
+    // 문제:
+    //   - `$userRole이라는` 가 generic `replacePh` 의 `이/가` (subj) 매치에 먼저 걸려
+    //     "선비가라는" / "행상가라는" 류 깨짐 발생.
+    //   - `$celebName 이름` 가 `$ph + " " + 이` (subj) 매치에 먼저 걸려
+    //     "카리나가 름" / "카리나가름" 등 placeholder collision 발생.
+    //
+    // 해결:
+    //   - generic `replacePh` 호출 전, 모든 compound 어미 (이라는 / 이었던 / 이었어요 /
+    //     이었고 / 이에요 / 였 / 이름) 를 placeholder 별로 명시 치환.
+    //   - 같은 placeholder 에 대해 긴 패턴부터 처리 (예: "이었어요" 먼저, "이었" 나중).
+    //   - 공백 있는 형태 (예: "$X 이라는") 와 공백 없는 형태 둘 다 커버.
+    //   - 받침 있음 / 없음 두 case 모두 자연스러운 한국어로 결합.
+    //
+    // 받침 보정 규칙 — copula `이/`였/이었` 계열:
+    //   받침 있음: "행상" → "행상이었", "행상이라는", "행상이에요"
+    //   받침 없음: "선비" → "선비였",   "선비라는",   "선비예요"
+    //
+    // `이름` 은 noun (이름 = name) — josa 가 아니므로 placeholder + 공백 + "이름" 유지.
+    //   "$celebName 이름" → "<celebName> 이름" / "$celebName이름" → "<celebName> 이름".
+
+    /// 받침 보정 — "이라는" (copula 인용형).
+    /// 받침 있음: "$word이라는" / 받침 없음: "$word라는".
+    String copulaIraneun(String word) {
+      return josa.hasFinalConsonant(word) ? '$word이라는' : '$word라는';
+    }
+
+    /// 받침 보정 — "이었어요" (copula 과거 종결).
+    String copulaIeoteoyo(String word) {
+      return josa.hasFinalConsonant(word) ? '$word이었어요' : '$word였어요';
+    }
+
+    /// 받침 보정 — "이었고" (copula 과거 연결).
+    String copulaIeotgo(String word) {
+      return josa.hasFinalConsonant(word) ? '$word이었고' : '$word였고';
+    }
+
+    /// 받침 보정 — "이에요" (copula 현재 종결).
+    String copulaIeyo(String word) {
+      return josa.hasFinalConsonant(word) ? '$word이에요' : '$word예요';
+    }
+
+    /// `$ph + 이름` collision → `<word> 이름` (공백 분리, noun 유지).
+    /// 공백 있는 형태 / 없는 형태 둘 다 동일 결과로 통일.
+    String nameNoun(String word) => '$word 이름';
+
+    /// `$ph + 이번` collision → `<word> 이번` (공백 유지, "이번 = this time" noun).
+    /// 사용자 보고 verbatim: "김채원이번 활동 별로네" 부자연 → "김채원 이번 활동".
+    String thisTimeNoun(String word) => '$word 이번';
+
+    /// 한 placeholder 에 대해 compound suffix 를 길이 우선으로 모두 치환.
+    /// 호출 후 남는 placeholder 는 generic replacePh + 마지막 plain fallback 으로 처리.
+    String resolveCompound(String src, String ph, String word) {
+      var t = src;
+      // 1) 가장 긴 compound 부터 — 이었어요(4) / 이라는(3) / 이었고(3) / 이에요(3) / 이름(2).
+      //    공백 있는 / 없는 형태 모두 커버.
+      // 1-a) copula 과거 종결.
+      t = t.replaceAll('$ph 이었어요', copulaIeoteoyo(word));
+      t = t.replaceAll('$ph이었어요', copulaIeoteoyo(word));
+      // 1-b) copula 인용형.
+      t = t.replaceAll('$ph 이라는', copulaIraneun(word));
+      t = t.replaceAll('$ph이라는', copulaIraneun(word));
+      // 1-c) copula 과거 연결.
+      t = t.replaceAll('$ph 이었고', copulaIeotgo(word));
+      t = t.replaceAll('$ph이었고', copulaIeotgo(word));
+      // 1-d) copula 현재 종결.
+      t = t.replaceAll('$ph 이에요', copulaIeyo(word));
+      t = t.replaceAll('$ph이에요', copulaIeyo(word));
+      // 1-e) 이름 noun — placeholder collision 방지. 공백 유지.
+      t = t.replaceAll('$ph 이름', nameNoun(word));
+      t = t.replaceAll('$ph이름', nameNoun(word));
+      // 1-f) 이번 noun — "이번 = this time". subj josa `이` 와 collision 방지.
+      t = t.replaceAll('$ph 이번', thisTimeNoun(word));
+      t = t.replaceAll('$ph이번', thisTimeNoun(word));
+      return t;
+    }
+
     String inject(String tmpl) {
       var s = tmpl;
-      s = replacePh(s, r'$userName', userName);
-      s = replacePh(s, r'$celebName', celebName);
-      // role placeholder — 받침 의존 어미 (이었던 / 였 / 로/으로) 별도 처리.
-      // 1) "$userRole 이었던" → "악사였던" 등 받침 보정.
+
+      // STEP 0 — compound suffix 우선 처리 (Name + Role 4종 모두).
+      // 길이 우선: "이었어요" / "이라는" / "이었고" / "이에요" / "이름" 이 generic
+      // josa replacement 보다 먼저 매치되도록.
+      s = resolveCompound(s, r'$userName', userName);
+      s = resolveCompound(s, r'$celebName', celebName);
+      s = resolveCompound(s, r'$userRole', rel.user);
+      s = resolveCompound(s, r'$celebRole', rel.celeb);
+
+      // STEP 1 — Role placeholder 의 "이었던" / "였" (R102 호환 유지).
+      // resolveCompound 가 "이었어요" 까지 처리했으므로 여기는 "이었던" 만 남음.
       s = s.replaceAll(r'$userRole 이었던', wasParticiple(rel.user));
       s = s.replaceAll(r'$userRole이었던', wasParticiple(rel.user));
       s = s.replaceAll(r'$celebRole 이었던', wasParticiple(rel.celeb));
       s = s.replaceAll(r'$celebRole이었던', wasParticiple(rel.celeb));
-      // 2) "$userRole 였" → fixCopula 결과 (예: "악사였" / "행상이었").
+      // "$userRole 였" → "악사였" / "행상이었". (이었던 / 이었어요 / 이었고 가 모두
+      // 위에서 처리됐으므로 여기는 그 외 "였"+어미 fragment 만 남음.)
       s = s.replaceAll(r'$userRole 였', fixCopula(rel.user));
       s = s.replaceAll(r'$userRole였', fixCopula(rel.user));
       s = s.replaceAll(r'$celebRole 였', fixCopula(rel.celeb));
       s = s.replaceAll(r'$celebRole였', fixCopula(rel.celeb));
-      // 3) 그 외 조사 (은/는/이/가/을/를/과/와/로/으로/의/도/에게/...).
+
+      // STEP 2 — Name + Role generic josa (은/는/이/가/을/를/과/와/로/으로/의/도/에게/...).
+      s = replacePh(s, r'$userName', userName);
+      s = replacePh(s, r'$celebName', celebName);
       s = replacePh(s, r'$userRole', rel.user);
       s = replacePh(s, r'$celebRole', rel.celeb);
-      // 4) Plain placeholder fallback — 남은 조사 없는 placeholder.
+
+      // STEP 3 — Plain placeholder fallback (조사 안 붙은 형태).
       s = s.replaceAll(r'$celebName', celebName);
       s = s.replaceAll(r'$userName', userName);
       s = s.replaceAll(r'$userRole', rel.user);
@@ -547,25 +669,39 @@ class PastLifeService {
       return s;
     }
 
-    // 머리 문장 — "당신과 솔라는 1800년대 ... 에서 만났습니다" 톤.
-    // 사용자 verbatim 첫 예시 그대로: "당신과 솔라는 ..." 형.
-    final headerSentence =
-        '$userName${josa.withWith(userName)} $celebName${josa.withTop(celebName)} $era에서 처음 마주쳤어요.';
+    // 머리 문장 — R103 sprint 1: pool에서 동적 선택 (8+ variant). 누락 시 R102 hard-coded fallback.
+    // placeholder = $userName / $celebName / $era. inject() 가 조사 보정.
+    final String headerSentence;
+    if (headerTemplate.isNotEmpty) {
+      var h = headerTemplate;
+      // $era placeholder 는 받침 무관 (era 텍스트는 "$era에서" 등 형태가 자유). 단순 치환.
+      h = h.replaceAll(r'$era', era);
+      headerSentence = inject(h);
+    } else {
+      headerSentence =
+          '$userName${josa.withWith(userName)} $celebName${josa.withTop(celebName)} $era에서 처음 마주쳤어요.';
+    }
 
-    // R102 sprint 2 — 3막 흐름:
-    //   배경: header + intro + setup (사용자 / 셀럽 역할 + 시대)
-    //   사건+전환: event (사주살 기반 사건) + turn (해결/미해결)
-    //   이번 생 여운: resolution + ending + tail
-    final sentences = <String>[
+    // R103 sprint 1 — 4막 흐름 (사용자 mandate "사건 strand 추가 / 좀 더 길어야 돼"):
+    //   1막 (배경): header (시대 + 시작점) + intro (신분/갈등 시작)
+    //   2막 (사건): setup (역할 명시) + event (사주살 기반 핵심 사건)
+    //   3막 (전환): event_sub (구체 incident — R103 신규) + turn (미해결/이별)
+    //   4막 (이번 생 punchline): resolution + ending + tail
+    final composedSentences = <String>[
       headerSentence,
       inject(intro),
       inject(setup),
       inject(event),
+      if (eventSub.isNotEmpty) inject(eventSub),
+      if (bridge.isNotEmpty) inject(bridge),
       inject(turn),
       inject(resolution),
       inject(ending),
       inject(tail),
     ];
+    // event_sub 가 있으면 9 문장, tail 이 1~2 문장이면 합쳐 10~11 문장. body_lines 의
+    // 일부 line 자체가 두 문장으로 구성된 경우 (예: "X. Y.") 까지 합치면 10~14 sentence 범위.
+    final sentences = composedSentences;
 
     // R102 sprint 2 — 반복 어휘 cap:
     //   "두 사람은" ≤ 2 / "자연스럽게" ≤ 1 / "결" (단독 어절) ≤ 2 /
@@ -634,29 +770,70 @@ class PastLifeService {
   // ─── 내부: 반복 어휘 cap ────────────────────────────────────────────
   //
   // R102 sprint 2 — 사용자 불만 "툭툭 끊김 / 반복" 대응.
-  //   "두 사람은" ≤ 2회
-  //   "자연스럽게" ≤ 1회
-  //   "결" (단독 어절, 조사 없이) ≤ 2회
-  //   "이었어요" 결말 ≤ 3회
-  // 초과 분은 동의 표현으로 대체. 첫 등장은 그대로 둠.
+  // R103 sprint 1 — 사용자 mandate "다 똑같네" 강화:
+  //   "사주상"          ≤ 1회 (R102=무제한)
+  //   "이번 생"         ≤ 1회 (R102=무제한)
+  //   "그 옛"           ≤ 1회 (R102=무제한)
+  //   "두 사람은"       = 0회 (R102=2)
+  //   "결이 두 사람 사이에" = 0회 (R102=무제한)
+  //   "자연스럽게"      ≤ 1회 (유지)
+  //   "결" 단독 어절    ≤ 2회 (유지)
+  //   "이었어요"/"였어요" 결말 ≤ 3회 (유지)
+  // 초과 분은 동의 표현으로 대체. 첫 등장은 그대로 둠. ("두 사람은" / "결이 두 사람
+  // 사이에" 는 첫 등장부터 모두 치환 = cap 0).
   static String _capRepetition(String text, Random rng) {
     var s = text;
 
-    // 1) "두 사람은" 치환 후보 (3회째부터).
-    const twoPeopleAlts = <String>[
-      '둘은', '서로는', '둘 다', '함께 있던 두 사람은',
+    // R103 sprint 1 — "사주상" cap 1.
+    const sajuSangAlts = <String>[
+      '사주에 박힌',
+      '사주의 결로',
+      '사주에 새겨진',
+      '사주가 짜 놓은 대로',
     ];
-    s = _cap(s, '두 사람은', 2, twoPeopleAlts, rng);
+    s = _cap(s, '사주상', 1, sajuSangAlts, rng);
 
-    // 2) "자연스럽게" — 2회째부터 다른 부사.
+    // R103 sprint 1 — "이번 생" cap 1.
+    const ibunSaengAlts = <String>[
+      '지금 생',
+      '오늘의 생',
+      '여기 이 생',
+      '이쪽 생',
+    ];
+    s = _cap(s, '이번 생', 1, ibunSaengAlts, rng);
+
+    // R103 sprint 1 — "그 옛" cap 1.
+    // 주의: alts 에 "그 옛" substring 이 포함되면 안 됨 (반복 매치 함정).
+    const gyeoutAlts = <String>[
+      '그때의',
+      '그 시절',
+      '오래전',
+      '예전의',
+    ];
+    s = _cap(s, '그 옛', 1, gyeoutAlts, rng);
+
+    // R103 sprint 1 — "두 사람은" cap 0 (모두 치환).
+    const twoPeopleAlts = <String>[
+      '둘은', '서로는', '둘 다',
+    ];
+    s = _cap(s, '두 사람은', 0, twoPeopleAlts, rng);
+
+    // R103 sprint 1 — "결이 두 사람 사이에" cap 0 (모두 치환).
+    const jielSaiAlts = <String>[
+      '결이 둘 사이에',
+      '그 결이 옅게',
+      '결의 여운이',
+      '결의 흔적이',
+    ];
+    s = _cap(s, '결이 두 사람 사이에', 0, jielSaiAlts, rng);
+
+    // R102 — "자연스럽게" 2회째부터 다른 부사.
     const naturalAlts = <String>[
       '어색함 없이', '부드럽게', '익숙하게', '잔잔하게',
     ];
     s = _cap(s, '자연스럽게', 1, naturalAlts, rng);
 
-    // 3) "결" 단독 어절 — `\b결\b` 와 비슷한 패턴.
-    //   다음 글자가 한글 음절 (조사/접미)이 아니고 앞 글자도 한글이 아닌 경우.
-    //   "결을" "결이" 등 조사 붙은 형태는 제외, "결 " "결." 등만 카운트.
+    // R102 — "결" 단독 어절 cap 2.
     s = _capStandaloneJiel(s, 2, rng);
 
     return s;
@@ -697,6 +874,8 @@ class PastLifeService {
         continue;
       }
       // 다음 글자가 조사 (을/이/은/의/과/도/에/만/까지/로/등) 면 단독 아님.
+      // R103 sprint 1: R102 test 호환 위해 attached set 좁게 유지 — 합성어 (결심/결정/
+      // 결제/결단 등) 는 JSON pool 차원에서 제거.
       final next = i + 1 < text.length ? text[i + 1] : '';
       const attached = {
         '을', '이', '은', '의', '과', '도', '에', '만', '까지', '로',
