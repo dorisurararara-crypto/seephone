@@ -141,10 +141,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'Even as a kid you tend to grow straight toward whatever catches your eye, '
         'and you often reach for new things a beat sooner than the people around you.',
     LifeCategory.midLife:
-        'Through your thirties and forties the field you love tends to come into focus, '
+        'As your thirties and forties unfold, the field you love tends to come into focus, '
         'and people can start to remember you by one clear keyword that is fully your own.',
     LifeCategory.lateLife:
-        'Later on you tend to shine less by standing on the big stage yourself and more by '
+        'In your later years you tend to shine less by standing on the big stage yourself and more by '
         'looking after the people coming up behind you, and their growth can quietly steady your name.',
     LifeCategory.health:
         'When you overthink, your shoulders and neck tend to feel it first, and your stomach can '
@@ -156,14 +156,14 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to draw people by the direction you move in rather than by being loud, '
         'though since your own heading runs strong, pausing to hear one more opinion can help.',
     LifeCategory.socialPersonality:
-        'In a group you rarely push from above; instead people tend to fall in behind the path you take, '
+        'Within a group you rarely push from above; instead people tend to fall in behind the path you take, '
         'and you often end up the one who sets the heading early.',
     LifeCategory.personality:
         'Your pride runs firm, so once you decide something you tend not to bend, '
         'and when you are upset you usually say it on the spot rather than letting it sit.',
     LifeCategory.innateTendency:
         'Being tied to one fixed spot can feel stifling to you, and your energy tends to wake up '
-        'on a new challenge or a road you have never walked, by the fastest route rather than the slow loop.',
+        'with a new challenge or a road you have never walked, and you would rather take the direct route than the slow loop.',
     LifeCategory.innateCharacter:
         'You tend to carry a natural weight that makes people see you as a leader without you commanding anyone, '
         'and a steady pride paired with deep loyalty often shows in how you treat close friends.',
@@ -186,7 +186,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'Spreading rather than putting everything in one place tends to fit you, '
         'and a longer horizon usually suits you more than chasing short, unfamiliar tips from friends.',
     LifeCategory.conclusionSelf:
-        'In one line, growing straight toward what you choose is your core colour, '
+        'Put simply, growing straight toward what you choose is your core colour, '
         'and the loyalty that shows as people get closer tends to make them want to stay.',
   },
   // ── 乙 (eul) — 덩굴·풀, 유연하고 끈질김 ──
@@ -195,10 +195,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a child you tend to settle into unfamiliar places slowly but surely, '
         'and you can hold onto what you love for a long time, the way a fan stays loyal.',
     LifeCategory.midLife:
-        'Through your thirties and forties you tend to climb by laying a path like a vine '
+        'Across your thirties and forties you tend to climb by laying a path like a vine '
         'rather than shooting up all at once, keeping your own pace even when others tug at it.',
     LifeCategory.lateLife:
-        'Later on, tending a few easy relationships for the long haul tends to suit you '
+        'As the years go on, tending a few easy relationships for the long haul tends to suit you '
         'more than forcing your circle wider, and small steady joys can keep your heart warm.',
     LifeCategory.health:
         'Pushing too hard tends to show on you quickly, so building rest into your day matters, '
@@ -210,7 +210,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to read the room and say the needed thing without a sharp tone, '
         'though bending too far for others can drain you, so keeping a gentle line helps.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who smooths the mood quietly, '
+        'Within a group you tend to be the one who smooths the mood quietly, '
         'and people can lean on you because you rarely make things heavier than they are.',
     LifeCategory.personality:
         'You may say you are fine on the surface while a lot is turning over inside, '
@@ -219,19 +219,19 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'Your instinct tends to choose flexibility first — bending around an obstacle rather than '
         'colliding with it — and that supple persistence is closer to your nature than force.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry a soft but unbreakable thread, '
+        'Deep down you tend to carry a soft but unbreakable thread, '
         'and that gentle endurance often shows most in how patiently you stay with the people you care for.',
     LifeCategory.loveFate:
         'Attraction tends to grow on you gradually, and you can be drawn to someone steady '
         'who gives your quiet inner world room rather than rushing it.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to show care through patient, repeated small gestures, '
+        'Once a bond settles in, you tend to show care through patient, repeated small gestures, '
         'though saying what you actually feel out loud can matter more than you expect.',
     LifeCategory.wealth:
         'Buying something the moment it looks pretty tends to lighten your wallet fast, '
         'so naming a budget first can keep the satisfaction while trimming the strain.',
     LifeCategory.wealthGather:
-        'Saving tends to work for you when it is small and regular, '
+        'Money tends to build for you when saving stays small and regular, '
         'and watching a modest amount add up steadily can feel quietly rewarding.',
     LifeCategory.wealthLossPrevent:
         'Money can slip away through goods bought on impulse, '
@@ -240,7 +240,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A slow, steady approach tends to suit you, and you usually do better staying with what you '
         'understand than jumping into a fast trend on someone else\'s word.',
     LifeCategory.conclusionSelf:
-        'In one line, supple persistence is your core colour, '
+        'Put simply, supple persistence is your core colour, '
         'and the way you quietly outlast hard moments tends to be your real strength.',
   },
   // ── 丙 (byeong) — 태양, 환한 표현 ──
@@ -249,10 +249,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a kid you tend to move the moment you want something, '
         'so praise can come fast, and now and then a rush can land you in trouble too.',
     LifeCategory.midLife:
-        'Through your thirties and forties speaking or leading in front of people tends to suit you, '
+        'In your thirties and forties, speaking or leading in front of people tends to suit you, '
         'and your presence can grow large, like a lead vocal on stage.',
     LifeCategory.lateLife:
-        'Later on the ties you built when young tend to stay with you, '
+        'In your later years the ties you built when young tend to stay with you, '
         'and sharing what you love can keep your heart bright if you ease up on stubbornness a little.',
     LifeCategory.health:
         'Cutting sleep short or holding feelings in too long tends to pile up fatigue quickly, '
@@ -264,28 +264,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to warm up any room you walk into, '
         'and people can be drawn to the open, easy brightness you carry without trying.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the spark that lifts the mood, '
+        'Among people you tend to be the spark that lifts the mood, '
         'and people often look to you to set a lively tone when things go flat.',
     LifeCategory.personality:
         'Praise tends to send your energy straight up, while being ignored can cool you fast, '
         'and a real wish to be recognised runs strong in you.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for expression — showing what you feel rather than hiding it — '
+        'By nature you tend to reach for expression — showing what you feel rather than hiding it — '
         'and shining openly is closer to your nature than holding back.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry a warm, lighting-up quality, '
+        'Underneath it all you tend to carry a warm, lighting-up quality, '
         'and that openness often shows most in how readily you cheer the people around you.',
     LifeCategory.loveFate:
         'When you fall for someone it tends to show fast and bright, '
         'and you can be drawn to a person who responds warmly and matches your open energy.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to give affection openly, '
+        'When a relationship lasts, you tend to give affection openly, '
         'though remembering to also listen quietly can keep the warmth balanced both ways.',
     LifeCategory.wealth:
         'Money tends to move toward pretty things, fun, and plans with friends, '
         'so setting a clear standard first can make your spending feel steadier.',
     LifeCategory.wealthGather:
-        'Saving tends to work when you make it visible and a little fun, '
+        'You can save more easily when you make it visible and a little fun, '
         'and a clear goal you can picture often keeps you putting money aside.',
     LifeCategory.wealthLossPrevent:
         'Spending tends to climb when your mood is high, '
@@ -294,7 +294,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A bright idea can pull you in fast, so checking it against a calm standard '
         'tends to suit you better than acting on the first spark of excitement.',
     LifeCategory.conclusionSelf:
-        'In one line, a warm lighting-up presence is your core colour, '
+        'In short, a warm lighting-up presence is your core colour, '
         'and the energy you bring into a room tends to be what people remember.',
   },
   // ── 丁 (jeong) — 촛불, 섬세하게 챙김 ──
@@ -303,10 +303,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a child you tend to watch quietly in new places, '
         'and once you feel safe, a warm humour and a sharp eye can show your presence quickly.',
     LifeCategory.midLife:
-        'Through your thirties and forties you tend to care for people at just the right moment '
+        'Once your thirties and forties arrive, you tend to care for people at just the right moment '
         'rather than pushing forward, and trust can build slowly and solidly around you.',
     LifeCategory.lateLife:
-        'Later on you tend to become a quiet comfort to those around you, like a song that lingers, '
+        'As the years go on, you tend to become a quiet comfort to those around you, like a song that lingers, '
         'and protecting your own calm space can keep you steady.',
     LifeCategory.health:
         'Keeping an unhurried rhythm of sleep, meals, and rest tends to make your warm energy last, '
@@ -318,28 +318,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to read feelings closely and offer just the right small kindness, '
         'and people can feel safe opening up around your quiet attentiveness.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who notices who is left out, '
+        'Within a group you tend to be the one who notices who is left out, '
         'and that gentle awareness often makes you the steadying presence people rely on.',
     LifeCategory.personality:
         'When you like someone you tend to carry that feeling for a long time, '
         'and you usually show it through warm action rather than light, passing words.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for delicate care — sensing what is needed and tending it quietly — '
+        'By nature you tend to reach for delicate care — sensing what is needed and tending it quietly — '
         'and that fine attentiveness is closer to your nature than bold display.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry a small, steady warmth, '
+        'Deep down you tend to carry a small, steady warmth, '
         'and it often shows most in the careful, lasting way you look after the people close to you.',
     LifeCategory.loveFate:
         'Attraction tends to begin quietly for you and deepen over time, '
         'and you can be drawn to someone whose warmth feels genuine rather than flashy.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to show love through steady, thoughtful gestures, '
+        'Once a bond settles in, you tend to show love through steady, thoughtful gestures, '
         'and that quiet consistency can mean more to you than grand moments.',
     LifeCategory.wealth:
         'Spending tends to follow your feelings, so when emotions run high your wallet can too, '
         'and keeping mood and money a little separate usually helps.',
     LifeCategory.wealthGather:
-        'Saving tends to suit you when it is gentle and regular, '
+        'Money tends to build for you when saving stays gentle and regular, '
         'and a small amount set aside without pressure can quietly add up over time.',
     LifeCategory.wealthLossPrevent:
         'A short pause before you spend tends to be one of your best habits, '
@@ -348,7 +348,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A calm, measured approach tends to suit you, '
         'and stepping back to check a decision when your feelings are stirred usually protects you well.',
     LifeCategory.conclusionSelf:
-        'In one line, a delicate, lasting warmth is your core colour, '
+        'Put simply, a delicate, lasting warmth is your core colour, '
         'and the careful way you tend the people you love tends to be your quiet strength.',
   },
   // ── 戊 (mu) — 큰 산, 든든한 중심 ──
@@ -357,11 +357,11 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a kid you tend not to wobble even when your friend group keeps shifting, '
         'and a feeling you settle on can stay with you for quite a while.',
     LifeCategory.midLife:
-        'Through your thirties and forties a slow early tempo can make you feel behind at first, '
+        'In your thirties and forties a slow early tempo can make you feel behind at first, '
         'but the experience you stack tends to harden into a presence that holds.',
     LifeCategory.lateLife:
-        'Later on, because you do not rattle easily, family and close friends tend to come to you '
-        'when things get hard, though letting yourself off the habit of long patience can help.',
+        'In your later years, because you do not rattle easily, family and close friends tend to come to you '
+        'when things get hard, though it helps to not push yourself to endure quietly for too long.',
     LifeCategory.health:
         'You tend to show fatigue late, so it can pile up unnoticed and then hit all at once, '
         'and catching your body\'s signals early usually serves you better than pushing through.',
@@ -372,29 +372,29 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'People tend to feel at ease beside you because you stay even, '
         'and you can be the dependable centre a group quietly settles around.',
     LifeCategory.socialPersonality:
-        'In a group you tend to take the role that keeps everyone steady, '
+        'Among people you tend to take the role that keeps everyone steady, '
         'and others often turn to you when something needs a calm, unhurried hand.',
     LifeCategory.personality:
         'You tend to keep a clear inner line and rarely change your word, '
         'and you often look after close friends for a long time, even if your pace runs slow.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for steadiness — holding the centre rather than chasing the new — '
+        'Left to yourself you tend to reach for steadiness — holding the centre rather than chasing the new — '
         'and being a fixed point others can rely on is closer to your nature.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry the quiet weight of a mountain, '
+        'Underneath it all you tend to carry the quiet weight of a mountain, '
         'and that grounded steadiness often shows most in how reliably you stand by the people close to you.',
     LifeCategory.loveFate:
         'Attraction tends to build slowly for you, and you can be drawn to someone steady '
         'whose feelings, like yours, are not easily shaken.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to show care through dependable, unchanging presence, '
+        'When a relationship lasts, you tend to show care through dependable, unchanging presence, '
         'though saying your feelings out loud can matter more than you assume.',
     LifeCategory.wealth:
         'You tend to have a real talent for stacking and holding, so a plan once set tends to last, '
         'though staying open to a new chance now and then can serve you well.',
     LifeCategory.wealthGather:
-        'Saving tends to come naturally to you, '
-        'and a steady, low-drama habit of setting money aside can grow into something solid.',
+        'Setting money aside tends to come naturally to you, '
+        'and a steady, low-drama routine can grow into something solid over time.',
     LifeCategory.wealthLossPrevent:
         'Your money tends to be safe from impulse, '
         'so the main thing to watch is missing a fair chance by holding on a little too tightly.',
@@ -402,7 +402,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A patient, long approach tends to suit you well, '
         'and trusting your steady pace usually serves you better than reacting to short swings.',
     LifeCategory.conclusionSelf:
-        'In one line, a grounded steadiness is your core colour, '
+        'In short, a grounded steadiness is your core colour, '
         'and the way people lean on you in hard moments tends to be your quiet strength.',
   },
   // ── 己 (gi) — 비옥한 밭, 실속 있는 포용 ──
@@ -411,10 +411,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a child you tend to feel settled when you build a familiar place step by step '
         'rather than standing out, and the friendships you make can last once they take.',
     LifeCategory.midLife:
-        'Through your thirties and forties you tend to make results by widening a familiar field '
+        'As your thirties and forties go on, you tend to make results by widening a familiar field '
         'rather than switching direction sharply, and your knack for caring for people can shine.',
     LifeCategory.lateLife:
-        'Later on a comfortable life and warm time with close people tend to matter more than big ambition, '
+        'As the years go on, a comfortable life and warm time with close people tend to matter more than big ambition, '
         'and laughing for years with the right few can feel like enough.',
     LifeCategory.health:
         'When your eating and sleeping rhythm slips your condition tends to sag quickly, '
@@ -426,28 +426,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to be the warm, easy presence a group gathers around, '
         'and people can trust you because you look after the small things others miss.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who quietly keeps everyone comfortable, '
+        'Within a group you tend to be the one who quietly keeps everyone comfortable, '
         'and that caretaking instinct often makes you the heart people return to.',
     LifeCategory.personality:
         'You tend to watch a situation and move slowly rather than jumping in, '
         'and since you can put your own feelings last while minding others, checking in with yourself helps.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for practical grounding — building something solid and useful — '
+        'Left to yourself you tend to reach for practical grounding — building something solid and useful — '
         'and a quiet, down-to-earth steadiness is closer to your nature than show.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry the giving calm of fertile soil, '
+        'Deep down you tend to carry the giving calm of fertile soil, '
         'and that supportive warmth often shows most in how you hold space for the people near you.',
     LifeCategory.loveFate:
         'Attraction tends to grow on you slowly through comfort and trust, '
         'and you can be drawn to someone whose steady, easy presence feels like home.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to give care generously and quietly, '
+        'Once a bond settles in, you tend to give care generously and quietly, '
         'though remembering to voice your own needs can keep things fair on both sides.',
     LifeCategory.wealth:
         'You tend to weigh where money is really needed rather than spending on impulse, '
         'and tracking even small amounts can turn saving into something that feels rewarding.',
     LifeCategory.wealthGather:
-        'Saving tends to suit you when it is steady and low-key, '
+        'Money tends to build for you when saving stays steady and low-key, '
         'and a small fixed habit can quietly grow your sense of security.',
     LifeCategory.wealthLossPrevent:
         'Your money tends to be fairly safe, '
@@ -456,7 +456,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A careful, gradual approach tends to suit you, '
         'and sticking with what you have looked into usually serves you better than a quick leap.',
     LifeCategory.conclusionSelf:
-        'In one line, a practical, giving steadiness is your core colour, '
+        'Put simply, a practical, giving steadiness is your core colour, '
         'and the warm, easy space you make for people tends to be your quiet strength.',
   },
   // ── 庚 (gyeong) — 도끼·쇠, 단호한 결단 ──
@@ -465,10 +465,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a kid you may find rules stuffy, yet you tend to quietly look out for weaker friends, '
         'and a blade-like focus means that once you lock onto something you dig in to the end.',
     LifeCategory.midLife:
-        'Through your thirties and forties you tend not to be easily swayed, though you can look stubborn, '
+        'Across your thirties and forties you tend not to be easily swayed, though you can look stubborn, '
         'and a goal you set tends to be one you carry through like a final stage pose.',
     LifeCategory.lateLife:
-        'Later on you tend to keep a few people you can trust for a long time rather than a wide circle, '
+        'In your later years you tend to keep a few people you can trust for a long time rather than a wide circle, '
         'and looking at what you protected rather than regretting old choices can steady you.',
     LifeCategory.health:
         'Rather than holding strain in and bursting at once, you tend to do better booking rest in advance, '
@@ -480,28 +480,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to shine in tricky situations because you cannot let a wrong thing pass as right, '
         'though insisting only your standard is correct can leave you a little isolated.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who calls things clearly and cuts through hesitation, '
+        'Among people you tend to be the one who calls things clearly and cuts through hesitation, '
         'and people often rely on you when a firm decision is needed.',
     LifeCategory.personality:
         'You tend to find it hard to accept what is wrong as right, '
         'which makes you sharp in difficult moments, though softening your edges keeps people close.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for decisive cuts — choosing cleanly and moving on — '
+        'When you act on gut feeling you tend to reach for decisive cuts — choosing cleanly and moving on — '
         'and a clear, no-blur judgement is closer to your nature than drawn-out hesitation.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry the firm edge of tempered metal, '
+        'Underneath it all you tend to carry the firm edge of tempered metal, '
         'and that decisive strength often shows most in how loyally you protect what you have chosen.',
     LifeCategory.loveFate:
         'Attraction tends to be clear-cut for you once you feel it, '
         'and you can be drawn to someone honest and direct who does not play games.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to show care through dependability and plain honesty, '
+        'When a relationship lasts, you tend to show care through dependability and plain honesty, '
         'though softening how you phrase things can let your warmth come through more.',
     LifeCategory.wealth:
         'You tend to spend only when there is a reason, '
         'though pride can prompt a large outlay now and then, so setting a standard in advance helps.',
     LifeCategory.wealthGather:
-        'Saving tends to work for you when it is rule-based and clear, '
+        'You can save more easily when the method is rule-based and clear, '
         'and a fixed system you can follow without debate usually adds up well.',
     LifeCategory.wealthLossPrevent:
         'Your main leak tends to be a pride-driven large purchase, '
@@ -510,7 +510,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A clear-rule, decisive approach tends to suit you, '
         'and sticking to a plan you set in advance usually serves you better than reacting to noise.',
     LifeCategory.conclusionSelf:
-        'In one line, clean and decisive judgement is your core colour, '
+        'In short, clean and decisive judgement is your core colour, '
         'and the loyal way you guard what you have chosen tends to be your real strength.',
   },
   // ── 辛 (sin) — 보석, 세련된 기준 ──
@@ -519,14 +519,14 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a child you tend not to just follow the crowd, '
         'choosing instead what is pretty, sharp, or fits your own standard.',
     LifeCategory.midLife:
-        'Through your thirties and forties your skill tends to come alive where details matter '
+        'In your thirties and forties your skill tends to come alive where details matter '
         'rather than where things are waved through, though pride can make asking for help hard.',
     LifeCategory.lateLife:
-        'Later on people may come to you for advice more often, '
+        'As the years go on, people may come to you for advice more often, '
         'and saying it gently rather than too bluntly tends to keep that closeness warm.',
     LifeCategory.health:
         'Getting by on cut sleep tends to cost you more than it seems, '
-        'so treating water, rest, and light stretching as a pretty routine can help you keep it.',
+        'so building water, rest, and light stretching into a routine you enjoy makes it easier to keep up.',
     LifeCategory.constitution:
         'Your build tends to be refined and a little sensitive, so a clean, well-kept routine '
         'usually suits you better than rough overexertion.',
@@ -534,28 +534,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to be valued for a precise eye and a sense of taste, '
         'and people can trust your read when something needs to be judged carefully.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who lifts the quality of what everyone does, '
+        'Within a group you tend to be the one who lifts the quality of what everyone does, '
         'and that careful standard often makes others look to you for a final check.',
     LifeCategory.personality:
         'You tend to want to do things well, so a result you are not happy with can keep nagging at you, '
         'even when you act unbothered on the outside.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for a clear standard — refining and choosing precisely — '
+        'When you act on gut feeling you tend to reach for a clear standard — refining and choosing precisely — '
         'and a sharp sense of quality is closer to your nature than rough approximation.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry the cut clarity of a polished gem, '
+        'Deep down you tend to carry the cut clarity of a polished gem, '
         'and that refined precision often shows most in how thoughtfully you treat the people you value.',
     LifeCategory.loveFate:
         'Attraction tends to follow your own standard rather than the crowd, '
         'and you can be drawn to someone who feels genuine and meets the bar you quietly hold.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to show care through thoughtful, well-judged gestures, '
+        'Once a bond settles in, you tend to show care through thoughtful, well-judged gestures, '
         'though easing up on a high standard now and then keeps the bond relaxed.',
     LifeCategory.wealth:
         'Your strengths tend to pay off in fields that need an eye and judgement — '
         'design, beauty, content, analysis, planning — though a low mood can prompt impulse buys.',
     LifeCategory.wealthGather:
-        'Saving tends to work when it feels well-kept and tidy, '
+        'Money tends to build for you when saving feels well-kept and tidy, '
         'and treating it as a clean routine you take pride in usually keeps it going.',
     LifeCategory.wealthLossPrevent:
         'Your main leak tends to be a purchase made when your mood drops, '
@@ -564,7 +564,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A precise, well-researched approach tends to suit you, '
         'and judging by clear facts rather than mood usually serves you better.',
     LifeCategory.conclusionSelf:
-        'In one line, a refined, precise standard is your core colour, '
+        'Put simply, a refined, precise standard is your core colour, '
         'and your eye for quality tends to be the strength people come to rely on.',
   },
   // ── 壬 (im) — 큰 강·바다, 넓은 흐름 ──
@@ -573,10 +573,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a kid you tend to catch trends fast and pick up the key point quickly, '
         'though your interest can be wide enough to scatter your attention.',
     LifeCategory.midLife:
-        'Through your thirties and forties a wide early curiosity can look unfocused at first, '
+        'Once your thirties and forties arrive, a wide early curiosity can look unfocused at first, '
         'but in time you tend to read people and shifting situations well.',
     LifeCategory.lateLife:
-        'Later on you tend to keep the openness to take in new culture, music, and people '
+        'In your later years you tend to keep the openness to take in new culture, music, and people '
         'rather than clinging to old ways, which can keep your circle lively.',
     LifeCategory.health:
         'A broken rhythm from late nights or long screen time tends to drop your condition fast, '
@@ -588,28 +588,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to move easily between different people and settings, '
         'and that adaptable, wide-angle ease can make you a natural connector.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who bridges different sides, '
+        'Among people you tend to be the one who bridges different sides, '
         'and people often rely on you to read the wider mood and keep things flowing.',
     LifeCategory.personality:
         'You tend to take a friend\'s worries in more deeply than expected, '
         'though with many options a decision can come slow, so narrowing the field early helps.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for movement and flow — adapting rather than fixing in place — '
+        'Given the choice you tend to reach for movement and flow — adapting rather than fixing in place — '
         'and a wide, shifting curiosity is closer to your nature than a narrow groove.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry the wide view of a broad river, '
+        'Underneath it all you tend to carry the wide view of a broad river, '
         'and that open, taking-it-all-in nature often shows most in how easily you understand people.',
     LifeCategory.loveFate:
         'Attraction tends to be easy to spark for you, '
         'and you can be drawn to someone interesting who keeps your wide curiosity engaged.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to keep things fresh and open, '
+        'When a relationship lasts, you tend to keep things fresh and open, '
         'though steadying into a dependable rhythm can deepen the bond over time.',
     LifeCategory.wealth:
         'Your possibilities tend to grow wherever you connect with information, people, movement, '
         'content, language, and trends, more than through plain repetition.',
     LifeCategory.wealthGather:
-        'Saving tends to work when you make it automatic, '
+        'You can save more easily when you make it automatic, '
         'since a fixed transfer can keep money aside even when your attention is elsewhere.',
     LifeCategory.wealthLossPrevent:
         'Money can slip away across many small, scattered interests, '
@@ -618,7 +618,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A broad, well-spread approach tends to suit you, '
         'and resisting the pull of every new trend usually serves you better than chasing each one.',
     LifeCategory.conclusionSelf:
-        'In one line, a wide, flowing adaptability is your core colour, '
+        'In short, a wide, flowing adaptability is your core colour, '
         'and the way you read people and change tends to be your real strength.',
   },
   // ── 癸 (gye) — 이슬·옹달샘, 깊은 직관 ──
@@ -627,10 +627,10 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'As a child you tend to sense a shift in mood quickly '
         'and hold onto a scene that stayed with you, with a deep warmth showing once you grow close.',
     LifeCategory.midLife:
-        'Through your thirties and forties you tend to speak and move precisely at the needed moment '
+        'As your thirties and forties unfold, you tend to speak and move precisely at the needed moment '
         'rather than standing out fast, like a quietly skilled member with a steady presence.',
     LifeCategory.lateLife:
-        'Later on you tend to guide by gently wrapping around people rather than pushing hard, '
+        'As the years go on, you tend to guide by gently wrapping around people rather than pushing hard, '
         'and protecting your own quiet time can keep you comfortable.',
     LifeCategory.health:
         'When sleep is short or tension builds, your energy tends to sag easily, '
@@ -642,28 +642,28 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'You tend to pick up on what others feel without it being said, '
         'and that quiet sensitivity can make people feel genuinely understood around you.',
     LifeCategory.socialPersonality:
-        'In a group you tend to be the one who notices the unspoken mood, '
+        'Within a group you tend to be the one who notices the unspoken mood, '
         'and that perceptiveness often makes you the gentle steadying presence others trust.',
     LifeCategory.personality:
         'You tend to be good at reading other people\'s hearts, '
         'and even when you look calm on the outside, a rich playlist of feeling can be turning inside.',
     LifeCategory.innateTendency:
-        'Your instinct tends to reach for intuition — sensing before reasoning — '
+        'Given the choice you tend to reach for intuition — sensing before reasoning — '
         'and a deep, quiet perceptiveness is closer to your nature than loud, direct push.',
     LifeCategory.innateCharacter:
-        'At your core you tend to carry the seeping depth of a clear spring, '
+        'Deep down you tend to carry the seeping depth of a clear spring, '
         'and that intuitive warmth often shows most in how gently you understand the people close to you.',
     LifeCategory.loveFate:
         'Attraction tends to begin quietly and run deep for you, '
         'and you can be drawn to someone whose feeling you can sense as genuine.',
     LifeCategory.affection:
-        'In a lasting relationship you tend to show care through quiet, perceptive attention, '
+        'Once a bond settles in, you tend to show care through quiet, perceptive attention, '
         'though saying plainly what you sense and feel can keep things clear between you.',
     LifeCategory.wealth:
         'Impulse spending can show up when your feelings are stirred, '
         'so a habit of recording and comparing tends to guard your wallet well.',
     LifeCategory.wealthGather:
-        'Saving tends to suit you when it is gentle and out of sight, '
+        'Money tends to build for you when saving stays gentle and out of sight, '
         'and a quiet automatic habit can let an amount build without testing your willpower.',
     LifeCategory.wealthLossPrevent:
         'Your main leak tends to be a purchase made when your mood is unsettled, '
@@ -672,7 +672,7 @@ const Map<String, Map<LifeCategory, String>> kLifeCategoryBodyEnByStem = {
         'A calm, well-noted approach tends to suit you, '
         'and stepping back when your feelings are stirred usually serves you better than acting on them.',
     LifeCategory.conclusionSelf:
-        'In one line, a deep, intuitive sensitivity is your core colour, '
+        'Put simply, a deep, intuitive sensitivity is your core colour, '
         'and the way you quietly understand people tends to be your real strength.',
   },
 };
