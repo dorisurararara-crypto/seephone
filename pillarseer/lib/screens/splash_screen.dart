@@ -27,7 +27,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     final delay = reduceMotion
         ? const Duration(milliseconds: 400)
-        : const Duration(milliseconds: 1500);
+        : const Duration(milliseconds: 2500);
     _timer = Timer(delay, _go);
   }
 

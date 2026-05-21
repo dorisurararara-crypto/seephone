@@ -95,11 +95,11 @@ void main() {
         reason: 'pubspec dependency 누락',
       );
       // pubspec version 자체 — ship target. ⚠️ 매 ship 마다 갱신 필요한 핀(트랩).
-      // R96 '1.0.0+57' → ... → R106 '1.0.0+70'. version bump 시 이 핀도 같이 수정.
+      // R96 '1.0.0+57' → ... → R106 '1.0.0+71'. version bump 시 이 핀도 같이 수정.
       expect(
-        pubspecSrc.contains('version: 1.0.0+70'),
+        pubspecSrc.contains('version: 1.0.0+71'),
         isTrue,
-        reason: 'pubspec version (1.0.0+70) 자체 변경 — R106 ship delivery 불일치',
+        reason: 'pubspec version (1.0.0+71) 자체 변경 — R106 ship delivery 불일치',
       );
     });
 
