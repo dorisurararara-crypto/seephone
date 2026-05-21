@@ -1,112 +1,198 @@
-// Round 71 회귀 — home_screen _OracleHero (사용자 불만 #8 + #3).
+// R106 — home_screen _OracleHero 미스터리형 전환 회귀.
 //
-// 1) _OracleHero 의 ment pool 30 (천간 10 × dayEnergy 3) 모두 사용자 불만 #3 invariant 통과:
-//    - restDay ment 에 "공식 자리·발표·승진·도전·승부" 0회
-//    - actionDay ment 에 "쉬어가·아끼" 0회
-// 2) 각 ment 가 단정 종결 ≥3 (3 줄 최소 1 단정 종결 / 줄)
-// 3) 단정 톤 (~다 / ~한다 / ~온다 / ~정답이다 등) — 헷지 종결 0
+// '오늘의 한 줄' 이 천간×dayEnergy 30 ment pool 에서 미스터리형(오늘 일진 지지 글자 +
+// 차트 관계 chung/hap/friction/neutral) 으로 전환됨. 알림(R106 P2b) 과 톤 통일.
+//
+// 검증:
+//  1) relation 4종 × KO/EN pool — 각 5개, {B} 슬롯 주입 후 정상 텍스트, 빈 문자열 0
+//  2) KO ment AI 슬롭(흐름이/흐름을/본질/정수/운기/입니다) 0
+//  3) ment 가 사용자 감정·사건·미래 사실 단정 X (금지 문자열 가드)
+//  4) _OracleHero 가 home build Column 에서 _AppBarBlock 다음 + _ScoreBlock/TodayV5Loader 위
+//  5) 거짓말 가드 — relation 은 TodayEventService 산출만 사용 (코드 경로)
 
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Round 71 — _OracleHero ment pool (불만 #8 first-fold + #3 모순 0)', () {
-    // _OracleHero 클래스 안 _pool 정의를 추출.
-    final src = File('lib/screens/home_screen.dart').readAsStringSync();
-    final classStart = src.indexOf('class _OracleHero');
-    final classEnd = src.indexOf('class _HeroGreeting');
-    final block = src.substring(classStart, classEnd);
-    final poolStart = block.indexOf('_pool = <');
-    final poolEnd = block.indexOf('};', poolStart);
-    final pool = block.substring(poolStart, poolEnd);
+  final src = File('lib/screens/home_screen.dart').readAsStringSync();
+  final classStart = src.indexOf('class _OracleHero');
+  final classEnd = src.indexOf('class _HeroGreeting');
+  final block = src.substring(classStart, classEnd);
 
-    test('ment pool 추출 — 30 entry (천간 10 × dayEnergy 3)', () {
-      // restDay 10 + mixedDay 10 + actionDay 10 = 30.
-      final gans = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-      var count = 0;
-      for (final g in gans) {
-        count += "'$g':".allMatches(pool).length;
-      }
-      expect(count, 30, reason: '천간 10 × dayEnergy 3 = 30 ment 필수');
-    });
+  // 한 relation pool (List<String>) 추출. KO/EN 각각 5개 string 리터럴.
+  List<String> extractPool(String poolName, String relationKey) {
+    final ps = block.indexOf('$poolName = <MysteryRelation, List<String>>{');
+    expect(ps, greaterThanOrEqualTo(0), reason: '$poolName 정의 누락');
+    final pe = block.indexOf('};', ps);
+    final poolBlock = block.substring(ps, pe);
+    final relStart = poolBlock.indexOf('MysteryRelation.$relationKey: [');
+    expect(relStart, greaterThanOrEqualTo(0),
+        reason: '$poolName.$relationKey 누락');
+    final relEnd = poolBlock.indexOf('],', relStart);
+    final relBlock = poolBlock.substring(relStart, relEnd);
+    // 작은따옴표 / 큰따옴표 string 리터럴 모두 잡는다.
+    final out = <String>[];
+    final re = RegExp(r"""(?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)")""");
+    for (final m in re.allMatches(relBlock)) {
+      final raw = m.group(1) ?? m.group(2) ?? '';
+      // MysteryRelation.xxx: [ 헤더 부분 string 아님 → 모두 ment.
+      out.add(raw
+          .replaceAll(r'\n', '\n')
+          .replaceAll(r"\'", "'")
+          .replaceAll(r'\"', '"'));
+    }
+    return out;
+  }
 
-    test('restDay ment 에 "공식 자리·발표·승진·도전·승부" 0회', () {
-      // restDay 섹션 추출.
-      final restStart = pool.indexOf('DayEnergyKind.restDay:');
-      final mixedStart = pool.indexOf('DayEnergyKind.mixedDay:');
-      final restSection = pool.substring(restStart, mixedStart);
-      const banned = ['공식 자리', '발표', '승진', '도전·승부', '도전 승부'];
-      for (final w in banned) {
-        expect(restSection.contains(w), isFalse,
-            reason: 'restDay ment 에 "$w" 발견 — 불만 #3 모순');
-      }
-    });
+  const relations = ['chung', 'hap', 'friction', 'neutral'];
 
-    test('actionDay ment 에 "쉬어가·아끼" 0회', () {
-      final actionStart = pool.indexOf('DayEnergyKind.actionDay:');
-      final actionSection = pool.substring(actionStart);
-      const banned = ['쉬어가', '아끼'];
-      for (final w in banned) {
-        expect(actionSection.contains(w), isFalse,
-            reason: 'actionDay ment 에 "$w" 발견 — 불만 #3 모순');
-      }
-    });
-
-    test('헷지 어휘 (할 수 있어요/도움됩니다/조심하세요/추천드려요) ≤2건 / pool 전체', () {
-      // Round 77 sprint 4 — mandate 해요체 변환 후 "있어요/편이에요" 는 단정 평서 해요체 이므로 제외.
-      const hedge = ['할 수 있어요', '도움됩니다', '조심하세요', '추천드려요',
-          '~것 같다', '~일지도'];
+  group('R106 — _OracleHero 미스터리형 pool 구조', () {
+    test('KO pool — relation 4종 각 5개 (총 20)', () {
       var total = 0;
-      for (final w in hedge) {
-        total += RegExp(RegExp.escape(w)).allMatches(pool).length;
+      for (final r in relations) {
+        final p = extractPool('_poolKo', r);
+        expect(p.length, 5, reason: 'KO $r pool 은 5개여야 함 (실제 ${p.length})');
+        total += p.length;
       }
-      expect(total <= 2, isTrue,
-          reason: '_OracleHero ment 헷지 합산 $total — ≤2 필요');
+      expect(total, 20);
     });
 
-    test('단정 평서 종결 ≥30 / pool 전체 (평균 1 / ment line)', () {
-      // Round 77 sprint 6 — mandate: 단정조 / 질문조 / 인용·밈 톤 3 형식 변주.
-      // 30 ment × 3 줄 = 90 줄 — 단정 평서 / 단정 명령 / 단정 슬로건 ≥30.
-      // 인용·밈 톤 (= 너 = 사람.) 도 단정 평서로 카운트.
-      const verbs = [
-        // 해요체 단정 평서 (Round 77 sprint 4 잔존)
-        '이에요.', '예요.', '돼요.', '와요.', '해요.', '가요.', '봐요.',
-        '맞아요.', '나아요.', '좋아요.', '있어요.', '편이에요.', '정해요.',
-        '만들어요.', '잡혀요.', '보여요.', '내려요.', '져요.', '아니에요.',
-        '미뤄요.', '늦춰요.', '챙겨요.', '지켜요.', '받아 봐요.', '마세요.',
-        // 친구 톤 반말 단정 (Round 77 sprint 6 신규)
-        '진짜야.', '다야.', '정답.', '없어.', '편해져.', '아니야.',
-        '잡혀.', '풀려.', '봐.', '봐.\n', '만들어.', '기회야.', '장점.',
-        '보내 봐.', '처리해 봐.', '끝내.', '미뤄.', '늦춰.', '패스.', '끝.',
-        '정해.', '잊어.', '챙겨.', '지켜.', '돼.', '커.', '먹어.',
-        '있어.', '없어.\n',
+    test('EN pool — relation 4종 각 5개 (총 20)', () {
+      var total = 0;
+      for (final r in relations) {
+        final p = extractPool('_poolEn', r);
+        expect(p.length, 5, reason: 'EN $r pool 은 5개여야 함 (실제 ${p.length})');
+        total += p.length;
+      }
+      expect(total, 20);
+    });
+
+    test('모든 ment 에 {B} 슬롯 존재 + 슬롯 주입 후 빈 문자열 0', () {
+      for (final poolName in ['_poolKo', '_poolEn']) {
+        for (final r in relations) {
+          for (final m in extractPool(poolName, r)) {
+            expect(m.contains('{B}'), isTrue,
+                reason: '$poolName.$r ment 에 {B} 슬롯 없음: $m');
+            // 卯(묘) 슬롯 주입 시뮬레이션.
+            final filled = m.replaceAll('{B}', '卯(묘)');
+            expect(filled.trim().isNotEmpty, isTrue);
+            expect(filled.contains('卯(묘)'), isTrue);
+          }
+        }
+      }
+    });
+  });
+
+  group('R106 — KO ment 한글 정상 + AI 슬롭 0', () {
+    test('KO ment 슬롯 주입 후 한글(가-힣) 포함', () {
+      final hangul = RegExp(r'[가-힣]');
+      for (final r in relations) {
+        for (final m in extractPool('_poolKo', r)) {
+          final filled = m.replaceAll('{B}', '卯(묘)');
+          expect(hangul.hasMatch(filled), isTrue,
+              reason: 'KO $r ment 에 한글 없음: $filled');
+        }
+      }
+    });
+
+    test('EN ment 슬롯 주입 후 영문 알파벳 포함', () {
+      final alpha = RegExp(r'[A-Za-z]');
+      for (final r in relations) {
+        for (final m in extractPool('_poolEn', r)) {
+          final filled = m.replaceAll('{B}', 'Mao');
+          expect(alpha.hasMatch(filled), isTrue,
+              reason: 'EN $r ment 에 영문 없음: $filled');
+        }
+      }
+    });
+
+    test('KO ment AI 슬롭 (흐름이/흐름을/본질/정수/운기/입니다) 0', () {
+      const slop = ['흐름이', '흐름을', '본질', '정수', '운기', '입니다'];
+      for (final r in relations) {
+        for (final m in extractPool('_poolKo', r)) {
+          for (final w in slop) {
+            expect(m.contains(w), isFalse,
+                reason: 'KO $r ment 에 AI 슬롭 "$w" 발견: $m');
+          }
+        }
+      }
+    });
+  });
+
+  group('R106 — 사실 단정 금지 (사용자 감정·사건·미래 단정 X)', () {
+    test('KO ment 사건·미래 단정 금지 문자열 0', () {
+      // 미스터리형은 차트 관계(구조)만 진술. 사용자의 하루 결과를 사실로 단정 X.
+      const banned = [
+        '반드시', '틀림없', '확실히', '분명히 좋', '분명히 나쁜',
+        '대박', '큰돈', '돈이 들어와', '사고가 나', '이별', '합격', '불합격',
       ];
-      var n = 0;
-      for (final w in verbs) {
-        n += RegExp(RegExp.escape(w)).allMatches(pool).length;
-      }
-      expect(n >= 30, isTrue,
-          reason: '단정 평서 종결 $n — ≥30 필요 (30 ment 평균 1+ 줄)');
-    });
-
-    test('AI 슬롭 (흐름이/결을 가/본질/정수/운기) 0회', () {
-      const slop = ['흐름이', '흐름을', '결을 가', '결이다', '본질', '정수', '운기',
-          '입니다', 'K팝', '무대 위'];
-      for (final w in slop) {
-        expect(pool.contains(w), isFalse,
-            reason: '_OracleHero ment pool 안 슬롭 "$w" 발견');
+      for (final r in relations) {
+        for (final m in extractPool('_poolKo', r)) {
+          for (final w in banned) {
+            expect(m.contains(w), isFalse,
+                reason: 'KO $r ment 에 사실 단정 "$w" 발견: $m');
+          }
+        }
       }
     });
 
-    test('home_screen Column 안 _OracleHero 가 _AppBarBlock 다음 위치', () {
+    test('모든 ment 가 "아래 풀이" 로 호기심 유도 (미스터리형 시그니처)', () {
+      for (final r in relations) {
+        for (final m in extractPool('_poolKo', r)) {
+          expect(m.contains('아래 풀이'), isTrue,
+              reason: 'KO $r ment 에 "아래 풀이" 유도 없음: $m');
+        }
+        for (final m in extractPool('_poolEn', r)) {
+          expect(m.contains('reading below'), isTrue,
+              reason: 'EN $r ment 에 "reading below" 유도 없음: $m');
+        }
+      }
+    });
+  });
+
+  group('R106 — 거짓말 0 + first-fold 위치', () {
+    test('relation 은 TodayEventService 산출만 사용', () {
+      // _relation getter 가 TodayEventService.build → fromHapChungType 경로만 사용하는지.
+      final relGetter = block.indexOf('MysteryRelation get _relation');
+      expect(relGetter, greaterThanOrEqualTo(0), reason: '_relation getter 누락');
+      final relEnd = block.indexOf('}', block.indexOf('{', relGetter));
+      final relBody = block.substring(relGetter, relEnd);
+      expect(relBody.contains('TodayEventService.build'), isTrue,
+          reason: 'relation 이 TodayEventService.build 를 안 씀 — 거짓말 위험');
+      expect(relBody.contains('fromHapChungType'), isTrue,
+          reason: 'relation 이 fromHapChungType 를 안 씀');
+    });
+
+    test('dayEnergy 는 accent 색상에만 사용 (ment 산출 미사용)', () {
+      // _pickMent 안에 dayEnergy 참조 0.
+      final pmStart = block.indexOf('String _pickMent(');
+      final pmEnd = block.indexOf('}', block.indexOf('{', pmStart));
+      final pmBody = block.substring(pmStart, pmEnd);
+      expect(pmBody.contains('dayEnergy'), isFalse,
+          reason: '_pickMent 에 dayEnergy 참조 — ment 산출에 dayEnergy 사용 금지');
+    });
+
+    test('home build Column 안 _OracleHero 가 _AppBarBlock 다음 + first-fold', () {
       final appBarPos = src.indexOf('_AppBarBlock()');
       final oracleHeroPos = src.indexOf('_OracleHero(');
       final scoreBlockPos = src.indexOf('_ScoreBlock(');
-      // _OracleHero 가 _AppBarBlock 다음 + _ScoreBlock 보다 위에 등장 (250px 안 first-fold 보장).
-      expect(oracleHeroPos > appBarPos, isTrue);
+      final v5LoaderPos = src.indexOf('TodayV5Loader(');
+      expect(oracleHeroPos > appBarPos, isTrue,
+          reason: '_OracleHero 가 _AppBarBlock 다음에 와야 함');
       expect(oracleHeroPos < scoreBlockPos, isTrue,
-          reason: '_OracleHero 가 _ScoreBlock 보다 위 — first-fold 도파민');
+          reason: '_OracleHero 가 _ScoreBlock 보다 위 — first-fold');
+      expect(oracleHeroPos < v5LoaderPos, isTrue,
+          reason: '_OracleHero 가 TodayV5Loader 보다 위 — first-fold');
+    });
+
+    test('지지 한자 → 한글음 gloss 12지 전부 존재', () {
+      const branches = ['子', '丑', '寅', '卯', '辰', '巳',
+          '午', '未', '申', '酉', '戌', '亥'];
+      for (final b in branches) {
+        expect(block.contains("'$b':"), isTrue,
+            reason: '_branchKo 에 $b gloss 누락');
+      }
     });
   });
 }

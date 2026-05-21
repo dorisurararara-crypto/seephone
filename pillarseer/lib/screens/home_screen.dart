@@ -10,11 +10,10 @@ import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../models/daily_fortune.dart';
 import '../services/daily_service.dart';
-import '../services/dynamic_text_resolver.dart';
 import '../services/five_day_trend_service.dart';
 import '../services/hourly_service.dart';
 import '../services/lucky_chips_service.dart';
-import '../services/natural_prose_joiner.dart';
+import '../services/notification_pool_service.dart' show MysteryRelation, MysteryRelationKey;
 import '../services/saju_context.dart';
 import '../services/six_axis_score_service.dart';
 import '../services/today_deep_service.dart';
@@ -112,9 +111,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // 2. 오늘 사주 총평 (TodayDeepReadingSection) — 6줄 가량 본문 + actions.
               // 3. 오늘 이렇게 해 봐 (_CategoryGuides) — 4영역 가이드.
               _OracleHero(
-                dayPillarChunGan: saju.dayPillar.chunGan,
+                todayPillar: fortune.dayPillar,
+                userDayStem: saju.dayPillar.chunGan,
+                userDayBranch: saju.dayPillar.jiJi,
+                userMonthBranch: saju.monthPillar.jiJi,
+                todayScore: fortune.totalScore,
                 dayEnergy: classifyDayEnergy(fortune.totalScore),
-                ctx: SajuContext.from(saju, today: now),
               ),
               // R106 P2a — 오늘의 사주 v5 (오늘의 주제 + 근거 3칩 + 자기검증).
               // 첫 fold 의 primary 오늘 풀이. selector 신호 0 시 v5 가 총평형 fallback.
@@ -247,147 +249,150 @@ class _AppBarBlock extends StatelessWidget {
 // ──────────── Oracle hero (Round 71 first-fold 도파민) ────────────
 
 /// 사용자 불만 #8 — home 진입 첫 5초 안에 화면 상단 ~250px 안에 박히는 단정 예언.
-/// DayEnergyKind × 천간(10) 30 ment pool 에서 결정적 hash 로 한 줄 선택.
+/// R106 — '오늘의 한 줄' 미스터리형 전환.
 ///
-/// 톤 (Round 67/71): 단정 평서 한다체. "오늘 너는 ~ 한다 / 너는 ~ 다."
-/// Sprint 3 사용자 불만 #3 invariant: restDay 에 "공식 자리·발표·승진·도전·승부" 0 / actionDay 에 "쉬어가·아끼" 0.
+/// 알림(R106 P2b)과 톤 통일: 오늘 들어온 일진 지지 한 글자를 신비하게 던져
+/// "아래 풀이" 로의 호기심을 유발한다. 사용자 감정·사건·미래를 사실 단정하지 않고,
+/// 차트 관계(충/합/형·파·해/없음)만 사실로 진술한다 — 거짓말·창작 0.
+///
+/// relation 산출 = `TodayEventService.build(...).hapChungType` →
+/// `MysteryRelationKey.fromHapChungType` (충/합/형·파·해/없음 → chung/hap/friction/neutral)
+/// 만 사용. 충·합이 없으면 neutral 로 접힌다 (관계 단정 금지).
+///
+/// `dayEnergy` 는 accent 색상에만 사용. ment 산출엔 미사용.
 class _OracleHero extends StatelessWidget {
-  final String dayPillarChunGan;
+  /// 오늘 60갑자 (예: '丁卯'). 둘째 글자가 오늘 일진 지지.
+  final String todayPillar;
+  final String userDayStem;
+  final String userDayBranch;
+  final String userMonthBranch;
+  final int todayScore;
   final DayEnergyKind dayEnergy;
-  // Round 78 sprint 3 — SajuContext 주입. 같은 천간·dayEnergy 라도 격국·용신 따라
-  // body 1줄 suffix 가 derive 되어 사용자별 phrase 차이 ≥1 보장.
-  final SajuContext? ctx;
   const _OracleHero({
-    required this.dayPillarChunGan,
+    required this.todayPillar,
+    required this.userDayStem,
+    required this.userDayBranch,
+    required this.userMonthBranch,
+    required this.todayScore,
     required this.dayEnergy,
-    this.ctx,
   });
 
-  /// 천간 10 × dayEnergy 3 = 30 ment pool.
-  /// R86 sprint 2 — 사용자 mandate verbatim (1.0.0+42 실기기 피드백):
-  ///   "오늘 너 = 이런 표현 빼줘 ai같아 그리고 어떤 부분은 반말 어떤부분은 존댓말이네 이런것도 다 없애"
-  /// 30 ment 전수 재작성 — 해요체 / 반말 0 / "X = Y" 패턴 0 / AI 슬롭 0.
-  /// invariant 보존: restDay 에 "공식 자리·발표·승진·도전·승부" 0 / actionDay 에 "쉬어가·아끼" 0.
-  /// R71 slop 가드 (R71/R77/R82 시그니처 보존): 흐름이/흐름을/본질/정수/운기/센터처럼 등 0.
-  static const _pool = <DayEnergyKind, Map<String, String>>{
-    DayEnergyKind.restDay: {
-      '甲': '오늘 제일 잘하는 건 아무것도 안 하는 거예요.\n어제 벌여둔 일 딱 하나만 매듭짓고 손 떼 봐요.\n그 하나면 오늘 몫은 끝이에요.',
-      '乙': '오늘은 느리게 가도 아무도 눈치 못 채요.\n잠 한 시간이 단톡 다섯 개보다 길게 남아요.\n무리한 약속은 미련 없이 다음으로 미뤄요.',
-      '丙': '오늘은 굳이 앞에 안 나서도 되는 날이에요.\n묵혀둔 톡 하나만 가볍게 정리해 봐요.\n그 하나로 마음 한 칸이 비워져요.',
-      '丁': '오늘은 조용히 흘려보내는 쪽이 이득이에요.\n친한 한 명한테만 짧게 안부 보내 봐요.\n그 한 줄이면 오늘은 충분해요.',
-      '戊':
-          '큰 결정은 오늘 손도 대지 마세요.\n하루 미뤄도 그 일은 어디 안 가요.\n가만히 있는 쪽에 오늘 점수가 있어요.',
-      '己': '남 일까지 떠안으면 오늘은 본인이 비어요.\n오늘은 본인부터 챙길 차례예요.\n친한 한 명한테만 마음 써도 충분해요.',
-      '庚': '바로 손절하고 싶을 때, 그 손이 제일 위험해요.\n한 박자 더 두고 봐도 절대 안 늦어요.\n흔들릴 때 내린 결정은 거의 후회로 돌아와요.',
-      '辛': '오늘은 부딪치는 순간 본인이 더 다쳐요.\n날 세우고 싶어지면 그게 멈출 신호예요.\n어제 상한 마음부터 먼저 풀어 봐요.',
-      '壬': '오늘 키워드 딱 하나, 멈춤이에요.\n새 방향은 잡지 말고 묵은 일 하나만 정리해 봐요.\n그거면 오늘은 충분해요.',
-      '癸': '오늘은 분위기에 끌려가면 본인만 닳아요.\n본인 자리 하나만 지키면 돼요.\n그 하나면 오늘은 충분해요.',
-    },
-    DayEnergyKind.mixedDay: {
-      '甲': '큰 결정은 한 박자 미뤄요.\n작은 확인 하나만 끝내면 나머지가 따라와요.\n오늘은 그 하나에만 손대 봐요.',
-      '乙': '오늘은 한 박자 늦게 움직이는 사람이 이겨요.\n작은 약속 하나 지키면 내일이 한결 가벼워져요.\n그 약속이 오늘 진짜 할 일이에요.',
-      '丙': '오늘은 한 자리만 지켜도 절반은 한 거예요.\n친한 한 명한테 톡 한 줄 먼저 보내 봐요.\n그 한 줄에서 다음이 자연스럽게 풀려나와요.',
-      '丁':
-          '오늘은 딱 한 사람한테만 집중해 봐요.\n오래된 친구한테 안부 한 줄 보내 봐요.\n다음 할 일이 그 안부에서 풀려나와요.',
-      '戊': '본인 자리를 지키는 쪽으로 가 봐요.\n큰 결정은 한 박자 늦춰요.\n버틴 그 자리가 내일 편한 길을 열어요.',
-      '己': '오늘은 한 사람만 챙겨도 본인 몫은 다 한 거예요.\n묵은 약속 하나 끝내 봐요.\n그거 끝내면 마음 한 칸이 가벼워져요.',
-      '庚':
-          '큰 결정을 진짜 오늘 해야 하는지 한 번 더 물어봐요.\n작은 일 하나만 끝까지 마무리해도 충분해요.\n끝까지 마친 그 하나가 본인 평판으로 남아요.',
-      '辛':
-          '오늘은 흔들리지 않는 사람이 제일 빨라요.\n익숙한 순서대로 처리하면 다음 할 일이 보여요.\n그 순서대로 한 단계씩 가 봐요.',
-      '壬': '오늘 키워드는 흐름 읽기예요.\n다음 할 일 딱 하나만 정해 봐요.\n그 하나로 다음 길이 한결 트여요.',
-      '癸':
-          '오늘은 비어 있는 자리를 채우는 쪽이 본인이에요.\n오래 못 본 한 명한테 짧게 톡 보내 봐요.\n그 톡 하나로 오늘 할 일이 정해져요.',
-    },
-    DayEnergyKind.actionDay: {
-      '甲': '오늘은 먼저 톡 보내는 사람이 판을 잡아요.\n망설이는 그 1분이 제일 아까운 시간이에요.\n눈에 떠오른 한 명한테 지금 보내 봐요.',
-      '乙': '미뤘던 그 하나, 오늘 진짜 끝낼 텐션이에요.\n오늘은 본인 쪽으로 바람이 불어요.\n그 한 발만 떼면 내일이 가벼워져요.',
-      '丙': '오늘은 앞에 나선 사람한테 시선이 모여요.\n분위기 잡는 자리, 본인이 한번 서 봐요.\n그 자리에서 다음 일도 한결 수월해져요.',
-      '丁': '오늘은 한 사람을 제대로 챙겨 봐요.\n공들인 만큼 상대 기억에 오래 남기 쉬워요.\n먼저 손 내미는 쪽이 본인이 돼 봐요.',
-      '戊':
-          '미루던 그 하나, 오늘은 끝까지 갈 힘이 차 있어요.\n한 번 잡았으면 끝을 봐요.\n끝까지 간 그 하나가 본인 이름으로 남기 쉬워요.',
-      '己':
-          '오늘은 한 사람 도와주기 딱 좋은 날이에요.\n도움받은 그 사람이 본인을 다시 찾기 쉬워요.\n그 한 번에 본인 자리가 또렷해져요.',
-      '庚': '오늘은 바로 정하고 가도 되는 날이에요.\n끝까지 밀어붙인 그 하나가 평판으로 남기 쉬워요.\n망설일 자리가 아니에요.',
-      '辛': '오늘은 남 방식 말고 본인 순서대로 가 봐요.\n말끝을 분명히 닫으면 오늘 인상이 길게 남아요.\n그 자리에서 다음 일도 수월해져요.',
-      '壬': '오늘 키워드는 새 방향이에요.\n다음 길이 본인 눈에 먼저 들어와요.\n눈에 띈 그 순서대로 움직여 봐요.',
-      '癸': '오늘은 한마디가 오래 남는 날이에요.\n스친 그 한마디를 상대가 의외로 오래 품기 쉬워요.\n그게 다음 기회로 이어지기 쉬워요.',
-    },
+  /// 지지 한자 → 한글음 gloss. 본문 {B} 슬롯에 '$지지($한글음)' 형태로 주입.
+  static const _branchKo = <String, String>{
+    '子': '자', '丑': '축', '寅': '인', '卯': '묘', '辰': '진', '巳': '사',
+    '午': '오', '未': '미', '申': '신', '酉': '유', '戌': '술', '亥': '해',
   };
 
-  /// Round 78 sprint 3 — H1 ctx-aware pool entries.
-  /// 한 chunGan/dayEnergy 셀 이 격국·용신 조합으로 정확/부분 매칭 가능하도록 작은 pool 제공.
-  /// 본 entries 가 미매칭 시 R77 _pool 정적 ment fallback + ctx suffix 합성 (chain 2~4).
-  static const _ctxEntries = <DynamicPoolEntry>[
-    // 정관격 + 용신 木 + restDay 사용자 — 직장 안정 + 초록 활동 안내.
-    DynamicPoolEntry(
-      key: 'oracle_hero.restDay.辛',
-      bodies: {
-        'ko':
-            '오늘은 정해진 룰 안에서 쉬는 편이 좋아요.\n초록·산책 한 번 챙기면 컨디션이 잘 받쳐줘요.\n무리한 약속은 다음 주로 넘겨 봐요.',
-        'en':
-            "Rest inside your usual lane today.\nA short green walk steadies your focus.\nPush bigger plans to next week.",
-      },
-      requires: {'gyeokgukShort': '정관격', 'yongsin': '木'},
-    ),
-    // 정관격 + 용신 火 — 같은 정관격이어도 용신 다르면 안내 다름.
-    // invariant: restDay 본문에 "도전·승부·발표·공식 자리·승진" 0.
-    DynamicPoolEntry(
-      key: 'oracle_hero.restDay.辛',
-      bodies: {
-        'ko':
-            '오늘은 정해진 룰 안에서 쉬는 편이 좋아요.\n햇볕 받는 동선이 자신감을 채워줘요.\n새 일정은 한 주 미뤄 봐요.',
-        'en':
-            "Rest inside your usual lane today.\nA bit of sunlight refills your spark.\nPush new plans to next week.",
-      },
-      requires: {'gyeokgukShort': '정관격', 'yongsin': '火'},
-    ),
-  ];
+  /// relation 별 미스터리형 ment pool — KO 5 × 4 relation = 20.
+  /// {B} = 오늘 일진 지지 글자 슬롯 (예: '卯(묘)').
+  static const _poolKo = <MysteryRelation, List<String>>{
+    MysteryRelation.chung: [
+      '오늘 당신 자리에 {B} 한 글자가 들어왔어요.\n당신 일주와 정면으로 마주 보는 글자예요.\n맞서기 전에 한 박자 — 자세한 건 아래 풀이에 있어요.',
+      '오늘 들어온 글자는 {B}.\n당신 일주와 똑바로 부딪치는 자리에 섰어요.\n세게 막지 말고 비껴서는 법, 아래 풀이에서 봐요.',
+      '{B}. 오늘 당신 일주 맞은편에 선 글자예요.\n맞부딪치면 시끄럽고, 한 박자 늦추면 조용해져요.\n어느 쪽일지는 아래 풀이가 정해줘요.',
+      '오늘은 {B} 글자가 당신 일주를 똑바로 건드려요.\n피하라는 게 아니라, 속도만 줄이면 되는 자리예요.\n그 속도 조절법, 아래 풀이에 적어놨어요.',
+      '오늘 당신한테 {B} 한 글자가 마주 걸어왔어요.\n당신 일주와 정면으로 만나는 자리예요.\n잘 넘기는 법은 아래 풀이를 봐요.',
+    ],
+    MysteryRelation.hap: [
+      '오늘 당신 자리에 {B} 한 글자가 들어왔어요.\n당신 일주와 살며시 손을 맞잡는 글자예요.\n이 손을 어떻게 쓰는지는 아래 풀이에 있어요.',
+      '오늘 들어온 글자는 {B}.\n당신 일주와 부드럽게 맞물리는 자리에 섰어요.\n맞물린 김에 뭘 하면 좋은지, 아래 풀이에서 봐요.',
+      '{B}. 오늘 당신 일주와 한편이 되는 글자예요.\n막혀 있던 게 있다면 오늘 슬쩍 밀어보기 좋은 자리예요.\n그 한 가지가 뭔지는 아래 풀이에.',
+      '오늘은 {B} 글자가 당신 일주에 살그머니 붙어요.\n밀어내지 말고 곁에 두면 하루가 한결 부드러워요.\n쓰는 법은 아래 풀이에 적어놨어요.',
+      '오늘 당신한테 {B} 한 글자가 손 내밀며 왔어요.\n맞잡으면 오늘 일이 한 칸 수월해지는 자리예요.\n어떻게 잡는지는 아래 풀이를 봐요.',
+    ],
+    MysteryRelation.friction: [
+      '오늘 당신 자리에 {B} 한 글자가 들어왔어요.\n당신 일주를 한 끗 비껴 스치는 글자예요.\n그 한 끗 다루는 법은 아래 풀이에 있어요.',
+      '오늘 들어온 글자는 {B}.\n당신 일주와 살짝 어긋난 자리에 섰어요.\n어긋난 한 칸을 메우는 법, 아래 풀이에서 봐요.',
+      '{B}. 오늘 당신 일주를 한 끗 엇갈려 지나는 글자예요.\n크게 부딪치진 않아도 작게 엇갈리는 자리예요.\n그 결을 푸는 법은 아래 풀이에.',
+      '오늘은 {B} 글자가 당신 일주를 비스듬히 스쳐요.\n정면도 아니고 합도 아닌, 한 끗 어긋난 자리예요.\n그 한 끗을 어떻게 넘기는지는 아래 풀이를 봐요.',
+      '오늘 당신한테 {B} 한 글자가 슬쩍 어긋나게 왔어요.\n작은 엇박을 미리 알면 오늘 덜 걸려 넘어져요.\n자세한 건 아래 풀이에 적어놨어요.',
+    ],
+    MysteryRelation.neutral: [
+      '오늘 당신 자리에 {B} 한 글자가 들어왔어요.\n당신 곁을 가만히 지나가는 글자예요.\n오늘 이 글자를 어떻게 맞이하는지는 아래 풀이에.',
+      '오늘 들어온 글자는 {B}.\n당신 일주와 직접 얽히지 않고 곁을 지나는 자리예요.\n조용한 날을 어떻게 쓰는지, 아래 풀이에서 봐요.',
+      '{B}. 오늘 당신 일주 옆을 스쳐 지나는 글자예요.\n크게 건드리지 않으니 흔들릴 일도 적은 자리.\n이 잔잔함을 쓰는 법은 아래 풀이에.',
+      '오늘은 {B} 글자가 당신 곁을 슬쩍 지나가요.\n부딪침도 끌림도 옅어서 오늘은 본인 페이스대로 가도 돼요.\n자세한 건 아래 풀이를 봐요.',
+      '오늘 당신한테 {B} 한 글자가 가볍게 다녀가요.\n직접 걸리는 자리가 없어 오늘은 잔잔한 날이에요.\n이 잔잔한 하루 쓰는 법, 아래 풀이에 적어놨어요.',
+    ],
+  };
 
-  String _pickMent() {
-    final m = _pool[dayEnergy]!;
-    final base = m[dayPillarChunGan] ?? m['甲']!;
-    // Round 78 sprint 3 — ctx 주입 시 DynamicTextResolver 가 용신 derive suffix 합성.
-    final c = ctx;
-    if (c == null) return NaturalProseJoiner.polish(base);
-    final resolved = DynamicTextResolver.resolve(
-      key: 'oracle_hero.${dayEnergy.name}.$dayPillarChunGan',
-      ctx: c,
-      locale: 'ko',
-      staticFallback: base,
-      entries: _ctxEntries,
-    );
-    return NaturalProseJoiner.polish(resolved);
+  /// relation 별 미스터리형 ment pool — EN 5 × 4 relation = 20.
+  static const _poolEn = <MysteryRelation, List<String>>{
+    MysteryRelation.chung: [
+      'A new character stepped onto your day: {B}.\nIt stands face to face with your day pillar.\nHow to pass it well is in the reading below.',
+      "Today's character is {B}, squared up against your day pillar.\nDon't block it hard; step half a beat aside.\nThe how is in the reading below.",
+      '{B}. Today it stands directly across from your day pillar.\nMeet it head-on and it\'s loud; slow a beat and it quiets.\nWhich way it goes is in the reading below.',
+      'Today {B} touches your day pillar straight on.\nNot a sign to hide, just a sign to ease your pace.\nThe pacing is in the reading below.',
+      'A character walked up to face you today: {B}.\nIt meets your day pillar straight on.\nHow to take it well is in the reading below.',
+    ],
+    MysteryRelation.hap: [
+      'A new character stepped onto your day: {B}.\nIt links quietly arm in arm with your day pillar.\nWhat to do with that link is in the reading below.',
+      "Today's character is {B}, clasping gently with your day pillar.\nWhile it's clasped, there's a good move to make.\nIt's in the reading below.",
+      "{B}. Today it takes your day pillar's side.\nIf something's been stuck, today's a good day to nudge it.\nWhat that something is is in the reading below.",
+      'Today {B} settles softly against your day pillar.\nKeep it close rather than pushing it off, and the day runs smoother.\nThe how is in the reading below.',
+      'A character reached a hand out to you today: {B}.\nClasp it and one thing today gets a notch easier.\nHow to clasp it is in the reading below.',
+    ],
+    MysteryRelation.friction: [
+      "A new character stepped onto your day: {B}.\nIt grazes your day pillar by a hair.\nHandling that hair's width is in the reading below.",
+      "Today's character is {B}, set a touch off from your day pillar.\nThere's a small gap to close.\nThe how is in the reading below.",
+      '{B}. Today it crosses your day pillar a hair out of line.\nNo big collision, just a small snag.\nSmoothing it is in the reading below.',
+      'Today {B} brushes your day pillar at a slant.\nNot a clash, not a link, a hair out of line.\nHow to pass it is in the reading below.',
+      'A character came in slightly off-beat today: {B}.\nKnow the small off-beat early and you trip on it less.\nThe detail is in the reading below.',
+    ],
+    MysteryRelation.neutral: [
+      'A new character stepped onto your day: {B}.\nIt simply passes by your side.\nHow to meet a quiet day is in the reading below.',
+      "Today's character is {B}, passing by without tangling with your day pillar.\nThere's a way to use a calm day.\nIt's in the reading below.",
+      '{B}. Today it slips past the side of your day pillar.\nNothing pulls hard, so little shakes loose.\nUsing that stillness is in the reading below.',
+      'Today {B} drifts quietly past you.\nLittle clash, little pull, a day to keep your own pace.\nThe detail is in the reading below.',
+      'A character passed through lightly today: {B}.\nNothing catches directly, so it\'s a still day.\nHow to use a still day is in the reading below.',
+    ],
+  };
+
+  /// 오늘 일진 지지 글자 (한자) — todayPillar 둘째 글자.
+  String get _todayBranch =>
+      todayPillar.length >= 2 ? todayPillar[1] : '子';
+
+  /// {B} 슬롯 값 — '$지지($한글음)' (예: '卯(묘)').
+  String get _branchSlot {
+    final b = _todayBranch;
+    final ko = _branchKo[b];
+    return ko == null ? b : '$b($ko)';
   }
 
-  // Round 77 sprint 6 — 영문 fallback 친구 톤 native casual. no AI slop, no em dash.
-  // R106 P6 — v5: 사용자의 하루를 사실로 단정 X (조건형·일반 진술·행동 유도).
-  String _pickMentEn() {
-    final base = switch (dayEnergy) {
-      DayEnergyKind.actionDay =>
-        "Today, whoever messages first sets the table.\nThat one you keep putting off, send it before the minute slips.\nLet the first move be yours.",
-      DayEnergyKind.mixedDay =>
-        "Let the big call wait for tomorrow. It won't run off.\nClose one small thing and the rest tends to follow.\nToday, touch only that one.",
-      DayEnergyKind.restDay =>
-        "Today, doing nothing is the move that wins.\nTie off one loose end from yesterday, then take your hands off.\nThat one is enough. Today's quota is done.",
-    };
-    final c = ctx;
-    if (c == null) return base;
-    return DynamicTextResolver.resolve(
-      key: 'oracle_hero.${dayEnergy.name}.$dayPillarChunGan',
-      ctx: c,
-      locale: 'en',
-      staticFallback: base,
-      entries: _ctxEntries,
+  /// 오늘 차트 관계 — TodayEventService 산출값만 사용 (거짓말 0).
+  MysteryRelation get _relation {
+    final reading = TodayEventService.build(
+      userDayStem: userDayStem,
+      userDayBranch: userDayBranch,
+      userMonthBranch: userMonthBranch,
+      todayPillar: todayPillar,
+      todayScore: todayScore,
     );
+    return MysteryRelationKey.fromHapChungType(reading.hapChungType);
+  }
+
+  /// 날짜 + 오늘 일진 기반 결정적 seed — 같은 날 같은 사용자 = 같은 ment.
+  int _seed(DateTime date) {
+    final dayKey = date.year * 366 + date.month * 31 + date.day;
+    final pillarKey =
+        todayPillar.codeUnits.fold<int>(0, (a, c) => a ^ c);
+    return (dayKey ^ pillarKey ^ userDayStem.codeUnits.fold<int>(0, (a, c) => a + c))
+        .abs();
+  }
+
+  /// relation pool 에서 결정적으로 1개 pick 후 {B} 슬롯 주입.
+  String _pickMent(bool useKo) {
+    final rel = _relation;
+    final pool = (useKo ? _poolKo : _poolEn)[rel]!;
+    final idx = _seed(DateTime.now()) % pool.length;
+    return pool[idx].replaceAll('{B}', _branchSlot);
   }
 
   @override
   Widget build(BuildContext context) {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
-    // Round 74 — ko / en 양쪽 모두 DayEnergyKind 단정 평서.
-    final ment = useKo ? _pickMent() : _pickMentEn();
+    final ment = _pickMent(useKo);
     final accent = switch (dayEnergy) {
       DayEnergyKind.actionDay => AppColors.woodJade,
       DayEnergyKind.mixedDay => AppColors.accent,
