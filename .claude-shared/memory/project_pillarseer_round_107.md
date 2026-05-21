@@ -38,7 +38,7 @@ main HEAD `19fb185`(R107 ship 1.0.0+72), pubspec `1.0.0+72` committed. **배포 
 
 ## ⭐ 다음 세션 작업 큐 (2026-05-21 사용자 지정 — "이어서" 시 이것부터)
 
-사용자가 실기기(영어 모드) 스크린샷 보고 2건 지정. "다음 세션에서 작업할거야."
+사용자가 실기기 스크린샷 보고 **4건** 지정. "다음 세션에서 작업할거야."
 
 ### 작은 거 — Today 영어 모드 한글 누락 (오늘의 행운 / 점)
 영어 모드 Today 화면인데 아직 한글이 샌다:
@@ -52,6 +52,22 @@ main HEAD `19fb185`(R107 ship 1.0.0+72), pubspec `1.0.0+72` committed. **배포 
 사용자: "전생에 악연 인연 스토리가 너무 재미없어서 직접 하나하나 다 스토리를 만들거야."
 - 현재 `assets/data/past_life_pool.json` `story_arcs` **9개**(+ `story_arcs_en` 9개) — R104 keyword×storyArc. 사용자가 재미없다고 판단.
 - 다음 세션 = 사용자가 스토리를 하나씩 직접 만든다. main Claude 는 현재 9 arc 를 보여주고, 사용자 구술/지시를 받아 `past_life_pool.json` 에 반영 + `past_life_service` 정합 + 영어판. **사용자 주도 — Claude 가 멋대로 창작 X, 사용자 스토리를 받아 적고 다듬는 역할.**
+
+### ⭐ 큰 거 ③ — 내 사주 큰그림+17카테고리+오늘탭 전부 my_saju_v5 hero 스타일로 재작성 (KO+EN)
+사용자 verbatim: "이 부분처럼 나머지 내 사주도 고쳐줘. 내 사주 큰그림, 초년운~재테크비법까지 나랑 잘 안 맞는 느낌. 사진처럼 — 신금은 잘 안 구부러져서 힘들어도 티를 안 낸다 — 이렇게 알기 쉽게 해석한 것처럼 바꿔줘. 오늘 탭도 전부 그런 식으로. 영어 한글 둘 다."
+- **스타일 기준(레퍼런스) = `my_saju_v5` hero** (R106 P3, `lib/services/my_saju_v5_service.dart` + `assets/data/my_saju_v5_pool.json` + `widgets/my_saju_v5_section.dart`). 스크린샷의 "당신을 한 글자로 보면 辛金 — 잘 벼려진 칼이나 보석... 무른 쇳덩이가 아니라 이미 모양이 잡힌 금속이라 기준이 뚜렷하고... 잘 안 휘는 대신 잘 안 구부러져서 힘들어도 티를 안 내고 혼자 너무 오래 버티다 확 터진다" — **실제 사주(일간 오행·일지·십신·격국·용신)를 구체적·비유적·알기 쉬운 말로 풀이.** 추상어 X.
+- **재작성 대상**:
+  - 내 사주 큰그림(LIFE OVERVIEW) = `life_overview_service.dart` `compose`/`composeEn` — anchor 6 조합 essay 를 my_saju_v5 톤으로.
+  - 초년운~재테크 17 카테고리 = `life_paragraph_service.dart` + `assets/data/life_paragraphs.json`(KO 70키) + `kLifeCategoryBodyEnByStem`(EN 일간10×17, R107 신규) — 전부 my_saju_v5 톤으로. R107 #1 이 중복 scaffold 만 제거했고 톤 업그레이드는 아직.
+  - 오늘 탭 전부 = `today_v5_service`/`today_v5_pool.json` + `today_deep_service` + 관련. 오늘 풀이도 같은 톤.
+- KO + EN 둘 다. 거짓말·창작 0(엔진 계산값 기반), v5 voice(단정 금지) 유지하되 **비유·구체성으로 알기 쉽게**. 회귀 가드(5행 골든·R69·R88·R107) 보존.
+- 규모 큼 — my_saju_v5 pool 구조를 다른 영역에도 확장하거나, 각 service 의 anchor 카피를 my_saju_v5 수준으로 재작성. codex QA.
+
+### ⭐ 큰 거 ④ — 알림 하루 여러 번 (오전 사주 / 오후 사주) + vivid 톤
+사용자: "알림 시간을 한 번이 아니라 하루 중 몇 번 할 수 있게. 오전 사주 / 오후 사주 이런 느낌으로. 알림 내용도 ③처럼 알기 쉽게 해석."
+- 현재 `notification_service` = R76 hh:mm picker, **하루 1회**. → 하루 복수 슬롯(오전/오후/저녁 등) 설정 + 각 슬롯별 다른 사주 풀이.
+- 알림 카피도 ③의 my_saju_v5 vivid·accessible 톤 (현재 R106 P2b 미스터리형 + R107 deep — 톤 점검).
+- settings 알림 UI(시간 picker)를 복수 슬롯 지원으로 확장. KO+EN.
 
 ## 차기 후보
 최애의 사주 셀럽 출생일 외부 1차 출처(공식 프로필/소속사) 다양화 — web research 데이터 라운드.
