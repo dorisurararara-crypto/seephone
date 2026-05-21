@@ -303,6 +303,188 @@ class LifeOverviewService {
     return essay;
   }
 
+  // ──────────── R106 P5 — 영어 모드 anchor (English-only 추가, 한국어 schema 불변) ────────────
+  //
+  // 영어 본문은 한국어 essay 와 동일한 anchor 6 구조를 영어 carrier 로 재구성한다.
+  // 별도 1MB JSON 없이 service 안에서 영어 carrier 를 빌드 — 한국어 필드/id 변경 0.
+  // v5 voice: 단정 금지(tends to / can / often), 메타 금지(chart/saju 노출 X),
+  // 자연 구어 영어(번역체·헤드라인체 금지).
+
+  /// 5행 한자 → 영어 자연 라벨.
+  static const Map<String, String> _elEn = {
+    '木': 'wood',
+    '火': 'fire',
+    '土': 'earth',
+    '金': 'metal',
+    '水': 'water',
+  };
+
+  /// Anchor 1 (En) — 일간 형용.
+  static const Map<String, String> _stemPersonaEn = {
+    '갑': 'You tend to move like a tall, upright tree — you set a direction and grow toward it steadily',
+    '을': 'You tend to bend without breaking, like a supple plant that keeps its grip through any weather',
+    '병': 'You tend to light up a room the way midday sun does — warm, open, and easy to be around',
+    '정': 'You tend to look after people with a quiet, candle-like warmth, noticing the small things',
+    '무': 'You tend to feel grounded and dependable, like a wide mountain that does not get rattled easily',
+    '기': 'You tend to support the people near you the way rich soil holds a garden — calm and giving',
+    '경': 'You tend to decide fast and cleanly, with a clear edge once you have made up your mind',
+    '신': 'You tend to have a refined, precise eye, picking up on details others move straight past',
+    '임': 'You tend to read situations from a wide angle, like a broad river that sees the whole landscape',
+    '계': 'You tend to take things in deeply and quietly, the way a spring seeps into everything around it',
+  };
+
+  /// Anchor 2 (En) — 월령 계절.
+  static const Map<String, String> _seasonFlavorEn = {
+    '봄': 'Born under spring energy, you often come alive fastest where something is just beginning or changing',
+    '여름': 'Born under summer warmth, your charm tends to deepen in lively places where people gather',
+    '가을': 'Born under autumn\'s sense of order, you tend to shine wherever scattered things need pulling together',
+    '겨울': 'Born under winter\'s steadiness, you can stay with a deep subject far longer than most people',
+  };
+
+  /// Anchor 3 (En) — 5행 압도/공허 대조.
+  static String _domDefContrastEn(String dominant, String deficit) {
+    final domEn = _elEn[dominant] ?? dominant;
+    final defEn = _elEn[deficit] ?? deficit;
+    final domTone = _dominantToneEn[dominant] ?? 'a clear personal signature comes through';
+    final defTone = _deficitToneEn[deficit] ?? 'it can help to slow down a half-step there';
+    return 'The strongest colour running through you is $domEn, so $domTone. '
+        'The lightest one is $defEn, so $defTone';
+  }
+
+  static const Map<String, String> _dominantToneEn = {
+    '木': 'you tend to have real drive and pick up new challenges easily',
+    '火': 'you can warm up the mood around you faster than most',
+    '土': 'a steady, reassuring presence comes naturally and people feel at ease beside you',
+    '金': 'you tend to decide quickly and do well wherever things need tidying up',
+    '水': 'you tend to adapt comfortably even when the environment keeps shifting',
+  };
+
+  static const Map<String, String> _deficitToneEn = {
+    '木': 'the drive to start something brand new can use a little gathering first',
+    '火': 'open self-expression is worth adding on purpose now and then',
+    '土': 'a sense of being rooted can grow through small daily habits',
+    '金': 'sharp, clean decisions come easier when deadlines are noted in advance',
+    '水': 'adapting to unfamiliar settings feels smoother after a short pause',
+  };
+
+  /// Anchor 4 (En) — 십성 주력.
+  static const Map<String, String> _sipsinFlavorEn = {
+    '비견': 'Your sense of self runs firm, so you tend not to wobble even when others push',
+    '겁재': 'A clear competitive streak means your spark can show more in lively, challenging settings',
+    '식신': 'You have a strong making instinct, so writing, video, or music can be where you shine',
+    '상관': 'Your expression is vivid, so in a field you love you can move a beat faster than your peers',
+    '편재': 'You read opportunity well, so you tend to find your footing fast even where things keep changing',
+    '정재': 'You build trust steadily, so a promise from you tends to carry real weight with friends',
+    '편관': 'You can grow steadier under pressure, so demanding situations often suit you',
+    '정관': 'You shine where principles are kept, so a role built on trust tends to fit you well',
+    '편인': 'You have a strong instinct for digging in alone, so deep subjects can really suit you',
+    '정인': 'Learning and good judgement run deep, so you can pick up new fields faster than most',
+  };
+
+  /// Anchor 5 (En) — 격국 (격국 한국어 key → 영어 carrier).
+  static const Map<String, String> _gyeokgukFlavorEn = {
+    '정관격': 'A clear sense of responsibility means a promise once made tends to be kept to the end',
+    '편관격': 'Where a big call is needed, your judgement can land a beat ahead of others',
+    '정인격': 'You can carry a steady, mentor-like presence, so people often look up to you',
+    '편인격': 'Your intuition tends to be quick, and a way of seeing things others miss is a real strength',
+    '정재격': 'Steady saving suits you, so setting a little aside each month feels natural',
+    '편재격': 'You meet people easily, so new acquaintances tend to warm to you quickly',
+    '식신격': 'A generous, easygoing warmth comes naturally, and people feel relaxed around you',
+    '상관격': 'Creativity runs strong, so your personal colour shows clearly in a field you love',
+    '건록격': 'A strong independent streak means solo work can still turn out well for you',
+    '양인격': 'A firm, decisive nature is a real strength, so you tend to hold your centre even in big moments',
+    '불명': 'Your character does not fold into one type, so the more varied your experience, the more your charm shows',
+  };
+
+  /// Anchor 6 (En) — 인생 phase 마무리.
+  static String _lifePhaseClosingEn(SajuResult saju) {
+    final el = saju.elements;
+    final wf = el.wood + el.fire;
+    final eg = el.earth + el.metal;
+    final w = el.water;
+    if (wf >= eg && wf >= w * 2) {
+      return 'Looking at the big picture, your own colour tends to settle in early. '
+          'If you choose a field you love sooner rather than later and stay true to it, '
+          'you can grow naturally solid as the years go on.';
+    }
+    if (eg >= wf && eg >= w * 2) {
+      return 'Looking at the big picture, your footing tends to grow firmer over time. '
+          'A slow, accumulating arc suits you more than fast results, so it is fine to trust your own pace.';
+    }
+    if (w * 2 > wf && w * 2 > eg) {
+      return 'Looking at the big picture, your charm tends to come alive when you are not tied to one spot. '
+          'Change itself is a strength for you, so new settings, new people, and new fields bring out your colour.';
+    }
+    return 'Looking at the big picture, you can feel steady in any season as long as you stay true to yourself. '
+        'Not leaning too far in one direction is one of your strengths.';
+  }
+
+  /// 사주 → 영어 한 단락 essay (한국어 compose 와 동일 anchor 6 구조).
+  ///
+  /// R106 P5 — 영어 모드 LIFE OVERVIEW 본문. placeholder 제거.
+  static Future<String> composeEn(SajuResult saju, {bool isMale = true}) async {
+    final stemHan = saju.dayPillar.chunGan;
+    final stemKo = _stemHanToKo[stemHan] ?? stemHan;
+    final season = _branchSeason[saju.monthPillar.jiJi] ?? '봄';
+
+    final rows = TenGodsService.tableFor(saju);
+    final freq = <TenGod, int>{};
+    for (final r in rows) {
+      if (r.chunGanGod != null) {
+        freq[r.chunGanGod!] = (freq[r.chunGanGod!] ?? 0) + 1;
+      }
+      if (r.jiJiGod != null) freq[r.jiJiGod!] = (freq[r.jiJiGod!] ?? 0) + 1;
+    }
+    TenGod topGod = TenGod.bigyeon;
+    int topCount = 0;
+    for (final g in TenGod.values) {
+      final c = freq[g] ?? 0;
+      if (c > topCount) {
+        topCount = c;
+        topGod = g;
+      }
+    }
+    final sipsinKey = _sipsinKey[topGod] ?? '비견';
+
+    final gye = GyeokgukService.judge(
+      dayMaster: saju.dayMaster,
+      monthJi: saju.monthPillar.jiJi,
+    );
+    final gyeKey = _gyeokgukKey(gye.name);
+
+    final a1 = _stemPersonaEn[stemKo] ??
+        'You tend to carry a clear personal colour';
+    final a2 = _seasonFlavorEn[season] ?? '';
+    final a3 = _domDefContrastEn(saju.elements.dominant, saju.elements.deficit);
+    final a4 = _sipsinFlavorEn[sipsinKey] ?? '';
+    final a5 = _gyeokgukFlavorEn[gyeKey] ?? _gyeokgukFlavorEn['불명']!;
+    final a6 = _lifePhaseClosingEn(saju);
+    final a7 = isMale
+        ? 'As a man, a steady and warm presence comes naturally to you, so close friends and family '
+            'often find themselves leaning on you.'
+        : 'As a woman, a sharp and caring instinct runs strong, so the people you look after tend to '
+            'feel safe beside you.';
+
+    final parts = [a1, a2, a3, a4, a5, a6, a7]
+        .where((s) => s.trim().isNotEmpty)
+        .map((s) {
+          var t = s.trim();
+          if (!t.endsWith('.') && !t.endsWith('!') && !t.endsWith('?')) {
+            t = '$t.';
+          }
+          return t;
+        })
+        .toList();
+    return parts.join(' ');
+  }
+
+  /// 카테고리 영어 본문 (17 카테고리). life_paragraph_service 의 공용 carrier 사용.
+  static String categoryBodyEn(LifeCategory cat) =>
+      LifeParagraphService.categoryBodyEn(cat);
+
+  /// JSON key → 영어 카테고리 제목 (chip nav + section card 공용).
+  static String categoryTitleEn(String key) => lifeCategoryTitleEn(key);
+
   /// 카테고리 short 라벨 (sprint 5 chip nav UI 호환 — 기존 caller 보존).
   static String categoryLabel(LifeCategory cat) {
     switch (cat) {

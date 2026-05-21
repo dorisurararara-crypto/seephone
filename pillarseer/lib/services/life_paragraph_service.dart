@@ -115,6 +115,93 @@ const Set<LifeCategory> kGenderSplitCategories = {
   LifeCategory.affection,
 };
 
+// ──────────── R106 P5 — 영어 모드 카테고리 본문 (English-only 추가) ────────────
+//
+// life_paragraphs.json 은 한국어 전용(En 필드 0)이라 1MB JSON 을 영어로 복제하지
+// 않고, service 안에서 17 카테고리 영어 carrier 를 보관한다. 한국어 schema/id 불변.
+// v5 voice: 단정 금지(tends to / can / often), 메타 금지(chart/element/stem/branch
+// 까지만 허용 — saju 주체 노출 X), 자연 구어 영어(번역체·헤드라인체 금지).
+
+/// 17 카테고리 영어 본문.
+const Map<LifeCategory, String> kLifeCategoryBodyEn = {
+  LifeCategory.earlyLife:
+      'In your earlier years you tend to take in your surroundings closely before you act, '
+      'and the habits you pick up young can quietly shape the direction you grow toward.',
+  LifeCategory.midLife:
+      'Through your middle years your own pace tends to settle, and both your work and your closer '
+      'relationships can find a steadier rhythm if you let them build rather than rushing them.',
+  LifeCategory.lateLife:
+      'In your later years a calmer, more grounded charm tends to come through, and the experience '
+      'you have gathered can make you someone other people lean on.',
+  LifeCategory.health:
+      'Your energy tends to hold steady when your daily rhythm stays even, so regular sleep and small, '
+      'consistent movement can do more for you than any sudden big effort.',
+  LifeCategory.constitution:
+      'Your body tends to respond well to warmth and steadiness, so gentle, regular routines usually '
+      'suit you better than extremes, and a short pause when you feel stretched can go a long way.',
+  LifeCategory.social:
+      'Out in the wider world you tend to be seen as dependable, and you can shine most in settings '
+      'where people trust you to hold things together.',
+  LifeCategory.socialPersonality:
+      'Within a group you tend to take on the role that keeps everyone steady, and people often turn '
+      'to you when something needs a calm hand.',
+  LifeCategory.personality:
+      'Day to day you tend to be the kind of person friends describe as level and easy to be around, '
+      'and that even temper is quietly one of your strengths.',
+  LifeCategory.innateTendency:
+      'Close to instinct, you tend to reach for steadiness first, and even without thinking about it '
+      'you often look for the dependable path.',
+  LifeCategory.innateCharacter:
+      'At your core you tend to carry a quiet weight that others can rely on, and that grounded nature '
+      'shows up most clearly in how you treat the people close to you.',
+  LifeCategory.loveFate:
+      'When attraction begins for you it tends to build gradually rather than all at once, and you can '
+      'be drawn to people who feel genuine and steady.',
+  LifeCategory.affection:
+      'In a lasting relationship you tend to show care through steadiness and small daily gestures, '
+      'and that consistency can matter more to you than grand moments.',
+  LifeCategory.wealth:
+      'Money tends to come to you through steady, accumulating effort rather than sudden windfalls, '
+      'so a patient long arc usually serves you better than chasing a fast result.',
+  LifeCategory.wealthGather:
+      'Saving suits you when it is regular and low-drama, so setting a fixed amount aside each month '
+      'tends to feel natural and quietly add up.',
+  LifeCategory.wealthLossPrevent:
+      'Money can slip away through impulse or pressure from others, so a short pause before any large '
+      'spend tends to protect you well.',
+  LifeCategory.wealthInvest:
+      'A measured, steady approach to investing tends to suit you more than an aggressive one, so '
+      'building slowly and avoiding sudden big bets usually fits you best.',
+  LifeCategory.conclusionSelf:
+      'Taken all together, you tend to be someone steady and genuine, and being exactly who you are '
+      'is quietly your strongest draw.',
+};
+
+/// 17 카테고리 영어 섹션 제목 (raw key 노출 방지).
+const Map<String, String> kLifeCategoryTitleEn = {
+  'early_life': 'Early Life',
+  'mid_life': 'Middle Years',
+  'late_life': 'Later Years',
+  'health': 'Health',
+  'constitution': 'Constitution',
+  'social': 'Social Life',
+  'social_personality': 'Social Self',
+  'personality': 'Personality',
+  'innate_tendency': 'Innate Tendency',
+  'innate_character': 'Innate Character',
+  'love_fate': 'Romance',
+  'affection': 'Affection',
+  'wealth': 'Wealth',
+  'wealth_gather': 'Saving',
+  'wealth_loss_prevent': 'Guarding Wealth',
+  'wealth_invest': 'Investing',
+  'conclusion_self': 'Who Am I',
+};
+
+/// JSON key → 영어 카테고리 제목.
+String lifeCategoryTitleEn(String key) =>
+    kLifeCategoryTitleEn[key] ?? key.replaceAll('_', ' ');
+
 class LifeParagraphService {
   static const _path = 'assets/data/life_paragraphs.json';
   static Map<String, dynamic>? _cache;
@@ -325,6 +412,15 @@ class LifeParagraphService {
     if (raw.containsKey('M')) return (raw['M'] ?? '').toString();
     return '';
   }
+
+  /// **R106 P5 — 영어 모드 카테고리 본문**.
+  ///
+  /// life_paragraphs.json 한국어 DB 와 별개로, service 내장 영어 carrier
+  /// (`kLifeCategoryBodyEn`) 를 반환한다. 한국어 paragraph 와 동일 17 카테고리 커버.
+  /// 영어 모드 _CategorySectionCard 가 이 method 로 본문을 채운다.
+  static String categoryBodyEn(LifeCategory category) =>
+      kLifeCategoryBodyEn[category] ??
+      kLifeCategoryBodyEn[LifeCategory.personality]!;
 
   /// 일주가 DB 에 있는지.
   static Future<bool> hasDayPillar(String dayPillar) async {

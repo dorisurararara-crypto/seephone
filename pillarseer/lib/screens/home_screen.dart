@@ -28,6 +28,7 @@ import '../widgets/coming_soon_modal.dart';
 import '../widgets/five_day_trend_chart.dart';
 import '../widgets/saju_required_empty.dart';
 import '../widgets/six_axis_radar.dart';
+import '../widgets/today_v5_loader.dart';
 
 /// Aesop Luxury home — 텍스트 위주 magazine editorial.
 /// 그라데이션 X, 카드 그림자 X, 둥근 모서리 X. 모든 강조는 letter-spacing UPPERCASE + 한자 + italic accent.
@@ -60,7 +61,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
     final saju = sajuOrNull;
     final birth = ref.watch(userBirthInfoProvider);
-    final fortune = DailyService().calculate(saju);
+    // R106 P2a-fix #6 — now() 를 한 곳에서 잡아 v5/deep/hero/fortune 에 동일 주입.
+    // midnight edge 에서 위젯별 now() 가 서로 다른 날을 가리키지 않게 한다 (R84 스타일).
+    final now = DateTime.now();
+    final fortune = DailyService().calculate(saju, today: now);
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
@@ -110,8 +114,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _OracleHero(
                 dayPillarChunGan: saju.dayPillar.chunGan,
                 dayEnergy: classifyDayEnergy(fortune.totalScore),
-                ctx: SajuContext.from(saju, today: DateTime.now()),
+                ctx: SajuContext.from(saju, today: now),
               ),
+              // R106 P2a — 오늘의 사주 v5 (오늘의 주제 + 근거 3칩 + 자기검증).
+              // 첫 fold 의 primary 오늘 풀이. selector 신호 0 시 v5 가 총평형 fallback.
+              TodayV5Loader(saju: saju, date: now),
               TodayDeepReadingSection(
                 reading: TodayDeepService.build(
                   userDayStem: saju.dayPillar.chunGan,
@@ -121,7 +128,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   userDeficitEl: saju.elements.deficit,
                   todayPillar: fortune.dayPillar,
                   todayScore: fortune.totalScore,
-                  ctx: SajuContext.from(saju, today: DateTime.now()),
+                  ctx: SajuContext.from(saju, today: now),
                 ),
               ),
               _CategoryGuides(fortune: fortune),
@@ -2317,6 +2324,8 @@ class _DeepDiveSectionState extends State<_DeepDiveSection> {
 
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -2333,7 +2342,11 @@ class _DeepDiveSectionState extends State<_DeepDiveSection> {
             child: Row(
               children: [
                 Text(
-                  _expanded ? '간단히 보기' : '더 깊이 보기 — 사주 풀이',
+                  _expanded
+                      ? (useKo ? '간단히 보기' : 'Show less')
+                      : (useKo
+                          ? '더 깊이 보기 — 사주 풀이'
+                          : 'Go deeper — full reading'),
                   style: GoogleFonts.notoSerifKr(
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
@@ -2360,6 +2373,8 @@ class _DeepDiveSectionState extends State<_DeepDiveSection> {
 class _FullSajuCTA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return InkWell(
       onTap: () => Navigator.of(context).pushNamed('/result'),
       child: Container(
@@ -2372,7 +2387,7 @@ class _FullSajuCTA extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              '내 사주 풀이 전체 보기',
+              useKo ? '내 사주 풀이 전체 보기' : 'See your full reading',
               style: GoogleFonts.notoSerifKr(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,

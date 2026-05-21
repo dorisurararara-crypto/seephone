@@ -88,6 +88,12 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
   Future<void> _share() async {
     final p = _prescription;
     if (p == null) return;
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final shareText = useKo ? p.prescriptionText : p.prescriptionTextEn;
+    final subject = useKo
+        ? '디지털 기운 처방전'
+        : 'Digital Energy Prescription';
     try {
       final boundary =
           _cardKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
@@ -103,8 +109,8 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
           await SharePlus.instance.share(
             ShareParams(
               files: [XFile(file.path)],
-              text: p.prescriptionText,
-              subject: '디지털 기운 처방전',
+              text: shareText,
+              subject: subject,
             ),
           );
           return;
@@ -112,14 +118,18 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
       }
       // 이미지 path 실패 → 텍스트 공유.
       await SharePlus.instance.share(
-        ShareParams(text: p.prescriptionText, subject: '디지털 기운 처방전'),
+        ShareParams(text: shareText, subject: subject),
       );
     } catch (_) {
       // 마지막 fallback — 클립보드 복사 + SnackBar.
-      await Clipboard.setData(ClipboardData(text: p.prescriptionText));
+      await Clipboard.setData(ClipboardData(text: shareText));
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('처방전 텍스트가 복사됐어요.')),
+        SnackBar(
+          content: Text(useKo
+              ? '처방전 텍스트가 복사됐어요.'
+              : 'Prescription text copied.'),
+        ),
       );
     }
   }
@@ -127,6 +137,8 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
   @override
   Widget build(BuildContext context) {
     final me = ref.watch(sajuResultProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
@@ -138,7 +150,7 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          '디지털 기운 처방전 · 藥',
+          useKo ? '디지털 기운 처방전 · 藥' : 'ENERGY PRESCRIPTION · 藥',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,
@@ -153,25 +165,31 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
       body: SafeArea(
         top: false,
         child: me == null
-            ? _emptyState(context)
+            ? _emptyState(context, useKo)
             : _loading
                 ? const Center(child: CircularProgressIndicator())
                 : _prescription == null
-                    ? const Center(child: Text('처방전을 만들지 못했어요. 다시 시도해 주세요.'))
-                    : _body(_prescription!),
+                    ? Center(
+                        child: Text(useKo
+                            ? '처방전을 만들지 못했어요. 다시 시도해 주세요.'
+                            : "Couldn't build a prescription. Please try again."),
+                      )
+                    : _body(_prescription!, useKo),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 
-  Widget _emptyState(BuildContext context) {
+  Widget _emptyState(BuildContext context, bool useKo) {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '내 사주를 먼저 입력해 주세요.',
+            useKo
+                ? '내 사주를 먼저 입력해 주세요.'
+                : 'Enter your birth details first.',
             style: GoogleFonts.notoSerifKr(
               fontSize: 18,
               fontWeight: FontWeight.w400,
@@ -181,20 +199,20 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
           const SizedBox(height: 12),
           TextButton(
             onPressed: () => context.go('/input'),
-            child: const Text('내 사주 입력하기'),
+            child: Text(useKo ? '내 사주 입력하기' : 'Enter birth details'),
           ),
         ],
       ),
     );
   }
 
-  Widget _body(MusicPrescription p) {
+  Widget _body(MusicPrescription p, bool useKo) {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       children: [
         RepaintBoundary(
           key: _cardKey,
-          child: _PrescriptionCard(p: p),
+          child: _PrescriptionCard(p: p, useKo: useKo),
         ),
         const SizedBox(height: 22),
         Row(
@@ -219,7 +237,7 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
                 },
                 icon: const Icon(Icons.refresh, size: 18),
                 label: Text(
-                  '다시 처방 받기',
+                  useKo ? '다시 처방 받기' : 'Get another',
                   style: GoogleFonts.notoSansKr(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -243,7 +261,7 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
                 onPressed: _share,
                 icon: const Icon(Icons.ios_share, size: 18),
                 label: Text(
-                  '공유',
+                  useKo ? '공유' : 'Share',
                   style: GoogleFonts.notoSansKr(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -260,7 +278,8 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
 
 class _PrescriptionCard extends StatelessWidget {
   final MusicPrescription p;
-  const _PrescriptionCard({required this.p});
+  final bool useKo;
+  const _PrescriptionCard({required this.p, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +315,9 @@ class _PrescriptionCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '처방 No. ${_shortHash(p)}',
+                  useKo
+                      ? '처방 No. ${_shortHash(p)}'
+                      : 'Rx No. ${_shortHash(p)}',
                   style: GoogleFonts.inter(
                     fontSize: 10,
                     color: AppColors.taupe,
@@ -308,7 +329,7 @@ class _PrescriptionCard extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            '디지털 기운 처방전',
+            useKo ? '디지털 기운 처방전' : 'Digital Energy Prescription',
             style: GoogleFonts.notoSerifKr(
               fontSize: 22,
               fontWeight: FontWeight.w500,
@@ -318,7 +339,9 @@ class _PrescriptionCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            '오늘 부족한 ${p.elementKo} 기운을 채워줄 곡',
+            useKo
+                ? '오늘 부족한 ${p.elementKo} 기운을 채워줄 곡'
+                : 'A track to top up the ${p.elementEn} energy running light today',
             style: GoogleFonts.notoSerifKr(
               fontSize: 13,
               color: AppColors.taupe,
@@ -328,12 +351,14 @@ class _PrescriptionCard extends StatelessWidget {
           const SizedBox(height: 22),
 
           _Section(
-            label: '처방 항목',
+            label: useKo ? '처방 항목' : 'PRESCRIBED',
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${p.celebNameKo}  —  ${p.songTitleKo}',
+                  useKo
+                      ? '${p.celebNameKo}  —  ${p.songTitleKo}'
+                      : '${p.celebNameEn}  —  ${p.songTitleEn}',
                   style: GoogleFonts.notoSerifKr(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -343,7 +368,9 @@ class _PrescriptionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '아티스트 · ${p.songArtistKo}',
+                  useKo
+                      ? '아티스트 · ${p.songArtistKo}'
+                      : 'Artist · ${p.songArtistEn}',
                   style: GoogleFonts.notoSansKr(
                     fontSize: 12,
                     color: AppColors.inkLight,
@@ -354,9 +381,9 @@ class _PrescriptionCard extends StatelessWidget {
           ),
 
           _Section(
-            label: '효능',
+            label: useKo ? '효능' : 'EFFECT',
             child: Text(
-              p.effectKo,
+              useKo ? p.effectKo : p.effectEn,
               key: const Key('music_pharmacy_effect'),
               style: GoogleFonts.notoSerifKr(
                 fontSize: 14,
@@ -367,9 +394,9 @@ class _PrescriptionCard extends StatelessWidget {
           ),
 
           _Section(
-            label: '부작용',
+            label: useKo ? '부작용' : 'SIDE EFFECT',
             child: Text(
-              p.sideEffectKo,
+              useKo ? p.sideEffectKo : p.sideEffectEn,
               key: const Key('music_pharmacy_side'),
               style: GoogleFonts.notoSerifKr(
                 fontSize: 14,
@@ -380,9 +407,9 @@ class _PrescriptionCard extends StatelessWidget {
           ),
 
           _Section(
-            label: '복용법',
+            label: useKo ? '복용법' : 'DOSAGE',
             child: Text(
-              p.dosageKo,
+              useKo ? p.dosageKo : p.dosageEn,
               key: const Key('music_pharmacy_dosage'),
               style: GoogleFonts.notoSerifKr(
                 fontSize: 14,
@@ -401,7 +428,7 @@ class _PrescriptionCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              p.prescriptionText,
+              useKo ? p.prescriptionText : p.prescriptionTextEn,
               key: const Key('music_pharmacy_body'),
               style: GoogleFonts.notoSerifKr(
                 fontSize: 13,

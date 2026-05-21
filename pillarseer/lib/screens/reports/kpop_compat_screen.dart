@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
+import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
@@ -562,7 +563,7 @@ class _Hero extends StatelessWidget {
           Text(
             useKo
                 ? '내 사주와 가장 잘 맞는 K-POP·한국 셀럽'
-                : 'K-POP and Korean stars matched to your chart',
+                : 'K-POP and Korean stars matched to you',
             style: GoogleFonts.notoSerifKr(
               fontSize: 24,
               fontWeight: FontWeight.w300,
@@ -1363,7 +1364,12 @@ class _StarRow extends StatelessWidget {
       p4 = '';
     }
 
-    return p4.isEmpty ? '$p1\n\n$p2\n\n$p3' : '$p1\n\n$p2\n\n$p3\n\n$p4';
+    // R106 P4a-fix2 — 최애 궁합 verdict 단정·메타는 pool source(상생 흐름 pool /
+    // bandPools / relationVariant / closerVariant)에서 이미 전수 제거됨. 셀럽과의
+    // 실제 사주 관계 anchor(합·충·오행)는 그대로 둔다. soften 은 만약을 위한
+    // deterministic backstop 패스로만 남기고, shortName 토큰 치환도 함께 처리한다.
+    final raw = p4.isEmpty ? '$p1\n\n$p2\n\n$p3' : '$p1\n\n$p2\n\n$p3\n\n$p4';
+    return CompatV5Service.soften(raw, useKo: useKo, shortName: shortName);
   }
 
   // R95 sprint 1 + R100 sprint 2 — 첫 문장 셀럽별 변별 lead (사용자 mandate
@@ -1692,6 +1698,7 @@ class _StarRow extends StatelessWidget {
       return build();
     } else {
       // R100 sprint 2-bis — EN 6 family × 8 skeleton = 48 skeleton total.
+      // R106 P4a — grain 남용 청소 + 메타 노출 제거 (v5 자연 구어 톤).
       String build() {
         final hasBlurb = blurbPhrase.isNotEmpty;
         final hasExtra = blurbExtra.isNotEmpty;
@@ -1702,23 +1709,23 @@ class _StarRow extends StatelessWidget {
               case 0:
                 return hasBlurb
                     ? '$blurbPhrase — that, in one line, is $shortName.'
-                    : '$shortName — ${pillarName.isNotEmpty ? "$pillarName day pillar" : "a single grain of a person"}.';
+                    : '$shortName — ${pillarName.isNotEmpty ? "a $pillarName day pillar" : "a person you can read in a single line"}.';
               case 1:
                 return hasBlurb
                     ? '"$blurbPhrase" — that is the compressed version of $shortName.'
-                    : '$shortName${pillarName.isNotEmpty ? ", a $pillarName grain." : ", a single grain."}';
+                    : '$shortName${pillarName.isNotEmpty ? ", a $pillarName day pillar." : ", in one clear line."}';
               case 2:
                 return hasBlurb
                     ? 'A one-line $shortName — $blurbPhrase.'
-                    : '$shortName, briefly — a $stElNameEn grain.';
+                    : '$shortName, briefly — a $stElNameEn-element type.';
               case 3:
                 return hasBlurb
                     ? '$shortName, the person — $blurbPhrase.'
-                    : '$shortName, ${pillarName.isNotEmpty ? "a $pillarName grain" : "a single grain"}.';
+                    : '$shortName, ${pillarName.isNotEmpty ? "a $pillarName day pillar" : "in one clear line"}.';
               case 4:
                 return hasBlurb
                     ? "$shortName's one-line tag: \"$blurbPhrase\"."
-                    : "$shortName's one-line tag: a $stElNameEn grain.";
+                    : "$shortName's one-line tag: $stElNameEn at the core.";
               case 5:
                 return hasExtra
                     ? '$blurbPhrase. Underneath that lives the part of $shortName that $blurbExtra.'
@@ -1728,11 +1735,11 @@ class _StarRow extends StatelessWidget {
               case 6:
                 return hasBlurb
                     ? 'First impression of $shortName — $blurbPhrase.'
-                    : 'First impression of $shortName — a $stElNameEn grain.';
+                    : 'First impression of $shortName — a $stElNameEn read.';
               default:
                 return hasBlurb
-                    ? '"$blurbPhrase" — that single line covers half of who $shortName is.'
-                    : 'A single line for $shortName — a $stElNameEn grain.';
+                    ? '"$blurbPhrase" — that single line says a lot about $shortName.'
+                    : 'A single line for $shortName — $stElNameEn at the core.';
             }
           case 1:
             // FAM 1 — group/kind context + blurb fragment
@@ -1742,7 +1749,7 @@ class _StarRow extends StatelessWidget {
                     ? 'a face inside the camera'
                     : (star.kind == 'athlete')
                         ? 'an arena figure'
-                        : 'a singular grain';
+                        : 'a one-of-one figure';
             switch (skeletonIdx) {
               case 0:
                 return '$kindLabel $shortName — $blurbPhrase.';
@@ -1752,8 +1759,8 @@ class _StarRow extends StatelessWidget {
                     : '$shortName, a $kindLabel inside which lives $blurbPhrase.';
               case 2:
                 return hasExtra
-                    ? "A $kindLabel's grain — $shortName, $blurbExtra."
-                    : "A $kindLabel's grain — $shortName, $blurbPhrase.";
+                    ? "A $kindLabel's signature — $shortName, $blurbExtra."
+                    : "A $kindLabel's signature — $shortName, $blurbPhrase.";
               case 3:
                 return 'Where $shortName sits is the $kindLabel space — $blurbPhrase.';
               case 4:
@@ -1768,14 +1775,14 @@ class _StarRow extends StatelessWidget {
                 return 'Inside a $kindLabel frame, $shortName carries $blurbPhrase.';
               default:
                 return hasExtra
-                    ? 'Among $kindLabel grains, $shortName holds $blurbExtra.'
-                    : 'Among $kindLabel grains, $shortName holds $blurbPhrase.';
+                    ? 'Among $kindLabel figures, $shortName holds $blurbExtra.'
+                    : 'Among $kindLabel figures, $shortName holds $blurbPhrase.';
             }
           case 2:
             // FAM 2 — day pillar imagery (pillarName has "Water Dog" form)
             final pillarTag = pillarName.isNotEmpty
                 ? pillarName
-                : (pillarKanji.isNotEmpty ? pillarKanji : 'a single grain');
+                : (pillarKanji.isNotEmpty ? pillarKanji : 'a quiet single line');
             final pillarKanjiTag = pillarKanji.isNotEmpty ? pillarKanji : pillarTag;
             switch (skeletonIdx) {
               case 0:
@@ -1787,19 +1794,19 @@ class _StarRow extends StatelessWidget {
               case 2:
                 return 'Read as a pillar, $pillarTag — $shortName stands there with $blurbPhrase.';
               case 3:
-                return 'On top of $pillarTag, the grain $shortName carries is $blurbPhrase.';
+                return 'On top of $pillarTag, what $shortName carries is $blurbPhrase.';
               case 4:
                 return hasExtra
-                    ? 'A $pillarTag grain in person, $shortName — $blurbExtra.'
-                    : 'A $pillarTag grain in person, $shortName — $blurbPhrase.';
+                    ? 'A $pillarTag pillar in person, $shortName — $blurbExtra.'
+                    : 'A $pillarTag pillar in person, $shortName — $blurbPhrase.';
               case 5:
                 return hasExtra
                     ? '$shortName, the person a $pillarTag pillar paints as $blurbExtra.'
                     : '$shortName, the person a $pillarTag pillar paints as $blurbPhrase.';
               case 6:
                 return hasExtra
-                    ? '$pillarKanjiTag pillar, the $pillarTag grain — $shortName starts from $blurbExtra.'
-                    : '$pillarKanjiTag pillar, the $pillarTag grain — $shortName starts from $blurbPhrase.';
+                    ? '$pillarKanjiTag pillar, the $pillarTag type — $shortName starts from $blurbExtra.'
+                    : '$pillarKanjiTag pillar, the $pillarTag type — $shortName starts from $blurbPhrase.';
               default:
                 return hasExtra
                     ? "$shortName: what a $pillarTag pillar shows is $blurbExtra."
@@ -1810,41 +1817,41 @@ class _StarRow extends StatelessWidget {
             switch (skeletonIdx) {
               case 0:
                 return stJiSceneEn.isNotEmpty
-                    ? '$shortName, a $stElNameEn-grain person, fits $stJiSceneEn. $blurbPhrase.'
-                    : '$shortName, a $stElNameEn grain. $blurbPhrase.';
+                    ? '$shortName, a $stElNameEn-element person, fits $stJiSceneEn. $blurbPhrase.'
+                    : '$shortName, a $stElNameEn-element person. $blurbPhrase.';
               case 1:
                 return stJiSceneEn.isNotEmpty
-                    ? "$shortName's seat is $stJiSceneEn — the natural face of a $stElNameEn grain. $blurbPhrase."
-                    : '$shortName, a $stElNameEn grain in person. $blurbPhrase.';
+                    ? "$shortName's seat is $stJiSceneEn — the natural face of $stElNameEn. $blurbPhrase."
+                    : '$shortName, a $stElNameEn-element person through and through. $blurbPhrase.';
               case 2:
                 return stJiSceneEn.isNotEmpty
                     ? '$shortName at their most natural: $stJiSceneEn. $blurbPhrase.'
-                    : '$shortName, the inside of a $stElNameEn grain. $blurbPhrase.';
+                    : '$shortName, $stElNameEn seen from the inside. $blurbPhrase.';
               case 3:
-                return 'Where $stElNameEn grain meets $stJiSceneEn, that is where $shortName stands. $blurbPhrase.';
+                return 'Where $stElNameEn meets $stJiSceneEn, that is where $shortName stands. $blurbPhrase.';
               case 4:
                 return stJiSceneEn.isNotEmpty
                     ? 'Picture $stJiSceneEn — that is where $shortName lives. $blurbPhrase.'
-                    : '$shortName lives inside the $stElNameEn grain. $blurbPhrase.';
+                    : '$shortName lives close to the $stElNameEn element. $blurbPhrase.';
               case 5:
                 return stJiSceneEn.isNotEmpty
-                    ? '$shortName, the kind of person who suits $stJiSceneEn — a $stElNameEn grain. $blurbPhrase.'
-                    : '$shortName, the kind of person who fits a $stElNameEn grain. $blurbPhrase.';
+                    ? '$shortName, the kind of person who suits $stJiSceneEn — a $stElNameEn read. $blurbPhrase.'
+                    : '$shortName, the kind of person a $stElNameEn read fits. $blurbPhrase.';
               case 6:
                 return hasExtra
-                    ? '$stElNameEn grain + $stJiSceneEn — that is where $shortName carries $blurbExtra.'
-                    : '$stElNameEn grain + $stJiSceneEn — that is where $shortName carries $blurbPhrase.';
+                    ? '$stElNameEn + $stJiSceneEn — that is where $shortName carries $blurbExtra.'
+                    : '$stElNameEn + $stJiSceneEn — that is where $shortName carries $blurbPhrase.';
               default:
                 return stJiSceneEn.isNotEmpty
-                    ? 'One scene to draw $shortName by: $stJiSceneEn — that is the $stElNameEn grain. $blurbPhrase.'
-                    : 'One scene to draw $shortName by: a frame of the $stElNameEn grain. $blurbPhrase.';
+                    ? 'One scene to draw $shortName by: $stJiSceneEn — $stElNameEn at its clearest. $blurbPhrase.'
+                    : 'One scene to draw $shortName by: a frame of the $stElNameEn element. $blurbPhrase.';
             }
           case 4:
             // FAM 4 — generation cue + blurb
             if (genCueEn.isEmpty) {
               return hasBlurb
                   ? '$shortName in one line — $blurbPhrase.'
-                  : '$shortName — a single grain of a person.';
+                  : '$shortName — a person you can read in a single line.';
             }
             switch (skeletonIdx) {
               case 0:
@@ -1852,7 +1859,7 @@ class _StarRow extends StatelessWidget {
               case 1:
                 return "The era $shortName grew in was $genCueEn. $blurbPhrase.";
               case 2:
-                return 'One grain $genCueEn produced, $shortName — $blurbPhrase.';
+                return 'One figure $genCueEn produced, $shortName — $blurbPhrase.';
               case 3:
                 return '$shortName — a name written on a $genCueEn page. $blurbPhrase.';
               case 4:
@@ -1873,16 +1880,16 @@ class _StarRow extends StatelessWidget {
             switch (skeletonIdx) {
               case 0:
                 return stJiSceneEn.isNotEmpty
-                    ? 'Where your $myElNameEn grain meets a $stElNameEn grain stands $shortName — a $stJiSceneEn kind of seat. $blurbPhrase.'
-                    : 'Where your $myElNameEn grain meets a $stElNameEn grain stands $shortName. $blurbPhrase.';
+                    ? 'Where your $myElNameEn element meets $stElNameEn stands $shortName — a $stJiSceneEn kind of seat. $blurbPhrase.'
+                    : 'Where your $myElNameEn element meets $stElNameEn stands $shortName. $blurbPhrase.';
               case 1:
                 return hasExtra
                     ? '$shortName — for you, the figure of a $relCueEn seat carrying $blurbExtra.'
                     : '$shortName — for you, the figure of a $relCueEn seat carrying $blurbPhrase.';
               case 2:
                 return stJiSceneEn.isNotEmpty
-                    ? 'Where your grain meets a $stElNameEn grain, that is $shortName — $stJiSceneEn. $blurbPhrase.'
-                    : 'Where your grain meets a $stElNameEn grain, that is $shortName. $blurbPhrase.';
+                    ? 'Where your element meets $stElNameEn, that is $shortName — $stJiSceneEn. $blurbPhrase.'
+                    : 'Where your element meets $stElNameEn, that is $shortName. $blurbPhrase.';
               case 3:
                 return hasExtra
                     ? '$shortName, your partner in a $relCueEn flow — $blurbExtra.'
@@ -1894,13 +1901,13 @@ class _StarRow extends StatelessWidget {
               case 5:
                 return stJiSceneEn.isNotEmpty
                     ? '$shortName, the $relCueEn seat figure — arriving like $stJiSceneEn. $blurbPhrase.'
-                    : '$shortName, the $relCueEn seat figure — arriving like a $stElNameEn grain. $blurbPhrase.';
+                    : '$shortName, the $relCueEn seat figure — arriving like a $stElNameEn read. $blurbPhrase.';
               case 6:
                 return hasExtra
                     ? 'The face $shortName shows you — a $relCueEn flow carrying $blurbExtra.'
                     : 'The face $shortName shows you — a $relCueEn flow carrying $blurbPhrase.';
               default:
-                return 'Onto your $myElNameEn grain, what $shortName brings is a $stElNameEn one — $blurbPhrase.';
+                return 'Onto your $myElNameEn element, what $shortName brings is $stElNameEn — $blurbPhrase.';
             }
         }
       }
@@ -2002,12 +2009,12 @@ class _StarRow extends StatelessWidget {
           '천간 오합 ($myGan-$stGan)이 정렬된 사이 — 한 번 만나면 인상이 깊게 박혀요. 그 인상에 휘말리지 않도록 너만의 결정 기준을 미리 정해두는 게 안전해요.',
           '천간 합 ($myGan-$stGan) — 둘 사이엔 자연 화학반응이 평균 두 배 자리예요. 두 배 끌리는 만큼 두 배 신중함이 필요한 자리예요.',
           '천간 오합 ($myGan-$stGan) — 짧은 대화에서도 평균 이상의 끌림이 만들어지는 자리예요. 사소한 약속 한 줄을 잘 지키는 게 신뢰의 단위가 돼요.',
-          '천간 합 ($myGan-$stGan) — 첫 인상이 깊게 새겨지는 만큼 헤어졌을 때의 잔상도 길어요. 그래서 시작 단계에서 너의 기준을 또렷이 가지고 가는 게 안전망이에요.',
+          '천간 합 ($myGan-$stGan) — 첫 인상이 깊게 새겨지는 결이라, 시작 단계에서 너의 기준을 또렷이 정해두면 나중에 흔들릴 일이 줄어요.',
           '천간 오합 ($myGan-$stGan)이 걸린 짝 — 분위기에 휘말려 큰 결정을 빠르게 내리기 쉬워요. 24시간 룰(큰 결정은 하루 묵힌다)을 둘만의 약속으로 정해두세요.',
           '천간 합 ($myGan-$stGan) — $shortName 앞에서 평소보다 큰 결심이 더 가볍게 나와요. 가볍게 나온 결심을 가볍게 깨지 않도록 한 번 더 적어보는 습관이 보호예요.',
           '천간 오합 ($myGan-$stGan)이 정렬 — 둘이 같이 있을 때 다른 사람들이 분위기를 먼저 느낄 정도로 호흡이 큰 자리예요. 그 분위기에 둘이 도취되지 않도록 셋 자리(친구 한 명 포함)도 자주 만드세요.',
           '천간 합 ($myGan-$stGan) — 사주 신호 중 가장 직관적인 끌림이라 첫 단계가 빨라요. 빠르게 시작한 만큼 천천히 가는 단계도 일부러 만들어 균형을 잡아두세요.',
-          '천간 오합 ($myGan-$stGan)이 걸린 자리 — 헤어졌다가 다시 만나는 사이클이 평균보다 잘 일어나요. 한 번 끝낸 결정은 적어도 6개월은 묵히는 둘만의 룰이 도움돼요.',
+          '천간 오합 ($myGan-$stGan)이 걸린 자리 — 한 번 끝낸 결정을 다시 들추고 싶어지기 쉬운 자리예요. 큰 결정은 한 번 정하면 적어도 6개월은 묵혀보는 둘만의 룰을 두면 흔들림이 줄어요.',
           '천간 합 ($myGan-$stGan) — 표현이 적은 자리에서도 의미가 깊게 통하는 자리예요. 다만 같은 침묵이 다른 의미일 때가 있으니, 정기적으로 말로 확인하는 시간을 잡아두세요.',
           '천간 오합 ($myGan-$stGan) — 둘 사이 정서적 점화가 빠른 자리예요. $shortName과 너의 감정 강도가 외부 친구들 보기엔 평균 이상이라, 친구 말 한 마디로 흔들리지 않는 합의가 필요해요.',
           '천간 합 ($myGan-$stGan)이 정렬된 짝 — 한 사람의 변화가 다른 한 사람한테 즉시 전달되는 자리예요. 좋은 변화는 즉시 칭찬으로, 어려운 변화는 한 박자 뒤에 말로 풀어보세요.',
@@ -2059,7 +2066,7 @@ class _StarRow extends StatelessWidget {
       }
       if (jiClash) {
         final pool = [
-          '지지 충 ($myJi-$stJi)이 걸려 큰 결정·이사·여행·돈 자리에서 의견이 자주 엇갈려요. 너의 $mySceneKo${withWith(mySceneKo)} $shortName의 $stSceneKo${withSubj(stSceneKo)} 정반대 시간대라, 미리 말로 룰을 정해두면 부딪힘이 줄어요.',
+          '지지 충 ($myJi-$stJi)이 걸려 큰 결정·이사·여행·돈 자리에서 의견이 엇갈리기 쉬워요. 너의 $mySceneKo${withWith(mySceneKo)} $shortName의 $stSceneKo${withSubj(stSceneKo)} 정반대 시간대라, 미리 말로 룰을 정해두면 부딪힘이 줄어요.',
           '지지 충 ($myJi-$stJi) — 큰 결정 자리에서 서로의 입장이 정반대로 자주 나와요. 결정 전에 둘만의 룰 한 줄을 미리 정해두는 게 가장 효과적이에요.',
           '충 ($myJi-$stJi)이 걸린 짝 — 일상 톤은 괜찮은데 큰 자리(여행·이사·돈·진로)에서 의견이 갈려요. 갈등 시점에 침묵 대신 말로 풀어내는 룰이 핵심이에요.',
           '지지 충 ($myJi-$stJi) — 너의 $mySceneKo와 $shortName의 $stSceneKo가 같은 자리에서 정반대로 흐를 수 있어요. 일정·예산 같은 구체적 항목은 미리 합의해두세요.',
@@ -2105,50 +2112,50 @@ class _StarRow extends StatelessWidget {
           '천간합·지지합·충·형이 직접 걸려 있지 않아요. 너의 $mySceneKo${withWith(mySceneKo)} $shortName의 $stSceneKo${withSubj(stSceneKo)} 자연스럽게 겹치는 순간이 와야 깊어지는 관계라, 시간이 일하는 인연이에요.',
           '직접적인 합·충·형 신호가 없는 짝이라 자연 발화는 천천히 와요. $shortName과 너 사이의 깊이는 사건이 아니라 시간이 만들어줘요.',
           '큰 합도 큰 충도 없어서 첫 만남부터 평온해요. 평온한 자리는 큰 폭발도 큰 회복도 없으니, 작은 약속·작은 메모가 관계의 진폭이 돼요.',
-          '천간·지지 사이에 직접 걸린 자리가 없어요. 그래서 자연 화학반응보다 의도적 만남이 둘 사이의 깊이를 결정해요.',
+          '천간·지지 사이에 직접 걸린 자리가 없어요. 그래서 저절로 끌리기보다, 의도적으로 챙기는 만남이 깊이를 만들어가기 쉬운 자리예요.',
           '직접 합·충 자리가 없는 짝이라 일상 톤은 잔잔해요. 잔잔함이 권태로 빠지지 않도록 새로운 자극(여행·취미·새 사람)을 정기적으로 합류시키세요.',
           '합·충·형 신호가 직접 걸리지 않은 자리 — $shortName과 너 사이엔 의도적 누적이 가장 큰 자산이에요. 작은 약속을 자주 지켜주는 게 깊이의 단위예요.',
           '직접 anchor 가 없는 짝이라 둘 다 게을러지면 관계가 그대로 멈춰요. 한 명이라도 다음 약속을 잡는 노동을 멈추지 않으면, 그 노동이 관계의 진폭이 돼요.',
           '합·충 없는 자리에선 큰 사건보다 누적이 결정적이에요. $shortName과 너 사이엔 작은 메시지 한 줄·작은 만남 한 번이 평균보다 더 크게 작용해요.',
           '천간·지지 직접 신호가 약한 만큼, 둘 사이엔 강한 끌림도 강한 마찰도 없어요. 그 무게 없음을 자유로 해석하면 어느 친구보다 가볍게 오래 갈 수 있는 관계예요.',
           '합·충 anchor 없는 짝이라 자연 발화는 어렵지만, 인공 발화에 익숙해지면 자연 관계보다 더 정교한 관계로 키울 수 있어요. 의도가 자산인 자리예요.',
-          '직접 걸린 자리가 없어서 둘 다 자기 일에 빠지면 관계가 자연 소멸돼요. 너의 안부 한 줄이 평균보다 더 큰 의미를 가져요.',
+          '직접 걸린 자리가 없어서, 둘 다 자기 일에 빠지면 거리가 그대로 벌어지기 쉬워요. 너의 안부 한 줄이 평균보다 더 크게 작용하는 자리예요.',
           '합·충·형 직접 anchor 가 없는 자리 — $shortName과 너 사이엔 작은 의식(약속·기념일·연락)이 관계의 뼈대를 만들어요.',
           '천간·지지 사이의 직접 신호가 약해서 첫 만남부터 자극이 크지 않아요. 그 잔잔함이 매력이라 인정해주면 오래 가는 친구·파트너 후보예요.',
-          '직접 anchor 0 — 사주가 운명적 끌림 신호를 던지지 않는 자리예요. 운명에 기대지 말고 너의 선택으로 자라는 관계라고 보면 정답이에요.',
-          '합·충 anchor 없이 평행선처럼 흐르는 자리라, 깊이는 시간이 결정해요. 1년 2년 단위로 관계를 점검하는 시야가 정답이에요.',
+          '직접 anchor 0 — 직접 걸린 끌림 신호가 비어 있는 자리예요. 저절로 흘러가게 두기보다 너의 선택으로 만들어 가는 관계라고 보면 잘 맞아요.',
+          '합·충 anchor 없이 평행선처럼 흐르는 자리라, 깊이는 시간이 천천히 쌓아가기 쉬워요. 1년 2년 단위로 길게 점검하는 시야가 잘 맞아요.',
           '직접 걸린 사주 신호가 약한 짝이라 큰 사건이 거의 없어요. 그래서 너희만의 작은 이벤트(이름 같은 카페·정기적인 산책)를 일부러 만드는 게 관계의 색이 돼요.',
-          '천간·지지 직접 합·충이 없는 자리 — $shortName과 너 사이엔 외부 사건이 관계의 색을 결정해요. 같이 다양한 자리에 가보세요.',
+          '천간·지지 직접 합·충이 없는 자리 — $shortName과 너 사이는 외부 사건이 관계의 색을 칠하기 쉬운 결이에요. 같이 다양한 자리에 가보세요.',
           '합·충 신호 없는 짝이라 강한 끌림은 적지만, 그만큼 안전한 자리예요. 친구·동료·신뢰 관계 자산으로 활용하기에 최적이에요.',
           '직접 anchor 가 없는 자리 — $shortName과 너 사이는 자연 발화보다 의도적 점화가 어울려요. 둘만의 정기 약속을 캘린더에 표시해두세요.',
           '천간·지지 합·충 직접 신호 없는 자리, 자연스러운 만남보다 의식적 만남이 자산이에요. $shortName과 너 사이엔 약속을 잡는 사람의 노동이 곧 관계의 자산이에요.',
           '합·충 anchor 0 — 자극이 적은 자리라 친구·동료로는 좋고 연애·동업처럼 거리가 가까워지는 자리는 의도적 관리가 필요해요.',
-          '직접 걸린 자리 없이 잔잔한 짝 — 큰 다툼이 거의 없는 만큼 큰 회복도 어려워요. 작은 응어리를 그날 안에 푸는 룰이 보호장치예요.',
-          '천간합·지지합·충·형 직접 anchor 없음 — $shortName과 너 사이의 색은 외부 자극(여행·새 친구·이벤트)이 결정해요.',
+          '직접 걸린 자리 없이 잔잔한 짝 — 크게 부딪힐 일이 적은 결이라 크게 풀어줄 계기도 잘 안 와요. 작은 응어리를 그날 안에 푸는 룰이 보호장치예요.',
+          '천간합·지지합·충·형 직접 anchor 없음 — $shortName과 너 사이의 색은 외부 자극(여행·새 친구·이벤트)이 칠해주기 쉬운 결이에요.',
           '직접 신호 없는 짝이라 한 사람이라도 거리를 좁히는 의지가 있는 시기에 관계가 자라요. 그 의지를 가진 사람이 관계의 엔진이에요.',
-          '합·충 anchor 없는 자리에선 큰 폭발이 거의 없어요. 그 안정감을 자기 자리로 끌어들이는 사람만이 이 관계의 깊이를 만들 수 있어요.',
-          '직접 anchor 가 없는 만큼 사주에 기댄 운명적 끌림은 약해요. 대신 너희 둘이 의식적으로 만든 추억이 사주를 대신해서 관계를 잡아줘요.',
-          '천간·지지 직접 신호 약함 — 외부 충격(이별·이사·진로 변화) 앞에서는 관계가 흔들리기 쉬워요. 그런 시즌엔 평소보다 두 배 자주 안부를 묻는 게 보호예요.',
+          '합·충 anchor 없는 자리는 크게 터질 일이 적은 결이에요. 그 안정감을 자기 자리로 끌어들이는 사람만이 이 관계의 깊이를 만들 수 있어요.',
+          '직접 anchor 가 없는 만큼 저절로 생기는 끌림은 약해요. 대신 너희 둘이 의식적으로 만든 추억이 둘 사이를 잡아주기 쉬운 자리예요.',
+          '천간·지지 직접 신호 약함 — 큰 변화(이사·진로 같은 외부 사건)가 겹치는 시기엔 둘 사이 거리가 벌어지기 쉬워요. 그런 시기일수록 평소보다 자주 안부를 챙기면 거리가 안 벌어져요.',
           '합·충 anchor 0 — 잔잔한 자리라 흥미는 외부에서 끌어와야 해요. 같이 새 사람·새 장소·새 활동을 시도하는 빈도가 관계의 신선도예요.',
           '직접 사주 신호 없이 평행하게 흐르는 자리 — $shortName과 너의 관계는 1년 단위로 봐야 진가가 보여요. 짧게 보지 말고 길게 가세요.',
           '천간·지지 합·충 직접 anchor 부재 — 자연 화학반응은 약하지만 의도적 신뢰 관계는 평균보다 단단하게 자랄 수 있어요.',
           '합·충 anchor 없는 짝이라 사건이 적어요. 사건이 적은 자리에선 누적이 결정적이니까, 작은 약속을 자주 지키는 게 관계 신용 점수예요.',
-          '직접 anchor 없는 자리에서 $shortName과 너는 의도적 관계의 모범 사례가 될 수 있어요. 운명에 기대지 말고 너희 선택으로 자라는 관계로 봐주세요.',
+          '직접 anchor 없는 자리에서 $shortName과 너는 의도적 관계의 모범 사례가 될 수 있어요. 저절로 흘러가게 두지 말고 너희 선택으로 만들어 가는 관계로 봐주세요.',
           // R100 sprint 4 — 32 → 48. NONE pool top-1 collision (FNV-1a bias) 추가 해소.
           '큰 합·충 없는 짝이라 첫 만남부터 잔잔한 결이에요. 잔잔함을 즐기는 두 사람이라면 길게 갈 자리예요.',
           '직접 anchor 없는 자리 — $shortName과 너 사이엔 깊이가 만들어지는 자리가 따로 있어요. 같이 시간을 보내는 그 자리가 곧 깊이의 단위예요.',
           '큰 자극 없는 자리라 일정 협의가 평이해요. 평이함을 잘 다듬으면 안정적인 친구·파트너로 길게 자리잡아요.',
           '직접 신호 약한 만큼, 둘이 함께 보낸 시간의 길이가 평균보다 더 의미를 가져요. 짧게 자주 보는 게 핵심이에요.',
-          '합·충·형 직접 anchor 없는 짝 — 자연 화학반응 약함, 의도 화학반응 강함. $shortName과 너의 약속 한 줄이 깊이를 결정해요.',
+          '합·충·형 직접 anchor 없는 짝 — 저절로 끌리는 힘은 약하고, 의도적으로 챙기는 힘은 강한 결이에요. $shortName과 너의 약속 한 줄이 깊이를 쌓아가기 쉬워요.',
           '큰 anchor 없는 결이라 평소엔 잔잔하지만 큰 자리(여행·이사·진로)에서 합 보는 노력이 자산이에요.',
-          '직접 신호 부재 — 둘 다 게을러지면 관계 자연 소멸 위험이 있어요. 한 명이라도 안부 잡는 결이 엔진이에요.',
+          '직접 신호 부재 — 둘 다 손을 놓으면 거리가 그대로 벌어지기 쉬워요. 한 명이라도 안부를 챙기는 결이 관계의 엔진이에요.',
           '큰 합·충 없는 자리에선 한 번의 큰 사건보다 매주 한 번의 작은 정성이 큰 의미를 가져요.',
           '직접 anchor 없는 결이라 첫 인상이 평범할 수 있어요. 평범함을 자유로 해석하면 어느 친구보다 가볍게 오래 가요.',
           '신호 없는 자리에서 $shortName과 너는 자연 화학반응보다 의도적 누적이 자산이에요. 약속 한 줄 한 줄이 관계 신용 점수가 돼요.',
           '큰 anchor 부재 — 자극은 외부에서 끌어와야 해요. 새 자리·새 사람·새 활동을 같이 가는 빈도가 관계의 신선도예요.',
           '직접 신호 없는 자리라 둘 사이 깊이는 사주가 정하지 않고 너희가 정해요. 둘만의 정기 약속이 관계의 색이에요.',
-          '큰 합·충 부재 — 자연 끌림 약함, 의도 신뢰 강함. 운명에 기대지 말고 너희 선택으로 길게 자라는 결이에요.',
-          '직접 anchor 없는 결 — $shortName과 너 사이 시간이 외부 사건(이별·이사·진로)에 흔들리기 쉬워요. 그런 시즌엔 평소 두 배 안부가 보호예요.',
+          '큰 합·충 부재 — 자연 끌림 약함, 의도 신뢰 강함. 저절로 흘러가게 두지 말고 너희 선택으로 길게 만들어 가기 좋은 결이에요.',
+          '직접 anchor 없는 결 — 외부 사건(이사·진로 같은 변화)이 겹치면 $shortName과 너 사이 거리가 벌어지기 쉬워요. 그런 시기일수록 평소보다 자주 안부를 챙기면 거리가 안 벌어져요.',
           '큰 자극 없는 자리에선 작은 디테일이 결의 색을 만들어요. 너희만의 작은 습관(이름 같은 카페·정기 산책)이 자산이에요.',
           '합·충·형 직접 anchor 없는 짝 — 자연 발화가 약한 만큼 인공 발화에 능숙해지면 자연 관계보다 단단한 자리로 키울 수 있어요.',
         ];
@@ -2159,61 +2166,61 @@ class _StarRow extends StatelessWidget {
         // R100 sprint 4 — 4 → 16 variants. baseline 의 4-variant slot collision
         // (FNV-1a + 같은 일주 셀럽 다수 → top-1 ≥ 11) 해소.
         final pool = [
-          "Both ${me.day60ji} day pillar — a mirror seat. What $shortName learns surfaces in you soon, and your changes reflect back fast.",
-          "Same ${me.day60ji} day pillar pair — one person's shift looks like the other's shift here. $shortName and you absorb each other's modes fast.",
-          "Twin ${me.day60ji} pillars means decision tone and word choice nearly overlap. To avoid wobbling together, agree to slow one of you on the biggest calls.",
-          "Same ${me.day60ji} pillar — strengths and weak spots live in sync. Recovery seasons are best paced together, not pushed against.",
-          "Mirror pair on ${me.day60ji} — preferred scent, preferred sound, decision speed all touch the same line. Sometimes one of you taking a different pace becomes the balance.",
-          "${me.day60ji} day pillar twin — condition graphs move in similar shapes. On the days $shortName dips, you naturally weigh heavier, so promise a recovery routine in advance.",
-          "Same ${me.day60ji} pair — first meeting reads like seeing someone you've known a long time. Small differences feel bigger because you are this similar, so receive the differences as signal, not blame.",
-          "Twin ${me.day60ji} — in a single line of conversation you both catch the same grain. The parts $shortName trims short you translate automatically, so build a habit of speaking the trimmed part out loud once in a while.",
-          "${me.day60ji} mirror pair — weak spots weaken together. If one of you loses balance, the other consciously turns on outside resources (a friend, a workout, a walk).",
+          "Both ${me.day60ji} day pillar — a mirror seat. What $shortName picks up tends to surface in you before long, and your shifts tend to read back fast.",
+          "Same ${me.day60ji} day pillar pair — one person's shift tends to look like the other's here. $shortName and you tend to pick up each other's modes fast.",
+          "Twin ${me.day60ji} pillars means decision tone and word choice tend to overlap closely. To avoid wobbling together, agree to slow one of you on the biggest calls.",
+          "Same ${me.day60ji} pillar — strengths and weak spots tend to sit in sync. Recovery seasons tend to go better paced together than pushed against.",
+          "Mirror pair on ${me.day60ji} — preferred scent, preferred sound, decision speed all tend to touch the same line. Sometimes one of you taking a different pace becomes the balance.",
+          "${me.day60ji} day pillar twin — your ups and downs tend to move in similar shapes. On the days $shortName dips, the load can land heavier on you, so promise a recovery routine in advance.",
+          "Same ${me.day60ji} pair — a first meeting can read like seeing someone you've known a long time. Small differences can read bigger because you are this similar, so take the differences as signal, not blame.",
+          "Twin ${me.day60ji} — in a single line of conversation you both tend to catch the same meaning. The parts $shortName trims short, you tend to fill in on your own — so build a habit of speaking the trimmed part out loud once in a while.",
+          "${me.day60ji} mirror pair — weak spots tend to soften together. If one of you loses balance, the other turning on outside resources (a friend, a workout, a walk) is the steadying move.",
           "Same ${me.day60ji} day pillar — both of you tend to stall in front of large decisions. If one freezes, the other starting with a small decision is the recovery rule.",
-          "${me.day60ji} day pillar twin — preferred seats, preferred hours, preferred meals all near the same axis. New stimulus runs thin, so once a month go to an unfamiliar place together.",
-          "Same ${me.day60ji} pillar — strengths overlap, so getting absorbed in the same task slows recovery. On big work, agree that one of you steps back half a pace.",
-          "${me.day60ji} pair — conflict and apology both end fast here. Quick repair is your habit, so once in a while linger in the resolution to reach deeper ground.",
-          "Twin ${me.day60ji} — neither of you offers your inner color to others easily, so you both end up postponing first words. Rotate who opens the line each time.",
-          "${me.day60ji} pair — two people with your own pace, so decision speed rarely clashes. Keep your shared decision tempo above outside pressure.",
-          "Same ${me.day60ji} day pillar — alike enough to feel easy, alike enough to feel stuck. A small daily ritual of difference (different book picks, different cafe choice) becomes the air this pair breathes.",
+          "${me.day60ji} day pillar twin — preferred seats, preferred hours, preferred meals all tend to sit near the same axis. New stimulus runs thin, so once a month go to an unfamiliar place together.",
+          "Same ${me.day60ji} pillar — strengths overlap, so getting absorbed in the same task tends to slow recovery. On big work, agree that one of you steps back half a pace.",
+          "${me.day60ji} pair — conflict and apology both tend to end fast here. Quick repair is your habit, so once in a while linger in the resolution to reach deeper ground.",
+          "Twin ${me.day60ji} — neither of you offers your inner color to others easily, so first words tend to get postponed. Rotate who opens the line each time.",
+          "${me.day60ji} pair — two people each with your own pace, so decision speed rarely clashes. Keep your shared decision tempo above outside pressure.",
+          "Same ${me.day60ji} day pillar — alike enough to feel easy, alike enough that it can feel stuck. A small daily ritual of difference (different book picks, different cafe choice) becomes the air this pair breathes.",
         ];
         parts.add(pick('dailySD_E', pool));
       } else if (sameBranch) {
         final pool = [
-          "Shared day branch ($myJi) — life rhythm, season, constitution all align. Your $mySceneEn reaches $shortName naturally.",
+          "Shared day branch ($myJi) — life rhythm, season, and pace tend to align. Your $mySceneEn reaches $shortName naturally.",
           "$myJi branch shared — season, time-of-day, even eating habits tend to match. Weekday paths between $shortName and you cross naturally.",
           "Branch ($myJi) shared — life rhythm runs at the same tempo, so scheduling is easy. Rest patterns between $shortName and you also flow alike.",
           "Same branch ($myJi) means condition spikes hit in the same season. $shortName's pace and yours align in one pitch over time.",
           "Shared $myJi branch — recovery method aligns too, so resting-place suggestions tend to overlap. $shortName and you blend recovery routines effortlessly.",
-          "Branch ($myJi) shared — preferred hours, noise levels, room temperature all near the same axis. Atmosphere adjusts itself when you two are in a room.",
+          "Branch ($myJi) shared — preferred hours, noise levels, room temperature all tend to sit near the same axis. The room tone tends to settle on its own when you two are in it.",
           "Same $myJi branch pair — good weeks in a month run similar; quiet rain settles you both at once. The silence between $shortName and you is in the same key.",
           "Shared $myJi branch — preferred scents, preferred sounds, preferred textures overlap often. Picking small gifts becomes nearly thoughtless here.",
           "Same branch ($myJi) — sleep times and wake times naturally align. Living or working together keeps schedule conflicts low.",
-          "Branch ($myJi) shared — preferred cafes and preferred routes run on the same grain. Weekday walks between $shortName and you head the same direction naturally.",
+          "Branch ($myJi) shared — preferred cafes and preferred routes tend to run on the same wavelength. Weekday walks between $shortName and you head the same direction naturally.",
           "Same $myJi branch — recovery styles after conflict line up. If one of you needs distance, the other not pushing it is the natural move.",
           "$myJi branch pair — both of you find lateness similarly hard, so time agreements between you stay precise on their own.",
           "Same $myJi branch — preferred company-time settings breathe at the same pitch. Introvert mode and extrovert mode flip on at the same hour for the two of you.",
           "Branch ($myJi) shared — small daily choices (where to eat, what route to walk) settle fast. Slow the bigger choices by a deliberate beat for balance.",
-          "Same $myJi branch pair — you both tire in the same season and recover in the same season. The pair-grain is the charm, but plant one outside friend into the schedule during shared low seasons.",
+          "Same $myJi branch pair — you tend to tire in the same season and recover in the same season. That shared rhythm is the charm, but plant one outside friend into the schedule during shared low seasons.",
           "Shared $myJi branch — preferred bedroom temperature and preferred silence-length both align, so sharing space feels natural. The silence-rule between you becomes the color of the bond.",
         ];
         parts.add(pick('dailySB_E', pool));
       }
       if (ganHap) {
         final pool = [
-          "Heavenly stem union ($myGan-$stGan) — magnetic from first sight. The pull is strong enough that one can lose their own color; an agreed pace matters.",
+          "Heavenly stem union ($myGan-$stGan) — a pull that tends to read magnetic early. It is strong enough that one of you can lose their own color, so an agreed pace matters.",
           "Stem union ($myGan-$stGan) — pull is strong from the first beat. With strong pull comes the risk of erasing your own color; protect your pace consciously.",
           "Heavenly stem ($myGan-$stGan) aligned — first impression sticks deep. To avoid being swept by that impression, set your own decision criteria in advance.",
-          "Stem alignment ($myGan-$stGan) — natural chemistry runs about double here. Double pull asks for double care.",
+          "Stem alignment ($myGan-$stGan) — natural chemistry tends to run high here. A strong pull asks for steady care.",
           "Stem union ($myGan-$stGan) — even short exchanges generate above-average pull. Keeping small promises becomes the unit of trust here.",
           "Heavenly stem ($myGan-$stGan) bond — first impressions etch deep, and so do their afterimages once distance comes. Hold your standards visible at the very beginning.",
           "Stem union ($myGan-$stGan) — atmosphere can carry both of you into fast decisions. Set a private 24-hour rule (sleep on the big calls).",
           "Heavenly stem ($myGan-$stGan) — in front of $shortName, larger choices come out lighter than usual. Re-read those choices the next morning before acting.",
           "Stem union ($myGan-$stGan) aligned — the room can feel the breath between you. Build in third-seat moments (one friend in the room) so the pull does not isolate.",
-          "Stem union ($myGan-$stGan) — the most intuitive pull in saju signals. Pair fast-start moments with deliberately slow stretches to keep balance.",
-          "Heavenly stem ($myGan-$stGan) bond — break-and-rejoin cycles tend to spin here. After any ending, sit with it at least six months as a private rule.",
+          "Stem union ($myGan-$stGan) — one of the most intuitive pulls a pairing can carry. Pair fast-start moments with deliberately slow stretches to keep balance.",
+          "Heavenly stem ($myGan-$stGan) bond — a pull this strong can be easy to fall back into. After any ending, sitting with it at least six months is a steadying private rule.",
           "Stem union ($myGan-$stGan) — meaning travels deeper than words. Same silences can mean different things, so schedule regular voice-checks.",
-          "Heavenly stem ($myGan-$stGan) — emotional ignition runs faster than average. Strength of feeling between $shortName and you reads above-average to outside friends, so plant a shared rule against being shaken by one friend's comment.",
-          "Stem union ($myGan-$stGan) aligned pair — changes transmit immediately. Praise the good ones on the spot; voice the harder ones after one beat of pause.",
+          "Heavenly stem ($myGan-$stGan) — emotional ignition tends to run faster than average. The bond can read strong from the outside too, so plant a shared rule against being shaken by one friend's comment.",
+          "Stem union ($myGan-$stGan) — shifts tend to travel between you fast. Praise the good ones on the spot; voice the harder ones after one beat of pause.",
           "Heavenly stem ($myGan-$stGan) — shared time passes faster than measured time. Keep a calendar log so the days stay anchored.",
           "Stem union ($myGan-$stGan) — pull is high enough to dilute self-decision. Reserve one solo decision-window a week to keep your own color.",
         ];
@@ -2224,11 +2231,11 @@ class _StarRow extends StatelessWidget {
           "Six harmony ($myJi-$stJi) — daily breath syncs. Your $mySceneEn and $shortName's $stSceneEn drift into one timeline.",
           "Six harmony ($myJi-$stJi) — weekday paths cross effortlessly. Your $mySceneEn and $stSceneEn fold into the same page.",
           "Hap6 ($myJi-$stJi) pair — time slots, plans, moods align with almost no effort. A two-person routine forms naturally.",
-          "Six harmony ($myJi-$stJi) — your $mySceneEn flows in the same rhythm as $shortName's $stSceneEn. This is the smoothest possible daily branch.",
+          "Six harmony ($myJi-$stJi) — your $mySceneEn tends to flow in the same rhythm as $shortName's $stSceneEn. A smooth-running daily branch pairing.",
           "Hap6 ($myJi-$stJi) — both of you keep time well, so meeting up rarely takes effort. A quiet bridge sits between $mySceneEn and $stSceneEn.",
           "Six harmony ($myJi-$stJi) — being together does not ask either of you to manufacture mood. Silence is not uncomfortable here.",
           "Hap6 ($myJi-$stJi) bond — sudden schedule changes settle quickly. Mismatched plans rarely become arguments in this pair.",
-          "Six harmony ($myJi-$stJi) — meal times, sleep times, walking routes drift together. Living together or working together suits this daily grain.",
+          "Six harmony ($myJi-$stJi) — meal times, sleep times, walking routes tend to drift together. Living together or working together suits this daily rhythm.",
           "Hap6 ($myJi-$stJi) — small breaths align even in a single sigh. The wins here are tiny daily harmonies more than one big union.",
           "Six harmony ($myJi-$stJi) aligned — reaching agreement takes less time than average. Spend the saved time on deeper conversation, not on filler.",
           "Hap6 ($myJi-$stJi) — small daily agreements come easily, so big agreements feel natural too. Schedule periodic time to draw the bigger picture together.",
@@ -2242,7 +2249,7 @@ class _StarRow extends StatelessWidget {
       } else if (jiSamhap) {
         final pool = [
           "Triad partial ($myJi-$stJi) — synergy peaks around shared goals. Your $mySceneEn plus $stSceneEn fits building one project together.",
-          "Triad partial ($myJi-$stJi) — in front of a shared target, synergy rises above average. Better suited to collaborator than to friendship-only.",
+          "Triad partial ($myJi-$stJi) — in front of a shared target, synergy tends to rise above average. It tends to suit a collaborator bond even more than a friendship-only one.",
           "Triad partial ($myJi-$stJi) — coordination flows when there's a big-picture goal. $mySceneEn and $stSceneEn meet inside a new project.",
           "Triad partial ($myJi-$stJi) — your hands and feet sync best in front of a shared big-picture goal. Travel, work, challenge projects all suit this pair.",
           "Triad partial ($myJi-$stJi) — once direction lines up, drive runs above average. Define the larger goal early for efficiency.",
@@ -2250,7 +2257,7 @@ class _StarRow extends StatelessWidget {
           "Triad partial ($myJi-$stJi) bond — once aimed the same way, breath aligns within a single beat. If aim diverges, drive falls together.",
           "Triad partial ($myJi-$stJi) — the brightest harmony with a shared goal. Project mode beats dating mode; cooperation beats socializing.",
           "Triad partial ($myJi-$stJi) — short windows yield big outputs. Short challenges, seasonal projects, travel plans bring out the union.",
-          "Triad partial ($myJi-$stJi) — outside resources gather toward the pair when direction is shared. Friends, venues, advice all flow in naturally.",
+          "Triad partial ($myJi-$stJi) — when direction is shared, outside resources tend to gather toward the pair — friends, venues, and advice can come in more easily.",
           "Triad partial ($myJi-$stJi) bond — pacts you make hold against outside shaking. Casual commitments here can grow into outsized results.",
           "Triad partial ($myJi-$stJi) — one partner's gap is filled by the other without role-talk. Flow forms even without explicit role-splitting.",
           "Triad partial ($myJi-$stJi) — co-events (working, training, traveling) outshine daily routines for this pair. Event-time is the natural habitat.",
@@ -2267,15 +2274,15 @@ class _StarRow extends StatelessWidget {
           "Clash ($myJi-$stJi) — daily tone is fine but big seats (travel, money, career) split opinions. Talk it out instead of going silent.",
           "Branch clash ($myJi-$stJi) — your $mySceneEn and $shortName's $stSceneEn can flow in opposite directions on the same square. Pre-agree concrete items (schedule, budget).",
           "Clash ($myJi-$stJi) — closer distance makes small differences feel larger. Building regular distance is paradoxically what stabilizes this bond.",
-          "Branch clash ($myJi-$stJi) — both of you carry a clear grain, so the same seat can produce opposite answers. A short pact to honor both is the safety net.",
+          "Branch clash ($myJi-$stJi) — both of you carry a clear shape, so the same seat can produce opposite answers. A short pact to honor both is the safety net.",
           "Clash ($myJi-$stJi) — big calls split opposite, so dividing responsibility ahead of time flattens the friction.",
           "Branch clash ($myJi-$stJi) — small everyday differences read as fresh stimulus, but the same shape becomes load in big seats. Bring one outside voice to share the big calls.",
           "Clash ($myJi-$stJi) — being together energizes the pair, so stimulus is plentiful. Keep the stimulus from sliding into conflict with a 24-hour repair routine.",
-          "Branch clash ($myJi-$stJi) — both of you lean toward your own grain in big calls. The protective rule is sleeping on the call one more night.",
+          "Branch clash ($myJi-$stJi) — both of you tend to lean toward your own read in big calls. The protective rule is sleeping on the call one more night.",
           "Clash ($myJi-$stJi) bond — conflict swings wide, but so does recovery. Small kindness after a clash carries above-average meaning.",
           "Branch clash ($myJi-$stJi) — plentiful stimulus suits adventurous settings. New places, new activities, new groups together is the preventive form of harmony.",
           "Clash ($myJi-$stJi) — disagreement in big calls is high, so practicing agreement in small calls is the disproportionate asset here.",
-          "Branch clash ($myJi-$stJi) — the same seat produces different grains, so what you see together is wider than what either of you sees alone. Frame the other grain as a resource, not a threat.",
+          "Branch clash ($myJi-$stJi) — the same seat tends to produce different reads, so what you see together is wider than what either of you sees alone. Frame the other read as a resource, not a threat.",
           "Clash ($myJi-$stJi) — stimulus is high, so if either of you under-rests, conflict risk rises. Negotiating recovery time is the protective rule.",
           "Branch clash ($myJi-$stJi) — friction in big seats softens when you write the decision items down. Written items turn large clashes into small adjustments.",
         ];
@@ -2289,37 +2296,37 @@ class _StarRow extends StatelessWidget {
           "Branch punishment ($myJi-$stJi) — usually good, occasionally tone splits. On low-condition days, postpone heavy conversation by mutual agreement.",
           "Hyeong ($myJi-$stJi) — one word can carry above-average weight. Before the weight becomes pressure, keep a handful of light phrasings ready.",
           "Branch punishment ($myJi-$stJi) — both of you prefer clear phrasing over hedged phrasing, and the clarity sometimes lands as sharpness. Stock one rung of softer vocabulary deliberately.",
-          "Hyeong ($myJi-$stJi) bond — recovery from conflict takes longer than average. Apology fast, reconciliation slow — that is the natural order.",
+          "Hyeong ($myJi-$stJi) bond — recovery from conflict tends to take longer than average. Apology fast, reconciliation slow — that tends to be the natural order.",
           "Branch punishment ($myJi-$stJi) — small wording differences read as large signals here. A kinder phrasing of the same meaning is wealth.",
           "Hyeong ($myJi-$stJi) — both of you sense your own space with clarity, so boundaries can bump. Voice respect for each other's space often.",
           "Branch punishment ($myJi-$stJi) — closer distance accumulates micro-collisions. Periodic distance (solo time, outside friends) is the cleanser.",
-          "Hyeong ($myJi-$stJi) — flash-point sits a bit low. Stocking warm everyday phrasing raises the flash-point so big conflicts rarely ignite.",
+          "Hyeong ($myJi-$stJi) — small sparks can catch a little more easily here. Stocking warm everyday phrasing tends to keep small sparks from growing into big ones.",
           "Branch punishment ($myJi-$stJi) — both of you hold opinions with clarity, so let diversity be the opening rule, not the result of a fight.",
           "Hyeong ($myJi-$stJi) bond — short rubs appear regularly, but big incidents are rare. Solving small rubs within the day is the cumulative asset.",
           "Branch punishment ($myJi-$stJi) — your color stands out together, so the protective view is reading other colors as freshness, not threat.",
           "Hyeong ($myJi-$stJi) — small conflicts arrive on a steady cycle. Reading that cycle on a monthly graph helps the bond stay even.",
-          "Branch punishment ($myJi-$stJi) bond — both of you carry your grain plainly, so the natural posture is recognizing both grains rather than merging them.",
+          "Branch punishment ($myJi-$stJi) bond — both of you carry your own shape plainly, so the natural posture is recognizing both shapes rather than merging them.",
         ];
         parts.add(pick('dailyJHY_E', pool));
       }
       if (parts.isEmpty) {
         final pool = [
-          "No direct stem-branch union or clash. Depth comes only when your $mySceneEn and $shortName's $stSceneEn naturally overlap — time does the work.",
+          "No direct stem-branch union or clash. Depth here tends to build as your $mySceneEn and $shortName's $stSceneEn overlap over time — time does the work.",
           "No direct union/clash signal here, so natural ignition arrives slowly. Depth between $shortName and you is built by time, not by events.",
           "Neither big union nor big clash — first impressions stay calm. Calm seats have no big eruption and no big recovery; small kept promises become amplitude.",
-          "No direct anchor between heavenly stems or earthly branches. Intentional meeting decides depth more than natural chemistry here.",
+          "No direct anchor between heavenly stems or earthly branches. Intentional meeting tends to shape depth more than natural chemistry here.",
           "No direct union/clash present — daily tone stays mellow. Keep mellowness from sliding into boredom by adding regular outside stimulus (travel, hobbies, new faces).",
           "Union/clash/punishment signals don't connect directly — the asset here is deliberate accumulation. Small promises kept often become depth units.",
           "Without direct anchors, mutual laziness freezes the bond. Either of you booking the next plan is itself the amplitude of this relationship.",
           "In no-anchor seats accumulation outranks events. Between $shortName and you, one line in a small message carries more weight than average.",
-          "Direct stem-branch signal is faint, so there's neither strong pull nor heavy friction here. Read the lack of weight as freedom and the bond outlasts many fated ones.",
+          "Direct stem-branch signal is faint, so there's neither strong pull nor heavy friction here. Read the lack of weight as freedom — a bond that can run long when you tend it.",
           "Without union/clash anchors, natural ignition is rare; but once you both adapt to intentional ignition, the bond can become more precise than natural pairs.",
           "Direct anchor missing, so the bond pauses if both sink into solo work. One check-in line from you carries more weight than usual.",
           "No direct union/clash/punishment anchor — small rituals (meetings, anniversaries, replies) form the skeleton between $shortName and you.",
           "Direct signal between stem and branch is weak; first impressions don't carry strong stimulus. Acknowledging that calm as charm produces a long-haul friend or partner.",
-          "Zero direct anchors — the chart doesn't throw fated-pull signals here. Don't rely on fate; this is a bond that grows by your choices.",
+          "Zero direct anchors — no direct pull signals here. Rather than leaving it to drift, treat this as a bond grown by your choices.",
           "Union/clash anchors absent, energies parallel — depth is on the clock. Annual reviews of the bond's depth are the right lens.",
-          "Direct saju signal is faint between $shortName and you, so big events are rare. Crafting your own tiny events (a named café, a regular walk) becomes the bond's color.",
+          "Direct anchor signal is faint between $shortName and you, so big events are rare. Crafting your own tiny events (a named café, a regular walk) becomes the bond's color.",
           "No direct union/clash between stems and branches — outside events decide the color of the bond between $shortName and you. Visit different settings together.",
           "Without union/clash signals strong pull is rare, but so is risk. Optimal as a friend, colleague, trust-relationship asset.",
           "Direct anchor missing — intentional ignition fits this seat better than spontaneous combustion. Mark a recurring date on the shared calendar.",
@@ -2329,10 +2336,10 @@ class _StarRow extends StatelessWidget {
           "Heavenly stem/branch union/clash/punishment all absent — outside stimulus (travel, new friends, events) defines the color between $shortName and you.",
           "Direct signal absent — the bond grows in seasons when at least one person actively closes the distance. That person is the engine of the relationship.",
           "Without union/clash anchors, big eruptions are rare. Only the person who claims the calm as their seat builds depth in this kind of bond.",
-          "No direct anchor means fated-style pull is weak. The memories the two of you build deliberately step in for the chart and hold the bond instead.",
-          "Direct stem/branch signal weak — outside shocks (break-ups, moves, career shifts) destabilize the bond. In those seasons, double your check-in frequency.",
+          "No direct anchor means the spontaneous pull is weak. The memories the two of you build deliberately step in and help hold the bond instead.",
+          "Direct stem/branch signal weak — when big outside changes (moves, career shifts) overlap, the bond is easy to shake. Checking in more often through those stretches keeps the distance from widening.",
           "Zero union/clash anchors — calm seat with little curiosity. Pull curiosity in from outside; frequency of new people, new places, new activities defines freshness.",
-          "Without direct saju signal, parallel flow — the real value of $shortName and you shows only on a year-plus arc. Play long.",
+          "No direct anchor between the two of you, parallel flow — the real value of $shortName and you tends to show on a year-plus arc. Play long.",
           "Stem/branch direct anchor absent — natural chemistry is weak, but intentional trust can grow steadier than average pairs.",
           "Union/clash anchors absent — events are rare. In rare-event seats accumulation decides, so kept small promises become long-term credit.",
           "No direct anchor seat — $shortName and you could be the textbook case of an intentional bond. Don't lean on fate; treat this as a bond grown by choice.",
@@ -2341,16 +2348,16 @@ class _StarRow extends StatelessWidget {
           "No direct anchor — between $shortName and you, the seat where depth forms is separate. Time together in that seat is itself the unit of depth.",
           "Without big stimulus, scheduling stays plain. Polished plainness becomes a steady friend or partner role over the long arc.",
           "Direct signal faint, so the length of time spent together carries above-average meaning. Short and frequent visits hold the key.",
-          "Union, clash, and punishment anchors all absent — natural chemistry weak, intentional chemistry strong. A single promise line between $shortName and you decides depth.",
+          "Union, clash, and punishment anchors all absent — natural chemistry quiet, intentional chemistry strong. A single promise line between $shortName and you tends to shape the depth.",
           "Without a big anchor, daily tone stays mellow, but pre-aligning for big seats (travel, relocation, career) becomes the real asset.",
           "Direct signal absent — if both of you go lazy, the bond drifts toward dormancy. One person keeping check-ins is the engine.",
           "Without big union or clash, one small consistent care weekly outweighs one big rare event.",
-          "Direct anchor absent — first impression may read ordinary. Reading ordinariness as freedom lets this bond outlast many fated ones.",
+          "Direct anchor absent — first impression may read ordinary. Reading ordinariness as freedom lets this bond run long when you tend it.",
           "In no-signal seats, $shortName and you rely on intentional accumulation more than natural chemistry. Each promise line becomes credit on the relationship.",
           "Big anchor missing — stimulus must be pulled in from outside. Frequency of new seats, new people, new activities defines this bond's freshness.",
-          "Direct signal absent — depth between you is not decided by saju, but by the two of you. Regular shared rituals become the bond's color.",
+          "Direct signal absent — depth between you is not fixed in advance; it takes shape from how the two of you show up. Regular shared rituals become the bond's color.",
           "Big union/clash absent — natural pull weak, deliberate trust strong. Don't lean on fate; the bond grows long by your choices.",
-          "Direct anchor missing seat — time between $shortName and you is easy to shake by outside events (break-ups, moves, career shifts). Double-check-in seasons protect the bond.",
+          "Direct anchor missing — time between $shortName and you is easy to shake when big outside changes (moves, career shifts) overlap. Checking in more often through those stretches protects the bond.",
           "Without big stimulus, small details define the color. Your own tiny habits (a named café, a regular walk) become the asset.",
           "Union, clash, and punishment all absent — natural ignition weak, so getting fluent in intentional ignition turns the bond into something stronger than natural pairs.",
         ];
@@ -2403,113 +2410,113 @@ class _StarRow extends StatelessWidget {
       const bandPoolsKo = <List<String>>[
         // 85+
         [
-          '사주가 권하는 인연 — ',
-          '사주 흐름이 적극적으로 밀어주는 자리 — ',
+          '두 사주가 강하게 끌리는 인연 — ',
+          '두 사주의 합 신호가 적극적으로 밀어주는 자리 — ',
           '천간·지지 anchor 가 함께 받쳐주는 합 — ',
           '강한 끌림 신호가 정확히 모인 자리 — ',
-          '사주가 좋은 인연이라고 표시해 둔 자리 — ',
+          '두 사주가 가깝게 묶이는 인연 — ',
           '복합 anchor 가 같이 걸린 진한 흐름 — ',
-          '운명적 끌림 신호가 다중으로 정렬된 자리 — ',
-          '사주 신호가 한 방향으로 정돈된 진한 자리 — ',
+          '강한 끌림 신호가 다중으로 정렬된 자리 — ',
+          '두 사주 신호가 한 방향으로 정돈된 진한 자리 — ',
           '여러 합 신호가 한 페이지에 모인 흐름 — ',
           '강한 anchor 가 줄지어 자리잡은 자리 — ',
           '복수의 끌림 신호가 같은 톤으로 정렬된 자리 — ',
-          '사주가 큰 인연으로 매기는 자리 — ',
+          '두 사주가 크게 묶이는 인연 — ',
           '천간 합과 지지 신호가 동시에 받쳐주는 진한 자리 — ',
           '강하게 묶인 anchor 가 한 자리에 모인 흐름 — ',
-          '사주가 신뢰의 표를 진하게 찍은 자리 — ',
+          '두 사주가 신뢰로 깊이 묶이는 자리 — ',
           '강한 합 신호가 합쳐서 한 페이지를 만든 자리 — ',
         ],
         // 70-84 (32 variants — 가장 흔한 band)
         [
-          '사주가 비교적 우호적으로 보는 흐름 — ',
-          '사주 신호가 부드럽게 우호적인 자리 — ',
+          '두 사주가 비교적 우호적으로 만나는 흐름 — ',
+          '두 사주 신호가 부드럽게 우호적인 자리 — ',
           '안정 anchor 가 한 줄 받쳐주는 흐름 — ',
-          '사주가 살짝 미소 짓는 자리 — ',
+          '두 사주 사이에 잔잔한 호의가 깔린 자리 — ',
           '천간·지지 신호가 잔잔하게 호의적인 자리 — ',
-          '사주가 안정 합으로 등록해 둔 자리 — ',
+          '두 사주가 안정 합으로 만나는 자리 — ',
           '큰 신호 없이 부드러운 호의가 깔린 자리 — ',
           '안정 anchor 가 한 줄 자리잡은 진한 자리 — ',
-          '사주가 무난하게 좋다고 매긴 자리 — ',
+          '두 사주가 무난하게 잘 맞는 자리 — ',
           '잔잔한 호의 신호가 한 톤 안에 모인 자리 — ',
           '천간·지지 anchor 가 부드러운 톤으로 정렬된 자리 — ',
-          '사주가 안정 anchor 한 줄을 표기해 둔 자리 — ',
+          '안정 anchor 한 줄이 받쳐주는 자리 — ',
           '편안한 anchor 가 한 자리에 자리잡은 흐름 — ',
           '큰 합·충 없이 부드러운 친화가 깔린 자리 — ',
-          '사주가 호의로 받아주는 자리 — ',
+          '두 사주가 호의로 만나는 자리 — ',
           '안정 anchor 가 자연스럽게 받쳐주는 자리 — ',
-          '사주 신호가 한쪽으로 살짝 기울어 호의적인 자리 — ',
+          '두 사주 신호가 한쪽으로 살짝 기울어 호의적인 자리 — ',
           '부드러운 호감 신호가 줄지어 정돈된 자리 — ',
           '천간 합·지지 신호가 잔잔히 정렬된 자리 — ',
-          '사주가 무리 없이 좋은 자리로 본 자리 — ',
+          '두 사주가 무리 없이 잘 맞는 자리 — ',
           '안정 anchor 가 일상 톤을 받쳐주는 자리 — ',
           '편안한 합 신호가 자리잡은 자리 — ',
           '큰 자극 없이 호의가 정돈된 자리 — ',
-          '사주가 가볍게 권하는 흐름 — ',
+          '두 사주가 가볍게 끌리는 흐름 — ',
           '잔잔한 호의 anchor 가 자리잡은 흐름 — ',
           '천간·지지 신호가 한 톤 부드럽게 정렬된 자리 — ',
           '편안한 anchor 한 줄이 받쳐주는 자리 — ',
           '큰 합 없이도 자연스러운 호의가 깔린 자리 — ',
-          '사주가 호의로 등록해 둔 자리 — ',
+          '두 사주 사이에 호의가 깔린 자리 — ',
           '안정 anchor 가 일상 톤으로 자리잡은 흐름 — ',
           '천간·지지 신호가 호의 쪽으로 살짝 기운 자리 — ',
           '부드러운 친화 anchor 가 자리잡은 자리 — ',
         ],
         // 55-69
         [
-          '사주가 강하게 권하지도 막지도 않는 흐름 — ',
-          '사주가 중립적으로 본 자리 — ',
+          '강한 끌림도 강한 마찰도 없는 흐름 — ',
+          '두 사주가 중립적으로 만나는 자리 — ',
           '신호가 한쪽으로 강하게 기울지 않은 자리 — ',
           '천간·지지 anchor 가 평행하게 흐르는 자리 — ',
-          '사주가 한 줄로 정리하기 어려운 균형 자리 — ',
+          '한 줄로 정리하기 어려운 균형 자리 — ',
           '큰 호의도 큰 마찰도 없는 잔잔한 자리 — ',
-          '사주가 너희 선택에 맡기는 자리 — ',
+          '결이 너희 선택에 더 달려 있는 자리 — ',
           '천간·지지 신호가 한쪽으로 치우치지 않은 자리 — ',
           '안정도 자극도 어느 한쪽이 강하지 않은 자리 — ',
-          '사주가 둘의 노력에 무게를 두는 자리 — ',
+          '두 사람의 노력이 무게를 더 가지는 자리 — ',
           '신호가 균형 잡힌 가운데 자리 — ',
-          '사주가 한 쪽 답을 주지 않는 균형 자리 — ',
+          '한 쪽으로 답이 안 기우는 균형 자리 — ',
           '천간·지지 anchor 가 양 끝을 잡는 자리 — ',
           '큰 끌림도 큰 거부도 없는 잔잔한 자리 — ',
-          '사주가 너희 의도에 무게를 더 두는 자리 — ',
+          '두 사람의 의도가 무게를 더 가지는 자리 — ',
           '신호 균형 자리 — ',
         ],
         // 40-54
         [
-          '사주가 조심을 권하는 흐름 — ',
-          '사주 신호가 살짝 조심하라고 표시하는 자리 — ',
+          '한 박자 조심해서 다루면 좋은 흐름 — ',
+          '신호가 살짝 조심할 자리를 비추는 흐름 — ',
           '천간·지지 anchor 가 한쪽에 작은 자극을 두는 자리 — ',
-          '사주가 한 박자 늦추라고 권하는 자리 — ',
+          '한 박자 늦춰서 다루면 좋은 자리 — ',
           '잔잔한 마찰 anchor 가 한 줄 보이는 자리 — ',
-          '사주가 신중함을 자산으로 보는 자리 — ',
+          '신중함이 자산이 되기 쉬운 자리 — ',
           '천간·지지 신호가 살짝 어긋난 자리 — ',
-          '사주가 의식적인 절제를 권하는 자리 — ',
+          '의식적인 절제가 도움 되는 자리 — ',
           '큰 충돌은 없지만 마찰 자리가 한 줄 보이는 자리 — ',
-          '사주가 너희 인내에 무게를 두는 자리 — ',
+          '두 사람의 인내가 무게를 가지는 자리 — ',
           '천간·지지 anchor 가 살짝 갈라진 자리 — ',
-          '사주가 한 박자 조심하라고 권하는 자리 — ',
+          '한 박자 조심해서 다루면 좋은 자리 — ',
           '잔잔한 자극 anchor 가 자리잡은 자리 — ',
-          '사주 신호가 살짝 어긋난 채로 흐르는 자리 — ',
+          '신호가 살짝 어긋난 채로 흐르는 자리 — ',
           '큰 합은 없지만 작은 자극이 살아 있는 자리 — ',
-          '사주가 의식적인 거리감을 권하는 자리 — ',
+          '의식적인 거리감이 도움 되는 자리 — ',
         ],
         // <40
         [
-          '사주가 깊이 가까이 가는 걸 조심스럽게 보는 흐름 — ',
+          '깊이 가까이 갈수록 조심해서 다루면 좋은 흐름 — ',
           '천간·지지 anchor 가 큰 자극을 두는 자리 — ',
-          '사주가 강하게 조심을 권하는 자리 — ',
+          '강하게 조심해서 다루면 좋은 자리 — ',
           '큰 충돌 anchor 가 자리잡은 흐름 — ',
-          '사주가 깊은 거리감을 권하는 자리 — ',
+          '깊은 거리감이 도움 되는 자리 — ',
           '신호가 강한 자극 쪽으로 정렬된 자리 — ',
-          '사주가 강한 신중함을 자산으로 두는 자리 — ',
+          '강한 신중함이 자산이 되기 쉬운 자리 — ',
           '천간·지지 신호가 정반대로 정렬된 자리 — ',
-          '사주가 깊은 절제와 거리두기를 권하는 자리 — ',
+          '깊은 절제와 거리두기가 도움 되는 자리 — ',
           '큰 자극 anchor 가 한 줄에 모인 자리 — ',
-          '사주가 직선적 끌림을 막는 자리 — ',
+          '직선적인 끌림이 잘 안 일어나는 자리 — ',
           '천간·지지 anchor 가 강하게 갈라진 자리 — ',
-          '사주 신호가 마찰 쪽으로 정돈된 자리 — ',
+          '신호가 마찰 쪽으로 정돈된 자리 — ',
           '큰 마찰 anchor 가 줄지어 자리잡은 자리 — ',
-          '사주가 한 박자 깊은 거리두기를 권하는 자리 — ',
+          '한 박자 깊은 거리두기가 도움 되는 자리 — ',
           '천간·지지 신호가 강한 거리 쪽으로 정렬된 자리 — ',
         ],
       ];
@@ -2524,30 +2531,30 @@ class _StarRow extends StatelessWidget {
         // line top-1 collision 해소.
         const noAnchorPool = [
           '직접 걸린 큰 자극 없이 무게가 옅은 자리라 너의 시간은 의식적으로 깊이를 만들 때만 자라요.',
-          '직접 anchor 가 없는 만큼 자연 발화는 약하지만, 둘의 의도가 관계의 깊이를 직접 결정해요.',
+          '직접 anchor 가 없는 만큼 저절로 가까워지는 힘은 약해도, 둘이 의도적으로 챙기는 만큼 깊이가 쌓이기 쉬워요.',
           '큰 자극 없는 자리라 작은 약속의 누적이 가장 큰 자산이에요.',
           '직접 신호 없는 자리에서는 의도적 만남이 곧 깊이의 단위가 돼요.',
           '직접 anchor 가 없는 만큼 인공 화학반응(이벤트·여행·새 자리)이 관계의 색이 돼요.',
-          '큰 anchor 없이 잔잔한 자리라 한 명이 약속을 잡는 노동이 관계 진폭을 결정해요.',
+          '큰 anchor 없이 잔잔한 자리라, 한 명이 먼저 약속을 잡는 만큼 관계가 더 살아나기 쉬워요.',
           '직접 걸린 자리 0 — 자연 발화 약함, 의도 발화 강함. 둘의 결정이 곧 관계의 깊이예요.',
           '신호 없는 자리에서는 누적이 결정적이에요. 작은 한 줄·한 메모가 평균보다 두 배 작용해요.',
-          '큰 자극 없는 자리라 운명에 기대지 말고 너희 선택으로 관계를 키워보세요.',
+          '큰 자극 없는 자리라 저절로 흘러가게 두지 말고 너희 선택으로 관계를 가꿔보세요.',
           '직접 anchor 0 — 자유로운 자리. 어느 친구보다 가볍게 오래 갈 수 있는 자리예요.',
           '신호가 약한 만큼 사건보다 누적이 결정적이에요. 작은 메시지가 자산이 돼요.',
           '큰 자극 없는 자리, 의도 관계의 모범 사례가 될 수 있는 자리예요.',
           '직접 anchor 없는 자리에서는 한 사람의 의지가 곧 엔진이 돼요.',
           '큰 합·충 없는 자리라 잔잔한 친구·파트너로 길게 자리잡을 수 있어요.',
-          '신호 없는 만큼 새 자극(여행·새 사람·새 활동)이 관계의 신선도를 결정해요.',
+          '신호 없는 만큼 새 자극(여행·새 사람·새 활동)을 자주 들이면 관계가 더 신선해지기 쉬워요.',
           '직접 자극 없는 자리는 1년·2년 단위로 봐야 진가가 드러나요.',
           '큰 합·충 없는 짝이라 첫 만남부터 잔잔한 결이에요. 잔잔함을 즐길 줄 아는 두 사람이면 길게 가는 자리예요.',
-          '직접 신호 약한 자리라 정기적인 안부 한 줄이 관계의 색을 결정해요.',
+          '직접 신호 약한 자리라 정기적인 안부 한 줄을 챙기면 관계의 색이 또렷해지기 쉬워요.',
           '큰 anchor 부재 — 자연 화학반응 약함, 단 의도 화학반응은 평균보다 단단해요.',
           '신호 없는 만큼 외부 자극(공통 관심사·새 활동·새 사람)이 관계의 산소가 돼요.',
           '직접 자극 없는 자리는 처음엔 평이하지만 누적이 큰 결을 만드는 자리예요.',
-          '큰 합·충 없는 결이라 한 사람의 거리 좁히려는 의지가 관계의 진폭을 결정해요.',
+          '큰 합·충 없는 결이라, 한 사람이 거리를 좁히려 움직이는 만큼 관계가 더 살아나기 쉬워요.',
           '직접 anchor 0 — 자연 발화 약함, 그래서 한 명이라도 정기 약속을 챙기는 결이 자산이에요.',
           '신호 없는 자리라 큰 사건이 적은 만큼 작은 일상 디테일이 관계의 색이 돼요.',
-          '큰 자극 없는 자리에선 사건보다 시간이 깊이를 결정해요. 1년 단위로 길게 보세요.',
+          '큰 자극 없는 자리에선 사건보다 시간이 깊이를 쌓아가기 쉬워요. 1년 단위로 길게 보세요.',
           '직접 anchor 부재 — 자연 발화 약함, 의도 발화 강함, 그래서 관계는 너희 선택으로 자라요.',
           '큰 합·충 없는 결이라 자기 색을 잃을 위험이 적어요. 안정적인 친구·파트너 자리예요.',
           '신호 없는 자리에선 한 사람의 정성이 관계 깊이의 단위가 돼요. 작은 정성을 챙기세요.',
@@ -2571,7 +2578,7 @@ class _StarRow extends StatelessWidget {
           '같이 걸려 있어서 둘의 추억이 평균보다 길게 남아요.',
           '한 페이지에 모여 있어서 너의 시간이 평소보다 더 정돈되게 새겨져요.',
           '자리잡혀 있어서 관계의 무게가 사주 신호로도 단단해요.',
-          '함께 있어서 둘의 일상이 사주 톤으로도 안정돼요.',
+          '함께 있어서 둘의 일상이 사주 신호로도 잔잔하게 받쳐져요.',
           '한 자리에 모여 있어서 두 사람의 시간이 평균 이상으로 진하게 흘러요.',
           '줄지어 자리잡혀 있어서 둘 사이가 사주 신호로도 또렷해요.',
           '한 페이지에 정돈되어 있어서 관계의 깊이가 평소보다 한 단계 진해요.',
@@ -2589,113 +2596,113 @@ class _StarRow extends StatelessWidget {
       const bandPoolsEn = <List<String>>[
         // 85+
         [
-          'A bond saju recommends — ',
-          'A seat the chart actively endorses — ',
+          'A bond the two of you lean toward — ',
+          'A seat you both point at — ',
           'Stems and branches both underwrite the union — ',
           'Strong pull signals align in one spot — ',
-          'A bond the chart bookmarks — ',
+          'A seat where stem-union and branch anchors line up — ',
           'A dense flow with multiple anchors aligned — ',
-          'Fated pull signals multiply-aligned — ',
-          'Chart signals tidy into one direction — ',
+          'Pull anchors multiply-aligned — ',
+          'Anchor signals tidy into one direction — ',
           'Multiple union signals on one page — ',
           'Strong anchors lined up here — ',
           'Pull signals aligned in one tone — ',
-          'A seat the chart rates as deep affinity — ',
+          'A seat where deep-affinity anchors gather — ',
           'Stem union and branch signals reinforce each other — ',
           'Strong anchors gathered in one seat — ',
-          'A seat the chart stamps with trust — ',
+          'A seat where trust-leaning anchors stack up — ',
           'Stacked union signals form a single page — ',
         ],
         // 70-84 — 32 variants
         [
-          'Broadly favorable in the chart — ',
-          'Chart signals lean gently favorable — ',
+          'A broadly favorable meeting between the two of you — ',
+          'Both of you lean gently favorable — ',
           'A steady anchor underwrites the seat — ',
-          'A seat the chart smiles at lightly — ',
+          'A gently favorable seat between the two of you — ',
           'Stems and branches tilt mildly in favor — ',
-          'A seat the chart logs as stable union — ',
+          'The two of you meet on a stable union — ',
           'No big signal, but soft favor flows underneath — ',
           'A steady anchor sits in one row, deep in the seat — ',
-          'A seat the chart marks easy and good — ',
+          'An easy, well-matched seat between the two of you — ',
           'Soft favor signals tone within one band — ',
           'Stems and branches align in a softer tone — ',
           'A steady anchor noted in one line — ',
           'A comfortable anchor sits in one seat — ',
           'Soft affinity flows without big union or clash — ',
-          'A seat the chart receives with goodwill — ',
+          'The two of you meet with quiet goodwill — ',
           'A steady anchor underwrites naturally — ',
-          'Chart signal tilts mildly toward favor — ',
+          'Both of you tilt mildly toward favor — ',
           'Soft affinity signals line up in order — ',
           'Stem union and branch signals settle softly — ',
-          'A seat the chart calls good without friction — ',
+          'A good, frictionless seat between the two of you — ',
           'A steady anchor holds up the everyday tone — ',
           'A comfortable union signal sits here — ',
           'Goodwill settled with no big spike — ',
-          'A flow the chart gently recommends — ',
-          'A soft favor anchor anchored down — ',
+          'A flow the two of you lean toward — ',
+          'A soft favor anchor settled underneath — ',
           'Stem-branch signal aligns one shade softly — ',
           'A comfortable anchor row underwrites — ',
           'Natural goodwill flows without big union — ',
-          'A seat the chart logs with favor — ',
+          'A favorable seat between the two of you — ',
           'A steady anchor in the everyday tone — ',
-          'Chart signal leans one shade toward favor — ',
+          'Both of you lean one shade toward favor — ',
           'A soft affinity anchor settles here — ',
         ],
         // 55-69
         [
-          'Neither pushed nor blocked by the chart — ',
-          'A neutral reading from the chart — ',
+          'No strong pull and no strong friction either — ',
+          'A neutral meeting between the two of you — ',
           'Signals neither tilt strongly one way nor another — ',
           'Stems and branches run parallel here — ',
           'A balanced seat that resists single-line summary — ',
           'No big favor and no big friction — ',
-          'A seat the chart leaves to your choice — ',
+          'A seat that rests more on your choices — ',
           'Stem-branch signal doesn\'t lean strongly — ',
           'Stability and stimulus neither dominate — ',
-          'A seat where the chart weighs your effort — ',
+          'A seat where your effort carries more of the weight — ',
           'A balanced middle seat — ',
-          'A balanced seat where the chart hands no single answer — ',
+          'A balanced seat with no single answer baked in — ',
           'Stems and branches hold both ends — ',
           'No big pull, no big rejection — ',
-          'A seat where the chart weighs your intent more — ',
+          'A seat where your intent carries more of the weight — ',
           'A signal-balanced seat — ',
         ],
         // 40-54
         [
-          'The chart asks for care here — ',
-          'Chart signal marks a soft caution — ',
+          'A seat that rewards a little care — ',
+          'A soft caution shows in the signal — ',
           'Stem-branch anchor places small stimulus on one side — ',
-          'The chart asks for a slower beat — ',
+          'A seat that rewards a slower beat — ',
           'A mild friction anchor sits in one row — ',
-          'A seat where the chart treats prudence as the asset — ',
+          'A seat where prudence tends to be the asset — ',
           'Stem-branch signal tilts slightly off — ',
-          'A seat the chart asks for conscious restraint — ',
+          'A seat where conscious restraint helps — ',
           'No big collision, but one friction row shows — ',
-          'A seat where the chart weighs your patience — ',
+          'A seat where your patience carries weight — ',
           'Stem-branch anchor slightly split — ',
-          'The chart asks for one beat of caution — ',
+          'A seat that rewards one beat of caution — ',
           'A mild stimulus anchor sits in place — ',
-          'Chart signal flows slightly off-axis — ',
+          'The signal flows slightly off-axis — ',
           'No big union, but small stimulus stays alive — ',
-          'A seat the chart asks for conscious distance — ',
+          'A seat where conscious distance helps — ',
         ],
         // <40
         [
-          'The chart is cautious about deep closeness — ',
+          'A seat that rewards care around deep closeness — ',
           'Stem-branch anchor places strong stimulus here — ',
-          'The chart asks for strong caution — ',
+          'A seat that rewards strong caution — ',
           'A big clash anchor sits in this flow — ',
-          'A seat the chart asks for deep distance — ',
+          'A seat where deep distance helps — ',
           'Signals align toward strong stimulus — ',
-          'A seat the chart treats heavy prudence as the asset — ',
+          'A seat where heavy prudence tends to be the asset — ',
           'Stems and branches align in opposite directions — ',
-          'A seat the chart asks for deep restraint and distance — ',
+          'A seat where deep restraint and distance help — ',
           'Big stimulus anchors gathered in one row — ',
-          'A seat the chart blocks straight-line pull — ',
+          'A seat where straight-line pull rarely happens — ',
           'Stem-branch anchor strongly split — ',
-          'Chart signal tidies toward friction — ',
+          'The signal tidies toward friction — ',
           'Big friction anchors lined up — ',
-          'A seat the chart asks for one beat of deep distancing — ',
+          'A seat that rewards one beat of deep distancing — ',
           'Stem-branch signal aligns toward strong distance — ',
         ],
       ];
@@ -2707,16 +2714,16 @@ class _StarRow extends StatelessWidget {
       if (strong + weak == 0) {
         // R100 sprint 4 — 16 → 32 variants. NONE branch top-1 collision 해소.
         final noAnchorPool = [
-          'no direct anchor holds the weight, so time with $shortName grows only when you build depth on purpose.',
-          'no direct anchor means natural ignition is weak, but the intent of the two of you directly decides depth.',
+          'no direct anchor holds the weight, so time with $shortName tends to deepen as you build depth on purpose.',
+          'no direct anchor means natural ignition is quiet, but the intent of the two of you tends to shape the depth most.',
           'in a no-anchor seat, accumulated small promises become the biggest asset.',
           'where direct signals are absent, intentional meetings themselves are the depth unit.',
           "no direct anchor means artificial chemistry (events, travel, new tables) becomes the bond's color.",
           "with no big anchor, the labor of booking the next plan is itself the bond's amplitude.",
-          'zero direct anchors — natural ignition weak, intentional ignition strong; your choices decide depth.',
-          'in no-signal seats accumulation rules; one small line or note carries double the usual weight.',
+          'zero direct anchors — natural ignition quiet, intentional ignition strong; your choices tend to shape the depth.',
+          'in no-signal seats accumulation rules; one small line or note tends to carry real weight.',
           "without big stimulus, don't lean on fate — let your choices grow this bond.",
-          'zero direct anchors mean a free seat — a bond that can outlast many fated pairs.',
+          'zero direct anchors mean a free seat — a bond that can run long when you tend it.',
           'weak signal means accumulation outranks events; tiny messages become the real asset.',
           'no big stimulus here — a textbook case of an intentional bond.',
           "in no-anchor seats, one person's will becomes the engine of the bond.",
@@ -2724,14 +2731,14 @@ class _StarRow extends StatelessWidget {
           "with no signal, outside stimulus (travel, new faces, new activity) defines the bond's freshness.",
           'no direct stimulus means the real value only shows on a 1-2 year arc.',
           'no big union or clash here, so the first meeting reads calm. Two people who can enjoy calm sustain the bond long.',
-          'weak direct signal means a steady check-in line itself decides the color of the bond.',
+          'weak direct signal means a steady check-in line itself colors the bond more than chance does.',
           'no big anchor — natural chemistry is thin, but intentional chemistry can build sturdier than average.',
           "no signal here means outside stimulus (shared hobbies, new activities, new circles) becomes the bond's oxygen.",
-          'no direct stimulus here, so it starts plain but accumulation creates the deeper grain over time.',
-          "no big union or clash means one person's will to close the distance decides the amplitude.",
+          'no direct stimulus here, so it starts plain, but small things added up tend to build the deeper bond over time.',
+          "no big union or clash means one person's will to close the distance carries most of the amplitude.",
           'zero direct anchors — natural ignition weak, so anyone keeping the next plan steady is the asset here.',
           'no signal seat means rare big events, so daily details design the bond color instead.',
-          'no big stimulus seat — events do not decide depth, time does. Read this on a yearly scale.',
+          'no big stimulus seat — depth here tends to come from time more than from events. Read this on a yearly scale.',
           'absent direct anchor — natural ignition weak, deliberate ignition strong; your choices grow this bond.',
           'no big union or clash means losing your own color is unlikely; a steady friend or partner seat.',
           "in no-signal seats, one person's small care becomes the unit of bond depth.",
@@ -2748,22 +2755,22 @@ class _StarRow extends StatelessWidget {
         if (weak > 0) partsList.add('$weak weak');
         final anchorSummary = partsList.join(' / ');
         final anchorTailsEn = [
-          'anchors sit together, so time with $shortName etches in by the chart, not just by feeling.',
-          'anchors stand in place, so the meaning between you records sharper than average.',
-          'anchors lay underneath, so the bond settles one shade deeper than usual.',
-          'anchors are logged here, so your everyday holds a darker line than average.',
-          'anchors hang together, so the memory between you lasts longer than average.',
-          'anchors are gathered on one page, so your time engraves more tidied than average.',
-          'anchors are pinned in place, so the weight of the bond firms up by chart signal too.',
-          'anchors sit together, so your shared everyday stabilizes by chart tone too.',
-          'anchors are gathered in one seat, so your time runs darker than average.',
-          'anchors line up in a row, so the bond reads sharper by chart signal too.',
-          'anchors are tidied onto one page, so the depth lifts one rank over usual.',
-          'anchors stand together, so your time records darker than average.',
-          'anchors overlap, so your everyday tidies above the average.',
-          'anchors underwrite the seat, so your time etches firm by chart tone.',
-          'anchors gather in one tone, so your everyday rises one rank from usual.',
-          'anchors line up in a row, so the bond flows deeper than usual.',
+          'anchors sit together, so time with $shortName tends to register, not just by feeling.',
+          'anchors stand in place, so the meaning between you tends to read sharper than average.',
+          'anchors lay underneath, so the bond tends to settle one shade deeper than usual.',
+          'anchors are logged here, so your everyday tends to hold a deeper line than average.',
+          'anchors hang together, so the memory between you tends to last longer than average.',
+          'anchors are gathered on one page, so your time together tends to register more tidied than average.',
+          'anchors are pinned in place, so the weight of the bond tends to firm up here too.',
+          'anchors sit together, so your shared everyday tends to read steadier here too.',
+          'anchors are gathered in one seat, so your time together tends to run deeper than average.',
+          'anchors line up in a row, so the bond tends to read sharper here too.',
+          'anchors are tidied onto one page, so the depth tends to lift one rank over usual.',
+          'anchors stand together, so your time together tends to register deeper than average.',
+          'anchors overlap, so your everyday tends to tidy above the average.',
+          'anchors underwrite the seat, so your time together tends to register firm here.',
+          'anchors gather in one tone, so your everyday tends to rise one rank from usual.',
+          'anchors line up in a row, so the bond tends to flow deeper than usual.',
         ];
         final idxA = _KpopAnchors.saltedPick('bandEAnchN', '$seed', anchorTailsEn.length);
         anchorLine = '$anchorSummary ${anchorTailsEn[idxA]}';
@@ -3001,7 +3008,7 @@ class _KpopAnchors {
   static String relCueEn(_ElRel rel) {
     switch (rel) {
       case _ElRel.same:
-        return 'same-grain';
+        return 'same-element';
       case _ElRel.iGenerate:
         return 'you-produce';
       case _ElRel.theyGenerate:
@@ -3011,7 +3018,7 @@ class _KpopAnchors {
       case _ElRel.theyOvercome:
         return 'they-shake-you';
       case _ElRel.neutral:
-        return 'parallel-grain';
+        return 'parallel-element';
     }
   }
 
@@ -3055,9 +3062,9 @@ class _KpopAnchors {
     ],
     _ElRel.iGenerate: [
       r'너의 기운이 상대를 살리는 상생 흐름이라, 너의 한 마디·한 행동이 $shortName한테 깊게 닿아요. 상대가 자라는 모습을 보면서 네가 더 단단해지는 관계예요.',
-      r'네가 상대에게 흘려보내는 쪽이라, 평소에는 네가 더 많이 주는 듯해도 시간이 쌓이면 누구도 못 깨는 인연으로 굳어요. 천천히 가는 게 정답인 만남이에요.',
+      r'네가 상대에게 흘려보내는 쪽이라, 평소에는 네가 더 많이 주는 듯해도 시간이 쌓일수록 단단해지기 좋은 자리예요. 천천히 가는 게 잘 맞는 자리예요.',
       r'너의 색이 상대를 키우는 위치라, $shortName이 너 앞에서는 평소보다 더 솔직해져요. 받는 쪽에 익숙해질 때쯤 한 번씩 페이스를 점검하면 균형이 오래 가요.',
-      r'상생 방향이 너 → 상대로 흐르는 흐름이에요. 네가 별생각 없이 한 말도 $shortName한테는 오래 남고, 그 무게를 의식할 때 관계가 더 건강하게 자라요.',
+      r'상생 방향이 너 → 상대로 흐르는 흐름이에요. 네가 별생각 없이 한 말도 $shortName한테는 오래 남기 쉬우니, 그 무게를 의식하면 관계를 건강하게 끌고 가는 데 도움돼요.',
       r'너의 에너지가 $shortName의 약한 자리를 자연스럽게 데워주는 상생 흐름이에요. 네가 채워주는 만큼 상대가 자기 색을 찾아가니까, 결과가 곧 안 보여도 조급하지 말고 계절 단위로 관계를 봐주세요.',
       r'네가 먼저 빛을 보내는 위치라 $shortName이 너 앞에서 평소보다 더 자신감 있게 행동해요. 다만 네가 지치면 둘 다 같이 가라앉을 수 있어서, 너 자신을 충전하는 시간을 따로 비워두는 게 관계의 기본 체력이에요.',
       r'네가 길을 먼저 닦는 입장이라 $shortName이 따라오는 그림이 자연스러워요. 다만 네 페이스만 보고 가다 보면 상대가 자기 호흡을 잃기 쉬우니까, 가끔은 의도적으로 뒤따라가 보는 연습도 관계에 좋은 균형이 돼요.',
@@ -3073,11 +3080,11 @@ class _KpopAnchors {
       r'$shortName한테 영양분을 흘려보내는 위치라, 네가 단순히 옆에 있는 것만으로도 상대의 회복 속도가 빨라져요. 그 무형의 효능을 너 스스로 인정하는 게, 주는 사람의 번아웃을 막아요.',
       r'네가 풍부할수록 $shortName이 풍부해지는 흐름이에요. 그래서 자기 계발·취미·인간관계 같은 너 자신의 풍요로움을 일부러 챙기는 게, 결과적으로 두 사람 다 자라게 만드는 길이에요.',
       r'상생 자리의 능동적 위치라, 갈등 상황에서도 네가 먼저 한 발 물러서는 그림이 만들어지기 쉬워요. 다만 늘 양보만 하면 너도 닳으니까, 너만의 비양보 영역을 두 개쯤은 정해두세요.',
-      r'네 페이스가 $shortName의 성장 속도를 결정해요. 빠르게 끌고 가면 빨리 자라지만 부작용도 나오고, 천천히 가면 깊게 자라요. 둘이 미리 합의한 속도가 맞는 속도예요.',
+      r'네 페이스에 $shortName의 성장 속도가 따라오기 쉬워요. 빠르게 끌고 가면 빨리 자라지만 부작용도 같이 오고, 천천히 가면 깊게 자라요. 둘이 미리 합의한 속도가 맞는 속도예요.',
       r'네 칭찬은 $shortName한테 누구의 칭찬보다 강하게 박혀요. 그래서 평소엔 칭찬을 아끼지 말고, 정말 짚어야 할 지적은 짧고 따뜻한 톤으로 한 번만 던지는 게 효과적이에요.',
       r'너의 작은 호의가 $shortName 입장에선 큰 사건처럼 기록돼요. 부담스러운 게 아니라, 그 만큼 너의 일상이 상대한테 중요하다는 뜻이니까 사소한 표현을 줄이지 마세요.',
       r'네가 영양분을 흘려보내는 만큼, 한 번씩은 $shortName의 회로가 너한테 어떤 색깔의 결과를 돌려주는지 확인해보세요. 그 피드백이 너의 다음 투자 방향을 잡아줘요.',
-      r'상생의 흐름이 너 → $shortName 라는 사실은, 네가 행복할수록 상대도 행복해진다는 신호예요. 그러니 둘의 행복을 위해서라도 너 자신의 행복을 최우선에 두는 게 정답이에요.',
+      r'상생의 흐름이 너 → $shortName 쪽으로 흐르는 자리라, 네 컨디션이 곧 $shortName 자리로도 이어지기 쉬워요. 그러니 둘 사이를 위해서라도 너 자신을 먼저 챙기는 게 좋은 출발점이에요.',
       r'$shortName이 너 앞에서 한 단계씩 단단해지는 모습은, 사실 너의 어떤 면이 비춰진 거울이기도 해요. 너의 미덕이 자라는 만큼 둘 사이가 자라요.',
       r'네가 길잡이 역할로 자연스럽게 자리잡는 위치라, 한 번씩은 의도적으로 모르는 척 따라가 보는 시간이 필요해요. 그 역할 교대가 관계의 입체감을 만들어요.',
       r'주는 쪽인 당신에게 가끔은 $shortName이 작게라도 되돌려주는 순간이 와요. 그 한 줌의 환원을 가볍게 넘기지 말고 분명히 인정해주면, 상대가 받는 사람 모드에서 벗어나는 데 도움이 돼요.',
@@ -3088,7 +3095,7 @@ class _KpopAnchors {
       r'너의 영향이 상대 일상 곳곳에 스며드는 자리라, 작은 농담조차 $shortName한테 오래 남아요. 자기 영향력을 정확히 인지하는 사람만이 이 상생 자리를 균형 있게 끌고 갈 수 있어요.',
     ],
     _ElRel.theyGenerate: [
-      r'상대가 너의 부족한 자리를 자연스럽게 채워주는 상생 흐름이에요. 가까이 있을수록 네가 편해지고, 받는 쪽이라 한 번씩 고마움을 말로 전하면 관계가 한 단계 깊어져요.',
+      r'상대가 너의 부족한 자리를 자연스럽게 채워주기 좋은 상생 흐름이에요. 가까이 있을수록 네가 편해지기 쉽고, 받는 쪽이라 한 번씩 고마움을 말로 전해두면 관계가 받는 쪽으로만 기우는 자리를 줄이기 좋아요.',
       r'너 쪽으로 흘러 들어오는 방향이라 $shortName 옆에 있을 때 너의 에너지가 회복돼요. 받기만 한다는 죄책감 대신, 너만 할 수 있는 방식으로 되돌려주는 연습이 필요해요.',
       r'상대의 기운이 너를 살리는 위치라 어려운 시기에 가장 먼저 찾게 되는 사람이에요. 너무 의존하면 상대가 지칠 수 있어서 받는 쪽에서도 페이스 조절이 필요해요.',
       r'상생 방향이 상대 → 너로 흐르는 흐름이에요. $shortName의 안정감이 너의 흔들림을 잡아주니까, 너도 너만의 방식으로 상대의 약한 자리를 챙겨주는 균형이 답이에요.',
@@ -3110,7 +3117,7 @@ class _KpopAnchors {
       r'$shortName의 결이 너를 살리는 자리라, 어려운 시기일수록 상대를 먼저 찾게 돼요. 너무 매달리지 않으려고 거리두지 말고, 솔직하게 도움을 청하되 회복되면 그만큼 돌려준다는 마음을 늘 가져가세요.',
       r'상대의 자원이 너의 다음 챕터를 만들어주는 자리라, $shortName과 함께한 시기엔 너의 큰 발전이 이뤄지기 쉬워요. 그 결과를 너의 능력으로만 돌리지 말고, 그 시기에 곁에 있어준 상대를 늘 인정하세요.',
       r'네가 부족함을 솔직하게 인정할수록 $shortName이 더 정확하게 도와줄 수 있는 자리예요. 약점을 숨기는 습관이 가장 큰 손해니까, 이 관계 안에서는 평소보다 더 투명하게 살아도 안전해요.',
-      r'$shortName 옆에 있는 시간이 너의 회복 속도를 결정해요. 그래서 의도적으로 옆에 있는 시간을 만드는 것 자체가 자기 관리의 핵심 행동이 돼요.',
+      r'$shortName 옆에 있는 시간만큼 너의 회복 속도가 빨라지기 쉬워요. 그래서 의도적으로 옆에 있는 시간을 만드는 것 자체가 자기 관리의 핵심 행동이 돼요.',
       r'상생 방향이 너 쪽으로 흘러오는 자리지만, 영구적이라고 가정하면 안 돼요. 받는 만큼 너의 회복 속도가 빨라진다는 걸 느낀 시점에서, 정확히 같은 양은 아니라도 너만의 방식으로 흘려보내는 연습을 시작해주세요.',
       r'$shortName의 따뜻함이 너의 추위를 녹여주는 자리예요. 그 따뜻함을 데이터처럼 측정하지 말고, 한 번씩 큰 소리로 인정해주는 표현이 가장 강한 보답이에요.',
       r'네가 받는 입장이라, $shortName이 자기 색을 너무 많이 내어주다가 자기 자신이 옅어질 위험이 있어요. 너의 변화를 짚어주는 사람이 너이듯, 상대의 변화를 짚어주는 사람도 너여야 한다는 걸 잊지 마세요.',
@@ -3125,9 +3132,9 @@ class _KpopAnchors {
       r'너의 기운이 상대를 누르는 상극 흐름이라, 처음엔 네가 주도하고 상대 약점을 정확히 짚어내는 코치 같은 관계예요. 톤이 한 단계만 올라가도 통제처럼 느껴질 수 있으니 의도와 표현의 거리를 늘 의식해야 해요.',
       r'네가 상대를 누르는 방향이라 짧은 한 마디가 깊게 박혀요. $shortName이 너 앞에서는 평소보다 위축될 수도 있어서, 의식적으로 한 박자 부드럽게 가는 연습이 필요해요.',
       r'주도권이 너 쪽으로 자연스럽게 흐르는 흐름이에요. 잘 쓰면 든든한 멘토 관계지만, 잘못 쓰면 일방적인 지시 관계가 돼버려서 상대가 자기 색을 낼 공간을 늘 비워둬야 해요.',
-      r'너의 기운이 상대를 다듬는 위치라 $shortName의 단점이 너 앞에서 더 잘 보여요. 그걸 어떻게 짚느냐가 관계의 미래를 결정해요 — 비판보다는 질문 형식이 잘 통해요.',
+      r'너의 기운이 상대를 다듬는 위치라 $shortName의 단점이 너 앞에서 더 잘 보여요. 그걸 어떻게 짚느냐에 따라 관계 결이 크게 달라지기 쉬워요 — 비판보다는 질문 형식이 잘 통해요.',
       r'네가 $shortName의 흐름을 조이는 위치라, 네가 의식하지 않은 평범한 말 한 줄도 상대한테는 평가처럼 들릴 수 있어요. 칭찬을 의도적으로 두 배 늘리고 지적은 사석에서만 하는 룰만 지켜도 관계 무게가 완전히 달라져요.',
-      r'주도권이 자연스럽게 너 쪽으로 모이는 상극 흐름이에요. 네가 끌고 가는 게 편한 만큼 $shortName이 자기 의견을 꺼낼 타이밍을 잃기 쉬우니까, 결정 전에 "어떻게 생각해?" 한 마디를 의식적으로 끼워 넣어주는 게 정답이에요.',
+      r'주도권이 자연스럽게 너 쪽으로 모이는 상극 흐름이에요. 네가 끌고 가는 게 편한 만큼 $shortName이 자기 의견을 꺼낼 타이밍을 잃기 쉬우니까, 결정 전에 "어떻게 생각해?" 한 마디를 의식적으로 끼워 넣어주면 좋아요.',
       r'너의 기운이 $shortName을 정돈하는 위치라, 평소엔 든든한 형/언니 같은 존재예요. 다만 상대가 너 한 명한테 맞추는 게 익숙해지면 자기 색이 옅어지니까, 가끔은 $shortName의 결정에 그냥 따라가 보는 시간이 필요해요.',
       r'네가 상대를 다듬는 자리에 서 있으니, 너의 정확함이 $shortName한테는 자극이자 부담이 될 수 있어요. 정답을 알려주기 전에 상대가 스스로 도달할 시간을 주는 게, 멘토 관계와 통제 관계를 가르는 결정적 차이예요.',
       r'$shortName 앞에서 너의 단호함은 평소의 두 배로 들려요. 그래서 너의 평소 톤보다 한 단계 부드럽게 발음하는 룰만 지켜도, 같은 말이 코치와 평가자로 정반대로 들릴 수 있어요.',
@@ -3151,7 +3158,7 @@ class _KpopAnchors {
       r'상극 흐름에선 침묵도 무기예요. $shortName한테 침묵으로 불만을 표현하는 습관은 가장 위험한 패턴이니까, 불만은 같은 날 안에 짧게 말로 풀어주는 룰을 정해두세요.',
       r'네 정확함이 너무 빠른 자리라, $shortName이 따라잡기 어려운 순간이 자주 와요. 그럴 땐 너의 정확함을 쉬게 두는 시간도 필요해요. "지금은 그냥 같이 있는 시간" 같은 카드도 적극적으로 쓰세요.',
       r'$shortName의 미숙함을 빠르게 짚는 능력이 코치로 환영받을 수도, 통제자로 거부될 수도 있는 자리예요. 그 차이는 짚는 빈도가 아니라, 짚기 전에 상대의 자기 발견 시간을 얼마나 줬는가에서 갈려요.',
-      r'네가 누르는 자리라, 큰 결정 앞에서는 의식적으로 너의 의견을 마지막에 꺼내는 룰이 정답이에요. 너의 의견이 먼저 나오는 순간 $shortName의 의견은 거의 안 나와요.',
+      r'네가 누르는 자리라, 큰 결정 앞에서는 의식적으로 너의 의견을 마지막에 꺼내는 룰이 잘 통해요. 너의 의견이 먼저 나오면 $shortName의 의견은 잘 안 나오기 쉬워요.',
       r'상극 자리의 너는, 잘 쓰면 $shortName의 평생 코치이지만 잘못 쓰면 평생 콤플렉스의 출처가 돼요. 그 사이의 갈림길은 너의 어조 하나, 너의 인내심 한 박자에 달려 있어요.',
       r'네 결이 상대를 다듬는 자리라, $shortName의 사적 시간(취미·우정·가족)에는 의식적으로 손대지 마세요. 그 영역에서만큼은 너의 평가가 들어가지 않는 안전지대가 있어야 관계 전체가 살아요.',
     ],
@@ -3191,18 +3198,18 @@ class _KpopAnchors {
     ],
     _ElRel.neutral: [
       '오행상 자극도 충돌도 크지 않아 첫인상은 잔잔하고 편안해요. 누군가 적극적으로 신호를 보내지 않으면 자연스럽게 거리가 벌어질 수 있어서, 의식적으로 무게를 만들 때 비로소 깊이가 생기는 관계예요.',
-      '서로 직접 살리지도 누르지도 않는 자리라, 운명적이라기보다 같이 만들어가는 인연에 가까워요. 약속·만남·연락 같은 작은 의식이 관계의 뼈대가 돼요.',
+      '서로 직접 살리지도 누르지도 않는 자리라, 저절로 묶이는 결이라기보다 같이 만들어가는 인연에 가까워요. 약속·만남·연락 같은 작은 의식이 관계의 뼈대가 돼요.',
       '안정적이지만 자극은 적은 흐름이라, "있으면 좋고 없어도 그럭저럭" 으로 끝날 수도 있어요. 한 사람이 먼저 두 발 다가가는 순간 관계가 비로소 자라요.',
-      '서로의 기운이 평행선처럼 흘러서 큰 충돌 없이 오래 갈 수 있는 사이예요. 다만 평행선이라 깊이는 시간이 만들어주는 거니까, 짧게 보지 말고 길게 같이 가는 게 정답이에요.',
+      '서로의 기운이 평행선처럼 흘러서 큰 충돌 없이 오래 가기 좋은 사이예요. 다만 평행선이라 깊이는 시간이 천천히 쌓아주는 거니까, 짧게 보지 말고 길게 같이 가면 좋아요.',
       r'$shortName과 너 사이엔 큰 끌림도 큰 마찰도 없어서 첫 인상이 잔잔하게 지나갈 수 있어요. 평범한 자리에 작은 추억·반복되는 약속을 한 켜씩 쌓아갈 때 비로소 둘만의 무게가 생기는 관계예요.',
       r'오행상 직접 신호가 약한 자리라 자연스레 스쳐 지나가기 쉬운 흐름이에요. 누구 한 명이 먼저 "다음에 또 보자" 를 명확히 약속하지 않으면 인연이 옅어지니까, 의식적인 한 박자가 관계의 시작 신호예요.',
-      '운명적인 끌림보다 "선택해서 만들어 가는" 색이 강한 자리예요. 약속·연락·기념일 같은 작은 의식이 둘만의 뼈대를 만드니까, 자연스럽게 흘러가게 두기보다 의식적으로 한 박자씩 깊이를 더해주세요.',
+      '저절로 생기는 끌림보다 "선택해서 만들어 가는" 색이 강한 자리예요. 약속·연락·기념일 같은 작은 의식이 둘만의 뼈대를 만드니까, 자연스럽게 흘러가게 두기보다 의식적으로 한 박자씩 깊이를 더해주세요.',
       '큰 자극이 없는 만큼 가까워지는 속도가 천천히이고, 한 번 자리잡으면 오래 가는 흐름이에요. 짧은 시간 안에 결과를 보려 하지 말고, 1년·2년 단위로 관계의 두께를 늘려가는 시야가 답이에요.',
-      r'$shortName의 결과 너의 결이 직접 만나지 않고 비껴 가는 자리라, 둘 다 무관심으로 빠지면 관계가 자연 소멸돼요. 의식적인 만남 약속 하나가 관계 전체를 살리는 자리예요.',
+      r'$shortName의 결과 너의 결이 직접 만나지 않고 비껴 가는 자리라, 둘 다 손을 놓으면 거리가 그대로 벌어지기 쉬워요. 의식적인 만남 약속 하나가 관계 전체를 받쳐주는 자리예요.',
       r'서로의 기운이 평행선이라 갈등은 적지만 깊이를 만들 동력도 적어요. 깊이를 원한다면, 너희 둘 다 외부에 의지하지 말고 둘만 갈 수 있는 자리(여행·취미·프로젝트)를 의도적으로 만드세요.',
       r'중립 자리는 처음엔 편하지만, 시간이 지나면 권태로 빠지기 쉬워요. 권태를 풀어주는 가장 좋은 방법은 새로운 공동 목표 하나를 매년 추가하는 습관이에요.',
       r'직접 살리지도 누르지도 않는 자리라, 둘 사이엔 자연 화학반응보다 인공 화학반응이 필요해요. 이벤트·여행·새 친구 합류 같은 외부 자극이 둘만의 화학을 만드는 촉매가 돼요.',
-      r'$shortName 옆에 있으면 마음이 편하지만 가슴이 두근거리지는 않는 자리예요. 그 편안함을 부정하지 말고 친구·동료·신뢰 관계의 기본 자산으로 활용하는 게 정답이에요.',
+      r'$shortName 옆에 있으면 마음이 편하지만 가슴이 두근거리지는 않는 자리예요. 그 편안함을 부정하지 말고 친구·동료·신뢰 관계의 기본 자산으로 활용하면 좋아요.',
       r'오행상 직접 신호가 없는 자리라, 둘 다 게을러지면 관계가 그대로 멈춰요. 한 사람이라도 약속을 잡고 다리를 놓는 노동을 멈추지 않으면, 그 노동량 자체가 관계의 진폭이 돼요.',
       r'중립 흐름은 첫 만남부터 강한 인상보다는 잔잔한 분위기가 더 많아요. 그 잔잔함을 매력으로 발전시키려면, 함께한 작은 순간을 의도적으로 기록·기념하는 습관이 도움돼요.',
       r'$shortName과 너 사이는 외부에서 보기엔 호흡이 좋아 보이지만, 안쪽에선 둘 다 큰 자극이 없다고 느끼기도 해요. 그 외부 평가에 안주하지 말고, 너희만의 비밀스러운 즐거움을 따로 키우세요.',
@@ -3211,17 +3218,17 @@ class _KpopAnchors {
       r'서로 직접 영향을 주지 않는 자리라, 너의 큰 일이 $shortName한테 자동 전달되지 않아요. 큰 일은 의식적으로 공유하는 게, 이 관계의 무게를 키우는 가장 효율적인 방법이에요.',
       r'직접적인 사주 신호가 없는 자리라 자연 발화가 어려운 관계예요. 다만 인공 발화에 익숙해지면, 자연 관계보다 더 정교하고 의도적인 관계로 키울 수 있어요.',
       r'$shortName과 너 사이엔 폭발도 침묵도 적어서, 외부에서 보면 "오래 가는 친구" 모양으로 보여요. 그 모양을 내부의 깊이로 채우려면, 의도적인 깊은 대화 시간을 한 달에 한 번이라도 잡으세요.',
-      r'평행선 자리라 너희 둘만의 색은 외부 사건이 만들어줘요. 같이 새로운 사람을 만나고, 같이 새로운 자리를 가는 빈도가 관계의 색을 결정해요.',
+      r'평행선 자리라 너희 둘만의 색은 외부 사건이 칠해주기 쉬워요. 같이 새로운 사람을 만나고 같이 새로운 자리를 가는 빈도가 늘수록 관계 색이 또렷해져요.',
       r'중립 흐름은 시간을 길게 잡고 보아야 진가가 드러나는 자리예요. 1년 단위로 너희 사이의 깊이가 어떻게 변했는지 점검하는 습관이 관계 보존의 비결이에요.',
       r'$shortName과 너의 관계는 자연 화학반응이 약한 만큼, "의도" 가 가장 큰 자산이에요. 의도적으로 약속하고, 의도적으로 기념하고, 의도적으로 표현하는 자리예요.',
-      r'서로의 결이 다른 결을 직접 자극하지 않는 자리라, 둘 다 자기 일에 빠지면 관계가 자연스레 멀어져요. 정기적인 안부 한 줄이 관계의 가장 큰 의무이자 보호장치예요.',
+      r'서로의 결이 다른 결을 직접 자극하지 않는 자리라, 둘 다 자기 일에 빠지면 거리가 슬슬 벌어지기 쉬워요. 정기적인 안부 한 줄이 관계의 가장 큰 의무이자 보호장치예요.',
       r'중립 자리에선 큰 사건보다 누적이 결정적이에요. 작은 약속·작은 메모·작은 선물 같은 누적이 시간이 지나면 큰 의미로 환산돼요.',
       r'기운이 평행선이라 서로한테 큰 영향이 안 미친다는 건, 너의 큰 변화를 $shortName이 모를 수도 있다는 뜻이에요. 너의 큰 변화는 적극적으로 알리는 게 이 관계의 정직 룰이에요.',
-      r'$shortName과 너 사이엔 큰 다툼이 거의 없지만, 그만큼 큰 회복도 어려워요. 그래서 작은 응어리도 그날 안에 푸는 룰이 큰 응어리 예방의 첫 단추예요.',
+      r'$shortName과 너 사이는 크게 부딪힐 일이 적은 결이라, 그만큼 크게 풀어줄 계기도 잘 안 와요. 그래서 작은 응어리도 그날 안에 푸는 룰이 큰 응어리를 막는 첫 단추예요.',
       r'중립 흐름은 비행기로 치면 안전 운항 모드 같은 상태예요. 안전한 만큼 흥미는 적으니까, 흥미는 외부 컨텐츠·새 장소·새 활동으로 의식적으로 끌어오세요.',
       r'$shortName과 너 사이엔 강한 끌림이 없는 만큼 강한 부담도 없어요. 그 부담 없음을 자유로 해석하면, 어느 친구보다 길게 갈 수 있는 자유로운 관계가 만들어져요.',
       r'중립 자리에선 한 사람이 의식적으로 거리를 좁히지 않으면 둘 다 자기 자리로 돌아가요. 그래서 한 명이라도 "이 사람을 내 사람으로 만들겠다" 는 의지가 있는 시기에 관계가 비로소 자라요.',
-      r'기운이 평행선이라 외부 충격에는 약해요. 큰 사건(이별·이사·진로 변화) 앞에서는 서로의 자리가 멀어지기 쉬우니, 그런 시기엔 평소보다 두 배 자주 안부를 묻는 게 관계 보호예요.',
+      r'기운이 평행선이라 외부 변화가 겹치면 거리가 벌어지기 쉬운 자리예요. 큰 변화(이사·진로 같은 외부 사건)가 겹치는 시기엔 서로의 자리가 멀어지기 쉬우니까, 그런 시기일수록 평소보다 자주 안부를 챙기면 거리가 안 벌어져요.',
     ],
   };
 
@@ -3229,7 +3236,7 @@ class _KpopAnchors {
   static const _relPoolEn = {
     _ElRel.same: [
       r"Same element overall — taste, tone, decision speed align without explaining. The flip side: shared weak spots, so when one dips, the other dips together.",
-      r"Matching energy, so the first conversation already feels familiar. Comfort is high, novelty is low; you'll need to surface new sides of each other on purpose.",
+      r"Matching energy, so the first conversation already feels familiar. Comfort is high, novelty is low; it helps to surface new sides of each other on purpose.",
       r"Similar pattern underneath — silence isn't awkward. Because your weak spots overlap too, big decisions benefit from one outside opinion before you commit.",
       r"Standing on the same element — even the things that annoy you tend to be the same. Small differences can feel larger; naming them keeps the bond healthy.",
       r"Same element base — you read $shortName's mood without asking. The mirror effect runs both ways though, so when one of you wobbles, the other tilts with it. A small recovery ritual helps.",
@@ -3238,62 +3245,62 @@ class _KpopAnchors {
       r"Same energy, so daily conversation tones lock in naturally. Because your paces tie together so easily, scheduling regular solo time for each of you is the secret to a bond that lasts.",
       r"Twin elements means the cadence of small jokes locks in fast. Picks of food, rest mode, even sleep timing tend to match — refresh the loop with outside friends so the routine doesn't go flat.",
       r"You walk one element side by side, so tastes converge over time. Familiarity is the asset; budget for novelty (new book, new route, new face) on a calendar so the bond keeps breathing.",
-      r"Same energy, same decision speed — you'll both arrive at the same call quickly. Because you can also fall into the same blind spot at the same moment, slow the biggest choices by one full day before committing.",
-      r"Standing on one element, your media diet, friend circle and Sunday rhythms naturally overlap. Once a season, choose a context $shortName has never tried — that's how same-element pairs stay interesting.",
-      r"Twin pattern means starting a project together feels obvious. Just remember both of you will hit the same wall at the same time; pre-plan staggered breaks so the whole project doesn't stall.",
-      r"With the same element your field of view narrows together. Run any big decision past one outsider before locking it in — your shared blind spot is the only real risk in this bond.",
+      r"Same energy, same decision speed — the two of you tend to reach the same call quickly. Because you can also fall into the same blind spot at the same moment, slow the biggest choices by one full day before committing.",
+      r"Standing on one element, everyday tastes and weekend rhythms tend to overlap. Once a season, choose a context $shortName has never tried — that's how same-element pairs stay interesting.",
+      r"Twin pattern means starting a project together tends to feel obvious. Just remember both of you can hit the same wall at the same time; pre-plan staggered breaks so the whole project doesn't stall.",
+      r"With the same element your field of view tends to narrow together. Run any big decision past one outsider before locking it in — that shared blind spot tends to be the main thing to watch in this bond.",
       r"Silence flows at the same tone when elements match. That comfort can hide change; once a month, ask $shortName what's new in their head — assumptions age fast in matched pairs.",
-      r"Same-element pairs build inside jokes at double speed. Keep one window open for outside language too — invite a third person into your loop occasionally so the world you share doesn't seal shut.",
+      r"Same-element pairs tend to build inside jokes fast. Keep one window open for outside language too — invite a third person into your loop occasionally so the world you share doesn't seal shut.",
       r"With one element, one mood spreads from you to $shortName fast. A one-line status check before meetings or plans is the cheapest insurance against unnecessary friction.",
       r"Twin elements means twin weak spots exposed at the same time. Identify two external supports (a friend, a habit, a system) in advance — that's how you weather the shared low seasons.",
       r"Same energy is gold for friendship rank one, but in romance or business the closeness needs structure. Pre-assign roles so being too similar doesn't blur both your colors.",
-      r"You and $shortName share a seasonal energy curve. Add one rule: no major decisions when both of you are in a dip, and the other 90% of the time the bond runs more smoothly than any other.",
+      r"You and $shortName tend to share a seasonal energy curve. Add one rule — no major decisions when both of you are in a dip — and the rest of the time the bond tends to run smooth.",
       r"Same element bonds are two mirrors facing each other. Mirrors that get too close stop reflecting the world; schedule deliberate outside stimuli to keep the bond ventilated.",
       r"Sharing one element means sharing one set of weak spots. Pre-decide which outside person or routine you'll lean on when both of you wobble — that's how to avoid a synchronized collapse.",
       r"Twin patterns enable deep first conversations. Don't only chase depth — protect daily small talk too, because matched pairs lose the everyday lightness fastest.",
       r"$shortName's path can feel like your own path here. That harmony is wealth, but keep one or two fork-points clearly yours so the bond stays a pair, not a merge.",
-      r"Same element means details land the same way for both. Don't take that for granted — be the one who names $shortName's micro-changes that only you would notice; that's how shared elements deepen.",
+      r"Same element means details tend to land the same way for both. Don't take that for granted — being the one who names $shortName's micro-changes that only you would notice tends to be how a shared-element bond grows.",
       r"Identical energy means you're drawn to the same trends, the same people, the same content. The shared lane fills quickly — protect each of your solo lanes too.",
-      r"Comfort languages match between same-element pairs. Your one sentence will be the most precise comfort $shortName gets — use that precision often, not just in crises.",
+      r"Comfort languages tend to match between same-element pairs. Your one sentence can land as unusually precise comfort for $shortName — use that precision often, not just in crises.",
       r"Conflict-avoidance patterns also match, which means problems can stack quietly. Pre-agree on a 'pause and talk' signal so both of you don't dodge in the same direction.",
       r"Twin elements decide things faster as a pair than as a trio. The risk is haste; deliberately slow your biggest calls and ask one outside view before locking in.",
       r"When same-element pairs clash, the friction is short and recovery is mirrored. Knowing that cycle prevents short fights from inflating into long ones.",
-      r"Trust builds fast on shared elements. The fast trust earns interest from small kept promises, so treat tiny commitments as the long-term credit score of the bond.",
+      r"Trust tends to build fast on shared elements. That fast trust tends to earn interest from small kept promises, so treating tiny commitments as the bond's long-term credit score helps.",
       r"Same element means the room tone unifies the moment you two arrive. That unified vibe is your strength, but it can read as a closed circle to outsiders — leave a deliberate seat open for new people.",
     ],
     _ElRel.iGenerate: [
-      r"You feed them (producing flow). What you say lands deep with $shortName, and watching them grow steadies you in return.",
-      r"You're the giving side here. Day to day it can feel uneven, but the bond hardens over time into something hard to break. Slow is the right pace.",
-      r"Your color quietly grows theirs, so $shortName tends to be more honest around you than around most people. Once you settle into giving, check your own pace.",
-      r"The producing arrow runs from you to them. Words you toss off stay with $shortName a long time — own that weight and the bond grows healthier.",
-      r"You quietly warm $shortName's weak spots. The change isn't visible day to day; read this bond in seasons, not weeks, and keep going even when the shift looks slow.",
-      r"You give light first, so $shortName carries more confidence near you than alone. Save real recharge time for yourself — your battery is the bond's baseline.",
-      r"You pave the road first, so $shortName following naturally feels right. Watching only your own pace, though, costs them their breath; practicing the reverse — letting them lead sometimes — keeps it balanced.",
-      r"You feed their growth in a clear producing flow. As $shortName steps up around you, name not just the results but the small process shifts — that's where the bond hardens.",
-      r"You're the nutrient channel here, so $shortName's color sharpens with time at your side. Lead from joy in their growth, not from awareness of giving — that's when the bond breathes naturally.",
-      r"Wherever your hand touches, $shortName grows by an inch. Don't rush the speed; revisit the change at the year mark — that's the lens this bond responds to best.",
-      r"As the giver here, you'll occasionally see $shortName lean. Lean isn't danger — but never trade away your own recovery routine, no matter how warm the lean feels.",
-      r"In producing position, both praise and correction from you land double. Drop short affirmations into the small moments of the day; that's how $shortName's color stabilizes faster.",
-      r"You → $shortName is the direction. Small environment changes you make are large pivot points for them — never assume something minor for you is minor for them.",
-      r"Your hours become $shortName's nutrient. Spend too many and you starve yourself; equal time alone is non-negotiable in this bond.",
-      r"Your decisions often open $shortName's next chapter. If the weight feels heavy, hand back the call sometimes: 'I'll let you take this one' is a real card to play.",
-      r"You light first, so your mood one notch sets the room two notches. Honest sharing of your real condition is both manners and infrastructure here.",
-      r"As the channel, you give $shortName recovery just by being nearby. Knowing that intangible service helps you avoid burning out from over-effort.",
-      r"You growing means $shortName growing. So pursuing your own enrichment — books, friends, hobbies — is, paradoxically, the most relational act you can do.",
-      r"In producing flow, you'll step back first in conflicts almost by default. Don't always step back; mark two areas where you never compromise so the giving doesn't erode you.",
-      r"Your pace dictates $shortName's growth rate. Fast pull means fast growth with side effects; slow pull means deeper growth. The pre-agreed pace is the right pace.",
-      r"Your praise lands harder on $shortName than anyone else's. So don't ration praise, and reserve sharp critique for one short, warm sentence at most.",
-      r"Small favors from you register as major events on their side. Not a burden — a signal that your daily life is important to them. Don't shrink the small expressions.",
-      r"As you feed, occasionally check what color of result $shortName sends back to you. That feedback guides your next round of investment.",
-      r"You → $shortName means your happiness propagates as theirs. So caring for your own happiness first isn't selfish — it's the most strategic act for both.",
-      r"$shortName tightening up beside you is partly a mirror of your own virtue showing through. As you grow, the bond grows.",
-      r"You'll naturally end up as the path-setter — but practice playing follower a few times. That role swap gives the relationship depth instead of flatness.",
-      r"As the giver, watch for the small moments when $shortName tries to return something. Don't brush them off; name them clearly so they break out of pure-receiver mode.",
-      r"Your color is the one that lifts the other; that means your fatigue is the bond's fatigue too. Solo recovery (exercise, rest, no-call hours) trumps any meeting.",
-      r"You growing is the bond's environment. Doing your own work well becomes the largest expression of care available to you here.",
-      r"With producing flow, asking $shortName directly what they need now beats guessing. Targeted help saves energy on both sides.",
-      r"As nutrient, you'll watch $shortName's color thin out at times. That's when stepping back creates the space for them to rebuild their own color.",
-      r"Your influence permeates their everyday life here — even casual jokes echo for a while. People who recognize that scale are the only ones who keep this producing position balanced.",
+      r"A generating (相生) line runs from you toward $shortName. What you say tends to land deep, and watching $shortName step forward tends to steady you in return.",
+      r"You tend to be the giving side here. Day to day it can feel uneven, but a generating line tends to hold steady when you tend it — slow tends to be the right pace.",
+      r"Your element tends to quietly feed $shortName's, so honesty around you tends to come easier for them. Once you settle into giving, checking your own pace helps.",
+      r"The generating arrow tends to run from you to them. Words you toss off can stay with $shortName a long time — owning that weight keeps the line healthy.",
+      r"You tend to warm $shortName's weak spots quietly. The shift isn't visible day to day, so reading this line in seasons rather than weeks fits it best.",
+      r"You tend to give light first, so confidence near you can come easier for $shortName. Saving real recharge time for yourself matters — your battery tends to be the line's baseline.",
+      r"You tend to pave the road first, so $shortName following can feel natural. Watching only your own pace can cost them their breath, so letting them lead sometimes keeps it balanced.",
+      r"You feed their growth in a clear generating (相生) flow. As $shortName steps up around you, naming the small process shifts — not just the results — tends to keep the line honest.",
+      r"You tend to be the nutrient channel here. Leading from joy in their growth, rather than from awareness of giving, tends to let the line breathe naturally.",
+      r"Wherever your hand touches, $shortName tends to move forward by an inch. Revisiting the change at the year mark fits this line better than rushing the speed.",
+      r"As the giver here, you may occasionally see $shortName lean. A lean isn't danger — but never trading away your own recovery routine keeps the line steady.",
+      r"In a generating line, both praise and correction from you tend to land with extra weight. Dropping short affirmations into the small moments of the day tends to help.",
+      r"You → $shortName tends to be the direction. Small environment changes you make can be large pivot points for them — assuming something minor for you is minor for them tends to miss the mark.",
+      r"Your hours tend to be $shortName's nutrient. Spend too many and you starve yourself — equal time alone tends to be non-negotiable in this line.",
+      r"Your decisions often open $shortName's next chapter. If the weight feels heavy, handing back the call sometimes — 'I'll let you take this one' — is a real card to play.",
+      r"You tend to light first, so your mood one notch can set the room two notches. Honest sharing of your real condition tends to be both manners and infrastructure here.",
+      r"As the channel, you tend to give $shortName recovery just by being nearby. Knowing that intangible service helps you avoid burning out from over-effort.",
+      r"Your own growth tends to feed this line. Pursuing your own enrichment — books, friends, hobbies — is, paradoxically, one of the most relational acts available to you.",
+      r"In a generating flow, you may step back first in conflicts almost by default. Marking two areas where you never compromise keeps the giving from eroding you.",
+      r"Your pace tends to set $shortName's growth rate. Fast pull tends to bring fast growth with side effects; slow pull tends to bring deeper growth — the pre-agreed pace tends to be the right pace.",
+      r"Your praise tends to land harder on $shortName than most. So don't ration praise, and reserving sharp critique for one short, warm sentence at most helps.",
+      r"Small favors from you tend to register as major events on their side. Not a burden — a signal that your daily life matters to them, so don't shrink the small expressions.",
+      r"As you feed, occasionally check what color of result $shortName sends back. That feedback tends to guide your next round of investment.",
+      r"You → $shortName means your steadiness tends to carry over to them. So caring for your own condition first isn't selfish — it tends to be the most strategic act for both.",
+      r"$shortName tightening up beside you tends to be partly a mirror of your own intensity showing through. As you grow, the line tends to grow with you.",
+      r"You tend to end up as the path-setter — but practising the follower role a few times tends to give the relationship depth instead of flatness.",
+      r"As the giver, watch for the small moments when $shortName tries to return something. Naming them clearly tends to help them step out of pure-receiver mode.",
+      r"Your element is the one that tends to lift the other, so your fatigue tends to be the line's fatigue too. Solo recovery (exercise, rest, no-call hours) tends to outweigh any meeting.",
+      r"Your own growth tends to be the line's environment. Doing your own work well tends to become the largest expression of care available to you here.",
+      r"In a generating flow, asking $shortName directly what they need now tends to beat guessing. Targeted help tends to save energy on both sides.",
+      r"As nutrient, you may watch $shortName's color thin out at times. That tends to be when stepping back makes the space for them to rebuild their own color.",
+      r"Your influence tends to permeate their everyday here — even casual jokes can echo for a while. Recognizing that scale tends to be what keeps a generating line balanced.",
     ],
     _ElRel.theyGenerate: [
       r"They fill the gaps in yours without effort (producing flow toward you). You receive more than you give, so naming the gratitude out loud deepens the bond.",
@@ -3330,17 +3337,17 @@ class _KpopAnchors {
       r"The producing arrow toward you means you should be the first to notice $shortName's fatigue. The duty of receiving isn't to receive more — it's to notice more.",
     ],
     _ElRel.iOvercome: [
-      r"You control them (overcoming flow). You lead naturally and read their weak spots like a coach. One notch sharper reads as control — intent and delivery must match.",
-      r"You overcome them, so short words land hard. $shortName may shrink around you without meaning to; building in a softer beat keeps it healthy.",
-      r"Leadership drifts to your side naturally. Used well it's a mentor bond; used badly it becomes one-way instruction. Always leave room for their own color.",
-      r"You refine them, so $shortName's flaws show clearly when you're close. How you point them out decides everything — questions land better than verdicts.",
+      r"An overcoming (相剋) line runs from you toward $shortName. You tend to lead naturally and read their weak spots like a coach — a notch sharper, though, can read as control, so intent and delivery have to match.",
+      r"You overcome them, so short words tend to land hard. $shortName may hold back around you without meaning to; building in a softer beat keeps it healthy.",
+      r"Leadership drifts to your side naturally. Used well it's a mentor bond; used badly it becomes one-way instruction. Leaving room for their own color is what keeps it the first kind.",
+      r"You refine them, so $shortName's flaws show clearly when you're close. How you point them out matters most — questions land better than verdicts.",
       r"You compress $shortName's flow without meaning to, so even a flat-toned sentence can read as a verdict. Double your visible praise and keep corrections private — that one rule reshapes the whole weight of the bond.",
       r'''Leadership lands on your side by default. It's easier to drive than to wait, but $shortName loses chances to speak first; build a deliberate "what do you think?" beat in before every decision.''',
       r"You keep $shortName tidied up, so on most days you read as the steady older one. But when they keep adjusting to you, their own color fades — practice just following their lead from time to time.",
       r"You're the one refining them, so your precision can land as both fuel and pressure on $shortName. Letting them reach the answer themselves, instead of handing it over, is the line between mentor and controller.",
-      r"In front of you, $shortName hears your firmness at double volume. One notch softer than your default is the calibration that turns the same words from coach into critic.",
+      r"In front of you, $shortName tends to hear your firmness louder than you mean it. One notch softer than your default is the calibration that turns the same words from coach into critic.",
       r"As the one in pressing position, your standards quietly become $shortName's standards. Treat that as weight, not power — your opinion ends up etched into their daily life.",
-      r"Catching $shortName's weak spots fast is both your weapon and your risk. Don't fire on detection; wait one beat so they spot it themselves first.",
+      r"Catching $shortName's weak spots fast is both your strength and your risk. Don't point it out the instant you see it; wait one beat so they spot it themselves first.",
       r"Driving the rhythm here feels easy to you, while $shortName spends more courage to voice an opinion. When they do, receive it as a welcome, never as a review.",
       r"Their action patterns analyze quickly for you. Don't deliver the analysis as judgment; reframe as a question so they discover their own color inside it.",
       r"Coaching seat is your natural fit, which means $shortName's self-determination needs deliberate room. Hand over small choices (menu, route, time) on purpose.",
@@ -3349,30 +3356,30 @@ class _KpopAnchors {
       r"In overcoming flow your way, even jokes risk landing as appraisals. Pair each joke with a quick safety line — 'just kidding, you're enough as you are.'",
       r"As refiner, $shortName's growth pace will often feel slow to you. Reframe that gap not as patience, but as 'someone living on a different clock' — that's the real generosity.",
       r"$shortName trims their expression beside you. To keep restraint from looking like virtue, send constant signals that full expression is safe in your space.",
-      r"Your precision is double-edged in this seat. Don't swing it; store it in its case, and you become $shortName's lifelong mentor.",
+      r"Your precision is double-edged in this seat. Don't swing it; kept in its case, it tends to make you the kind of mentor $shortName keeps for a long time.",
       r"You see $shortName's gaps more clearly than others do. That's your eye, not their flaw — they might not show those gaps in front of a different friend.",
       r"You press, so $shortName's color takes longer to grow beneath yours. Don't only chase fast results; log their annual changes to read the bond accurately.",
-      r"As the active end of overcoming flow, conflict almost always starts with your sentence. Three deliberate breaths before that sentence drop conflict frequency by more than half.",
+      r"As the active end of overcoming flow, conflict often starts with your sentence. Three deliberate breaths before that sentence tend to cut the friction sharply.",
       r"As refiner, their progress easily becomes your satisfaction. Don't claim that progress as yours — keep credit clearly on $shortName's name plate.",
-      r"$shortName looks smaller next to you than on their own. Don't enjoy the contrast; instead, schedule recurring self-check moments asking 'am I shrinking them?'",
+      r"$shortName can come across smaller next to you than on their own. Rather than sit with that contrast, schedule recurring self-check moments asking 'am I leaving them room?'",
       r"In mentor seat, $shortName's growth tempts you into evaluator mode. Schedule deliberate just-hanging-out time with no growth agenda attached.",
-      r"In overcoming flow, silence becomes a weapon. Using silence as protest is the most dangerous pattern here; resolve discontent verbally on the same day.",
+      r"In overcoming flow, silence can do real damage. Using silence as protest tends to be the costliest pattern here; resolve discontent in words on the same day.",
       r"Your speed of precision is too fast for $shortName at times. Rest the precision deliberately; cards like 'we're just hanging out right now' are valid.",
       r"Catching $shortName's immaturity fast can read as coaching or as control. The line isn't the frequency of catches — it's how much self-discovery time you grant before catching.",
-      r"In pressing position, voice your opinion last in big decisions on purpose. The moment you speak first, $shortName's voice essentially disappears.",
-      r"You at this seat can be $shortName's lifelong coach or the lifelong source of their complex. The fork lies in one tone, one extra beat of patience.",
+      r"In pressing position, voice your opinion last in big decisions on purpose. When you speak first, $shortName's own voice tends to get crowded out.",
+      r"At this seat, the same input can land on $shortName as steady coaching or as a weight that sticks. The fork lies in one tone, one extra beat of patience.",
       r"As refiner, deliberately keep your hands off $shortName's private circles (hobbies, friendships, family). That untouched zone keeps the whole bond breathable.",
     ],
     _ElRel.theyOvercome: [
-      r"Their energy shifts your pace (overcoming flow toward you). The closer you get, the more you must hold your own color. Handle it well and both grow tougher.",
+      r"Their energy shifts your pace (overcoming flow toward you). The closer you get, the more it helps to hold your own color. Handled well, this kind of bond tends to leave both sides steadier.",
       r"They overcome you, so a single sentence from $shortName can spike you. Read that as a sign of how much they matter — not as a weakness in you.",
       r"Leadership drifts toward them. Don't just match; hold one or two non-negotiables so the relationship lasts past the early pull.",
       r"They challenge you by default. Facing that discomfort instead of dodging it is where your weak spot turns into strength — a growth-style bond.",
-      r'''$shortName's tone tilts your normal pace, so the closer you get the more often you'll notice "I'm being shaken." Honor that signal with short rest and brief distance — friction turns into growth once it's named.''',
+      r'''$shortName's tone tilts your normal pace, so the closer you get the more often a "this is shaking me" beat can surface. Honor that signal with short rest and brief distance — friction turns into growth once it's named.''',
       r'''Their seat mirrors your weak spots with precision. Defense rises first, but practicing honest "yes, that's me" responses around $shortName forges your next-level self — a quietly grateful bond.''',
       r"$shortName nudges your speed without meaning to. Don't get swept along — anchor one or two daily basics (morning, exercise, sleep) and their pressure converts into your new energy.",
-      r"They shake you a little, but it's also the kind of jolt that exposes your weak spots like a coach would. The moment you receive $shortName's bluntness as a mirror rather than a verdict, the relationship becomes your fastest growth engine.",
-      r"In their seat you'll lose your usual decision speed. Don't take that lag as a flaw; treat slow decisions in $shortName's presence as your safe mode.",
+      r"They shake you a little, but it's also the kind of jolt that surfaces your weak spots the way a coach would. The moment you receive $shortName's bluntness as a mirror rather than a verdict, this bond tends to become one of your fastest ways to grow.",
+      r"In their seat your usual decision speed can dip. Don't take that lag as a flaw; treat slower decisions in $shortName's presence as your safe mode.",
       r"One sentence from $shortName creates oversized ripples in your day. The ripple control is yours, not theirs — when absorption runs too hot, stretch the distance deliberately.",
       r"When they shake you, your strongest tool isn't composure — it's your own routine. Two or three daily anchors are the keel that keeps you upright through their pressure.",
       r"$shortName is stimulating in this position, so deliberately stepping away from the stimulus is part of the rhythm. Naming distance as recovery, not avoidance, is important here.",
@@ -3381,55 +3388,55 @@ class _KpopAnchors {
       r"At decision points your usual judgment dims around $shortName. Deliberately take big decisions away from their presence; that physical distance protects your call.",
       r"$shortName shifts your pace; protecting your default tempo matters above all. Run regular check-ins: 'is this still my speed?' is a question worth asking weekly.",
       r"With the absorption running this high, sit with $shortName's words for 24 hours before responding. Slow replies tend to be your truer replies in this bond.",
-      r"Their grain refines yours, so closeness sharpens your details. As detail sharpens, self-censorship grows too; deliberately loosen one notch to keep self-expression alive.",
-      r"In seasons you feel smaller beside $shortName, don't normalize the shrink. Check your real size against an outside mirror — friends, work, family — that's this bond's safety net.",
-      r"In shaken position you'll overreact to small expression changes. Don't treat that as weakness — name it as your sensitivity signal and install a one-beat delay rule before reacting.",
+      r"Their element refines yours, so closeness sharpens your details. As detail sharpens, self-censorship grows too; deliberately loosen one notch to keep self-expression alive.",
+      r"In seasons you feel less like yourself beside $shortName, don't let that settle in as normal. Check in with an outside mirror — friends, work, family — that's this bond's safety net.",
+      r"In shaken position, small expression changes can hit you harder than expected. Don't treat that as weakness — name it as your sensitivity signal and install a one-beat delay rule before reacting.",
       r"As they refine you, $shortName's directness reads as coaching or as insult depending on your condition. On low days, postpone the directness by mutual agreement.",
       r"$shortName presses your flow, so your autonomous time (a solo walk, a hobby, a workout) is even more sacred. The moment you start giving it up, balance starts breaking.",
-      r"As receiver of shaking, recovery time after conflict will exceed average for you. Don't read that as a flaw; explain it to yourself as your own recovery cadence.",
-      r"In the passive seat of overcoming flow, one sentence from $shortName carries double weight. Their unintentional joke can be a big event for you — sharing that openly is the protection.",
+      r"As receiver of shaking, recovery time after conflict tends to run long for you. Don't read that as a flaw; explain it to yourself as your own recovery cadence.",
+      r"In the passive seat of overcoming flow, one sentence from $shortName tends to carry extra weight. Their unintentional joke can be a big event for you — sharing that openly is the protection.",
       r"What you absorb here is what builds your toughness. Receive without dodging, but never get swept — the balance starts with preserving your own daily routine.",
       r"$shortName's precision is both stimulus and burden. Reduce the burden by giving yourself permission: 'I don't have to mirror your precision 100%.'",
-      r"Their grain refines yours, accelerating your growth. The moment your growth outruns your breath is the warning sign — solo check-in once a month, no exceptions.",
-      r"$shortName reflects your weak spots clearly, and practicing acknowledgment is lifelong wealth. Just don't let acknowledgment become self-flogging; pair it with 'still, I'm doing well.'",
+      r"Their element refines yours, and that tends to speed your growth. The moment your growth outruns your breath is the warning sign — solo check-in once a month, no exceptions.",
+      r"$shortName reflects your weak spots clearly, and getting practised at acknowledgment tends to pay off for a long time. Just don't let acknowledgment turn into self-blame; pair it with 'still, I'm doing well.'",
       r"In shaken position, decisions, conflicts, and missteps occur more often. Don't book those as failures; accounting-wise, write them as learning cost inside this bond.",
       r"In seasons your color thins beside $shortName, recharge in places where your color is loud (friends, family, work). Returning recharged is, in itself, bond protection.",
       r"As receiver of shaking, occasionally state your limits to $shortName plainly. Hiding limits isn't strength here; precise sharing of limits is.",
-      r"As receiver of varied stimulus, classifying the stimulus is half the skill. The ability to sort 'growth stimulus' from 'noise' is your sharpest weapon in this bond.",
+      r"As receiver of varied stimulus, classifying the stimulus is half the skill. The ability to sort 'growth stimulus' from 'noise' is your sharpest tool in this bond.",
     ],
     _ElRel.neutral: [
-      r"Mild interaction with yours — no spark, no clash. The bond drifts unless someone deliberately builds weight into it.",
-      r"Neither producing nor overcoming directly, so this is less fated and more built. Small rituals — meetings, replies, plans — become the skeleton of the bond.",
-      r"Stable but low-stimulation, so it can settle at 'nice to have, fine without.' Depth shows up only after one of you takes the first two steps in.",
-      r"Energies run parallel — easy to last a long time without big clashes. But parallel means depth is on the clock; play the long game, not the short one.",
-      r"Between you and $shortName there's neither strong pull nor heavy friction, so first impressions pass softly. Stack small memories and repeated promises one layer at a time — that's how weight forms.",
-      r'''Direct elemental signal is weak here, so the bond drifts off if no one names the next step. A clear "let's meet again on X" from one side is what turns this from passing into staying.''',
-      r"More chosen than fated, this is a relationship you build with intention. Small rituals — promises, replies, anniversaries — form the skeleton, so deliberately add a beat of depth instead of letting it drift on its own.",
-      r"With no big stimulus, closeness comes slowly here — but once it sets, it lasts. Don't try to read the result in weeks; widen the lens to a year or two, and the bond steadily thickens.",
-      r"$shortName's pattern and yours cross sideways, so mutual indifference dissolves the bond fast. One deliberate meeting per quarter is enough to keep it alive.",
-      r"Energies run parallel, so conflicts stay low but so does momentum. To create depth, build trips, hobbies, projects only the two of you share — outside stimulus becomes the catalyst.",
-      r"Neutral seats feel easy at first but slide toward boredom. The best antidote is adding one new shared goal per year, deliberately.",
-      r"With neither producing nor overcoming, this bond needs artificial chemistry instead of natural. Events, travel, new mutual friends become the catalysts that ignite shared chemistry.",
-      r"Near $shortName your heart settles but doesn't race. Don't reject the calm — file it as the asset of a friend, colleague, trust relationship and use it as such.",
-      r"With no direct elemental signal, mutual laziness freezes the bond as is. As long as one of you keeps booking the next plan, that labor itself becomes the amplitude of the bond.",
-      r"Neutral flow leans more on quiet first impressions than strong sparks. To turn that calm into magnetism, deliberately document and commemorate small moments.",
-      r"Between you and $shortName, outsiders see a smooth pair, but inside both of you may feel low stimulation. Don't settle for the outside reading; cultivate private joys only the two of you know.",
-      r"Energies cross sideways, so time passes without major events. The lack of events can be a weakness — counter it by making deliberate events together.",
-      r"In neutral seats conflicts are rare, but so is the energy to resolve them. Pre-empt by routinely clearing tiny grievances before they accumulate.",
-      r"Direct influence is weak, so your big news doesn't auto-relay to $shortName. Big news must be shared deliberately — that's the most efficient way to add weight to this bond.",
-      r"Without direct saju signals, spontaneous combustion is rare. But once you both get used to deliberate ignition, you can build a more careful, more intentional bond than natural pairs.",
-      r"Between you and $shortName there's neither explosion nor silence, so outside eyes see a 'long-time friend' shape. Match that shape with internal depth by booking one real, longer talk per month.",
-      r"On a parallel line, the bond's color is colored by outside events. Frequency of new shared people and new shared places dictates the bond's hue.",
-      r"Neutral flow only reveals its real value over a long arc. Make annual reviews of depth a habit — that's the secret to preserving neutral pairs.",
-      r"With $shortName, natural chemistry is weak, so 'intention' is the largest asset here. Intentional meetings, intentional anniversaries, intentional expressions — all of it.",
-      r"Neither grain stimulates the other directly, so the bond drifts if both of you sink into your own work. A regular check-in line is the biggest obligation and protection in this bond.",
-      r"In neutral seats accumulation matters more than events. Small promises, small notes, small gifts compound into large meaning over time.",
-      r"Parallel energies mean your major shifts can pass under $shortName's radar. Announcing your big shifts actively is the honesty rule of this bond.",
-      r"Between you and $shortName fights are rare, but so is deep repair. Resolve tiny knots on the same day — that's the first button against bigger knots.",
-      r"Neutral flow is a kind of safe-cruise mode. Safe but bland; bring excitement in deliberately through outside content, new places, new activities.",
-      r"With no strong pull there's no heavy burden either between you and $shortName. Read the lack of burden as freedom — and a free-flowing bond can outlast many more 'fated' ones.",
-      r"In neutral seats, unless one person deliberately closes distance, both default back to their own lanes. The bond truly grows in the seasons one person commits to 'making this person mine.'",
-      r"Parallel energies are weak against outside shock. In big life events (break-ups, moves, career shifts) the bond stretches easily — double the check-in frequency in those seasons.",
+      r"A neutral line with yours — no spark, no clash. This kind of bond tends to drift unless someone deliberately builds weight into it.",
+      r"Neither generating nor overcoming directly, so this tends to be less a spontaneous draw and more a built one. Small rituals — meetings, replies, plans — tend to become the skeleton of the bond.",
+      r"Stable but low-stimulation, so it can settle at 'nice to have, fine without.' Depth here tends to show up after one of you takes the first two steps in.",
+      r"Parallel elements — easy to run long without big clashes. But parallel tends to mean depth is on the clock, so the long game fits this line better than the short one.",
+      r"Between you and $shortName there's neither strong pull nor heavy friction, so first impressions tend to pass softly. Stacking small memories and repeated promises one layer at a time tends to be how weight forms.",
+      r'''A direct elemental signal is weak here, so this bond tends to drift off if no one names the next step. A clear "let's meet again on X" from one side tends to turn this from passing into staying.''',
+      r"More chosen than spontaneous, this tends to be a relationship you build with intention. Small rituals — promises, replies, anniversaries — tend to form the skeleton, so deliberately adding a beat of depth helps.",
+      r"With no big stimulus, closeness here tends to come slowly — but once it sets, it tends to hold. Widening the lens to a year or two fits this bond better than reading it in weeks.",
+      r"$shortName's element and yours cross sideways, so mutual indifference tends to thin the bond fast. One deliberate meeting per quarter tends to be enough to keep it alive.",
+      r"Parallel elements, so conflicts tend to stay low but so does momentum. Building trips, hobbies, and projects only the two of you share tends to make outside stimulus the catalyst for depth.",
+      r"Neutral seats tend to feel easy at first and slide toward boredom. Adding one new shared goal per year, deliberately, tends to be the best antidote.",
+      r"With neither generating nor overcoming, this bond tends to run on built chemistry rather than natural. Events, travel, and new mutual friends tend to be the catalysts here.",
+      r"Near $shortName your heart tends to settle rather than race. Filing that calm as the asset of a friend, colleague, or trust relationship — and using it as such — tends to help.",
+      r"With no direct elemental signal, mutual laziness tends to freeze the bond as is. As long as one of you keeps booking the next plan, that labor itself tends to be the amplitude of the bond.",
+      r"A neutral line leans more on quiet first impressions than strong sparks. Deliberately documenting and commemorating small moments tends to turn that calm into something warmer.",
+      r"Between you and $shortName, outsiders tend to see a smooth pair, while inside both of you may feel low stimulation. Cultivating private joys only the two of you know tends to help more than settling for the outside reading.",
+      r"The two elements cross sideways, so time tends to pass without major events. The lack of events can be a weak spot — making deliberate events together tends to counter it.",
+      r"In neutral seats conflicts tend to be rare, but so is the energy to resolve them. Routinely clearing tiny grievances before they accumulate tends to pre-empt that.",
+      r"Direct influence is weak, so your big news doesn't tend to auto-relay to $shortName. Sharing big news deliberately tends to be the most efficient way to add weight to this bond.",
+      r"With no direct anchor between the two of you, a spontaneous spark tends to be rare. But once you both get used to deliberate ignition, an intentional bond can run as carefully as effortless pairs.",
+      r"Between you and $shortName there's neither explosion nor silence, so outside eyes tend to see a 'long-time friend' shape. Booking one real, longer talk per month tends to match that shape with internal depth.",
+      r"On a parallel line, the bond's color tends to come from outside events. The more often you meet new people and visit new places together, the more vivid the hue tends to get.",
+      r"A neutral line tends to reveal its real value over a long arc. Making annual reviews of the bond a habit tends to be the way neutral pairs hold.",
+      r"With $shortName, natural chemistry is weak, so 'intention' tends to be the largest asset here. Intentional meetings, intentional anniversaries, intentional expressions — all of it.",
+      r"Neither element stimulates the other directly, so this bond tends to drift if both of you sink into your own work. A regular check-in line tends to be the biggest obligation and protection here.",
+      r"In neutral seats accumulation tends to matter more than events. Small promises, small notes, small gifts tend to compound into large meaning over time.",
+      r"Parallel elements mean your major shifts can pass under $shortName's radar. Announcing your big shifts actively tends to be the honesty rule of this bond.",
+      r"Between you and $shortName fights tend to be rare, but so is deep repair. Resolving tiny knots on the same day tends to be the first button against bigger knots.",
+      r"A neutral line tends to be a kind of safe-cruise mode. Safe but bland — bringing excitement in deliberately through outside content, new places, and new activities tends to help.",
+      r"With no strong pull there tends to be no heavy burden either between you and $shortName. Reading the lack of burden as freedom — a free-flowing bond can run long when you tend it.",
+      r"In neutral seats, unless one person deliberately closes distance, both tend to default back to their own lanes. This bond tends to grow in the seasons one person commits to truly showing up for it.",
+      r"Parallel elements tend to be weak against outside shock. When big life changes (moves, career shifts) overlap, the bond stretches easily — checking in more often through those stretches helps.",
     ],
   };
 
@@ -3438,7 +3445,7 @@ class _KpopAnchors {
     r'$shortName — $blurbTail 이 성향이 너의 일상에 한 자락 더해질 때, 두 사람만의 호흡이 생겨요.',
     r'$shortName의 한 줄 — $blurbTail 이 흐름이 너의 일주와 맞닿는 지점이 바로 너희만의 관계 색이에요.',
     r'$shortName — $blurbTail 이 분위기가 너의 페이스에 섞일 때, 평범한 하루가 좀 다르게 느껴져요.',
-    r'$shortName의 색 — $blurbTail 너의 일주가 이 색을 어떻게 받아들이느냐가 둘 사이를 결정해요.',
+    r'$shortName의 색 — $blurbTail 너의 일주가 이 색을 어떻게 받아들이느냐에 따라 둘 사이 결이 달라지기 쉬워요.',
     r'$shortName — $blurbTail 너의 일상에 이 한 조각이 더해지는 순간, 둘만의 톤이 만들어져요.',
     r'$shortName 한눈에 — $blurbTail 이 결을 한 번 마주한 사람은 다음 약속을 자연스럽게 잡고 싶어져요.',
     r'$shortName, 결국 한 단어 — $blurbTail 그 단어가 너의 일주와 만나면 둘의 시즌이 시작돼요.',
@@ -3461,7 +3468,7 @@ class _KpopAnchors {
     r'$shortName 본질 — $blurbTail 너의 일주가 그 본질을 가장 정확히 알아보는 자리에 서 있어요.',
     r'$shortName 한 컷 더 — $blurbTail 너의 결이 옆에 있으면 그 한 컷에 디테일이 한 겹 더해져요.',
     r'$shortName 스타일 — $blurbTail 너의 일주가 이 스타일을 입히는 방식이 둘만의 분위기가 돼요.',
-    r'$shortName의 잔잔한 면 — $blurbTail 너의 일상 한쪽에 이 잔잔함이 자리잡으면 호흡이 안정돼요.',
+    r'$shortName의 잔잔한 면 — $blurbTail 너의 일상 한쪽에 이 잔잔함이 자리잡으면 호흡이 한결 차분해지기 쉬워요.',
     r'$shortName 본 모습 — $blurbTail 너의 결이 가까이 있을 때 이 본 모습이 자연스럽게 풀려요.',
     r'$shortName 핵심 — $blurbTail 그 핵심이 너의 일주와 부딪힘 없이 자리잡는 자리예요.',
     r'$shortName 한 줄 — $blurbTail 너의 일주가 받쳐주면 이 한 줄이 둘만의 슬로건처럼 자리잡아요.',
@@ -3539,107 +3546,107 @@ class _KpopAnchors {
   ];
 
   static const _closerPoolEn = [
-    r"$shortName — $blurbTail When this pattern layers into your daily rhythm, the two of you find your own beat.",
-    r"$shortName, in one line — $blurbTail Where this rhythm meets your chart is where your shared color shows up.",
-    r"$shortName — $blurbTail When this mood mixes into your pace, ordinary days start to feel a little different.",
-    r"$shortName's color — $blurbTail How your chart receives it decides what the two of you become.",
-    r"$shortName — $blurbTail Add this single piece to your daily flow and a tone only the two of you have starts forming.",
-    r"$shortName at a glance — $blurbTail Anyone who meets this grain once naturally books the next conversation.",
-    r"$shortName in one word — $blurbTail When that word meets your day pillar, your shared season begins.",
-    r"$shortName, a note — $blurbTail Your day pillar deepens this tone by one shade.",
-    r"$shortName, the person — $blurbTail With your time alongside, this color doubles in saturation.",
-    r"$shortName, a memo — $blurbTail Close to your day pillar, this tone shines its most natural.",
-    r"$shortName's atmosphere — $blurbTail Together, this grain sharpens into its clearest season.",
-    r"$shortName, a one-line summary — $blurbTail This grain spreads into a private tone only the two of you share.",
-    r"$shortName, a tidy version — $blurbTail How your everyday receives this grain becomes the depth between you.",
-    r"$shortName's color — $blurbTail Meeting your day pillar, this color comes back framed.",
-    r"$shortName's grain — $blurbTail When your seat is next to theirs, the after-tone of this grain lasts longer.",
-    r"$shortName's first impression — $blurbTail Where that impression meets your grain is your starting point.",
-    r"$shortName's pace — $blurbTail Your day pillar follows this pace without strain.",
-    r"$shortName, a single facet — $blurbTail Inside your daily life, that facet faces forward.",
-    r"$shortName's one breath — $blurbTail There comes a point where your breath naturally overlaps with theirs.",
-    r"$shortName in one cut — $blurbTail Beside your day pillar, that cut unspools like the opening of a film.",
-    r"$shortName's tone — $blurbTail The way your grain receives it turns the tone into a sound only the two of you have.",
-    r"$shortName, briefly — $blurbTail Once it enters your everyday, this grain finds its tidiest position.",
-    r"$shortName's flow — $blurbTail As your time runs alongside, the depth of this flow naturally doubles.",
-    r"$shortName's essence — $blurbTail Your day pillar reads that essence more accurately than most.",
-    r"$shortName, one more frame — $blurbTail Beside your grain, the frame gains one more layer of detail.",
-    r"$shortName's style — $blurbTail The way your day pillar drapes this style becomes the room tone between you.",
-    r"$shortName's quieter side — $blurbTail In a corner of your everyday, this quiet stabilizes the breath of the bond.",
-    r"$shortName's true face — $blurbTail Close to your grain, that true face unfolds naturally.",
-    r"$shortName's core — $blurbTail The core settles into your day pillar without friction.",
-    r"$shortName, one line — $blurbTail With your day pillar behind it, this line becomes a slogan only the two of you use.",
-    r"$shortName's deepest tone — $blurbTail With your time at their side, that tone lingers longest.",
-    r"$shortName's seat — $blurbTail Inside your everyday, this seat fills exactly one open square.",
-    r"$shortName, an edge — $blurbTail Meeting your grain, that edge comes back gently smoothed.",
-    r"$shortName's everyday — $blurbTail Close to your day pillar, the everyday rises one shade more composed.",
-    r"$shortName's concept — $blurbTail Your day tone sharpens this concept by one click.",
-    r"$shortName, one face — $blurbTail Beside your grain, that face lands squarely in front of the lens.",
-    r"$shortName's mood — $blurbTail Your day pillar translates this mood into an everyday tone.",
-    r"$shortName's essence, briefly — $blurbTail As your time flows beside it, the essence emerges faster than average.",
-    r"$shortName, in short — $blurbTail Meeting your day pillar, the brevity lasts as a long impression.",
-    r"$shortName's outcome — $blurbTail Inside your everyday, that outcome closes one shade softer.",
-    r"$shortName as a signal — $blurbTail Your grain stands exactly where a signal needs receiving.",
-    r"$shortName's main text — $blurbTail Where your day pillar enters becomes the boldest line in that text.",
-    r"$shortName, a single line — $blurbTail Beside your grain, that line becomes your shared signature.",
-    r"$shortName, the name — $blurbTail Once this name appears in your everyday, the room tone shifts.",
-    r"$shortName's average — $blurbTail Next to your day pillar, that average rises one rank.",
-    r"$shortName's detail work — $blurbTail Received by your grain, the detail survives longer than average.",
-    r"$shortName's nucleus — $blurbTail Close to your day pillar, the nucleus appears at double the usual speed.",
-    r"$shortName, one note — $blurbTail When that note enters your everyday, the whole room tone bends slightly.",
-    r"$shortName, a tonal tidy — $blurbTail Beside your day pillar, that tidy holds one more beat of stability.",
-    r"$shortName's interior — $blurbTail Close to your grain, the interior shows at the right angle.",
-    r"$shortName as a mood — $blurbTail Inside your everyday, that mood unspools more honestly.",
-    r"$shortName, one grain — $blurbTail Carried by your day pillar, the grain stays alive in every corner of the day.",
-    r"$shortName, summed up — $blurbTail Meeting your grain, that summary becomes a page only the two of you read.",
-    r"$shortName, one pitch — $blurbTail Your day pillar adds a harmony exactly on top of that pitch.",
-    r"$shortName's groundwork — $blurbTail Your everyday tone makes that groundwork carry into every corner of the day.",
-    r"$shortName, one beat — $blurbTail When your grain follows that beat, the rhythm of the pair starts.",
-    r"$shortName's own color — $blurbTail Meeting your day pillar, the color sharpens by one rank.",
-    r"$shortName's selfness — $blurbTail Inside your everyday, that selfness loosens into its easiest form.",
-    r"$shortName, one paragraph — $blurbTail Meeting your grain, the paragraph settles into your daily life.",
-    r"$shortName, one character — $blurbTail Beside your day pillar, that single character becomes the keyword of the pair.",
-    r"$shortName, one grain answered — $blurbTail How your grain meets it is the unit of depth between you.",
-    r"$shortName's palette — $blurbTail Beside your day pillar, that palette settles into a daily tone.",
-    r"$shortName, one track — $blurbTail Meeting your grain, that track becomes your shared regular play.",
-    r"$shortName as a signal sent — $blurbTail Your day pillar functions like the antenna that receives it.",
-    r"$shortName's home tone — $blurbTail Alongside your everyday, that home tone deepens by one grain.",
+    r"$shortName — $blurbTail When this pattern layers into your daily rhythm, a beat of your own tends to form.",
+    r"$shortName, in one line — $blurbTail Where this rhythm meets your day pillar tends to be where a shared color shows up.",
+    r"$shortName — $blurbTail When this mood mixes into your pace, ordinary days tend to feel a little different.",
+    r"$shortName's color — $blurbTail How your day pillar receives it tends to shape what kind of bond the two of you build.",
+    r"$shortName — $blurbTail Add this single piece to your daily flow and a tone of your own tends to start forming.",
+    r"$shortName at a glance — $blurbTail A spark like this tends to make people want the next conversation.",
+    r"$shortName in one word — $blurbTail When that word meets your day pillar, a shared season tends to open.",
+    r"$shortName, a note — $blurbTail Beside your day pillar, this tone tends to read one shade richer.",
+    r"$shortName, the person — $blurbTail With your time alongside, this color tends to read deeper.",
+    r"$shortName, a memo — $blurbTail Close to your day pillar, this tone tends to read at its most natural.",
+    r"$shortName's atmosphere — $blurbTail Together, this side tends to read at its clearest.",
+    r"$shortName, a one-line summary — $blurbTail This note tends to spread into a private tone of your own.",
+    r"$shortName, a tidy version — $blurbTail How your everyday receives this note tends to set the depth between you.",
+    r"$shortName's color — $blurbTail Meeting your day pillar, this color tends to come back framed.",
+    r"$shortName's nature — $blurbTail When your seat is next to theirs, the after-tone of it tends to linger.",
+    r"$shortName's first impression — $blurbTail Where that impression meets your day pillar tends to be the starting point.",
+    r"$shortName's pace — $blurbTail Your day pillar tends to follow this pace without strain.",
+    r"$shortName, a single facet — $blurbTail Inside your daily life, that facet tends to face forward.",
+    r"$shortName's one breath — $blurbTail There tends to come a point where your breath overlaps with theirs.",
+    r"$shortName in one cut — $blurbTail Beside your day pillar, that cut tends to unspool like the opening of a film.",
+    r"$shortName's tone — $blurbTail The way your day pillar receives it tends to turn the tone into a sound of your own.",
+    r"$shortName, briefly — $blurbTail Once it enters your everyday, this note tends to find its tidiest position.",
+    r"$shortName's flow — $blurbTail As your time runs alongside, the depth of this flow tends to build.",
+    r"$shortName's essence — $blurbTail Your day pillar tends to read that essence more accurately than most.",
+    r"$shortName, one more frame — $blurbTail Beside your day pillar, the frame tends to gain one more layer of detail.",
+    r"$shortName's style — $blurbTail The way your day pillar drapes this style tends to set the room tone between you.",
+    r"$shortName's quieter side — $blurbTail In a corner of your everyday, this quiet tends to steady the breath of the bond.",
+    r"$shortName's true face — $blurbTail Close to your day pillar, that true face tends to unfold naturally.",
+    r"$shortName's core — $blurbTail The core tends to settle into your day pillar without friction.",
+    r"$shortName, one line — $blurbTail With your day pillar behind it, this line tends to read like a slogan of your own.",
+    r"$shortName's deepest tone — $blurbTail With your time at their side, that tone tends to linger.",
+    r"$shortName's seat — $blurbTail Inside your everyday, this seat tends to fill one open square.",
+    r"$shortName, an edge — $blurbTail Meeting your day pillar, that edge tends to come back gently smoothed.",
+    r"$shortName's everyday — $blurbTail Close to your day pillar, the everyday tends to read one shade more composed.",
+    r"$shortName's concept — $blurbTail Your day tone tends to sharpen this concept by one click.",
+    r"$shortName, one face — $blurbTail Beside your day pillar, that face tends to land squarely in front of the lens.",
+    r"$shortName's mood — $blurbTail Your day pillar tends to translate this mood into an everyday tone.",
+    r"$shortName's essence, briefly — $blurbTail As your time flows beside it, the essence tends to emerge faster than average.",
+    r"$shortName, in short — $blurbTail Meeting your day pillar, the brevity tends to last as a long impression.",
+    r"$shortName's outcome — $blurbTail Inside your everyday, that outcome tends to close one shade softer.",
+    r"$shortName as a signal — $blurbTail Your day pillar tends to stand exactly where a signal needs receiving.",
+    r"$shortName's main text — $blurbTail Where your day pillar enters tends to be the boldest line in that text.",
+    r"$shortName, a single line — $blurbTail Beside your day pillar, that line tends to read like a shared signature.",
+    r"$shortName, the name — $blurbTail Once this name appears in your everyday, the room tone tends to shift.",
+    r"$shortName's average — $blurbTail Next to your day pillar, that average tends to read one rank higher.",
+    r"$shortName's detail work — $blurbTail Received by your day pillar, the detail tends to survive longer than average.",
+    r"$shortName's nucleus — $blurbTail Close to your day pillar, the nucleus tends to surface faster than usual.",
+    r"$shortName, one note — $blurbTail When that note enters your everyday, the whole room tone tends to bend slightly.",
+    r"$shortName, a tonal tidy — $blurbTail Beside your day pillar, that tidy tends to hold one more beat of stability.",
+    r"$shortName's interior — $blurbTail Close to your day pillar, the interior tends to show at the right angle.",
+    r"$shortName as a mood — $blurbTail Inside your everyday, that mood tends to unspool more honestly.",
+    r"$shortName, one note — $blurbTail Carried by your day pillar, the note tends to stay alive in every corner of the day.",
+    r"$shortName, summed up — $blurbTail Meeting your day pillar, that summary tends to read like a page of your own.",
+    r"$shortName, one pitch — $blurbTail Your day pillar tends to add a harmony on top of that pitch.",
+    r"$shortName's groundwork — $blurbTail Your everyday tone tends to carry that groundwork into every corner of the day.",
+    r"$shortName, one beat — $blurbTail When your day pillar follows that beat, a rhythm of the pair tends to start.",
+    r"$shortName's own color — $blurbTail Meeting your day pillar, the color tends to read one rank sharper.",
+    r"$shortName's selfness — $blurbTail Inside your everyday, that selfness tends to loosen into its easiest form.",
+    r"$shortName, one paragraph — $blurbTail Meeting your day pillar, the paragraph tends to settle into your daily life.",
+    r"$shortName, one character — $blurbTail Beside your day pillar, that single character tends to read like the keyword of the pair.",
+    r"$shortName, one note answered — $blurbTail How your day pillar meets it tends to be the unit of depth between you.",
+    r"$shortName's palette — $blurbTail Beside your day pillar, that palette tends to settle into a daily tone.",
+    r"$shortName, one track — $blurbTail Meeting your day pillar, that track tends to read like a shared regular play.",
+    r"$shortName as a signal sent — $blurbTail Your day pillar tends to function like the antenna that receives it.",
+    r"$shortName's home tone — $blurbTail Alongside your everyday, that home tone tends to read one shade richer.",
     // R100 sprint 2-bis — pool 65 → 96 with semantically distinct frames (+31).
-    r"$shortName's one remark — $blurbTail Your day pillar sits exactly where that remark needs receiving.",
-    r"$shortName's base beat — $blurbTail Near your grain, that beat fits into your daily rhythm.",
-    r"$shortName, one more side — $blurbTail Meeting your day pillar, that side resurfaces a touch clearer.",
-    r"$shortName, a hand's width — $blurbTail Backed by your grain, that width hardens into your shared space.",
-    r"$shortName as a tone — $blurbTail Alongside your everyday, that tone reads two shades deeper than usual.",
-    r"$shortName's core — $blurbTail Near your day pillar, the core surfaces a heartbeat faster than expected.",
-    r"$shortName, one grain's definition — $blurbTail Meeting your grain, that definition crystallizes into your shared word.",
-    r"$shortName's first letter — $blurbTail Next to your day pillar, that letter sounds like the start signal of the pair.",
-    r"$shortName, one note's depth — $blurbTail When your grain supports it, the depth lasts twice its usual length.",
-    r"$shortName, one row — $blurbTail Meeting your day pillar, that row becomes a page in your shared book.",
-    r"$shortName's own color — $blurbTail Your daily tone receives this color without effort, letting it settle.",
-    r"$shortName's interior grain — $blurbTail Close to your grain, the interior glows without extra lighting.",
-    r"$shortName's one-line surface — $blurbTail Meeting your day pillar, one more layer becomes visible beneath the surface.",
-    r"$shortName's afterglow — $blurbTail Inside your everyday, that afterglow stretches the tone by one beat.",
-    r"$shortName, one grain — $blurbTail Meeting your grain, this grain becomes your shared standard tone.",
-    r"$shortName's opening line — $blurbTail Next to your day pillar, that opening line plays like your duo's intro.",
-    r"$shortName, one strand — $blurbTail Beside your grain, that strand weaves naturally into your daily tone.",
-    r"$shortName's distance — $blurbTail Inside your everyday, that distance settles like a safety line for the pair.",
-    r"$shortName's one season — $blurbTail Meeting your day pillar, the season gets logged as shared time.",
-    r"$shortName's first page — $blurbTail When your grain is near, the first page extends into your shared book.",
-    r"$shortName's surface tone — $blurbTail Close to your day pillar, the surface tone reads one shade richer than usual.",
-    r"$shortName's everyday grain — $blurbTail Alongside your everyday, that grain becomes the basic unit between you.",
-    r"$shortName, one beat — $blurbTail Meeting your grain, that beat acts like a metronome only the two of you share.",
-    r"$shortName's true color — $blurbTail Next to your day pillar, the true color comes through a step deeper than average.",
-    r"$shortName, one more sentence — $blurbTail When your grain backs it, the sentence becomes your shared shorthand.",
-    r"$shortName's own tempo — $blurbTail Inside your everyday, that tempo finds its natural settling tone.",
-    r"$shortName, one facet — $blurbTail Near your day pillar, the facet shows one grain more accurately than usual.",
-    r"$shortName as a shape — $blurbTail Alongside your everyday, that shape rises a tone clearer than expected.",
-    r"$shortName, one pitch of color — $blurbTail Meeting your grain, the color settles into your shared minor key.",
-    r"$shortName's first nuance — $blurbTail Meeting your day pillar, the nuance hardens into a signal only you two share.",
-    r"$shortName's result-and-intent — $blurbTail When your daily life supports it, the intent settles into your shared promise.",
-    r"$shortName's first interior — $blurbTail Close to your grain, the interior unspools one beat more honestly.",
-    r"$shortName's one-liner — $blurbTail Near your day pillar, that one-liner becomes your shared cover line.",
-    r"$shortName's amplitude — $blurbTail Meeting your grain, the amplitude smooths out over your shared daily life.",
-    r"$shortName's segments — $blurbTail Beside your day pillar, those segments tick like a shared metronome.",
+    r"$shortName's one remark — $blurbTail Your day pillar tends to sit exactly where that remark needs receiving.",
+    r"$shortName's base beat — $blurbTail Near your day pillar, that beat tends to fit into your daily rhythm.",
+    r"$shortName, one more side — $blurbTail Meeting your day pillar, that side tends to resurface a touch clearer.",
+    r"$shortName, a hand's width — $blurbTail Backed by your day pillar, that width tends to read like your shared space.",
+    r"$shortName as a tone — $blurbTail Alongside your everyday, that tone tends to read two shades deeper than usual.",
+    r"$shortName's core — $blurbTail Near your day pillar, the core tends to surface faster than expected.",
+    r"$shortName, one trait's definition — $blurbTail Meeting your day pillar, that definition tends to crystallize into a shared word.",
+    r"$shortName's first letter — $blurbTail Next to your day pillar, that letter tends to sound like a start signal of the pair.",
+    r"$shortName, one note's depth — $blurbTail When your day pillar supports it, the depth tends to last longer than usual.",
+    r"$shortName, one row — $blurbTail Meeting your day pillar, that row tends to read like a page in a shared book.",
+    r"$shortName's own color — $blurbTail Your daily tone tends to receive this color without effort, letting it settle.",
+    r"$shortName's interior tone — $blurbTail Close to your day pillar, the interior tends to glow without extra lighting.",
+    r"$shortName's one-line surface — $blurbTail Meeting your day pillar, one more layer tends to become visible beneath the surface.",
+    r"$shortName's afterglow — $blurbTail Inside your everyday, that afterglow tends to stretch the tone by one beat.",
+    r"$shortName, one note — $blurbTail Meeting your day pillar, this note tends to read like a shared standard tone.",
+    r"$shortName's opening line — $blurbTail Next to your day pillar, that opening line tends to play like a duo's intro.",
+    r"$shortName, one strand — $blurbTail Beside your day pillar, that strand tends to weave into your daily tone.",
+    r"$shortName's distance — $blurbTail Inside your everyday, that distance tends to settle like a safety line for the pair.",
+    r"$shortName's one season — $blurbTail Meeting your day pillar, the season tends to get logged as shared time.",
+    r"$shortName's first page — $blurbTail When your day pillar is near, the first page tends to extend into a shared book.",
+    r"$shortName's surface tone — $blurbTail Close to your day pillar, the surface tone tends to read one shade richer than usual.",
+    r"$shortName's everyday note — $blurbTail Alongside your everyday, that note tends to read like the basic unit between you.",
+    r"$shortName, one beat — $blurbTail Meeting your day pillar, that beat tends to act like a metronome of your own.",
+    r"$shortName's true color — $blurbTail Next to your day pillar, the true color tends to come through a step deeper than average.",
+    r"$shortName, one more sentence — $blurbTail When your day pillar backs it, the sentence tends to read like a shared shorthand.",
+    r"$shortName's own tempo — $blurbTail Inside your everyday, that tempo tends to find its natural settling tone.",
+    r"$shortName, one facet — $blurbTail Near your day pillar, the facet tends to show one shade more accurately than usual.",
+    r"$shortName as a shape — $blurbTail Alongside your everyday, that shape tends to read a tone clearer than expected.",
+    r"$shortName, one pitch of color — $blurbTail Meeting your day pillar, the color tends to settle into a shared minor key.",
+    r"$shortName's first nuance — $blurbTail Meeting your day pillar, the nuance tends to firm into a signal of your own.",
+    r"$shortName's result-and-intent — $blurbTail When your daily life supports it, the intent tends to settle into a shared promise.",
+    r"$shortName's first interior — $blurbTail Close to your day pillar, the interior tends to unspool one beat more honestly.",
+    r"$shortName's one-liner — $blurbTail Near your day pillar, that one-liner tends to read like a shared cover line.",
+    r"$shortName's amplitude — $blurbTail Meeting your day pillar, the amplitude tends to smooth out over your shared daily life.",
+    r"$shortName's segments — $blurbTail Beside your day pillar, those segments tend to tick like a shared metronome.",
   ];
 
   // R100 sprint 2 — salted independent FNV-1a per slot. 기존 `seed % pool.length`
@@ -3818,7 +3825,7 @@ class _KpopAnchors {
           ' $myElName↔$stElName 결 위에 신호 자리가 비어 있어 톤이 매번 두 사람이 새로 합의해야 떠올라요.',
           ' 큰 anchor 없는 결이라 $myElName↔$stElName 사이의 본 박자가 매일 새로 측정돼요.',
           ' anchor 비어 있는 자리라 $myElName↔$stElName 결의 본 깊이가 매번 약속 빈도에 비례해 보여요.',
-          ' $myElWith $stElName 사이에 받쳐 줄 신호가 없어 톤은 두 사람의 의도된 합의 위에서만 안정돼요.',
+          ' $myElWith $stElName 사이에 받쳐 줄 신호가 없어, 톤은 두 사람이 의도적으로 합의한 만큼만 잔잔하게 떠 있어요.',
           ' 신호 없는 결이라 $myElName↔$stElName 본래 거리가 두 사람의 매일 결정으로만 좁혀져요.',
           ' anchor 가 없는 자리라 $myElName↔$stElName 결의 본 모양이 두 사람의 약속 빈도에 정직하게 비례해요.',
           ' $myElName↔$stElName 사이에 신호 anchor 가 비어 있어 톤은 두 사람의 의도된 시간만큼만 살아 있어요.',
@@ -3842,16 +3849,16 @@ class _KpopAnchors {
           ' The $myElName↔$stElName flow runs through $strongCount strong anchors, so the pull reads tidier than usual.',
           ' $strongCount dense anchors bind the $myElName↔$stElName seat, drawing the two of you in by a sharper margin.',
           ' Across the $myElName↔$stElName line, $strongCount strong signals layer together so the pull reads two shades clearer.',
-          ' $strongCount anchors lock the $myElName↔$stElName grain in place, letting the attraction settle above the room average.',
+          ' $strongCount anchors lock the $myElName↔$stElName line in place, letting the attraction settle above the room average.',
           ' On top of the $myElName↔$stElName flow rest $strongCount big anchors, so the pull lands with extra weight.',
           ' $strongCount strong anchors gather over the $myElName↔$stElName seat, sharpening the magnetism beyond the usual tone.',
-          ' The $myElName and $stElName grains are pulled toward each other by $strongCount anchors, so closeness arrives fast.',
+          ' The $myElName and $stElName elements are pulled toward each other by $strongCount anchors, so closeness arrives fast.',
           ' With $strongCount anchors lined up, the $myElName↔$stElName attraction reads a full step above average clarity.',
           ' $strongCount aligned anchors run through the $myElName↔$stElName seat, so the pull builds in a steady, visible curve.',
-          ' $strongCount big signals reinforce the $myElName↔$stElName grain, holding the attraction in a tight, readable line.',
+          ' $strongCount big signals reinforce the $myElName↔$stElName pairing, holding the attraction in a tight, readable line.',
           ' The $myElName↔$stElName seat carries $strongCount strong anchors at once, so closeness arrives without much effort.',
           ' Stacked in $strongCount rows, the anchors on the $myElName↔$stElName seat read like a magnetic pull above the median.',
-          ' $strongCount anchors layered into the $myElName↔$stElName grain push the pull a clear notch above neutral attraction.',
+          ' $strongCount anchors layered into the $myElName↔$stElName flow push the pull a clear notch above neutral attraction.',
         ];
       } else if (weakCount >= 1) {
         pool = [
@@ -3859,52 +3866,52 @@ class _KpopAnchors {
           ' $weakCount friction anchor stays in the seat, so a soft tone still shows a couple of split points.',
           ' A small stimulus anchor ($weakCount) is present, so even between calm beats one notch of caution surfaces.',
           ' On top of the $myElName↔$stElName flow, $weakCount friction anchor surfaces a small split inside a calm seat.',
-          ' $weakCount friction anchor lodges between the $myElName and $stElName grains, asking for one extra beat of care.',
+          ' $weakCount friction anchor lodges between the $myElName and $stElName elements, asking for one extra beat of care.',
           ' Across the $myElName↔$stElName seat, $weakCount stimulus signal slips in and tilts the rhythm off-axis by a hair.',
-          ' $weakCount weak anchor leans on the $myElName↔$stElName grain, so the calm tone still cracks for a beat now and then.',
+          ' $weakCount weak anchor leans on the $myElName↔$stElName line, so the calm tone still cracks for a beat now and then.',
           ' A friction signal ($weakCount) cuts across the $myElName↔$stElName line, surfacing a small split mid-flow.',
           ' $weakCount stimulus anchor settles into the $myElName↔$stElName seat, asking for a touch more conscious alignment.',
-          ' On the $myElName↔$stElName grain, $weakCount weak anchor sits low and the rhythm picks up a quiet hitch.',
-          ' $weakCount friction signal lands across the $myElName and $stElName grains, leaving a fine line in an otherwise soft seat.',
+          ' On the $myElName↔$stElName flow, $weakCount weak anchor sits low and the rhythm picks up a quiet hitch.',
+          ' $weakCount friction signal lands across the $myElName and $stElName elements, leaving a fine line in an otherwise soft seat.',
           ' A small anchor of caution ($weakCount) holds part of the $myElName↔$stElName flow, so one beat of restraint is wise.',
           ' $weakCount weak anchor presses one side of the $myElName↔$stElName seat, so one shade of patience reads tidier.',
           ' Through the $myElName↔$stElName line runs $weakCount friction signal, so a soft tone shows a thin fracture if you look close.',
-          ' $weakCount stimulus anchor is layered into the $myElName↔$stElName grain, so the rhythm needs one beat of deliberate handling.',
+          ' $weakCount stimulus anchor is layered into the $myElName↔$stElName pairing, so the rhythm needs one beat of deliberate handling.',
           ' A subtle friction signal ($weakCount) crosses the $myElName↔$stElName seat, so a calm pace still snags once in a while.',
         ];
       } else if (strongCount == 1) {
         pool = [
           ' One anchor underwrites it, keeping the $myElName↔$stElName flow naturally settled.',
           ' A single steady anchor sits in the seat, tidying the $myElName↔$stElName flow into a calm tone.',
-          ' One firm anchor underneath holds the $myElName↔$stElName grain in a quietly aligned rhythm.',
+          ' One firm anchor underneath holds the $myElName↔$stElName flow in a quietly aligned rhythm.',
           ' A dense single anchor lies through the $myElName↔$stElName seat, so the flow settles above average tidy.',
-          ' A lone steady anchor crosses the $myElName↔$stElName grain, holding the flow without tilting either way.',
+          ' A lone steady anchor crosses the $myElName↔$stElName line, holding the flow without tilting either way.',
           ' One quiet anchor sits over the $myElName↔$stElName seat, keeping the pace softly aligned through the day.',
           ' Across the $myElName↔$stElName line, one anchor underwrites the rhythm and the tone stays one step above neutral.',
-          ' A single firm signal binds the $myElName and $stElName grains, so the everyday rhythm sits a half-step calmer.',
+          ' A single firm signal binds the $myElName and $stElName elements, so the everyday rhythm sits a half-step calmer.',
           ' One anchor laid into the $myElName↔$stElName seat tidies the flow into a steady, unstrained tone.',
-          ' The $myElName↔$stElName grain rests on one steady anchor, so daily pacing reads tidier than the average pairing.',
-          ' One anchor underneath the $myElName↔$stElName seat keeps both grains aligned without either pushing the other.',
+          ' The $myElName↔$stElName flow rests on one steady anchor, so daily pacing reads tidier than the average pairing.',
+          ' One anchor underneath the $myElName↔$stElName seat keeps both elements aligned without either pushing the other.',
           ' A solid single signal threads the $myElName↔$stElName line, holding the flow at a quiet, average-plus setting.',
-          ' A lone anchor lies across the $myElName and $stElName grains, so the rhythm reads one shade cleaner than usual.',
+          ' A lone anchor lies across the $myElName and $stElName elements, so the rhythm reads one shade cleaner than usual.',
           ' One stabilizing anchor sits across the $myElName↔$stElName seat, so the pacing keeps a soft, sustained baseline.',
           ' A single firm anchor underwrites the $myElName↔$stElName line, so closeness builds without strain or rush.',
           ' One anchor of trust crosses the $myElName↔$stElName seat, letting the rhythm settle into a steady, low-friction tone.',
           ' A single quiet thread of an anchor runs through the $myElName↔$stElName seat, so the room reads calm without effort.',
           ' One settled anchor underwrites the $myElName↔$stElName line, keeping the daily tone half a step above the room average.',
-          ' A solitary firm anchor crosses the $myElName and $stElName grains, so a steady tone stays in the air across the week.',
+          ' A solitary firm anchor crosses the $myElName and $stElName elements, so a steady tone stays in the air across the week.',
           ' One steady signal beneath the $myElName↔$stElName flow keeps both ends aligned without either side pressing the other.',
           ' A lone underwriting anchor on the $myElName↔$stElName seat holds the rhythm at a softly elevated baseline.',
-          ' A single grounding anchor rests across the $myElName↔$stElName grain, so closeness comes by inches rather than spikes.',
+          ' A single grounding anchor rests across the $myElName↔$stElName line, so closeness comes by inches rather than spikes.',
           ' One anchor of patience binds the $myElName↔$stElName seat, so the tone takes the long route into clarity.',
           ' A lone anchor runs underneath the $myElName↔$stElName flow, so the conversation cadence stays tidy without effort.',
-          ' One firm note threads through the $myElName↔$stElName grain, keeping the room temperature one notch above neutral.',
+          ' One firm note threads through the $myElName↔$stElName pairing, keeping the room temperature one notch above neutral.',
           ' A single supporting anchor on the $myElName↔$stElName seat tilts the tone gently toward favor without overplay.',
           ' One anchor sits low across the $myElName↔$stElName line, so the cadence holds even when the topic shifts.',
           ' A lone steady underwriter on the $myElName and $stElName seat keeps the conversation tone in a clean low gear.',
-          ' One quiet anchor underwrites the $myElName↔$stElName grain, so the day-to-day stays mended without dramatic strokes.',
+          ' One quiet anchor underwrites the $myElName↔$stElName flow, so the day-to-day stays mended without dramatic strokes.',
           ' A single settled anchor crosses the $myElName↔$stElName flow, so the bond builds in even, almost invisible layers.',
-          ' One trust-shaped anchor sits beneath the $myElName↔$stElName grain, so the closeness stays unstrained on slow days.',
+          ' One trust-shaped anchor sits beneath the $myElName↔$stElName line, so the closeness stays unstrained on slow days.',
           ' A lone calming anchor binds the $myElName↔$stElName seat, so neither side has to overcorrect to keep tempo.',
         ];
       } else {
@@ -3912,49 +3919,49 @@ class _KpopAnchors {
           ' No direct anchor — the raw distance between $myElName and $stElName shows through.',
           ' No dense anchor here — the natural distance between $myElName and $stElName shows in its bare form.',
           ' With no big anchor laid in, the original distance between $myElName and $stElName comes through as is.',
-          ' A no-stimulus seat — the $myElName and $stElName grains show their honest distance.',
+          ' A no-stimulus seat — the $myElName and $stElName elements show their honest distance.',
           ' Nothing binds the seat, so the bare distance between $myElName and $stElName surfaces without correction.',
-          ' Without a single anchor on the line, the $myElName and $stElName grains face each other in their natural form.',
+          ' Without a single anchor on the line, the $myElName and $stElName elements face each other in their natural form.',
           ' No signal layers in, so the distance between $myElName and $stElName reads exactly as it is.',
           ' An anchor-free seat — the $myElName and $stElName flow keeps to its own original spacing.',
-          ' Without anchors, the $myElName↔$stElName grain runs at its uncorrected pace from both ends.',
+          ' Without anchors, the $myElName↔$stElName flow runs at its uncorrected pace from both ends.',
           ' No reinforcing signal — the $myElName↔$stElName line stands at its honest, native distance.',
-          ' Empty of dense anchors, the $myElName↔$stElName seat lets each grain show its bare grain back.',
+          ' Empty of dense anchors, the $myElName↔$stElName seat lets each side show its bare outline back.',
           ' No anchor lies between $myElName and $stElName, so the rhythm depends entirely on how you both choose to lean.',
           ' Across the $myElName↔$stElName line nothing locks in, so the distance reads as your conscious effort decides.',
           ' With the seat blank of anchors, the $myElName↔$stElName flow plays back without dampening or amplification.',
-          ' No anchor on the $myElName↔$stElName grain — closeness becomes a choice rather than a chart event.',
+          ' No anchor on the $myElName↔$stElName line — closeness here tends to be a choice rather than something that happens on its own.',
           ' The $myElName↔$stElName seat carries no signal, so what shows up between you is built, not given.',
-          ' An empty anchor seat lets the $myElName and $stElName grains stand at the size they were before they met.',
+          ' An empty anchor seat lets the $myElName and $stElName elements stand at the size they were before they met.',
           ' Without one binding signal, the $myElName↔$stElName line reads as its untouched starting distance.',
-          ' No layered anchors mean the $myElName↔$stElName grain stays its own native length on both sides.',
+          ' No layered anchors mean the $myElName↔$stElName flow stays its own native length on both sides.',
           ' A vacant anchor field across the $myElName and $stElName seat lets the bond rely solely on intent.',
           ' Lacking direct anchors, the $myElName↔$stElName flow holds its natural length until effort is added.',
-          ' The $myElName↔$stElName grain sits unmoored, so the tone changes only when one of you moves it on purpose.',
+          ' The $myElName↔$stElName line sits unmoored, so the tone changes only when one of you moves it on purpose.',
           ' No anchor reinforces the $myElName↔$stElName seat, so consistency depends on how you both keep showing up.',
           ' An empty signal line between $myElName and $stElName means the bond grows by deliberate action only.',
           ' The $myElName↔$stElName seat has no native pull, so depth here is built layer by layer rather than given.',
           ' Without any binding anchors, the $myElName↔$stElName line measures itself purely by your routines.',
-          ' No stabilizing signal underwrites the $myElName↔$stElName grain, so both sides keep their original size.',
+          ' No stabilizing signal underwrites the $myElName↔$stElName pairing, so both sides keep their original size.',
           ' Free of anchors, the $myElName↔$stElName flow follows whatever rhythm you both consciously hand it.',
-          ' The $myElName↔$stElName seat sits without any chart-side scaffolding, so the bond is whatever you keep making.',
+          ' The $myElName↔$stElName seat sits without any built-in scaffolding, so the bond tends to be whatever you keep making.',
           ' With no anchor laid into the $myElName↔$stElName line, the tone is the exact sum of your weekly meetings.',
-          ' Nothing pre-binds the $myElName↔$stElName grain here, so the bond reads as a slow, deliberate construction.',
+          ' Nothing pre-binds the $myElName↔$stElName line here, so the bond reads as a slow, deliberate construction.',
           ' The $myElName↔$stElName seat has zero pre-set pull, so closeness becomes a deliberate practice rather than a given.',
           ' No bridging anchor lies in the $myElName↔$stElName seat, so the bond inherits whatever pace you both keep.',
-          ' Across an empty signal field, the $myElName and $stElName grains keep their original outline intact.',
+          ' Across an empty signal field, the $myElName and $stElName elements keep their original outline intact.',
           ' Without dense anchors, the $myElName↔$stElName line plays at the volume you both deliberately set.',
-          ' No native pull threads the $myElName↔$stElName grain, so the closeness reads as constructed, not inherited.',
-          ' The $myElName↔$stElName seat lacks any chart-side reinforcement, so the bond runs on practice alone.',
+          ' No native pull threads the $myElName↔$stElName flow, so the closeness reads as constructed, not inherited.',
+          ' The $myElName↔$stElName seat lacks any built-in reinforcement, so the bond tends to run on practice alone.',
           ' Empty of any signal, the $myElName↔$stElName line shows its raw spacing every time you meet.',
-          ' Without binding lines, the $myElName↔$stElName grain reads exactly as wide as your weekly contact keeps it.',
-          ' An anchor-empty seat lets the $myElName and $stElName grains keep their native outline through every meeting.',
+          ' Without binding lines, the $myElName↔$stElName flow reads exactly as wide as your weekly contact keeps it.',
+          ' An anchor-empty seat lets the $myElName and $stElName elements keep their native outline through every meeting.',
           ' The $myElName↔$stElName flow rests on no scaffolding here, so depth is the precise sum of your shown-up days.',
           ' Without underpinning anchors, the $myElName↔$stElName line records itself purely from your active choices.',
           ' No structure underwrites the $myElName↔$stElName seat, so the bond stays whatever rhythm you both keep current.',
-          ' An empty signal seat across the $myElName↔$stElName grain leaves the closeness to your own routine cadence.',
-          ' Free from any chart pull, the $myElName↔$stElName line gathers whatever shape your shared time gives it.',
-          ' Without anchor reinforcement, the $myElName↔$stElName grain holds at exactly your conscious bond-building rate.',
+          ' An empty signal seat across the $myElName↔$stElName line leaves the closeness to your own routine cadence.',
+          ' Free of any built-in pull, the $myElName↔$stElName line tends to gather whatever shape your shared time gives it.',
+          ' Without anchor reinforcement, the $myElName↔$stElName pairing holds at exactly your conscious bond-building rate.',
           ' The $myElName↔$stElName line carries no inherent pull, so what builds here is exactly what you both invest.',
         ];
       }
@@ -4001,7 +4008,7 @@ class _KpopAnchors {
             ' ($myElName↔$stElName 박자 위)',
           ]
         : [
-            ' ($myElName↔$stElName grain note)',
+            ' ($myElName↔$stElName element note)',
             ' (on the $myElName↔$stElName flow)',
             ' (one beat across $myElName↔$stElName)',
             ' (a $myElName↔$stElName tone aside)',

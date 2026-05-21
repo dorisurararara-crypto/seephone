@@ -98,15 +98,28 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
     }
   }
 
-  String _effectiveUserName() {
+  /// R106 P5 — 앱 언어 분기. compatibility_screen / kpop_compat_screen 의
+  /// `final useKo = (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko'`
+  /// 패턴과 동일.
+  bool _useKo(BuildContext context) =>
+      (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+
+  String _effectiveUserName(BuildContext context) {
     final raw = _nameCtl.text.trim();
+    // R106 P5 — 빈 칸이면 언어별 기본 호칭. KO 경로는 R101 이래의 동작
+    // `raw.isEmpty ? '당신' : raw` 그대로, EN 경로는 'you' 로 분기.
+    if (!_useKo(context)) return raw.isEmpty ? 'you' : raw;
     return raw.isEmpty ? '당신' : raw;
   }
 
-  Future<void> _compose() async {
+  Future<void> _compose(BuildContext context) async {
     final me = ref.read(sajuResultProvider);
     final star = _selected;
     if (me == null || star == null) return;
+    // R106 P5 — 현재 앱 언어에 맞는 호칭/셀럽명으로 시나리오 생성.
+    // 서비스는 KO/EN 본문을 모두 만들지만, 본문에 박히는 이름은 한 쌍이므로
+    // 화면이 보는 언어에 맞춰 전달한다.
+    final useKo = _useKo(context);
     setState(() {
       _composing = true;
     });
@@ -115,8 +128,8 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
       final scenario = await PastLifeService.generate(
         user: me,
         celeb: celeb,
-        celebName: _starShortName(star),
-        userName: _effectiveUserName(),
+        celebName: _starDisplayName(star, useKo),
+        userName: _effectiveUserName(context),
         kind: star.kind,
       );
       if (!mounted) return;
@@ -133,6 +146,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
   @override
   Widget build(BuildContext context) {
     final me = ref.watch(sajuResultProvider);
+    final useKo = _useKo(context);
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
@@ -144,7 +158,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          '전생 · 緣',
+          useKo ? '전생 · 緣' : 'PAST LIFE · 緣',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,
@@ -159,7 +173,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
       body: SafeArea(
         top: false,
         child: me == null
-            ? _NeedSajuState()
+            ? _NeedSajuState(useKo: useKo)
             : !_loaded
             ? const Center(
                 child: Padding(
@@ -170,7 +184,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
                   ),
                 ),
               )
-            : _buildBody(context),
+            : _buildBody(context, useKo),
       ),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
@@ -187,7 +201,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
     });
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, bool useKo) {
     // R103 sprint 2 — page-level single primary scroll. picker 의 nested ListView
     // 가 NeverScrollable 로 설정되어 모든 vertical gesture 가 이 ListView 로 흐른다.
     //
@@ -199,22 +213,24 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
       key: const Key('past_life_primary_scroll'),
       padding: EdgeInsets.zero,
       children: [
-        _Hero(),
+        _Hero(useKo: useKo),
         if (!hasResult) ...[
           _NameField(controller: _nameCtl),
           _SearchBar(
             controller: _searchCtl,
+            useKo: useKo,
             onChanged: (q) => setState(() => _query = q),
           ),
           _StarPickerList(
             stars: _filteredStars(),
             selectedId: _selected?.id,
+            useKo: useKo,
             onPick: (s) {
               setState(() {
                 _selected = s;
                 _scenario = null;
               });
-              _compose();
+              _compose(context);
             },
           ),
         ],
@@ -234,8 +250,9 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
             _ResultCard(
               key: const Key('past_life_result_card'),
               scenario: _scenario!,
-              celebName: _starShortName(_selected!),
-              userName: _effectiveUserName(),
+              celebName: _starDisplayName(_selected!, useKo),
+              userName: _effectiveUserName(context),
+              useKo: useKo,
               onChooseOther: _chooseOtherStar,
             ),
         ],
@@ -257,6 +274,9 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
 // ───────────────── widgets ─────────────────
 
 class _Hero extends StatelessWidget {
+  final bool useKo;
+  const _Hero({required this.useKo});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -270,7 +290,7 @@ class _Hero extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '팬심 1순위 · 전생 인연',
+            useKo ? '팬심 1순위 · 전생 인연' : 'FOR THE FANDOM · PAST-LIFE TIE',
             style: GoogleFonts.inter(
               fontSize: 9,
               letterSpacing: 5,
@@ -280,22 +300,39 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '전생의 악연 혹은 인연',
-            style: GoogleFonts.notoSerifKr(
-              fontSize: 26,
-              fontWeight: FontWeight.w300,
-              color: AppColors.ink,
-              height: 1.25,
-            ),
+            useKo ? '전생의 악연 혹은 인연' : 'A bond or a feud, lifetimes ago',
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.ink,
+                    height: 1.25,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.ink,
+                    height: 1.2,
+                  ),
           ),
           const SizedBox(height: 10),
           Text(
-            '나와 최애가 어떤 시대에 만나 어떤 관계였는지, 사주의 합·충·원진살로 풀어드립니다.',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 13,
-              color: AppColors.inkLight,
-              height: 1.7,
-            ),
+            useKo
+                ? '나와 최애가 어떤 시대에 만나 어떤 관계였는지, 사주의 합·충·원진살로 풀어드립니다.'
+                : 'How you and your favorite might have met, and what you '
+                      'might have been to each other — read through the '
+                      'meeting, clashing, and love-hate threads of your day pillars.',
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 13,
+                    color: AppColors.inkLight,
+                    height: 1.7,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 13,
+                    color: AppColors.inkLight,
+                    height: 1.7,
+                  ),
           ),
         ],
       ),
@@ -309,18 +346,27 @@ class _NameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // R106 P5 — useKo 를 context 에서 직접 산출 (state 의 _useKo 와 동일 패턴).
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '내 이름 (빈 칸이면 “당신”)',
-            style: GoogleFonts.notoSansKr(
-              fontSize: 11,
-              color: AppColors.taupe,
-              letterSpacing: 0.4,
-            ),
+            useKo ? '내 이름 (빈 칸이면 “당신”)' : 'Your name (blank becomes “you”)',
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 11,
+                    color: AppColors.taupe,
+                    letterSpacing: 0.4,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 11,
+                    color: AppColors.taupe,
+                    letterSpacing: 0.4,
+                  ),
           ),
           const SizedBox(height: 8),
           TextField(
@@ -328,7 +374,7 @@ class _NameField extends StatelessWidget {
             controller: controller,
             style: GoogleFonts.notoSansKr(fontSize: 15, color: AppColors.ink),
             decoration: InputDecoration(
-              hintText: '예) 승현',
+              hintText: useKo ? '예) 승현' : 'e.g. Alex',
               hintStyle: GoogleFonts.notoSansKr(
                 fontSize: 14,
                 color: AppColors.taupe,
@@ -363,7 +409,12 @@ class _NameField extends StatelessWidget {
 class _SearchBar extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
-  const _SearchBar({required this.controller, required this.onChanged});
+  final bool useKo;
+  const _SearchBar({
+    required this.controller,
+    required this.onChanged,
+    required this.useKo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -375,7 +426,7 @@ class _SearchBar extends StatelessWidget {
         style: GoogleFonts.notoSansKr(fontSize: 14, color: AppColors.ink),
         onChanged: onChanged,
         decoration: InputDecoration(
-          hintText: '최애 이름으로 검색',
+          hintText: useKo ? '최애 이름으로 검색' : 'Search by your favorite’s name',
           hintStyle: GoogleFonts.notoSansKr(
             fontSize: 13,
             color: AppColors.taupe,
@@ -414,10 +465,12 @@ class _StarPickerList extends StatelessWidget {
   final List<_StarLite> stars;
   final String? selectedId;
   final ValueChanged<_StarLite> onPick;
+  final bool useKo;
   const _StarPickerList({
     required this.stars,
     required this.selectedId,
     required this.onPick,
+    required this.useKo,
   });
 
   @override
@@ -426,11 +479,18 @@ class _StarPickerList extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
         child: Text(
-          '검색 결과가 없어요. 다른 이름으로 찾아보세요.',
-          style: GoogleFonts.notoSansKr(
-            fontSize: 13,
-            color: AppColors.inkLight,
-          ),
+          useKo
+              ? '검색 결과가 없어요. 다른 이름으로 찾아보세요.'
+              : 'No matches. Try another name.',
+          style: useKo
+              ? GoogleFonts.notoSansKr(
+                  fontSize: 13,
+                  color: AppColors.inkLight,
+                )
+              : GoogleFonts.inter(
+                  fontSize: 13,
+                  color: AppColors.inkLight,
+                ),
         ),
       );
     }
@@ -473,22 +533,37 @@ class _StarPickerList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _starShortName(s),
-                          style: GoogleFonts.notoSerifKr(
-                            fontSize: 16,
-                            fontWeight: isSelected
-                                ? FontWeight.w500
-                                : FontWeight.w400,
-                            color: AppColors.ink,
-                          ),
+                          _starDisplayName(s, useKo),
+                          style: useKo
+                              ? GoogleFonts.notoSerifKr(
+                                  fontSize: 16,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w500
+                                      : FontWeight.w400,
+                                  color: AppColors.ink,
+                                )
+                              : GoogleFonts.cormorantGaramond(
+                                  fontSize: 18,
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
+                                  color: AppColors.ink,
+                                ),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${s.dayPillar} · ${_pillarKoFromHanja(s.dayPillar)}일주',
-                          style: GoogleFonts.notoSansKr(
-                            fontSize: 11.5,
-                            color: AppColors.taupe,
-                          ),
+                          useKo
+                              ? '${s.dayPillar} · ${_pillarKoFromHanja(s.dayPillar)}일주'
+                              : '${s.dayPillar} · ${_pillarRomanFromHanja(s.dayPillar)} day pillar',
+                          style: useKo
+                              ? GoogleFonts.notoSansKr(
+                                  fontSize: 11.5,
+                                  color: AppColors.taupe,
+                                )
+                              : GoogleFonts.inter(
+                                  fontSize: 11.5,
+                                  color: AppColors.taupe,
+                                ),
                         ),
                       ],
                     ),
@@ -514,6 +589,7 @@ class _ResultCard extends StatelessWidget {
   final PastLifeScenario scenario;
   final String celebName;
   final String userName;
+  final bool useKo;
 
   /// R104 sprint 2 — "다른 최애 고르기" tap. picker 화면으로 복귀.
   final VoidCallback onChooseOther;
@@ -522,12 +598,27 @@ class _ResultCard extends StatelessWidget {
     required this.scenario,
     required this.celebName,
     required this.userName,
+    required this.useKo,
     required this.onChooseOther,
   });
 
   @override
   Widget build(BuildContext context) {
-    final keywords = scenario.keywords.map((k) => k.labelKo).toList();
+    // R106 P5 — 언어별 keyword 라벨 / headline / body. EN scenarioEn 이 비면
+    // (영어 풀 누락 등) 한국어 본문으로 fallback 해 앱이 깨지지 않게 한다.
+    final keywords = scenario.keywords
+        .map((k) => useKo ? k.labelKo : k.labelEn)
+        .toList();
+    final headline = useKo
+        ? scenario.headlineKo
+        : (scenario.headlineEn.isNotEmpty
+              ? scenario.headlineEn
+              : scenario.headlineKo);
+    final body = useKo
+        ? scenario.scenarioKo
+        : (scenario.scenarioEn.isNotEmpty
+              ? scenario.scenarioEn
+              : scenario.scenarioKo);
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
       child: Column(
@@ -537,6 +628,7 @@ class _ResultCard extends StatelessWidget {
           _SelectedStarBar(
             key: const Key('past_life_selected_star_bar'),
             celebName: celebName,
+            useKo: useKo,
             onChooseOther: onChooseOther,
           ),
           const SizedBox(height: 12),
@@ -552,7 +644,7 @@ class _ResultCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '전생 · 緣',
+                    useKo ? '전생 · 緣' : 'PAST LIFE · 緣',
                     style: GoogleFonts.inter(
                       fontSize: 9,
                       letterSpacing: 5,
@@ -562,13 +654,20 @@ class _ResultCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    scenario.headlineKo,
-                    style: GoogleFonts.notoSerifKr(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.ink,
-                      height: 1.35,
-                    ),
+                    headline,
+                    style: useKo
+                        ? GoogleFonts.notoSerifKr(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.ink,
+                            height: 1.35,
+                          )
+                        : GoogleFonts.cormorantGaramond(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.ink,
+                            height: 1.3,
+                          ),
                   ),
                   const SizedBox(height: 14),
                   Wrap(
@@ -587,11 +686,17 @@ class _ResultCard extends StatelessWidget {
                           ),
                           child: Text(
                             k,
-                            style: GoogleFonts.notoSansKr(
-                              fontSize: 11,
-                              color: AppColors.inkLight,
-                              letterSpacing: 0.2,
-                            ),
+                            style: useKo
+                                ? GoogleFonts.notoSansKr(
+                                    fontSize: 11,
+                                    color: AppColors.inkLight,
+                                    letterSpacing: 0.2,
+                                  )
+                                : GoogleFonts.inter(
+                                    fontSize: 11,
+                                    color: AppColors.inkLight,
+                                    letterSpacing: 0.2,
+                                  ),
                           ),
                         ),
                     ],
@@ -600,13 +705,19 @@ class _ResultCard extends StatelessWidget {
                   Container(height: 1, color: AppColors.line),
                   const SizedBox(height: 18),
                   Text(
-                    scenario.scenarioKo,
+                    body,
                     key: const Key('past_life_result_body'),
-                    style: GoogleFonts.notoSansKr(
-                      fontSize: 14.5,
-                      color: AppColors.ink,
-                      height: 1.85,
-                    ),
+                    style: useKo
+                        ? GoogleFonts.notoSansKr(
+                            fontSize: 14.5,
+                            color: AppColors.ink,
+                            height: 1.85,
+                          )
+                        : GoogleFonts.inter(
+                            fontSize: 14,
+                            color: AppColors.ink,
+                            height: 1.8,
+                          ),
                   ),
                 ],
               ),
@@ -622,10 +733,12 @@ class _ResultCard extends StatelessWidget {
 /// "다른 최애 고르기" 로 picker 화면 복귀 경로를 제공한다.
 class _SelectedStarBar extends StatelessWidget {
   final String celebName;
+  final bool useKo;
   final VoidCallback onChooseOther;
   const _SelectedStarBar({
     super.key,
     required this.celebName,
+    required this.useKo,
     required this.onChooseOther,
   });
 
@@ -641,13 +754,20 @@ class _SelectedStarBar extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '선택한 최애: $celebName',
-              style: GoogleFonts.notoSansKr(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.ink,
-                letterSpacing: 0.2,
-              ),
+              useKo ? '선택한 최애: $celebName' : 'Your pick: $celebName',
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                      letterSpacing: 0.2,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ink,
+                      letterSpacing: 0.2,
+                    ),
             ),
           ),
           const SizedBox(width: 8),
@@ -663,13 +783,20 @@ class _SelectedStarBar extends StatelessWidget {
               ),
             ),
             child: Text(
-              '다른 최애 고르기',
-              style: GoogleFonts.notoSansKr(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.3,
-                color: AppColors.accent,
-              ),
+              useKo ? '다른 최애 고르기' : 'Pick another',
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.3,
+                      color: AppColors.accent,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.3,
+                      color: AppColors.accent,
+                    ),
             ),
           ),
         ],
@@ -679,6 +806,9 @@ class _SelectedStarBar extends StatelessWidget {
 }
 
 class _NeedSajuState extends StatelessWidget {
+  final bool useKo;
+  const _NeedSajuState({required this.useKo});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -688,23 +818,41 @@ class _NeedSajuState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '먼저 내 사주를 입력해 주세요.',
+              useKo
+                  ? '먼저 내 사주를 입력해 주세요.'
+                  : 'Enter your birth details first.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.notoSerifKr(
-                fontSize: 18,
-                color: AppColors.ink,
-                fontWeight: FontWeight.w400,
-              ),
+              style: useKo
+                  ? GoogleFonts.notoSerifKr(
+                      fontSize: 18,
+                      color: AppColors.ink,
+                      fontWeight: FontWeight.w400,
+                    )
+                  : GoogleFonts.cormorantGaramond(
+                      fontSize: 22,
+                      color: AppColors.ink,
+                      fontWeight: FontWeight.w500,
+                    ),
             ),
             const SizedBox(height: 12),
             Text(
-              '전생 시나리오는 사용자 사주와 최애의 일주를 바탕으로 합·충·원진살을 풀어드립니다.',
+              useKo
+                  ? '전생 시나리오는 사용자 사주와 최애의 일주를 바탕으로 합·충·원진살을 풀어드립니다.'
+                  : 'The past-life reading is drawn from your day pillar and '
+                        'your favorite’s — through the meeting, clashing, and '
+                        'love-hate threads between them.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.notoSansKr(
-                fontSize: 13,
-                color: AppColors.inkLight,
-                height: 1.7,
-              ),
+              style: useKo
+                  ? GoogleFonts.notoSansKr(
+                      fontSize: 13,
+                      color: AppColors.inkLight,
+                      height: 1.7,
+                    )
+                  : GoogleFonts.inter(
+                      fontSize: 13,
+                      color: AppColors.inkLight,
+                      height: 1.7,
+                    ),
             ),
             const SizedBox(height: 22),
             OutlinedButton(
@@ -718,12 +866,18 @@ class _NeedSajuState extends StatelessWidget {
                 ),
               ),
               child: Text(
-                '사주 입력하기',
-                style: GoogleFonts.notoSansKr(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.5,
-                ),
+                useKo ? '사주 입력하기' : 'Enter birth details',
+                style: useKo
+                    ? GoogleFonts.notoSansKr(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      )
+                    : GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      ),
               ),
             ),
           ],
@@ -767,9 +921,28 @@ class _StarLite {
 /// `nameKo` 의 괄호 (예: "홍은채 (LE SSERAFIM)") 안 영문 그룹명을 잘라낸 짧은 표시명.
 String _starShortName(_StarLite s) {
   final raw = s.nameKo.trim();
-  if (raw.isEmpty) return s.nameEn.trim();
+  if (raw.isEmpty) return _stripParen(s.nameEn);
   final cut = raw.contains('(') ? raw.split('(').first.trim() : raw;
-  return cut.isEmpty ? s.nameEn.trim() : cut;
+  return cut.isEmpty ? _stripParen(s.nameEn) : cut;
+}
+
+/// R106 P5 — `nameEn` 의 괄호 (예: "V (BTS)") 안 그룹명을 잘라낸 짧은 영문명.
+String _stripParen(String name) {
+  final raw = name.trim();
+  if (raw.isEmpty) return raw;
+  final cut = raw.contains('(') ? raw.split('(').first.trim() : raw;
+  return cut.isEmpty ? raw : cut;
+}
+
+/// R106 P5 — 언어별 셀럽 표시명. KO → `_starShortName`, EN → `nameEn` 짧은 형.
+/// 어느 쪽이든 비어 있으면 다른 언어 이름으로 fallback.
+String _starDisplayName(_StarLite s, bool useKo) {
+  if (useKo) {
+    final ko = _starShortName(s);
+    return ko.isNotEmpty ? ko : _stripParen(s.nameEn);
+  }
+  final en = _stripParen(s.nameEn);
+  return en.isNotEmpty ? en : _starShortName(s);
 }
 
 /// 일주 한자 2자 → 한국어 음 (kpop_compat_screen.dart `_pillarKoFromHanja` 와 동일 매핑).
@@ -803,6 +976,42 @@ String _pillarKoFromHanja(String dayPillar) {
   };
   final g = ganKo[dayPillar[0]] ?? '';
   final j = jiKo[dayPillar[1]] ?? '';
+  return '$g$j';
+}
+
+/// R106 P5 — 일주 한자 2자 → 로마자 음 (영어 모드 picker 부제목용).
+/// 천간/지지 표준 로마자. 매핑 실패 시 빈 문자열.
+String _pillarRomanFromHanja(String dayPillar) {
+  if (dayPillar.length < 2) return '';
+  const ganRoman = {
+    '甲': 'Gap',
+    '乙': 'Eul',
+    '丙': 'Byeong',
+    '丁': 'Jeong',
+    '戊': 'Mu',
+    '己': 'Gi',
+    '庚': 'Gyeong',
+    '辛': 'Sin',
+    '壬': 'Im',
+    '癸': 'Gye',
+  };
+  const jiRoman = {
+    '子': 'Ja',
+    '丑': 'Chuk',
+    '寅': 'In',
+    '卯': 'Myo',
+    '辰': 'Jin',
+    '巳': 'Sa',
+    '午': 'O',
+    '未': 'Mi',
+    '申': 'Sin',
+    '酉': 'Yu',
+    '戌': 'Sul',
+    '亥': 'Hae',
+  };
+  final g = ganRoman[dayPillar[0]] ?? '';
+  final j = jiRoman[dayPillar[1]] ?? '';
+  if (g.isEmpty || j.isEmpty) return '';
   return '$g$j';
 }
 

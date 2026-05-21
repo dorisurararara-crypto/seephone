@@ -3,12 +3,108 @@
 // Round 76 sprint 6 — pickDeep 신규: 사용자 사주 + 오늘 일진 기반 calibrate.
 // Round 77 sprint 7 — MZ 톤 50 ko/en 풀 추가 + tone selector.
 //   기본 'adult' = 기존 50 ko/en. 'mz' = 신규 50 ko/en (단톡/야자/시험/최애/굿즈/짝꿍/엄마).
+// Round 106 P2b — pickMystery 신규: 사주 미스터리형 알림 (design doc §6).
+//   오늘 일진 글자를 신비하게 던지는 title + body 2줄(글자×차트 관계 + 행동).
+//   topic-aware (P1 TopicSelector 가 고른 주제 반영). 7회 중 1회 기능 발견 훅.
+//   기존 pickDeep / pickFor / adult·mz 풀 — 전부 보존 (회귀 0).
+// Round 106 P2b-fix — 거짓말 0: body line1 은 그날 실제 계산된 일진 지지↔사용자
+//   일지 관계(event.hapChungType — TodayEventService 산출)로만 선택된다. 실제 충이
+//   있을 때만 "맞서는/부딪치는", 실제 합일 때만 "맞물리는/끌어당기는", 실제 형/파/해
+//   일 때만 "살짝 엇갈리는", 셋 다 없으면 관계-중립("스쳐가는/곁을 지나가는") 표현만.
+//   계산 로직 신규 작성 X — TodayEventService 가 이미 HapchungService 로 산출한 값 사용.
+
+import 'dart:convert';
+
+import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/saju_result.dart';
 import 'today_event_service.dart';
 
 /// 알림 톤 — 어른 (기본) / MZ 중고생.
 enum NotificationTone { adult, mz }
+
+/// R106 P2b-fix — 오늘 일진 지지 ↔ 사용자 일지 사이 실제 계산된 관계.
+/// TodayEventService.hapChungType(합/충/형/파/해/없음) 을 미스터리 알림 카피
+/// 선택용 4 분류로 접는다. 이 분류가 body line1 의 차트 관계 표현을 강제한다.
+/// 충/합/형·파·해가 없으면 [neutral] — 어떤 날이든 사실인 관계-중립 표현만.
+enum MysteryRelation {
+  /// 실제 지지충 — "맞서는 / 부딪치는 / 맞부딪치는" 표현 허용.
+  chung,
+
+  /// 실제 지지합(또는 천간합) — "맞물리는 / 끌어당기는" 표현 허용.
+  hap,
+
+  /// 실제 형(刑)/파(破)/해(害) — "살짝 엇갈리는 / 한 끗 어긋나는" 표현 허용.
+  friction,
+
+  /// 충·합·형·파·해 모두 없음 — 관계-중립("스쳐가는 / 곁을 지나가는") 표현만.
+  neutral,
+}
+
+extension MysteryRelationKey on MysteryRelation {
+  /// 미스터리 풀 JSON 의 interactions 하위 key.
+  String get key {
+    switch (this) {
+      case MysteryRelation.chung:
+        return 'chung';
+      case MysteryRelation.hap:
+        return 'hap';
+      case MysteryRelation.friction:
+        return 'friction';
+      case MysteryRelation.neutral:
+        return 'neutral';
+    }
+  }
+
+  /// TodayEventService.hapChungType('합'/'충'/'형'/'파'/'해'/'없음') →
+  /// MysteryRelation. 미스/null/'없음' 은 모두 [neutral] (관계 단정 금지).
+  static MysteryRelation fromHapChungType(String? hapChungType) {
+    switch (hapChungType) {
+      case '충':
+        return MysteryRelation.chung;
+      case '합':
+        return MysteryRelation.hap;
+      case '형':
+      case '파':
+      case '해':
+        return MysteryRelation.friction;
+      default:
+        // '없음' 또는 미상 — 관계 단정 금지, 중립 표현만.
+        return MysteryRelation.neutral;
+    }
+  }
+}
+
+/// R106 P2b — 사주 미스터리형 알림 카피 (design doc §6).
+/// title = 오늘 일진 글자를 신비하게 던지는 호기심 훅.
+/// body  = 2줄. line1 = 글자 × 사용자 차트 관계, line2 = 바로 할 행동 1개.
+/// 단정 0 — 사용자 감정·사건을 단정하지 않고 글자×차트 "구조" 만 말한다.
+class MysteryNotificationCopy {
+  final String title;
+
+  /// body line 1 — 오늘 글자가 사용자 일주/일지와 만나는 자리(실제 사주 관계).
+  final String bodyLine1;
+
+  /// body line 2 — 바로 할 행동 1개 (앱 열면 자세히).
+  final String bodyLine2;
+
+  /// 이 알림이 기능 발견 훅(7회 중 1회)인지.
+  final bool isFeatureHook;
+
+  /// 반영된 주제 id (R106 10 주제 string 중 하나). 신호 없으면 null.
+  final String? topicId;
+
+  const MysteryNotificationCopy({
+    required this.title,
+    required this.bodyLine1,
+    required this.bodyLine2,
+    required this.isFeatureHook,
+    required this.topicId,
+  });
+
+  /// flutter_local_notifications body 슬롯용 — 2줄을 줄바꿈으로 합친다.
+  String get body => '$bodyLine1\n$bodyLine2';
+}
 
 class NotificationPoolService {
   static const _enPool = [
@@ -267,5 +363,227 @@ class NotificationPoolService {
       ),
       en: TodayEventService.composeNotificationLineEn(reading),
     );
+  }
+
+  // ─────────────── Round 106 P2b — 사주 미스터리형 알림 ───────────────
+  //
+  // design doc §6: 오늘 실제 일진(글자)을 신비하게 던져 "어떤 글자? 왜?" 호기심을
+  // 만들고 tap 을 유도한다. title + body 2줄. body 1줄 = 글자×차트 관계,
+  // body 2줄 = 행동 1개. P1 TopicSelector 가 고른 주제 반영 (topic-aware).
+  // 7회 중 1회는 기능 발견 훅. 단정 0 — 글자가 차트와 만나는 "구조" 만 말한다.
+
+  /// 지지 한자 → 한글 음. 한자를 본문에서 즉시 풀이하기 위한 map (R86 jargon 가드).
+  static const Map<String, String> _branchKo = {
+    '子': '자',
+    '丑': '축',
+    '寅': '인',
+    '卯': '묘',
+    '辰': '진',
+    '巳': '사',
+    '午': '오',
+    '未': '미',
+    '申': '신',
+    '酉': '유',
+    '戌': '술',
+    '亥': '해',
+  };
+
+  /// design doc §6 — 기능 발견 훅 빈도. 7회 중 1회.
+  static const int featureHookEvery = 7;
+
+  static Map<String, dynamic>? _mysteryPoolCache;
+  static bool _mysteryPoolLoaded = false;
+
+  /// r106_mystery_notification_pool.json 1회 로드 + 캐시. 실패해도 silent.
+  /// 호출 측은 부팅 시 1회 await — 이후 동기 pickMystery 호출 OK.
+  /// 미적재여도 pickMystery 는 내장 fallback 으로 graceful (앱이 죽지 않는다).
+  static Future<void> ensureMysteryPoolLoaded() async {
+    if (_mysteryPoolLoaded) return;
+    try {
+      final raw = await rootBundle.loadString(
+        'assets/data/r106_mystery_notification_pool.json',
+      );
+      _mysteryPoolCache = jsonDecode(raw) as Map<String, dynamic>;
+    } catch (_) {
+      _mysteryPoolCache = <String, dynamic>{};
+    }
+    _mysteryPoolLoaded = true;
+  }
+
+  /// 테스트 전용 — 미스터리 풀 캐시 리셋.
+  static void debugResetMysteryPool() {
+    _mysteryPoolCache = null;
+    _mysteryPoolLoaded = false;
+  }
+
+  /// 사주 미스터리형 알림 카피 생성 — design doc §6 + P2b-fix 거짓말 0.
+  ///
+  /// [date] 오늘 날짜, [todayPillar] 오늘 60갑자 (DailyService.calculate 산출),
+  /// [day60ji] 사용자 일주 60갑자 (seed 분산용),
+  /// [topicId] P1 TopicSelector 가 고른 오늘 주제 id (없으면 null — 총평형),
+  /// [relation] 그날 실제 계산된 일진 지지↔사용자 일지 관계 (P2b-fix 핵심).
+  ///   TodayEventService.hapChungType 을 [MysteryRelation] 으로 접은 값. body
+  ///   line1 의 차트 관계 표현(맞서는/맞물리는/엇갈리는/스쳐가는)을 강제한다 —
+  ///   실제 충일 때만 "부딪치는", 실제 합일 때만 "끌어당기는", 둘 다 없으면
+  ///   관계-중립 표현만. null 이면 안전하게 [MysteryRelation.neutral] 처리.
+  /// [dayOffset] scheduleDaily 의 i (0~29) — 기능 발견 훅 7회 1회 rotate anchor.
+  ///
+  /// pure — 같은 입력이면 항상 같은 출력 (deterministic). 캐시 미적재 시 fallback.
+  static MysteryNotificationCopy pickMystery({
+    required DateTime date,
+    required String todayPillar,
+    required String day60ji,
+    String? topicId,
+    MysteryRelation? relation,
+    int dayOffset = 0,
+  }) {
+    // 오늘 일진 지지 글자 — 이게 알림이 신비하게 던지는 "글자".
+    final char = todayPillar.length >= 2 ? todayPillar[1] : '子';
+    final charKo = _branchKo[char] ?? char;
+
+    // P2b-fix — relation 미공급 시 관계 단정 금지 → 중립.
+    final rel = relation ?? MysteryRelation.neutral;
+
+    // deterministic seed — 날짜 + 사용자 일주 + 오늘 일진.
+    final seed = (date.year * 366 + date.month * 31 + date.day) ^
+        day60ji.codeUnits.fold<int>(0, (a, b) => a + b) ^
+        todayPillar.codeUnits.fold<int>(0, (a, b) => a + b);
+
+    // 7회 중 1회 기능 발견 훅 — dayOffset 기준 deterministic rotate.
+    final isFeatureHook = featureHookEvery > 0 &&
+        (dayOffset % featureHookEvery == (seed.abs() % featureHookEvery));
+
+    String sub(String tpl) =>
+        tpl.replaceAll('{char}', char).replaceAll('{charKo}', charKo);
+
+    if (isFeatureHook) {
+      final hook = _pickFeatureHook(seed);
+      return MysteryNotificationCopy(
+        title: sub(hook.$1),
+        bodyLine1: sub(hook.$2),
+        bodyLine2: sub(hook.$3),
+        isFeatureHook: true,
+        topicId: topicId,
+      );
+    }
+
+    // 주제별 카피 노드 — topicId 가 있으면 그 주제, 없으면 no_topic 총평형.
+    final node = _mysteryTopicNode(topicId);
+    final titles = _strList(node['titles']);
+    // P2b-fix — interactions 는 관계타입별(chung/hap/friction/neutral) 맵.
+    // 실제 relation 의 key 배열만 고른다 — 충 없는 날 "부딪치는" 이 안 나가게 강제.
+    final interactions = _interactionsForRelation(node['interactions'], rel);
+    final actions = _strList(node['actions']);
+
+    final fb = _mysteryFallback(rel, char, charKo);
+    final title = sub(_pickFrom(titles, seed, 1, fb.$1));
+    final line1 = sub(_pickFrom(interactions, seed, 2, fb.$2));
+    final line2 = sub(_pickFrom(actions, seed, 3, fb.$3));
+
+    return MysteryNotificationCopy(
+      title: title,
+      bodyLine1: line1,
+      bodyLine2: line2,
+      isFeatureHook: false,
+      topicId: topicId,
+    );
+  }
+
+  /// P2b-fix — interactions 노드(관계타입별 맵)에서 실제 [relation] key 배열만 추출.
+  /// 신버전 스키마 = `{chung:[],hap:[],friction:[],neutral:[]}`. 해당 key 가 비면
+  /// neutral 로 안전 강등 (관계 단정 금지 — 충 카피가 충 아닌 날 누출되지 않게).
+  static List<String> _interactionsForRelation(
+    dynamic raw,
+    MysteryRelation relation,
+  ) {
+    if (raw is! Map) return const [];
+    final byKey = raw[relation.key];
+    final list = _strList(byKey);
+    if (list.isNotEmpty) return list;
+    // 요청 관계 카피가 비어 있으면 — 관계 단정을 피해 neutral 로 폴백.
+    if (relation != MysteryRelation.neutral) {
+      return _strList(raw[MysteryRelation.neutral.key]);
+    }
+    return const [];
+  }
+
+  /// topicId → 미스터리 풀의 주제 노드. 미스/null 시 no_topic 노드.
+  static Map<String, dynamic> _mysteryTopicNode(String? topicId) {
+    final root = _mysteryPoolCache;
+    if (root == null) return const {};
+    if (topicId != null) {
+      final topics = root['topics'];
+      if (topics is Map) {
+        final t = topics[topicId];
+        if (t is Map) return t.cast<String, dynamic>();
+      }
+    }
+    final noTopic = root['no_topic'];
+    return noTopic is Map ? noTopic.cast<String, dynamic>() : const {};
+  }
+
+  /// 기능 발견 훅 1개 deterministic pick → (title, interaction, action).
+  static (String, String, String) _pickFeatureHook(int seed) {
+    final root = _mysteryPoolCache;
+    final hooks = root == null ? null : root['feature_hooks'];
+    final items = hooks is Map ? hooks['items'] : null;
+    if (items is List && items.isNotEmpty) {
+      final idx = (seed.abs() ~/ 11) % items.length;
+      final item = items[idx];
+      if (item is Map) {
+        final t = item['title'];
+        final i = item['interaction'];
+        final a = item['action'];
+        if (t is String && i is String && a is String) return (t, i, a);
+      }
+    }
+    // 내장 fallback — 풀 미적재여도 기능 훅이 죽지 않게.
+    return (
+      '오늘 글자가 당신 사주에 닿은 이유, 안에서 풀어놨어요',
+      "오늘 '{char}'({charKo}) 글자가 당신 사주와 만나는 자리를 그려놨어요.",
+      '자세한 풀이는 오늘의 사주 안에 있어요.',
+    );
+  }
+
+  /// dynamic 을 `List<String>` 로 변환 (null·타입 미스 graceful).
+  static List<String> _strList(dynamic raw) =>
+      raw is List ? raw.whereType<String>().toList() : const [];
+
+  /// list 에서 seed + salt deterministic pick. 비면 fallback.
+  static String _pickFrom(List<String> list, int seed, int salt, String fb) {
+    if (list.isEmpty) return fb;
+    final idx = ((seed.abs() ~/ 7 + salt * 31)) % list.length;
+    return list[idx];
+  }
+
+  /// 풀 미적재 시 내장 fallback (title, line1, line2) — design doc §6 톤 보존.
+  /// P2b-fix — line1 은 실제 [relation] 에 맞는 표현만. 충 없는 날 "부딪치는" 금지.
+  static (String, String, String) _mysteryFallback(
+    MysteryRelation relation,
+    String char,
+    String charKo,
+  ) {
+    const title = '오늘 들어온 글자가 당신 사주의 한 자리에 닿았어요';
+    const action = '넘기는 법은 안에 적어놨어요.';
+    String line1;
+    switch (relation) {
+      case MysteryRelation.chung:
+        line1 = "'{char}'({charKo})라는 글자인데, "
+            '당신 일지(태어난 날의 지지)와 맞서는 자리예요.';
+        break;
+      case MysteryRelation.hap:
+        line1 = "'{char}'({charKo})라는 글자인데, "
+            '당신 일지(태어난 날의 지지)와 맞물리는 자리예요.';
+        break;
+      case MysteryRelation.friction:
+        line1 = "'{char}'({charKo})라는 글자인데, "
+            '당신 일지(태어난 날의 지지)와 살짝 엇갈리는 자리예요.';
+        break;
+      case MysteryRelation.neutral:
+        line1 = "'{char}'({charKo})라는 글자인데, "
+            '당신 일주 곁을 스쳐가는 자리예요.';
+        break;
+    }
+    return (title, line1, action);
   }
 }

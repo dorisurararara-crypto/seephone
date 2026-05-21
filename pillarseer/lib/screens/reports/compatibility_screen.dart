@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
+import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../services/saju_service.dart';
 import '../../theme/app_theme.dart';
@@ -1242,17 +1243,17 @@ class _DetailSection extends StatelessWidget {
       '金·金': '金·金 결은 같은 칼끝으로 닦이는 자리. 원칙·기준·정리 같은 자리에서 강하게 통하지만, 부드러운 감정 표현이 둘 다 어색해서 의식적으로 톤을 풀어주는 연습이 필요해요.',
       '水·水': '水·水 결은 같은 강물처럼 흐르는 자리. 깊은 대화·내면 탐색·창작 자리에서 가장 잘 통하지만, 결정 미루기·생각 과잉이 둘 다 와서 행동 트리거가 필요해요.',
       // 상생 5 — A→B 형태
-      '木→火': '木→火 결은 나무가 불을 피우는 자리. 내가 한 마디 던지면 상대가 그걸 표현·실행으로 펼쳐줘서 아이디어가 빠르게 현실이 되는 결이에요. 창작·발표·이벤트 자리에 둘이 함께 있으면 결과물이 더 또렷하게 살아나요.',
-      '火→土': '火→土 결은 불이 땅을 데우는 자리. 내 열정이 상대의 안정 자리를 따뜻하게 만들어줘서 상대가 둥지를 만드는 결이에요. 집·살림·기반 자리에 상대가 자연스럽게 자리잡아요.',
-      '土→金': '土→金 결은 땅이 금속을 품는 자리. 내 안정감이 상대의 원칙·기준 자리를 단단하게 만들어줘서 상대가 자기 결을 또렷이 가지는 결이에요. 정리·결정·기준 세우는 자리에 상대가 능력을 펴요.',
-      '金→水': '金→水 결은 금속이 물을 맑게 거르는 자리. 내 분별력이 상대의 깊은 자리를 정제해줘서 상대가 자기 본질에 더 가깝게 가요. 내면 탐색·창작·연구 자리에 상대가 깊어져요.',
-      '水→木': '水→木 결은 물이 나무를 키우는 자리. 내 직관·이해가 상대의 새 시도 자리를 키워줘서 상대가 자기 가능성을 펼치는 결이에요. 시작·도전·확장 자리에 상대가 자라요.',
+      '木→火': '木→火 결은 나무가 불을 피우는 자리. 내가 한 마디 던지면 상대가 그걸 표현·실행으로 펼쳐주기 쉬운 결이에요. 창작·발표·이벤트 자리에 둘이 함께 있으면 아이디어가 또렷하게 잡히기 좋아요.',
+      '火→土': '火→土 결은 불이 땅을 데우는 자리. 내 열정이 상대의 안정 자리를 따뜻하게 받쳐주기 쉬운 결이에요. 집·살림·기반 자리에 상대가 자연스럽게 둥지를 트기 좋아요.',
+      '土→金': '土→金 결은 땅이 금속을 품는 자리. 내 안정감이 상대의 원칙·기준 자리를 받쳐주기 쉬운 결이에요. 정리·결정·기준 세우는 자리에서 상대가 자기 색을 펴기 좋아요.',
+      '金→水': '金→水 결은 금속이 물을 맑게 거르는 자리. 내 분별력이 상대의 깊은 자리를 정제해주기 쉬운 결이에요. 내면 탐색·창작·연구 자리에서 상대가 자기 본질에 가까워지기 좋아요.',
+      '水→木': '水→木 결은 물이 나무를 키우는 자리. 내 직관·이해가 상대의 새 시도 자리를 받쳐주기 쉬운 결이에요. 시작·도전·확장 자리에서 상대가 자기 가능성을 펴기 좋아요.',
       // 반대 상생 5 — B→A 형태 (theyGenerate)
-      '火→木': '火→木 결은 거꾸로, 상대가 불처럼 내 나무 결을 데워주는 자리. 상대가 표현·즐거움을 끌어내줘서 내가 평소 못 내놓던 색을 자연스럽게 펴게 되는 결이에요.',
-      '土→火': '土→火 결은 거꾸로, 상대가 땅처럼 내 불의 자리를 받쳐주는 자리. 상대 곁에 있으면 내가 들떠도 자리가 잡혀서 무리하지 않게 되는 결이에요.',
-      '金→土': '金→土 결은 거꾸로, 상대가 금속의 결로 내 땅을 다듬어주는 자리. 상대 한 마디로 내가 정리해야 할 자리가 보이고, 미루던 결정이 자연스럽게 정해지는 결이에요.',
-      '水→金': '水→金 결은 거꾸로, 상대가 물처럼 내 금속의 결을 흐르게 해주는 자리. 평소 굳어 있던 자리에서 상대 곁에 있으면 부드럽게 풀리는 결이에요.',
-      '木→水': '木→水 결은 거꾸로, 상대가 나무처럼 내 물의 자리를 끌어올려주는 자리. 평소 잠겨 있던 생각이 상대 곁에 있으면 행동으로 자연스럽게 옮겨지는 결이에요.',
+      '火→木': '火→木 결은 거꾸로, 상대가 불처럼 내 나무 결을 데워주기 쉬운 자리. 상대 곁에서 내가 평소 못 내놓던 색을 자연스럽게 펴기 좋은 결이에요.',
+      '土→火': '土→火 결은 거꾸로, 상대가 땅처럼 내 불의 자리를 받쳐주기 쉬운 자리. 상대 곁에 있으면 내가 들떠도 자리가 잡혀서 무리를 한 박자 늦추기 좋은 결이에요.',
+      '金→土': '金→土 결은 거꾸로, 상대가 금속의 결로 내 땅을 다듬어주기 쉬운 자리. 상대 한 마디로 내가 정리해야 할 자리가 보여서, 미루던 결정을 잡아가기 좋은 결이에요.',
+      '水→金': '水→金 결은 거꾸로, 상대가 물처럼 내 금속의 결을 흐르게 해주기 쉬운 자리. 평소 굳어 있던 자리가 상대 곁에서 부드럽게 풀리기 좋은 결이에요.',
+      '木→水': '木→水 결은 거꾸로, 상대가 나무처럼 내 물의 자리를 끌어올려주기 쉬운 자리. 평소 잠겨 있던 생각을 상대 곁에서 행동으로 옮겨가기 좋은 결이에요.',
       // 상극 — 10 (A→B + B→A)
       '木→土': '木→土 결은 나무 뿌리가 땅을 뚫는 자리. 내가 새 시도를 권하면 상대 기반이 흔들리는 자리에 가요. 상대 안정감을 인정한 후 새 시도를 권하는 결이 핵심.',
       '土→木': '土→木 결은 거꾸로, 땅이 나무를 누르는 자리. 상대가 안정·기반을 우선시할 때 내 새 시도 자리가 막히는 느낌이 와요.',
@@ -1271,31 +1272,31 @@ class _DetailSection extends StatelessWidget {
   String _elementPairSceneEn(_RelationshipAnchorProfile p) {
     final flow = p.elementFlow;
     const map = {
-      '木·木': 'Wood·Wood — both love starting (trips, jobs, ventures) but neither closes well; unfinished projects pile on both sides.',
-      '火·火': 'Fire·Fire — when you meet, expression and events explode; staying steady through quiet days is the weak spot.',
-      '土·土': 'Earth·Earth — stable on promises, money, home; both hesitate at change or adventure.',
-      '金·金': 'Metal·Metal — principles and clarity click; soft emotional expression feels awkward for both.',
-      '水·水': 'Water·Water — deep talk, inner work, creation align; decision-deferring and overthinking show on both sides.',
-      '木→火': 'Wood→Fire — your one word, their expression. Ideas turn into reality fast together.',
-      '火→土': 'Fire→Earth — your warmth heats their soil; they build a nest you keep alive.',
-      '土→金': 'Earth→Metal — your steadiness sharpens their principles; their boundaries grow clear.',
-      '金→水': 'Metal→Water — your discernment clears their depth; they reach their own essence faster.',
-      '水→木': 'Water→Wood — your intuition feeds their new attempts; they grow into their potential.',
-      '火→木': 'Fire→Wood (reverse) — they warm your wood; colors you usually hide come out easily.',
-      '土→火': 'Earth→Fire (reverse) — they ground your fire; even when you spike, you stay anchored.',
-      '金→土': 'Metal→Earth (reverse) — one word from them and the cleanup you postponed becomes clear.',
-      '水→金': 'Water→Metal (reverse) — what felt rigid in you softens beside them.',
-      '木→水': 'Wood→Water (reverse) — submerged thoughts become action when they are near.',
-      '木→土': 'Wood→Earth — your roots crack their soil. Honor their stability first, then suggest the new.',
-      '土→木': 'Earth→Wood (reverse) — when they prioritize stability, your new attempt feels blocked.',
-      '土→水': 'Earth→Water — your rules dam their flow. Honor their current first, then propose structure.',
-      '水→土': 'Water→Earth (reverse) — their deep questions can shake your foundation.',
-      '水→火': 'Water→Fire — your calm word cools their flame. Honor the spark first, then adjust tone.',
-      '火→水': 'Fire→Water (reverse) — their heat boils your stillness.',
-      '火→金': 'Fire→Metal — your heat melts their clean lines; they may lose their standard.',
-      '金→火': 'Metal→Fire (reverse) — their precision cuts off your flame.',
-      '金→木': 'Metal→Wood — your rule cuts their fresh attempt. Honor the start first, then apply standards.',
-      '木→金': 'Wood→Metal (reverse) — your new attempt shakes their principled place.',
+      '木·木': 'Wood·Wood — both of you tend to love starting things (trips, jobs, ventures); closing them out tends to be the shared weak spot, so unfinished projects can pile on both sides.',
+      '火·火': 'Fire·Fire — together, expression tends to run big and fast; staying steady through the quiet days tends to be the weak spot.',
+      '土·土': 'Earth·Earth — promises, money, and home tend to feel steady here; change and adventure tend to be where you both hesitate.',
+      '金·金': 'Metal·Metal — principles and clarity tend to click; softer emotional expression tends to feel less natural for both.',
+      '水·水': 'Water·Water — deep talk, inner work, and creation tend to align; deferring decisions and overthinking tend to show on both sides.',
+      '木→火': 'Wood→Fire generating line — your one word, their expression. Ideas tend to take shape fast together.',
+      '火→土': 'Fire→Earth generating line — your warmth tends to heat their soil; a seat where a nest is easy to build.',
+      '土→金': 'Earth→Metal generating line — your steadiness tends to back their principles; a seat where their lines tend to read clear.',
+      '金→水': 'Metal→Water generating line — your discernment tends to clear their depth; a seat where reaching their own essence comes easier.',
+      '水→木': 'Water→Wood generating line — your intuition tends to feed their new attempts; a seat where opening into potential comes easier.',
+      '火→木': 'Fire→Wood generating line (reverse) — they tend to warm your wood; colors you tend to keep in can come out easier.',
+      '土→火': 'Earth→Fire generating line (reverse) — they tend to ground your fire; even when you spike, staying anchored comes easier.',
+      '金→土': 'Metal→Earth generating line (reverse) — one word from them, and any cleanup you have been putting off tends to read clearer.',
+      '水→金': 'Water→Metal generating line (reverse) — what felt rigid in you tends to soften beside them.',
+      '木→水': 'Wood→Water generating line (reverse) — submerged thoughts tend to move into action when they are near.',
+      '木→土': 'Wood→Earth overcoming line — your roots tend to crack their soil. Honoring their stability first, then suggesting the new, helps.',
+      '土→木': 'Earth→Wood overcoming line (reverse) — when they prioritize stability, your new attempt can feel blocked.',
+      '土→水': 'Earth→Water overcoming line — your rules tend to dam their flow. Honoring their current first, then proposing structure, helps.',
+      '水→土': 'Water→Earth overcoming line (reverse) — their deep questions can shake your foundation.',
+      '水→火': 'Water→Fire overcoming line — your calm word tends to cool their flame. Honoring the spark first, then adjusting tone, helps.',
+      '火→水': 'Fire→Water overcoming line (reverse) — their heat tends to boil your stillness.',
+      '火→金': 'Fire→Metal overcoming line — your heat tends to melt their clean lines; their standard can blur if the tone runs hot.',
+      '金→火': 'Metal→Fire overcoming line (reverse) — their precision can cut off your flame.',
+      '金→木': 'Metal→Wood overcoming line — your rule tends to cut their fresh attempt. Honoring the start first, then applying standards, helps.',
+      '木→金': 'Wood→Metal overcoming line (reverse) — your new attempt tends to shake their principled place.',
     };
     return map[flow] ?? '';
   }
@@ -1349,25 +1350,25 @@ class _DetailSection extends StatelessWidget {
       '申·寅': 'Yin·Shen clash — move vs settle; big moves (relocation, job change, travel) bring opposite views.',
       '巳·亥': 'Si·Hai clash — exposure vs concealment; SNS, public visibility settings need agreement.',
       '亥·巳': 'Si·Hai clash — exposure vs concealment; SNS, public visibility settings need agreement.',
-      '辰·戌': 'Chen·Xu clash — both Earth, but household and finance organization styles refuse to yield.',
-      '戌·辰': 'Chen·Xu clash — both Earth, but household and finance organization styles refuse to yield.',
+      '辰·戌': 'Chen·Xu clash — both Earth, but household and finance organizing styles tend to pull in different directions.',
+      '戌·辰': 'Chen·Xu clash — both Earth, but household and finance organizing styles tend to pull in different directions.',
       '丑·未': 'Chou·Wei clash — winter vs summer Earth; conservative vs expansive priorities split.',
       '未·丑': 'Chou·Wei clash — winter vs summer Earth; conservative vs expansive priorities split.',
     };
     if (clash.containsKey(pair)) return clash[pair]!;
     const hap6 = {
-      '子·丑': 'Zi·Chou union — quiet winter warmth; cafes and home spaces suit best.',
-      '丑·子': 'Zi·Chou union — quiet winter warmth; cafes and home spaces suit best.',
-      '寅·亥': 'Yin·Hai union — life-spark union; travel, new ventures, moves do well together.',
-      '亥·寅': 'Yin·Hai union — life-spark union; travel, new ventures, moves do well together.',
-      '卯·戌': 'Mao·Xu union — fire union; calm individually, lively together.',
-      '戌·卯': 'Mao·Xu union — fire union; calm individually, lively together.',
-      '辰·酉': 'Chen·You union — metal union; cleanup, organizing produces fast results together.',
-      '酉·辰': 'Chen·You union — metal union; cleanup, organizing produces fast results together.',
-      '巳·申': 'Si·Shen union — water union; walks, travel, quiet time suit best.',
-      '申·巳': 'Si·Shen union — water union; walks, travel, quiet time suit best.',
-      '午·未': 'Wu·Wei union — midsummer union; outings, parties, festivals fit best.',
-      '未·午': 'Wu·Wei union — midsummer union; outings, parties, festivals fit best.',
+      '子·丑': 'Zi·Chou branch union — a quiet winter-warmth union; cafes and home spaces tend to suit it best.',
+      '丑·子': 'Zi·Chou branch union — a quiet winter-warmth union; cafes and home spaces tend to suit it best.',
+      '寅·亥': 'Yin·Hai branch union — a life-spark union; travel, new ventures, and moves tend to suit this pair best done together.',
+      '亥·寅': 'Yin·Hai branch union — a life-spark union; travel, new ventures, and moves tend to suit this pair best done together.',
+      '卯·戌': 'Mao·Xu branch union — a fire union; calm apart, the seat tends to feel livelier together.',
+      '戌·卯': 'Mao·Xu branch union — a fire union; calm apart, the seat tends to feel livelier together.',
+      '辰·酉': 'Chen·You branch union — a metal union; cleanup and organizing tend to be the seats you click in.',
+      '酉·辰': 'Chen·You branch union — a metal union; cleanup and organizing tend to be the seats you click in.',
+      '巳·申': 'Si·Shen branch union — a water union; walks, travel, and quiet time tend to suit it best.',
+      '申·巳': 'Si·Shen branch union — a water union; walks, travel, and quiet time tend to suit it best.',
+      '午·未': 'Wu·Wei branch union — a midsummer union; outings, parties, and festivals tend to fit it best.',
+      '未·午': 'Wu·Wei branch union — a midsummer union; outings, parties, and festivals tend to fit it best.',
     };
     if (hap6.containsKey(pair)) return hap6[pair]!;
     return '';
@@ -1394,16 +1395,16 @@ class _DetailSection extends StatelessWidget {
   String _stemPairSceneEn(_RelationshipAnchorProfile p) {
     final pair = '${p.myGan}·${p.ptGan}';
     const ganHapPairs = {
-      '甲·己': 'Jia·Ji union — \'central balance\' union; both step into responsibility together.',
-      '己·甲': 'Jia·Ji union — \'central balance\' union; both step into responsibility together.',
-      '乙·庚': 'Yi·Geng union — \'principled\' union; promise-keeping spaces unite you.',
-      '庚·乙': 'Yi·Geng union — \'principled\' union; promise-keeping spaces unite you.',
-      '丙·辛': 'Bing·Xin union — \'authority\' union; decision-making seats fit you both.',
-      '辛·丙': 'Bing·Xin union — \'authority\' union; decision-making seats fit you both.',
-      '丁·壬': 'Ding·Ren union — \'recognition\' union; expression, art, romance bind you.',
-      '壬·丁': 'Ding·Ren union — \'recognition\' union; expression, art, romance bind you.',
-      '戊·癸': 'Wu·Gui union — \'silent trust\' union; deep, longstanding bonds form here.',
-      '癸·戊': 'Wu·Gui union — \'silent trust\' union; deep, longstanding bonds form here.',
+      '甲·己': "Jia·Ji union — a 'central balance' stem union; the two of you tend to click around shared responsibility.",
+      '己·甲': "Jia·Ji union — a 'central balance' stem union; the two of you tend to click around shared responsibility.",
+      '乙·庚': "Yi·Geng union — a 'principled' stem union; keeping promises tends to be where the two of you meet.",
+      '庚·乙': "Yi·Geng union — a 'principled' stem union; keeping promises tends to be where the two of you meet.",
+      '丙·辛': "Bing·Xin union — an 'authority' stem union; making decisions together tends to fit you both.",
+      '辛·丙': "Bing·Xin union — an 'authority' stem union; making decisions together tends to fit you both.",
+      '丁·壬': "Ding·Ren union — a 'recognition' stem union; expression, art, and romance tend to be where you click.",
+      '壬·丁': "Ding·Ren union — a 'recognition' stem union; expression, art, and romance tend to be where you click.",
+      '戊·癸': "Wu·Gui union — a 'silent trust' stem union; the quiet, long-standing moments tend to suit this bond.",
+      '癸·戊': "Wu·Gui union — a 'silent trust' stem union; the quiet, long-standing moments tend to suit this bond.",
     };
     return ganHapPairs[pair] ?? '';
   }
@@ -1548,7 +1549,7 @@ class _DetailSection extends StatelessWidget {
       // 6 branch × 8 variant = 48 KO summary 본문 pool.
       final summaryPoolsKo = <String, List<String>>{
         'same': [
-          '두 사람 모두 $myEl 결을 타고난 동기예요. 처음부터 별 설명 없이도 톤이 맞아서 $pTop 너랑 비슷한 속도로 결정을 내리고 비슷한 자리에서 웃어요. 같은 결끼리 빛나는 건 시간이 지날수록 점점 진해진다는 점이에요.\n\n다만 약점도 같이 와요. 둘 다 지친 날, 둘 다 미루는 날이 같은 날에 오니까 한 명이 의식적으로 다른 무게를 골라야 균형이 잡혀요.',
+          '두 사람 모두 $myEl 결을 타고난 동기예요. 처음부터 별 설명 없이도 톤이 맞아서 $pTop 너랑 비슷한 속도로 결정을 내리고 비슷한 자리에서 웃어요. 같은 결끼리는 시간을 들일수록 결이 진해지기 좋은 자리예요.\n\n다만 약점도 같이 와요. 둘 다 지친 날, 둘 다 미루는 날이 같은 날에 오니까 한 명이 의식적으로 다른 무게를 골라야 균형이 잡혀요.',
           '같은 $myEl 결을 공유해서 $pSubj 곁에 있을 때 \'설명 안 해도 되는 사이\'의 편안함이 가장 크게 와요. 좋아하는 메뉴, 결정 속도, 일상 리듬까지 닮은 결이라 첫 만남부터 익숙한 느낌이 와요.\n\n주의할 자리는 약점 동조. 한쪽이 가라앉으면 다른 쪽도 같이 가라앉는 결이라, 한 명이 \'역할 분담\' 한 가지를 정해두면 같이 가라앉는 날을 피할 수 있어요.',
           '$pSubj 너와 같은 $myEl 결이라 첫인상부터 \'어디서 본 사람 같다\'는 느낌이 와요. 좋아하는 톤·말투·결정 속도가 가깝게 가서 신뢰가 빠르게 쌓이는 결.\n\n그런데 결이 같은 만큼 약한 자리도 겹쳐요. 둘 다 운동 빠지는 날, 둘 다 결정 미루는 날이 같은 날에 와서 평소에 \'한 명은 반대로 움직이기\' 룰이 도움돼요.',
           '같은 $myEl 비화(比和) 결. $pTop 너와 가장 닮은 사람일 수 있어요. 거울 보듯 보이는 사이라 친구·동료·연인 어느 자리에 두어도 자연스럽게 합이 맞고, 굳이 잘 보이려 안 해도 편안한 자리가 만들어져요.\n\n동시에 거울이라 자기 단점이 상대 안에 보일 때 불편함도 같이 와요. 그게 자기 단점이라기보다 결이 같아서 비치는 거라는 걸 의식하면 갈등이 줄어요.',
@@ -1558,21 +1559,21 @@ class _DetailSection extends StatelessWidget {
           '같은 오행 결끼리는 \'동기(同氣)\'라 불리는 자리예요. 둘 다 $myEl 인 만큼 $pSubj 너의 한 마디를 듣고 \'나도 그랬어\' 하는 자리가 자주 와요. 위로보다 동의가 빠른 사이.\n\n다만 같은 결끼리는 변화가 더디고 새 자극이 약해요. 의식적으로 한 명이 다른 시도를 가져오면 관계가 정체 안 돼요.',
         ],
         'iGen': [
-          '내 $myEl 결이 $pPossKo $ptEl 결을 자라게 하는 상생(相生) 자리예요. 한 마디 한 행동이 깊게 닿고, $pSubj 자라는 모습을 보면서 내가 더 단단해져요.\n\n천천히 가도 시간이 쌓이면 누구도 못 깨는 결이 되지만, 주는 쪽이라 페이스를 잃기 쉬워요. 한 달에 한 번은 자기 회복 자리를 따로 두는 게 필요해요.',
+          '내 $myEl 결이 $pPossKo $ptEl 결을 자라게 하는 상생(相生) 자리예요. 한 마디 한 행동이 깊게 닿기 쉽고, $pSubj 곁에 있는 모습을 보면서 나도 든든해지기 쉬워요.\n\n천천히 가도 시간을 들이면 단단해지기 좋은 결이지만, 주는 쪽이라 페이스를 잃기 쉬워요. 한 달에 한 번은 자기 회복 자리를 따로 두는 게 필요해요.',
           '$pTop 너의 $myEl 한 마디로 자라는 자리예요. 결정 망설이던 자리에서 너 곁에 있으면 답이 나오고, 새로 시작하는 일에 네가 큰 영향을 주는 결.\n\n주는 쪽이 더 많이 신경 쓰는 만큼 받는 쪽 표현이 가끔 필요해요. \'덕분이야\' 한 마디가 주는 쪽 피로감을 가장 빠르게 풀어줘요.',
           '$pNameKo한테 너의 결이 자양분처럼 닿는 상생 자리. 큰 변화 한 번보다 매일의 작은 영향이 더 깊게 새겨지는 결이라, 빨리 결과 안 보여도 1년 단위로 봐도 늦지 않아요.\n\n자기 페이스를 지키는 게 가장 큰 미션이에요. 주는 쪽이 자기 자리 잃으면 결이 한쪽으로 무너져요.',
           '$pPossKo $ptEl 자리에 너의 $myEl 결이 흘러들어가요. $pSubj 너 곁에서 조금씩 자기 색을 또렷이 가지는 결.\n\n다만 보람이 자주 안 느껴질 수도 있어요. 변화는 천천히 와요. 한 분기 단위로 \'$pName 의 변화 자리\' 한 가지를 짚어보면 자기가 키운 자리가 보여요.',
           '상생 — 내 결이 $pObj 살리는 자리예요. 한 번 깊이 들어가면 떨어지기 어렵고, 곁에 있는 것만으로도 $pSubj 컨디션이 좋아지는 결.\n\n다만 \'주는 쪽\'이 평생 일방통행이 되면 안 돼요. $pNameKo 도 자기 자리에서 너한테 줄 수 있는 한 가지를 찾아두면 결이 양방향으로 흘러요.',
-          '내가 자라게 하는 쪽인 자리. $pSubj 너의 곁에서 한 단계씩 성장하는 모습을 보면서, 그 결과만 칭찬하지 말고 과정의 작은 변화도 알아봐 주면 결이 훨씬 단단해져요.\n\n시간 흐름과 함께 깊어지는 구조라, 조급해하지 말고 계절 단위로 결을 보세요.',
+          '내가 자라게 하는 쪽인 자리. $pSubj 너의 곁에서 한 단계씩 자라는 모습을 보면서, 그 결과만 칭찬하지 말고 과정의 작은 변화도 알아봐 주면 결이 훨씬 단단해져요.\n\n시간이 쌓일수록 천천히 깊어지는 결이라, 조급해하지 말고 계절 단위로 길게 보세요.',
           '$myEl→$ptEl 상생 흐름. $pTop 너의 한 마디로 새로운 결을 만들어가는 자리예요. 시작·도전·확장 같은 결정 자리에 너의 영향이 가장 크게 닿아요.\n\n주의할 점은 너무 앞서 끌어주는 자리에서 $pSubj 자기 결정을 못 하게 되는 자리. 한 번씩 \'어떻게 하고 싶어?\' 먼저 묻는 결이 균형을 잡아줘요.',
           '내 결이 $pObj 자라게 하는 자리라, 평소엔 잔잔해도 $pSubj 위기일 때 가장 빠르게 회복돼요. 큰 갈등 없는 안정된 결이지만 표현이 자주 한쪽으로만 흐를 위험은 있어요.\n\n받는 쪽도 한 번씩 \'고마워\' 말로 전해야 주는 쪽이 지치지 않아요.',
         ],
         'tGen': [
-          '$pPossKo $ptEl 결이 내 부족한 자리를 자연스럽게 채워주는 상생(相生) 관계예요. $pSubj 곁에 있을 때 내가 결정 망설이던 자리에서 답이 나오고, 흔들리던 컨디션이 자연스럽게 회복되는 결.\n\n받는 쪽이 표현 자주 안 해도 $pNameKo 는 알아주지만, 한 번씩 \'덕분이야\' 말로 전하면 관계가 한 단계 깊어져요.',
+          '$pPossKo $ptEl 결이 내 부족한 자리를 자연스럽게 채워주기 좋은 상생(相生) 자리예요. $pSubj 곁에 있을 때 내가 결정 망설이던 자리에서 답을 찾기 쉽고, 흔들리던 컨디션이 자연스럽게 잡히기 좋은 결.\n\n받는 쪽이 표현 자주 안 해도 $pNameKo 는 알아주지만, 한 번씩 \'덕분이야\' 말로 전해두면 받는 쪽으로만 기우는 자리를 줄이기 좋아요.',
           '$pName${withWith(pName)} 함께 있을 때 내가 \'보호받는 느낌\'이 가장 큰 결. 평소에 못 풀던 자리도 $pSubj 한 마디면 풀리는 — 그런 어른 같은 자리에 가까이 있는 사이예요.\n\n받기만 하는 사이는 시간 지나면 주는 쪽이 지쳐요. 매일 짧게라도 한 마디 표현이 결을 길게 가져가요.',
           '$pPossKo 결이 나의 약한 자리를 데우는 상생 자리예요. 같이 있는 시간만큼 내 회복 속도가 빨라지고, 흔들리던 일상이 자연스럽게 잡혀요.\n\n다만 받는 쪽도 의식적으로 $pPossKo 일상을 들여다보는 습관을 들여야 관계가 한쪽으로 기울지 않아요.',
           '$pTop 너를 자라게 하는 쪽이라, 자기도 모르게 너의 결정 속도가 $pNameKo 영향을 받아요. 결정 망설일 때 \'$pName 면 어떻게 했을까\' 떠올리는 자리도 자주 와요.\n\n받는 쪽이라 자기 결 흐려질 수 있어요. 한 분기에 한 번은 자기 자리만의 결정 한 가지를 의식적으로 가져가는 게 좋아요.',
-          '받는 쪽인 상생 결. $pSubj 줘서 좋아질 자리에 너 곁에 있는 만큼 가장 빠르게 안정돼요. 자연스러운 보호 자리에 묶이는 사이.\n\n다만 표현 안 하면 주는 쪽이 \'알아서 잘 받고 있겠지\' 하다가 거리감을 느낄 수 있어요. \'고마워\' 한 마디가 결을 단단하게 해요.',
+          '받는 쪽인 상생 결. $pSubj 곁에 있을 때 흔들리던 컨디션이 가라앉기 쉬워서, 평소 너를 받쳐주는 자리에 있는 사람이에요.\n\n다만 받기만 하고 표현을 안 하면 주는 쪽이 \'알아서 잘 받고 있겠지\' 하다가 거리감을 느끼기 쉬워요. \'고마워\' 한 마디씩 챙기면 그런 거리감이 잘 안 생겨요.',
           '$myEl←$ptEl. $pPossKo 결이 내 결을 키우는 자리. 평소 잠재되어 있던 색이 $pNameKo 곁에서 자연스럽게 나오는 결이에요.\n\n받는 쪽도 한 자리에선 줄 수 있는 결이 있어야 일방통행이 안 돼요. 받기만 하는 자리에서 작은 보답 자리 한 가지 찾아두면 결이 양방향이 돼요.',
           '$pPossKo $ptEl 자리가 내 빈 자리를 채우는 결. 첫 만남에서 이미 \'안심되는 사람\' 느낌이 오고, 시간이 갈수록 그 결이 더 또렷해져요.\n\n받는 쪽이 의식적으로 자기 자리를 가꾸지 않으면 \'너 없으면 안 되는\' 결로 흘러서 둘 다 부담돼요. 자기 회복 자리를 따로 두는 결이 필요.',
           '$pSubj 곁에 있으면 흔들리던 컨디션이 자연스럽게 잡혀요. 받는 쪽이 잘 표현 안 해도 $pNameKo 한테 닿지만, 한 번씩 말로 전하면 결이 한 단계 깊어져요.\n\n주는 쪽이 평생 일방통행이 되면 안 돼요. 받는 쪽도 자기 자리에서 줄 수 있는 한 가지를 찾아두면 결이 길게 가요.',
@@ -1581,7 +1582,7 @@ class _DetailSection extends StatelessWidget {
           '내 $myEl 결이 $pPossKo $ptEl 결을 누르는 상극(相剋) 자리예요. 처음엔 내가 주도하는 자리가 자연스럽고 $pObj 정확히 짚어내는 코치 같은 결.\n\n다만 톤이 한 단계만 높아져도 통제처럼 느껴질 수 있어요. \'이렇게 해\' 보다는 \'이렇게 하는 건 어때\' 식으로 한 단계 낮추는 결이 가장 중요해요.',
           '$pObj 한 마디로 길 잡아주는 자리에 자주 가요. 강한 자리에서 약한 자리로 흐르는 상극 결이라 내가 결정하고 $pSubj 따라오는 자연스러운 흐름.\n\n잘 다루면 $pPossKo 가장 큰 성장 코치, 잘못 다루면 $pPossKo 자기 색을 잃는 자리. 약점 짚는 만큼 강점도 같이 짚어줘야 균형이 잡혀요.',
           '$myEl→$ptEl. 누르는 쪽인 상극. $pSubj 헤매는 자리에서 내가 먼저 방향을 정해주는 자리에 자주 가지만, 강해질수록 $pNameKo 자기 결을 잃는 위험이 같이 와요.\n\n평소에 \'내 톤이 너무 강했어?\' 한 번씩 묻는 결이 필수예요.',
-          '내가 주도하는 사이. $pName${withWith(pName)} 함께할 때 한 단계 앞서 가는 자리가 자연스럽지만, 자기도 모르게 \'$pName 의 결정\'까지 가져갈 위험이 있어요. \'어떻게 생각해?\' 먼저 묻는 결이 필요.\n\n잘 풀면 단단한 결, 잘못 풀면 한쪽이 위축되는 구조예요.',
+          '내가 주도하기 쉬운 사이예요. $pName${withWith(pName)} 함께할 때 한 단계 앞서 가는 자리가 자연스럽게 오는데, 자기도 모르게 \'$pName 의 결정\'까지 대신 가져가기 쉬워요. \'어떻게 생각해?\' 먼저 묻는 습관이 그걸 막아줘요.\n\n톤을 잘 다루면 단단해지고, 한 마디가 세지면 $pSubj 위축되기 쉬운 자리. 톤 한 단계 낮추는 게 핵심이에요.',
           '상극 결이라 첫 만남에서 자극이 강한 자리. 평소엔 부드럽다가 큰 결정에서 내가 강하게 한 마디 던지면 $pSubj 흔들리는 자리가 자주 와요.\n\n톤 관리가 평생 미션. 같은 조언이라도 표현 방식 한 단계 낮추면 $pNameKo 가장 빠르게 자라요.',
           '내 결이 $pObj 정리시키는 자리. 평소엔 도움되지만 너무 자주 짚어주면 $pSubj 자기 의견 안 내게 돼요. \'이건 네가 정해줘\' 한 번씩 비워주는 결이 균형을 잡아요.\n\n잘 다루면 $pSubj 너 곁에서 가장 빠르게 성장하는 자리.',
           '누르는 자리. 내가 강한 결인 만큼 한 마디가 $pNameKo 한테 무겁게 닿아요. 의도와 표현의 거리를 늘 의식해야 결이 길게 가요.\n\n약점 코치 자리는 보람이 크지만, $pObj 응원하는 자리를 같이 잡지 않으면 결이 한쪽으로 무너져요.',
@@ -1592,8 +1593,8 @@ class _DetailSection extends StatelessWidget {
           '$pSubj 한 마디로 내 페이스가 흔들리는 자리. 평소엔 부드럽다가 $pNameKo 강하게 한 마디 던지는 순간 내가 위축되는 결이 자주 와요.\n\n\'$pName 한 마디는 무게가 크다\' 는 걸 둘 다 의식하고, 받는 쪽인 내가 자기 결 지키는 연습을 같이 하면 결이 단단해져요.',
           '눌리는 쪽인 상극. $pNameKo 입장에선 \'솔직히 말한 건데 왜 위축되지\' 라고 느끼고, 내 입장에선 \'무겁다\' 고 느끼는 미스매치가 자주 와요.\n\n중간에 \'네 말 무게가 컸어\' 한 번씩 전하는 결이 두 사람 톤 거리를 줄여요.',
           '$pPossKo 결이 내 결을 정리시키는 자리. 시간 지나면 강한 톤이 익숙해지면서 단단해지지만, 그 전에는 자기 색 지키는 의식이 필요해요.\n\n매주 한 번은 \'내 자리에서 내 결로 결정한 자리\' 한 가지 만들어두면 결이 한쪽으로 안 무너져요.',
-          '$pSubj 가진 결이 내 약점을 정확히 짚는 자리. 좋게 쓰면 가장 빠르게 자라는 코치, 나쁘게 쓰면 자기 색을 잃는 구조예요.\n\n$pTop 곁에 있을 때 내가 더 단단해진다 느낀다면 좋은 결, 점점 자기 의견 안 내게 된다면 결을 재조정할 자리예요.',
-          '$myEl 결이 $ptEl 결에 눌리는 자리. $pNameKo 곁에서 내가 평소보다 조심스러워지는 자리가 자주 와요. 잘 다루면 둘 다 단단해지지만 잘못 다루면 자기 색 잃는 구조.\n\n둘 다 의식적으로 톤 한 단계 낮추는 연습을 함께 해야 결이 길게 가요.',
+          '$pSubj 가진 결이 내 약점을 정확히 짚기 쉬운 자리예요. 좋게 다루면 빨리 자라는 코치 같은 자리가 되고, 톤이 세지면 받는 쪽이 자기 색을 놓치기 쉬워요.\n\n$pTop 곁에 있을 때 내가 더 단단해진다 느끼면 잘 흘러가는 거고, 점점 자기 의견을 안 내게 된다 싶으면 그때가 결을 다시 맞춰볼 자리예요.',
+          '$myEl 결이 $ptEl 결에 눌리는 자리예요. $pNameKo 곁에서 내가 평소보다 조심스러워지기 쉬워요. 톤을 잘 다루면 둘 다 단단해지고, 톤이 세지면 받는 쪽이 자기 색을 놓치기 쉬워요.\n\n둘 다 의식적으로 톤 한 단계 낮추는 연습을 함께 하면 오래 가기 좋아요.',
           '강한 자리에서 약한 자리로 흐르는 상극. $pTop 자기 결이 강한 만큼 한 마디가 내 자리에 무겁게 닿아요. \'네 말 무게가 컸어\' 자주 전하면 $pNameKo 도 톤 조정 자리를 같이 가져가요.\n\n시간이 흐르면 익숙해지면서 자기 색 잃지 않게 단단해지는 자리.',
           '$pPossKo 한 마디가 내 일상에 강하게 닿는 자리예요. 평소엔 잘 지내다가 큰 결정 자리에서 내가 흔들리는 결.\n\n받는 쪽인 내가 자기 자리 지키는 의식 하나 (예: 매주 자기만의 결정 자리 한 가지) 가 있으면 결이 한쪽으로 안 기울어요.',
         ],
@@ -1603,7 +1604,7 @@ class _DetailSection extends StatelessWidget {
           '중립 결. $pSubj 너랑 \'좋네\' 정도의 잔잔한 첫인상이 오래 가는 자리. 가벼운 친구로는 편하지만 깊이는 의식적으로 만들어야 해요.\n\n\'매주 한 번 둘만 보는 시간\', \'매일 짧은 안부\' 같은 작은 의식이 있으면 자연스럽게 무게가 쌓여요.',
           '직접 생극 없는 중립의 사이. 강한 끌림은 없지만 강한 부딪힘도 없는 안정 결.\n\n자연스럽게 가까워지는 결이 아니라 한 명이 먼저 신호 보내는 룰을 정해두면 결이 흔들리지 않아요. 의식적으로 무게를 만들 때 비로소 깊이가 생겨요.',
           '$pTop 너와 자극은 작지만 편안함은 큰 결. 가까워질수록 \'없으면 허전한\' 자리에 천천히 자리잡는 결이에요.\n\n중립 결끼리는 적극적인 신호가 없으면 멀어지기 쉬워서, 정기 연락 약속 하나가 결을 길게 가게 해요.',
-          '오행 직접 신호가 없는 자리. 평소 잘 맞는다는 느낌은 약해도, $pName${withWith(pName)} 자기 페이스 지키며 같이 있는 시간이 가장 편안한 결.\n\n적극적인 끌림 없는 만큼 한 명이 먼저 \'우리 이번 주 한 번 보자\' 보내는 자리에 자주 가야 관계가 유지돼요.',
+          '오행끼리 직접 걸린 신호가 없는 자리예요. 강하게 끌리는 느낌은 약해도, $pName${withWith(pName)} 각자 페이스 지키면서 같이 있을 때 편한 결.\n\n자연스럽게 가까워지는 힘이 약한 만큼, 한 명이 먼저 \'우리 이번 주 한 번 보자\' 보내는 자리를 자주 만들면 거리가 잘 안 벌어져요.',
           '중립 자리. 강하게 자극되는 결은 아니지만 \'부담 없이 오래 가는\' 가장 편한 결 중 하나예요. 시간이 흐를수록 잔잔한 깊이가 쌓여요.\n\n자연스러운 끌림이 없으니까 한 명이 먼저 의식적인 한 걸음을 가져오는 게 핵심.',
           '$pName${withWith(pName)} 직접 신호가 없는 결. 첫 만남에서 강한 자극은 없지만 점점 가까워질수록 \'편한 사람\' 자리에 단단히 자리잡아요.\n\n중립의 사이는 적극적 신호가 없으면 자연스럽게 멀어지는 결이라, 한 명이 먼저 룰 만드는 자리가 가장 중요해요.',
         ],
@@ -1618,7 +1619,7 @@ class _DetailSection extends StatelessWidget {
       // 일주 동일 / 일지 동일 추가 paragraph (variant 2 분기).
       if (sameDay) {
         const sameDayPool = [
-          '\n\n게다가 같은 60갑자 일주를 공유해요. 거울 보듯 닮은 면이 많고, 한 사람이 깨달은 건 다른 사람도 곧 깨달아요. 사주적으로 가장 강한 \'동기\' 결.',
+          '\n\n게다가 같은 60갑자 일주를 타고났어요. 거울 보듯 닮은 면이 많아서, 한 사람이 깨달은 걸 다른 사람도 곧 따라 깨닫기 쉬운 — 두 사주가 가장 비슷한 \'동기(同氣)\' 결이에요.',
           '\n\n같은 일주를 타고난 사이. 인생의 큰 결정 시기·체질·평소 결이 거의 일치해서, 같은 시기에 같은 고민을 마주하는 결이에요.',
         ];
         summary.write(sameDayPool[pick('summary-sameDay-ko', sameDayPool.length)]);
@@ -1636,64 +1637,64 @@ class _DetailSection extends StatelessWidget {
       final np = pPoss;
       final summaryPoolsEn = <String, List<String>>{
         'same': [
-          'Both of you carry the same $myEl grain. Comfort lands quickly — taste, decision speed, daily rhythm align with $n without explaining. The trade-off is shared weak spots: when one dips, the other tends to dip on the same day.',
-          'Same $myEl element means $n speaks a language you already know. First impressions feel familiar; the warm-up time other pairs need almost disappears here.',
-          'You and $n run on the same element. The bond reads as easy from day one, but mirrors cut both ways — flaws you see in $n may sit in you too.',
-          'A 比和 (same-element) match. With $n you skip the small talk and land in real ease. Watch out only for synchronized fatigue — pick days when one of you deliberately moves opposite.',
-          'Sharing $myEl means small daily things click. You and $n laugh at the same beat in a movie or pick the same dish without asking — and that quiet alignment is the bond.',
-          "$np grain and yours are the same color. A friend-flavored love, durable rather than electric — closeness builds in quiet repetition.",
-          'Same-element pair. The lift is mild but the floor is high; once close, the bond outlasts loud pairings simply because it never strained the air.',
-          'You and $n are 동기 — same-grain peers. Agreement runs faster than comfort; growth comes only when one of you brings a different weight on purpose.',
+          'You and $n share the same $myEl element — a 比和 (same-element) match. Taste, decision speed, and daily rhythm tend to line up without much explaining. The flip side is shared weak spots: when one of you dips, the other dips easily on the same day, so a small recovery routine helps.',
+          'Same $myEl element means $n speaks a language you already know. First impressions tend to feel familiar, and the warm-up time tends to be short here.',
+          'You and $n run on the same element. The bond can read as easy from day one — but mirrors cut both ways, so a flaw you spot in $n may sit in you too. Naming that as element, not character, helps.',
+          'A 比和 (same-element) match. With $n the small talk tends to be short and the ease comes fast. The one thing to watch is synchronized fatigue — picking days when one of you deliberately moves opposite keeps the bond ventilated.',
+          'Sharing $myEl means small daily things tend to click. Tastes and timing tend to line up without much explaining — and that quiet alignment is the bond.',
+          "$np element and yours run the same color — a friend-flavored love that leans durable rather than electric. Closeness here tends to build in quiet repetition, so small steady rituals matter.",
+          'Same-element pair. The lift is mild but the floor is high; once close, this kind of bond can run long simply because it never strained the air.',
+          'You and $n run as same-element peers. Agreement tends to run faster than novelty here, so bringing a different weight on purpose now and then keeps the bond from going static.',
         ],
         'iGen': [
-          'You generate (相生) $n. Your $myEl quietly grows $np $ptEl grain — small words land deep, and watching $n grow steadies you in return.',
-          'Slow, durable generating bond. With time $n carries something of your tone; one quarter from now, your influence will be visible in $np choices.',
-          'You feed $np grain. Closeness with $n improves $np daily condition almost on its own, and new ventures of $n carry your imprint.',
-          'A giving line. $n catches up to themselves beside you, and you find satisfaction in shape you helped form — provided the receiver says thanks out loud now and then.',
-          'Your one word turns into $np next step. Less spectacle, more season-by-season change; if you measure month to month, you may miss the work — measure year to year.',
-          'Generating relationships ripen with time. With $n the curve is slow, steady, and almost unbreakable once a few years pass; impatience is the only real threat.',
-          "Your $myEl is fuel for $np $ptEl. Beside you $n starts saying things they could not say before. Just keep one ritual of your own — the giver burns out without it.",
-          'You bring the grain $n needed. New starts, scary calls, and recovery all run easier with you close — and the moment $n names that out loud, the bond locks in.',
+          'You generate (相生) $n — a producing line. Your $myEl tends to feed $np $ptEl side, so small words can land deep. Naming what you notice in $n keeps the giving line two-way.',
+          'A slow, durable generating (相生) bond. This kind of line tends to ripen season by season rather than week by week — measuring year to year fits it better than measuring month to month.',
+          'You feed what $n runs on. Closeness with $n tends to make new ventures easier to start — and a thank-you said out loud now and then keeps the giver standing.',
+          'A giving line. $n tends to find their footing beside you, and you tend to find meaning in shape you helped form — as long as the receiver names the help out loud sometimes.',
+          'Your one word tends to turn into $np next step. This bond runs on slow, season-by-season change, so it rewards a long lens more than a short one.',
+          'Generating (相生) relationships tend to ripen when you tend them. With $n the curve is slow and steady, so patience reads as the main asset here.',
+          "Your $myEl tends to be fuel for $np $ptEl. Beside you, $n often finds it easier to say things they held back before. Keeping one ritual of your own matters — the giver runs dry without it.",
+          'You bring the element $n was short on. New starts, hard calls, and recovery all tend to run easier with you close — and the moment $n names that out loud, the bond tends to settle.',
         ],
         'tGen': [
-          "$np $ptEl quietly fills the gaps in your $myEl. When you stall, $n unsticks you. When you wobble, $np presence pulls you back to the floor.",
-          "You receive more than you give here. $n won't ask for thanks, but a real one out loud once a week is what keeps the giver standing.",
-          "$n is the steady current under your day. A decision you would have postponed becomes simple beside $n, and a low mood lifts faster than it would alone.",
-          'A protective bond. With $n nearby you feel the safety you used to look for; the only trap is hiding inside it and forgetting your own work.',
-          "$np grain enters yours like a quiet teacher. Even the colors you used to suppress come out near $n — keep one personal space anyway.",
-          'You are on the receiving end of generating. Time with $n raises your floor; just make sure you also bring something only you can give, so the lane runs both ways.',
-          "$n carries grain you were missing. Closeness makes the gap visible and closes it at once — and after a season, you start noticing $np voice inside your own.",
-          "Steady relief is the headline. $n holds the line when you cannot, and that is real care — show it back with a 'thanks to you' that $n can actually hear.",
+          "$np $ptEl tends to fill the gaps in your $myEl — a generating (相生) line toward you. When you stall, $n often unsticks you; when you wobble, $np steadiness tends to pull you back to the floor.",
+          "You tend to receive more than you give here. $n may not ask for thanks, but a real one said out loud once a week is what keeps the giver standing.",
+          "$n tends to be the steady current under your day. A decision you might have postponed can feel simpler beside $n, and a low mood is often easier to lift with $n near.",
+          'A protective bond. With $n nearby you tend to feel the safety you used to look for — the one trap is hiding inside it and forgetting your own work.',
+          "$np element tends to enter yours like a quiet teacher. Even colors you used to suppress can come out near $n — keeping one personal space anyway helps.",
+          'You are on the receiving end of generating (相生). Time with $n tends to raise your floor — so bringing something only you can give keeps the lane running both ways.',
+          "$n tends to carry the element you were short on. Closeness makes the gap visible, and over a season you may start noticing $np voice inside your own.",
+          "Steady relief is the headline. $n tends to hold the line when you cannot, and that is real care — showing it back with a 'thanks to you' $n can actually hear keeps the bond level.",
         ],
         'iOvr': [
-          'You overcome (相剋) $n. You lead naturally and read $np weak spots like a coach — but a notch sharper tone slips into control fast. Intent and delivery must match.',
-          "Your $myEl edits $np $ptEl. Useful when $n asks for direction, costly when it shows up as default. 'How about this' tones land far better than 'do this'.",
-          "An overcoming bond. Done well, $n grows fastest beside you. Done poorly, $n stops voicing opinions. Ask 'what do you think?' often — that single habit changes the line.",
-          "Your call settles the room. Useful, but $n loses color if you settle every call. Once a week, follow $n on one real decision; the bond steadies.",
-          'You see the weak point first. The strength is sharp, the cost is sharp too — pair every critique with a real spot of praise or the giving line tilts.',
-          'Strong-over-soft pairing. Closeness depends on you measuring your tone. The moment you stop noticing how heavy you sound, $n starts shrinking.',
-          'You bring the structure. Standards, lines, decisions — $n watches and learns. Build in regular asks so $np own grain stays visible.',
-          'Coach line. Worked well, $n becomes their best self beside you; worked badly, $n disappears. The pivot is whether you also champion $np strengths out loud.',
+          'You overcome (相剋) $n — an overcoming line. You tend to lead naturally and read $np weak spots like a coach — but a notch sharper tone can read as control, so intent and delivery have to match.',
+          "Your $myEl tends to edit $np $ptEl. That is useful when $n asks for direction, costlier when it shows up as default — 'how about this' tends to land far better than 'do this'.",
+          "An overcoming (相剋) bond. Handled well, $n tends to grow beside you; handled poorly, $n tends to hold opinions back. Asking 'what do you think?' often is the single habit that keeps the line honest.",
+          "Your call tends to settle the room. That is useful — but if you settle every call, $n loses color. Following $n on one real decision a week tends to steady the bond.",
+          'You tend to see the weak point first. The strength is sharp and the cost is sharp too — pairing each critique with a real spot of praise keeps the giving line from tilting.',
+          'A strong-over-soft pairing. Closeness here tends to depend on you measuring your tone — the moment that goes unnoticed, $n tends to hold back.',
+          'You bring the structure — standards, lines, decisions. Building in regular asks keeps $np own voice visible alongside yours.',
+          'A coach line. Handled well, $n tends to show their steadier side beside you; handled badly, $n tends to fade. The pivot is whether you also champion $np strengths out loud.',
         ],
         'tOvr': [
-          "$np $ptEl overcomes (相剋) your $myEl. Closeness asks you to keep your color when $n speaks heavily — done well, both toughen; done badly, you shrink.",
-          "$np one word can move your day. Soft most of the time, but a sharper line from $n lands harder than $n knows. Tell $n: 'that one was heavy'.",
-          "The friction lives in tone. $n speaks plainly and means well; you receive it three notches louder. Both sides need practice — $n softens, you stand.",
-          "You're on the receiving end of overcoming. Hold one decision a week that is purely yours, so the line of who-you-are stays bright.",
-          "$np presence sharpens your edges. Used well, you grow tougher; used badly, you stop offering opinions. Catch the slide early and name it.",
-          'A challenging match with high payoff. Time mostly does the work — $np strong tone becomes familiar — but the early phase needs explicit tone agreements.',
-          "$n names the things you wish you had said. Useful when you take it; painful when it arrives at the wrong moment. Ask for one timing rule and the rest gets easier.",
-          'Receiving the stronger current. The bond hardens once you trust that $np force is direction, not pressure — until then, hold the small claims of self.',
+          "$np $ptEl overcomes (相剋) your $myEl — an overcoming line toward you. Closeness here tends to ask you to keep your color when $n speaks heavily; handled well, both sides tend to toughen.",
+          "$np one word can move your day. $n is soft most of the time, but a sharper line tends to land harder than $n knows — telling $n 'that one was heavy' keeps it honest.",
+          "The friction here tends to live in tone. $n often speaks plainly and means well; you may receive it a few notches louder. Both sides practice — $n softens, you stand.",
+          "You're on the receiving end of overcoming (相剋). Holding one decision a week that is purely yours tends to keep the line of who-you-are bright.",
+          "$np presence tends to sharpen your edges. Handled well you tend to toughen; handled badly you tend to hold opinions back — catching that slide early and naming it helps.",
+          'A challenging match with high payoff. Time tends to do much of the work — $np strong tone becomes familiar — but the early phase rewards explicit tone agreements.',
+          "$n tends to name the things you wish you had said. That is useful when you take it, harder when it arrives at the wrong moment — asking for one timing rule makes the rest easier.",
+          'Receiving the stronger current. The bond tends to firm up once you trust that $np force is direction, not pressure — until then, holding the small claims of self helps.',
         ],
         'neut': [
-          "No direct 生剋 between your $myEl and $np $ptEl. Mild interaction — neither spark nor clash. The closeness will not happen by gravity; it happens by choice.",
-          "A quiet pairing. With $n there is no urgency, but also no friction — perfect for slow trust, easy to forget about when life gets loud.",
-          'Neutral grain. The two of you click softly and drift softly. A standing weekly check-in keeps the line warm; without one, distance grows.',
-          "$n is the kind of person you can keep beside you for life — but only if one of you keeps reaching first. The pull is not automatic.",
-          "Comfortable but mild. With $n the room is calm, the tone is even, the bond holds — provided you build small rituals on purpose.",
-          'No anchor in the chart, plenty in the choices. Closeness here is a discipline of small signals, not a magnetic accident.',
-          "$n sits in a quiet zone of your chart. No clash means no warning bells; no spark means you must light it. A monthly plan together does the work.",
-          'Neutral match. The bond does not push or pull — it sits there, dependable, only as deep as the attention you give. Make a habit, not a moment.',
+          "No direct 生剋 between your $myEl and $np $ptEl — a neutral line. The interaction is mild, neither spark nor clash, so closeness here tends to grow by choice rather than by pull.",
+          "A quiet pairing. With $n there is no urgency and no friction — well suited to slow trust, and easy to forget about when life gets loud, so a standing check-in helps.",
+          'A neutral line. The two of you tend to click softly and drift softly. A standing weekly check-in tends to keep the line warm; without one, distance is easy to let widen.',
+          "$n is the kind of person a neutral line can keep close for a long time — as long as one of you keeps reaching first. The pull here is not automatic.",
+          "Comfortable but mild. With $n the room tends to stay calm and the tone even — building small rituals on purpose is what gives the bond its depth.",
+          'No direct stem-branch anchor between you, but plenty in the choices. Closeness here tends to be a discipline of small signals rather than a magnetic accident.',
+          "$n sits in a quiet zone relative to your day pillar. No clash means no warning bells; no spark means you light it. A monthly plan together tends to do that work.",
+          'A neutral match. The bond neither pushes nor pulls — it tends to be only as deep as the attention you give it, so a habit serves it better than a single moment.',
         ],
       };
       final summaryPool = summaryPoolsEn[elBranchKey] ?? summaryPoolsEn['neut']!;
@@ -1704,14 +1705,14 @@ class _DetailSection extends StatelessWidget {
       }
       if (sameDay) {
         const sameDayPool = [
-          ' You also share the same day pillar — a mirror bond.',
-          ' Same day pillar runs underneath everything; insights one of you reaches show up in the other soon after.',
+          ' You also share the same day pillar — a mirror bond, where one of you tends to recognize the other quickly.',
+          ' A shared day pillar runs underneath everything; what one of you notices tends to read familiar to the other soon after.',
         ];
         summary.write(sameDayPool[pick('summary-sameDay-en', sameDayPool.length)]);
       } else if (sameBranch) {
         final sameBranchPool = [
-          ' Same day branch ($myJi) — life rhythm aligns.',
-          ' Sharing the $myJi branch syncs season, body, and pace without effort.',
+          ' A shared day branch ($myJi) — life rhythm tends to align here.',
+          ' Sharing the $myJi branch tends to sync season, body, and pace without much effort.',
         ];
         summary.write(sameBranchPool[pick('summary-sameBranch-en', sameBranchPool.length)]);
       }
@@ -1737,10 +1738,10 @@ class _DetailSection extends StatelessWidget {
     if (useKo) {
       final attractPoolsKo = <String, List<String>>{
         'ganHap': [
-          '천간 오합($myGan·$ptGan) — 사주에서 가장 강한 끌림 중 하나예요. $pSubj 처음 봤을 때부터 자석 같은 결이고, 한 번 가까워지면 떨어지기 힘든 사이.\n\n합이 강한 만큼 한쪽이 자기 색을 잃기 쉬워요. 처음엔 \'운명\' 같지만 시간이 흐를수록 각자의 페이스를 의식적으로 지키는 게 더 중요해져요.',
+          '천간 오합($myGan·$ptGan) — 두 사주에서 가장 강하게 걸리는 끌림 자리 중 하나예요. $pSubj 처음 봤을 때부터 자석 같은 결이고, 한 번 가까워지면 떨어지기 어렵게 느껴지기 쉬운 사이.\n\n합이 강한 만큼 한쪽이 자기 색을 잃기 쉬워요. 처음엔 깊게 통하는 느낌이 강하게 와도, 시간이 흐를수록 각자의 페이스를 의식적으로 지키는 게 더 중요해져요.',
           '$myGan·$ptGan 천간합이 맺힌 자리. $pName${withWith(pName)} 함께 있을 때 시간이 빨리 가고, 다른 사람과 있을 때보다 자기다워지는 느낌이 자주 와요.\n\n천간합은 \'서로 보완하고 싶은 자리\'를 자극해서 만남이 자연스럽게 이어져요. 다만 합이 깊은 만큼 변형도 같이 와요. 자기 자리 한 가지는 따로 챙겨두세요.',
           '오합(五合) 중 하나인 $myGan·$ptGan 짝. 친구·연인·동업자 — 어느 자리에 두어도 결이 단단해지는 만능 합이에요.\n\n끌림이 강한 만큼 \'경계 없는 사이\'로 흐를 위험도 있어요. $pName${withWith(pName)} 함께해도 자기 페이스 한 자리는 의식적으로 지키는 결이 필요해요.',
-          '천간합이 있는 사이는 첫 만남부터 \'어디서 본 사람\' 느낌이 와요. $pTop 거의 처음부터 편하고, 시간이 지날수록 서로의 결이 자연스럽게 섞여요.\n\n잘 풀면 평생 인연. 다만 너무 빠르게 섞이면 한쪽 색이 묻혀요. 한 분기에 한 번은 자기만의 결을 점검하는 자리가 좋아요.',
+          '천간합이 있는 사이는 첫 만남부터 \'어디서 본 사람\' 느낌이 오기 쉬워요. $pTop 거의 처음부터 편하고, 시간이 지날수록 서로의 결이 자연스럽게 섞이기 쉬운 자리.\n\n잘 다루면 오래 가기 좋은 자리예요. 다만 너무 빠르게 섞이면 한쪽 색이 묻히기 쉬워요. 한 분기에 한 번은 자기만의 결을 점검하는 자리가 좋아요.',
         ],
         'jiHap6': [
           '지지 육합($myJi·$ptJi) — 일상 호흡이 자연스럽게 맞는 결. $pName${withWith(pName)} 같이 살거나 같이 일할 때 가장 빛나는 합이에요.\n\n거창한 이벤트보다 \'같이 밥 먹기, 같이 산책\' 같은 작은 매일이 결을 단단하게 만들어요. 둘이 \'평범한 하루\'를 자주 보내면 자연스럽게 깊어져요.',
@@ -1764,7 +1765,7 @@ class _DetailSection extends StatelessWidget {
           '오행 상생(相生) — 한 사람이 다른 사람을 자라게 하는 결. 받는 쪽은 보호받는 느낌이, 주는 쪽은 만들어낸 변화에서 보람이 와요. $pName${withWith(pName)} 시간이 갈수록 깊어지는 사이.\n\n한쪽으로 흐르는 결이라 받는 쪽도 자기 자리를 만들어두는 게 좋아요. 시간이 지나면서 역할이 바뀌는 자리가 생기면 결이 더 단단해져요.',
           '상생 결은 \'성장 매력\'. $pSubj 곁에서 한 단계씩 자기 결을 찾는 모습이 가장 큰 끌림이에요.\n\n같이 보낸 1년이 지나면 받는 쪽이 눈에 띄게 자라있고, 주는 쪽도 자부심을 느껴요. 시즌 단위로 결을 볼 수 있는 사이.',
           '$myEl·$ptEl 상생 — 한 명이 가르치고 한 명이 배우는 자리가 자연스럽게 만들어지는 결. $pName${withWith(pName)} 한 자리에 있으면 두 사람 모두 변해요.\n\n주의할 자리는 균형. 한쪽이 평생 주는 자리면 결이 무너져요. \'받는 쪽도 다른 자리에선 주는 쪽\' 으로 만드는 결이 길게 가게 해요.',
-          '상생은 키우는 자리·자라는 자리가 분명한 합. $pTop 자기 결이 다른 사람 곁에서 가장 잘 자라는 사람 중 하나일 수 있어요.\n\n시간 흐름과 함께 깊어지는 구조라 조급해하지 말고 1년 단위로 봐도 늦지 않아요.',
+          '상생은 키우는 자리·자라는 자리가 분명한 합. $pTop 자기 결이 다른 사람 곁에서 잘 자라는 사람 중 하나일 수 있어요.\n\n시간이 쌓일수록 천천히 깊어지는 결이라, 조급해하지 말고 1년 단위로 봐도 늦지 않아요.',
         ],
         'neut': [
           '판단을 강요하지 않는 잔잔한 편안함이 매력이에요. $pName${withWith(pName)} 강한 끌림은 없지만 한 번 가까워지면 부담 없이 오래 가는 결.\n\n중립의 사이는 \'편안한 공존\'이 가장 큰 매력. 서로 자리를 침범 안 하고, 자기 페이스 유지하면서 같이 있는 자리.',
@@ -1778,7 +1779,7 @@ class _DetailSection extends StatelessWidget {
 
       if (complementary) {
         const complementaryPool = [
-          '\n\n게다가 한 사람이 많이 가진 오행이 다른 사람이 부족한 자리를 정확히 채우는 보완 구조도 있어요. 사주적으로 가장 안정적인 결 중 하나로, 결정·건강·돈 흐름이 모두 안정돼요.',
+          '\n\n게다가 한 사람이 많이 가진 오행이 다른 사람이 부족한 자리를 채워주는 보완 짝이에요. 두 사주가 만나면 결정·건강·돈 쪽 결이 한쪽으로 안 쏠리고 균형이 잡히기 쉬운 자리.',
           '\n\n오행 보완 신호까지 추가로 걸려 있어요. 평소 부족하다 느끼던 자리가 곁에 있을 때 자연스럽게 채워지는 \'완성\' 결.',
         ];
         attract.write(complementaryPool[pick('attract-complement-ko', complementaryPool.length)]);
@@ -1797,40 +1798,40 @@ class _DetailSection extends StatelessWidget {
       final np = pPoss;
       final attractPoolsEn = <String, List<String>>{
         'ganHap': [
-          'Heavenly stem union ($myGan·$ptGan) with $n — one of the strongest pulls in saju. Magnetic from first sight; once close, hard to separate.',
-          "Stem union ($myGan·$ptGan). $np presence completes something you didn't know was unfinished. Watch the cost: bond this strong erodes individual color over time.",
-          "$myGan·$ptGan five-union. Time runs fast beside $n; you sound more like yourself than you do with anyone else. Keep one personal lane outside the bond on purpose.",
-          'Saju calls $myGan·$ptGan a fated pull. Friend, partner, business — every container holds. Just guard your own pace as years stack.',
+          'A heavenly stem union ($myGan·$ptGan) with $n — a strong pull. It tends to read magnetic early, and once close, easy to feel hard to separate.',
+          "A stem union ($myGan·$ptGan). $np presence tends to complete something you didn't know was unfinished — and a pull this strong can blur individual color, so keeping one personal lane outside the bond helps.",
+          "A $myGan·$ptGan five-union. Time tends to run fast beside $n, and you may sound more like yourself than you do with most people. Keeping one personal lane outside the bond on purpose helps.",
+          'A $myGan·$ptGan stem union — a pull strong enough to feel sudden. Friend, partner, business — the bond tends to hold its shape across most of them. Guarding your own pace as the years stack keeps it healthy.',
         ],
         'jiHap6': [
-          "Six harmony ($myJi·$ptJi) with $n. Daily breath syncs without effort. Fits living or working together; shines brightest when you share space.",
-          "$myJi·$ptJi is a 'home union' — small daily acts (shared meals, walks, cleaning) build the bond more than big events.",
-          'Branch six-union. $np rhythm and yours overlap in the everyday. Routine becomes the love language.',
-          "$myJi·$ptJi union — closeness grows the more time you share a space with $n. Distance dilutes it; presence concentrates it.",
+          "A six harmony ($myJi·$ptJi) with $n. Daily breath tends to sync without much effort — it fits living or working together and reads brightest when you share space.",
+          "$myJi·$ptJi is a 'home union' — small daily acts (shared meals, walks, cleaning) tend to build this bond more than big events do.",
+          'A branch six-union. $np rhythm and yours tend to overlap in the everyday, so routine tends to become the love language.',
+          "A $myJi·$ptJi union — closeness here tends to build the more time you share a space with $n. Presence tends to concentrate it; distance tends to dilute it.",
         ],
         'jiSamhap': [
-          "Triad partial ($myJi·$ptJi) — $n and you click hardest around a shared goal. Run a project, plan a trip, build something together; outcomes thicken the bond.",
-          'Branch triad fragment. Quiet on idle days; explosive when a real mission shows up. Keep one shared project alive each quarter.',
-          'Saju triad partial with $n. The pull is mission-shaped — common objectives make the bond unmistakable.',
-          "$myJi·$ptJi triad piece. Movement together (sports, travel, work) brings out the best of the bond; static settings dull it.",
+          "A triad partial ($myJi·$ptJi) — $n and you tend to click hardest around a shared goal. Running a project, planning a trip, or building something together tends to thicken the bond.",
+          'A branch triad fragment. Quiet on idle days, and lively when a real mission shows up — keeping one shared project alive each quarter suits it.',
+          'A branch triad partial with $n. The pull tends to be mission-shaped, so common objectives tend to make the bond unmistakable.',
+          "A $myJi·$ptJi triad piece. Movement together (sports, travel, work) tends to bring out the best of the bond; static settings tend to dull it.",
         ],
         'sameEl': [
-          'Same element grain with $n — first impression already familiar; tone, taste, and decision speed sync fast. Comfort runs highest in shared space.',
-          'Biwha (same-element) match. The attraction is ease, not spark. Trust comes early; novelty needs intent.',
-          "Sharing $myEl with $n makes 'no need to explain' the love language. The flip side: starting often needs one of you to send the first signal.",
-          'Same-element bond. With $n the version of you that comes out is the unguarded one. Closeness builds in quiet repetition.',
+          'A same-element match with $n — the first impression tends to read already familiar, and tone, taste, and decision speed tend to sync fast. Comfort tends to run highest in shared space.',
+          'A 比和 (same-element) match. The attraction here tends to be ease rather than spark — trust tends to come early, and novelty rewards intent.',
+          "Sharing $myEl with $n tends to make 'no need to explain' the love language. The flip side: starting something often rewards one of you sending the first signal.",
+          'A same-element bond. With $n the version of you that comes out tends to be the unguarded one — closeness here tends to build in quiet repetition.',
         ],
         'gen': [
-          'Generating (相生) bond with $n — one quietly grows the other. The receiver feels protected; the giver finds meaning. Depth compounds with time.',
-          'Saju生 (generating) line. $n changes around you, or you change around $n; either way, season-by-season transformation is the bond.',
-          "$myEl·$ptEl generating match. One year in, the growth is visible — give yourself the same long horizon for measuring the love.",
-          'Generating bond. Beside $n new starts go easier. Just build a reverse-flow ritual so the giver does not burn out.',
+          'A generating (相生) bond with $n — one element quietly feeds the other. The receiver tends to feel protected; the giver tends to find meaning. Depth tends to compound when you tend it.',
+          'A generating (相生) line. $n tends to shift around you, or you around $n — either way, this bond tends to run on season-by-season change.',
+          "A $myEl·$ptEl generating (相生) match. The growth here tends to read clearer over a year than over a week — a long horizon fits measuring the love.",
+          'A generating (相生) bond. Beside $n, new starts tend to go easier — building a reverse-flow ritual keeps the giver from running dry.',
         ],
         'neut': [
-          "A quiet ease with $n that doesn't demand alignment. No strong pull, but durable once close.",
-          "Neutral grain with $n. Comfort is the headline; depth has to be built on purpose. A standing weekly check-in changes everything.",
-          'No direct 生剋, just calm room. The bond holds as long as someone keeps reaching first — gravity will not do the work.',
-          "$n sits in a quiet zone of your chart. No spark to chase, no clash to manage — only the small rituals you choose to make.",
+          "A quiet ease with $n that doesn't demand alignment. The pull is not strong, but a neutral line can run long once close.",
+          "A neutral line with $n. Comfort tends to be the headline; depth here rewards being built on purpose, and a standing weekly check-in helps.",
+          'No direct 生剋, just calm room. A neutral line tends to hold as long as someone keeps reaching first — gravity does not do the work here.',
+          "$n sits in a quiet zone relative to your day pillar. No spark to chase, no clash to manage — only the small rituals you choose to make.",
         ],
       };
       final attractPool = attractPoolsEn[attractBranchKey] ?? attractPoolsEn['neut']!;
@@ -1838,8 +1839,8 @@ class _DetailSection extends StatelessWidget {
 
       if (complementary) {
         const complementaryPool = [
-          " Dominant element on one side fills the deficit on the other — together, balance shows in decisions, health, money flow.",
-          " A complementary anchor runs underneath: what one lacks the other holds. The bond reads as 'whole' from the start.",
+          " The dominant element on one side tends to fill the deficit on the other — a complementary anchor that tends to show up most in how you make decisions together.",
+          " A complementary anchor runs underneath: what one lacks, the other tends to hold. The bond tends to read as 'whole' early on.",
         ];
         attract.write(complementaryPool[pick('attract-complement-en', complementaryPool.length)]);
       }
@@ -1872,31 +1873,31 @@ class _DetailSection extends StatelessWidget {
     if (useKo) {
       final frictionPoolsKo = <String, List<String>>{
         'clash': [
-          '지지 충($myJi·$ptJi). $pName${withWith(pName)} 큰 결정·이사·여행·돈 결정에서 의견이 자주 엇갈려요. 평소엔 잘 맞다가도 \'이사 갈까\', \'여행 어디 갈래\' 같은 자리에서 방향이 다르게 나와요.\n\n미리 룰을 정해두는 게 가장 큰 약. \'돈 결정은 한 명, 여행 결정은 다른 한 명\' 식으로 영역을 나누면 한 번씩 부딪힐 때도 큰 다툼으로 안 가요. 충이 있는 사이는 한 번 솔직하게 부딪히고 나면 오히려 깊어져요.',
-          '$myJi·$ptJi 일주 충. 평소엔 부드러운 결이라도 큰 결정 자리에서 $pSubj 너랑 다른 방향을 가리키는 자리가 자주 와요.\n\n부딪힘 자체가 진심을 꺼내놓는 자리라, 피하지 말고 솔직하게 말하는 결이 더 중요해요. 다만 \'미리 영역 분담\' 한 줄 룰만 있어도 큰 다툼은 안 와요.',
-          '충이 있는 자리. 큰 결정 영역마다 누가 주도할지 합의해두면 결이 흔들리지 않아요. $pPossKo 결정 방식이랑 내 방식이 정반대로 가는 자리가 분명 있어요.\n\n충 — 부정적이지만은 않아요. 솔직하게 부딪히고 진짜 마음 꺼내놓는 결이라 잘 풀면 평생 갑니다.',
+          '지지 충($myJi·$ptJi) — 두 글자가 정면으로 마주 보는 자리예요. $pName${withWith(pName)} 큰 결정(이사·여행·돈) 앞에서 의견이 엇갈리기 쉬워요. 평소엔 잘 맞다가도 \'이사 갈까\', \'여행 어디 갈래\' 같은 자리에서 방향이 다르게 나오기 쉬운 결.\n\n미리 룰을 정해두는 게 가장 큰 약이에요. \'돈 결정은 한 명, 여행 결정은 다른 한 명\' 식으로 영역을 나누면 부딪혀도 큰 다툼으로 잘 안 번져요. 충은 한 번 솔직하게 부딪히고 나면 오히려 가까워지기 쉬운 결이기도 해요.',
+          '$myJi·$ptJi 일주 충(沖) — 글자끼리 정면으로 마주 보는 자리예요. 평소엔 부드럽다가도 큰 결정 앞에서 $pSubj 너랑 다른 방향을 가리키기 쉬워요.\n\n충은 부딪히면서 진심을 꺼내놓게 되는 결이라, 피하기보다 솔직하게 말하는 게 나아요. \'미리 영역 분담\' 한 줄 룰만 정해둬도 부딪힘이 큰 다툼으로 잘 안 번져요.',
+          '충(沖)이 걸린 자리예요. 큰 결정 영역마다 누가 주도할지 미리 합의해두면 흔들릴 일이 줄어요. $pPossKo 결정 방식과 내 방식이 정반대로 가기 쉬운 자리거든요.\n\n충은 나쁘기만 한 게 아니에요. 솔직하게 부딪히고 진짜 마음을 꺼내놓게 되는 결이라, 룰만 잘 잡으면 오래 단단하게 가기 좋아요.',
           '$myJi·$ptJi 충. $pTop 너랑 \'밤·낮\'·\'동·서\' 같은 반대 자리에 있는 결. 평소엔 매력적인 차이지만 큰 결정 앞에서는 의식적으로 합의 룰이 필요해요.\n\n6개월에 한 번씩 \'영역 분담 룰 재조정\' 자리만 두어도 결이 길게 가요.',
         ],
         'hyeong': [
-          '지지 형($myJi·$ptJi). 한 번씩 강한 한 마디가 $pName${withWith(pName)} 오갈 수 있고, 그 한 마디가 평소 누적된 작은 서운함에서 시작돼요.\n\n작은 인정과 칭찬을 자주 챙겨주는 게 큰 다툼을 막아요. \'잘했어\', \'고마워\', \'네 덕분이야\' — 하루 한 번씩 챙겨주면 큰 갈등이 거의 안 와요.',
-          '$myJi·$ptJi 형 자리. 평소 잘 지내다가 갑자기 폭발하는 결이라, 사소한 서운함을 그때그때 풀어주는 결이 가장 큰 보약.\n\n다툼이 시작되면 \'화날 때 10분 자리 떨어지기\' 같은 룰이 필수예요. 한 박자 쉬는 결 한 번이 큰 충돌을 막아요.',
-          '형 — 사소한 일이 갑자기 커지는 결. $pSubj 평소엔 부드러운 만큼 한 번씩 폭발할 때 무게가 커요.\n\n\'네 덕분이야\' 매일 한 마디면 누적이 안 일어나요. 다툼 자체는 자연스러운 결이라 \'다툼 후 24시간 안에 한 명이 손 내밀기\' 약속이 결을 길게 가게 해요.',
-          '$myJi·$ptJi 三刑 partial. 작은 서운함이 누적되다가 한 번에 큰 한 마디로 나오는 결. $pPossKo 톤이 평소보다 한 단계 높아지는 자리가 자주 와요.\n\n평소에 \'고마워\' \'미안해\' 짧은 인정을 자주 챙기면 큰 갈등이 거의 사라져요.',
+          '지지 형($myJi·$ptJi). 한 번씩 강한 한 마디가 $pName${withWith(pName)} 오갈 수 있고, 그 한 마디는 평소 누적된 작은 서운함에서 시작되기 쉬워요.\n\n작은 인정과 칭찬을 자주 챙겨주면 큰 다툼으로 잘 안 번지게 하는 데 도움돼요. \'잘했어\', \'고마워\', \'네 덕분이야\' — 하루 한 번씩 챙겨두면 작은 서운함이 큰 갈등으로 자라기 어려워요.',
+          '$myJi·$ptJi 형(刑) 자리예요. 평소 잘 지내다가 한 번에 확 터지기 쉬운 결이라, 사소한 서운함을 그때그때 풀어주는 게 가장 큰 보약.\n\n다툼이 시작되면 \'화날 때 10분 자리 떨어지기\' 같은 룰이 필수예요. 한 박자 쉬는 결 한 번이 큰 충돌로 잘 안 번지게 하는 데 도움돼요.',
+          '형 — 사소한 일이 갑자기 커지기 쉬운 결. $pSubj 평소엔 부드러운 만큼 한 번씩 크게 부딪힐 때 무게가 큰 자리.\n\n\'네 덕분이야\' 매일 한 마디면 누적이 잘 안 쌓여요. 다툼 자체는 자연스러운 결이라 \'다툼 후 24시간 안에 한 명이 손 내밀기\' 약속을 두면 결을 길게 가져가는 데 도움돼요.',
+          '$myJi·$ptJi 三刑 partial. 작은 서운함이 누적되다가 한 번에 큰 한 마디로 터지기 쉬운 결. $pPossKo 톤이 평소보다 한 단계 높아지는 자리가 자주 올 수 있어요.\n\n평소에 \'고마워\' \'미안해\' 짧은 인정을 자주 챙기면 작은 서운함이 큰 갈등으로 자라기 어려워요.',
         ],
         'overcome': [
           '오행 상극이 있어서 말의 톤이 한 단계만 높아져도 통제처럼 느껴질 수 있어요. \'이렇게 해\'보다 \'이렇게 하는 게 어때, 왜냐면…\' 식으로 한 단계 낮추는 결이 핵심.\n\n상극은 평소엔 단단한 관계를 만들지만 톤 관리 못 하면 한쪽이 위축되기 쉬워요. \'내 톤이 너무 강했어?\' 한 번씩 묻는 결이 필수예요.',
-          '$myEl·$ptEl 상극 자리. 의도와 표현의 거리가 가장 중요한 사이라, 같은 말이라도 \'왜\'부터 짚어주는 결이 필요해요.\n\n잘 풀면 둘 다 단단해지는 관계지만 잘못 풀면 한쪽이 점점 작아지는 구조. $pName${withWith(pName)} 톤 차이를 인정하는 결이 먼저예요.',
+          '$myEl·$ptEl 상극(相剋) 자리예요. 의도와 표현의 거리가 가장 중요한 사이라, 같은 말이라도 \'왜\'부터 짚어주면 잘 통해요.\n\n톤을 잘 다루면 둘 다 단단해지고, 톤이 세지면 한쪽이 점점 작아지기 쉬워요. $pName${withWith(pName)} 톤 차이를 인정하는 게 먼저예요.',
           '상극이 걸린 자리. 누르는 쪽은 자기 톤이 강한 줄 모르고, 눌리는 쪽은 점점 자기 색을 잃을 수 있어요. \'네 의견 듣고 싶어\' 한 번씩 권하는 결, \'네 말 무게가 컸어\' 한 번씩 전하는 결이 필수.\n\n시간이 지나면 익숙해지면서 단단해지는 결이지만 초반엔 의식적 룰이 핵심.',
-          '$myEl→$ptEl 또는 $ptEl→$myEl 상극. $pPossKo 결이 강할 때 $pSubj 한 마디로 내 페이스가 흔들리는 자리가 자주 와요.\n\n두 사람 모두 톤 한 단계 낮추는 연습이 필요해요. 자기 검열이 아니라 \'배려된 표현\' 자리. 잘 잡히면 결이 평생 단단해져요.',
+          '$myEl→$ptEl 또는 $ptEl→$myEl 상극. $pPossKo 결이 강할 때 $pSubj 한 마디로 내 페이스가 흔들리는 자리가 자주 올 수 있어요.\n\n두 사람 모두 톤 한 단계 낮추는 연습이 필요해요. 자기 검열이 아니라 \'배려된 표현\' 자리. 잘 잡으면 오래 가기 좋은 자리예요.',
         ],
         'sameEl': [
-          '결이 같아서 약한 자리도 겹쳐요. $pName${withWith(pName)} 함께 가라앉기 쉬운 구조라, 둘 중 한 명이 의식적으로 다른 행동을 선택해주는 룰이 필요해요.\n\n비화 사이는 \'역할 분담\' 룰이 효과 커요. 둘 다 지친 날 한 명은 산책 한 명은 휴식, 자잘한 분담이 같이 가라앉는 날을 피하게 해줘요.',
+          '결이 같아서 약한 자리도 겹쳐요. $pName${withWith(pName)} 함께 가라앉기 쉬운 자리라, 둘 중 한 명이 의식적으로 다른 행동을 골라주는 룰이 필요해요.\n\n비화 사이는 \'역할 분담\' 룰이 효과 커요. 둘 다 지친 날 한 명은 산책 한 명은 휴식, 자잘한 분담이 같이 가라앉는 날을 피하게 해줘요.',
           '같은 $myEl 결끼리는 약점도 동조해요. 같이 피곤한 날, 같이 결정 미루는 날이 자주 겹쳐요. $pSubj 자기 단점처럼 보이는 결도 사실은 \'결이 같아서 비치는\' 거리.\n\n그 차이를 의식하면 갈등이 줄어요. 거울이라 자기 단점 같아 보일 수 있다는 걸 둘 다 인지하는 결이 핵심.',
           '비화 자리의 충돌. 자극은 적지만 \'같이 가라앉기\'가 가장 큰 위험이에요. $pPossKo 일상이 흔들리는 날은 내가 반대로 움직이는 결, 내가 흔들리는 날은 $pSubj 반대로 움직이는 결이 결을 잡아줘요.\n\n같은 결끼리는 다툼보다 매너리즘이 위험. 새 자극을 의식적으로 만들면 결이 살아 있어요.',
           '같은 $myEl. 부딪힘 자체는 약해도 약점 동조가 강해요. 한 명이 가라앉으면 다른 명도 같이 가라앉는 자리. $pName${withWith(pName)} 평소에 \'다른 무게\' 한 가지를 정해두면 같이 가라앉는 날을 피할 수 있어요.',
         ],
         'mild': [
-          '강한 부딪힘은 없지만 적극적인 신호가 없으면 자연스럽게 거리가 벌어질 수 있어요. $pName${withWith(pName)} 정기적으로 연락하는 약속 하나가 결을 지켜요.\n\n\'잊혀짐\'이 가장 큰 위험. \'우리 이번 주 한 번 보자\' 한 마디 먼저 보내는 자리에 자주 가야 관계가 유지돼요.',
+          '강한 부딪힘은 없지만, 적극적인 신호가 없으면 거리가 슬슬 벌어지기 쉬워요. $pName${withWith(pName)} 정기적으로 연락하는 약속 하나가 그걸 막아줘요.\n\n이런 결에선 다툼보다 \'서로 잊고 지내기\'가 더 큰 위험. \'우리 이번 주 한 번 보자\' 한 마디 먼저 보내는 자리를 자주 만들면 거리가 안 벌어져요.',
           '중립 결이라 충돌이 적은 만큼 깊이도 자연스럽게 안 생겨요. $pSubj \'특별히 갈등은 없는데 왜 멀어지지\' 느낌이 올 때, 그건 자연스러운 끌림이 없는 결이라서 그래요.\n\n의식적인 정성이 깊이를 만드는 사이. 한 명이 먼저 신호를 보내는 룰을 정해두면 결이 흔들리지 않아요.',
           '$pTop 자극도 충돌도 큰 자리가 아니에요. 잔잔한 결인 만큼 한 명이 신경 안 쓰면 자연스럽게 거리가 벌어지는 결.\n\n매주 정기 약속 하나, 매일 짧은 안부 한 마디 — 작은 의식이 결을 지켜요.',
           '직접 신호가 없는 중립. $pName${withWith(pName)} 부딪힘이 거의 없는 자리지만 그만큼 끌림도 약해요. 의식적으로 정성 들이는 결이 깊이를 만들어요.',
@@ -1915,34 +1916,34 @@ class _DetailSection extends StatelessWidget {
       final np = pPoss;
       final frictionPoolsEn = <String, List<String>>{
         'clash': [
-          "Branch clash ($myJi·$ptJi) with $n. Friction shows up in big calls — moves, money, travel. Agree on the rule first ('this kind of call goes your way'), and small bumps stop turning into fights.",
-          "$myJi·$ptJi clash. With $n the everyday is calm, but choice points fork. Pre-allocate decision domains ('travel — yours, money — mine') and the line steadies.",
-          "Clash on the day-branch. The bond often deepens after one honest collision — avoid the avoidance, and tell $n what is real.",
-          "$myJi·$ptJi opposes. $np direction and yours run on opposite axes (night/day, east/west, move/settle). Useful contrast in steady weather; difficult in storms — agreements help.",
+          "A branch clash ($myJi·$ptJi) with $n. Friction tends to show up in big calls — moves, money, travel. Agreeing on the rule first ('this kind of call goes your way') tends to keep small bumps from turning into fights.",
+          "A $myJi·$ptJi clash. With $n the everyday tends to read calm, but choice points tend to fork. Pre-allocating decision domains ('travel — yours, money — mine') tends to steady the line.",
+          "A clash on the day-branch. This kind of bond often eases after one honest collision — naming what is real to $n tends to help more than avoiding it.",
+          "$myJi·$ptJi opposes. $np direction and yours tend to run on opposite axes (night/day, east/west, move/settle) — useful contrast in steady weather, harder in storms, so agreements help.",
         ],
         'hyeong': [
-          "Branch punishment ($myJi·$ptJi). Sharp words can surface with $n, usually from small things piling up. A daily 'thanks' or 'good job' keeps the big blow-up away.",
-          "$myJi·$ptJi 三刑 partial. Quiet stretch, sudden spike. Catch the small things while they are small, and the spike never builds.",
-          "Punishment branches. $n speaks plainly most days, then once in a while the volume jumps. Schedule a 'pause 10 minutes' rule for those moments — it works.",
-          "$myJi·$ptJi punishment with $n. The structural fix is daily acknowledgment — 'I saw what you did, thanks'. That alone shrinks 80% of the explosions.",
+          "A branch punishment ($myJi·$ptJi). Sharp words can surface with $n, usually from small things piling up — a daily 'thanks' or 'good job' tends to keep the big blow-up away.",
+          "A $myJi·$ptJi 三刑 partial. Quiet stretches and a sudden spike — catching the small things while they are small tends to keep the spike from building.",
+          "Punishment branches. $n tends to speak plainly most days, then once in a while the volume can jump — a 'pause 10 minutes' rule for those moments helps.",
+          "A $myJi·$ptJi punishment with $n. The structural fix tends to be daily acknowledgment — 'I saw what you did, thanks' — which helps keep most explosions from building.",
         ],
         'overcome': [
-          "Overcoming bond — one notch sharper tone reads as control. Lead with 'why' before 'what'. Worked through, both grow tougher.",
-          "$myEl·$ptEl overcoming line with $n. Soften imperatives by one degree ('how about…' instead of 'do this') and the friction drops fast.",
-          "Saju 相剋. The stronger side doesn't notice; the weaker side starts holding back. Ask each other 'was that too sharp?' regularly — that single question maintains the bond.",
-          "Overcoming match. With time the louder voice becomes familiar and the quieter one stops shrinking — but the early phase needs explicit tone agreements.",
+          "An overcoming line — a notch sharper tone can read as control. Leading with 'why' before 'what' helps; worked through, both sides tend to toughen.",
+          "A $myEl·$ptEl overcoming line with $n. Softening imperatives by one degree ('how about…' instead of 'do this') tends to drop the friction fast.",
+          "An overcoming (相剋) line. The stronger side often doesn't notice the weight, and the receiving side tends to hold back — asking each other 'was that too sharp?' regularly keeps the bond honest.",
+          "An overcoming match. With time the louder voice tends to become familiar and the quieter one tends to stop shrinking — but the early phase rewards explicit tone agreements.",
         ],
         'sameEl': [
-          "Sharing the same element with $n means sharing the same weak spots. When one of you dips, the other tends to follow. One of you has to make a different choice on those days.",
-          "Biwha (same-element). Fights are rare, simultaneous slumps are common. Pre-allocate 'opposite-day rules' (one walks, one rests).",
-          "Same-element friction is parallel sinking, not collision. $np low day and yours arrive on the same calendar; the cure is asymmetry, not negotiation.",
-          "$myEl·$myEl pair. The shadow you spot in $n is often the one you carry too. Recognizing 'that's element, not character' kills most of the small fights.",
+          "Sharing the same element with $n means sharing the same weak spots. When one of you dips, the other tends to follow — so one of you choosing a different move on those days helps.",
+          "A 比和 (same-element) line. Fights tend to be rare, simultaneous slumps common — pre-allocating 'opposite-day rules' (one walks, one rests) helps.",
+          "Same-element friction tends to be parallel sinking, not collision. $np low day and yours tend to arrive on the same calendar — asymmetry, not negotiation, is the cure.",
+          "A $myEl·$myEl pair. A shadow you spot in $n is often one you carry too — recognizing 'that's element, not character' helps defuse most small fights.",
         ],
         'mild': [
-          "No sharp clash with $n, but the gap can widen without small signals. Agree on who reaches out first when the chat goes quiet.",
-          "Neutral grain. The risk is being forgotten, not being hurt. Schedule a recurring check-in and the bond stays warm.",
-          "Mild interaction. Nothing pushes; nothing collides. Whoever reaches out first does the real work of holding the line.",
-          "$n and you share no direct anchor in the chart. Distance grows by default; closeness grows only by choice. Choose, on a calendar.",
+          "No sharp clash with $n, but the gap can widen without small signals. Agreeing on who reaches out first when the chat goes quiet helps.",
+          "A quiet, neutral line. The risk here tends to be being forgotten, not being hurt — a recurring check-in helps keep the bond warm.",
+          "A mild interaction. Nothing pushes, nothing collides — whoever reaches out first does the real work of holding the line.",
+          "$n and you share no direct stem-branch anchor. Distance tends to grow without small signals, and closeness tends to grow by choice — so choose, on a calendar.",
         ],
       };
       final frictionPool = frictionPoolsEn[frictionBranchKey] ?? frictionPoolsEn['mild']!;
@@ -2014,9 +2015,9 @@ class _DetailSection extends StatelessWidget {
       if (isHyeong || isClash) {
         slot3 = [
           '【작은 인정 자주 챙기기】 \'잘했어\', \'고마워\', \'네 덕분이야\' 한 마디씩 자주 챙기세요. 큰 갈등은 작은 누적에서 시작돼요.',
-          '【매일 한 마디 인정】 $pName 한테 매일 한 마디 인정을 챙기는 결. 평범한 자리에 \'네 덕분이야\' 한 마디면 큰 충돌이 거의 사라져요.',
-          '【화날 때 10분 자리 떨어지기】 다툼이 시작되면 한 박자 쉬는 룰을 미리 정해두세요. \'화날 때 10분 따로 있기\' 합의가 큰 충돌을 막아요.',
-          '【사소한 서운함 그때그때 풀기】 형·충 결은 작은 서운함이 누적되면 한 번에 폭발해요. 그때그때 \'요거 좀 서운했어\' 가벼운 한 마디가 누적을 막아요.',
+          '【매일 한 마디 인정】 $pName 한테 매일 한 마디 인정을 챙기는 결. 평범한 자리에 \'네 덕분이야\' 한 마디씩 두면 작은 서운함이 큰 충돌로 자라기 어려워요.',
+          '【화날 때 10분 자리 떨어지기】 다툼이 시작되면 한 박자 쉬는 룰을 미리 정해두세요. \'화날 때 10분 따로 있기\' 합의가 큰 충돌로 잘 안 번지게 하는 데 도움돼요.',
+          '【사소한 서운함 그때그때 풀기】 형·충 결은 작은 서운함이 쌓이면 한 번에 터지기 쉬워요. 그때그때 \'요거 좀 서운했어\' 가벼운 한 마디가 누적을 막아줘요.',
         ];
       } else if (iGenerate || theyGenerate) {
         slot3 = [
@@ -2070,24 +2071,24 @@ class _DetailSection extends StatelessWidget {
       List<String> slot1;
       if (isClash) {
         slot1 = [
-          'Pre-agree rules on big decisions (move, travel, money) — one line of consensus prevents escalation.',
-          "Allocate decision domains in advance with $n ('travel — yours, money — mine'). Domain rules halve clash frequency.",
-          'Revisit the rule set every six months. Static rules grow brittle in clash pairs.',
-          'For big calls, add a 24-hour-sleep-on-it rule. Snap answers are the riskiest move in a clash bond.',
+          'Pre-agree rules on big decisions (move, travel, money) — one line of consensus tends to keep things from escalating.',
+          "Allocate decision domains in advance with $n ('travel — yours, money — mine'). Domain rules tend to keep clashes from escalating.",
+          'Revisit the rule set every six months — static rules tend to grow brittle in clash pairs.',
+          'For big calls, add a 24-hour-sleep-on-it rule. Snap answers tend to be the riskiest move in a clash bond.',
         ];
       } else if (isGanHap || isJiHap6) {
         slot1 = [
-          'Stem/branch union means natural closeness — protect one weekly time slot for just the two of you.',
-          "Strong unions can swallow personal pace. Keep one solo hour per week and the bond stays healthier, not weaker.",
-          "Calendar one 'only us' ritual that outside plans cannot move. The union benefits from a reliable anchor.",
-          "Book a monthly just-the-two-of-you outing. Time together literally feeds this bond.",
+          'A stem/branch union means closeness comes naturally — protecting one weekly time slot for just the two of you helps.',
+          "Strong unions can swallow personal pace. Keeping one solo hour per week tends to keep the bond healthier.",
+          "Calendar one 'only us' ritual that outside plans cannot move — a union tends to do well with a reliable anchor.",
+          "Book a monthly just-the-two-of-you outing. Time together tends to be what this bond runs on.",
         ];
       } else {
         slot1 = [
           'Once a week, let $n go first on one real decision.',
-          "Ask $n 'what do you think?' before answering. The habit alone reshapes the dynamic.",
+          "Ask $n 'what do you think?' before answering — the habit alone tends to reshape the dynamic.",
           'Keep a small shared decisions log — one line per week of a call you made together.',
-          'Try a weekly hand-off: $n picks Saturday plans, you pick midweek. Small rotations build trust faster than negotiation.',
+          'Try a weekly hand-off: $n picks Saturday plans, you pick midweek. Small rotations tend to build trust faster than negotiation.',
         ];
       }
       List<String> slot2;
@@ -2095,67 +2096,67 @@ class _DetailSection extends StatelessWidget {
         slot2 = [
           'On the days you both feel low, one of you picks the opposite move.',
           "Pre-allocate 'opposite-day' rules with $n. One walks, the other rests; one decides, the other follows.",
-          "Recognise that a flaw you see in $n is often the one you share. Naming it 'element, not character' shrinks half of the small fights.",
-          'Bring one new stimulus per quarter — a different activity, a new place. Same-element pairs stagnate without it.',
+          "Recognise that a flaw you see in $n is often the one you share. Naming it 'element, not character' tends to defuse a lot of the small fights.",
+          'Bring one new stimulus per quarter — a different activity, a new place. Same-element pairs tend to go static without it.',
         ];
       } else if (complementary) {
         slot2 = [
           "Cover each other's weaker element — one small habit each (color, food, place).",
-          "Learn $np missing element and weave it into one weekly gesture. Small care, big resonance.",
-          'Hold a monthly check on what each of you is short on right now. With $n, naming the gap usually closes it.',
+          "Learn $np missing element and weave it into one weekly gesture. Small care tends to carry a big resonance.",
+          'Hold a monthly check on what each of you is short on right now. With $n, naming the gap tends to close it.',
           "Tune the complement to the season — a different missing-element gesture for spring, summer, fall, winter.",
         ];
       } else {
         slot2 = [
-          'Once a month, sit down with both eight-character charts and name where each of you is strong and weak.',
-          "Read $np eight-character chart together once. One sit-down reveals patterns hours of arguing cannot.",
+          'Once a month, sit down together and name where each of you runs strong and where each runs thin.',
+          "Walk through each other's strong spots and thin spots together once — one honest sit-down tends to surface patterns hours of arguing cannot.",
           'Hold a monthly hour of relationship review — what worked, what stung, one focus for next month.',
-          'Use the chart as the third voice in the room. The objective anchor surfaces things neither of you would raise alone.',
+          'Let an honest map of who runs strong where sit in the room as a neutral third reference — it tends to surface things neither of you would raise alone.',
         ];
       }
       List<String> slot3;
       if (isHyeong || isClash) {
         slot3 = [
-          "A small 'thanks' or 'good job' every day — most big fights start from small slights piling up.",
-          "Send one acknowledgment to $n daily. The cumulative effect outperforms big gestures by a wide margin.",
-          "When tension spikes, take a 10-minute pause. Walk out, breathe, come back. The single rule that prevents most explosions.",
-          "Surface small disappointments early — one quick 'that one hurt a little' line stops the silent stack.",
+          "A small 'thanks' or 'good job' every day — most big fights tend to start from small slights piling up.",
+          "Send one acknowledgment to $n daily. The cumulative effect tends to outperform big gestures by a wide margin.",
+          "When tension spikes, take a 10-minute pause. Walk out, breathe, come back — the single rule that tends to keep most explosions from building.",
+          "Surface small disappointments early — one quick 'that one hurt a little' line tends to stop the silent stack.",
         ];
       } else if (iGenerate || theyGenerate) {
         slot3 = [
-          "The one being supported says 'thanks' out loud once in a while — silent gratitude burns the giver out.",
-          "Whoever is giving — book a monthly recovery hour for yourself. Giving runs dry without it.",
-          "Name one growth moment in $n every quarter. Being seen is the deepest thank-you.",
-          "Once a week, let the receiver give something small back. Two-way flow keeps the bond from tilting.",
+          "The one being supported says 'thanks' out loud once in a while — silent gratitude tends to burn the giver out.",
+          "Whoever is giving — book a monthly recovery hour for yourself. Giving tends to run dry without it.",
+          "Name one growth moment in $n every quarter. Being seen tends to be the deepest thank-you.",
+          "Once a week, let the receiver give something small back. Two-way flow tends to keep the bond from tilting.",
         ];
       } else {
         slot3 = [
           'Build one small shared habit (a nightly text, a weekly walk).',
-          "Set a recurring weekly meet with $n — neutral pairs run on calendars, not gravity.",
-          'A daily one-line check-in (even just a meme) keeps the line warm. Tiny rhythm beats grand gestures here.',
-          "Reserve one no-outside-plans evening per month for just the two of you. The smallest ritual deepens the bond.",
+          "Set a recurring weekly meet with $n — neutral pairs tend to run on calendars, not gravity.",
+          'A daily one-line check-in (even just a meme) tends to keep the line warm. Tiny rhythm tends to beat grand gestures here.',
+          "Reserve one no-outside-plans evening per month for just the two of you. The smallest ritual tends to help the bond stay close.",
         ];
       }
       final slot4 = <String>[
-        "Pre-decide a 24-hour rule: whoever notices first reaches out after a fight. Small fights stop becoming silences.",
-        "Agree in advance who apologizes first. With $n it doesn't have to be 'fair' — it has to be consistent.",
-        "After a fight, send a short check-in the next day — 'sleep ok?' carries more than the long talk that follows.",
-        "Hot heads delay the talk. Pre-agree to wait 24 hours; cool minds finish what fired words started.",
+        "Pre-decide a 24-hour rule: whoever notices first reaches out after a fight. Small fights tend to stay small that way.",
+        "Agree in advance who apologizes first. With $n it doesn't have to be 'fair' — it helps if it's consistent.",
+        "After a fight, send a short check-in the next day — 'sleep ok?' tends to carry more than the long talk that follows.",
+        "Hot heads delay the talk. Pre-agreeing to wait 24 hours lets cool minds finish what fired words started.",
       ];
       List<String> slot5;
       if (iOvercome || theyOvercome) {
         slot5 = [
           "Practice softening one notch — 'do this' → 'how about this, because…'.",
-          "Ask weekly: 'was my tone too sharp?' Overcoming pairs need the question more than they need the answer.",
-          "Invite $np opinion explicitly. The stronger voice has to make room — that single discipline saves the receiving side.",
-          "Re-phrase one sentence per week into a softer version. Practice in calm water; it works in storm water.",
+          "Ask weekly: 'was my tone too sharp?' Overcoming pairs tend to need the question more than the answer.",
+          "Invite $np opinion explicitly. The stronger voice making room is the single discipline that tends to protect the receiving side.",
+          "Re-phrase one sentence per week into a softer version. Practising in calm water tends to make it land in storm water.",
         ];
       } else {
         slot5 = [
           "Once a year, review the relationship together — one strong point, one regret, one goal for next year.",
-          "At each season change, hold a short 'how are we?' hour with $n. Four times a year keeps the bond clean.",
-          "Write one line a year on the bond's strengths and weaknesses. Five years of those lines outline the shape of your story together.",
-          "Once a month, swap one line on 'how we're doing'. Short rhythm prevents long surprises.",
+          "At each season change, hold a short 'how are we?' hour with $n. Four times a year tends to keep the bond clean.",
+          "Write one line a year on the bond's strengths and weak spots. Five years of those lines tend to outline the shape of your story together.",
+          "Once a month, swap one line on 'how we're doing'. Short rhythm tends to prevent long surprises.",
         ];
       }
       actions = [
@@ -2210,9 +2211,9 @@ class _DetailSection extends StatelessWidget {
       // 연애
       final lovePoolsKo = <String, List<String>>{
         'ganHap': [
-          '【연애】 천간합이 있는 사이라 사주가 가장 강하게 권하는 연애 결이에요. $pName${withWith(pName)} 처음부터 자연스럽게 끌리고 한 번 가까워지면 떨어지기 힘든 결. 다만 합이 강한 만큼 평소에 \'나만의 시간\' 한 자리는 꼭 챙겨두세요.',
-          '【연애】 $myGan·$ptGan 천간합 — 자석 같은 끌림. 데이트가 자주 길어지고 함께 있을 때 시간이 빨리 가는 결이에요. 자기 페이스 한 자리만 지키면 평생 가는 사랑.',
-          '【연애】 천간합 — 운명 같은 끌림이지만 합이 깊은 만큼 자기 색을 잃기 쉬워요. $pName${withWith(pName)} 깊어질수록 자기만의 자리 한 가지를 의식적으로 챙기세요.',
+          '【연애】 천간합($myGan·$ptGan)이 걸린 사이예요. 두 사주가 가장 강하게 끌리는 연애 결이라, $pName${withWith(pName)} 처음부터 자연스럽게 가까워지기 쉬워요. 합이 강한 만큼 평소에 \'나만의 시간\' 한 자리는 꼭 챙겨두세요.',
+          '【연애】 $myGan·$ptGan 천간합 — 자석처럼 끌리는 결이에요. 데이트가 길어지고 함께 있을 때 시간이 빨리 가기 쉬워요. 자기 페이스 한 자리만 지키면 오래 가기 좋은 사랑.',
+          '【연애】 천간합 — 강하게 끌리기 쉬운 결이지만 합이 깊은 만큼 자기 색을 잃기 쉬워요. $pName${withWith(pName)} 가까워질수록 자기만의 자리 한 가지를 의식적으로 챙기세요.',
           '【연애】 천간합이 맺힌 결. 자연스러운 끌림이라 시작은 쉽지만, 깊어질수록 두 사람 결이 섞여서 \'내 자리\' 가 흐려질 위험이 있어요. 자기 자리 한 자리는 꼭.',
         ],
         'jiHap': [
@@ -2253,31 +2254,31 @@ class _DetailSection extends StatelessWidget {
       // 결혼
       final marriagePoolsKo = <String, List<String>>{
         'clash': [
-          '【결혼】 충이 있는 사이는 결혼 후 큰 결정 (주거지·자녀·금전) 앞에서 의견이 자주 엇갈려요. 결혼 전에 \'영역 분담\' 룰을 미리 정해두면 결혼 생활이 훨씬 안정돼요.',
-          '【결혼】 충이 있어도 룰만 잘 세우면 평생 가는 결혼이 충분히 가능해요. $pName${withWith(pName)} 누가 어떤 결정 영역을 책임지는지 명시적으로 합의해두세요.',
+          '【결혼】 충(沖)이 걸린 사이는 결혼 후 큰 결정(주거지·자녀·금전) 앞에서 의견이 엇갈리기 쉬워요. 결혼 전에 \'영역 분담\' 룰을 미리 정해두면 그런 엇갈림이 큰 갈등으로 잘 안 번져요.',
+          '【결혼】 충이 있어도 룰만 잘 세우면 오래 단단하게 가기 좋아요. $pName${withWith(pName)} 누가 어떤 결정 영역을 책임지는지 명시적으로 합의해두세요.',
           '【결혼】 충 결의 결혼은 \'명시적 영역 분담\' 결혼. 암묵적 합의는 위험해요. 결혼 전 한 번, 결혼 후 6개월마다 한 번 룰 점검 자리를 두세요.',
-          '【결혼】 일주 충 — 결혼 후 큰 결정마다 부딪힘이 와요. 다만 충이 있는 부부일수록 \'규칙이 있는 부부\' 가 가장 안정적. 룰이 사랑을 지켜요.',
+          '【결혼】 일주 충 — 결혼 후 큰 결정마다 부딪히기 쉬운 결이에요. 다만 충이 있을수록 \'규칙을 먼저 정해두는 부부\'가 흔들림이 적어요. 룰이 사랑을 받쳐줘요.',
         ],
         'hyeong': [
-          '【결혼】 형 사이는 평소엔 잘 지내다가 한 번씩 큰 한 마디가 폭발해요. \'사소한 서운함 그때그때 풀기\' 습관이 결혼 생활의 핵심.',
-          '【결혼】 형 결혼 — 매일 한 마디 칭찬, 한 마디 고마움이 누적되면 큰 다툼이 거의 안 와요. 작은 인정의 결이 결혼을 평생 가게 해요.',
-          '【결혼】 $pName${withWith(pName)} 결혼하면 \'화날 때 10분 자리 떨어지기\' 룰을 미리 약속해두세요. 한 박자 쉬는 결 한 번이 큰 충돌을 막아요.',
+          '【결혼】 형(刑)이 걸린 사이는 평소엔 잘 지내다가 한 번씩 큰 한 마디가 터지기 쉬워요. \'사소한 서운함 그때그때 풀기\' 습관이 결혼 생활의 핵심.',
+          '【결혼】 형 결혼 — 매일 한 마디 칭찬, 한 마디 고마움을 챙기면 큰 다툼으로 잘 안 번져요. 작은 인정을 자주 챙기는 게 결혼을 오래 가게 하는 약이에요.',
+          '【결혼】 $pName${withWith(pName)} 결혼하면 \'화날 때 10분 자리 떨어지기\' 룰을 미리 약속해두세요. 한 박자 쉬는 결 한 번이 큰 충돌로 잘 안 번지게 하는 데 도움돼요.',
           '【결혼】 형 결 결혼은 잔잔한 일상 안에 누적이 위험. 매일 짧은 인정의 의식이 결혼 안에 자리잡으면 큰 파열은 거의 사라져요.',
         ],
         'union': [
-          '【결혼】 사주적으로 결혼 잘 어울리는 결이에요. 합·상생이 있는 사이는 결혼 생활이 시간 흐름과 함께 깊어지는 구조라, 신혼 때보다 5년·10년 후가 더 단단한 결.',
+          '【결혼】 결혼으로 가면 시간이 갈수록 단단해지기 좋은 결이에요. 합·상생이 걸린 사이는 결혼 생활이 천천히 깊어지는 결이라, 신혼 때보다 5년·10년 뒤에 더 잘 맞는 자리.',
           '【결혼】 합 결혼은 \'시간이 약\' 인 결혼. 매년 결혼 기념일에 한 해를 되돌아보는 의식 하나만 두어도 관계가 자연스럽게 단단해져요.',
           '【결혼】 $pName${withWith(pName)} 합·상생 결혼이라 \'평범한 매일\'이 결을 키워요. 거창한 이벤트 없이 일상이 단단한 결혼.',
-          '【결혼】 사주가 권하는 결혼 결. 다만 합 결혼도 \'각자의 시간\' 자리 한 가지는 따로 챙겨야 결이 깊어져요.',
+          '【결혼】 결혼으로 가면 잘 풀리기 좋은 결이에요. 다만 합 결혼도 \'각자의 시간\' 자리 한 가지는 따로 챙겨야 결이 더 깊어져요.',
         ],
         'overcome': [
           '【결혼】 상극 사이의 결혼은 \'역할 분담이 명확한 결혼\' 으로 풀면 가장 잘 작동해요. 누가 결정 자리에 있는지, 누가 챙김 자리에 있는지 자연스럽게 정해지는 결.',
           '【결혼】 상극 결혼은 톤 관리가 평생 미션. \'서로 다르게 표현해도 사랑\'이라는 기본 약속이 결혼을 길게 가게 해요.',
-          '【결혼】 상극 결혼 — 명확한 역할 자리만 있으면 평생 단단한 결혼이 가능해요. $pName${withWith(pName)} 강점·약점 자리를 인정하고 시작하세요.',
+          '【결혼】 상극 결혼 — 명확한 역할 자리를 미리 정해두면 오래 단단하게 가져가기 좋은 자리예요. $pName${withWith(pName)} 강점·약점 자리를 인정하고 시작하세요.',
           '【결혼】 상극 결 결혼은 한쪽이 결혼 안에서 작아지지 않게 \'배려된 표현\' 자리가 핵심. 톤 한 단계 낮추는 결혼 약속.',
         ],
         'neut': [
-          '【결혼】 중립 결의 결혼은 \'편안한 동반자\' 모델로 풀어요. 강한 합도 강한 충도 없는 사이라 결혼 생활이 잔잔하고 안정적이에요.',
+          '【결혼】 중립 결의 결혼은 \'편안한 동반자\' 모델로 풀면 잘 맞아요. 강한 합도 강한 충도 없는 사이라, 결혼 생활이 잔잔하게 흘러가기 쉬운 자리.',
           '【결혼】 둘만의 작은 루틴 (매주 데이트, 매달 짧은 여행, 매년 함께 보는 영화 list 등) 을 만들어두면 자연스럽게 깊이가 쌓여요.',
           '【결혼】 중립 결혼의 핵심은 \'정성\'. 자연스러운 끌림이 약한 만큼 의식적인 작은 자리들이 결혼을 단단하게 만들어요.',
           '【결혼】 잔잔한 결혼. $pName${withWith(pName)} 외부 자극보다 둘만의 의식이 결을 키워요. 매주, 매달, 매년 — 정기성이 결혼의 핵심.',
@@ -2289,7 +2290,7 @@ class _DetailSection extends StatelessWidget {
 
       // 자녀 — opening + branch
       const childrenOpenKo = [
-        '【자녀】 사주적으로 자녀 운은 두 사람의 일주 조합보다 각자의 자녀궁 (식상·관성 영역) 이 더 큰 영향을 줘요. ',
+        '【자녀】 자녀 결은 두 사람의 일주 조합보다 각자의 자녀궁(식상·관성 — 자녀를 가리키는 자리)이 더 크게 작용해요. ',
         '【자녀】 자녀 결은 두 사람 일주 조합만으로 결정되지 않아요. 각자의 자녀궁이 더 큰 영향을 가지지만, 두 사람 결이 자녀가 자라는 분위기를 만들어요. ',
         '【자녀】 자녀 운은 부모 두 사람 사주 조합보다 각자 자녀궁 자리가 큰 영향. 그래도 두 사람의 결이 자녀 자라는 분위기를 직접 만들어요. ',
       ];
@@ -2322,40 +2323,40 @@ class _DetailSection extends StatelessWidget {
       // LOVE
       final lovePoolsEn = <String, List<String>>{
         'ganHap': [
-          'Stem union with $n — saju strongly recommends this love. Magnetic from the start; once close, hard to separate. Protect one personal time slot each week.',
-          'Heavenly-stem union ($myGan·$ptGan). The pull is the kind that feels fated. Reserve one private hour weekly so the bond does not erase your colors.',
-          "Saju calls this one of the strongest unions. Time bends around $n — savor it, but anchor at least one solo lane outside the romance.",
-          'A 五合 line with $n. Easy to fall in, easy to dissolve into. Long-term health depends on each of you keeping one untouched lane.',
+          'A stem union with $n — a strong love anchor. It tends to read magnetic early, and easy to feel hard to separate once close. Protecting one personal time slot each week helps.',
+          'A heavenly-stem union ($myGan·$ptGan). The pull tends to be strong enough to feel sudden — reserving one private hour weekly helps the bond from blurring your colors.',
+          "A strong, hard-to-separate union. Time tends to bend around $n — savoring it while anchoring at least one solo lane outside the romance keeps it healthy.",
+          'A 五合 stem union with $n. It tends to be easy to fall into and easy to dissolve into — each of you keeping one untouched lane tends to keep it healthy long-term.',
         ],
         'jiHap': [
-          "Branch union with $n — closeness grows in daily life. Routines matter more than dates.",
-          "Six harmony / triad. Living rhythms align without trying; the bond shines brightest in shared space and shared time.",
-          "$myJi·$ptJi branch union. Cook together, walk together, watch movies together — that is the love language here, not events.",
-          "Daily-life love. The smaller the moments you share with $n, the stronger the bond grows.",
+          "A branch union with $n — closeness here tends to build in daily life, so routines tend to matter more than dates.",
+          "A six harmony / triad. Living rhythms tend to align without trying, and the anchor tends to read brightest in shared space and shared time.",
+          "A $myJi·$ptJi branch union. Cooking together, walking together, watching movies together — that tends to be the love language here, not events.",
+          "A daily-life love. The smaller the moments you share with $n, the more this kind of bond tends to build.",
         ],
         'clash': [
-          "Branch clash with $n — intense love but frequent friction on small decisions. Pre-agree rules.",
-          "$myJi·$ptJi clash brings sparks and sparks. Decide in advance who calls which kind of shot, and the love survives the friction.",
-          "Clash love is real love with friction baked in. Honesty after collisions deepens the bond more than calm could.",
-          "Branch clash with $n. Pre-allocated decision rules and a 24-hour wait on big calls keep the love sustainable.",
+          "A branch clash with $n — intense love with friction that tends to surface on small decisions. Pre-agreeing rules helps.",
+          "A $myJi·$ptJi clash tends to bring sparks and sparks. Deciding in advance who calls which kind of shot tends to make the love easier to carry through the friction.",
+          "A clash love tends to be real love with friction baked in. Honesty after collisions tends to ease the bond more than calm could.",
+          "A branch clash with $n. Pre-allocated decision rules and a 24-hour wait on big calls tend to make the love easier to sustain.",
         ],
         'overcome': [
-          "Overcoming bond with $n — start intense; one leads, one follows. Tone matters most.",
-          "$myEl·$ptEl overcoming. The dominant voice has to soften; the receiving voice has to stay. 'How about…' is the magic phrase.",
-          "Saju 相剋 love. Useful coaching can drift into control — ask 'was that too sharp?' weekly to keep the line honest.",
-          "Strong-over-soft love. Bonds last when the louder side practices restraint and the quieter side practices voice.",
+          "An overcoming bond with $n — it tends to start intense; one leads, one follows. Tone tends to matter most.",
+          "A $myEl·$ptEl overcoming line. The dominant voice softening and the receiving voice staying tends to be the balance — 'how about…' tends to be the magic phrase.",
+          "An overcoming (相剋) love. Useful coaching can drift into control — asking 'was that too sharp?' weekly keeps the line honest.",
+          "A strong-over-soft love. This kind of bond tends to hold when the louder side practises restraint and the quieter side practises voice.",
         ],
         'sameEl': [
-          "Same element with $n — friend-like love. Comfort over passion.",
-          "Biwha (same-element) love. Trust is fast; spark is slow. The 'no big feeling but very easy' phase is often the deepest love.",
-          "$myEl·$myEl love. Conversations that don't need explaining; preferences that match without asking — that is the bond.",
-          "Same-grain romance. Quiet on the outside, durable on the inside; closeness compounds through small repetition.",
+          "A same-element line with $n — a friend-like love that tends to lean on comfort over passion.",
+          "A 比和 (same-element) love. Trust tends to come fast and spark slow — the 'no big feeling but very easy' phase is often the deepest part of this love.",
+          "A $myEl·$myEl love. Conversations that don't need explaining, preferences that match without asking — that tends to be the bond.",
+          "A same-element romance. Quiet on the outside, durable on the inside — closeness here tends to build through small repetition.",
         ],
         'neut': [
-          "Neutral grain with $n — natural pull is mild; intentional closeness builds durable love.",
-          "No direct anchor in the chart. The love grows only by choice — recurring dates and small rituals do the work gravity will not.",
-          "Mild interaction with $n. Comfort is the headline, depth is the project; if both of you decide to build, the love lasts.",
-          "Neutral bond — calm, dependable, easy to sustain. The risk is forgetting; the cure is calendar.",
+          "A neutral pairing with $n — the natural pull tends to be mild, so intentional closeness is what tends to build a durable love.",
+          "No direct stem-branch anchor between you. A neutral love tends to grow by choice — recurring dates and small rituals do the work gravity will not.",
+          "A mild interaction with $n. Comfort tends to be the headline and depth the project — if both of you decide to build, a neutral love can run long.",
+          "A neutral bond — calm, dependable, easy to sustain. The risk here tends to be forgetting, and the cure tends to be a calendar.",
         ],
       };
       final lovePool = lovePoolsEn[loveBranchKey] ?? lovePoolsEn['neut']!;
@@ -2367,34 +2368,34 @@ class _DetailSection extends StatelessWidget {
       // MARRIAGE
       final marriagePoolsEn = <String, List<String>>{
         'clash': [
-          "Pre-marriage role-allocation rules essential with $n.",
-          "Branch clash plus marriage = decision-domain rules first. Once allocated, the friction calms.",
-          "With $n marriage stays steady if you write down who handles what before the rings. Re-audit every six months.",
-          "Clash marriages do last — they last best with explicit, revisited rules.",
+          "As a marriage, a clash line tends to reward pre-agreed role-allocation rules with $n.",
+          "A branch clash plus marriage rewards decision-domain rules first — once allocated, the friction tends to calm.",
+          "With $n, a clash marriage tends to stay steady when you write down who handles what before the rings. Re-auditing every six months helps.",
+          "Clash marriages tend to hold best with explicit, revisited rules — the rule set tends to be the anchor here.",
         ],
         'hyeong': [
-          "Daily acknowledgments prevent the big blow-up with $n.",
-          "Punishment-branch marriage thrives on small daily 'thanks' and one 'pause 10 minutes' rule. Tiny habits, large peace.",
-          "Schedule micro-recognition. Marriages with $myJi·$ptJi do best when 'I saw what you did' is daily, not occasional.",
-          "Marriage thrives if small slights never get to pile. With $n the rule is: surface the small, save the big.",
+          "As a marriage, a punishment line tends to reward daily acknowledgments that keep the big blow-up away with $n.",
+          "A punishment-branch marriage tends to do well on small daily 'thanks' and one 'pause 10 minutes' rule — tiny habits, large peace.",
+          "Schedule micro-recognition. Marriages with $myJi·$ptJi tend to do best when 'I saw what you did' is daily, not occasional.",
+          "A marriage tends to do well when small slights never get to pile — with $n the rule is to surface the small and save the big.",
         ],
         'union': [
-          "Saju-favorable for marriage with $n; depth compounds over years.",
-          "Union / generating bond. The marriage gets better in year five than year one — protect the small annual rituals.",
-          "Time is on your side. With $n the bond reads as 'destined' more in year ten than year one — just keep the simple anniversary review.",
-          "Saju recommends this marriage. Add one private personal ritual each so the bond does not absorb both colors.",
+          "As a marriage, a union line tends to read steadier the more years you tend it with $n.",
+          "A union / generating bond. The marriage tends to read steadier in year five than year one — protecting the small annual rituals helps.",
+          "Time tends to be on your side. With $n a union marriage tends to read steadier in year ten than year one — keeping the simple anniversary review helps.",
+          "As a marriage, a union bond tends to get steadier with years. Adding one private personal ritual each keeps it from blurring both colors.",
         ],
         'overcome': [
-          "Works best as a clear-role marriage with $n. Mutual 'we love differently' promise required.",
-          "Overcoming marriage holds when both partners practice tone. The stronger voice quiets; the softer voice stays.",
-          "Saju 相剋 marriage with $n — durable, even strong, when explicit roles and explicit softening rules are in place.",
-          "Marriages with 相剋 last when 'we express love differently and that is still love' is the founding agreement.",
+          "As a marriage, an overcoming line tends to work best with clear roles and a mutual 'we love differently' promise with $n.",
+          "An overcoming marriage tends to hold when both partners practise tone — the stronger voice quiets, the softer voice stays.",
+          "An overcoming (相剋) marriage with $n — it tends to hold, and even toughen, when explicit roles and explicit softening rules are in place.",
+          "Marriages with 相剋 tend to hold when 'we express love differently and that is still love' is the founding agreement.",
         ],
         'neut': [
-          "Comfortable-companion model. Build small joint rituals with $n.",
-          "Neutral marriage runs on calendars more than gravity. Weekly date, monthly trip, yearly ritual — these are the bond.",
-          "With $n the marriage is the small daily decisions to stay close. No grand currents — just steady ones.",
-          "Companion marriage. The depth grows by attention; the fade comes by neglect. Choose the calendar.",
+          "As a marriage, a neutral line tends to suit a comfortable-companion model — building small joint rituals with $n helps.",
+          "A neutral marriage tends to run on calendars more than gravity — a weekly date, a monthly trip, a yearly ritual tend to be the bond.",
+          "With $n a neutral marriage tends to be the small daily decisions to stay close — no grand currents, just steady ones.",
+          "A companion marriage. Depth here tends to grow with attention and fade with neglect — choosing the calendar helps.",
         ],
       };
       final marriagePool = marriagePoolsEn[marriageBranchKey] ?? marriagePoolsEn['neut']!;
@@ -2405,43 +2406,48 @@ class _DetailSection extends StatelessWidget {
 
       // CHILDREN
       const childrenOpenEn = [
-        "Children luck depends more on each person's child-palace than the pair combination. ",
-        "Child luck is shaped more by each chart's child-palace than by the pair. Still, the bond between you frames the household. ",
-        "Each chart's child-palace carries more weight than the pair combination, but the pair sets the temperature of the home. ",
+        "A read on children leans more on each of you on your own than on the two of you as a pair — still, the bond you keep tends to shape the home's tone. ",
+        "Children come through each of you individually more than through the combination. Even so, how you two tend the bond tends to frame the household. ",
+        "Each of you carries the children read on your own more than as a pair — but the tone you two keep tends to set the temperature of the home. ",
       ];
       const childrenHeaders = ['【CHILDREN】 ', '【CHILDREN / 子】 ', '【FAMILY】 '];
       loveMarriage.write(childrenHeaders[pick('children-header-en', childrenHeaders.length)]);
       loveMarriage.write(childrenOpenEn[pick('children-open-en', childrenOpenEn.length)]);
       final childrenPoolsEn = <String, List<String>>{
         'harmonious': [
-          "Harmonious bond with $n builds a stable parenting climate.",
-          "Union / generating pairs raise children in a warm room. When opinions split, the first to yield models the deepest lesson.",
-          "$n and you set a calm tone. Children absorb the parental harmony as their default for relationships later.",
-          "Harmonious parents — the home runs on agreement more than negotiation, and children inherit that ease.",
+          "A harmonious bond with $n tends to make a steady home tone easier to keep — and a steady home tone tends to give children a calm room to grow in.",
+          "Union / generating pairs tend to keep a warm room. When opinions split, the first to yield tends to model the steadier lesson for the home.",
+          "$n and you tend to set a calm tone together. Keeping that calm tends to give children a steady relationship climate to grow up around.",
+          "A harmonious bond — the home tends to run on agreement more than negotiation. Tending that ease tends to make the household feel settled.",
         ],
         'frictioned': [
-          "With $n in a friction bond — pre-agree big decisions away from kids; align in front of them.",
-          "Branch clash or 相剋 in the pair? Children thrive when 'one voice in front of you, two voices in private' becomes the rule.",
-          "Children sense parental friction; what reassures them is knowing they are loved by both. Make that explicit, often.",
-          "Pre-decide school, money, lifestyle calls away from the kids. United front in front of them. That is the whole game.",
+          "A friction bond with $n tends to reward pre-agreeing big decisions away from the kids and aligning in front of them.",
+          "A branch clash or 相剋 in the pair? Keeping 'one voice in front of you, two voices in private' as the rule tends to make the home feel steady to children.",
+          "With a friction bond, what tends to steady a home is kids knowing they are loved by both — making that explicit, and often, tends to do that work.",
+          "Pre-deciding school, money, and lifestyle calls away from the kids, then keeping a united front in front of them, tends to be the whole game here.",
         ],
         'neut': [
-          "Quiet alignment with $n; let kids find their own colors with both of you supporting.",
-          "Neutral parents tend to give children space. Hold steady support, low directive pressure; children grow their own grain.",
-          "$n and you are calm parents. The strength is autonomy; the work is intentional presence so calm does not slide into absence.",
-          "Companion-style parenting. Children get a quiet floor to stand on — keep adding one shared family ritual to anchor it.",
+          "A quiet alignment with $n — letting kids find their own colors while both of you support them tends to suit a neutral bond.",
+          "A neutral bond tends to give children space. Holding steady support with low directive pressure tends to let children find their own footing.",
+          "$n and you tend to be calm parents. The strength tends to be autonomy, and intentional presence keeps the calm from sliding into absence.",
+          "A companion-style parenting tone tends to give children a quiet floor to stand on — adding one shared family ritual tends to anchor it.",
         ],
       };
       final childrenPool = childrenPoolsEn[childrenBranchKey] ?? childrenPoolsEn['neut']!;
       loveMarriage.write(childrenPool[pick('children-en', childrenPool.length)]);
     }
 
+    // R106 P4a-fix2 — 궁합 v5 톤 backstop 정규화. 단정·메타는 pool source 에서
+    // 이미 전수 제거됨(P4a-fix2). 두 사주의 실제 관계 anchor(합·충·오행·일주)는
+    // 그대로 두고, soften 은 만약을 위한 deterministic backstop 패스로만 남긴다
+    // (presentation layer only — 계산값 변경 0). design 9 / 2 / 3.
+    String v5(String s) => CompatV5Service.soften(s, useKo: useKo, shortName: ptName);
     return _CompatAnalysis(
-      summary: summary.toString(),
-      attract: attract.toString(),
-      friction: friction.toString(),
-      loveMarriage: loveMarriage.toString(),
-      actions: actions,
+      summary: v5(summary.toString()),
+      attract: v5(attract.toString()),
+      friction: v5(friction.toString()),
+      loveMarriage: v5(loveMarriage.toString()),
+      actions: actions.map(v5).toList(),
     );
   }
 }

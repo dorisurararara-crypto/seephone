@@ -19,6 +19,7 @@ import '../services/saju_context.dart';
 import '../services/today_deep_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/today_event_detail_section.dart';
+import '../widgets/today_v5_loader.dart';
 import 'home_screen.dart' show TodayDeepReadingSection;
 
 /// /today 페이지 — today_event 상세 + (옵션) today_deep 본문 통합 노출.
@@ -77,6 +78,11 @@ class TodayScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // R106 P2a — 오늘의 사주 v5 (오늘의 주제 중심 + 근거 3칩 + 자기검증)
+              // 가 primary 섹션. TopicSelector 신호 0 시 v5 자체가 총평형 fallback.
+              TodayV5Loader(saju: result, date: now),
+              const SizedBox(height: 24),
+              // 기존 오늘 사주 총평 (TodayDeepService) — 보조 deep reading 으로 보존.
               TodayDeepReadingSection(
                 reading: TodayDeepService.build(
                   userDayStem: result.dayPillar.chunGan,

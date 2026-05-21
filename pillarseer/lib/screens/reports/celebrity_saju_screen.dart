@@ -22,9 +22,13 @@
 //   - 공유 영역 RepaintBoundary 감싸기 + overflow 방지.
 //   - loading / error / empty(준비중) state 분리.
 //
+// R106 P5 — 영문 모드(useKo) 분기:
+//   - 모든 사용자 노출 라벨/안내/버튼/본문을 useKo 로 ko/en 분기.
+//   - 본문은 readings.json 의 bodyKo / bodyEn 으로 분기.
+//   - 차트 한자는 증거 라벨이라 양쪽 동일, 일간/오행 음만 ko/로마자 분기.
+//
 // 금지:
 //   - 출생 시(時) 기준 기둥 / "태어난 시간" 단정 표현. 時 칸은 항상 "—".
-//   - 사용자 노출 영문 문구 (라벨 / 안내 / 버튼). 차트 한자는 증거 라벨이라 OK.
 
 import 'dart:convert';
 
@@ -154,6 +158,7 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final useKo = Localizations.localeOf(context).languageCode == 'ko';
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
@@ -165,7 +170,7 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
           onPressed: () => context.go('/reports'),
         ),
         title: Text(
-          '최애의 사주',
+          useKo ? '최애의 사주' : 'BIAS SAJU',
           style: GoogleFonts.inter(
             fontSize: 11,
             fontWeight: FontWeight.w500,
@@ -177,12 +182,12 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
           bottom: BorderSide(color: AppColors.line, width: 1),
         ),
       ),
-      body: SafeArea(top: false, child: _buildState(context)),
+      body: SafeArea(top: false, child: _buildState(context, useKo)),
       bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 
-  Widget _buildState(BuildContext context) {
+  Widget _buildState(BuildContext context, bool useKo) {
     switch (_state) {
       case _LoadState.loading:
         return const Center(
@@ -195,13 +200,17 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
           ),
         );
       case _LoadState.error:
-        return _ErrorState(key: const Key('celebrity_saju_error'), onRetry: _retry);
+        return _ErrorState(
+          key: const Key('celebrity_saju_error'),
+          onRetry: _retry,
+          useKo: useKo,
+        );
       case _LoadState.ready:
-        return _buildBody(context);
+        return _buildBody(context, useKo);
     }
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, bool useKo) {
     final hasSelection = _selected != null;
     final filtered = _filtered();
     return ListView(
@@ -209,17 +218,19 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
       controller: _scrollCtl,
       padding: EdgeInsets.zero,
       children: [
-        _Hero(),
+        _Hero(useKo: useKo),
         if (!hasSelection) ...[
           _SearchBar(
             controller: _searchCtl,
             onChanged: (q) => setState(() => _query = q),
+            useKo: useKo,
           ),
           _CelebPickerList(
             readings: filtered,
             totalCurated: _readings.length,
             emptyCurated: _readings.isEmpty,
             onPick: _selectStar,
+            useKo: useKo,
           ),
         ],
         if (hasSelection)
@@ -227,6 +238,7 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
             key: const Key('celebrity_saju_result_card'),
             reading: _selected!,
             onChooseOther: _chooseOtherStar,
+            useKo: useKo,
           ),
         const SizedBox(height: 28),
       ],
@@ -237,6 +249,9 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
 // ───────────────── widgets ─────────────────
 
 class _Hero extends StatelessWidget {
+  final bool useKo;
+  const _Hero({required this.useKo});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -250,7 +265,7 @@ class _Hero extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '팬심 4순위 · 최애의 사주',
+            useKo ? '팬심 4순위 · 최애의 사주' : 'FAN PICK NO. 4 · BIAS SAJU',
             style: GoogleFonts.inter(
               fontSize: 9,
               letterSpacing: 5,
@@ -260,7 +275,7 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '내 최애는 어떤 사주일까',
+            useKo ? '내 최애는 어떤 사주일까' : "What chart does my bias have?",
             style: GoogleFonts.notoSerifKr(
               fontSize: 26,
               fontWeight: FontWeight.w300,
@@ -270,8 +285,12 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            '최애의 공개된 생일로 풀어낸 사주 이야기예요. 출생 시간은 알려지지 않아 '
-            '연·월·일 세 기둥만 봅니다.',
+            useKo
+                ? '최애의 공개된 생일로 풀어낸 사주 이야기예요. 출생 시간은 알려지지 않아 '
+                      '연·월·일 세 기둥만 봅니다.'
+                : "A saju reading drawn from your bias's public birth date. "
+                      'Since the birth time is not known, only the year, '
+                      'month, and day pillars are read.',
             style: GoogleFonts.notoSansKr(
               fontSize: 13,
               color: AppColors.inkLight,
@@ -287,7 +306,12 @@ class _Hero extends StatelessWidget {
 class _SearchBar extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
-  const _SearchBar({required this.controller, required this.onChanged});
+  final bool useKo;
+  const _SearchBar({
+    required this.controller,
+    required this.onChanged,
+    required this.useKo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +324,7 @@ class _SearchBar extends StatelessWidget {
         onChanged: onChanged,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
-          hintText: '최애 이름으로 검색',
+          hintText: useKo ? '최애 이름으로 검색' : 'Search by your bias name',
           hintStyle: GoogleFonts.notoSansKr(
             fontSize: 13,
             color: AppColors.taupe,
@@ -344,11 +368,13 @@ class _CelebPickerList extends StatelessWidget {
   /// curated reading 이 0개 — 준비 중 상태.
   final bool emptyCurated;
   final ValueChanged<_CelebReading> onPick;
+  final bool useKo;
   const _CelebPickerList({
     required this.readings,
     required this.totalCurated,
     required this.emptyCurated,
     required this.onPick,
+    required this.useKo,
   });
 
   @override
@@ -358,8 +384,12 @@ class _CelebPickerList extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
         child: Text(
           emptyCurated
-              ? '최애의 사주 풀이를 준비하고 있어요. 곧 만나요.'
-              : '검색 결과가 없어요. 다른 이름으로 찾아보세요.',
+              ? (useKo
+                    ? '최애의 사주 풀이를 준비하고 있어요. 곧 만나요.'
+                    : 'Bias saju readings are being prepared. See you soon.')
+              : (useKo
+                    ? '검색 결과가 없어요. 다른 이름으로 찾아보세요.'
+                    : 'No results. Try another name.'),
           key: const Key('celebrity_saju_empty_hint'),
           style: GoogleFonts.notoSansKr(
             fontSize: 13,
@@ -375,7 +405,9 @@ class _CelebPickerList extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 10),
           child: Text(
-            '풀이가 준비된 최애 $totalCurated명',
+            useKo
+                ? '풀이가 준비된 최애 $totalCurated명'
+                : '$totalCurated biases with a reading ready',
             key: const Key('celebrity_saju_curated_count'),
             style: GoogleFonts.notoSansKr(
               fontSize: 11,
@@ -419,7 +451,7 @@ class _CelebPickerList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              r.nameKoShort,
+                              r.displayName(useKo),
                               style: GoogleFonts.notoSerifKr(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
@@ -428,8 +460,12 @@ class _CelebPickerList extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '${r.dayPillar} · '
-                              '${_pillarKoFromHanja(r.dayPillar)}일주',
+                              useKo
+                                  ? '${r.dayPillar} · '
+                                        '${_pillarKoFromHanja(r.dayPillar)}일주'
+                                  : '${r.dayPillar} · '
+                                        '${_pillarRomanFromHanja(r.dayPillar)} '
+                                        'day pillar',
                               style: GoogleFonts.notoSansKr(
                                 fontSize: 11.5,
                                 color: AppColors.taupe,
@@ -457,7 +493,8 @@ class _CelebPickerList extends StatelessWidget {
 /// bootstrap 실패 시 — 다시 시도 CTA.
 class _ErrorState extends StatelessWidget {
   final VoidCallback onRetry;
-  const _ErrorState({super.key, required this.onRetry});
+  final bool useKo;
+  const _ErrorState({super.key, required this.onRetry, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -468,7 +505,9 @@ class _ErrorState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '최애의 사주를 불러오지 못했어요.',
+              useKo
+                  ? '최애의 사주를 불러오지 못했어요.'
+                  : "Couldn't load the bias saju.",
               textAlign: TextAlign.center,
               style: GoogleFonts.notoSerifKr(
                 fontSize: 18,
@@ -478,7 +517,9 @@ class _ErrorState extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              '잠시 후 다시 시도해 주세요.',
+              useKo
+                  ? '잠시 후 다시 시도해 주세요.'
+                  : 'Please try again in a moment.',
               textAlign: TextAlign.center,
               style: GoogleFonts.notoSansKr(
                 fontSize: 13,
@@ -499,7 +540,7 @@ class _ErrorState extends StatelessWidget {
                 ),
               ),
               child: Text(
-                '다시 시도',
+                useKo ? '다시 시도' : 'Retry',
                 style: GoogleFonts.notoSansKr(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -517,10 +558,12 @@ class _ErrorState extends StatelessWidget {
 class _ResultCard extends StatelessWidget {
   final _CelebReading reading;
   final VoidCallback onChooseOther;
+  final bool useKo;
   const _ResultCard({
     super.key,
     required this.reading,
     required this.onChooseOther,
+    required this.useKo,
   });
 
   @override
@@ -531,8 +574,9 @@ class _ResultCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SelectedStarBar(
-            celebName: reading.nameKoShort,
+            celebName: reading.displayName(useKo),
             onChooseOther: onChooseOther,
+            useKo: useKo,
           ),
           const SizedBox(height: 12),
           // 공유 대비 — 결과 본문 전체를 RepaintBoundary 로 감싼다.
@@ -549,7 +593,7 @@ class _ResultCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '최애의 사주',
+                    useKo ? '최애의 사주' : 'BIAS SAJU',
                     style: GoogleFonts.inter(
                       fontSize: 9,
                       letterSpacing: 5,
@@ -559,7 +603,7 @@ class _ResultCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    reading.nameKoShort,
+                    reading.displayName(useKo),
                     style: GoogleFonts.notoSerifKr(
                       fontSize: 22,
                       fontWeight: FontWeight.w400,
@@ -569,11 +613,11 @@ class _ResultCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   // 사주 차트 — 年月日 3기둥 + 時 칸은 "—". 출생 시(時) 추정 금지.
-                  _SajuChart(reading: reading),
+                  _SajuChart(reading: reading, useKo: useKo),
                   const SizedBox(height: 18),
                   Container(height: 1, color: AppColors.line),
                   const SizedBox(height: 18),
-                  _SectionBody(reading: reading),
+                  _SectionBody(reading: reading, useKo: useKo),
                 ],
               ),
             ),
@@ -587,12 +631,17 @@ class _ResultCard extends StatelessWidget {
 /// 셀럽 사주 차트 — 年月日 3기둥 한자 + 일간/오행 요약. 時 칸은 "—".
 class _SajuChart extends StatelessWidget {
   final _CelebReading reading;
-  const _SajuChart({required this.reading});
+  final bool useKo;
+  const _SajuChart({required this.reading, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
-    final dayMaster = reading.dayMasterKo;
-    final element = reading.dayElementKo;
+    final dayMaster = useKo
+        ? reading.dayMasterKo
+        : reading.dayMasterEn;
+    final element = useKo
+        ? reading.dayElementKo
+        : reading.dayElementEn;
     return Column(
       key: const Key('celebrity_saju_chart'),
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -600,22 +649,37 @@ class _SajuChart extends StatelessWidget {
         // 4칸: 연·월·일 + 時(미상 "—"). 시각 추정 절대 금지.
         Row(
           children: [
-            _PillarChip(label: '연주', pillar: reading.yearPillar),
+            _PillarChip(
+              label: useKo ? '연주' : 'YEAR',
+              pillar: reading.yearPillar,
+            ),
             const SizedBox(width: 6),
-            _PillarChip(label: '월주', pillar: reading.monthPillar),
+            _PillarChip(
+              label: useKo ? '월주' : 'MONTH',
+              pillar: reading.monthPillar,
+            ),
             const SizedBox(width: 6),
-            _PillarChip(label: '일주', pillar: reading.dayPillar),
+            _PillarChip(
+              label: useKo ? '일주' : 'DAY',
+              pillar: reading.dayPillar,
+            ),
             const SizedBox(width: 6),
-            const _PillarChip(label: '시주', pillar: '—', dim: true),
+            // 시주 칸 — 출생 시(時) 미상이므로 pillar 는 항상 "—" 고정.
+            if (useKo)
+              const _PillarChip(label: '시주', pillar: '—', dim: true)
+            else
+              const _PillarChip(label: 'HOUR', pillar: '—', dim: true),
           ],
         ),
         if (dayMaster.isNotEmpty || element.isNotEmpty) ...[
           const SizedBox(height: 10),
           Text(
             [
-              if (dayMaster.isNotEmpty) '일간 $dayMaster',
-              if (element.isNotEmpty) '오행 $element',
-              '출생 시(時) 미상',
+              if (dayMaster.isNotEmpty)
+                useKo ? '일간 $dayMaster' : 'Day master $dayMaster',
+              if (element.isNotEmpty)
+                useKo ? '오행 $element' : 'Element $element',
+              useKo ? '출생 시(時) 미상' : 'Birth hour unknown',
             ].join('  ·  '),
             style: GoogleFonts.notoSansKr(
               fontSize: 11,
@@ -679,17 +743,21 @@ class _PillarChip extends StatelessWidget {
   }
 }
 
-/// 결과 카드 본문 — 7섹션(opening … closing)을 한국어 섹션 라벨과 함께 표시.
+/// 결과 카드 본문 — 7섹션(opening … closing)을 섹션 라벨과 함께 표시.
 class _SectionBody extends StatelessWidget {
   final _CelebReading reading;
-  const _SectionBody({required this.reading});
+  final bool useKo;
+  const _SectionBody({required this.reading, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
     if (reading.sections.isEmpty) {
       // curated 만 picker 에 노출되므로 정상 흐름에선 도달하지 않는 방어 분기.
       return Text(
-        '${reading.nameKoShort}의 사주 풀이를 정성껏 준비하고 있어요.',
+        useKo
+            ? '${reading.displayName(useKo)}의 사주 풀이를 정성껏 준비하고 있어요.'
+            : "${reading.displayName(useKo)}'s saju reading is being "
+                  'prepared with care.',
         key: const Key('celebrity_saju_result_body'),
         style: GoogleFonts.notoSansKr(
           fontSize: 14.5,
@@ -705,7 +773,7 @@ class _SectionBody extends StatelessWidget {
         for (var i = 0; i < reading.sections.length; i++) ...[
           if (i > 0) const SizedBox(height: 20),
           Text(
-            _sectionLabelKo(reading.sections[i].id),
+            _sectionLabel(reading.sections[i].id, useKo),
             style: GoogleFonts.inter(
               fontSize: 9,
               letterSpacing: 4,
@@ -715,7 +783,7 @@ class _SectionBody extends StatelessWidget {
           ),
           const SizedBox(height: 7),
           Text(
-            reading.sections[i].bodyKo,
+            reading.sections[i].body(useKo),
             style: GoogleFonts.notoSansKr(
               fontSize: 14.5,
               color: AppColors.ink,
@@ -731,9 +799,11 @@ class _SectionBody extends StatelessWidget {
 class _SelectedStarBar extends StatelessWidget {
   final String celebName;
   final VoidCallback onChooseOther;
+  final bool useKo;
   const _SelectedStarBar({
     required this.celebName,
     required this.onChooseOther,
+    required this.useKo,
   });
 
   @override
@@ -748,7 +818,9 @@ class _SelectedStarBar extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              '선택한 최애: $celebName',
+              useKo
+                  ? '선택한 최애: $celebName'
+                  : 'Selected bias: $celebName',
               style: GoogleFonts.notoSansKr(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -770,7 +842,7 @@ class _SelectedStarBar extends StatelessWidget {
               ),
             ),
             child: Text(
-              '다른 최애 고르기',
+              useKo ? '다른 최애 고르기' : 'Choose another bias',
               style: GoogleFonts.notoSansKr(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -787,11 +859,22 @@ class _SelectedStarBar extends StatelessWidget {
 
 // ───────────────── model + helpers ─────────────────
 
-/// celeb_saju_readings.json sections 의 한 섹션 (id + 한국어 본문).
+/// celeb_saju_readings.json sections 의 한 섹션 (id + 본문 ko/en).
 class _CelebSection {
   final String id;
   final String bodyKo;
-  const _CelebSection({required this.id, required this.bodyKo});
+  final String bodyEn;
+  const _CelebSection({
+    required this.id,
+    required this.bodyKo,
+    required this.bodyEn,
+  });
+
+  /// locale 에 맞는 본문 — en 누락 시 ko fallback (정상 데이터에선 도달 X).
+  String body(bool useKo) {
+    if (useKo) return bodyKo;
+    return bodyEn.isNotEmpty ? bodyEn : bodyKo;
+  }
 }
 
 /// celeb_saju_readings.json 의 한 셀럽 항목 + celebrities.json 의 이름.
@@ -817,13 +900,27 @@ class _CelebReading {
   /// curated = 본문 sections 가 비어있지 않음. 빈 셀럽은 메뉴에서 숨긴다.
   bool get isCurated => sections.isNotEmpty;
 
+  /// locale 에 맞는 표시 이름 — en 모드는 nameEn, 누락 시 한국어 fallback.
+  String displayName(bool useKo) {
+    if (useKo) return nameKoShort;
+    return nameEn.isNotEmpty ? nameEn : nameKoShort;
+  }
+
   /// 일간(日干) 한국어 음 — 일주 한자 첫 글자.
   String get dayMasterKo =>
       dayPillar.isEmpty ? '' : (_ganKo[dayPillar[0]] ?? '');
 
+  /// 일간(日干) 로마자 음 — 일주 한자 첫 글자.
+  String get dayMasterEn =>
+      dayPillar.isEmpty ? '' : (_ganRoman[dayPillar[0]] ?? '');
+
   /// 일간 오행 한국어 — 일주 한자 첫 글자 기준.
   String get dayElementKo =>
       dayPillar.isEmpty ? '' : (_ganElementKo[dayPillar[0]] ?? '');
+
+  /// 일간 오행 영문 — 일주 한자 첫 글자 기준.
+  String get dayElementEn =>
+      dayPillar.isEmpty ? '' : (_ganElementEn[dayPillar[0]] ?? '');
 
   static _CelebReading? tryParse({
     required String id,
@@ -838,9 +935,12 @@ class _CelebReading {
       for (final s in rawSections) {
         if (s is Map<String, dynamic>) {
           final sid = (s['id'] as String?)?.trim() ?? '';
-          final body = (s['bodyKo'] as String?)?.trim() ?? '';
-          if (body.isNotEmpty) {
-            sections.add(_CelebSection(id: sid, bodyKo: body));
+          final bodyKo = (s['bodyKo'] as String?)?.trim() ?? '';
+          final bodyEn = (s['bodyEn'] as String?)?.trim() ?? '';
+          if (bodyKo.isNotEmpty) {
+            sections.add(
+              _CelebSection(id: sid, bodyKo: bodyKo, bodyEn: bodyEn),
+            );
           }
         }
       }
@@ -882,6 +982,24 @@ String _sectionLabelKo(String sectionId) {
   return labels[sectionId] ?? '';
 }
 
+/// 결과 카드 7섹션 id → 영문 섹션 라벨.
+String _sectionLabelEn(String sectionId) {
+  const labels = {
+    'opening': 'FIRST IMPRESSION',
+    'day_core': 'CORE OF THE DAY PILLAR',
+    'month_year_frame': 'MONTH & YEAR FRAME',
+    'ten_gods_flow': 'FLOW OF THE TEN GODS',
+    'verified_trace': 'TRACE LEFT IN THE CHART',
+    'fan_takeaway': 'A WORD FOR FANS',
+    'closing': 'CLOSING',
+  };
+  return labels[sectionId] ?? '';
+}
+
+/// locale 분기 섹션 라벨.
+String _sectionLabel(String sectionId, bool useKo) =>
+    useKo ? _sectionLabelKo(sectionId) : _sectionLabelEn(sectionId);
+
 /// 천간 한자 → 한국어 음.
 const Map<String, String> _ganKo = {
   '甲': '갑',
@@ -896,6 +1014,20 @@ const Map<String, String> _ganKo = {
   '癸': '계',
 };
 
+/// 천간 한자 → 로마자 음 (영문 모드 차트 라벨용).
+const Map<String, String> _ganRoman = {
+  '甲': 'Gap',
+  '乙': 'Eul',
+  '丙': 'Byeong',
+  '丁': 'Jeong',
+  '戊': 'Mu',
+  '己': 'Gi',
+  '庚': 'Gyeong',
+  '辛': 'Sin',
+  '壬': 'Im',
+  '癸': 'Gye',
+};
+
 /// 천간 한자 → 오행 한국어.
 const Map<String, String> _ganElementKo = {
   '甲': '목(木)',
@@ -908,6 +1040,20 @@ const Map<String, String> _ganElementKo = {
   '辛': '금(金)',
   '壬': '수(水)',
   '癸': '수(水)',
+};
+
+/// 천간 한자 → 오행 영문 (영문 모드 차트 라벨용).
+const Map<String, String> _ganElementEn = {
+  '甲': 'Wood (木)',
+  '乙': 'Wood (木)',
+  '丙': 'Fire (火)',
+  '丁': 'Fire (火)',
+  '戊': 'Earth (土)',
+  '己': 'Earth (土)',
+  '庚': 'Metal (金)',
+  '辛': 'Metal (金)',
+  '壬': 'Water (水)',
+  '癸': 'Water (水)',
 };
 
 /// 지지 한자 → 한국어 음.
@@ -926,10 +1072,35 @@ const Map<String, String> _jiKo = {
   '亥': '해',
 };
 
+/// 지지 한자 → 로마자 음 (영문 모드 picker 라벨용).
+const Map<String, String> _jiRoman = {
+  '子': 'Ja',
+  '丑': 'Chuk',
+  '寅': 'In',
+  '卯': 'Myo',
+  '辰': 'Jin',
+  '巳': 'Sa',
+  '午': 'O',
+  '未': 'Mi',
+  '申': 'Sin',
+  '酉': 'Yu',
+  '戌': 'Sul',
+  '亥': 'Hae',
+};
+
 /// 일주 한자 2자 → 한국어 음 (past_life_screen `_pillarKoFromHanja` 와 동일 매핑).
 String _pillarKoFromHanja(String dayPillar) {
   if (dayPillar.length < 2) return '';
   final g = _ganKo[dayPillar[0]] ?? '';
   final j = _jiKo[dayPillar[1]] ?? '';
   return '$g$j';
+}
+
+/// 일주 한자 2자 → 로마자 음 (영문 모드 picker 라벨용).
+String _pillarRomanFromHanja(String dayPillar) {
+  if (dayPillar.length < 2) return '';
+  final g = _ganRoman[dayPillar[0]] ?? '';
+  final j = _jiRoman[dayPillar[1]] ?? '';
+  if (g.isEmpty && j.isEmpty) return '';
+  return '$g-$j';
 }

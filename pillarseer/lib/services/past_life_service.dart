@@ -108,6 +108,29 @@ extension PastLifeKeywordKey on PastLifeKeyword {
         return '형';
     }
   }
+
+  /// R106 P5 — 영어 라벨 (앱 언어 = 영어 시 UI 표시용).
+  /// 한자 술어를 자연스러운 영어 명사구로 옮긴 것 — 단정 금지 voice 와 일관.
+  String get labelEn {
+    switch (this) {
+      case PastLifeKeyword.wonjin:
+        return 'love-hate bond';
+      case PastLifeKeyword.dohwa:
+        return 'magnetic pull';
+      case PastLifeKeyword.yeokma:
+        return 'restless streak';
+      case PastLifeKeyword.cheoneul:
+        return 'protective tie';
+      case PastLifeKeyword.gongmang:
+        return 'empty-space tie';
+      case PastLifeKeyword.hap:
+        return 'natural accord';
+      case PastLifeKeyword.chung:
+        return 'refining friction';
+      case PastLifeKeyword.hyeong:
+        return 'bound promise';
+    }
+  }
 }
 
 /// 전생 시나리오 1편 결과.
@@ -121,6 +144,13 @@ class PastLifeScenario {
   /// 시나리오 머리줄 (keyword 대표 한 줄).
   final String headlineKo;
 
+  /// R106 P5 — 시나리오 본문 (EN). 앱 언어 = 영어 시 화면이 분기해서 노출.
+  /// 한국어 [scenarioKo] 와 동일 keyword/era/role 구조의 영어 단편.
+  final String scenarioEn;
+
+  /// R106 P5 — 시나리오 머리줄 (EN).
+  final String headlineEn;
+
   /// 사용된 placeholder 값 (디버깅용).
   final String celebName;
   final String userName;
@@ -132,6 +162,8 @@ class PastLifeScenario {
     required this.keywords,
     required this.scenarioKo,
     required this.headlineKo,
+    this.scenarioEn = '',
+    this.headlineEn = '',
     required this.celebName,
     required this.userName,
     required this.era,
@@ -374,8 +406,9 @@ class PastLifeService {
   }) {
     final primary = _pickPrimary(keywords);
     final arc = _selectStoryArc(pool, primary.key, seed);
+    final PastLifeScenario base;
     if (arc != null) {
-      return _composeFromStoryArc(
+      base = _composeFromStoryArc(
         pool: pool,
         arc: arc,
         keywords: keywords,
@@ -385,17 +418,130 @@ class PastLifeService {
         seed: seed,
         kind: kind,
       );
+    } else {
+      // story_arcs 미존재 / invalid → 기존 slot 조립 fallback.
+      base = _composeFromPool(
+        pool: pool,
+        keywords: keywords,
+        user: user,
+        celeb: celeb,
+        celebName: celebName,
+        userName: userName,
+        seed: seed,
+      );
     }
-    // story_arcs 미존재 / invalid → 기존 slot 조립 fallback.
-    return _composeFromPool(
+    // R106 P5 — 영어 본문/머리줄을 같은 seed/keyword 로 추가 생성해 base 에 부착.
+    // 한국어 필드(scenarioKo/headlineKo)는 절대 변경 안 함 — 영어는 추가만.
+    return _attachEnglish(
+      base: base,
       pool: pool,
-      keywords: keywords,
-      user: user,
-      celeb: celeb,
+      primary: primary,
       celebName: celebName,
       userName: userName,
       seed: seed,
+      kind: kind,
     );
+  }
+
+  // ─── 내부: 영어 본문 합성 (R106 P5) ────────────────────────────────────
+  //
+  // story_arcs_en[keyword] 에서 한국어 경로와 동일 seed 로 arc 1개를 선택해
+  // 영어 단편을 만든다. 영어 풀이 없거나 invalid 하면 영어 필드는 빈 문자열로
+  // 둔다(화면이 useKo 분기 시 한국어를 노출하므로 앱은 깨지지 않음).
+  //
+  // 영어 placeholder 치환은 plain string replace (josa 보정 불필요).
+  static PastLifeScenario _attachEnglish({
+    required PastLifeScenario base,
+    required Map<String, dynamic> pool,
+    required PastLifeKeyword primary,
+    required String celebName,
+    required String userName,
+    required int seed,
+    required String kind,
+  }) {
+    final arcEn = _selectStoryArcEn(pool, primary.key, seed);
+    if (arcEn == null) {
+      return base; // 영어 풀 없음 → scenarioEn/headlineEn 빈 채로.
+    }
+    final rng = Random(seed);
+
+    // $era — arc 의 eraHints(EN) 우선, 없으면 전역 eras_en fallback.
+    final eraHints = (arcEn['eraHints'] is List)
+        ? (arcEn['eraHints'] as List).whereType<String>().toList()
+        : const <String>[];
+    final String era;
+    if (eraHints.isNotEmpty) {
+      era = eraHints[rng.nextInt(eraHints.length)];
+    } else {
+      final eras = (pool['eras_en'] is List)
+          ? (pool['eras_en'] as List).whereType<String>().toList()
+          : const <String>[];
+      era = eras.isNotEmpty ? eras[rng.nextInt(eras.length)] : 'a far-off age';
+    }
+
+    final userRole = (arcEn['userRole'] as String?)?.trim() ?? 'a traveler';
+    final celebRole = (arcEn['celebRole'] as String?)?.trim() ?? 'a companion';
+
+    String inject(String src) => src
+        .replaceAll(r'$era', era)
+        .replaceAll(r'$userRole', userRole)
+        .replaceAll(r'$celebRole', celebRole)
+        .replaceAll(r'$userName', userName)
+        .replaceAll(r'$celebName', celebName);
+
+    final paragraphs = arcEn['paragraphs'] as Map;
+    final gi = inject(paragraphs['gi'] as String);
+    final seung = inject(paragraphs['seung'] as String);
+    final jeon = inject(paragraphs['jeon'] as String);
+    var gyeol = inject(paragraphs['gyeol'] as String);
+
+    final punchlineRaw = _arcPunchline(arcEn, kind);
+    if (punchlineRaw.isNotEmpty) {
+      gyeol = '${gyeol.trim()} ${inject(punchlineRaw).trim()}';
+    }
+
+    final scenarioEn = [gi, seung, jeon, gyeol]
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .join(' ');
+    final headlineEn =
+        "$userName & $celebName's past life — a ${primary.labelEn}";
+
+    return PastLifeScenario(
+      keywords: base.keywords,
+      scenarioKo: base.scenarioKo,
+      headlineKo: base.headlineKo,
+      scenarioEn: scenarioEn,
+      headlineEn: headlineEn,
+      celebName: base.celebName,
+      userName: base.userName,
+      era: base.era,
+      userRole: base.userRole,
+      celebRole: base.celebRole,
+    );
+  }
+
+  /// story_arcs_en[keywordId] 에서 seed deterministic 하게 영어 arc 1개 선택.
+  /// 키 없음 / 빈 리스트 / 유효 arc 0 이면 null.
+  static Map<String, dynamic>? _selectStoryArcEn(
+    Map<String, dynamic> pool,
+    String keywordId,
+    int seed,
+  ) {
+    final raw = pool['story_arcs_en'];
+    if (raw is! Map) return null;
+    final arcsRaw = raw[keywordId];
+    if (arcsRaw is! List || arcsRaw.isEmpty) return null;
+    final valid = <Map<String, dynamic>>[];
+    for (final a in arcsRaw) {
+      if (a is Map && _isValidArc(a)) {
+        valid.add(a.cast<String, dynamic>());
+      }
+    }
+    if (valid.isEmpty) return null;
+    // 한국어 경로 _selectStoryArc 와 동일한 seed 소비 패턴 → EN/KO arc 정합.
+    final idx = Random(seed).nextInt(valid.length);
+    return valid[idx];
   }
 
   /// story_arcs[keywordId] 에서 seed deterministic 하게 arc 1개 선택.

@@ -10,6 +10,10 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import '../models/saju_result.dart';
 import 'daily_service.dart';
 import 'notification_pool_service.dart';
+import 'recall_feedback_service.dart';
+import 'saju_context.dart';
+import 'today_event_service.dart';
+import 'topic_selector_service.dart';
 
 class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
@@ -20,6 +24,14 @@ class NotificationService {
   static const _kPrefsHour = 'app.notif.daily.hour';
   static const _kPrefsMinute = 'app.notif.daily.minute';
   static const int _kDailyId = 8888;
+
+  /// R106 P2b-fix — 미스터리 알림 알고리즘/풀 버전 마커.
+  /// scheduleSignature 에 박혀, 이 값이 바뀌면 기존 enabled 사용자도
+  /// needsReschedule==true 가 되어 새 미스터리 알림으로 자동 재스케줄된다.
+  /// 미스터리 카피 알고리즘·풀 스키마가 바뀔 때마다 이 문자열을 올린다.
+  ///   v1 = R106 P2b 초판 (static per-topic interactions).
+  ///   v2 = R106 P2b-fix (relation-aware interactions — 거짓말 0).
+  static const String _kMysteryAlgoVersion = 'mystery_v2';
 
   static Future<void> ensureInitialized() async {
     if (_initialized) return;
@@ -91,14 +103,83 @@ class NotificationService {
     }
     final daily = DailyService();
     final now = tz.TZDateTime.now(tz.local);
+
+    // Round 106 P2b — 사주 미스터리형 알림 (design doc §6).
+    // saju + useKo(한국어) 둘 다일 때만 미스터리형. 영어는 후속 phase.
+    // 미스터리 카피 풀 1회 로드 + topic-aware 를 위한 RecallFeedback pref 선읽기.
+    final useMystery = saju != null && useKo;
+    Map<String, double> userPrefById = const {};
+    Map<String, int> shownDaysAgoById = const {};
+    Set<String> suppressedIds = const {};
+    if (useMystery) {
+      await NotificationPoolService.ensureMysteryPoolLoaded();
+      await TodayEventService.ensurePoolLoaded();
+      final today0 = DateTime(now.year, now.month, now.day);
+      final prefs = <String, double>{};
+      final shown = <String, int>{};
+      final suppressed = <String>{};
+      for (final t in DailyTopic.values) {
+        final st = await RecallFeedbackService.stateOf(t.id);
+        prefs[t.id] = RecallFeedbackService.userPrefFromScore(st.score);
+        if (st.lastShown != null) {
+          shown[t.id] = today0.difference(st.lastShown!).inDays;
+        }
+        if (await RecallFeedbackService.isSuppressed(t.id, today0)) {
+          suppressed.add(t.id);
+        }
+      }
+      userPrefById = prefs;
+      shownDaysAgoById = shown;
+      suppressedIds = suppressed;
+    }
+
     for (var i = 0; i < daysAhead; i++) {
       final target = tz.TZDateTime(
           tz.local, now.year, now.month, now.day, hour, minute, 0)
           .add(Duration(days: i));
       if (target.isBefore(now)) continue;
+      String pickedTitle = title;
       String pickedBody = body;
-      if (saju != null) {
-        // Round 76 sprint 6 — 매일 다른 일진 → 사주 기반 매일 다른 본문.
+      if (useMystery) {
+        // Round 106 P2b — 매일 다른 일진 글자를 신비하게 던지는 미스터리형.
+        // title 도 매일 다른 글자/주제 반영해 per-day 로 바뀐다.
+        final dayDate = DateTime(target.year, target.month, target.day);
+        final fortune = daily.calculate(saju, today: dayDate);
+        final ctx = SajuContext.from(saju, today: dayDate);
+        final event = TodayEventService.build(
+          userDayStem: saju.dayPillar.chunGan,
+          userDayBranch: saju.dayPillar.jiJi,
+          userMonthBranch: saju.monthPillar.jiJi,
+          todayPillar: fortune.dayPillar,
+          todayScore: fortune.totalScore,
+        );
+        final selection = TopicSelectorService.select(
+          saju: saju,
+          ctx: ctx,
+          event: event,
+          date: dayDate,
+          userPrefById: userPrefById,
+          shownDaysAgoById: shownDaysAgoById,
+          suppressedIds: suppressedIds,
+        );
+        // R106 P2b-fix — 거짓말 0: 그날 실제 계산된 일진 지지↔일지 관계
+        // (event.hapChungType — TodayEventService 가 HapchungService 로 산출)를
+        // pickMystery 로 넘긴다. body line1 의 차트 관계 표현이 실제 관계에
+        // 강제 일치 — 실제 충일 때만 "부딪치는", 없으면 관계-중립 표현만.
+        final relation =
+            MysteryRelationKey.fromHapChungType(event.hapChungType);
+        final copy = NotificationPoolService.pickMystery(
+          date: dayDate,
+          todayPillar: fortune.dayPillar,
+          day60ji: saju.dayPillar.text,
+          topicId: selection.selected?.id,
+          relation: relation,
+          dayOffset: i,
+        );
+        pickedTitle = copy.title;
+        pickedBody = copy.body;
+      } else if (saju != null) {
+        // Round 76 sprint 6 — 매일 다른 일진 → 사주 기반 매일 다른 본문 (영어 등).
         final dayDate = DateTime(target.year, target.month, target.day);
         final fortune = daily.calculate(saju, today: dayDate);
         final picked = NotificationPoolService.pickDeep(
@@ -119,7 +200,7 @@ class NotificationService {
       try {
         await _plugin.zonedSchedule(
           id: _kDailyId + i,
-          title: title,
+          title: pickedTitle,
           body: pickedBody,
           scheduledDate: target,
           notificationDetails: const NotificationDetails(
@@ -245,8 +326,13 @@ class NotificationService {
     final sajuKey = saju == null
         ? 'nosaju'
         : 'deep:${saju.dayPillar.text}:${saju.monthPillar.jiJi}:${saju.dayMaster}';
+    // R106 P2b-fix — 미스터리 알고리즘 버전 마커. 미스터리형으로 스케줄되는
+    // 케이스(saju!=null && useKo)에만 박아, 알고리즘이 바뀌면 기존 enabled
+    // 사용자의 needsReschedule 가 true 가 되어 새 미스터리 알림으로 갱신된다.
+    final mysteryKey =
+        (saju != null && useKo) ? '|$_kMysteryAlgoVersion' : '';
     return '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}|'
         '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}|'
-        '$sajuKey';
+        '$sajuKey$mysteryKey';
   }
 }

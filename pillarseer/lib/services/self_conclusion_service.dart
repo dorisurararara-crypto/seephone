@@ -114,6 +114,59 @@ class SelfConclusionService {
     return result;
   }
 
+  // ──────────── R106 P5 — 영어 모드 결론 (English-only 추가, 한국어 schema 불변) ────────────
+
+  /// 5행 한자 → 영어 라벨.
+  static const Map<String, String> _elEn = {
+    '木': 'wood',
+    '火': 'fire',
+    '土': 'earth',
+    '金': 'metal',
+    '水': 'water',
+  };
+
+  /// 일간 + dominant 별 영어 결론 anchor (조건형 voice / 메타 금지).
+  static String _conclusionPrefixEn(String stemKo, String dominant) {
+    final domEn = _elEn[dominant] ?? dominant;
+    const stemKey = {
+      '갑': 'someone who grows steadily toward a chosen direction',
+      '을': 'someone who adapts gently without losing their grip',
+      '병': 'someone who warms up the mood around them',
+      '정': 'someone who looks after others with quiet care',
+      '무': 'someone who stays grounded and dependable',
+      '기': 'someone who quietly supports the people nearby',
+      '경': 'someone who decides cleanly and without fuss',
+      '신': 'someone with a refined, precise eye',
+      '임': 'someone who reads situations from a wide angle',
+      '계': 'someone who takes things in deeply and quietly',
+    };
+    final stemDesc = stemKey[stemKo] ?? 'someone with a clear personal colour';
+    const domTone = {
+      '木': 'so you tend to have real drive and pick up new challenges easily',
+      '火': 'so you can lift the mood around you faster than most',
+      '土': 'so people tend to feel at ease beside you',
+      '金': 'so you tend to decide quickly and shine where things need tidying',
+      '水': 'so you tend to adapt comfortably even as things keep shifting',
+    };
+    final domDesc = domTone[dominant] ?? 'so a clear personal colour comes through';
+    return 'In a word, you tend to be $stemDesc. '
+        'The strongest colour you carry is $domEn, $domDesc.';
+  }
+
+  /// 사주 → 영어 결론 paragraph (한국어 conclude 와 동일 anchor 구조).
+  ///
+  /// R106 P5 — 영어 모드 SELF CONCLUSION 본문. placeholder 제거.
+  static Future<String> concludeEn(SajuResult saju, {bool isMale = true}) async {
+    final stemHan = saju.dayPillar.chunGan;
+    final stemKo = _stemHanToKo[stemHan] ?? stemHan;
+    final dominant = saju.elements.dominant;
+
+    final prefix = _conclusionPrefixEn(stemKo, dominant);
+    const closing =
+        'Being exactly who you are is quietly your strongest draw.';
+    return '$prefix $closing';
+  }
+
   /// paragraph 첫 마침표 단위.
   static String _firstSentence(String paragraph) {
     if (paragraph.isEmpty) return '';

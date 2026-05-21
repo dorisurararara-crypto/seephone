@@ -16,7 +16,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/life_overview_service.dart';
 import '../services/life_paragraph_service.dart';
+import '../services/my_saju_v5_service.dart';
+import '../services/recall_feedback_service.dart';
 import '../services/self_conclusion_service.dart';
+import '../services/topic_selector_service.dart';
 import '../services/gong_mang_service.dart';
 import '../services/gyeokguk_service.dart';
 import '../services/hapchung_service.dart';
@@ -41,6 +44,7 @@ import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
+import '../widgets/my_saju_v5_section.dart';
 import '../widgets/saju_required_empty.dart';
 
 /// Round 70 mandate 명시: 자미두수 별 이름/궁 이름 UI 노출 0.
@@ -237,7 +241,11 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             _FiveElementsSection(
                 result: result, reading: reading, useKo: useKo),
             // 3. R89 sprint 3 — CHIP NAV: 16 카테고리 점프 entry.
-            _CategoryChipNav(onTap: _scrollTo),
+            _CategoryChipNav(onTap: _scrollTo, useKo: useKo),
+            // 3-b. R106 P3 — 내 사주 v5 cohesive 리딩 (증거 띠 + 헤드라인 +
+            //      본문 + 오늘 CTA). 한국어 전용 — 기존 17섹션 상세 풀이는
+            //      아래에 그대로 보존 (삭제 X). 영문은 후속 phase.
+            if (useKo) _MySajuV5HeroLoader(result: result),
             // 4. LIFE OVERVIEW — "내 사주 큰 그림" (R88 sprint 8 LifeOverviewService wire).
             _LifeOverviewHero(result: result, isMale: birth?.isMale ?? true),
             // 5. 17 카테고리 — R88 sprint 9 에서 LifeParagraphService wire.
@@ -274,7 +282,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 ///   - chip tap → Scrollable.ensureVisible (320ms easeOutCubic).
 class _CategoryChipNav extends StatelessWidget {
   final void Function(String categoryKey) onTap;
-  const _CategoryChipNav({required this.onTap});
+  final bool useKo;
+  const _CategoryChipNav({required this.onTap, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +309,9 @@ class _CategoryChipNav extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: _LifeCategoryChip(
-                  label: cat.titleKo,
+                  label: useKo
+                      ? cat.titleKo
+                      : lifeCategoryTitleEn(cat.key),
                   onTap: () => onTap(cat.key),
                 ),
               ),
@@ -345,6 +356,87 @@ class _LifeCategoryChip extends StatelessWidget {
 
 // ──────────── R88 sprint 3 — 신규 widget (sprint 5~9 에서 본문 wire) ────────────
 
+/// R106 P3 — 내 사주 v5 cohesive 리딩 로더.
+/// pool 비동기 load + RecallFeedbackService(P1) 관심 주제 read 후 v5 reading build.
+/// 둘 다 끝나면 MySajuV5Section 노출. 로딩 중에는 자리만 잡고 (placeholder 한 줄),
+/// 실패해도 graceful — build 가 내장 fallback 으로 항상 reading 을 만든다.
+class _MySajuV5HeroLoader extends StatefulWidget {
+  final SajuResult result;
+  const _MySajuV5HeroLoader({required this.result});
+
+  @override
+  State<_MySajuV5HeroLoader> createState() => _MySajuV5HeroLoaderState();
+}
+
+class _MySajuV5HeroLoaderState extends State<_MySajuV5HeroLoader> {
+  MySajuV5Reading? _reading;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant _MySajuV5HeroLoader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.result != widget.result) {
+      _reading = null;
+      _load();
+    }
+  }
+
+  Future<void> _load() async {
+    await MySajuV5Service.ensurePoolLoaded();
+    // P1 — 사용자 관심 주제 1위 → 오늘 CTA 를 그 주제로 연결 (design doc §9).
+    String? topTopic;
+    try {
+      double best = -1;
+      for (final t in DailyTopic.values) {
+        final pref = await RecallFeedbackService.userPref(t.id);
+        if (pref > best) {
+          best = pref;
+          topTopic = t.id;
+        }
+      }
+      // 모든 주제가 중립(0.5)이면 특정 주제로 몰지 않고 default CTA.
+      if (best <= 0.5) topTopic = null;
+    } catch (_) {
+      topTopic = null;
+    }
+    final r = MySajuV5Service.build(
+      saju: widget.result,
+      topTopicId: topTopic,
+    );
+    if (mounted) setState(() => _reading = r);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final r = _reading;
+    if (r == null) {
+      // 로딩 placeholder — 자리 유지.
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
+        decoration: const BoxDecoration(
+          color: AppColors.paper,
+          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Text(
+          '여덟 글자를 한 사람으로 모아 풀어드릴게요.',
+          style: GoogleFonts.notoSansKr(
+            fontSize: 14,
+            color: AppColors.taupe,
+            height: 1.7,
+          ),
+        ),
+      );
+    }
+    return MySajuV5Section(reading: r);
+  }
+}
+
 /// "내 사주 큰 그림" hero card.
 /// R88 sprint 8 — LifeOverviewService 의 anchor 10 조합 essay.
 /// Stateful + initState 의 _future 캐시로 rebuild 시 재호출 X.
@@ -359,12 +451,15 @@ class _LifeOverviewHero extends StatefulWidget {
 
 class _LifeOverviewHeroState extends State<_LifeOverviewHero> {
   late Future<String> _future;
+  late Future<String> _futureEn;
 
   @override
   void initState() {
     super.initState();
     _future =
         LifeOverviewService.compose(widget.result, isMale: widget.isMale);
+    _futureEn =
+        LifeOverviewService.composeEn(widget.result, isMale: widget.isMale);
   }
 
   @override
@@ -375,6 +470,8 @@ class _LifeOverviewHeroState extends State<_LifeOverviewHero> {
         oldWidget.isMale != widget.isMale) {
       _future =
           LifeOverviewService.compose(widget.result, isMale: widget.isMale);
+      _futureEn =
+          LifeOverviewService.composeEn(widget.result, isMale: widget.isMale);
     }
   }
 
@@ -415,20 +512,21 @@ class _LifeOverviewHeroState extends State<_LifeOverviewHero> {
           Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 18),
           FutureBuilder<String>(
-            future: _future,
+            future: useKo ? _future : _futureEn,
             builder: (ctx, snap) {
-              final String ko;
+              final String body;
               if (snap.hasError) {
                 // asset load 실패 시 명시적 fallback (loading 문구와 구분).
-                ko = '본인 사주 큰 그림 본문을 잠깐 못 불러왔어요. 앱을 다시 켜주면 다시 시도해요.';
+                body = useKo
+                    ? '본인 사주 큰 그림 본문을 잠깐 못 불러왔어요. 앱을 다시 켜주면 다시 시도해요.'
+                    : 'We could not load your life overview just now. Reopen the app to try again.';
               } else if (snap.hasData) {
-                ko = snap.data!;
+                body = snap.data!;
               } else {
-                ko = '한 줄 한 줄 모아 본인 사주 큰 그림을 그려드릴게요.';
+                body = useKo
+                    ? '한 줄 한 줄 모아 본인 사주 큰 그림을 그려드릴게요.'
+                    : 'Gathering your reading line by line to draw the big picture.';
               }
-              final body = useKo
-                  ? ko
-                  : 'A single-paragraph life essay — please switch to Korean for the full picture.';
               return Text(
                 body,
                 style: GoogleFonts.notoSansKr(
@@ -542,7 +640,7 @@ class _CategorySectionCardState extends State<_CategorySectionCard> {
           Text(
             widget.useKo
                 ? widget.titleKo
-                : widget.categoryKey.toUpperCase().replaceAll('_', ' '),
+                : lifeCategoryTitleEn(widget.categoryKey),
             style: GoogleFonts.notoSerifKr(
               fontSize: 15,
               fontWeight: FontWeight.w500,
@@ -555,15 +653,17 @@ class _CategorySectionCardState extends State<_CategorySectionCard> {
             future: _future,
             builder: (ctx, snap) {
               final String body;
-              if (snap.hasData && (snap.data ?? '').isNotEmpty) {
-                body = widget.useKo
-                    ? snap.data!
-                    : 'Coming soon for "${widget.categoryKey.replaceAll('_', ' ')}".';
+              if (!widget.useKo) {
+                // R106 P5 — 영어 모드: service 내장 영어 carrier (placeholder 제거).
+                final cat = _keyToEnum[widget.categoryKey];
+                body = cat != null
+                    ? LifeParagraphService.categoryBodyEn(cat)
+                    : '';
+              } else if (snap.hasData && (snap.data ?? '').isNotEmpty) {
+                body = snap.data!;
               } else {
                 // DB miss / 로딩 중 — previewKo fallback.
-                body = widget.useKo
-                    ? widget.previewKo
-                    : 'Coming soon for "${widget.categoryKey.replaceAll('_', ' ')}".';
+                body = widget.previewKo;
               }
               return Text(
                 body,
@@ -594,12 +694,15 @@ class _SelfConclusionCard extends StatefulWidget {
 
 class _SelfConclusionCardState extends State<_SelfConclusionCard> {
   late Future<String> _future;
+  late Future<String> _futureEn;
 
   @override
   void initState() {
     super.initState();
     _future =
         SelfConclusionService.conclude(widget.result, isMale: widget.isMale);
+    _futureEn =
+        SelfConclusionService.concludeEn(widget.result, isMale: widget.isMale);
   }
 
   @override
@@ -609,6 +712,8 @@ class _SelfConclusionCardState extends State<_SelfConclusionCard> {
         oldWidget.isMale != widget.isMale) {
       _future =
           SelfConclusionService.conclude(widget.result, isMale: widget.isMale);
+      _futureEn = SelfConclusionService.concludeEn(widget.result,
+          isMale: widget.isMale);
     }
   }
 
@@ -649,19 +754,20 @@ class _SelfConclusionCardState extends State<_SelfConclusionCard> {
           Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 18),
           FutureBuilder<String>(
-            future: _future,
+            future: useKo ? _future : _futureEn,
             builder: (ctx, snap) {
-              final String ko;
+              final String body;
               if (snap.hasError) {
-                ko = '본인의 한 마디 결론을 잠깐 못 불러왔어요. 앱을 다시 켜주면 다시 시도해요.';
+                body = useKo
+                    ? '본인의 한 마디 결론을 잠깐 못 불러왔어요. 앱을 다시 켜주면 다시 시도해요.'
+                    : 'We could not load your summary just now. Reopen the app to try again.';
               } else if (snap.hasData) {
-                ko = snap.data!;
+                body = snap.data!;
               } else {
-                ko = '내가 어떤 사람인지 친구한테 말하듯 한 단락으로 정리해드릴게요.';
+                body = useKo
+                    ? '내가 어떤 사람인지 친구한테 말하듯 한 단락으로 정리해드릴게요.'
+                    : 'Putting together a friendly, one-paragraph take on who you are.';
               }
-              final body = useKo
-                  ? ko
-                  : 'A one-paragraph friendly verdict about who you are — please switch to Korean.';
               return Text(
                 body,
                 style: GoogleFonts.notoSansKr(
