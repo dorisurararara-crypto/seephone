@@ -312,10 +312,11 @@ void main() {
         todayScore: 50,
         ctx: ctx,
       );
-      expect(reading.cautionKo.contains('공망'), isTrue,
-          reason: 'gongMangAreas 비어있지 않은 ctx → caution 에 공망 anchor');
-      expect(reading.cautionEn.contains('Void signal') ||
-              reading.cautionEn.contains('void'), isTrue);
+      // R108 ③-3 — "공망" jargon 노출 제거. anchor wire 자체는 보존 — caution 끝에
+      // 공망 작용을 plain 하게 묘사하는 한 줄이 붙는지로 검증.
+      expect(reading.cautionKo.contains('헛돌 수 있는'), isTrue,
+          reason: 'gongMangAreas 비어있지 않은 ctx → caution 에 공망 anchor (jargon-free)');
+      expect(reading.cautionEn.contains('spin without landing'), isTrue);
     });
 
     test('ctx.gongMangAreas 빈 시 공망 anchor 0 (회귀 가드)', () async {
@@ -349,7 +350,8 @@ void main() {
         todayScore: 50,
         ctx: ctx,
       );
-      expect(reading.cautionKo.contains('공망'), isFalse);
+      // R108 ③-3 — gongMangAreas 빈 시 공망 anchor 0 (jargon-free marker 로 검증).
+      expect(reading.cautionKo.contains('헛돌 수 있는'), isFalse);
     });
 
     test('실 사주 1998-06-15 男 (도화 활성) → today_event composeBodyKoWithAnchor 검증', () async {

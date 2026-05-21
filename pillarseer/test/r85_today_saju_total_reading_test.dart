@@ -18,9 +18,15 @@ void main() {
         todayScore: 72,
       );
 
-      expect(reading.headlineKo.startsWith('오늘 사주 총평'), isTrue);
+      // R108 ③-3 — headline 은 메타("총평")·헤드라인체("~날") 0.
+      // 일간 비유에 묶은 조언형 한 줄.
+      expect(reading.headlineKo.contains('총평'), isFalse,
+          reason: 'R108 ③-3 — headline 에 메타 단어 "총평" 노출 0');
       expect(reading.headlineKo.contains('분위기의 하루'), isFalse);
-      expect(reading.headlineEn.startsWith("Today's Saju Summary"), isTrue);
+      expect(reading.headlineKo.contains('당신'), isTrue,
+          reason: 'R108 ③-3 — headline 이 일간 비유로 사용자를 직접 부른다');
+      expect(reading.headlineEn.contains('Summary'), isFalse,
+          reason: 'R108 ③-3 — EN headline 에 메타 단어 "Summary" 노출 0');
       expect(reading.headlineEn.contains("Today's mood"), isFalse);
 
       // R96 hotfix — 의미 무관한 5+ sentence random paragraph 회피.

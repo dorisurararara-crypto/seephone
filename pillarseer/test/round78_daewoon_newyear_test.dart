@@ -35,7 +35,9 @@ void main() {
       // bodyKo 에 "대운" 단어 포함 (한국어 anchor).
       expect(reading.bodyKo.contains('대운'), isTrue,
           reason: '대운 anchor 한국어 wire');
-      expect(reading.bodyEn.contains('cycle'), isTrue,
+      // R108 ③-3 — 영어 daewoon anchor 의 십신 라벨("cycle") jargon 제거.
+      // wire marker 를 새 plain 문구로 갱신.
+      expect(reading.bodyEn.contains('In this stretch of your life'), isTrue,
           reason: '대운 anchor 영어 wire');
     });
 
@@ -121,7 +123,8 @@ void main() {
         ctx: ctx,
       );
       expect(reading.bodyKo.contains('대운'), isFalse);
-      expect(reading.bodyEn.contains('cycle'), isFalse);
+      // R108 ③-3 — 영어 daewoon anchor wire marker 갱신.
+      expect(reading.bodyEn.contains('In this stretch of your life'), isFalse);
     });
 
     test('대운 anchor 10 십신 모두 ko/en non-empty', () {
@@ -152,7 +155,7 @@ void main() {
         );
         expect(reading.bodyKo.contains('대운'), isTrue,
             reason: '$god 대운 anchor ko');
-        expect(reading.bodyEn.contains('cycle'), isTrue,
+        expect(reading.bodyEn.contains('In this stretch of your life'), isTrue,
             reason: '$god 대운 anchor en');
       }
     });

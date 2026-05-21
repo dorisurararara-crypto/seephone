@@ -1,8 +1,15 @@
 // ignore_for_file: unused_field
-// Pillar Seer — 오늘 운세 깊이 풀이 서비스 (Round 11+).
+// Pillar Seer — 오늘 운세 깊이 풀이 서비스 (Round 11+ / R108 ③-3 v5 톤).
 //
 // 사용자 사주 + 오늘 일진 → 5-7문장 narrative + 행동 추천 + 조심 + 시간대.
 // 중학생도 5초 안에 이해할 톤. 명리 jargon은 괄호 안에만.
+//
+// R108 ③-3 — 본문 풀·fragment 를 my_saju_v5 메타포 톤으로 전면 재작성.
+//   - headline 의 "총평"(메타)·"~날"(헤드라인체) 제거 → 조언형 한 줄.
+//   - body fragment 의 "오늘은 ~한 날이에요" 헤드라인체 0 → 발동조건형.
+//   - "균형/본인 페이스/자기 결대로" boilerplate 제거.
+//   - 사용자 일간 비유 anchor (辛=잘 벼려진 칼·보석 등 10천간) 를 body 에 1회 묶음.
+//   계산 로직·임계값·DayEnergyKind 분기·hash 는 1 bit 도 건드리지 않는다 — 텍스트만.
 //
 // 입력:
 //   - userSaju.dayPillar.chunGan (사용자 일간)
@@ -12,7 +19,7 @@
 //   - 오늘 일진 (60갑자) — DailyService 로부터
 //
 // 출력 (TodayDeepReading):
-//   - headlineKo / headlineEn: 한 줄 분위기 (예: "오늘은 '깊은 물 같은 사람'에게 따스한 바람이 부는 날.")
+//   - headlineKo / headlineEn: 일간 비유에 묶은 조언형 한 줄 (메타·헤드라인체 0)
 //   - bodyKo / bodyEn: 4-6 문장 narrative
 //   - actionsKo[] / actionsEn[]: 추천 행동 2-3개 (구체적)
 //   - cautionKo / cautionEn: 조심할 일 한 줄
@@ -111,8 +118,10 @@ class TodayDeepService {
 
     final hooks = _hooksByEnergy(dayEnergy);
 
-    final headlineKo = '오늘 사주 총평: ${hooks.moodKo} 날.';
-    final headlineEn = "Today's Saju Summary: ${hooks.moodEn}.";
+    // R108 ③-3 — headline 은 메타("총평")·헤드라인체("~날") 0. 일간 비유에
+    // 묶은 조언형 한 줄. 같은 일간 + dayEnergy = 같은 headline (deterministic).
+    final headlineKo = _headlineKo(userDayStem, dayEnergy);
+    final headlineEn = _headlineEn(userDayStem, dayEnergy);
 
     // R97 — mixedDay opening 변형 pool deterministic pick anchor.
     // 사용자 사주 (일간 + 일지) + 오늘 일지 만으로 결정 (같은 사주 = 같은 sentence).
@@ -132,6 +141,7 @@ class TodayDeepService {
         : hooks.bodyHookKo;
 
     var bodyKo = _composeBodyKo(
+      userDayStem: userDayStem,
       godKo: godKo,
       branchKo: brKo,
       elementKo: elementMood.ko,
@@ -140,6 +150,7 @@ class TodayDeepService {
       mixedOpeningSeed: mixedSeed,
     );
     var bodyEn = _composeBodyEn(
+      userDayStem: userDayStem,
       godEn: godEn,
       branchEn: brEn,
       elementEn: elementMood.en,
@@ -194,11 +205,12 @@ class TodayDeepService {
     var cautionEn = _cautionEn(god, branchRelation, todayScore);
 
     // Round 78 sprint 6 — 공망 발동 시 caution 끝에 anchor join.
-    // ctx.gongMangAreas 가 비어있지 않으면 caution 에 "공망 신호" 한 줄 prepend.
+    // R108 ③-3 — "공망" jargon 노출 제거, 작용만 plain 하게 묘사.
     if (ctx != null && ctx.gongMangAreas.isNotEmpty) {
-      cautionKo = '$cautionKo 공망 신호가 도는 날이라 큰돈·계약 결정은 한 번 더 확인해보세요.';
-      cautionEn =
-          '$cautionEn Void signal day — double-check big money or contract calls.';
+      cautionKo = '$cautionKo 오늘은 결정 하나가 괜히 헛돌 수 있는 자리라, '
+          '큰돈·계약 같은 건 한 번 더 확인하고 움직여요.';
+      cautionEn = '$cautionEn Today, a decision can spin without landing, '
+          'so double-check big money or contract calls before you move.';
     }
 
     return TodayDeepReading(
@@ -244,18 +256,29 @@ class TodayDeepService {
       return map[ko] ?? '';
     } else {
       final ko = dwGod.ko.split(' ').first;
+      // R108 ③-3 — sipsin-style jargon labels ("Peer/Output cycle" 등) 제거.
+      // 한국어 map 과 동일하게 plain 하게 풀어쓴다.
       const map = {
-        '비견': "You're inside a Peer luck cycle — peer dynamics show up more strongly than usual.",
-        '겁재': "You're inside a Rival cycle — your competitive edge sharpens.",
-        '식신': "You're inside an Output cycle — expression comes out more easily.",
-        '상관': "You're inside a Sharp Output cycle — quick reads and sharp takes stand out.",
-        '편재': "You're inside a Windfall Wealth cycle — new deals tend to show up.",
-        '정재': "You're inside a Stable Wealth cycle — steady, layered savings work.",
-        '편관': "You're inside a Bold Drive cycle — challenges keep stacking on.",
-        '정관': "You're inside a Stable Office cycle — your position settles in.",
-        '편인':
-            "You're inside an Unconventional Resource cycle — intuition sharpens.",
-        '정인': "You're inside a Direct Resource cycle — what you learn now sticks.",
+        '비견': 'In this stretch of your life, the pull of comparing yourself '
+            'with peers tends to run thicker than usual.',
+        '겁재': 'In this stretch of your life, a competitive, want-to-win '
+            'streak tends to run a beat quicker.',
+        '식신': 'In this stretch of your life, expressing and creating tends '
+            'to flow more easily.',
+        '상관': 'In this stretch of your life, a quick, sharp read of things '
+            'tends to come through clearly.',
+        '편재': 'In this stretch of your life, fresh deals and chances tend '
+            'to come around more often.',
+        '정재': 'In this stretch of your life, a steady, layered sense of '
+            'stability tends to grow stronger.',
+        '편관': 'In this stretch of your life, signals of challenge and '
+            'pressure tend to stack one layer thicker.',
+        '정관': 'In this stretch of your life, settling into a role within a '
+            'job or group tends to be well backed.',
+        '편인': 'In this stretch of your life, your intuition tends to read '
+            'clearer than usual.',
+        '정인': 'In this stretch of your life, the time you spend learning '
+            'tends to stack up more solidly.',
       };
       return map[ko] ?? '';
     }
@@ -277,6 +300,71 @@ class TodayDeepService {
     return map[stem] ?? '木';
   }
 
+  // ───────── R108 ③-3 — 일간 비유 anchor (my_saju_v5 _stemPersona 톤) ─────────
+
+  /// 일간 천간 → 짧은 비유 명사구 (body 첫 문장 anchor 용).
+  /// my_saju_v5_pool day_master.ko / life_overview _stemPersona 와 같은 비유.
+  static const Map<String, String> _stemMetaphorKo = {
+    '甲': '곧게 위로 자라는 큰 나무 같은 당신',
+    '乙': '어디에 놓여도 길을 찾아 자라는 풀 같은 당신',
+    '丙': '한낮의 해처럼 환한 당신',
+    '丁': '어두운 데를 비추는 촛불 같은 당신',
+    '戊': '자리를 묵직하게 잡은 큰 산 같은 당신',
+    '己': '무엇이든 길러내는 밭흙 같은 당신',
+    '庚': '아직 다듬지 않은 무쇠 같은 당신',
+    '辛': '잘 벼려진 칼이나 보석 같은 당신',
+    '壬': '넓게 흐르는 큰 강 같은 당신',
+    '癸': '땅속으로 조용히 스며드는 옹달샘 같은 당신',
+  };
+
+  /// 일간 천간 → 영어 비유 명사구.
+  static const Map<String, String> _stemMetaphorEn = {
+    '甲': 'you, with a tall-tree kind of energy',
+    '乙': 'you, with a vine-finding-its-way kind of energy',
+    '丙': 'you, with a midday-sun kind of energy',
+    '丁': 'you, with a candle-lighting-a-dark-corner kind of energy',
+    '戊': 'you, with a wide-mountain kind of energy',
+    '己': 'you, with a rich-garden-soil kind of energy',
+    '庚': 'you, with a raw-iron kind of energy',
+    '辛': 'you, with a well-honed-blade kind of energy',
+    '壬': 'you, with a wide-river kind of energy',
+    '癸': 'you, with a quiet-spring kind of energy',
+  };
+
+  static String _stemMetaphorKoOf(String stem) =>
+      _stemMetaphorKo[stem] ?? '본인 색이 또렷한 당신';
+
+  static String _stemMetaphorEnOf(String stem) =>
+      _stemMetaphorEn[stem] ?? 'you, with a colour all your own';
+
+  /// R108 ③-3 — headline (한국어). 메타·헤드라인체 0. 일간 비유 + dayEnergy
+  /// 조언형 한 줄. 같은 일간 + dayEnergy → 같은 문장.
+  static String _headlineKo(String userDayStem, DayEnergyKind energy) {
+    final who = _stemMetaphorKoOf(userDayStem);
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        return '$who, 오늘은 미뤄둔 한 가지를 손에 들어도 좋아요.';
+      case DayEnergyKind.mixedDay:
+        return '$who, 오늘은 한 발씩 정리하는 쪽이 잘 맞아요.';
+      case DayEnergyKind.restDay:
+        return '$who, 오늘은 새로 벌리기보다 한 박자 쉬어가요.';
+    }
+  }
+
+  /// R108 ③-3 — headline (영어). r99 forbidden 35 phrase 회피.
+  static String _headlineEn(String userDayStem, DayEnergyKind energy) {
+    final who = _stemMetaphorEnOf(userDayStem);
+    switch (energy) {
+      case DayEnergyKind.actionDay:
+        return 'For $who, today is fine for picking up one thing you have '
+            'been putting off.';
+      case DayEnergyKind.mixedDay:
+        return 'For $who, a step-by-step sort-out works best today.';
+      case DayEnergyKind.restDay:
+        return 'For $who, today leans toward a pause rather than a new start.';
+    }
+  }
+
   // Round 71 — restDay 일 때 "승진/공식 자리/도전" 류 단어가 bodyKo 에 등장하면
   // 사용자 불만 #3 (모순) 재발. dayEnergy 별 godPhrase 변주로 차단.
   // Round 74 — '분위기' 5회 반복 분산. 일상 평서.
@@ -285,15 +373,15 @@ class TodayDeepService {
     if (energy == DayEnergyKind.restDay) {
       switch (g) {
         case TenGod.jeonggwan:
-          return '오늘은 자리 관련 얘기가 비교적 잠잠해요';
+          return '오늘은 자리 관련 얘기를 무리해서 끌어올리지 않아도 돼요';
         case TenGod.pyeongwan:
-          return '오늘은 새 일을 떠맡기엔 어울리지 않는 날이에요';
+          return '새 일 얘기가 들어와도 오늘은 떠맡기보다 한 박자 두는 쪽이 잘 맞아요';
         case TenGod.sanggwan:
-          return '표현 욕구가 평소보다 조용해져요';
+          return '표현하고 싶은 마음이 올라와도 오늘은 한 톤 가라앉혀 두는 쪽이 편해요';
         case TenGod.pyeonjae:
-          return '큰돈 얘기는 오늘 멀리 가요';
+          return '큰돈 얘기가 나와도 오늘은 한 발 멀리 두고 보는 쪽이 편해요';
         case TenGod.geopjae:
-          return '경쟁심이 평소보다 가라앉아요';
+          return '승부욕이 올라와도 오늘은 한 박자 늦추는 쪽이 잘 맞아요';
         case TenGod.bigyeon:
         case TenGod.siksin:
         case TenGod.jeongjae:
@@ -311,18 +399,20 @@ class TodayDeepService {
 
   /// R98 — geopjae (non-restDay) 본문 godPhrase 3-pool.
   /// 동일 사용자 (dayStem+dayBranch) + 오늘 stem hash 로 deterministic pick.
+  /// R108 ③-3 — 헤드라인체("~날이에요") 0. 발동조건형으로.
   static const List<String> _geopjaeNonRestPool = [
-    '오늘은 또래나 가까운 사람과 자꾸 비교가 생기는 날이에요',
-    '오늘은 평소에 신경 안 쓰던 비교가 한 번씩 떠오를 수 있어요',
-    '오늘은 가까운 사람 한 명이 자꾸 신경 쓰이는 날이에요',
+    '오늘은 또래나 가까운 사람과 비교가 한 번씩 떠오르면, 그건 그냥 지나가는 신호니까 너무 붙들지 않아도 돼요',
+    '오늘은 누가 한 발 앞서 보이면 평소보다 신경이 그쪽으로 갈 수 있으니, 그럴 땐 내 한 가지에만 손을 둬요',
+    '오늘은 가까운 사람 한 명이 자꾸 눈에 들어오면, 비교 대신 가벼운 안부 한 줄로 풀어봐요',
   ];
 
   /// R98 — mixedDay 일 때 본문 마지막 줄 (moodHook) 3-pool.
   /// 같은 사주는 항상 같은 sentence — 다른 사주 끼리는 spread.
+  /// R108 ③-3 — 헤드라인체 0. 행동 권유형.
   static const List<String> _mixedDayMoodHookPool = [
-    '큰 일은 잠시 두고 작은 마무리 하나에 시간 쓰는 게 더 좋아요',
-    '급한 결정 대신 흐름을 보면서 한 박자 쉬어가요',
-    '오늘은 한 가지만 분명히 끝내도 충분한 날이에요',
+    '큰 일은 잠시 두고 작은 마무리 하나에 시간을 모아보면 더 잘 풀려요',
+    '급한 결정이 떠오르면 그 자리에서 정하지 말고 한 박자만 늦춰봐요',
+    '오늘은 한 가지만 분명히 끝내도 충분하니, 나머지는 메모로만 남겨둬도 돼요',
   ];
 
   /// R98 — phrase pool deterministic pick 용 hash (FNV-1a + avalanche).
@@ -345,15 +435,15 @@ class TodayDeepService {
     if (energy == DayEnergyKind.restDay) {
       switch (g) {
         case TenGod.jeonggwan:
-          return 'not your day for big formal moves';
+          return 'there is no need to push position talk up today';
         case TenGod.pyeongwan:
-          return 'not a day to pick up new tasks';
+          return 'if new work comes up, leaving it a beat rather than taking it on is the better move today';
         case TenGod.sanggwan:
-          return 'the urge to speak up quiets down';
+          return 'if the urge to speak up rises, turning it down a notch tends to feel easier today';
         case TenGod.pyeonjae:
-          return "big money decisions don't fit";
+          return "if big-money talk comes up, keeping it at arm's length pays off today";
         case TenGod.geopjae:
-          return 'competition cools off';
+          return 'if a competitive streak rises, easing it by a beat tends to help today';
         case TenGod.bigyeon:
         case TenGod.siksin:
         case TenGod.jeongjae:
@@ -370,52 +460,67 @@ class TodayDeepService {
     //   "사람이랑 부딪히는데 큰 충돌없이 지나간다니 앞뒤가 안맞아"
     // 강한 충돌 phrase ("부딪칠 일이 생겨요" 등) 약화 — branch neutral 의 "큰 충돌 없이"
     // 와 함께 합성돼도 모순 0 보장.
+    // R108 ③-3 — 헤드라인체 0, jargon 0. 사건은 무조건 발동조건형("~하면 ~")으로 —
+    // 그날 아무 일도 안 생겨도 틀리지 않게.
     switch (g) {
       case TenGod.bigyeon:
-        return '오늘은 친구나 동료처럼 비슷한 자리 사람이 가까워지는 신호가 있어요';
+        return '친구나 동료처럼 비슷한 자리의 사람이 떠오르면, 오늘은 먼저 한 발 다가가도 잘 받아주는 편이에요';
       case TenGod.geopjae:
-        return '오늘은 괜히 비교가 신경 쓰일 수 있는 날이에요';
+        return '누가 한 발 앞서 보여서 비교가 떠오르면, 오늘은 그 마음을 붙들지 말고 내 한 가지에만 손을 둬요';
       case TenGod.siksin:
-        return '오늘은 표현·창작이 잘 풀려서 말과 글이 가벼워져요';
+        return '표현하고 싶은 게 있으면 오늘 꺼내봐요 — 말과 글이 평소보다 한결 가볍게 나가는 편이에요';
       case TenGod.sanggwan:
-        return '재능이 잘 드러나는 날이라 윗사람한테는 톤만 한 단계 부드럽게 가요';
+        return '재능을 보여줄 일이 생기면 오늘은 잘 드러나는 편이니, 윗사람한테는 톤만 한 단계 부드럽게 가요';
       case TenGod.pyeonjae:
-        return '오늘은 뜻밖의 기회나 큰돈 관련 얘기가 다가올 수 있어요';
+        return '돈이나 기회 얘기가 나오면, 오늘은 바로 정하기보다 한 번 더 확인하고 가는 쪽이 잘 맞아요';
       case TenGod.jeongjae:
-        return '꾸준한 수입이나 약속이 안정적으로 자리 잡는 날이에요';
+        return '수입이나 약속을 챙길 일이 있으면, 오늘은 차곡차곡 정리해두기 좋은 편이에요';
       case TenGod.pyeongwan:
-        return '오늘은 큰 책임이나 새 도전 신호가 평소보다 가까워질 수 있어요';
+        return '큰 책임이나 새 도전 얘기가 들어오면, 오늘은 그 자리에서 답하지 말고 한 박자 두고 봐요';
       case TenGod.jeonggwan:
-        return '인정받을 일이나 자리 관련 얘기가 자연스럽게 오가는 날이에요';
+        return '인정받을 일이나 자리 관련 얘기가 오가면, 오늘은 평소보다 한 단계만 갖춰서 가면 잘 받쳐줘요';
       case TenGod.pyeonin:
-        return '오늘은 깊은 공부·직관이 평소보다 또렷해져요';
+        return '혼자 깊게 파고들 일이 있으면 오늘 손대봐요 — 직관이 평소보다 한 칸 또렷한 편이에요';
       case TenGod.jeongin:
-        return '배움·멘토·도움이 자연스럽게 가까워지는 날이에요';
+        return '배우거나 도움을 청할 일이 있으면, 오늘은 멘토·선생님 쪽으로 한 발 다가가기 좋은 편이에요';
     }
   }
 
   static String _godPhraseEn(TenGod g) {
+    // R108 ③-3 — condition/trigger form, no verdict. The r99 English-quality
+    // guard forbidden-phrase list is honored here (no AI-cliche carriers).
+    // R108 ③-3 — condition form ("if ~"), no event verdict.
     switch (g) {
       case TenGod.bigyeon:
-        return 'people on your level, like friends or coworkers, come closer';
+        return 'if a friend or coworker on your level comes to mind, '
+            'stepping toward them first tends to land well';
       case TenGod.geopjae:
-        return 'someone at your level may push back, so keep your tone clean';
+        return 'if a comparison comes up because someone seems a step '
+            'ahead, keeping your hands on your one thing is the steadier move';
       case TenGod.siksin:
-        return 'your words come out more easily than usual';
+        return 'if you have something to express, putting it out today '
+            'tends to come easier than usual';
       case TenGod.sanggwan:
-        return 'your talent is easier to notice, but tone matters around authority';
+        return 'if a chance to show your talent comes up, a softer tone '
+            'around senior people tends to help';
       case TenGod.pyeonjae:
-        return 'an unexpected opening around money or opportunity can show up';
+        return 'if money or a chance comes up, checking once more before '
+            'you settle it pays off';
       case TenGod.jeongjae:
-        return 'steady work, income, or promises are easier to organize';
+        return 'if there is income or a promise to look after, sorting it '
+            'steadily works well today';
       case TenGod.pyeongwan:
-        return 'a bigger ask or challenge may arrive quickly';
+        return 'if a bigger ask or a new challenge comes in, leaving it a '
+            'beat rather than answering on the spot is the better move';
       case TenGod.jeonggwan:
-        return 'recognition, responsibility, or formal decisions come into focus';
+        return 'if recognition or position talk passes back and forth, '
+            'lifting your manner one notch tends to back you up';
       case TenGod.pyeonin:
-        return 'study, intuition, and quiet focus run stronger';
+        return 'if there is something to dig into alone, reaching for it '
+            'today works well — your read runs a notch clearer';
       case TenGod.jeongin:
-        return 'learning, advice, or helpful support comes more naturally';
+        return 'if there is something to learn or help to ask for, '
+            'stepping toward a mentor tends to land well';
     }
   }
 
@@ -459,40 +564,49 @@ class TodayDeepService {
     // 모순(예: 겁재 "부딪칠 일이 생겨요" + neutral "충돌 없이") 을 일으켜 사용자 직발.
     // 모순 가능성 없는 중립 톤으로 갱신.
     // R98 — neutral 7/10 반복 fix. seed 기반 5-pool deterministic pick.
+    // R108 ③-3 — "오늘은 ~날이에요" 헤드라인체 0. jargon("일지") 노출 0.
     switch (r) {
       case _BranchRelation.same:
-        return '오늘은 평소 습관과 말버릇이 더 선명하게 드러나요';
+        return '오늘 기운이 당신과 같은 결로 들어와서, 평소 습관·말버릇이 한 칸 더 선명하게 비칠 수 있으니 말 한마디만 평소처럼 차분히 가요';
       case _BranchRelation.hap:
-        return '오늘은 사람 사이 일이 비교적 부드럽게 풀려요';
+        return '오늘 기운이 당신과 잘 맞물리는 결이라, 미뤄둔 연락이나 사람 사이 일을 오늘 풀어보면 평소보다 매끄럽게 가요';
       case _BranchRelation.chung:
-        return '오늘은 마음이 쉽게 흔들려 결정이 평소보다 어렵게 느껴질 수 있어요';
+        return '오늘 기운이 당신과 살짝 어긋나는 결이라, 마음이 어디로 쏠리면 그 자리에서 큰 결정을 정하기보다 한 박자 두고 봐요';
       case _BranchRelation.neutral:
         return _branchNeutralPool[seed % _branchNeutralPool.length];
     }
   }
 
   /// R98 — branch neutral 본문 5-pool.
-  /// 같은 사용자 (일지) + 오늘 일지 hash 로 deterministic pick — 같은 사주는 항상
-  /// 같은 sentence. "충돌/부딪" 단어 0 (R86 sprint 4 invariant 보존).
+  /// 같은 사용자 + 오늘 hash 로 deterministic pick — 같은 사주는 항상 같은 sentence.
+  /// "충돌/부딪" 단어 0 (R86 sprint 4 invariant 보존).
+  /// R108 ③-3 — "본인 페이스/자기 결대로/분위기" boilerplate 제거, jargon("일지") 0.
   static const List<String> _branchNeutralPool = [
-    '오늘은 큰 변동 없이 자기 결대로 흘러가는 평탄한 날이에요',
-    '오늘은 외부 자극보다 본인 페이스를 지키기 좋은 날이에요',
-    '오늘은 잔잔한 흐름 안에서 자기 자리를 확인하는 날이에요',
-    '오늘은 안정적인 분위기 안에서 본인 색이 또렷해지는 날이에요',
-    '오늘은 외부 신호가 강하지 않고 본인이 중심을 잡는 날이에요',
+    '오늘 기운은 당신과 특별히 엮이지 않아서, 밖에 휘둘리기보다 하던 한 가지에 손을 두면 잘 풀려요',
+    '오늘 기운은 당신과 큰 접점이 없어서, 새 신호를 찾기보다 하던 흐름을 이어가는 쪽이 잘 맞아요',
+    '오늘 기운은 당신과 부딪치지도 맞물리지도 않아서, 욕심내지 말고 한 가지만 챙겨도 충분해요',
+    '오늘 기운은 당신과 거리를 둔 결이라, 평소 챙기던 한 가지를 다시 잡아보면 좋아요',
+    '오늘 기운은 당신과 따로 도는 결이라, 큰 결정을 서두르기보다 평소 페이스대로 가면 돼요',
   ];
 
   static String _branchRelationEn(_BranchRelation r) {
+    // R108 ③-3 — condition form, no day verdict. No saju jargon carriers.
     switch (r) {
       case _BranchRelation.same:
-        return 'Your usual habits and speaking style stand out more clearly today';
+        return "Today's current runs in the same groove as yours, so your "
+            'usual habits can read a notch clearer — keep a remark as calm '
+            'as usual';
       case _BranchRelation.hap:
-        return 'People-related matters can move more smoothly today';
+        return "Today's current locks in well with yours, so working "
+            'through a postponed message or a people matter today tends to '
+            'go more smoothly';
       case _BranchRelation.chung:
-        return 'Decisions may feel less steady than usual today';
+        return "Today's current sits a little off from yours, so if your "
+            'mind tilts somewhere, leaving a big call a beat is the safer move';
       case _BranchRelation.neutral:
         // R86 sprint 4 — drop "clash" wording (clashed with 겁재 godPhrase).
-        return 'The day flows at your usual pace without much disruption';
+        return "Today's current barely meets yours, so rather than chasing "
+            'a new signal, keeping your hands on one usual thing works best';
     }
   }
 
@@ -509,21 +623,25 @@ class TodayDeepService {
       '金': 'metal',
       '水': 'water',
     };
+    // R108 ③-3 — "균형" 금지어 제거. "당신 사주/chart" meta 제거. 발동조건형.
     if (todayEl == dominant) {
       return (
-        ko: '평소 강한 ${koEl[dominant]} 성향이 오늘 더 선명해져요',
-        en: 'Your already-strong ${enEl[todayEl]} side is easier to notice today',
+        ko: '오늘은 ${koEl[dominant]} 기운이 들어와서, 당신이 평소에 강한 ${koEl[dominant]} 색이 한 칸 더 진하게 비칠 수 있어요',
+        en: 'Today, an incoming ${enEl[todayEl]} current tends to bring out '
+            'your already-strong ${enEl[todayEl]} side a touch more',
       );
     }
     if (todayEl == deficit) {
       return (
-        ko: '평소 모자라던 ${koEl[deficit]} 쪽이 오늘 조금 보태져요',
-        en: 'Your usually lighter ${enEl[deficit]} side gets some support today',
+        ko: '오늘은 ${koEl[deficit]} 기운이 들어와서, 당신이 평소에 옅은 ${koEl[deficit]} 쪽이 살짝 보태질 수 있어요',
+        en: 'Today, an incoming ${enEl[deficit]} current tends to lend a hand '
+            'to your usually lighter ${enEl[deficit]} side',
       );
     }
     return (
-      ko: '오늘은 ${koEl[todayEl]} 성향을 의식하면 균형이 잡혀요',
-      en: 'Paying attention to ${enEl[todayEl]} helps you stay balanced today',
+      ko: '오늘은 ${koEl[todayEl]} 기운이 들어오는데, 당신과 따로 도는 결이라 한 번 의식해두면 그 색을 골라 쓰기 좋아요',
+      en: 'Today, an incoming ${enEl[todayEl]} current runs apart from your '
+          'usual mix, so noticing it once tends to make it easy to draw on',
     );
   }
 
@@ -549,30 +667,32 @@ class TodayDeepService {
   // restDay 에 "공식/도전/승진" 단어 0회 (사용자 불만 #3).
   static ({String moodKo, String moodEn, String bodyHookKo, String bodyHookEn})
   _hooksByEnergy(DayEnergyKind energy) {
+    // R108 ③-3 — moodKo 는 chip 한 단어 (헤드라인체 X). bodyHookKo 는 body 마지막
+    // 줄로 합성되니 행동 권유형.
     switch (energy) {
       case DayEnergyKind.actionDay:
         return (
-          moodKo: '움직임이 살아나는',
-          moodEn: 'active and responsive',
-          bodyHookKo: '미뤄둔 일 하나는 오늘 시작해도 좋아요',
+          moodKo: '움직이기 좋은',
+          moodEn: 'good for moving',
+          bodyHookKo: '미뤄둔 일 하나는 오늘 손에 들어도 좋아요',
           bodyHookEn:
-              'Start one thing you have been putting off; today responds better to action than overthinking',
+              'Picking up one thing you have been putting off can work well today',
         );
       case DayEnergyKind.mixedDay:
         return (
           moodKo: '차분히 다지는',
           moodEn: 'steady and measured',
-          bodyHookKo: '큰 결정은 미루고 확인이 필요한 일 하나만 끝내요',
+          bodyHookKo: '큰 결정은 한 박자 두고, 확인이 필요한 일 하나만 끝내봐요',
           bodyHookEn:
-              'Leave major decisions for later and finish one small check first',
+              'Leave a big decision a beat and finish just one thing that needs a check',
         );
       case DayEnergyKind.restDay:
         return (
           moodKo: '쉬어가는',
-          moodEn: 'quiet and restorative',
-          bodyHookKo: '새로 벌리기보다 몸과 마음을 회복하는 쪽이 맞아요',
+          moodEn: 'quiet and restful',
+          bodyHookKo: '새로 벌리기보다 몸과 마음을 한 칸 채우는 쪽으로 가봐요',
           bodyHookEn:
-              'Do not force a new start today; one clear recovery choice is enough',
+              'Leaning toward refilling your body and mind, rather than a new start, is the better call',
         );
     }
   }
@@ -585,12 +705,13 @@ class TodayDeepService {
   // append 되므로 총 4~5 sentence.
   // R97 — mixedDay 5개 변형 pool. 사용자 사주 anchor (일간 + 일지 + 오늘 일지)
   // hash 로 deterministic pick — 같은 사주는 항상 같은 sentence.
+  /// R108 ③-3 — "오늘은 ~날이에요" 헤드라인체 0. 행동 권유형으로.
   static const List<String> _mixedDayOpeningPool = [
-    '오늘은 한 번에 멀리 가기보다 한 발씩 정리하는 쪽이 잘 맞는 날이에요.',
-    '오늘은 끝내야 할 일 한 가지에 시간을 모으는 게 답이에요.',
-    '오늘은 결과보다 흐름을 잡아두는 쪽이 더 잘 맞아요.',
-    '오늘은 큰 그림보다 그동안 미뤄둔 작은 것 한 가지를 매듭 짓는 날이에요.',
-    '오늘은 새로 벌리기보다 하던 일에 한 박자 힘을 더 모으는 날이에요.',
+    '오늘은 한 번에 멀리 가기보다 한 발씩 정리하는 쪽으로 가면 잘 풀려요.',
+    '오늘은 끝내야 할 일 한 가지에 시간을 모아보면 흐름이 잡혀요.',
+    '오늘은 결과를 서두르기보다 흐름을 먼저 잡아두는 쪽이 잘 맞아요.',
+    '오늘은 큰 그림보다 그동안 미뤄둔 작은 것 한 가지를 매듭지어보면 좋아요.',
+    '오늘은 새로 벌리기보다 하던 일에 한 박자 힘을 더 모아보면 단단해져요.',
   ];
 
   /// R97 → R98 — FNV-1a 변형 hash + rotational salt.
@@ -618,6 +739,7 @@ class TodayDeepService {
   }
 
   static String _composeBodyKo({
+    required String userDayStem,
     required String godKo,
     required String branchKo,
     required String elementKo,
@@ -626,14 +748,18 @@ class TodayDeepService {
     int mixedOpeningSeed = 0,
   }) {
     final parts = <String>[];
+    // R108 ③-3 — opening 을 일간 비유에 anchor (my_saju_v5 톤). 헤드라인체 0.
+    // 비유는 opening 한 문장 안에 녹여 sentence 수는 그대로 (opening+god+branch+
+    // moodHook = 4, ctx 시 5 — R85 cap 보존).
+    final who = _stemMetaphorKoOf(userDayStem);
     switch (energy) {
       case DayEnergyKind.actionDay:
-        parts.add('오늘은 평소보다 말과 행동이 밖으로 잘 드러나는 날이에요.');
+        parts.add('$who한테, 오늘은 마음먹은 걸 한 발 밖으로 꺼내봐도 잘 받쳐주는 편이에요.');
       case DayEnergyKind.mixedDay:
         final idx = mixedOpeningSeed % _mixedDayOpeningPool.length;
-        parts.add(_mixedDayOpeningPool[idx]);
+        parts.add('$who한테, ${_mixedDayOpeningPool[idx]}');
       case DayEnergyKind.restDay:
-        parts.add('오늘은 속도를 늦추고 안쪽을 정리할수록 잘 맞는 날이에요.');
+        parts.add('$who한테, 오늘은 속도를 늦추고 안쪽을 정리하는 쪽이 잘 맞아요.');
     }
     if (godKo.isNotEmpty) parts.add('$godKo.');
     parts.add('$branchKo.');
@@ -642,6 +768,7 @@ class TodayDeepService {
   }
 
   static String _composeBodyEn({
+    required String userDayStem,
     required String godEn,
     required String branchEn,
     required String elementEn,
@@ -649,17 +776,20 @@ class TodayDeepService {
     required DayEnergyKind energy,
   }) {
     final parts = <String>[];
+    // R108 ③-3 — opening anchored to the day-stem metaphor.
+    final who = _stemMetaphorEnOf(userDayStem);
     switch (energy) {
       case DayEnergyKind.actionDay:
-        parts.add('Today brings your natural style closer to the surface.');
+        parts.add('For $who, putting something you have in mind a step out '
+            'into the open tends to be well met today.');
       case DayEnergyKind.mixedDay:
-        parts.add(
-          'Today is better for sorting things out than forcing a big move.',
-        );
+        parts.add('For $who, sorting things out a step at a time tends to '
+            'fit better than forcing a big move today.');
       case DayEnergyKind.restDay:
-        parts.add('Today works best when you slow down and clear some space.');
+        parts.add('For $who, slowing down and clearing some space tends to '
+            'fit best today.');
     }
-    if (godEn.isNotEmpty) parts.add('Today: $godEn.');
+    if (godEn.isNotEmpty) parts.add('Today, $godEn.');
     parts.add('$branchEn.');
     // R96 hotfix — drop random middleHook + elementEn line. Same intent as
     // _composeBodyKo: avoid stitching meaning-unrelated atoms.
@@ -795,7 +925,7 @@ class TodayDeepService {
       case TenGod.jeonggwan:
         return '공식 자리·발표·승진 신청에 좋은 날 — 격식 한 단계 올리세요.';
       case TenGod.pyeonin:
-        return '깊은 책·강의·명상 한 가지 — 직관이 가장 깊어지는 날.';
+        return '깊은 책·강의·명상 한 가지를 골라봐요 — 오늘 직관이 한 칸 또렷해지는 쪽이에요.';
       case TenGod.jeongin:
         return '오래된 멘토·선생님께 연락 한 통 — 답이 빠릅니다.';
     }
