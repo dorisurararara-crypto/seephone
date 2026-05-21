@@ -381,7 +381,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (ok != true || !context.mounted) return;
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    await NotificationService.cancelDaily();
+    await NotificationService.cancelAll();
     if (!context.mounted) return;
     ref.read(sajuResultProvider.notifier).clear();
     ref.read(userBirthInfoProvider.notifier).clear();

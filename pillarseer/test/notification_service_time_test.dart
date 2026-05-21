@@ -52,9 +52,11 @@ void main() {
     });
 
     test('needsReschedule — 시간 변경 감지', () async {
-      // 직접 prefs 에 signature 주입 (8:00, nosaju) 후 시간 9:30 으로 비교 → true.
+      // R108 — signature 는 3 슬롯(아침/오후/저녁) 상태를 모두 인코딩한다.
+      // 아침만 enabled 08:00 인 sig 주입 후 동일/다른 시간 비교.
       SharedPreferences.setMockInitialValues({
-        'app.notif.daily8am.scheduleSig': 'ko|t|b||08:00|nosaju',
+        'app.notif.daily8am.scheduleSig':
+            'ko|t|b||1@08:00,0@13:00,0@21:00|nosaju',
       });
       // 동일 시간 — false.
       final same = await NotificationService.needsReschedule(
@@ -77,9 +79,10 @@ void main() {
     });
 
     test('Round 76 sprint 6 — fallback (nosaju) → deep (saju) 전환 시 reschedule', () async {
-      // 직접 prefs 에 fallback signature 주입.
+      // 직접 prefs 에 fallback signature 주입 (R108 3 슬롯 인코딩).
       SharedPreferences.setMockInitialValues({
-        'app.notif.daily8am.scheduleSig': 'ko|t|b||08:00|nosaju',
+        'app.notif.daily8am.scheduleSig':
+            'ko|t|b||1@08:00,0@13:00,0@21:00|nosaju',
       });
       final dummy = SajuResult.dummy();
       // saju 받으면 → signature deep:... 와 mismatch → true.

@@ -1,5 +1,8 @@
 // Pillar Seer — 일일 운세 알림. flutter_local_notifications + timezone.
-// 오전 8시 매일 반복 푸시. 사용자 토글 ON/OFF.
+// R108 ④ — 하루 1회 → 3 고정 슬롯(아침/오후/저녁)으로 확장.
+//   각 슬롯 = {enabled, hour, minute}. 마스터 토글이 권한 + 전체 on/off.
+//   마스터 ON 일 때 enabled 인 슬롯만 매일 울린다.
+//   기존 단일 알림 사용자는 마이그레이션으로 아침 슬롯에 그대로 이관 (알림 유지).
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,23 +18,96 @@ import 'saju_context.dart';
 import 'today_event_service.dart';
 import 'topic_selector_service.dart';
 
+/// R108 ④ — 하루 알림 슬롯. 3 고정: 아침 / 오후 / 저녁.
+/// 슬롯마다 다른 사주 풀이 프레임(아침 = 하루 미리보기, 오후 = 결이 바뀜,
+/// 저녁 = 하루 마무리 + 내일 살짝)으로 같은 날도 카피가 다르게 나간다.
+enum NotificationSlot { morning, afternoon, evening }
+
+extension NotificationSlotMeta on NotificationSlot {
+  /// SharedPreferences key prefix + signature 식별자.
+  String get id {
+    switch (this) {
+      case NotificationSlot.morning:
+        return 'morning';
+      case NotificationSlot.afternoon:
+        return 'afternoon';
+      case NotificationSlot.evening:
+        return 'evening';
+    }
+  }
+
+  /// ID 공간 / cancel loop / signature 순서용 인덱스 (0/1/2).
+  int get index => NotificationSlot.values.indexOf(this);
+
+  /// 디폴트 시간 — 아침 08:00 / 오후 13:00 / 저녁 21:00.
+  ({int hour, int minute}) get defaultTime {
+    switch (this) {
+      case NotificationSlot.morning:
+        return (hour: 8, minute: 0);
+      case NotificationSlot.afternoon:
+        return (hour: 13, minute: 0);
+      case NotificationSlot.evening:
+        return (hour: 21, minute: 0);
+    }
+  }
+
+  /// 디폴트 enabled — 아침만 ON.
+  bool get defaultEnabled => this == NotificationSlot.morning;
+}
+
+/// 한 슬롯의 설정 — enabled + 시간. immutable.
+class SlotConfig {
+  final bool enabled;
+  final int hour;
+  final int minute;
+  const SlotConfig({
+    required this.enabled,
+    required this.hour,
+    required this.minute,
+  });
+
+  SlotConfig copyWith({bool? enabled, int? hour, int? minute}) => SlotConfig(
+        enabled: enabled ?? this.enabled,
+        hour: (hour ?? this.hour).clamp(0, 23),
+        minute: (minute ?? this.minute).clamp(0, 59),
+      );
+
+  /// signature 조각 — "{enabled}@{hh}:{mm}".
+  String get sigPart =>
+      '${enabled ? '1' : '0'}@${hour.toString().padLeft(2, '0')}:'
+      '${minute.toString().padLeft(2, '0')}';
+}
+
 class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
   static bool _initialized = false;
-  static const _kPrefsEnabled = 'app.notif.daily8am.enabled';
+
+  /// 마스터 토글 — 권한 + 전체 on/off. (기존 키 재사용 — 마이그레이션 호환.)
+  static const _kPrefsMaster = 'app.notif.daily8am.enabled';
   static const _kPrefsScheduleSig = 'app.notif.daily8am.scheduleSig';
-  // Round 76 — 사용자 설정 시간 영속 (디폴트 8:00 — 기존 호환).
-  static const _kPrefsHour = 'app.notif.daily.hour';
-  static const _kPrefsMinute = 'app.notif.daily.minute';
+
+  /// R76 단일 슬롯 시절 키 — 마이그레이션 source 로만 읽는다.
+  static const _kLegacyHour = 'app.notif.daily.hour';
+  static const _kLegacyMinute = 'app.notif.daily.minute';
+
+  /// R108 — 슬롯별 키. `{prefix}.{slotId}.enabled/.hour/.minute`.
+  static const _kSlotPrefix = 'app.notif.slot';
+
+  /// 마이그레이션 1회 완료 마커.
+  static const _kMigrated = 'app.notif.r108.migrated';
+
+  /// 슬롯당 ID 예산 32 (30일 + 여유). 3 슬롯 = 96 ID (8888~8983).
   static const int _kDailyId = 8888;
+  static const int _kSlotIdSpan = 32;
+  static const int _kSlotCount = 3;
 
   /// R106 P2b-fix — 미스터리 알림 알고리즘/풀 버전 마커.
   /// scheduleSignature 에 박혀, 이 값이 바뀌면 기존 enabled 사용자도
   /// needsReschedule==true 가 되어 새 미스터리 알림으로 자동 재스케줄된다.
-  /// 미스터리 카피 알고리즘·풀 스키마가 바뀔 때마다 이 문자열을 올린다.
   ///   v1 = R106 P2b 초판 (static per-topic interactions).
   ///   v2 = R106 P2b-fix (relation-aware interactions — 거짓말 0).
-  static const String _kMysteryAlgoVersion = 'mystery_v2';
+  ///   v3 = R108 ④ 슬롯별 사주 풀이 프레임 (아침/오후/저녁).
+  static const String _kMysteryAlgoVersion = 'mystery_v3';
 
   static Future<void> ensureInitialized() async {
     if (_initialized) return;
@@ -77,36 +153,101 @@ class NotificationService {
     return true;
   }
 
-  /// 30일 × 매일 사용자 설정 시간 알림 등록.
-  /// Round 76 — hour/minute 사용자 설정 가능. 디폴트 8:00 (기존 호환).
-  /// codex Round 7 fix: 각 일자별 explicit schedule (matchDateTimeComponents.time 미사용)
-  /// — 사용자가 시간 변경 시 OS 캐싱 패턴이 안 깨지는 이슈 회피.
+  // ──────────────────── R108 슬롯 영속 (load / save) ────────────────────
+
+  static String _slotKey(NotificationSlot s, String field) =>
+      '$_kSlotPrefix.${s.id}.$field';
+
+  /// R108 — 기존 단일 알림 사용자를 3 슬롯 모델로 1회 이관.
+  /// 기존 `app.notif.daily.hour/minute` → 아침 슬롯 시간.
+  /// 기존 마스터 enabled → 아침 슬롯도 enabled (업데이트 후 알림 유지).
+  /// 마커가 이미 있으면 no-op.
+  static Future<void> _migrateIfNeeded(SharedPreferences prefs) async {
+    if (prefs.getBool(_kMigrated) ?? false) return;
+
+    // 슬롯 키가 이미 하나라도 있으면(신규 설치 후 이미 슬롯 사용) 마커만 찍는다.
+    final alreadyHasSlots = prefs.containsKey(
+      _slotKey(NotificationSlot.morning, 'hour'),
+    );
+    if (!alreadyHasSlots) {
+      // 기존 단일 시간 — 없으면 아침 디폴트 08:00.
+      final legacyHour =
+          (prefs.getInt(_kLegacyHour) ?? NotificationSlot.morning.defaultTime.hour)
+              .clamp(0, 23);
+      final legacyMinute = (prefs.getInt(_kLegacyMinute) ??
+              NotificationSlot.morning.defaultTime.minute)
+          .clamp(0, 59);
+      // 기존 마스터가 켜져 있던 사용자 → 아침 슬롯도 켠다 (알림 끊김 방지).
+      final masterOn = prefs.getBool(_kPrefsMaster) ?? false;
+
+      for (final s in NotificationSlot.values) {
+        final isMorning = s == NotificationSlot.morning;
+        final t = isMorning
+            ? (hour: legacyHour, minute: legacyMinute)
+            : s.defaultTime;
+        // 아침: 기존 마스터 ON 이면 ON, 아니면 디폴트(ON). 오후/저녁: 디폴트 OFF.
+        final enabled = isMorning ? (masterOn || s.defaultEnabled) : s.defaultEnabled;
+        await prefs.setBool(_slotKey(s, 'enabled'), enabled);
+        await prefs.setInt(_slotKey(s, 'hour'), t.hour);
+        await prefs.setInt(_slotKey(s, 'minute'), t.minute);
+      }
+    }
+    await prefs.setBool(_kMigrated, true);
+  }
+
+  /// 3 슬롯 설정 로드 (마이그레이션 포함). 항상 3 entry 반환.
+  static Future<Map<NotificationSlot, SlotConfig>> loadSlots() async {
+    final prefs = await SharedPreferences.getInstance();
+    await _migrateIfNeeded(prefs);
+    final out = <NotificationSlot, SlotConfig>{};
+    for (final s in NotificationSlot.values) {
+      final d = s.defaultTime;
+      out[s] = SlotConfig(
+        enabled: prefs.getBool(_slotKey(s, 'enabled')) ?? s.defaultEnabled,
+        hour: (prefs.getInt(_slotKey(s, 'hour')) ?? d.hour).clamp(0, 23),
+        minute: (prefs.getInt(_slotKey(s, 'minute')) ?? d.minute).clamp(0, 59),
+      );
+    }
+    return out;
+  }
+
+  /// 한 슬롯 설정 저장.
+  static Future<void> saveSlot(NotificationSlot s, SlotConfig c) async {
+    final prefs = await SharedPreferences.getInstance();
+    await _migrateIfNeeded(prefs);
+    await prefs.setBool(_slotKey(s, 'enabled'), c.enabled);
+    await prefs.setInt(_slotKey(s, 'hour'), c.hour.clamp(0, 23));
+    await prefs.setInt(_slotKey(s, 'minute'), c.minute.clamp(0, 59));
+  }
+
+  // ──────────────────── 스케줄링 (3 슬롯) ────────────────────
+
+  /// 3 고정 슬롯 × 매일 알림 등록. 마스터 ON + enabled 인 슬롯만 울린다.
+  /// codex R7 fix: 각 일자별 explicit schedule — 사용자가 시간 변경/슬롯 토글
+  /// 시 OS 캐싱 패턴이 안 깨지게 per-day schedule 유지.
   /// day60ji null 시 fallback fixed body 사용.
-  static Future<void> scheduleDaily({
+  static Future<void> scheduleSlots({
     required String title,
     required String body,
+    required Map<NotificationSlot, SlotConfig> slots,
     String? day60ji,
     bool useKo = false,
     int daysAhead = 30,
-    required int hour,
-    required int minute,
-    SajuResult? saju, // Round 76 sprint 6 — 있으면 today_event_service deep pick.
-    // Round 77 sprint 7 — 알림 톤 (adult/mz). fallback pickFor 경로에서 풀 선택.
+    SajuResult? saju, // 있으면 미스터리/deep 계산 본문.
     NotificationTone tone = NotificationTone.adult,
   }) async {
     await ensureInitialized();
-    // 기존 모든 daily 알림 cancel
-    for (var i = 0; i < 64; i++) {
+    // 전체 슬롯 ID 공간 전수 cancel (0..95) — 슬롯 OFF→ON / 시간 변경 모두 커버.
+    for (var i = 0; i < _kSlotIdSpan * _kSlotCount; i++) {
       try {
         await _plugin.cancel(id: _kDailyId + i);
       } catch (_) {}
     }
+
     final daily = DailyService();
     final now = tz.TZDateTime.now(tz.local);
 
-    // Round 106 P2b — 사주 미스터리형 알림 (design doc §6).
-    // saju + useKo(한국어) 둘 다일 때만 미스터리형. 영어는 후속 phase.
-    // 미스터리 카피 풀 1회 로드 + topic-aware 를 위한 RecallFeedback pref 선읽기.
+    // R106 P2b — 미스터리형: saju + useKo 둘 다일 때만. 영어는 deep 경로.
     final useMystery = saju != null && useKo;
     Map<String, double> userPrefById = const {};
     Map<String, int> shownDaysAgoById = const {};
@@ -133,18 +274,78 @@ class NotificationService {
       suppressedIds = suppressed;
     }
 
+    for (final slot in NotificationSlot.values) {
+      final cfg = slots[slot];
+      if (cfg == null || !cfg.enabled) continue;
+      await _scheduleOneSlot(
+        slot: slot,
+        cfg: cfg,
+        title: title,
+        body: body,
+        day60ji: day60ji,
+        useKo: useKo,
+        daysAhead: daysAhead,
+        saju: saju,
+        tone: tone,
+        useMystery: useMystery,
+        daily: daily,
+        now: now,
+        userPrefById: userPrefById,
+        shownDaysAgoById: shownDaysAgoById,
+        suppressedIds: suppressedIds,
+      );
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      _kPrefsScheduleSig,
+      _scheduleSignature(
+        title: title,
+        body: body,
+        day60ji: day60ji,
+        useKo: useKo,
+        slots: slots,
+        saju: saju,
+      ),
+    );
+  }
+
+  /// 한 슬롯의 daysAhead 일분 explicit schedule.
+  static Future<void> _scheduleOneSlot({
+    required NotificationSlot slot,
+    required SlotConfig cfg,
+    required String title,
+    required String body,
+    required String? day60ji,
+    required bool useKo,
+    required int daysAhead,
+    required SajuResult? saju,
+    required NotificationTone tone,
+    required bool useMystery,
+    required DailyService daily,
+    required tz.TZDateTime now,
+    required Map<String, double> userPrefById,
+    required Map<String, int> shownDaysAgoById,
+    required Set<String> suppressedIds,
+  }) async {
+    final idBase = _kDailyId + slot.index * _kSlotIdSpan;
     for (var i = 0; i < daysAhead; i++) {
       final target = tz.TZDateTime(
-          tz.local, now.year, now.month, now.day, hour, minute, 0)
-          .add(Duration(days: i));
+        tz.local,
+        now.year,
+        now.month,
+        now.day,
+        cfg.hour,
+        cfg.minute,
+        0,
+      ).add(Duration(days: i));
       if (target.isBefore(now)) continue;
+
       String pickedTitle = title;
       String pickedBody = body;
       if (useMystery) {
-        // Round 106 P2b — 매일 다른 일진 글자를 신비하게 던지는 미스터리형.
-        // title 도 매일 다른 글자/주제 반영해 per-day 로 바뀐다.
         final dayDate = DateTime(target.year, target.month, target.day);
-        final fortune = daily.calculate(saju, today: dayDate);
+        final fortune = daily.calculate(saju!, today: dayDate);
         final ctx = SajuContext.from(saju, today: dayDate);
         final event = TodayEventService.build(
           userDayStem: saju.dayPillar.chunGan,
@@ -162,12 +363,9 @@ class NotificationService {
           shownDaysAgoById: shownDaysAgoById,
           suppressedIds: suppressedIds,
         );
-        // R106 P2b-fix — 거짓말 0: 그날 실제 계산된 일진 지지↔일지 관계
-        // (event.hapChungType — TodayEventService 가 HapchungService 로 산출)를
-        // pickMystery 로 넘긴다. body line1 의 차트 관계 표현이 실제 관계에
-        // 강제 일치 — 실제 충일 때만 "부딪치는", 없으면 관계-중립 표현만.
         final relation =
             MysteryRelationKey.fromHapChungType(event.hapChungType);
+        // R108 ④ — 슬롯별 풀이 프레임. 같은 날이라도 아침/오후/저녁 카피가 다르게.
         final copy = NotificationPoolService.pickMystery(
           date: dayDate,
           todayPillar: fortune.dayPillar,
@@ -175,11 +373,11 @@ class NotificationService {
           topicId: selection.selected?.id,
           relation: relation,
           dayOffset: i,
+          slot: slot,
         );
         pickedTitle = copy.title;
         pickedBody = copy.body;
       } else if (saju != null) {
-        // Round 76 sprint 6 — 매일 다른 일진 → 사주 기반 매일 다른 본문 (영어 등).
         final dayDate = DateTime(target.year, target.month, target.day);
         final fortune = daily.calculate(saju, today: dayDate);
         final picked = NotificationPoolService.pickDeep(
@@ -187,23 +385,25 @@ class NotificationService {
           saju: saju,
           todayPillar: fortune.dayPillar,
           todayScore: fortune.totalScore,
+          slot: slot,
         );
+        pickedTitle = useKo ? picked.titleKo : picked.titleEn;
         pickedBody = useKo ? picked.ko : picked.en;
       } else if (day60ji != null && day60ji.isNotEmpty) {
-        // R107 #3 — last-resort fallback. saju == null (사주 미상) 일 때만
-        // 도달한다. 사주가 있으면 위 두 분기(미스터리/deep)가 항상 먼저
-        // 잡으므로 계산 기반 알림이 기본 경로. 이 풀은 v5 voice(조건형 —
-        // 사건/결과 단정 0)라 사주 미상에서도 거짓말 0.
+        // last-resort fallback — saju 미상일 때만.
         final picked = NotificationPoolService.pickFor(
           DateTime(target.year, target.month, target.day),
           day60ji,
           tone: tone,
+          slot: slot,
         );
+        pickedTitle = useKo ? picked.titleKo : picked.titleEn;
         pickedBody = useKo ? picked.ko : picked.en;
       }
+
       try {
         await _plugin.zonedSchedule(
-          id: _kDailyId + i,
+          id: idBase + i,
           title: pickedTitle,
           body: pickedBody,
           scheduledDate: target,
@@ -224,96 +424,109 @@ class NotificationService {
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         );
       } catch (e) {
-        if (kDebugMode) print('schedule[$i] failed: $e');
+        if (kDebugMode) print('schedule[$slot/$i] failed: $e');
         break;
       }
     }
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kPrefsScheduleSig, _scheduleSignature(
-      title: title,
-      body: body,
-      day60ji: day60ji,
-      useKo: useKo,
-      hour: hour,
-      minute: minute,
-      saju: saju,
-    ));
-    await prefs.setInt(_kPrefsHour, hour);
-    await prefs.setInt(_kPrefsMinute, minute);
   }
 
-  /// 기존 호환 — 8AM 고정 wrapper. 신규 코드는 scheduleDaily 직접 사용 권장.
-  static Future<void> scheduleDaily8am({
-    required String title,
-    required String body,
-    String? day60ji,
-    bool useKo = false,
-    int daysAhead = 30,
-    SajuResult? saju,
-  }) =>
-      scheduleDaily(
-        title: title,
-        body: body,
-        day60ji: day60ji,
-        useKo: useKo,
-        daysAhead: daysAhead,
-        hour: 8,
-        minute: 0,
-        saju: saju,
-      );
-
-  static Future<void> cancelDaily() async {
+  static Future<void> cancelAll() async {
     await ensureInitialized();
-    for (var i = 0; i < 64; i++) {
+    for (var i = 0; i < _kSlotIdSpan * _kSlotCount; i++) {
       try {
         await _plugin.cancel(id: _kDailyId + i);
       } catch (_) {}
     }
   }
 
-  static Future<bool> isEnabled() async {
+  static Future<bool> isMasterEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_kPrefsEnabled) ?? false;
+    return prefs.getBool(_kPrefsMaster) ?? false;
   }
 
-  static Future<void> setEnabled(bool value) async {
+  static Future<void> setMasterEnabled(bool value) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_kPrefsEnabled, value);
+    await prefs.setBool(_kPrefsMaster, value);
   }
 
+  /// 마스터 토글 — 하위호환 alias (기존 호출부·테스트 보존).
+  static Future<bool> isEnabled() => isMasterEnabled();
+  static Future<void> setEnabled(bool value) => setMasterEnabled(value);
+
+  /// 하위호환 — 단일 알림 시간 = 아침 슬롯 시간.
+  /// R76 시절 키가 남아 있으면 그대로, 없으면 아침 슬롯에서 읽는다.
+  static Future<({int hour, int minute})> loadTime() async {
+    final slots = await loadSlots();
+    final m = slots[NotificationSlot.morning]!;
+    return (hour: m.hour.clamp(0, 23), minute: m.minute.clamp(0, 59));
+  }
+
+  /// 하위호환 — 단일 알림 시간 설정 = 아침 슬롯 시간 변경.
+  static Future<void> setTime(int hour, int minute) async {
+    final slots = await loadSlots();
+    final m = slots[NotificationSlot.morning]!;
+    await saveSlot(
+      NotificationSlot.morning,
+      m.copyWith(hour: hour, minute: minute),
+    );
+  }
+
+  /// R108 — 3 슬롯 기반 needsReschedule.
+  static Future<bool> needsRescheduleSlots({
+    required String title,
+    required String body,
+    String? day60ji,
+    required bool useKo,
+    required Map<NotificationSlot, SlotConfig> slots,
+    SajuResult? saju,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_kPrefsScheduleSig) !=
+        _scheduleSignature(
+          title: title,
+          body: body,
+          day60ji: day60ji,
+          useKo: useKo,
+          slots: slots,
+          saju: saju,
+        );
+  }
+
+  /// 하위호환 — 단일 hour/minute 시그니처. 아침 슬롯만 enabled 로 본 signature 와
+  /// 비교한다 (R76 테스트·기존 호출부 보존). 신규 코드는 slots 버전을 쓴다.
   static Future<bool> needsReschedule({
     required String title,
     required String body,
     String? day60ji,
     required bool useKo,
-    required int hour,
-    required int minute,
+    int? hour,
+    int? minute,
+    Map<NotificationSlot, SlotConfig>? slots,
     SajuResult? saju,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_kPrefsScheduleSig) != _scheduleSignature(
+    final effective = slots ??
+        {
+          for (final s in NotificationSlot.values)
+            s: s == NotificationSlot.morning
+                ? SlotConfig(
+                    enabled: true,
+                    hour: hour ?? s.defaultTime.hour,
+                    minute: minute ?? s.defaultTime.minute,
+                  )
+                : SlotConfig(
+                    enabled: false,
+                    hour: s.defaultTime.hour,
+                    minute: s.defaultTime.minute,
+                  ),
+        };
+    return needsRescheduleSlots(
       title: title,
       body: body,
       day60ji: day60ji,
       useKo: useKo,
-      hour: hour,
-      minute: minute,
+      slots: effective,
       saju: saju,
     );
-  }
-
-  /// Round 76 — 사용자 저장 알림 시간 (디폴트 8:00).
-  static Future<({int hour, int minute})> loadTime() async {
-    final prefs = await SharedPreferences.getInstance();
-    final h = prefs.getInt(_kPrefsHour) ?? 8;
-    final m = prefs.getInt(_kPrefsMinute) ?? 0;
-    return (hour: h.clamp(0, 23), minute: m.clamp(0, 59));
-  }
-
-  static Future<void> setTime(int hour, int minute) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_kPrefsHour, hour.clamp(0, 23));
-    await prefs.setInt(_kPrefsMinute, minute.clamp(0, 59));
   }
 
   static String _scheduleSignature({
@@ -321,22 +534,22 @@ class NotificationService {
     required String body,
     String? day60ji,
     required bool useKo,
-    required int hour,
-    required int minute,
+    required Map<NotificationSlot, SlotConfig> slots,
     SajuResult? saju,
   }) {
-    // Round 76 sprint 6 — saju 의 derived key (dayPillar + monthBranch + dayMaster) 포함.
-    // fallback↔deep 전환 시 signature mismatch → reschedule 보장.
+    // saju derived key (dayPillar + monthBranch + dayMaster) — fallback↔deep
+    // 전환 시 signature mismatch → reschedule 보장.
     final sajuKey = saju == null
         ? 'nosaju'
         : 'deep:${saju.dayPillar.text}:${saju.monthPillar.jiJi}:${saju.dayMaster}';
-    // R106 P2b-fix — 미스터리 알고리즘 버전 마커. 미스터리형으로 스케줄되는
-    // 케이스(saju!=null && useKo)에만 박아, 알고리즘이 바뀌면 기존 enabled
-    // 사용자의 needsReschedule 가 true 가 되어 새 미스터리 알림으로 갱신된다.
+    // R106 P2b-fix — 미스터리 알고리즘 버전 마커.
     final mysteryKey =
         (saju != null && useKo) ? '|$_kMysteryAlgoVersion' : '';
+    // R108 — 3 슬롯 enabled/시간 전부 signature 에 포함 (슬롯 변경 시 reschedule).
+    final slotKey = NotificationSlot.values
+        .map((s) => slots[s]?.sigPart ?? '0@--:--')
+        .join(',');
     return '${useKo ? 'ko' : 'en'}|$title|$body|${day60ji ?? ''}|'
-        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}|'
-        '$sajuKey$mysteryKey';
+        '$slotKey|$sajuKey$mysteryKey';
   }
 }

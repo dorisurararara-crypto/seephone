@@ -18,10 +18,75 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/saju_result.dart';
+import 'notification_service.dart' show NotificationSlot;
 import 'today_event_service.dart';
 
 /// 알림 톤 — 어른 (기본) / MZ 중고생.
 enum NotificationTone { adult, mz }
+
+/// R108 ④ — 슬롯별 사주 풀이 프레임. 같은 날이라도 슬롯마다 카피 결이 다르다.
+///  - 아침 = "오늘 하루 미리보기" — 하루를 앞에 두고 미리 짚어주는 결.
+///  - 오후 = "오후부터 결이 바뀜" — 오전과 오후의 결이 갈리는 지점을 짚는 결.
+///  - 저녁 = "하루 마무리 + 내일 살짝" — 오늘을 닫고 내일을 살짝 여는 결.
+/// vivid v5 voice — 사건·감정 단정 0, 헤드라인체 0, 발동조건형, 메타 노출 0.
+///
+/// 슬롯 프레임은 알림 카피의 일부로 직접 노출된다(title 의 슬롯 접두 + body
+/// 행동 줄의 슬롯 anchor 문장). 본문 카피 선택 seed 도 슬롯별로 갈라져,
+/// 같은 날 같은 사주여도 아침/오후/저녁이 서로 다른 줄을 골라낸다.
+class SlotFrame {
+  /// 미스터리/deep/fallback title 앞에 붙는 슬롯 프레임 한 조각 (KO).
+  final String titlePrefixKo;
+
+  /// title 앞에 붙는 슬롯 프레임 한 조각 (EN).
+  final String titlePrefixEn;
+
+  /// body 행동 줄에 합쳐지는 슬롯 anchor 문장 (KO). 발동조건형·메타 0.
+  final String actionAnchorKo;
+
+  /// body 행동 줄에 합쳐지는 슬롯 anchor 문장 (EN).
+  final String actionAnchorEn;
+
+  /// seed salt — 슬롯마다 다른 줄을 골라내기 위한 deterministic offset.
+  final int seedSalt;
+
+  const SlotFrame({
+    required this.titlePrefixKo,
+    required this.titlePrefixEn,
+    required this.actionAnchorKo,
+    required this.actionAnchorEn,
+    required this.seedSalt,
+  });
+
+  /// 슬롯 → 프레임. vivid v5 톤 — 자극적·클릭 유도하되 거짓 0.
+  static SlotFrame of(NotificationSlot slot) {
+    switch (slot) {
+      case NotificationSlot.morning:
+        return const SlotFrame(
+          titlePrefixKo: '아침 — ',
+          titlePrefixEn: 'Morning — ',
+          actionAnchorKo: '하루를 펼치기 전에 안에서 미리 확인해요.',
+          actionAnchorEn: "Take a look inside before the day unfolds.",
+          seedSalt: 101,
+        );
+      case NotificationSlot.afternoon:
+        return const SlotFrame(
+          titlePrefixKo: '오후 — ',
+          titlePrefixEn: 'Afternoon — ',
+          actionAnchorKo: '오후부터 결이 한 번 바뀌어요. 안에서 확인해요.',
+          actionAnchorEn: 'The grain shifts from here — check inside.',
+          seedSalt: 211,
+        );
+      case NotificationSlot.evening:
+        return const SlotFrame(
+          titlePrefixKo: '저녁 — ',
+          titlePrefixEn: 'Evening — ',
+          actionAnchorKo: '오늘을 닫고 내일을 살짝 여는 한 줄, 안에 있어요.',
+          actionAnchorEn: 'A line to close today and crack tomorrow open — inside.',
+          seedSalt: 331,
+        );
+    }
+  }
+}
 
 /// R106 P2b-fix — 오늘 일진 지지 ↔ 사용자 일지 사이 실제 계산된 관계.
 /// TodayEventService.hapChungType(합/충/형/파/해/없음) 을 미스터리 알림 카피
@@ -334,27 +399,42 @@ class NotificationPoolService {
   /// 사용자 사주가 있으면 notification_service 가 항상 pickDeep(영문) /
   /// pickMystery(한국어) — 실제 일진 계산 기반 — 을 쓴다. 그래도 이 풀의
   /// 모든 문구는 v5 voice(조건형·경향형 — 사건/결과 단정 0)로 유지한다.
-  static ({String en, String ko}) pickFor(
+  /// R108 ④ — fallback 알림 기본 title (슬롯 접두가 앞에 붙는다).
+  static const String _fallbackTitleKo = 'Pillar Seer · 오늘의 한 줄';
+  static const String _fallbackTitleEn = 'Pillar Seer · Your day, in one line';
+
+  static ({String en, String ko, String titleKo, String titleEn}) pickFor(
     DateTime date,
     String day60ji, {
     NotificationTone tone = NotificationTone.adult,
+    NotificationSlot slot = NotificationSlot.morning,
   }) {
+    final frame = SlotFrame.of(slot);
+    // R108 — 슬롯 salt 가 seed 에 섞여, 같은 날 같은 일주여도 슬롯별로 다른 줄.
     final seed = (date.year * 366 + date.month * 31 + date.day) ^
-        day60ji.codeUnits.fold<int>(0, (a, b) => a + b);
+        day60ji.codeUnits.fold<int>(0, (a, b) => a + b) ^
+        frame.seedSalt;
     final koPool = tone == NotificationTone.mz ? _koPoolMz : _koPool;
     final enPool = tone == NotificationTone.mz ? _enPoolMz : _enPool;
     final idx = (seed % enPool.length).abs();
-    return (en: enPool[idx], ko: koPool[idx]);
+    return (
+      en: enPool[idx],
+      ko: koPool[idx],
+      titleKo: '${frame.titlePrefixKo}$_fallbackTitleKo',
+      titleEn: '${frame.titlePrefixEn}$_fallbackTitleEn',
+    );
   }
 
   /// Round 76 sprint 6 — 사용자 사주 + 오늘 일진 기반 deep pick.
   /// today_event_service.build + composeNotificationLine 결과 (ko+en) 반환.
+  /// R108 ④ — slot 별 title 접두 + body 행동 anchor 추가.
   /// saju null 시 호출 측에서 pickFor fallback.
-  static ({String en, String ko}) pickDeep({
+  static ({String en, String ko, String titleKo, String titleEn}) pickDeep({
     required DateTime date,
     required SajuResult saju,
     required String todayPillar,
     required int todayScore,
+    NotificationSlot slot = NotificationSlot.morning,
   }) {
     final reading = TodayEventService.build(
       userDayStem: saju.dayPillar.chunGan,
@@ -363,15 +443,21 @@ class NotificationPoolService {
       todayPillar: todayPillar,
       todayScore: todayScore,
     );
+    final frame = SlotFrame.of(slot);
     // Round 77 sprint 2 — ko 본문은 pool entry 우선, 미스 시 6분기 fallback.
     // ensurePoolLoaded() 가 부팅 시 이미 끝났다는 가정. 미적재여도 graceful.
+    final ko = TodayEventService.composeBodyKo(
+      reading: reading,
+      date: date,
+      day60ji: saju.dayPillar.text,
+    );
+    final en = TodayEventService.composeNotificationLineEn(reading);
     return (
-      ko: TodayEventService.composeBodyKo(
-        reading: reading,
-        date: date,
-        day60ji: saju.dayPillar.text,
-      ),
-      en: TodayEventService.composeNotificationLineEn(reading),
+      // R108 — 슬롯 anchor 한 줄을 본문 뒤에 붙여 슬롯별 결을 살린다.
+      ko: '$ko ${frame.actionAnchorKo}',
+      en: '$en ${frame.actionAnchorEn}',
+      titleKo: '${frame.titlePrefixKo}$_fallbackTitleKo',
+      titleEn: '${frame.titlePrefixEn}$_fallbackTitleEn',
     );
   }
 
@@ -437,6 +523,9 @@ class NotificationPoolService {
   ///   실제 충일 때만 "부딪치는", 실제 합일 때만 "끌어당기는", 둘 다 없으면
   ///   관계-중립 표현만. null 이면 안전하게 [MysteryRelation.neutral] 처리.
   /// [dayOffset] scheduleDaily 의 i (0~29) — 기능 발견 훅 7회 1회 rotate anchor.
+  /// [slot] R108 ④ — 알림 슬롯(아침/오후/저녁). title 에 슬롯 프레임 접두가
+  ///   붙고, body 행동 줄에 슬롯 anchor 한 줄이 더해진다. seed 에도 슬롯 salt 가
+  ///   섞여, 같은 날 같은 사주여도 슬롯별로 서로 다른 줄을 골라낸다.
   ///
   /// pure — 같은 입력이면 항상 같은 출력 (deterministic). 캐시 미적재 시 fallback.
   static MysteryNotificationCopy pickMystery({
@@ -446,6 +535,7 @@ class NotificationPoolService {
     String? topicId,
     MysteryRelation? relation,
     int dayOffset = 0,
+    NotificationSlot slot = NotificationSlot.morning,
   }) {
     // 오늘 일진 지지 글자 — 이게 알림이 신비하게 던지는 "글자".
     final char = todayPillar.length >= 2 ? todayPillar[1] : '子';
@@ -454,10 +544,13 @@ class NotificationPoolService {
     // P2b-fix — relation 미공급 시 관계 단정 금지 → 중립.
     final rel = relation ?? MysteryRelation.neutral;
 
-    // deterministic seed — 날짜 + 사용자 일주 + 오늘 일진.
+    final frame = SlotFrame.of(slot);
+
+    // deterministic seed — 날짜 + 사용자 일주 + 오늘 일진 + 슬롯 salt.
     final seed = (date.year * 366 + date.month * 31 + date.day) ^
         day60ji.codeUnits.fold<int>(0, (a, b) => a + b) ^
-        todayPillar.codeUnits.fold<int>(0, (a, b) => a + b);
+        todayPillar.codeUnits.fold<int>(0, (a, b) => a + b) ^
+        frame.seedSalt;
 
     // 7회 중 1회 기능 발견 훅 — dayOffset 기준 deterministic rotate.
     final isFeatureHook = featureHookEvery > 0 &&
@@ -466,12 +559,16 @@ class NotificationPoolService {
     String sub(String tpl) =>
         tpl.replaceAll('{char}', char).replaceAll('{charKo}', charKo);
 
+    // R108 — body 행동 줄 끝에 슬롯 anchor 를 한 칸 띄워 합친다. 행동 줄이
+    // 이미 anchor 어휘(안에/확인)를 담고 있어도 슬롯 결이 더 또렷해진다.
+    String withAnchor(String line2) => '$line2 ${frame.actionAnchorKo}';
+
     if (isFeatureHook) {
       final hook = _pickFeatureHook(seed);
       return MysteryNotificationCopy(
-        title: sub(hook.$1),
+        title: '${frame.titlePrefixKo}${sub(hook.$1)}',
         bodyLine1: sub(hook.$2),
-        bodyLine2: sub(hook.$3),
+        bodyLine2: withAnchor(sub(hook.$3)),
         isFeatureHook: true,
         topicId: topicId,
       );
@@ -491,9 +588,9 @@ class NotificationPoolService {
     final line2 = sub(_pickFrom(actions, seed, 3, fb.$3));
 
     return MysteryNotificationCopy(
-      title: title,
+      title: '${frame.titlePrefixKo}$title',
       bodyLine1: line1,
-      bodyLine2: line2,
+      bodyLine2: withAnchor(line2),
       isFeatureHook: false,
       topicId: topicId,
     );

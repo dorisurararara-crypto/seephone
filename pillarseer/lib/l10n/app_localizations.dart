@@ -733,6 +733,84 @@ abstract class AppL10n {
   /// **'Notification time set to {hh}:{mm}.'**
   String settingsNotifTimeDoneSnack(Object hh, Object mm);
 
+  /// No description provided for @settingsNotifSlotsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'When to get notified'**
+  String get settingsNotifSlotsLabel;
+
+  /// No description provided for @settingsNotifSlotsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the times of day you want — morning, afternoon, evening. Each one reads with a different grain'**
+  String get settingsNotifSlotsHint;
+
+  /// No description provided for @settingsNotifSlotMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get settingsNotifSlotMorning;
+
+  /// No description provided for @settingsNotifSlotAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Afternoon'**
+  String get settingsNotifSlotAfternoon;
+
+  /// No description provided for @settingsNotifSlotEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get settingsNotifSlotEvening;
+
+  /// No description provided for @settingsNotifSlotMorningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A preview before the day gets going'**
+  String get settingsNotifSlotMorningDesc;
+
+  /// No description provided for @settingsNotifSlotAfternoonDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Where the grain shifts after noon'**
+  String get settingsNotifSlotAfternoonDesc;
+
+  /// No description provided for @settingsNotifSlotEveningDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrapping up today, a peek at tomorrow'**
+  String get settingsNotifSlotEveningDesc;
+
+  /// No description provided for @settingsNotifSlotDoneSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'{slot} notification set to {hh}:{mm}.'**
+  String settingsNotifSlotDoneSnack(Object slot, Object hh, Object mm);
+
+  /// No description provided for @settingsNotifSlotOnSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'{slot} notification turned on.'**
+  String settingsNotifSlotOnSnack(Object slot);
+
+  /// No description provided for @settingsNotifSlotOffSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'{slot} notification turned off.'**
+  String settingsNotifSlotOffSnack(Object slot);
+
+  /// No description provided for @settingsNotifSlotPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick {slot} notification time'**
+  String settingsNotifSlotPickerTitle(Object slot);
+
+  /// No description provided for @homeNotifOnSlots.
+  ///
+  /// In en, this message translates to:
+  /// **'ON · {count} times'**
+  String homeNotifOnSlots(Object count);
+
   /// No description provided for @todayEventCaption.
   ///
   /// In en, this message translates to:

@@ -353,6 +353,59 @@ class AppL10nEn extends AppL10n {
   }
 
   @override
+  String get settingsNotifSlotsLabel => 'When to get notified';
+
+  @override
+  String get settingsNotifSlotsHint =>
+      'Pick the times of day you want — morning, afternoon, evening. Each one reads with a different grain';
+
+  @override
+  String get settingsNotifSlotMorning => 'Morning';
+
+  @override
+  String get settingsNotifSlotAfternoon => 'Afternoon';
+
+  @override
+  String get settingsNotifSlotEvening => 'Evening';
+
+  @override
+  String get settingsNotifSlotMorningDesc =>
+      'A preview before the day gets going';
+
+  @override
+  String get settingsNotifSlotAfternoonDesc =>
+      'Where the grain shifts after noon';
+
+  @override
+  String get settingsNotifSlotEveningDesc =>
+      'Wrapping up today, a peek at tomorrow';
+
+  @override
+  String settingsNotifSlotDoneSnack(Object slot, Object hh, Object mm) {
+    return '$slot notification set to $hh:$mm.';
+  }
+
+  @override
+  String settingsNotifSlotOnSnack(Object slot) {
+    return '$slot notification turned on.';
+  }
+
+  @override
+  String settingsNotifSlotOffSnack(Object slot) {
+    return '$slot notification turned off.';
+  }
+
+  @override
+  String settingsNotifSlotPickerTitle(Object slot) {
+    return 'Pick $slot notification time';
+  }
+
+  @override
+  String homeNotifOnSlots(Object count) {
+    return 'ON · $count times';
+  }
+
+  @override
   String get todayEventCaption => 'What\'s likely for you today';
 
   @override

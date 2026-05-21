@@ -416,8 +416,10 @@ void main() {
     });
 
     test('needsReschedule — 시간 변경 감지 보존 (nosaju)', () async {
+      // R108 — signature 는 3 슬롯 상태를 인코딩 (아침만 enabled 08:00).
       SharedPreferences.setMockInitialValues({
-        'app.notif.daily8am.scheduleSig': 'ko|t|b||08:00|nosaju',
+        'app.notif.daily8am.scheduleSig':
+            'ko|t|b||1@08:00,0@13:00,0@21:00|nosaju',
       });
       final same = await NotificationService.needsReschedule(
         title: 't', body: 'b', useKo: true, hour: 8, minute: 0,
@@ -432,9 +434,10 @@ void main() {
     test('Fix3 — 미스터리 알고리즘 버전 변경 시 재스케줄 필요', () async {
       final saju = SajuResult.dummy();
       // 구버전 signature (mystery 마커 없음) 가 저장돼 있던 사용자.
+      // R108 3 슬롯 인코딩 사용 + 미스터리 마커는 일부러 누락.
       SharedPreferences.setMockInitialValues({
         'app.notif.daily8am.scheduleSig':
-            'ko|t|b||08:00|deep:${saju.dayPillar.text}:'
+            'ko|t|b||1@08:00,0@13:00,0@21:00|deep:${saju.dayPillar.text}:'
                 '${saju.monthPillar.jiJi}:${saju.dayMaster}',
       });
       // 미스터리형(saju!=null && useKo) — 새 signature 에 mystery 마커가 박혀

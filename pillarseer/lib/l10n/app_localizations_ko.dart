@@ -335,6 +335,56 @@ class AppL10nKo extends AppL10n {
   }
 
   @override
+  String get settingsNotifSlotsLabel => '알림 받을 시간대';
+
+  @override
+  String get settingsNotifSlotsHint =>
+      '아침·오후·저녁 중 받고 싶은 시간대만 골라요. 시간대마다 풀이 결이 달라요';
+
+  @override
+  String get settingsNotifSlotMorning => '아침';
+
+  @override
+  String get settingsNotifSlotAfternoon => '오후';
+
+  @override
+  String get settingsNotifSlotEvening => '저녁';
+
+  @override
+  String get settingsNotifSlotMorningDesc => '하루를 시작하기 전 미리보기';
+
+  @override
+  String get settingsNotifSlotAfternoonDesc => '오후부터 결이 바뀌는 지점';
+
+  @override
+  String get settingsNotifSlotEveningDesc => '하루 마무리 + 내일 살짝';
+
+  @override
+  String settingsNotifSlotDoneSnack(Object slot, Object hh, Object mm) {
+    return '$slot 알림 시간을 $hh:$mm로 바꿨어요.';
+  }
+
+  @override
+  String settingsNotifSlotOnSnack(Object slot) {
+    return '$slot 알림을 켰어요.';
+  }
+
+  @override
+  String settingsNotifSlotOffSnack(Object slot) {
+    return '$slot 알림을 껐어요.';
+  }
+
+  @override
+  String settingsNotifSlotPickerTitle(Object slot) {
+    return '$slot 알림 시간 선택';
+  }
+
+  @override
+  String homeNotifOnSlots(Object count) {
+    return '켜짐 · $count개 시간대';
+  }
+
+  @override
   String get todayEventCaption => '오늘 당신에게 생길 수 있는 일';
 
   @override
