@@ -1,6 +1,6 @@
 ---
 name: pillarseer-round-106
-description: "R106 심리학 retention 라운드 — P1~P6 + 홈 미스터리형 완료, 1.0.0+70 배포 APPROVED(2026-05-21). commit df305ba, ganzitester 외부 베타 라이브. 1372/1372 test PASS."
+description: "R106 심리학 retention 라운드 — P1~P6 + 홈 미스터리형 완료, 1.0.0+71 배포 (스플래시·Android아이콘)(2026-05-21). commit d74fd94, ganzitester Beta Review 제출. 1372/1372 test PASS."
 metadata: 
   node_type: memory
   type: project
@@ -112,7 +112,7 @@ date_picking / dream / tojeong / new_year_2026(yearOverviewEn·monthlyEn 보유)
 5행 골든 1995-10-27 男 17시 辛卯 16/21/17/41/4 / R69 lock / R100 compat_repetition / R101 celeb_compat_uses_analyze·영문 leak / 5섹션 구조 / element-relation 변별.
 
 ## 현재 working tree
-main 브랜치, HEAD `df305ba`(R106 ship 1.0.0+70 APPROVED), pubspec `1.0.0+70` committed. clean. 전체 `flutter test` **1372/1372 PASS**, `flutter analyze lib/` 0.
+main 브랜치, HEAD `d74fd94`(R106 ship 1.0.0+71), pubspec `1.0.0+71` committed. clean. 전체 `flutter test` **1372/1372 PASS**, `flutter analyze lib/` 0.
 ⚠️ round82 version pin 트랩: `test/round82_version_display_test.dart` 가 pubspec version 을 하드코딩 핀. **version bump 마다 이 핀도 같이 수정** (현재 +68).
 
 ## R106 미해결 / 차기
