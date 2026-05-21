@@ -39,14 +39,21 @@ class TodayV5Loader extends StatefulWidget {
 
 class _TodayV5LoaderState extends State<TodayV5Loader> {
   late Future<TodayV5Reading> _future;
+  bool _started = false;
 
+  // R107 today_v5_en — locale 따라 ko/en pool 선택. didChangeDependencies 에서
+  // Localizations 를 안전하게 읽고 1회만 _assemble.
   @override
-  void initState() {
-    super.initState();
-    _future = _assemble();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    _future = _assemble(useKo);
   }
 
-  Future<TodayV5Reading> _assemble() async {
+  Future<TodayV5Reading> _assemble(bool useKo) async {
     final saju = widget.saju;
     final date = widget.date;
 
@@ -92,12 +99,13 @@ class _TodayV5LoaderState extends State<TodayV5Loader> {
       suppressedIds: suppressed,
     );
 
-    // 6. v5 reading.
+    // 6. v5 reading. locale 따라 ko/en pool·라벨·fallback 분기.
     return TodayV5Service.build(
       saju: saju,
       selection: selection,
       event: event,
       chartSeed: ctx.chartSeed,
+      useKo: useKo,
     );
   }
 

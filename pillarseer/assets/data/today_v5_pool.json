@@ -1,6 +1,6 @@
 {
-  "schema": "today_v5_pool_v1",
-  "notes": "Round 106 P2a / Round 107 #4 — 오늘의 사주 v5. 10 주제 × {headline, structure, trigger, action} 변형 pool. R107 #4 에서 각 slot 변주를 3 → 6 으로 확장 (seed 가 달라도 같은 사용자군이 반복 문구를 안 보게 변별 강화). 톤 = 친구 같은 용한 점쟁이. 단정 금지(§2): 감정·사건 단정 0, '~하는 날이에요' 헤드라인체 0, '예민해요/우울/들뜨기 쉬운 흐름' 류 0. 발동조건은 무조건 조건형('만약 ~하면'). 행동은 기분 좋든 나쁘든 유효. 한자/십신 jargon 단독 노출 0. selected 주제별로 chartSeed 로 deterministic pick.",
+  "schema": "today_v5_pool_v2",
+  "notes": "Round 106 P2a / Round 107 #4 / Round 107 today_v5_en — 오늘의 사주 v5. 10 주제 × {headline, structure, trigger, action} 변형 pool. R107 #4 에서 각 slot 변주를 3 → 6 으로 확장. R107 today_v5_en 에서 각 slot 에 *En 영어 변주 6종 추가 (한국어 키 불변, 영어 추가만). 톤 = 친구 같은 용한 점쟁이. 단정 금지(§2): 감정·사건 단정 0, '~하는 날이에요' 헤드라인체 0, '예민해요/우울/들뜨기 쉬운 흐름' 류 0. 발동조건은 무조건 조건형('만약 ~하면' / 'If ~'). 행동은 기분 좋든 나쁘든 유효. 한자/십신 jargon 단독 노출 0. 영어 변주는 verdict 금지 — no 'will/always/definitely', trigger 는 'If' 절. selected 주제별로 chartSeed 로 deterministic pick.",
   "topics": {
     "communication": {
       "headline": [
@@ -11,6 +11,14 @@
         "오늘은 보내려던 메시지를 한 번 더 읽어보는 손길이 도움이 돼요.",
         "오늘은 하고 싶은 말을 다 하기보다 꼭 필요한 말만 골라도 충분해요."
       ],
+      "headlineEn": [
+        "Today, it can help to pause for one beat before you send that message.",
+        "Today, smoothing a thought once more before you say it out loud tends to land better.",
+        "Today, a precise reply often travels further than a fast one.",
+        "Today, opening with one clear line instead of a long explanation can keep things light.",
+        "Today, giving a message one more read before sending it tends to pay off.",
+        "Today, picking only the words that really matter is usually enough."
+      ],
       "structure": [
         "오늘은 무슨 말을 꺼낼 때 '지금 할지, 조금 뒤에 할지'를 한 번 고르고 가면 결이 더 깔끔해요. 말 자체보다 타이밍을 먼저 정하는 게 오늘은 이득이에요.",
         "오늘은 하고 싶은 말을 바로 보내기보다, 핵심만 먼저 한 줄로 추려놓고 시작하면 대화가 덜 꼬여요. 길게 가기 전에 요점부터 잡아요.",
@@ -18,6 +26,14 @@
         "오늘은 '내가 하고 싶은 말'과 '상대가 듣고 싶은 말'을 한 번 갈라보면 대화가 부드러워져요. 어느 쪽부터 꺼낼지를 정하고 시작해요.",
         "오늘은 대화를 한 번에 끝내려 하기보다 '오늘 할 말'과 '다음에 할 말'로 나눠두면 흐름이 단단해져요. 오늘 몫만 골라서 다뤄요.",
         "오늘은 말의 양보다 순서에 신경 쓰는 게 잘 맞아요. 결론을 먼저 둘지 이유를 먼저 둘지만 정해도 한결 매끄러워져요."
+      ],
+      "structureEn": [
+        "Today, picking 'now or a little later' before you bring something up tends to keep the tone cleaner. Settling the timing first, before the words, can work in your favor.",
+        "Today, trimming your point down to one line before you start usually keeps a conversation from tangling. Catch the main idea before it runs long.",
+        "Today, the more important the line, the more it tends to help to smooth it once before sending. Settle the conclusion first, then layer in the tone.",
+        "Today, splitting 'what I want to say' from 'what they want to hear' can soften a conversation. Decide which side to open with, then start.",
+        "Today, instead of finishing a talk in one go, sorting it into 'say today' and 'say next time' tends to keep the flow steady. Handle only today's part.",
+        "Today, the order of your words tends to matter more than the amount. Just deciding whether the conclusion or the reason goes first can make it smoother."
       ],
       "trigger": [
         "만약 누구 말이 유난히 거슬리거나 지금 당장 답하고 싶어지면 — 그게 '아, 한 박자 쉴 자리구나' 하는 신호예요.",
@@ -27,6 +43,14 @@
         "만약 같은 말을 더 강하게 다시 말하고 싶어지면, 그 반복하고 싶은 마음이 한 박자 쉴 알람이에요.",
         "만약 보내기 버튼 앞에서 망설여지면, 그 망설임이 '한 번 더 읽어보라'는 뜻이에요."
       ],
+      "triggerEn": [
+        "If a remark feels unusually sharp, or you suddenly want to reply right now — that can be your cue to take one beat.",
+        "If your finger hesitates as you go to send a reply, that hesitation is worth trusting. Read it once more, then send.",
+        "If a strong 'I really have to point this out' thought hits mid-conversation, just slow that one moment by ten seconds.",
+        "If you keep noticing how fast you reply, that can be a sign to focus only on the content today.",
+        "If you feel an urge to repeat the same point more forcefully, that urge to repeat can be your cue to pause a beat.",
+        "If you hesitate in front of the send button, that hesitation tends to mean 'give it one more read.'"
+      ],
       "action": [
         "기분이 좋아서 막 밀어붙이고 싶은 말도 10분 뒤에 하면 문장이 더 깔끔해져요. 마음에 안 드는 얘기는 오늘 끝내려 말고 '핵심만 메모해두기'까지만 해도 충분해요.",
         "중요한 말은 보내기 전에 소리 내서 한 번 읽어봐요. 그거 하나로 톤이 한 단계 부드러워져요.",
@@ -34,6 +58,14 @@
         "할 말이 많으면 제일 중요한 한 가지만 먼저 전하고 나머지는 다음으로 미뤄도 괜찮아요.",
         "오늘 보낼 메시지가 길어지면 핵심만 남기고 한 번 줄여봐요. 짧아진 만큼 더 잘 닿아요.",
         "대화가 막힐 것 같으면 '내가 이해한 게 맞을까요?' 한 줄로 되물어봐요. 그 한 줄이 오해를 미리 막아줘요."
+      ],
+      "actionEn": [
+        "Even a line you feel eager to push out can read cleaner ten minutes later. For a touchy topic, don't try to close it today — jotting down just the key point is enough.",
+        "Read an important message out loud once before sending it. That one habit tends to soften the tone a notch.",
+        "If a message is awkward to answer today, one line like 'I'll sort my thoughts and reply tomorrow' can buy you the time you need.",
+        "If you have a lot to say, sharing the single most important thing first and saving the rest for later is perfectly fine.",
+        "If today's message runs long, trim it down to the core once. The shorter it gets, the better it tends to land.",
+        "If a conversation looks like it might stall, ask back with one line: 'Did I get that right?' That line can head off a misunderstanding early."
       ]
     },
     "money_spending": {
@@ -45,6 +77,14 @@
         "오늘은 큰 지출일수록 천천히 들여다보는 게 이득이에요.",
         "오늘은 '갖고 싶다'와 '필요하다'를 한 번 갈라보면 길이 또렷해져요."
       ],
+      "headlineEn": [
+        "Today, if you spot something you want, just park it in the cart for now.",
+        "Today, holding one spending decision for a single day usually costs you nothing.",
+        "Today, try swapping 'should I buy this now' for 'would I still want it tomorrow.'",
+        "Today, one pause in front of the checkout button tends to cut down on regret.",
+        "Today, the bigger the expense, the more it helps to look at it slowly.",
+        "Today, separating 'I want it' from 'I need it' can make the path clearer."
+      ],
       "structure": [
         "오늘은 돈 결정을 내릴 때 '갖고 싶다'와 '필요하다'를 한 번 갈라서 보면 후회가 줄어요. 작은 지출이든 큰 결정이든, 바로 정하기보다 한 박자 두는 게 오늘은 이득이에요.",
         "오늘은 돈 쓰는 선택을 '좋은 기회'와 '그냥 충동' 두 칸으로 나눠 적어보면 길이 또렷해져요. 어느 칸인지 정한 다음에 움직여요.",
@@ -52,6 +92,14 @@
         "오늘은 지출 결정을 '오늘 꼭'과 '나중에도 OK' 두 칸으로 나눠보면 흐름이 단단해져요. 오늘 꼭인 것만 먼저 처리해요.",
         "오늘은 돈 얘기가 나오면 금액보다 '이게 왜 필요한지'를 먼저 정리하는 게 잘 맞아요. 이유가 분명해진 다음에 숫자를 봐요.",
         "오늘은 사고 싶은 것과 미뤄도 되는 것의 경계를 한 번 그어두는 게 이득이에요. 경계를 정해두면 어떤 유혹이 와도 덜 흔들려요."
+      ],
+      "structureEn": [
+        "Today, splitting 'I want it' from 'I need it' before a money call tends to cut down on regret. Small spend or big decision, leaving one beat before you settle it can work in your favor.",
+        "Today, writing a spending choice into two columns — 'real opportunity' and 'just an impulse' — can make the path clearer. Decide which column it is, then move.",
+        "Today, handling payments, transfers, or quotes one beat slower tends to fit well. Before you tap, ask once: 'Would I make the same choice tomorrow?'",
+        "Today, sorting a spend into 'must do today' and 'fine for later' tends to keep the flow steady. Take care of only the must-do-today items first.",
+        "Today, when money comes up, sorting out 'why this is needed' before the amount tends to fit well. Look at the numbers once the reason is clear.",
+        "Today, drawing a line once between what to buy and what can wait can work in your favor. With the line set, any temptation tends to shake you less."
       ],
       "trigger": [
         "만약 '이거 지금 안 사면 손해'라는 생각이 들면 — 그게 바로 하루 자고 봐야 한다는 신호예요.",
@@ -61,6 +109,14 @@
         "만약 작은 지출이 자꾸 모이는 게 보이면, 그건 오늘 한 번 합쳐서 점검하라는 알람이에요.",
         "만약 '이번 한 번쯤은'이라는 생각이 스치면, 그 한 번이 오늘은 메모로만 남길 자리예요."
       ],
+      "triggerEn": [
+        "If a thought like 'I'll lose out if I don't buy this now' shows up — that can be the sign to sleep on it for a day.",
+        "If words like 'sale' or 'limited' make you feel rushed, that rush is the alarm. Close the tab and take a break.",
+        "If someone brings up money and pushes to decide fast, that 'fast' tends to mean 'hold off today.'",
+        "If your pulse picks up right before checkout, that flutter can be a sign to leave it for just a day.",
+        "If you notice small spends quietly piling up, that can be a cue to total them and review them once today.",
+        "If a 'just this once' thought drifts by, that 'once' is a spot to leave as a note only today."
+      ],
       "action": [
         "기분 좋아서 쓰고 싶은 돈은 장바구니에 담고 하루 자고 보면 절반은 사라져요. 꼭 써야 하는 돈이면 오늘은 '금액만 확정'까지만 하고 결제는 내일로 넘겨도 충분해요.",
         "오늘 큰 지출 결정이 있으면 종이에 '왜 필요한지' 한 줄을 적어봐요. 한 줄이 안 써지면 아직 때가 아니에요.",
@@ -68,6 +124,14 @@
         "오늘 사고 싶은 게 있으면 같은 것을 파는 곳을 한 군데 더 비교해봐요. 비교하는 동안 마음이 정리돼요.",
         "지출이 망설여지면 '내일 다시 봐서도 사고 싶으면 산다'는 규칙 하나만 정해둬요. 그 규칙이 오늘 결정을 대신해줘요.",
         "오늘은 들어온 돈과 나갈 돈을 한 번만 적어봐요. 숫자를 눈으로 보면 다음 선택이 한결 쉬워져요."
+      ],
+      "actionEn": [
+        "Money you feel like spending on a high mood — park it in the cart and sleep on it, and about half tends to fade. If you truly must spend, just 'lock the amount' today and push the payment to tomorrow.",
+        "If you have a big spending call today, write one line on paper about 'why it's needed.' If the line won't come, it's not time yet.",
+        "Setting your spend money and your save money ahead of time tends to keep you steady against any temptation today.",
+        "If there's something you want today, compare it at one more place that sells it. Your mind tends to settle while you compare.",
+        "If a spend feels uncertain, set just one rule: 'If I still want it when I look again tomorrow, I buy it.' That rule can stand in for today's decision.",
+        "Today, write down money in and money out just once. Seeing the numbers tends to make the next choice easier."
       ]
     },
     "work_career": {
@@ -79,6 +143,14 @@
         "오늘은 할 일을 줄여 잡으면 오히려 더 멀리 가요.",
         "오늘은 시작보다 정리에 시간을 더 떼어두면 하루가 단단해져요."
       ],
+      "headlineEn": [
+        "Today, finishing the one thing in front of you tends to pay off more than the big picture.",
+        "Today, wrapping up what's already running fits better than starting something new.",
+        "Today, a hand for reviewing and polishing tends to shine.",
+        "Today, it's fine not to settle 'take it or not' on the spot.",
+        "Today, planning a shorter to-do list can actually carry you further.",
+        "Today, setting aside more time for tidying than for starting tends to make the day steady."
+      ],
       "structure": [
         "오늘은 일을 새로 벌이기보다 하던 것 하나를 끝까지 닫는 쪽으로 잡으면 하루가 단단해져요. '시작할 일'과 '마무리할 일'을 갈라놓고, 마무리부터 손대요.",
         "오늘은 일을 다룰 때 디테일 점검에 시간을 한 칸 떼어두는 게 잘 맞아요. 가장 중요한 한 군데를 골라, 거기에 검토하는 손을 몰아줘요.",
@@ -86,6 +158,14 @@
         "오늘은 할 일 목록을 '오늘 끝낼 것'과 '적어만 둘 것'으로 갈라두면 흐름이 잡혀요. 끝낼 것 하나에만 손을 몰아줘요.",
         "오늘은 일을 크게 보기보다 가장 가까운 다음 한 칸만 정해서 움직이는 게 잘 맞아요. 그 한 칸을 끝내고 다음을 다시 봐요.",
         "오늘은 새로 벌일 일과 마무리할 일이 섞여 보이면, 마무리 쪽을 먼저 닫는 순서로 잡아요. 닫는 손이 오늘은 더 빛나요."
+      ],
+      "structureEn": [
+        "Today, choosing to close one running task all the way rather than opening something new tends to make the day steady. Split 'to start' from 'to finish,' and reach for the finishing first.",
+        "Today, setting aside one slot for detail-checking tends to fit well. Pick the single most important spot and pour your reviewing hand into it.",
+        "Today, leaving a beat on a work call like 'take it or not' instead of answering right away can work in your favor. Accepting or deferring are both fine — just avoid an instant yes.",
+        "Today, sorting your list into 'finish today' and 'just write down' tends to settle the flow. Pour your hand into the one thing to finish.",
+        "Today, picking only the nearest next step rather than taking in the whole job tends to fit well. Finish that one step, then look at the next.",
+        "Today, if new work and finishing work look mixed together, order it so you close the finishing side first. The closing hand tends to shine more today."
       ],
       "trigger": [
         "만약 새 일을 떠맡고 싶거나 반대로 다 던지고 싶어지면 — 그게 '한 박자 쉬고 정하자'는 신호예요.",
@@ -95,6 +175,14 @@
         "만약 일이 손에 안 잡히고 자꾸 흩어지면, 그건 의지 문제가 아니라 제일 작은 한 칸으로 돌아갈 자리라는 뜻이에요.",
         "만약 '오늘 다 해치워야 한다'는 생각이 들면, 그 생각이 오늘은 한 가지만 고르라는 알람이에요."
       ],
+      "triggerEn": [
+        "If you feel like taking on new work, or the opposite — like throwing it all aside — that can be a cue to pause a beat before deciding.",
+        "If the work looks like it's all crowding in at once, that feeling is the alarm. Start with the smallest single step.",
+        "If someone rushes you to decide, that 'rush' is something you don't have to take on today.",
+        "If you feel an urge to make a big decision right now, that impatience can be a sign to leave it a beat.",
+        "If work won't hold and keeps scattering, that's not a willpower problem — it tends to mean it's a spot to return to the smallest single step.",
+        "If a thought like 'I have to clear it all today' shows up, that thought can be a cue to pick just one thing today."
+      ],
       "action": [
         "기분 좋게 새 일을 시작하고 싶어도 오늘은 '하던 일 하나 마무리'가 더 멀리 가요. 마음에 안 드는 일이 있으면 끝내려 말고 '다음 한 칸만 진행'까지 해두면 충분해요.",
         "오늘 할 일이 많으면 제일 먼저 끝낼 한 가지만 고르고 나머지는 적어만 둬요. 그 한 가지가 오늘 흐름을 잡아줘요.",
@@ -102,6 +190,14 @@
         "새 제안이 들어오면 '하루만 생각해볼게요' 한 줄로 시간을 벌어둬요. 받는 것도 미루는 것도 그다음에 정하면 돼요.",
         "오늘은 일을 시작하기 전에 '끝났다'의 기준을 한 줄로 적어봐요. 기준이 분명하면 일이 덜 늘어져요.",
         "막힌 일이 있으면 혼자 붙들기보다 한 사람에게 짧게 물어봐요. 그 한 번이 오늘 흐름을 풀어줘요."
+      ],
+      "actionEn": [
+        "Even if you'd love to start something new on a good mood, 'finish one running task' tends to carry further today. For a task you dislike, don't try to finish it — just 'move it one step forward' and that's enough.",
+        "If you have a lot to do today, pick only the one thing to finish first and just write down the rest. That one thing tends to anchor the day's flow.",
+        "If there's material that needs review, look it over carefully once today. A sharp eye tends to shine right there.",
+        "If a new offer comes in, buy time with one line: 'Let me think on it for a day.' You can decide to accept or defer after that.",
+        "Today, before you start, write one line on what 'done' means. A clear standard tends to keep work from dragging.",
+        "If something is stuck, ask one person briefly instead of holding it alone. That one ask tends to loosen today's flow."
       ]
     },
     "love_connection": {
@@ -113,6 +209,14 @@
         "오늘은 답장 속도보다 답장 내용에만 마음을 둬요.",
         "오늘은 해석을 멈추고 사실만 보면 한결 가벼워져요."
       ],
+      "headlineEn": [
+        "Today, not reading too much into the other person's reaction tends to feel easier.",
+        "Today, take just one beat before you put your feelings into words.",
+        "Today, one short line of hello tends to land better than a long message.",
+        "Today, it's fine not to settle right now whether to step closer or keep some distance.",
+        "Today, put your mind on what the reply says rather than how fast it comes.",
+        "Today, stopping the interpreting and looking only at the facts tends to feel lighter."
+      ],
       "structure": [
         "오늘은 상대의 말투나 답장 속도를 해석하기보다 사실만 보는 쪽으로 잡으면 편해져요. '답이 왔다, 안 왔다'까지만 보고, 그 너머는 오늘 굳이 풀지 않아요.",
         "오늘은 마음을 표현할 때 크게 한 번보다 가볍게 한 줄로 시작하는 게 잘 닿아요. 길게 정리해서 보내기 전에, 짧은 안부부터 먼저 던져요.",
@@ -120,6 +224,14 @@
         "오늘은 상대에게 바라는 것과 내가 줄 수 있는 것을 한 번 갈라보면 마음이 편해져요. 어느 쪽부터 다룰지만 정하고 시작해요.",
         "오늘은 마음을 다 표현하기보다 '오늘 전할 한 줄'만 골라두는 쪽으로 잡아요. 나머지는 다음을 위해 남겨둬도 괜찮아요.",
         "오늘은 관계의 큰 결론을 내기보다 작은 한 가지 행동만 정하는 게 잘 맞아요. 연락 한 줄이든 안부 한 마디든, 작은 것 하나면 충분해요."
+      ],
+      "structureEn": [
+        "Today, looking only at the facts rather than reading the other person's tone or reply speed tends to feel easier. Note just 'a reply came, or didn't,' and leave anything beyond that for now.",
+        "Today, starting light with one line tends to land better than one big effort. Before you send a long, polished message, toss out a short hello first.",
+        "Today, it's fine not to settle on the spot whether to step closer or keep distance. Rather than calling it one way, set just one small step and defer the rest.",
+        "Today, splitting what you hope for from the other person and what you can give can put your mind at ease. Just decide which side to handle first, then start.",
+        "Today, instead of expressing everything, lean toward picking just 'one line to share today.' It's fine to leave the rest for next time.",
+        "Today, setting one small action fits better than reaching a big conclusion about the relationship. One line of contact or one word of hello — one small thing is enough."
       ],
       "trigger": [
         "만약 상대의 답장 하나에 기분이 크게 출렁이면 — 그건 오늘 안테나가 평소보다 켜져 있다는 신호예요.",
@@ -129,6 +241,14 @@
         "만약 답장이 늦는다고 마음이 조급해지면, 그 조급함이 한 박자 쉴 자리예요.",
         "만약 '지금 이 말을 꼭 해야 할 것 같다'는 생각이 확 들면, 그 순간만 10초 늦춰요."
       ],
+      "triggerEn": [
+        "If a single reply makes your mood swing a lot — that can be a sign your antenna is more switched on than usual today.",
+        "If you want to express everything right now, just slow that 'right now' a little. Your feelings tend to hold even if you do it tomorrow.",
+        "If you keep turning one of their remarks over and over, that turning-over is an alarm to watch for over-reading.",
+        "If you keep drawing scenarios about why they did something, that can be a sign to look only at the facts today.",
+        "If a slow reply makes you feel rushed, that rush can be a spot to pause a beat.",
+        "If a strong 'I really have to say this now' thought hits, just slow that one moment by ten seconds."
+      ],
       "action": [
         "기분이 좋아서 마음을 크게 표현하고 싶어도 오늘은 짧은 안부 한 줄로 시작하면 더 자연스러워요. 서운한 일이 있어도 오늘 따지려 말고 '나중에 얘기하자' 정도로 남겨두면 충분해요.",
         "상대 반응이 애매하게 느껴지면 해석을 멈추고 그냥 사실만 봐요. 답이 왔다, 안 왔다 — 거기까지만요.",
@@ -136,6 +256,14 @@
         "마음을 전하고 싶으면 큰 고백 대신 '오늘 생각났어요' 같은 작은 안부 한 줄이면 충분해요.",
         "오늘 서운한 게 있으면 바로 풀려 하지 말고 '내가 어떻게 느꼈는지'만 차분히 한 문장으로 남겨둬요.",
         "상대와의 거리가 신경 쓰이면 결론을 내려 말고 가벼운 연락 한 번만 해봐요. 그 한 번으로 오늘은 충분해요."
+      ],
+      "actionEn": [
+        "Even if you'd love to express a lot on a good mood, starting with one short line of hello tends to feel more natural today. If something stung, don't hash it out today — leaving it at 'let's talk later' is enough.",
+        "If a reaction feels unclear, stop interpreting and just look at the facts. A reply came, or didn't — only that far.",
+        "If you want to reach out to someone today, one light line is plenty. Going short with just the core tends to land better than a long message.",
+        "If you want to share how you feel, one small line of hello like 'I thought of you today' is enough instead of a big confession.",
+        "If something stung today, don't rush to resolve it — calmly leave just one sentence on 'how I felt.'",
+        "If the distance between you is on your mind, don't reach for a conclusion — just send one light message. That one is enough for today."
       ]
     },
     "family_home": {
@@ -147,6 +275,14 @@
         "오늘은 미뤄둔 작은 용무 하나를 매듭짓는 게 이득이에요.",
         "오늘은 가까운 사람의 말을 끝까지 들어주는 손길이 빛나요."
       ],
+      "headlineEn": [
+        "Today, handle matters with someone close one beat slower.",
+        "Today, tidying one small home task can lighten your mind.",
+        "Today, with family talk, lead with listening before any conclusion.",
+        "Today, picking just one thing is enough — you don't have to cover it all.",
+        "Today, tying up one small errand you'd put off tends to pay off.",
+        "Today, a hand that hears a close person out to the end tends to shine."
+      ],
       "structure": [
         "오늘은 가족이나 가까운 사람과 얽힌 일을 한 박자 천천히 다루는 게 잘 맞아요. 들어온 말이나 부탁은 바로 답하지 말고, 받아두고 한 번 두는 쪽으로 가요.",
         "오늘은 가족 일에서 '내가 다 챙기기'와 '오늘은 쉬기' 중 하나만 골라도 충분해요. 둘 다 하려 하지 말고, 오늘 할 한 가지를 먼저 정해요.",
@@ -154,6 +290,14 @@
         "오늘은 가까운 사람과의 대화를 '결론 내기'보다 '듣기'로 잡으면 흐름이 부드러워져요. 오늘은 답을 정하는 자리가 아니라 듣는 자리예요.",
         "오늘은 집안 일을 '오늘 할 것'과 '주말로 미룰 것'으로 갈라두면 마음이 가벼워져요. 오늘 몫 하나만 골라서 다뤄요.",
         "오늘은 가족 부탁이 들어오면 바로 답하기보다 '언제 할지'를 먼저 정해두는 게 잘 맞아요. 시점을 정해두면 마음이 덜 무거워요."
+      ],
+      "structureEn": [
+        "Today, handling matters tangled with family or someone close one beat slower tends to fit well. Don't answer an incoming word or request right away — take it in and let it sit once.",
+        "Today, picking just one of 'cover it all myself' or 'rest today' is enough for family matters. Don't try for both — decide the one thing to do today first.",
+        "Today, lean toward picking and finishing the smallest of the home errands you'd put off. One small knot tied tends to be enough today, rather than a big effort.",
+        "Today, framing a talk with someone close as 'listening' rather than 'reaching a conclusion' tends to soften the flow. Today is a seat for hearing, not for settling an answer.",
+        "Today, sorting home tasks into 'do today' and 'push to the weekend' can lighten your mind. Pick just today's share and handle that.",
+        "Today, when a family request comes in, settling 'when to do it' first tends to fit better than answering right away. With a time set, your mind feels less weighed down."
       ],
       "trigger": [
         "만약 가족 누군가의 말에 욱하거나 서운해지면 — 그건 오늘 그 자리가 평소보다 가깝다는 신호예요.",
@@ -163,6 +307,14 @@
         "만약 가족 얘기에 자꾸 같은 말이 맴돌면, 그건 결론을 미루고 한 박자 쉴 알람이에요.",
         "만약 집안 용무가 한꺼번에 보이면, 그건 다 하라는 게 아니라 제일 작은 하나만 고르라는 신호예요."
       ],
+      "triggerEn": [
+        "If a family member's words make you flare up or feel hurt — that can be a sign that spot sits closer than usual today.",
+        "If you feel like taking on every home task, or the opposite — putting them all off — that's an alarm to 'just do one thing.'",
+        "If a talk with someone close runs long and feels stuck, that stuck feeling can be a sign to 'listen today, not conclude.'",
+        "If a thought like 'no one else is going to handle this' shows up, that thought can be a spot to set one notch down today.",
+        "If the same words keep circling in a family talk, that can be an alarm to defer the conclusion and pause a beat.",
+        "If home errands all show up at once, that's not a cue to do them all — it can be a sign to pick just the smallest one."
+      ],
       "action": [
         "기분 좋게 가족 일을 크게 벌이고 싶어도 오늘은 작은 정리 한 가지로 충분해요. 서운한 말이 오갔으면 오늘 풀려 말고 '내일 차분히' 정도로 남겨둬도 괜찮아요.",
         "가까운 사람과 부딪힐 것 같으면 결론을 내려 말고 상대 말을 끝까지 들어만 줘도 흐름이 잡혀요.",
@@ -170,6 +322,14 @@
         "가족에게 부탁을 받으면 '오늘은 이만큼, 나머지는 내일' 하고 분량을 나눠 답해도 괜찮아요.",
         "오늘은 가까운 사람에게 안부 한 줄을 먼저 건네봐요. 작은 인사 하나가 집안 분위기를 부드럽게 해줘요.",
         "집안 일을 다 챙기고 싶어도 오늘은 한 칸 내려놓아도 돼요. 내려놓은 그 자리가 내일의 여유가 돼요."
+      ],
+      "actionEn": [
+        "Even if you'd love to take on family matters in a big way on a good mood, one small tidy-up is enough today. If sharp words passed, don't resolve it today — leaving it at 'calmly tomorrow' is fine.",
+        "If you might clash with someone close, just hearing them out to the end, rather than reaching a conclusion, tends to settle the flow.",
+        "If there's a home errand you put off, finish just the smallest one today. That one tends to lighten your mind.",
+        "If a family member asks something of you, it's fine to split the load in your answer: 'this much today, the rest tomorrow.'",
+        "Today, offer one line of hello to someone close first. One small greeting tends to soften the mood at home.",
+        "Even if you want to cover every home task, it's fine to set one notch down today. That spot you set down becomes tomorrow's room to breathe."
       ]
     },
     "health_condition": {
@@ -181,6 +341,14 @@
         "오늘은 회복할 자리를 먼저 잡아두는 게 잘 맞아요.",
         "오늘은 한꺼번에 당기기보다 천천히 나눠서 가요."
       ],
+      "headlineEn": [
+        "Today, give the small signals your body sends one more listen.",
+        "Today, leaving one slot empty fits better than overfilling it.",
+        "Today, resting thirty minutes earlier tends to pay off more than any item on the schedule.",
+        "Today, spreading out your pace tends to make the day feel lighter.",
+        "Today, securing a spot to recover first tends to fit well.",
+        "Today, go slowly in shares rather than pulling it all at once."
+      ],
       "structure": [
         "오늘은 일정을 꽉 채우기보다 중간에 쉬는 칸을 하나 비워두는 게 잘 맞아요. 한 번에 당기기보다 나눠서 가는 쪽으로, 오늘은 페이스 배분에 신경 써요.",
         "오늘은 몸이 보내는 신호를 한 번 더 들어주는 쪽으로 하루를 잡아요. 그냥 지나치기보다 작게라도 반응 한 번 해주는 게 오늘은 이득이에요.",
@@ -188,6 +356,14 @@
         "오늘은 할 일을 시간 순서대로 늘어놓기보다 '쉬는 칸'을 먼저 끼워 넣고 나머지를 배치해요. 쉬는 칸이 오늘의 중심이에요.",
         "오늘은 컨디션을 '버틸 만한 것'과 '줄여야 할 것'으로 갈라보면 하루가 가벼워져요. 줄여야 할 한 가지를 먼저 골라요.",
         "오늘은 무리한 약속이 보이면 다 소화하기보다 하나를 가볍게 줄여 잡는 게 잘 맞아요. 줄인 칸이 회복 시간이 돼요."
+      ],
+      "structureEn": [
+        "Today, leaving one rest slot empty in the middle fits better than packing the schedule tight. Lean toward going in shares rather than pulling at once, and mind how you spread your pace today.",
+        "Today, frame the day toward giving your body's signals one more listen. Reacting even a little, rather than just passing it by, tends to pay off today.",
+        "Today, securing a spot to recover first fits better than opening something new. Treat leaving one slot empty as part of today's schedule.",
+        "Today, instead of lining up tasks by time, slot in the 'rest block' first and arrange the rest around it. The rest block is the center of today.",
+        "Today, splitting how you feel into 'bearable' and 'to cut back' can make the day lighter. Pick the one thing to cut back first.",
+        "Today, if an over-packed plan shows up, gently trimming one item fits better than absorbing it all. The trimmed slot becomes recovery time."
       ],
       "trigger": [
         "만약 평소보다 일이 유난히 무겁게 느껴지면 — 그건 '오늘은 한 칸 비워두라'는 몸의 신호예요.",
@@ -197,6 +373,14 @@
         "만약 '조금만 더'라는 생각으로 계속 밀어붙이게 되면, 그 '조금만 더'가 오늘은 멈출 자리예요.",
         "만약 일정 사이에 빈틈이 하나도 안 보이면, 그건 오늘 한 칸을 일부러 비워두라는 신호예요."
       ],
+      "triggerEn": [
+        "If work feels unusually heavy compared to usual — that can be your body's sign to leave one slot empty today.",
+        "If rich food or late hours keep pulling at you, that pull is an alarm to 'keep it light today.'",
+        "If your focus keeps scattering, that's not a willpower problem — it tends to mean it's a spot to rest a moment.",
+        "If your shoulders or neck feel stiff, that signal can be an alarm to pause and stretch a moment.",
+        "If a 'just a bit more' thought keeps you pushing on, that 'just a bit more' can be a spot to stop today.",
+        "If there's not a single gap between schedule items, that can be a sign to leave one slot deliberately empty today."
+      ],
       "action": [
         "기분 좋게 일정을 꽉 채우고 싶어도 오늘은 한 칸 비워두면 내일이 편해져요. 컨디션이 안 좋게 느껴지면 버티려 말고 '물 한 잔, 30분 일찍 눕기'까지만 해도 충분해요.",
         "오늘 무리한 약속이 있으면 하나는 가볍게 줄여봐요. 줄인 그 한 칸이 회복 시간이 돼요.",
@@ -204,6 +388,14 @@
         "오늘은 일정 중간에 10분짜리 쉼표를 하나 정해둬요. 그 쉼표가 오후를 다르게 만들어줘요.",
         "오늘은 자기 전 30분을 미리 비워둬봐요. 화면을 끄고 그 시간을 회복에 써도 괜찮아요.",
         "오늘 할 일이 많아 보이면 '꼭 오늘'과 '내일도 OK'로 한 번 갈라요. 줄어든 만큼 몸이 가벼워져요."
+      ],
+      "actionEn": [
+        "Even if you'd love to pack the schedule tight on a good mood, leaving one slot empty today tends to make tomorrow easier. If you feel off, don't tough it out — just 'a glass of water and lying down thirty minutes earlier' is enough.",
+        "If you have an over-packed plan today, gently trim one item. That trimmed slot becomes recovery time.",
+        "If your body sends a signal, don't ignore it — react even a little. One stretch or one short walk is plenty.",
+        "Today, set one ten-minute pause in the middle of your schedule. That pause tends to make the afternoon different.",
+        "Today, clear thirty minutes before bed in advance. Turning the screen off and spending that time on recovery is fine.",
+        "If today's tasks look like a lot, split them once into 'must be today' and 'tomorrow is OK.' Your body feels lighter for what you trimmed."
       ]
     },
     "mental_emotion": {
@@ -215,6 +407,14 @@
         "오늘은 머릿속 생각을 종이로 한 번 꺼내두면 무게가 줄어요.",
         "오늘은 '여기까지'라고 끊는 선만 정해도 충분해요."
       ],
+      "headlineEn": [
+        "Today, slowing anything by just one beat is all it takes.",
+        "Today, not rushing a conclusion tends to put your mind at ease.",
+        "Today, it's fine not to try to process every thought that comes up.",
+        "Today, you can hand a big judgment over to tomorrow's you once.",
+        "Today, getting the thoughts in your head onto paper once can ease the weight.",
+        "Today, just setting a line that says 'this far' is enough."
+      ],
       "structure": [
         "오늘은 무슨 결정을 하든 한 박자 늦추는 게 잘 맞는 자리예요. 기분이 어느 쪽이든, 큰 판단은 오늘 끝내지 말고 내일 다시 봐도 늦지 않아요.",
         "오늘은 떠오른 생각을 바로 말이나 행동으로 옮기기보다 한 번 묵혀두는 쪽으로 잡아요. 머릿속 결론과 실제 행동 사이에 틈을 한 칸 둬요.",
@@ -222,6 +422,14 @@
         "오늘은 생각을 '지금 다룰 것'과 '내일로 넘길 것'으로 갈라두면 머리가 가벼워져요. 오늘 몫 하나만 골라서 봐요.",
         "오늘은 큰 판단을 내리기보다 '판단을 미룬다'는 결정 하나만 내려도 충분해요. 그 한 가지가 오늘은 가장 단단한 선택이에요.",
         "오늘은 떠오르는 생각을 머릿속에서만 굴리기보다 한 번 밖으로 꺼내 적어두는 쪽으로 잡아요. 적어두면 다음 결정이 한결 또렷해져요."
+      ],
+      "structureEn": [
+        "Today, whatever you decide, it's a good spot to slow it by one beat. Whichever way your mood leans, leaving a big judgment for tomorrow rather than closing it today is not too late.",
+        "Today, lean toward letting a thought sit once rather than moving it straight into words or action. Leave one gap between the conclusion in your head and the actual move.",
+        "Today, it's fine not to try to sort everything out. Defer the big conclusion, and just setting a line that says 'this far' is enough today.",
+        "Today, sorting thoughts into 'handle now' and 'pass to tomorrow' can lighten your head. Pick just today's share and look at that.",
+        "Today, rather than reaching a big judgment, just making the one decision to 'defer the judgment' is enough. That one thing tends to be today's steadiest choice.",
+        "Today, lean toward getting a thought out and written down once rather than rolling it only in your head. Once written, the next decision tends to come clearer."
       ],
       "trigger": [
         "만약 누구 말이 유난히 거슬리거나 지금 당장 결론을 내고 싶어지면 — 그게 '아, 지금이 한 박자 쉴 자리구나' 하는 신호예요.",
@@ -231,6 +439,14 @@
         "만약 '지금 당장 정해야 할 것 같다'는 조급함이 들면, 그 조급함이 한 박자 늦출 신호예요.",
         "만약 머릿속이 복잡해서 무겁게 느껴지면, 그건 생각을 종이로 한 번 꺼내보라는 알람이에요."
       ],
+      "triggerEn": [
+        "If a remark feels unusually sharp, or you suddenly want to reach a conclusion right now — that can be a sign it's a spot to pause one beat.",
+        "If a thought keeps chaining on and won't stop, that can be an alarm that 'you don't have to sort it all today.'",
+        "If a moment comes when a feeling rises fast, just notice that moment and breathe slowly for ten seconds.",
+        "If the same worry keeps circling in place, that can mean it's a spot to defer the answer and pause a beat today.",
+        "If an impatient 'I have to decide this right now' shows up, that impatience can be a sign to slow by one beat.",
+        "If your head feels cluttered and heavy, that can be an alarm to get the thoughts onto paper once."
+      ],
       "action": [
         "기분 좋아서 막 밀어붙이고 싶은 일도 10분 뒤에 하면 결이 더 깔끔해져요. 마음에 안 드는 일은 오늘 끝내려 말고 '선택지만 줄여놓기'까지만 해도 충분해요.",
         "생각이 많아지면 종이에 떠오르는 걸 그냥 적어봐요. 머리 밖으로 한 번 꺼내두면 무게가 절반은 줄어요.",
@@ -238,6 +454,14 @@
         "마음이 복잡하면 큰 결정 대신 작은 일 하나만 정해서 끝내봐요. 작은 매듭 하나가 머리를 정리해줘요.",
         "오늘은 고민을 '내가 바꿀 수 있는 것'과 '아닌 것'으로 한 번 갈라봐요. 바꿀 수 있는 쪽에만 손을 둬요.",
         "생각이 멈추지 않으면 10분만 다른 일에 손을 옮겨봐요. 잠깐 떨어졌다 돌아오면 시야가 한결 넓어져요."
+      ],
+      "actionEn": [
+        "Even something you feel eager to push through reads cleaner ten minutes later. For something you dislike, don't try to finish it today — just 'narrowing down the options' is enough.",
+        "If thoughts pile up, just write down whatever comes on paper. Getting it out of your head once tends to ease about half the weight.",
+        "For something that won't conclude today, it's fine to cut it off yourself: 'this far for today.' Tomorrow's you tends to see it more clearly.",
+        "If your mind is cluttered, set and finish one small thing instead of a big decision. One small knot tied tends to tidy your head.",
+        "Today, split a worry once into 'what I can change' and 'what I can't.' Keep your hands only on the side you can change.",
+        "If thoughts won't stop, move your hands to something else for just ten minutes. Stepping away briefly and coming back tends to widen your view."
       ]
     },
     "relationship_conflict": {
@@ -249,6 +473,14 @@
         "오늘은 즉답만 피해도 대부분 그냥 지나가요.",
         "오늘은 '여기까지'라고 끊는 선을 미리 정해두면 편해져요."
       ],
+      "headlineEn": [
+        "Today, if a clash looks likely, answer one beat late.",
+        "Today, not reacting straight away to someone's words tends to feel easier.",
+        "Today, keeping some distance tends to pay off more than sorting right from wrong.",
+        "Today, keep your hands on your one thing, not on the other person's pace.",
+        "Today, just avoiding an instant reply lets most of it pass on its own.",
+        "Today, setting a line that says 'this far' ahead of time tends to feel easier."
+      ],
       "structure": [
         "오늘은 사람 사이의 일에 바로 반응하기보다 한 박자 늦게 답하는 쪽으로 잡아요. 거슬리는 말이 와도 즉답만 피하면 대부분 그냥 지나가요.",
         "오늘은 비교나 신경전 같은 신호가 와도 받을지 흘릴지를 내가 먼저 정하고 가요. 상대 페이스를 따라가지 말고, 내 한 가지에만 손을 둬요.",
@@ -256,6 +488,14 @@
         "오늘은 대화를 '꼭 짚을 것'과 '흘려보낼 것'으로 갈라두면 마찰이 줄어요. 꼭 짚을 한 가지만 골라서 다뤄요.",
         "오늘은 사람 사이의 일을 그 자리에서 끝내려 하기보다 시간을 한 칸 두고 다루는 게 잘 맞아요. 답을 미루는 것도 오늘은 좋은 선택이에요.",
         "오늘은 누구와 부딪칠 것 같으면 '이기는 것'보다 '깔끔하게 빠지는 것'을 목표로 잡아요. 필요한 말만 하고 한 발 물러나는 게 이득이에요."
+      ],
+      "structureEn": [
+        "Today, lean toward answering one beat late rather than reacting straight away to matters between people. Even if a sharp word comes, just avoiding an instant reply lets most of it pass.",
+        "Today, even when a signal of comparison or friction comes, decide for yourself first whether to take it in or let it slide. Don't follow the other person's pace — keep your hands on your one thing.",
+        "Today, leaving one notch of distance tends to pay off more than sorting right from wrong to the end. Don't reach for a conclusion — set a line ahead of time at 'this far for today.'",
+        "Today, sorting a talk into 'must address' and 'let slide' tends to reduce friction. Pick just the one thing to address and handle that.",
+        "Today, handling a matter between people with one notch of time fits better than trying to finish it on the spot. Deferring the answer is a good choice today too.",
+        "Today, if a clash with someone looks likely, set your goal as 'stepping out cleanly' rather than 'winning.' Saying only what's needed and stepping back one pace tends to pay off."
       ],
       "trigger": [
         "만약 누구 말이 유난히 거슬리거나 지금 당장 받아치고 싶어지면 — 그게 '한 박자 쉬고 가자'는 신호예요.",
@@ -265,6 +505,14 @@
         "만약 상대 말을 자꾸 받아치고 싶어지면, 그 충동이 한 박자 늦게 답할 알람이에요.",
         "만약 같은 갈등이 자꾸 맴돌면, 그건 오늘은 결론 대신 거리를 두라는 신호예요."
       ],
+      "triggerEn": [
+        "If a remark feels unusually sharp, or you suddenly want to fire back — that can be a sign to pause one beat first.",
+        "If you feel compared with someone, that feeling can be an alarm to 'let it slide today.'",
+        "If a talk turns sharper and sharper, that can be a sign for 'distance now, not a conclusion.'",
+        "If a thought like 'I have to prove I'm right' shows up, that thought can be a spot to step back one pace today.",
+        "If you keep wanting to fire back at the other person's words, that urge can be an alarm to answer one beat late.",
+        "If the same conflict keeps circling, that can be a sign to keep distance instead of a conclusion today."
+      ],
       "action": [
         "기분이 좋든 안 좋든, 거슬리는 말에는 바로 답하지 말고 한 박자 늦춰요. 마음에 안 드는 사람과는 오늘 끝장을 보려 말고 '필요한 말만 하고 빠지기'까지만 해도 충분해요.",
         "부딪칠 것 같은 자리가 있으면 옳고 그름을 가리려 말고 '오늘은 여기까지 하자'로 끊어요.",
@@ -272,6 +520,14 @@
         "거슬리는 연락이 오면 바로 답하지 말고 잠깐 화면을 닫아둬요. 한 박자 뒤에 답해도 늦지 않아요.",
         "오늘 누구와 의견이 갈리면 '내 입장은 이렇다'만 한 번 말하고 더 밀어붙이지 않아도 괜찮아요.",
         "마음이 불편한 사람이 있으면 오늘은 거리를 한 칸 두고, 꼭 필요한 용건만 짧게 처리해도 충분해요."
+      ],
+      "actionEn": [
+        "Good mood or not, don't answer a sharp word right away — slow it one beat. With a person you dislike, don't try to have it out today — just 'saying only what's needed and stepping out' is enough.",
+        "If a spot looks like it might clash, don't sort right from wrong — cut it off with 'let's leave it here for today.'",
+        "If you feel comparison or friction, focus only on your one thing, not on that person's pace. That tends to be the steadiest spot today.",
+        "If a sharp message comes, don't answer right away — close the screen for a moment. Answering one beat later is not too late.",
+        "If opinions split with someone today, it's fine to say 'this is my position' once and not push any further.",
+        "If there's a person you feel uneasy with, leave one notch of distance today and handle only the essential matter, briefly."
       ]
     },
     "challenge_opportunity": {
@@ -283,6 +539,14 @@
         "오늘은 '진짜 기회'와 '그냥 분주함'을 한 번 갈라봐요.",
         "오늘은 결정보다 정보 한 칸을 먼저 모아두는 게 이득이에요."
       ],
+      "headlineEn": [
+        "Today, if a new opportunity shows up, look it over once more before you take it.",
+        "Today, movement tends to pick up, so try one small step.",
+        "Today, even if a challenge signal comes, take on only as much as you can carry to the end.",
+        "Today, try starting just one thing lightly rather than opening it big.",
+        "Today, split 'a real opportunity' from 'just busyness' once.",
+        "Today, gathering one slot of information first tends to pay off more than a decision."
+      ],
       "structure": [
         "오늘은 새 기회를 만나면 '진짜 기회'와 '그냥 분주함' 두 칸으로 갈라보는 게 잘 맞아요. 어느 칸인지 정하기 전에는 크게 결정하지 않아요.",
         "오늘은 새 시도를 크게 벌이기보다 작은 한 걸음으로 떼어보는 쪽으로 잡아요. 이동이든 연락이든, 시작은 가볍게 하나만 정해요.",
@@ -290,6 +554,14 @@
         "오늘은 기회가 보이면 바로 잡기보다 '한 가지만 알아보기'까지 해두고 다음을 보는 게 잘 맞아요. 정보가 모인 다음에 결정해요.",
         "오늘은 새 일을 '오늘 시작할 것'과 '지켜볼 것'으로 갈라두면 흐름이 단단해져요. 오늘 시작할 작은 하나만 골라요.",
         "오늘은 도전 신호가 와도 전부를 한 번에 받기보다 첫 한 칸만 떼어서 다루는 게 잘 맞아요. 첫 칸을 끝내고 다음을 다시 봐요."
+      ],
+      "structureEn": [
+        "Today, if you meet a new opportunity, splitting it into two columns — 'a real opportunity' and 'just busyness' — tends to fit well. Don't decide big before you've placed which column it's in.",
+        "Today, lean toward taking a new try as one small step rather than opening it big. A trip or a message — set just one light start.",
+        "Today, when a challenge comes, cutting its size ahead of time to 'as much as you can carry to the end' tends to pay off. Accepting or deferring are both fine — settle the amount first.",
+        "Today, if an opportunity shows up, going as far as 'look into just one thing' and then watching tends to fit better than taking it right away. Decide once the information is gathered.",
+        "Today, sorting new work into 'start today' and 'keep an eye on' tends to keep the flow steady. Pick just one small thing to start today.",
+        "Today, even if a challenge signal comes, handling just the first step rather than taking it all at once tends to fit well. Finish the first step, then look at the next."
       ],
       "trigger": [
         "만약 '이거 지금 안 잡으면 끝'이라는 생각이 들면 — 그게 '한 번 더 살펴보라'는 신호예요.",
@@ -299,6 +571,14 @@
         "만약 여러 기회가 한꺼번에 보이면, 그건 다 잡으라는 게 아니라 하나만 골라보라는 알람이에요.",
         "만약 시작이 두려워 자꾸 미루게 되면, 그 미룸이 '작은 한 걸음부터 떼라'는 신호예요."
       ],
+      "triggerEn": [
+        "If a thought like 'it's over if I don't grab this now' shows up — that can be a sign to look it over once more.",
+        "If you feel like taking on every new thing, or the opposite — avoiding it all — that's an alarm to 'take on only as much as you can carry to the end.'",
+        "If your mind keeps turning outward, that can mean it's time to take one small step first.",
+        "If it looks like a good opportunity yet you feel rushed, that rush can be a sign to look it over once more.",
+        "If several opportunities show up at once, that's not a cue to grab them all — it can be an alarm to pick just one.",
+        "If fear of starting keeps making you put it off, that delay can be a sign to take one small step first."
+      ],
       "action": [
         "기분 좋게 크게 벌이고 싶어도 오늘은 '작은 한 걸음' 하나면 충분해요. 받기 망설여지는 제안이 있으면 거절하거나 수락하기 전에 '하루만 생각해볼게요'로 시간을 벌어둬요.",
         "관심 가는 기회가 있으면 오늘은 '메모하고 한 가지만 알아보기'까지 해두면 돼요. 결정은 정보가 모인 뒤에요.",
@@ -306,6 +586,14 @@
         "도전이 망설여지면 '내가 끝까지 갈 수 있는 분량'을 먼저 한 줄로 적어봐요. 그 한 줄이 크기를 정해줘요.",
         "오늘은 하고 싶었던 것 중 제일 작은 하나만 골라 시작해봐요. 작은 시작이 다음 칸을 열어줘요.",
         "여러 갈래가 보이면 오늘은 하나만 골라 한 칸 진행해봐요. 나머지는 적어두고 다음에 다시 봐도 늦지 않아요."
+      ],
+      "actionEn": [
+        "Even if you'd love to open it big on a good mood, 'one small step' is enough today. If an offer feels uncertain to take, buy time with 'let me think on it for a day' before you decline or accept.",
+        "If there's an opportunity you're drawn to, going as far as 'note it and look into just one thing' is enough today. Decide after the information is gathered.",
+        "If you want to move, move even briefly. One walk, one line of contact — that small start tends to bring today's flow alive.",
+        "If a challenge feels uncertain, write one line first on 'the amount I can carry to the end.' That line sets the size.",
+        "Today, pick just the smallest of the things you've wanted to do and start it. A small start tends to open the next step.",
+        "If several paths show up, pick just one and move it one step today. Note the rest — coming back to it later is not too late."
       ]
     },
     "rest_recovery": {
@@ -317,6 +605,14 @@
         "오늘은 채우는 칸보다 비는 칸을 하나 남겨둬요.",
         "오늘은 회복한 시간이 내일을 정해줘요."
       ],
+      "headlineEn": [
+        "Today, leaving things open fits better than opening something new.",
+        "Today, slowing your pace can actually carry you further.",
+        "Today, finishing just one thing clearly is enough.",
+        "Today, tying up one small thing you'd put off tends to pay off.",
+        "Today, leave one empty slot rather than a filled one.",
+        "Today, the time you recover tends to set tomorrow."
+      ],
       "structure": [
         "오늘은 새 일을 벌이기보다 비워두는 쪽으로 하루를 잡으면 잘 맞아요. 채우는 칸을 늘리지 말고, 비는 칸을 일부러 하나 남겨둬요.",
         "오늘은 큰 시작 대신 미뤄둔 작은 것 하나를 매듭짓는 쪽으로 방향을 잡아요. 안쪽을 가볍게 정리하는 걸 오늘의 한 가지로 삼아요.",
@@ -324,6 +620,14 @@
         "오늘은 할 일을 '오늘 꼭'과 '쉬어도 되는 것'으로 갈라두면 하루가 가벼워져요. 꼭인 것 하나만 골라서 다뤄요.",
         "오늘은 결과를 만드는 것보다 회복할 자리를 먼저 잡는 쪽으로 방향을 잡아요. 비워둔 칸을 오늘의 일정으로 생각해요.",
         "오늘은 미뤄둔 일들 중 제일 작은 하나를 골라 매듭짓고 나머지는 적어만 두는 게 잘 맞아요. 작은 매듭 하나로 오늘은 충분해요."
+      ],
+      "structureEn": [
+        "Today, framing the day toward leaving things open rather than opening new work tends to fit well. Don't add filled slots — deliberately leave one empty slot.",
+        "Today, point the direction toward tying up one small thing you'd put off instead of a big start. Make a light inside tidy-up your one thing for today.",
+        "Today, it's a spot where handling things one beat slower tends to pay off. Lean toward finishing one thing clearly rather than doing a lot.",
+        "Today, sorting tasks into 'must be today' and 'can wait' can lighten the day. Pick just the must-do one and handle that.",
+        "Today, point the direction toward securing a spot to recover before making results. Treat the empty slot as today's schedule.",
+        "Today, picking and tying up the smallest of the things you put off, and just writing down the rest, tends to fit well. One small knot tied is enough today."
       ],
       "trigger": [
         "만약 자꾸 새 일을 벌이고 싶어지면 — 그게 '오늘은 비워두라'는 신호예요.",
@@ -333,6 +637,14 @@
         "만약 자꾸 다음 할 일을 찾게 되면, 그건 오늘 비는 칸을 하나 남겨두라는 신호예요.",
         "만약 몸은 멈췄는데 머리가 계속 돌아가면, 그건 생각도 한 칸 비워줄 자리라는 뜻이에요."
       ],
+      "triggerEn": [
+        "If you keep wanting to open new work — that can be a sign to leave things open today.",
+        "If your mind feels uneasy even while you rest, that unease can mean part of you doesn't yet believe 'it's fine to rest.' You can believe it today.",
+        "If the tasks look like a lot, that's not a cue to do them all — it's an alarm for 'just the smallest one.'",
+        "If a thought like 'I'll fall behind if I rest' shows up, that thought can be a spot to slow one beat today.",
+        "If you keep looking for the next task, that can be a sign to leave one empty slot today.",
+        "If your body has stopped but your head keeps turning, that can mean your thoughts also have a spot to leave open."
+      ],
       "action": [
         "기분 좋아서 일을 벌이고 싶어도 오늘은 미뤄둔 작은 것 하나를 매듭짓는 걸로 충분해요. 마음에 걸리는 일은 끝내려 말고 '내일 할 목록에 적어두기'까지만 해도 괜찮아요.",
         "오늘 만든 결과보다 오늘 회복한 시간이 내일을 정해요. 한 칸 비워두는 걸 일정이라고 생각해봐요.",
@@ -340,6 +652,14 @@
         "오늘은 일정 하나를 가볍게 줄여봐요. 줄인 그 자리를 그냥 쉬는 데 써도 괜찮아요.",
         "마음이 바쁘면 10분만 화면을 끄고 가만히 있어봐요. 그 짧은 멈춤이 하루의 리듬을 잡아줘요.",
         "오늘은 미뤄둔 작은 정리 하나만 끝내봐요. 작은 매듭 하나가 마음을 가볍게 해줘요."
+      ],
+      "actionEn": [
+        "Even if you'd love to open work on a good mood, tying up one small thing you'd put off is enough today. For something on your mind, don't try to finish it — just 'writing it on tomorrow's list' is fine.",
+        "The time you recover today tends to set tomorrow more than the results you make today. Try treating one empty slot as part of the schedule.",
+        "If tasks look piled up, pick and finish just the smallest one and only write down the rest. That one is enough for today.",
+        "Today, gently trim one item from the schedule. It's fine to spend that trimmed spot just resting.",
+        "If your mind feels busy, turn the screen off and sit still for just ten minutes. That short pause tends to settle the day's rhythm.",
+        "Today, finish just one small tidy-up you'd put off. One small knot tied tends to lighten your mind."
       ]
     }
   },
@@ -350,11 +670,23 @@
       "오늘은 평소 습관대로 가는 것만으로도 충분히 잘 가요.",
       "오늘은 새 신호를 찾기보다 익숙한 리듬을 지키는 게 잘 맞아요."
     ],
+    "headlineEn": [
+      "Today, with no signal standing out, going at your usual pace is perfectly fine.",
+      "Today, there's no single point the chart pins down. Rather than forcing something, keep your usual rhythm.",
+      "Today, just going by your usual habits carries you well enough.",
+      "Today, keeping a familiar rhythm fits better than hunting for a new signal."
+    ],
     "structure": [
       "오늘은 사주 글자들이 크게 부딪치거나 강하게 끌어당기는 자리가 없어요. 그래서 새 신호를 찾기보다 평소 페이스대로 다루는 게 가장 잘 맞아요.",
       "오늘은 어느 한 영역이 두드러지게 움직이지 않아요. 그러니 무리해서 변화를 만들기보다 평소 습관대로 가는 쪽으로 하루를 잡아요.",
       "오늘은 사주 글자에서 한쪽으로 쏠리는 흐름이 보이지 않아요. 그래서 새로 벌이기보다 하던 일을 그대로 이어가는 게 잘 맞아요.",
       "오늘은 어느 영역도 특별히 신호를 보내지 않아요. 그러니 오늘은 큰 결정 대신 평소 챙기던 한 가지를 다시 잡는 쪽으로 가요."
+    ],
+    "structureEn": [
+      "Today, the chart's characters have no spot that clashes hard or pulls strongly. So rather than hunting for a new signal, handling things at your usual pace tends to fit best.",
+      "Today, no single area moves out in front. So rather than forcing a change, frame the day toward going by your usual habits.",
+      "Today, the chart shows no flow tilting to one side. So continuing what you've been doing fits better than opening something new.",
+      "Today, no area sends a particular signal. So lean toward picking up one thing you usually look after, instead of a big decision."
     ],
     "trigger": [
       "만약 그래도 마음이 어딘가로 쏠리면, 그건 외부 신호가 아니라 당신이 원래 신경 쓰던 쪽이라는 뜻이에요.",
@@ -362,11 +694,23 @@
       "만약 오늘 특별한 일을 기대하게 되면, 그건 사주 신호가 아니라 당신의 평소 관심이라는 뜻이에요.",
       "만약 뭔가 바꾸고 싶어지면, 그건 작게 시작해도 괜찮다는 알람이에요."
     ],
+    "triggerEn": [
+      "If your mind still tilts somewhere, that tends to mean it's not an outside signal but the side you already cared about.",
+      "If something comes up to decide today, following your usual standard tends to keep you from going off-track.",
+      "If you find yourself expecting something special today, that tends to mean it's your usual interest, not a chart signal.",
+      "If you feel like changing something, that can be an alarm that starting small is perfectly fine."
+    ],
     "action": [
       "특별한 이벤트를 기대하기보다, 평소 챙기던 루틴 하나를 오늘 다시 잡아보면 좋아요. 운동, 정리, 습관 — 무엇이든 작게 한 가지면 충분해요.",
       "오늘은 큰 결정을 무리해서 만들지 말고, 평소 페이스를 지키는 것만으로도 충분히 잘 가요.",
       "오늘은 미뤄둔 작은 일 하나를 가볍게 끝내봐요. 작은 매듭 하나면 오늘은 충분해요.",
       "오늘은 평소 잘 챙기던 습관 하나를 다시 잡아보면 좋아요. 익숙한 한 가지가 하루를 단단하게 잡아줘요."
+    ],
+    "actionEn": [
+      "Rather than expecting a special event, try picking up one routine you usually look after today. Exercise, tidying, a habit — any one small thing is enough.",
+      "Today, don't force a big decision — just keeping your usual pace carries you well enough.",
+      "Today, lightly finish one small task you'd put off. One small knot tied is enough for today.",
+      "Today, try picking up one habit you usually keep well. One familiar thing tends to hold the day steady."
     ]
   }
 }

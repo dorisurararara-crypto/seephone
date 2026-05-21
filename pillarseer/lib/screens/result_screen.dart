@@ -709,10 +709,11 @@ class _CategorySectionCardState extends State<_CategorySectionCard> {
             builder: (ctx, snap) {
               final String body;
               if (!widget.useKo) {
-                // R106 P5 — 영어 모드: service 내장 영어 carrier (placeholder 제거).
+                // R107 — 영어 모드: 일간별 개인화 carrier (placeholder 제거).
+                // 사용자 일간으로 170 맵 lookup — 일간 다르면 본문 다름.
                 final cat = _keyToEnum[widget.categoryKey];
                 body = cat != null
-                    ? LifeParagraphService.categoryBodyEn(cat)
+                    ? LifeParagraphService.categoryBodyEnFor(widget.saju, cat)
                     : '';
               } else if (snap.hasData && (snap.data ?? '').isNotEmpty) {
                 body = snap.data!;

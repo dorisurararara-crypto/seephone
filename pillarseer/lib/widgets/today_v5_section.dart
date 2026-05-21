@@ -92,6 +92,9 @@ class _TodayV5SectionState extends State<TodayV5Section> {
   @override
   Widget build(BuildContext context) {
     final r = widget.reading;
+    // R107 today_v5_en — locale 분기. 다른 화면과 동일 패턴.
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 36, 24, 32),
@@ -106,7 +109,7 @@ class _TodayV5SectionState extends State<TodayV5Section> {
           Row(
             children: [
               Text(
-                '오늘의 사주',
+                useKo ? '오늘의 사주' : TodayV5Service.sectionTitleEn,
                 style: GoogleFonts.notoSansKr(
                   fontSize: 12,
                   letterSpacing: 0.4,
@@ -121,7 +124,11 @@ class _TodayV5SectionState extends State<TodayV5Section> {
                   border: Border.all(color: AppColors.accent, width: 1),
                 ),
                 child: Text(
-                  r.isFallback ? r.topicLabel : '오늘의 주제 · ${r.topicLabel}',
+                  r.isFallback
+                      ? r.topicLabel
+                      : (useKo
+                          ? '오늘의 주제 · ${r.topicLabel}'
+                          : '${TodayV5Service.topicPrefixEn} · ${r.topicLabel}'),
                   style: GoogleFonts.notoSansKr(
                     fontSize: 10,
                     letterSpacing: 0.2,
@@ -147,7 +154,7 @@ class _TodayV5SectionState extends State<TodayV5Section> {
           if (r.evidenceChips.isNotEmpty) ...[
             const SizedBox(height: 18),
             Text(
-              '왜 이 주제냐면',
+              useKo ? '왜 이 주제냐면' : TodayV5Service.chipHeaderEn,
               style: GoogleFonts.notoSansKr(
                 fontSize: 11,
                 letterSpacing: 0.3,
@@ -162,21 +169,26 @@ class _TodayV5SectionState extends State<TodayV5Section> {
           Container(width: 36, height: 1, color: AppColors.line),
           const SizedBox(height: 16),
           // ── 본문 「구조 / 발동조건 / 행동」 ──
-          _buildBodyBlock('흐름', r.structureLine),
+          _buildBodyBlock(
+              useKo ? '흐름' : TodayV5Service.bodyLabelFlowEn, r.structureLine),
           if (r.triggerLine.isNotEmpty) ...[
             const SizedBox(height: 14),
-            _buildBodyBlock('이런 순간이 오면', r.triggerLine),
+            _buildBodyBlock(
+                useKo ? '이런 순간이 오면' : TodayV5Service.bodyLabelTriggerEn,
+                r.triggerLine),
           ],
           if (r.actionLine.isNotEmpty) ...[
             const SizedBox(height: 14),
-            _buildBodyBlock('오늘 이렇게', r.actionLine),
+            _buildBodyBlock(
+                useKo ? '오늘 이렇게' : TodayV5Service.bodyLabelActionEn,
+                r.actionLine),
           ],
           // ── 자기검증 (design doc §7) — *어제 본 풀이* 가 있을 때만 노출.
           // 어제 기록이 없으면 (첫 실행·하루 건너뜀) 카드 자체를 숨긴다.
           // R106 P2a-fix #5: 오늘 풀이가 아니라 어제 풀이를 체크하는 카드.
           if (_recallResolved && _recallTarget != null) ...[
             const SizedBox(height: 26),
-            _buildRecallBlock(),
+            _buildRecallBlock(useKo),
           ],
         ],
       ),
@@ -248,7 +260,7 @@ class _TodayV5SectionState extends State<TodayV5Section> {
     );
   }
 
-  Widget _buildRecallBlock() {
+  Widget _buildRecallBlock(bool useKo) {
     return Container(
       padding: const EdgeInsets.only(top: 16),
       decoration: const BoxDecoration(
@@ -258,7 +270,9 @@ class _TodayV5SectionState extends State<TodayV5Section> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            TodayV5Service.recallTitleKo,
+            useKo
+                ? TodayV5Service.recallTitleKo
+                : TodayV5Service.recallTitleEn,
             style: GoogleFonts.notoSansKr(
               fontSize: 13.5,
               fontWeight: FontWeight.w600,
@@ -268,7 +282,7 @@ class _TodayV5SectionState extends State<TodayV5Section> {
           ),
           const SizedBox(height: 6),
           Text(
-            TodayV5Service.recallDescKo,
+            useKo ? TodayV5Service.recallDescKo : TodayV5Service.recallDescEn,
             style: GoogleFonts.notoSansKr(
               fontSize: 12,
               color: AppColors.inkLight,
@@ -280,18 +294,29 @@ class _TodayV5SectionState extends State<TodayV5Section> {
             Row(
               children: [
                 _buildVerdictButton(
-                    RecallVerdict.correct, TodayV5Service.recallCorrectKo),
+                    RecallVerdict.correct,
+                    useKo
+                        ? TodayV5Service.recallCorrectKo
+                        : TodayV5Service.recallCorrectEn),
                 const SizedBox(width: 8),
                 _buildVerdictButton(
-                    RecallVerdict.unsure, TodayV5Service.recallUnsureKo),
+                    RecallVerdict.unsure,
+                    useKo
+                        ? TodayV5Service.recallUnsureKo
+                        : TodayV5Service.recallUnsureEn),
                 const SizedBox(width: 8),
                 _buildVerdictButton(
-                    RecallVerdict.wrong, TodayV5Service.recallWrongKo),
+                    RecallVerdict.wrong,
+                    useKo
+                        ? TodayV5Service.recallWrongKo
+                        : TodayV5Service.recallWrongEn),
               ],
             )
           else
             Text(
-              '체크 고마워요. 다음 풀이가 당신 관심사에 더 가까워질 거예요.',
+              useKo
+                  ? '체크 고마워요. 다음 풀이가 당신 관심사에 더 가까워질 거예요.'
+                  : TodayV5Service.recallDoneEn,
               style: GoogleFonts.notoSansKr(
                 fontSize: 12.5,
                 color: AppColors.accent,

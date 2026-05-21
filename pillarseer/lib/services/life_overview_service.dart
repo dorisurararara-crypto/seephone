@@ -478,9 +478,16 @@ class LifeOverviewService {
     return parts.join(' ');
   }
 
-  /// 카테고리 영어 본문 (17 카테고리). life_paragraph_service 의 공용 carrier 사용.
+  /// 카테고리 영어 본문 (17 카테고리, 일간 무관 generic).
+  /// R107 부터 일주별 개인화가 mandate — 가능하면 `categoryBodyEnFor` 사용.
+  /// 이 method 는 R106 호환·일간 unknown fallback 용으로 보존.
   static String categoryBodyEn(LifeCategory cat) =>
       LifeParagraphService.categoryBodyEn(cat);
+
+  /// R107 — 카테고리 영어 본문 (일간별 개인화).
+  /// 사용자 사주의 일간으로 170 맵에서 lookup. life_paragraph_service delegate.
+  static String categoryBodyEnFor(SajuResult saju, LifeCategory cat) =>
+      LifeParagraphService.categoryBodyEnFor(saju, cat);
 
   /// JSON key → 영어 카테고리 제목 (chip nav + section card 공용).
   static String categoryTitleEn(String key) => lifeCategoryTitleEn(key);
