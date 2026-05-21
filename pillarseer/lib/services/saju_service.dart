@@ -146,6 +146,8 @@ class SajuService {
       currentYearGanji: currentYearGanji,
       birthDateTime: birthDt,
       isMale: isMale,
+      // R107 — 음력 변환 실패 flag 를 ManseryeokService 에서 SajuResult 로 전파.
+      lunarConversionFailed: mans.lunarConversionFailed,
     );
 
     final tenGods = TenGodsService.tableFor(base);
@@ -166,6 +168,8 @@ class SajuService {
       currentYearGanji: currentYearGanji,
       birthDateTime: birthDt,
       isMale: isMale,
+      // R107 — 음력 변환 실패 flag 를 ManseryeokService 에서 SajuResult 로 전파.
+      lunarConversionFailed: mans.lunarConversionFailed,
     );
   }
 

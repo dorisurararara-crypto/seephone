@@ -106,6 +106,9 @@ class TodayEventReading {
   final TenGodGroup tenGodGroup;
   final List<String> activeShinsa; // 도화 / 역마 / 문창귀인 / 천을귀인 / 양인 / 백호 / 괴강 / 화개
   final String hapChungType; // 합 / 충 / 형 / 파 / 해 / 없음
+  // Round 107 #4 — 월지(태어난 달) vs 오늘 일진 지지의 합/충/형/파/해.
+  // '없음' = 관계 없음. 일지 관계(hapChungType) 와 별개로 계절·뿌리 자리 신호.
+  final String monthBranchRelation;
   final int starsLove; // 1-5
   final int starsMoney; // 1-5
   final int starsWork; // 1-5
@@ -121,6 +124,7 @@ class TodayEventReading {
     required this.tenGodGroup,
     required this.activeShinsa,
     required this.hapChungType,
+    this.monthBranchRelation = '없음',
     required this.starsLove,
     required this.starsMoney,
     required this.starsWork,
@@ -137,7 +141,7 @@ class TodayEventService {
   static TodayEventReading build({
     required String userDayStem, // 사용자 일간 (천간)
     required String userDayBranch, // 사용자 일지
-    required String userMonthBranch, // 월지 — 계절 보정 (현재 미사용, future hook)
+    required String userMonthBranch, // 월지 — 계절·뿌리 자리 (Round 107 #4 wire)
     required String todayPillar, // 오늘 60갑자
     required int todayScore, // 0-100
   }) {
@@ -158,11 +162,17 @@ class TodayEventService {
     // 3. 합/충/형/파/해 — 오늘 지지 vs 사용자 일지.
     final relation = _branchRelation(userDayBranch, branch);
 
+    // 3b. Round 107 #4 — 월지(태어난 달) vs 오늘 일진 지지 관계.
+    //     일지 관계와 별개로, 계절·뿌리 자리가 오늘 일진과 맞물리는지 본다.
+    //     점수에 작은 가중(±1)으로만 반영 — dominant 를 뒤집지 않는 보조 신호.
+    final monthRelation = _branchRelation(userMonthBranch, branch);
+
     // 4. 카테고리 점수 계산.
     final scores = _scoreCategories(
       group: group,
       activeShinsa: active,
       relation: relation,
+      monthRelation: monthRelation,
       energy: classifyDayEnergy(todayScore),
     );
 
@@ -185,12 +195,14 @@ class TodayEventService {
       god: god,
       activeShinsa: active,
       relation: relation,
+      monthRelation: monthRelation,
       dominant: dominant,
     );
     final sourceReasonEn = _composeSourceReasonEn(
       group: group,
       activeShinsa: active,
       relation: relation,
+      monthRelation: monthRelation,
       dominant: dominant,
     );
 
@@ -200,6 +212,7 @@ class TodayEventService {
       tenGodGroup: group,
       activeShinsa: active,
       hapChungType: relation,
+      monthBranchRelation: monthRelation,
       starsLove: star(EventCategory.love),
       starsMoney: star(EventCategory.money),
       starsWork: star(EventCategory.work),
@@ -732,10 +745,15 @@ class TodayEventService {
   }
 
   /// 6 카테고리 점수 합산. 각 카테고리 base 1점 (별점 0 방지) + 가중.
+  ///
+  /// Round 107 #4 — [monthRelation] (월지 vs 오늘 일진 지지 관계) 가 보조 신호로
+  /// 추가됐다. dominant 를 뒤집지 않게 일지 관계(relation)의 절반 크기(+1)로만
+  /// 가중하고, baseline 1 미만으로는 절대 내리지 않는다 (별점 0 방지 보존).
   static Map<EventCategory, int> _scoreCategories({
     required TenGodGroup group,
     required List<String> activeShinsa,
     required String relation,
+    String monthRelation = '없음',
     required DayEnergyKind energy,
   }) {
     final s = <EventCategory, int>{for (final c in EventCategory.values) c: 1};
@@ -835,6 +853,26 @@ class TodayEventService {
         break;
     }
 
+    // Round 107 #4 — 월지(태어난 달) vs 오늘 일진 지지 관계 보조 가중.
+    // 일지 관계와 같은 방향의 영역에 +1 만 더한다 (절반 크기 보조 신호).
+    // dominant 를 뒤집지 않으려고 가중치를 +1 로 제한했고, 감점은 하지 않는다.
+    // 같은 사용자라도 월지가 다르면 점수·dominant 가 달라질 수 있어 변별이 생긴다.
+    switch (monthRelation) {
+      case '합':
+        add(EventCategory.relationship, 1);
+        add(EventCategory.love, 1);
+        break;
+      case '충':
+        add(EventCategory.health, 1);
+        add(EventCategory.luck, 1);
+        break;
+      case '형':
+      case '파':
+      case '해':
+        add(EventCategory.work, 1);
+        break;
+    }
+
     return s;
   }
 
@@ -852,6 +890,7 @@ class TodayEventService {
     required TenGod? god,
     required List<String> activeShinsa,
     required String relation,
+    String monthRelation = '없음',
     required EventCategory dominant,
   }) {
     // 자연어 톤: 십신 한자는 () 안에만, jargon "결/일간/지지" 단어 노출 X.
@@ -880,16 +919,36 @@ class TodayEventService {
       default:
         relPart = '';
     }
+    // Round 107 #4 — 월지(태어난 달) vs 오늘 일진 관계 보조 한 줄.
+    // 일지 관계(relPart)와 별개로, 계절 자리가 오늘과 맞물릴 때만 덧붙인다.
+    String monthPart;
+    switch (monthRelation) {
+      case '합':
+        monthPart = ' 태어난 달의 기운까지 오늘과 부드럽게 이어지는 자리예요.';
+        break;
+      case '충':
+        monthPart = ' 태어난 달의 기운이 오늘과 살짝 어긋나니 페이스 배분에 신경 써요.';
+        break;
+      case '형':
+      case '파':
+      case '해':
+        monthPart = ' 태어난 달의 기운이 오늘과 톤이 달라, 한 박자 늦춰 다루면 좋아요.';
+        break;
+      default:
+        monthPart = '';
+    }
     // FIX: 한자 jargon 노출 0 — god.ko 의 한자 () suffix 사용 X.
     return '오늘은 당신의 사주가 $groupTone 분위기를 만나서 $catKo 가능성이 강해요.'
         '$shinPart'
-        '$relPart';
+        '$relPart'
+        '$monthPart';
   }
 
   static String _composeSourceReasonEn({
     required TenGodGroup group,
     required List<String> activeShinsa,
     required String relation,
+    String monthRelation = '없음',
     required EventCategory dominant,
   }) {
     final groupTone = _groupToneEn(group);
@@ -917,10 +976,27 @@ class TodayEventService {
       default:
         relPart = '';
     }
+    // Round 107 #4 — month branch (birth-month) vs today's branch clause.
+    String monthPart;
+    switch (monthRelation) {
+      case '합':
+        monthPart = ' Your birth-month energy flows smoothly with today, too.';
+        break;
+      case '충':
+        monthPart = ' Your birth-month energy runs a bit against today, so pace yourself.';
+        break;
+      case '형':
+      case '파':
+      case '해':
+        monthPart = ' Your birth-month energy is off-tone with today, so take it a beat slower.';
+        break;
+      default:
+        monthPart = '';
+    }
     // FIX r3 #3: 항상 2문장 이상 — 신살/관계 비어도 두 번째 문장 ("watch the small signals").
-    final twoSent = shinPart.isEmpty && relPart.isEmpty
+    final twoSent = shinPart.isEmpty && relPart.isEmpty && monthPart.isEmpty
         ? ' Keep an eye on small signals on this track today.'
-        : '$shinPart$relPart';
+        : '$shinPart$relPart$monthPart';
     return 'Today, your chart leans into $groupTone vibes — the $catEn track is more likely.$twoSent';
   }
 

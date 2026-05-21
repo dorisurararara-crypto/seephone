@@ -10,7 +10,23 @@
           "monthPillar": "月柱 한자 2자",
           "dayPillar": "日柱 한자 2자",
           "hourPillar": "항상 null — 셀럽 출생 시(時) 미상이므로 時柱 생성·암시 금지",
-          "confidence": "stable | boundary_ambiguous"
+          "confidence": "stable | boundary_ambiguous",
+          "chartValidation": {
+            "method": "검증 방식 — celeb_chart_validator 로 00:00/12:00/23:00 3시각 재계산",
+            "validatorVersion": "validator 식별자",
+            "computedDate": "검증 계산 수행일 YYYY-MM-DD",
+            "birthInput": "celebrities.json 의 출생일 입력값 YYYY-MM-DD",
+            "birthSourceId": "출생일 출처 — celebrities.json#<celebId>",
+            "gender": "M | F — 검증 계산에 쓴 성별",
+            "probeHours": "교차검증 시각 [0,12,23]",
+            "probes": "각 시각별 계산된 年月日 — 재현 가능한 raw 산출값",
+            "yearPillarStable": "3시각 年柱 동일 여부",
+            "monthPillarStable": "3시각 月柱 동일 여부",
+            "dayPillarStable": "3시각 日柱 동일 여부",
+            "recomputed": "validator 가 재계산한 年月日 — chart 와 일치해야 함",
+            "matchesChart": "recomputed == chart 인지 — 전원 true",
+            "confidenceBasis": "stable/boundary_ambiguous 판정 근거 문장"
+          }
         },
         "usedFactIds": [
           "celeb_facts.json 의 fact id — 모두 confidence=verified 여야 함"
@@ -32,7 +48,14 @@
     "chartConfidence": "00:00 / 12:00 / 23:00 세 시각으로 계산해 年柱·月柱가 모두 동일하면 stable, 절기 경계로 바뀌면 boundary_ambiguous.",
     "todoSprint2": "DONE — top 12 셀럽 curated reading 작성. 위키 검증 fact 를 티 안 나게 침투.",
     "todoSprint3A": "DONE — Top 30 확장 첫 9명 curated reading 작성. chart 는 celeb_chart_validator 로 계산, 전원 stable.",
-    "todoSprint3B": "DONE — Top 30 마지막 9명 curated reading 작성. chart 는 celeb_chart_validator 로 계산, 전원 stable. Top 30 완성."
+    "todoSprint3B": "DONE — Top 30 마지막 9명 curated reading 작성. chart 는 celeb_chart_validator 로 계산, 전원 stable. Top 30 완성.",
+    "r107": {
+      "change": "chart.chartValidation 추가 — 각 셀럽 출생일을 celeb_chart_validator 로 00:00/12:00/23:00 3시각 재계산한 검증 로그. chart/bodyKo/bodyEn/usedFactIds/sections 불변.",
+      "validatorVersion": "R105 celeb_chart_validator.dart (ManseryeokService unknownTime=true)",
+      "computedDate": "2026-05-21",
+      "reproducible": "tool/r107_compute_celeb_validation.dart 가 celebrities.json 출생일을 입력으로 재현. 손계산 0 — 전부 validator 실측값.",
+      "result": "셀럽 30명 전원 recomputed 차트 == 저장 chart (불일치 0), confidence 전원 stable."
+    }
   },
   "iu": {
     "chart": {
@@ -40,7 +63,50 @@
       "monthPillar": "丁巳",
       "dayPillar": "丁卯",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1993-05-16",
+        "birthSourceId": "celebrities.json#iu",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "癸酉",
+            "monthPillar": "丁巳",
+            "dayPillar": "丁卯"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "癸酉",
+            "monthPillar": "丁巳",
+            "dayPillar": "丁卯"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "癸酉",
+            "monthPillar": "丁巳",
+            "dayPillar": "丁卯"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "癸酉",
+          "monthPillar": "丁巳",
+          "dayPillar": "丁卯"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "iu_singer_songwriter",
@@ -90,7 +156,50 @@
       "monthPillar": "癸酉",
       "dayPillar": "辛丑",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1994-09-12",
+        "birthSourceId": "celebrities.json#rm",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "甲戌",
+            "monthPillar": "癸酉",
+            "dayPillar": "辛丑"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "甲戌",
+            "monthPillar": "癸酉",
+            "dayPillar": "辛丑"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "甲戌",
+            "monthPillar": "癸酉",
+            "dayPillar": "辛丑"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "甲戌",
+          "monthPillar": "癸酉",
+          "dayPillar": "辛丑"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "rm_underground_runch_randa",
@@ -140,7 +249,50 @@
       "monthPillar": "戊申",
       "dayPillar": "丙午",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1997-09-01",
+        "birthSourceId": "celebrities.json#jungkook",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "丁丑",
+            "monthPillar": "戊申",
+            "dayPillar": "丙午"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "丁丑",
+            "monthPillar": "戊申",
+            "dayPillar": "丙午"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "丁丑",
+            "monthPillar": "戊申",
+            "dayPillar": "丙午"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "丁丑",
+          "monthPillar": "戊申",
+          "dayPillar": "丙午"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "jungkook_solo_album_golden",
@@ -190,7 +342,50 @@
       "monthPillar": "己丑",
       "dayPillar": "壬子",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1996-01-16",
+        "birthSourceId": "celebrities.json#jennie",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "乙亥",
+            "monthPillar": "己丑",
+            "dayPillar": "壬子"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "乙亥",
+            "monthPillar": "己丑",
+            "dayPillar": "壬子"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "乙亥",
+            "monthPillar": "己丑",
+            "dayPillar": "壬子"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "乙亥",
+          "monthPillar": "己丑",
+          "dayPillar": "壬子"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "jennie_odd_atelier",
@@ -240,7 +435,50 @@
       "monthPillar": "庚辰",
       "dayPillar": "己亥",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "2000-04-11",
+        "birthSourceId": "celebrities.json#karina",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "庚辰",
+            "monthPillar": "庚辰",
+            "dayPillar": "己亥"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "庚辰",
+            "monthPillar": "庚辰",
+            "dayPillar": "己亥"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "庚辰",
+            "monthPillar": "庚辰",
+            "dayPillar": "己亥"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "庚辰",
+          "monthPillar": "庚辰",
+          "dayPillar": "己亥"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "karina_aespa_leader",
@@ -290,7 +528,50 @@
       "monthPillar": "壬申",
       "dayPillar": "壬午",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "2004-08-31",
+        "birthSourceId": "celebrities.json#wonyoung_ive",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "甲申",
+            "monthPillar": "壬申",
+            "dayPillar": "壬午"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "甲申",
+            "monthPillar": "壬申",
+            "dayPillar": "壬午"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "甲申",
+            "monthPillar": "壬申",
+            "dayPillar": "壬午"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "甲申",
+          "monthPillar": "壬申",
+          "dayPillar": "壬午"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "wonyoung_produce48_first",
@@ -340,7 +621,50 @@
       "monthPillar": "丁卯",
       "dayPillar": "戊辰",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1989-03-09",
+        "birthSourceId": "celebrities.json#taeyeon",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "己巳",
+            "monthPillar": "丁卯",
+            "dayPillar": "戊辰"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "己巳",
+            "monthPillar": "丁卯",
+            "dayPillar": "戊辰"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "己巳",
+            "monthPillar": "丁卯",
+            "dayPillar": "戊辰"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "己巳",
+          "monthPillar": "丁卯",
+          "dayPillar": "戊辰"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "taeyeon_snsd_leader",
@@ -390,7 +714,50 @@
       "monthPillar": "庚申",
       "dayPillar": "乙巳",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1988-08-18",
+        "birthSourceId": "celebrities.json#gdragon",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "戊辰",
+            "monthPillar": "庚申",
+            "dayPillar": "甲辰"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "戊辰",
+            "monthPillar": "庚申",
+            "dayPillar": "乙巳"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "戊辰",
+            "monthPillar": "庚申",
+            "dayPillar": "乙巳"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": false,
+        "recomputed": {
+          "yearPillar": "戊辰",
+          "monthPillar": "庚申",
+          "dayPillar": "乙巳"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "gdragon_songwriting_no1",
@@ -440,7 +807,50 @@
       "monthPillar": "己亥",
       "dayPillar": "甲辰",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1981-11-22",
+        "birthSourceId": "celebrities.json#song-hyekyo",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "辛酉",
+            "monthPillar": "己亥",
+            "dayPillar": "甲辰"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "辛酉",
+            "monthPillar": "己亥",
+            "dayPillar": "甲辰"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "辛酉",
+            "monthPillar": "己亥",
+            "dayPillar": "甲辰"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "辛酉",
+          "monthPillar": "己亥",
+          "dayPillar": "甲辰"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "songhyekyo_model_contest_debut",
@@ -490,7 +900,50 @@
       "monthPillar": "壬子",
       "dayPillar": "庚辰",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1972-12-15",
+        "birthSourceId": "celebrities.json#squidgame-lee",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "壬子",
+            "monthPillar": "壬子",
+            "dayPillar": "庚辰"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "壬子",
+            "monthPillar": "壬子",
+            "dayPillar": "庚辰"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "壬子",
+            "monthPillar": "壬子",
+            "dayPillar": "庚辰"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "壬子",
+          "monthPillar": "壬子",
+          "dayPillar": "庚辰"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "leejungjae_model_debut_1993",
@@ -540,7 +993,50 @@
       "monthPillar": "甲申",
       "dayPillar": "癸酉",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1990-09-05",
+        "birthSourceId": "celebrities.json#kim-yuna",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "庚午",
+            "monthPillar": "甲申",
+            "dayPillar": "癸酉"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "庚午",
+            "monthPillar": "甲申",
+            "dayPillar": "癸酉"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "庚午",
+            "monthPillar": "甲申",
+            "dayPillar": "癸酉"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "庚午",
+          "monthPillar": "甲申",
+          "dayPillar": "癸酉"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "kim_yuna_olympic_gold_2010",
@@ -590,7 +1086,50 @@
       "monthPillar": "丁未",
       "dayPillar": "乙酉",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1992-07-08",
+        "birthSourceId": "celebrities.json#son-heungmin",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "壬申",
+            "monthPillar": "丁未",
+            "dayPillar": "乙酉"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "壬申",
+            "monthPillar": "丁未",
+            "dayPillar": "乙酉"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "壬申",
+            "monthPillar": "丁未",
+            "dayPillar": "乙酉"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "壬申",
+          "monthPillar": "丁未",
+          "dayPillar": "乙酉"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "son_golden_boot_2022",
@@ -640,7 +1179,50 @@
       "monthPillar": "戊子",
       "dayPillar": "乙未",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1995-12-30",
+        "birthSourceId": "celebrities.json#v",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "乙亥",
+            "monthPillar": "戊子",
+            "dayPillar": "乙未"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "乙亥",
+            "monthPillar": "戊子",
+            "dayPillar": "乙未"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "乙亥",
+            "monthPillar": "戊子",
+            "dayPillar": "乙未"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "乙亥",
+          "monthPillar": "戊子",
+          "dayPillar": "乙未"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "v_acting_hwarang",
@@ -690,7 +1272,50 @@
       "monthPillar": "丙戌",
       "dayPillar": "丁未",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1995-10-13",
+        "birthSourceId": "celebrities.json#jimin",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "乙亥",
+            "monthPillar": "丙戌",
+            "dayPillar": "丁未"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "乙亥",
+            "monthPillar": "丙戌",
+            "dayPillar": "丁未"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "乙亥",
+            "monthPillar": "丙戌",
+            "dayPillar": "丁未"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "乙亥",
+          "monthPillar": "丙戌",
+          "dayPillar": "丁未"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "jimin_solo_album_face",
@@ -740,7 +1365,50 @@
       "monthPillar": "辛亥",
       "dayPillar": "甲寅",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1992-12-04",
+        "birthSourceId": "celebrities.json#jin",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "壬申",
+            "monthPillar": "辛亥",
+            "dayPillar": "甲寅"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "壬申",
+            "monthPillar": "辛亥",
+            "dayPillar": "甲寅"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "壬申",
+            "monthPillar": "辛亥",
+            "dayPillar": "甲寅"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "壬申",
+          "monthPillar": "辛亥",
+          "dayPillar": "甲寅"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "jin_bts_eldest",
@@ -790,7 +1458,50 @@
       "monthPillar": "丙子",
       "dayPillar": "甲午",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1995-01-03",
+        "birthSourceId": "celebrities.json#jisoo",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "甲戌",
+            "monthPillar": "丙子",
+            "dayPillar": "甲午"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "甲戌",
+            "monthPillar": "丙子",
+            "dayPillar": "甲午"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "甲戌",
+            "monthPillar": "丙子",
+            "dayPillar": "甲午"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "甲戌",
+          "monthPillar": "丙子",
+          "dayPillar": "甲午"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "jisoo_acting_snowdrop",
@@ -840,7 +1551,50 @@
       "monthPillar": "壬寅",
       "dayPillar": "甲申",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1997-02-11",
+        "birthSourceId": "celebrities.json#rose",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "丁丑",
+            "monthPillar": "壬寅",
+            "dayPillar": "甲申"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "丁丑",
+            "monthPillar": "壬寅",
+            "dayPillar": "甲申"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "丁丑",
+            "monthPillar": "壬寅",
+            "dayPillar": "甲申"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "丁丑",
+          "monthPillar": "壬寅",
+          "dayPillar": "甲申"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "rose_australia_audition",
@@ -890,7 +1644,50 @@
       "monthPillar": "癸卯",
       "dayPillar": "戊辰",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1997-03-27",
+        "birthSourceId": "celebrities.json#lisa",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "丁丑",
+            "monthPillar": "癸卯",
+            "dayPillar": "戊辰"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "丁丑",
+            "monthPillar": "癸卯",
+            "dayPillar": "戊辰"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "丁丑",
+            "monthPillar": "癸卯",
+            "dayPillar": "戊辰"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "丁丑",
+          "monthPillar": "癸卯",
+          "dayPillar": "戊辰"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "lisa_thailand_audition",
@@ -940,7 +1737,50 @@
       "monthPillar": "戊子",
       "dayPillar": "甲子",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "2001-01-01",
+        "birthSourceId": "celebrities.json#winter_aespa",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "庚辰",
+            "monthPillar": "戊子",
+            "dayPillar": "甲子"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "庚辰",
+            "monthPillar": "戊子",
+            "dayPillar": "甲子"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "庚辰",
+            "monthPillar": "戊子",
+            "dayPillar": "甲子"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "庚辰",
+          "monthPillar": "戊子",
+          "dayPillar": "甲子"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "winter_dancefest_cast",
@@ -990,7 +1830,50 @@
       "monthPillar": "庚申",
       "dayPillar": "丁丑",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "2003-09-01",
+        "birthSourceId": "celebrities.json#yujin_ive",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "癸未",
+            "monthPillar": "庚申",
+            "dayPillar": "丁丑"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "癸未",
+            "monthPillar": "庚申",
+            "dayPillar": "丁丑"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "癸未",
+            "monthPillar": "庚申",
+            "dayPillar": "丁丑"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "癸未",
+          "monthPillar": "庚申",
+          "dayPillar": "丁丑"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "yujin_produce48_fifth",
@@ -1040,7 +1923,50 @@
       "monthPillar": "甲寅",
       "dayPillar": "辛丑",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1988-02-16",
+        "birthSourceId": "celebrities.json#kim-soohyun",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "戊辰",
+            "monthPillar": "甲寅",
+            "dayPillar": "辛丑"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "戊辰",
+            "monthPillar": "甲寅",
+            "dayPillar": "辛丑"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "戊辰",
+            "monthPillar": "甲寅",
+            "dayPillar": "辛丑"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "戊辰",
+          "monthPillar": "甲寅",
+          "dayPillar": "辛丑"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "kimsoohyun_moon_sun_2012",
@@ -1090,7 +2016,50 @@
       "monthPillar": "丙午",
       "dayPillar": "壬寅",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1987-06-22",
+        "birthSourceId": "celebrities.json#lee-minho",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "丁卯",
+            "monthPillar": "丙午",
+            "dayPillar": "辛丑"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "丁卯",
+            "monthPillar": "丙午",
+            "dayPillar": "壬寅"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "丁卯",
+            "monthPillar": "丙午",
+            "dayPillar": "壬寅"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": false,
+        "recomputed": {
+          "yearPillar": "丁卯",
+          "monthPillar": "丙午",
+          "dayPillar": "壬寅"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "leeminho_model_predebut",
@@ -1140,7 +2109,50 @@
       "monthPillar": "癸卯",
       "dayPillar": "辛未",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1997-03-30",
+        "birthSourceId": "celebrities.json#cha-eunwoo",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "丁丑",
+            "monthPillar": "癸卯",
+            "dayPillar": "辛未"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "丁丑",
+            "monthPillar": "癸卯",
+            "dayPillar": "辛未"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "丁丑",
+            "monthPillar": "癸卯",
+            "dayPillar": "辛未"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "丁丑",
+          "monthPillar": "癸卯",
+          "dayPillar": "辛未"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "chaeunwoo_film_debut_2014",
@@ -1191,7 +2203,50 @@
       "monthPillar": "甲子",
       "dayPillar": "乙巳",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1988-12-16",
+        "birthSourceId": "celebrities.json#park-seojoon",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "戊辰",
+            "monthPillar": "甲子",
+            "dayPillar": "乙巳"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "戊辰",
+            "monthPillar": "甲子",
+            "dayPillar": "乙巳"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "戊辰",
+            "monthPillar": "甲子",
+            "dayPillar": "乙巳"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "戊辰",
+          "monthPillar": "甲子",
+          "dayPillar": "乙巳"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "parkseojoon_mv_debut_2011",
@@ -1241,7 +2296,50 @@
       "monthPillar": "丁丑",
       "dayPillar": "庚寅",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1990-01-25",
+        "birthSourceId": "celebrities.json#lee-junho",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "己巳",
+            "monthPillar": "丁丑",
+            "dayPillar": "庚寅"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "己巳",
+            "monthPillar": "丁丑",
+            "dayPillar": "庚寅"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "己巳",
+            "monthPillar": "丁丑",
+            "dayPillar": "庚寅"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "己巳",
+          "monthPillar": "丁丑",
+          "dayPillar": "庚寅"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "leejunho_audition_2006",
@@ -1291,7 +2389,50 @@
       "monthPillar": "甲戌",
       "dayPillar": "己巳",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1994-10-10",
+        "birthSourceId": "celebrities.json#bae-suzy",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "甲戌",
+            "monthPillar": "甲戌",
+            "dayPillar": "己巳"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "甲戌",
+            "monthPillar": "甲戌",
+            "dayPillar": "己巳"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "甲戌",
+            "monthPillar": "甲戌",
+            "dayPillar": "己巳"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "甲戌",
+          "monthPillar": "甲戌",
+          "dayPillar": "己巳"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "suzy_miss_a_debut",
@@ -1341,7 +2482,50 @@
       "monthPillar": "癸亥",
       "dayPillar": "癸卯",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1993-11-18",
+        "birthSourceId": "celebrities.json#han-sohee",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "癸酉",
+            "monthPillar": "癸亥",
+            "dayPillar": "癸卯"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "癸酉",
+            "monthPillar": "癸亥",
+            "dayPillar": "癸卯"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "癸酉",
+            "monthPillar": "癸亥",
+            "dayPillar": "癸卯"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "癸酉",
+          "monthPillar": "癸亥",
+          "dayPillar": "癸卯"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "hansohee_acting_debut_2017",
@@ -1391,7 +2575,50 @@
       "monthPillar": "庚戌",
       "dayPillar": "戊辰",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1992-10-19",
+        "birthSourceId": "celebrities.json#kim-jiwon",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "壬申",
+            "monthPillar": "庚戌",
+            "dayPillar": "戊辰"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "壬申",
+            "monthPillar": "庚戌",
+            "dayPillar": "戊辰"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "壬申",
+            "monthPillar": "庚戌",
+            "dayPillar": "戊辰"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "壬申",
+          "monthPillar": "庚戌",
+          "dayPillar": "戊辰"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "kimjiwon_descendants_of_the_sun",
@@ -1441,7 +2668,50 @@
       "monthPillar": "戊戌",
       "dayPillar": "甲戌",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1991-10-31",
+        "birthSourceId": "celebrities.json#byeon-wooseok",
+        "gender": "M",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "辛未",
+            "monthPillar": "戊戌",
+            "dayPillar": "甲戌"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "辛未",
+            "monthPillar": "戊戌",
+            "dayPillar": "甲戌"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "辛未",
+            "monthPillar": "戊戌",
+            "dayPillar": "甲戌"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "辛未",
+          "monthPillar": "戊戌",
+          "dayPillar": "甲戌"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "byeonwooseok_model_debut_2010",
@@ -1491,7 +2761,50 @@
       "monthPillar": "己亥",
       "dayPillar": "辛亥",
       "hourPillar": null,
-      "confidence": "stable"
+      "confidence": "stable",
+      "chartValidation": {
+        "method": "celeb_chart_validator (00:00/12:00/23:00 cross-check)",
+        "validatorVersion": "R105 celeb_chart_validator.dart",
+        "computedDate": "2026-05-21",
+        "birthInput": "1996-11-10",
+        "birthSourceId": "celebrities.json#kim-hyeyoon",
+        "gender": "F",
+        "probeHours": [
+          0,
+          12,
+          23
+        ],
+        "probes": [
+          {
+            "hour": 0,
+            "yearPillar": "丙子",
+            "monthPillar": "己亥",
+            "dayPillar": "辛亥"
+          },
+          {
+            "hour": 12,
+            "yearPillar": "丙子",
+            "monthPillar": "己亥",
+            "dayPillar": "辛亥"
+          },
+          {
+            "hour": 23,
+            "yearPillar": "丙子",
+            "monthPillar": "己亥",
+            "dayPillar": "辛亥"
+          }
+        ],
+        "yearPillarStable": true,
+        "monthPillarStable": true,
+        "dayPillarStable": true,
+        "recomputed": {
+          "yearPillar": "丙子",
+          "monthPillar": "己亥",
+          "dayPillar": "辛亥"
+        },
+        "matchesChart": true,
+        "confidenceBasis": "00:00 / 12:00 / 23:00 세 시각 모두 年柱·月柱 동일 → stable"
+      }
     },
     "usedFactIds": [
       "kimhyeyoon_debut_2013",

@@ -1409,6 +1409,120 @@ class _DetailSection extends StatelessWidget {
     return ganHapPairs[pair] ?? '';
   }
 
+  // R107 #5 — 두 사람 전체 사주 궁합. 직전까지 _analyze 는 일주(일간/일지) 만 봤다.
+  // 년주·월주 지지 간 합/충 + 천간 합 을 보조 anchor 로 계산해서, summary 와
+  // friction 본문이 일주뿐 아니라 년·월주 관계도 한 줄씩 짚도록 한다.
+  // 시주는 두 사람 다 hourPillar 가 있을 때만 (없으면 skip — 거짓 합충 X).
+  // additive — 일주 중심 분석·점수·5섹션 구조는 보존.
+  _SecondaryPillarAnchor _secondaryPillarAnchor(
+      SajuResult me, SajuResult partner) {
+    const jiHap6 = {
+      '子': '丑', '丑': '子', '寅': '亥', '亥': '寅', '卯': '戌',
+      '戌': '卯', '辰': '酉', '酉': '辰', '巳': '申', '申': '巳',
+      '午': '未', '未': '午',
+    };
+    const ji12clash = {
+      '子': '午', '丑': '未', '寅': '申', '卯': '酉', '辰': '戌', '巳': '亥',
+      '午': '子', '未': '丑', '申': '寅', '酉': '卯', '戌': '辰', '亥': '巳',
+    };
+    const ganHap = {
+      '甲': '己', '己': '甲', '乙': '庚', '庚': '乙', '丙': '辛',
+      '辛': '丙', '丁': '壬', '壬': '丁', '戊': '癸', '癸': '戊',
+    };
+    // 한 pillar 짝의 관계 유형을 판정 — 실제 계산된 합충만.
+    String relate(String aGan, String aJi, String bGan, String bJi) {
+      if (ji12clash[aJi] == bJi) return 'clash';
+      if (jiHap6[aJi] == bJi) return 'jiHap';
+      if (ganHap[aGan] == bGan) return 'ganHap';
+      return 'none';
+    }
+
+    final year = relate(
+      me.yearPillar.chunGan, me.yearPillar.jiJi,
+      partner.yearPillar.chunGan, partner.yearPillar.jiJi,
+    );
+    final month = relate(
+      me.monthPillar.chunGan, me.monthPillar.jiJi,
+      partner.monthPillar.chunGan, partner.monthPillar.jiJi,
+    );
+    // 시주 — 두 사람 다 출생시를 알 때만. 한 명이라도 모르면 거짓 X → skip.
+    final bothHaveHour = me.hourPillar != null && partner.hourPillar != null;
+    final hour = bothHaveHour
+        ? relate(
+            me.hourPillar!.chunGan, me.hourPillar!.jiJi,
+            partner.hourPillar!.chunGan, partner.hourPillar!.jiJi,
+          )
+        : 'unknown';
+    return _SecondaryPillarAnchor(
+      year: year,
+      month: month,
+      hour: hour,
+      yearPair: '${me.yearPillar.jiJi}·${partner.yearPillar.jiJi}',
+      monthPair: '${me.monthPillar.jiJi}·${partner.monthPillar.jiJi}',
+    );
+  }
+
+  // 년·월주 보조 anchor → summary 에 붙일 한 줄 (조건형, v5 voice). 짧게 (< 8 어절)
+  // 유지해 R100 8+ clause 반복 카운터 밖에 둔다. 합충 없으면 빈 문자열 (거짓 X).
+  String _secondaryAnchorSummaryKo(_SecondaryPillarAnchor a) {
+    final parts = <String>[];
+    if (a.year == 'jiHap' || a.year == 'ganHap') {
+      parts.add('태어난 해의 기운(${a.yearPair})은 잔잔히 맞물리는 결이에요.');
+    } else if (a.year == 'clash') {
+      parts.add('태어난 해의 기운(${a.yearPair})은 서로 다른 축을 가리키기 쉬워요.');
+    }
+    if (a.month == 'jiHap' || a.month == 'ganHap') {
+      parts.add('자란 계절의 결(${a.monthPair})도 비슷한 온도로 흐르기 쉬워요.');
+    } else if (a.month == 'clash') {
+      parts.add('자란 계절의 결(${a.monthPair})은 속도감이 달라 조율이 필요할 수 있어요.');
+    }
+    return parts.join(' ');
+  }
+
+  String _secondaryAnchorSummaryEn(_SecondaryPillarAnchor a) {
+    final parts = <String>[];
+    if (a.year == 'jiHap' || a.year == 'ganHap') {
+      parts.add('Your birth-year energies tend to mesh quietly.');
+    } else if (a.year == 'clash') {
+      parts.add('Your birth-year energies tend to point on different axes.');
+    }
+    if (a.month == 'jiHap' || a.month == 'ganHap') {
+      parts.add('The seasons you grew up in tend to run a similar temperature.');
+    } else if (a.month == 'clash') {
+      parts.add('The seasons you grew up in tend to differ in pace.');
+    }
+    return parts.join(' ');
+  }
+
+  // 년·월(·시)주 충 → friction 에 붙일 한 줄. 충이 있을 때만, 짧게.
+  String _secondaryAnchorFrictionKo(_SecondaryPillarAnchor a) {
+    final parts = <String>[];
+    if (a.year == 'clash') {
+      parts.add('년주 충은 가치관·배경 차이로 비치기 쉬운 자리예요.');
+    }
+    if (a.month == 'clash') {
+      parts.add('월주 충은 일·돈 같은 영역에서 속도 차이로 드러나기 쉬워요.');
+    }
+    if (a.hour == 'clash') {
+      parts.add('시주 충은 둘만의 사적 시간 결에서 어긋남이 비치기 쉬워요.');
+    }
+    return parts.join(' ');
+  }
+
+  String _secondaryAnchorFrictionEn(_SecondaryPillarAnchor a) {
+    final parts = <String>[];
+    if (a.year == 'clash') {
+      parts.add('A year-pillar clash tends to surface as a values or background gap.');
+    }
+    if (a.month == 'clash') {
+      parts.add('A month-pillar clash tends to show in work or money pace.');
+    }
+    if (a.hour == 'clash') {
+      parts.add('An hour-pillar clash tends to show in your private time together.');
+    }
+    return parts.join(' ');
+  }
+
   // R100 sprint 3 — 사용자 mandate verbatim: "마찬가지로 최애와 케미쪽도 엄청 반복이야
   // 1위만 보는게아니라 여러사람 볼텐데 다 비슷하거나 똑같은 형식으로 나오면 ai가
   // 만든거구나 할거같은데?". 일반 궁합 _analyze 5 섹션 본문도 같은 element-relation 짝이면
@@ -1511,6 +1625,14 @@ class _DetailSection extends StatelessWidget {
     final brPairEn = _branchPairSceneEn(profile);
     final stPairKo = _stemPairSceneKo(profile);
     final stPairEn = _stemPairSceneEn(profile);
+
+    // R107 #5 — 년·월(·시)주 보조 anchor. 일주 중심 분석에 두 사람 전체 사주
+    // 관계를 한 줄씩 더한다 (additive). 합충 없으면 빈 문자열 → 거짓 X.
+    final secondary = _secondaryPillarAnchor(me, partner);
+    final secSummaryKo = _secondaryAnchorSummaryKo(secondary);
+    final secSummaryEn = _secondaryAnchorSummaryEn(secondary);
+    final secFrictionKo = _secondaryAnchorFrictionKo(secondary);
+    final secFrictionEn = _secondaryAnchorFrictionEn(secondary);
 
     final sameDay = me.day60ji == partner.day60ji;
     final sameBranch = myJi == ptJi;
@@ -1630,6 +1752,10 @@ class _DetailSection extends StatelessWidget {
         ];
         summary.write(sameBranchPool[pick('summary-sameBranch-ko', sameBranchPool.length)]);
       }
+      // R107 #5 — 년·월주 보조 anchor 한 줄 (합/충 있을 때만).
+      if (secSummaryKo.isNotEmpty) {
+        summary.write('\n\n$secSummaryKo');
+      }
     } else {
       // 6 branch × 8 variant = 48 EN summary pool. pNameEn (fallback: 'the other person')
       // / pPoss 변수 inject. 같은 element-relation 안에서도 day60ji 짝이 다르면 다른 본문.
@@ -1715,6 +1841,10 @@ class _DetailSection extends StatelessWidget {
           ' Sharing the $myJi branch tends to sync season, body, and pace without much effort.',
         ];
         summary.write(sameBranchPool[pick('summary-sameBranch-en', sameBranchPool.length)]);
+      }
+      // R107 #5 — year/month pillar secondary anchor (only when hap/clash).
+      if (secSummaryEn.isNotEmpty) {
+        summary.write(' $secSummaryEn');
       }
     }
 
@@ -1911,6 +2041,10 @@ class _DetailSection extends StatelessWidget {
       if (elPairKo.isNotEmpty) {
         friction.write('\n\n$elPairKo');
       }
+      // R107 #5 — 년·월(·시)주 충 한 줄 (충 있을 때만).
+      if (secFrictionKo.isNotEmpty) {
+        friction.write('\n\n$secFrictionKo');
+      }
     } else {
       final n = pNameEn;
       final np = pPoss;
@@ -1953,6 +2087,10 @@ class _DetailSection extends StatelessWidget {
       }
       if (elPairEn.isNotEmpty) {
         friction.write(' $elPairEn');
+      }
+      // R107 #5 — year/month/hour pillar clash line (only when clash).
+      if (secFrictionEn.isNotEmpty) {
+        friction.write(' $secFrictionEn');
       }
     }
 
@@ -2563,5 +2701,24 @@ class _RelationshipAnchorProfile {
     required this.branchPair,
     required this.myDay60,
     required this.ptDay60,
+  });
+}
+
+// R107 #5 — 두 사람 년·월(·시)주 사이 보조 합충 anchor. 일주 중심 _analyze 에
+// "두 사람 전체 사주" 신호를 한 줄씩 더하기 위한 묶음. relation 값은
+// 'jiHap'(지지 육합) / 'ganHap'(천간 합) / 'clash'(지지 충) / 'none' / 'unknown'(시주
+// 한쪽이라도 출생시 모름 — 거짓 합충 X) 중 하나.
+class _SecondaryPillarAnchor {
+  final String year;
+  final String month;
+  final String hour;
+  final String yearPair;
+  final String monthPair;
+  const _SecondaryPillarAnchor({
+    required this.year,
+    required this.month,
+    required this.hour,
+    required this.yearPair,
+    required this.monthPair,
   });
 }

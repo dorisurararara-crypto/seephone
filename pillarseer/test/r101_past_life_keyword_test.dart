@@ -146,10 +146,11 @@ void main() {
     );
 
     test(
-      'R104 story_arcs 키 — 존재 시 8 keyword 와 동일 키 사용 (Sprint 4 content 후)',
+      'R104 story_arcs 키 — 존재 시 알려진 keyword 키만 사용 (R107: neutral 포함)',
       () {
         // story_arcs 는 Sprint 4 가 추가한다. 추가 전에는 키 자체가 없을 수 있으므로
-        // "없으면 통과" — 단 존재할 때는 기존 8 keyword 와 동일한 키만 써야 한다.
+        // "없으면 통과" — 단 존재할 때는 알려진 keyword 키만 써야 한다.
+        // R107 #9-1: neutral (매칭 0 fallback — 거짓 합 회피) 추가.
         final sa = pool['story_arcs'];
         if (sa == null) return; // Sprint 4 전.
         expect(sa, isA<Map>(), reason: 'story_arcs 는 Map 이어야 함');
@@ -162,6 +163,7 @@ void main() {
           'hap',
           'chung',
           'hyeong',
+          'neutral',
         };
         for (final k in (sa as Map).keys) {
           expect(
@@ -378,7 +380,9 @@ void main() {
       expect(kws, contains(PastLifeKeyword.gongmang));
     });
 
-    test('매칭 0 → fallback hap', () {
+    // R107 #9-1: 종전 fallback 은 hap 강제였으나 거짓 합 서술 = 거짓.
+    //   이제 매칭 0 → neutral (정직한 "신호 약함") 로 분기한다.
+    test('매칭 0 → fallback neutral (R107 #9-1)', () {
       // 寅(인) 일지 + 丑(축) 일지 — 합/충/원진/도화/역마/공망 모두 미해당.
       // 寅 도화 = 卯, 역마 = 申. 丑 도화 = 午, 역마 = 亥.
       // 甲 일간 천을 = 丑/未 (셀럽 丑 → cheoneul 매칭!) → 회피.
@@ -407,8 +411,14 @@ void main() {
       expect(kws, isNotEmpty);
       expect(
         kws,
-        contains(PastLifeKeyword.hap),
-        reason: 'fallback should be hap. got=$kws',
+        contains(PastLifeKeyword.neutral),
+        reason: 'R107 #9-1: 매칭 0 fallback 은 neutral. got=$kws',
+      );
+      // 거짓 합 서술 회피 — 매칭 0 인데 hap 이 섞이면 안 됨.
+      expect(
+        kws,
+        isNot(contains(PastLifeKeyword.hap)),
+        reason: 'R107 #9-1: 실제 합 없는데 hap fallback = 거짓. got=$kws',
       );
     });
   });

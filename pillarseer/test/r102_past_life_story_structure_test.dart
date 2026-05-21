@@ -118,7 +118,11 @@ void main() {
       ('wonjin', () => mk('子'), () => mk('未')),
       ('hap', () => mk('子'), () => mk('丑')),
       ('chung', () => mk('子'), () => mk('午')),
-      ('gongmang', () => mk('子'), () => mk('戌')),
+      // R107 #9-1: 戊子+戊戌 은 합·충·공망 어느 것도 매칭 0 → neutral fallback.
+      //   종전엔 거짓 hap fallback ("합 결") 으로 우연히 통과했었음.
+      //   이제 정직하게 neutral keyword 로 분류된다. neutral 시나리오는
+      //   거짓 살(煞) 단정을 안 하므로 saju-jargon 가 아닌 "사주" 단어로 가드.
+      ('neutral', () => mk('子'), () => mk('戌')),
     ];
 
     test('시나리오 문장 수 (arc 8~10 / fallback 7~14) + 사주 용어 1회 이상', () {
@@ -145,12 +149,22 @@ void main() {
                 '문장 수 $n 범위 밖. body=$scenario',
           );
           // 사주 용어는 arc/fallback 양쪽에서 1회 이상이어야 함 (회귀 가드).
-          final hasTerm = sajuTerms.any((t) => scenario.contains(t));
-          expect(
-            hasTerm,
-            isTrue,
-            reason: '[$label seed=$seed] 사주 용어 없음: $scenario',
-          );
+          // R107 #9-1: neutral 은 거짓 살(煞) 단정을 안 하는 정직한 keyword 라
+          //   jargon 대신 "사주" 단어 포함만 확인 (거짓말 0 보장).
+          if (label == 'neutral') {
+            expect(
+              scenario.contains('사주'),
+              isTrue,
+              reason: '[$label seed=$seed] "사주" 단어 없음: $scenario',
+            );
+          } else {
+            final hasTerm = sajuTerms.any((t) => scenario.contains(t));
+            expect(
+              hasTerm,
+              isTrue,
+              reason: '[$label seed=$seed] 사주 용어 없음: $scenario',
+            );
+          }
         }
       }
     });

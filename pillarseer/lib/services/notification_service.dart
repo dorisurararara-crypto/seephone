@@ -190,6 +190,10 @@ class NotificationService {
         );
         pickedBody = useKo ? picked.ko : picked.en;
       } else if (day60ji != null && day60ji.isNotEmpty) {
+        // R107 #3 — last-resort fallback. saju == null (사주 미상) 일 때만
+        // 도달한다. 사주가 있으면 위 두 분기(미스터리/deep)가 항상 먼저
+        // 잡으므로 계산 기반 알림이 기본 경로. 이 풀은 v5 voice(조건형 —
+        // 사건/결과 단정 0)라 사주 미상에서도 거짓말 0.
         final picked = NotificationPoolService.pickFor(
           DateTime(target.year, target.month, target.day),
           day60ji,

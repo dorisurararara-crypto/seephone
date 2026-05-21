@@ -2292,6 +2292,12 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Without a birth time, this section reads a little less sharp'**
   String get timeUnknownAffectsAccuracy;
+
+  /// No description provided for @lunarConversionFailedWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not convert that lunar date, so the chart was calculated using your input as a solar date. Please double-check your birth date.'**
+  String get lunarConversionFailedWarning;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

@@ -62,6 +62,14 @@ enum PastLifeKeyword {
 
   /// 형 — 약속과 책임이 깊게 묶인 결.
   hyeong,
+
+  /// 신호 없음 — 합·충·형 등 뚜렷한 인연 신호가 하나도 매칭되지 않은 결.
+  ///
+  /// R107 #9-1: 종전에는 매칭 0 일 때 [hap] 를 강제로 채웠다. 하지만 [hap] 시나리오는
+  /// "합의 기운이 둘을 묶었다" 처럼 실제로 없는 합(合)을 있는 것처럼 서술한다 = 거짓.
+  /// 이제 매칭 0 이면 거짓 합 대신 [neutral] — "뚜렷한 인연 신호가 약한" 정직한
+  /// 시나리오로 분기한다. 없는 합·충을 있는 척하지 않는다.
+  neutral,
 }
 
 extension PastLifeKeywordKey on PastLifeKeyword {
@@ -84,6 +92,8 @@ extension PastLifeKeywordKey on PastLifeKeyword {
         return 'chung';
       case PastLifeKeyword.hyeong:
         return 'hyeong';
+      case PastLifeKeyword.neutral:
+        return 'neutral';
     }
   }
 
@@ -106,6 +116,8 @@ extension PastLifeKeywordKey on PastLifeKeyword {
         return '충';
       case PastLifeKeyword.hyeong:
         return '형';
+      case PastLifeKeyword.neutral:
+        return '잔잔한 인연';
     }
   }
 
@@ -129,6 +141,8 @@ extension PastLifeKeywordKey on PastLifeKeyword {
         return 'refining friction';
       case PastLifeKeyword.hyeong:
         return 'bound promise';
+      case PastLifeKeyword.neutral:
+        return 'quiet bond';
     }
   }
 }
@@ -235,7 +249,8 @@ class PastLifeService {
   ///   - 천을귀인: 사용자 일간 기준 천을지지에 셀럽 일지 포함, 또는 반대 → cheoneul
   ///   - 공망: 사용자 일주 기준 공망지에 셀럽 일지 포함, 또는 반대 → gongmang
   ///
-  /// 한 개도 매칭 안 되면 fallback 으로 `hap` 1종 반환 — 시나리오 생성이 항상 가능하게.
+  /// 한 개도 매칭 안 되면 fallback 으로 `neutral` 1종 반환 — 시나리오 생성은
+  /// 항상 가능하되, 실제로 없는 합(合)을 있는 척하지 않는다 (R107 #9-1).
   static Set<PastLifeKeyword> extractKeywords(
     SajuResult user,
     SajuResult celeb,
@@ -317,8 +332,11 @@ class PastLifeService {
       keywords.add(PastLifeKeyword.gongmang);
     }
 
-    // Fallback — 한 개도 매칭 안 되면 hap (가장 무난한 결).
-    if (keywords.isEmpty) keywords.add(PastLifeKeyword.hap);
+    // R107 #9-1 — 매칭 0 이면 neutral.
+    // 종전 fallback 은 hap 강제였으나, hap 시나리오는 "합의 기운이 둘을 묶었다"
+    // 처럼 실제로 없는 합(合)을 서술 = 거짓. 거짓 합 대신 "뚜렷한 인연 신호가
+    // 약한" 정직한 결로 분기한다. 없는 합·충을 있는 척 0.
+    if (keywords.isEmpty) keywords.add(PastLifeKeyword.neutral);
 
     return keywords;
   }
@@ -667,9 +685,7 @@ class PastLifeService {
     final composed = _diversifyEndings(_capRepetition(composedRaw, rng), rng);
 
     // headline — 기존 josa helper 패턴 보존.
-    final headline =
-        '$userName${josa.withWith(userName)} '
-        '$celebName의 전생 — ${primary.labelKo} 결';
+    final headline = _headlineFor(primary, userName, celebName);
 
     return PastLifeScenario(
       keywords: keywords,
@@ -681,6 +697,22 @@ class PastLifeService {
       userRole: userRole,
       celebRole: celebRole,
     );
+  }
+
+  /// 전생 headline 한 줄.
+  ///
+  /// 일반 keyword: "X와 Y의 전생 — 원진살 결" 처럼 "<라벨> 결".
+  /// R107 #9-1 neutral: "결" 접미가 어색하므로 "<라벨>" 만 — 거짓 결(結) 단정 회피.
+  static String _headlineFor(
+    PastLifeKeyword primary,
+    String userName,
+    String celebName,
+  ) {
+    final base = '$userName${josa.withWith(userName)} $celebName의 전생 — ';
+    if (primary == PastLifeKeyword.neutral) {
+      return '$base${primary.labelKo}';
+    }
+    return '$base${primary.labelKo} 결';
   }
 
   /// arc 의 modernPunchlineByKind 에서 kind 별 punchline. unknown → icon fallback.
@@ -1080,10 +1112,8 @@ class PastLifeService {
     final composed = _diversifyEndings(_capRepetition(composedRaw, rng), rng);
 
     // R102 sprint 2 headline — josa helper 적용.
-    //   "X{와/과} Y의 전생 — {labelKo} 결"
-    final headline =
-        '$userName${josa.withWith(userName)} '
-        '$celebName의 전생 — ${primary.labelKo} 결';
+    //   "X{와/과} Y의 전생 — {labelKo} 결" (neutral 은 "결" 접미 생략).
+    final headline = _headlineFor(primary, userName, celebName);
 
     return PastLifeScenario(
       keywords: keywords,
@@ -1105,7 +1135,8 @@ class PastLifeService {
   /// 5. hyeong
   /// 6. chung
   /// 7. gongmang
-  /// 8. hap (fallback)
+  /// 8. hap
+  /// 9. neutral (신호 0 일 때만 — 다른 keyword 가 하나라도 있으면 절대 선택 안 됨)
   static PastLifeKeyword _pickPrimary(Set<PastLifeKeyword> keywords) {
     const order = [
       PastLifeKeyword.wonjin,
@@ -1116,11 +1147,13 @@ class PastLifeService {
       PastLifeKeyword.chung,
       PastLifeKeyword.gongmang,
       PastLifeKeyword.hap,
+      PastLifeKeyword.neutral,
     ];
     for (final k in order) {
       if (keywords.contains(k)) return k;
     }
-    return PastLifeKeyword.hap;
+    // 빈 Set 방어 — extractKeywords 가 항상 1개 이상 반환하므로 도달 X.
+    return PastLifeKeyword.neutral;
   }
 
   /// seed 미명시 시 deterministic seed — 두 사주 day pillar + 사용자 나이.

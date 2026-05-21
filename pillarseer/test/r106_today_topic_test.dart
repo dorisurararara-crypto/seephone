@@ -258,9 +258,18 @@ void main() {
         'no_signal_fallback',
       );
 
-      // 10 주제 × 4 슬롯 × 3 + fallback 4 슬롯 × 2 = 120 + 8 = 128.
-      expect(scanned, 128,
+      // R107 #4 — 변주 확장: 10 주제 × 4 슬롯 × 6 + fallback 4 슬롯 × 4
+      //          = 240 + 16 = 256. (R106: 슬롯당 3 → R107: 슬롯당 6)
+      expect(scanned, 256,
           reason: 'pool fragment 수 불일치 — 누락 없이 전수 스캔되어야 함');
+      // 변주 확장 가드 — 각 주제 slot 변주 ≥ 6.
+      for (final entry in topics.entries) {
+        final bucket = entry.value as Map<String, dynamic>;
+        for (final slot in ['headline', 'structure', 'trigger', 'action']) {
+          expect((bucket[slot] as List).length, greaterThanOrEqualTo(6),
+              reason: 'topics.${entry.key}.$slot 변주가 6개 미만');
+        }
+      }
     });
 
     test('④ 자기검증 응답 → RecallFeedbackService.recordFeedback 연결', () async {

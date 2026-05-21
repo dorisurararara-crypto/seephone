@@ -34,6 +34,34 @@ class NewYear2026Screen extends ConsumerWidget {
     required bool useKo,
   }) => _MonthlyFlow.moodFor(ctx: ctx, index: index, useKo: useKo);
 
+  /// R107 #6 — public test API.
+  /// 재성(정재·편재) 십신 빈도 → 돈 흐름 분기 라벨.
+  /// 위임: _AnnualSummary.wealthShape.
+  /// 반환: 'jeong' / 'pyeon' / 'balanced' / 'light' / 'none'.
+  static String wealthShapeForTest(SajuContext ctx) =>
+      _AnnualSummary.wealthShape(ctx);
+
+  /// R107 #6 — public test API.
+  /// 십신 빈도 map 직접 받아 돈 흐름 분기 라벨 (deterministic 검증용).
+  static String wealthShapeFromFreqForTest(Map<TenGod, int> freq) =>
+      _AnnualSummary.wealthShapeFromFreq(freq);
+
+  /// R107 #6 — public test API.
+  /// 신년 총평 [6] 돈 흐름 문단 (KO) — ctx 의 재성 구조 기반.
+  static String wealthFlowKoForTest(SajuContext ctx) {
+    final s = _AnnualSummary(saju: SajuResult.dummy(), yongsin: '火', useKo: true);
+    return s._wealthFlowKo(ctx);
+  }
+
+  /// R107 #6 — public test API.
+  /// _AnnualSummary 본문 전체 — 재성 구조 회귀 검증용.
+  static String annualSummaryBodyForTest({
+    required SajuResult saju,
+    required bool useKo,
+  }) {
+    return _AnnualSummary.bodyText(saju: saju, useKo: useKo);
+  }
+
   /// R93 sprint 6 — public test API.
   /// 12 area dynamic readings (CAREER ~ LEGACY) — 사주 anchor 반영.
   /// 위임: _TwelveAreas._buildAreaReadings.
@@ -390,8 +418,54 @@ class _AnnualSummary extends StatelessWidget {
     }
   }
 
+  /// R107 #6 — public test API.
+  /// 신년 총평 본문 전체를 widget 렌더 없이 합성. 재성 분기 회귀 검증용.
+  static String bodyText({required SajuResult saju, required bool useKo}) {
+    return _AnnualSummary(
+      saju: saju,
+      yongsin: '火',
+      useKo: useKo,
+    )._buildBody();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? 'ANNUAL  SUMMARY · 總 評' : 'ANNUAL  SUMMARY · 總 評',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            _buildBody(),
+            style: GoogleFonts.notoSansKr(
+              fontSize: 14,
+              color: AppColors.ink,
+              height: 1.95,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// R93 sprint 5 / R107 #6 — 신년 총평 7 문단 본문 합성.
+  /// build() 와 bodyText() (test API) 가 공유.
+  String _buildBody() {
     final ctx = SajuContext.from(saju, today: DateTime(2026, 1, 1));
     final myEl = saju.dayPillar.chunGanElement;
     final myJi = saju.dayPillar.jiJi;
@@ -479,9 +553,11 @@ class _AnnualSummary extends StatelessWidget {
       );
 
       // [6] 사람·관계·돈 — 250~350자
+      // R107 #6 — 돈 흐름 문단을 사용자 실제 재성(정재·편재) 구조로 분기.
+      // 기존: "정재보다 편재 성격" 고정 → 재성 구조 무관하게 모든 사용자가 동일 문장.
       body.writeln('');
       writePara(
-        '관계 영역은 봄에 정리, 여름에 확장, 가을에 정착으로 리듬을 잡아두면 좋아요. 오래된 친구·연인과의 거리감을 봄에 한 번 들여다보기 좋고, 여름 무대에서 새 인연이 가까워질 자리가 열리기 쉬워요. 가을 이후에 두텁게 자리잡는 인연이 있다면 한 해의 가장 큰 선물이 될 수 있어요. 돈 흐름은 정재(고정 수입)보다 편재(기회·투자) 성격이 강한 자리라, 큰 흐름 한 번이 지나갈 때를 대비해두면 좋아요. 그 자리를 놓치지 않으려면 1~3월의 정보 수집과 4~5월의 결정 모드를 미리 챙겨두는 게 핵심이에요. 큰 돈이 들어왔을 때 바로 쓰지 않고 한 박자 보관하는 습관을 들이면 가을·겨울 안정에 도움이 됩니다.',
+        '관계 영역은 봄에 정리, 여름에 확장, 가을에 정착으로 리듬을 잡아두면 좋아요. 오래된 친구·연인과의 거리감을 봄에 한 번 들여다보기 좋고, 여름 무대에서 새 인연이 가까워질 자리가 열리기 쉬워요. 가을 이후에 두텁게 자리잡는 인연이 있다면 한 해의 가장 큰 선물이 될 수 있어요. ${_wealthFlowKo(ctx)} 큰 돈이 흘러올 때 바로 쓰지 않고 한 박자 보관하는 습관을 들이면 가을·겨울 안정에 도움이 됩니다.',
       );
 
       // [7] 마무리 조언 — 200자
@@ -514,42 +590,12 @@ class _AnnualSummary extends StatelessWidget {
         'Spring (Feb–Apr): plant new seeds. Summer (May–Jul): fire peaks — visibility but burnout risk. Autumn (Aug–Oct): harvest. Winter (Nov–Dec): store and prepare for 2027.',
       );
       body.writeln(
-        'Relationships: spring is for sorting old ties, summer for opening new ones, autumn for settling depth. Money: more windfall than fixed — a big flow tends to pass once, so collect info Jan–Mar and decide Apr–May.',
+        'Relationships: spring is for sorting old ties, summer for opening new ones, autumn for settling depth. ${_wealthFlowEn(ctx)}',
       );
       body.writeln('One-line counsel: ${_oneLineCounsel(rel)}');
     }
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 36, 24, 36),
-      decoration: const BoxDecoration(
-        color: AppColors.bg,
-        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            useKo ? 'ANNUAL  SUMMARY · 總 評' : 'ANNUAL  SUMMARY · 總 評',
-            style: GoogleFonts.inter(
-              fontSize: 9,
-              letterSpacing: 5,
-              fontWeight: FontWeight.w500,
-              color: AppColors.taupe,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            body.toString().trim(),
-            style: GoogleFonts.notoSansKr(
-              fontSize: 14,
-              color: AppColors.ink,
-              height: 1.95,
-            ),
-          ),
-        ],
-      ),
-    );
+    return body.toString().trim();
   }
 
   /// 십신 빈도 최강 1개 라벨 (KR).
@@ -610,6 +656,60 @@ class _AnnualSummary extends StatelessWidget {
         return '눌리는 해 — 무리 금지, 가을 이후 진짜 성장';
       default:
         return '중립의 해 — 작은 도전 한 가지로 의미를 만들기';
+    }
+  }
+
+  /// R107 #6 — 사용자 실제 재성(정재·편재 십신 개수) 구조로 돈 흐름 문단 분기.
+  ///
+  /// 기존 총평 [6] 문단은 재성 구조와 무관하게 "정재보다 편재" 가 고정 삽입돼
+  /// 많은 사용자가 같은 문장을 봤다. ctx.tenGodFrequency 의 정재·편재 카운트를
+  /// 읽어 4 분기 — 정재 우세 / 편재 우세 / 정·편재 균형 / 재성 약함.
+  /// v5 voice: 단정 금지·발동 조건형 ("쉬워요" / "기울어요" / "도움이 돼요").
+  ///
+  /// 분기 5 종 (public test 검증):
+  ///   wealthShape ∈ { jeong, pyeon, balanced, light, none }.
+  static String wealthShape(SajuContext ctx) =>
+      wealthShapeFromFreq(ctx.tenGodFrequency);
+
+  /// 십신 빈도 map 직접 받는 형 — deterministic 검증용.
+  static String wealthShapeFromFreq(Map<TenGod, int> freq) {
+    final jeong = freq[TenGod.jeongjae] ?? 0;
+    final pyeon = freq[TenGod.pyeonjae] ?? 0;
+    final total = jeong + pyeon;
+    if (total == 0) return 'none';
+    if (total == 1) return 'light';
+    if (jeong > pyeon) return 'jeong';
+    if (pyeon > jeong) return 'pyeon';
+    return 'balanced';
+  }
+
+  String _wealthFlowKo(SajuContext ctx) {
+    switch (wealthShape(ctx)) {
+      case 'jeong':
+        return '본인 사주는 재성 중 정재(고정 수입·꾸준한 결실) 쪽이 더 두텁게 자리해요. 한 해의 돈 흐름도 큰 한 방보다 매달 쌓이는 결을 챙길 때 더 안정되기 쉬우니, 정기적인 수입·저축 루틴을 봄에 한 번 정비해두면 좋아요.';
+      case 'pyeon':
+        return '본인 사주는 재성 중 편재(기회·투자·유동 수입) 쪽이 더 두텁게 자리해요. 한 해의 돈 흐름도 큰 흐름 한 번이 지나갈 때를 대비해두는 게 잘 맞으니, 1~3월 정보 수집과 4~5월 결정 모드를 미리 챙겨두면 그 자리를 놓치지 않기 쉬워요.';
+      case 'balanced':
+        return '본인 사주는 정재(고정 수입)와 편재(기회·투자)가 비슷한 무게로 자리해요. 한 해의 돈 흐름도 꾸준한 결실과 큰 기회를 둘 다 열어둘 때 균형이 잡히기 쉬우니, 안정 루틴 하나와 기회 대비 하나를 같이 챙겨두면 좋아요.';
+      case 'light':
+        return '본인 사주는 재성이 한 자리만 있어서, 한 해의 돈 흐름은 큰 변동보다 한두 번의 또렷한 결정 자리를 중심으로 움직이기 쉬워요. 그 한 자리를 신중하게 다루면 한 해 재정이 한결 또렷해지기 쉬워요.';
+      default: // none
+        return '본인 사주는 재성이 거의 없는 결이라, 한 해의 돈 흐름은 고정 수입보다 인연·기회 쪽 우회 경로로 들어오기 쉬워요. 사람과의 관계를 잘 챙기는 것이 그대로 재정의 길이 되기 쉬운 한 해예요.';
+    }
+  }
+
+  String _wealthFlowEn(SajuContext ctx) {
+    switch (wealthShape(ctx)) {
+      case 'jeong':
+        return 'Money: your chart leans toward jeongjae (steady, recurring income) among the wealth stars, so the flow tends to settle when you tend a regular savings rhythm rather than chasing one big hit.';
+      case 'pyeon':
+        return 'Money: your chart leans toward pyeonjae (opportunity and fluid income) among the wealth stars, so a big flow tends to pass once — collecting info Jan–Mar and deciding Apr–May tends to help you catch it.';
+      case 'balanced':
+        return 'Money: jeongjae (fixed income) and pyeonjae (opportunity) sit at similar weight in your chart, so the flow tends to balance when you keep both a steady routine and a readiness for the big window.';
+      case 'light':
+        return 'Money: a single wealth star sits in your chart, so the year tends to move around one or two clear decision points rather than wide swings — handling that one spot with care tends to keep the year steadier.';
+      default: // none
+        return 'Money: wealth stars are scarce in your chart, so the flow tends to arrive through people and opportunity more than fixed income — tending your relationships tends to double as tending your finances.';
     }
   }
 }
@@ -1050,7 +1150,7 @@ class _TwelveAreas extends StatelessWidget {
         ),
         area(
           'WEALTH · 財',
-          '$wealthAnchor $wealthYong 정재보다 편재 성격의 한 해 — 1-3월 정보 수집, 4-5월 결정 모드.',
+          '$wealthAnchor $wealthYong ${_wealthShapeLineKo(ctx)}',
         ),
         area('LOVE · 緣', '$loveAnchor 깊이는 가을(9-10월) 이후에 자리잡기 쉽고, 봄·여름엔 가볍게 가는 게 잘 맞아요.'),
         area(
@@ -1178,7 +1278,7 @@ class _TwelveAreas extends StatelessWidget {
         ),
         (
           'WEALTH',
-          '$wealthAnchor ${yongIsFire ? 'Yongsin Fire — the year directly nourishes you, ideal for big calls.' : 'Keep yongsin $yong close to steady the flow.'} Collect info Jan–Mar, decide Apr–May.',
+          '$wealthAnchor ${yongIsFire ? 'Yongsin Fire — the year directly nourishes you, ideal for big calls.' : 'Keep yongsin $yong close to steady the flow.'} ${_wealthShapeLineEn(ctx)}',
         ),
         (
           'LOVE',
@@ -1215,6 +1315,39 @@ class _TwelveAreas extends StatelessWidget {
           "Your $gShort structure leaves the year's mark. Write the year in one line at the end — that line shapes the first decision of 2027.",
         ),
       ];
+    }
+  }
+
+  /// R107 #6 — WEALTH area 한 줄을 사용자 재성(정재·편재) 구조로 분기.
+  /// 기존 "정재보다 편재 성격의 한 해" 고정 삽입 제거. v5 voice (발동 조건형).
+  String _wealthShapeLineKo(SajuContext ctx) {
+    switch (_AnnualSummary.wealthShape(ctx)) {
+      case 'jeong':
+        return '재성 중 정재(고정 수입) 쪽이 두터운 결 — 매달 쌓이는 흐름을 챙길 때 더 안정되기 쉬워요.';
+      case 'pyeon':
+        return '재성 중 편재(기회·투자) 쪽이 두터운 결 — 1-3월 정보 수집, 4-5월 결정 모드를 미리 챙겨두면 좋아요.';
+      case 'balanced':
+        return '정재(고정)와 편재(기회)가 비슷한 무게 — 안정 루틴 하나와 기회 대비 하나를 같이 챙겨두면 좋아요.';
+      case 'light':
+        return '재성이 한 자리 — 한두 번의 또렷한 결정 자리를 신중하게 다루는 게 한 해의 키예요.';
+      default: // none
+        return '재성이 약한 결 — 돈 흐름은 인연·기회 쪽 우회 경로로 들어오기 쉬워요.';
+    }
+  }
+
+  /// R107 #6 — WEALTH area 영어 한 줄 (재성 구조 분기).
+  String _wealthShapeLineEn(SajuContext ctx) {
+    switch (_AnnualSummary.wealthShape(ctx)) {
+      case 'jeong':
+        return 'Wealth leans to jeongjae (steady income) — tending a recurring rhythm tends to keep it stable.';
+      case 'pyeon':
+        return 'Wealth leans to pyeonjae (opportunity) — collect info Jan–Mar, decide Apr–May.';
+      case 'balanced':
+        return 'Jeongjae and pyeonjae sit at similar weight — keep both a steady routine and a readiness for the window.';
+      case 'light':
+        return 'A single wealth star — handling one or two clear decision points with care is the year\'s key.';
+      default: // none
+        return 'Wealth stars are scarce — the flow tends to arrive through people and opportunity.';
     }
   }
 }

@@ -95,8 +95,11 @@ void main() {
       ('wonjin', () => mk('子'), () => mk('未')),
       ('hap', () => mk('子'), () => mk('丑')),
       ('chung', () => mk('子'), () => mk('午')),
-      ('gongmang', () => mk('子'), () => mk('戌')),
-      ('cheoneul', () => mk('子'), () => mk('丑')), // 천을귀인 hit 안 될 수 있으나 hap fallback OK
+      // R107 #9-1: 戊子+戊戌 은 합·충·공망 매칭 0 → neutral fallback (정직).
+      //   종전엔 거짓 hap fallback 으로 우연히 통과. neutral 시나리오는
+      //   거짓 살(煞)·드라마 단정을 안 하므로 drama/sal 가드에서 의도적 제외.
+      ('neutral', () => mk('子'), () => mk('戌')),
+      ('cheoneul', () => mk('子'), () => mk('丑')), // 戊 일간 천을 = 丑/未 → 실제 cheoneul 매칭
     ];
 
     final celebs = <String>['솔라', '카리나', '뷔', '아이유', '이찬원'];
@@ -106,6 +109,8 @@ void main() {
       final failureExamples = <String>[];
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        // R107 #9-1: neutral 은 의도적으로 저드라마(잔잔한 인연) — drama 가드 제외.
+        if (label == 'neutral') continue;
         for (final celeb in celebs) {
           for (var seed = 0; seed < 2; seed++) {
             final scenario = PastLifeService.generateScenario(
@@ -133,6 +138,9 @@ void main() {
     test('사주살 bucket 50 sample 모두 hit (≥ 1)', () {
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        // R107 #9-1: neutral 은 살(煞) 신호 0 인 케이스 — 살 명시 0 이 정답.
+        //   거짓 살을 넣으면 거짓말이므로 sal 가드에서 의도적 제외.
+        if (label == 'neutral') continue;
         for (final celeb in celebs) {
           for (var seed = 0; seed < 2; seed++) {
             final scenario = PastLifeService.generateScenario(

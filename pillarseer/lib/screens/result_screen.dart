@@ -231,6 +231,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             // R88 sprint 3 — 17 카테고리 인생 분류 skeleton.
             // R89 sprint 3 — 상단 chip nav 추가 (16 카테고리, conclusion_self 별도).
 
+            // R107 — 음력 변환 실패 안내 배너. 음력 입력인데 ManseryeokService 가
+            // 양력으로 변환하지 못한 경우(lunarConversionFailed==true) 결과 최상단에
+            // 사실 안내 1줄을 mount. 정상 입력은 lunarConversionFailed==false → 미노출.
+            if (result.lunarConversionFailed)
+              _LunarConversionWarning(useKo: useKo),
+
             // 1. FOUR PILLARS — 4기둥 8글자 (R83 P1-E 시간 모름 처리 보존).
             _FourPillarsSection(
               result: result,
@@ -349,6 +355,55 @@ class _LifeCategoryChip extends StatelessWidget {
             color: AppColors.ink,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// R107 — 음력 변환 실패 안내 배너.
+///
+/// 사용자가 음력으로 입력했으나 유효하지 않은 음력 날짜라 양력 변환에 실패하면
+/// `SajuResult.lunarConversionFailed` 가 true 가 된다. 이 배너는 결과 화면 최상단에
+/// 사실만 차분히 안내한다 — v5 voice: 과한 공포 표현 없이 "확인해 주세요" 톤.
+/// Aesop 톤 유지: 별도 색 fill 최소, terracotta hairline 1px 로만 주의 신호.
+class _LunarConversionWarning extends StatelessWidget {
+  final bool useKo;
+  const _LunarConversionWarning({required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+      decoration: BoxDecoration(
+        color: AppColors.paper,
+        border: const Border(
+          bottom: BorderSide(color: AppColors.line, width: 1),
+          left: BorderSide(color: AppColors.fireRed, width: 3),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.info_outline,
+            size: 18,
+            color: AppColors.fireRed,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              l.lunarConversionFailedWarning,
+              style: GoogleFonts.notoSansKr(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                height: 1.6,
+                color: AppColors.ink,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

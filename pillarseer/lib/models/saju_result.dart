@@ -293,6 +293,15 @@ class SajuResult {
   final DateTime? birthDateTime;
   final bool? isMale;         // 양남음녀 결정용 — daewoon 순행/역행 (있으면 우선 사용).
 
+  /// R107 — 음력 입력의 양력 변환 실패 여부.
+  ///
+  /// `true` 면 사용자가 음력으로 입력했으나 유효하지 않은 음력 날짜(범위 밖·
+  /// 없는 윤달 등) 라 `ManseryeokService` 가 변환하지 못하고 입력값을 양력으로
+  /// 간주해 계산했다는 뜻. `result_screen` 이 이 flag 로 사용자에게 안내 배너를
+  /// 띄운다. 양력 입력 또는 정상 음력 변환 시 항상 `false` (기본값) — 정상
+  /// 경로의 사주 출력값은 1 bit 도 안 바뀐다.
+  final bool lunarConversionFailed;
+
   const SajuResult({
     required this.yearPillar,
     required this.monthPillar,
@@ -310,6 +319,7 @@ class SajuResult {
     this.currentYearGanji,
     this.birthDateTime,
     this.isMale,
+    this.lunarConversionFailed = false,
   });
 
   String get pillarsText {

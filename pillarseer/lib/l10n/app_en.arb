@@ -397,5 +397,6 @@
 
   "hourPillarUnknownDisclaimer": "You did not enter a birth time, so the hour pillar is left blank. Read the broader flow rather than fine timing.",
   "hourPillarUnknownBadge": "Result without hour pillar",
-  "timeUnknownAffectsAccuracy": "Without a birth time, this section reads a little less sharp"
+  "timeUnknownAffectsAccuracy": "Without a birth time, this section reads a little less sharp",
+  "lunarConversionFailedWarning": "We could not convert that lunar date, so the chart was calculated using your input as a solar date. Please double-check your birth date."
 }

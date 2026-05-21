@@ -13,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
+import '../../services/celeb_chart_validator.dart';
 import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../theme/app_theme.dart';
@@ -4464,44 +4465,74 @@ String _starShortName(_Star star, {required bool useKo}) {
   return cut;
 }
 
-/// R101 sprint 3 — `_Star` → `SajuResult` light adapter.
+/// R101 sprint 3 / R107 #2 — `_Star` → `SajuResult` adapter.
 ///
-/// 셀럽 데이터는 `birth` (YYYY-MM-DD) + `dayPillar` (일주 한자 2자) 만 가지고
-/// year/month/hour pillar 는 보강 불가. `compatibility_screen._analyze()` 가
-/// 본문 합성에 사용하는 필드만 정확히 채운다:
+/// 셀럽 데이터(`celebrities.json`)는 `birth` (YYYY-MM-DD) + `dayPillar` (일주
+/// 한자 2자) 를 가진다. 출생 시(時)는 공개되지 않았다.
 ///
-/// - `dayPillar.chunGan` / `.jiJi` — 본문 모든 합/충/형/생극 분기.
-/// - `day60ji` — variant pool seed.
-/// - `elements.deficit` / `.dominant` — complementary 한 분기 (line 1525).
-/// - `elements` 분포 — 셀럽 dayPillar chunGan 5행 가중치만 줘서 dominant 일관성.
+/// R107 #2 거짓말 0 mandate — 이전(R101)에는 year/month pillar 자리를 `dayPillar`
+/// 로 임시(가짜) 복사했다. "셀럽 전체 사주 궁합" 이라 보이지만 실제로는 일주만
+/// 진짜이고 年柱·月柱가 가짜 = 거짓. 본 adapter 는 이제 `CelebChartValidator`
+/// (= `ManseryeokService` 엔진, `unknownTime=true`) 로 셀럽 출생일에서 **실제
+/// 年柱·月柱·日柱 3주**를 계산한다.
 ///
-/// 시간 모름 mandate (R83 sprint P1-E) 와 동일하게 `hourPillar=null`.
-/// year/month pillar 도 보강 불가하므로 `dayPillar` 로 임시 채움 — `_analyze` 가
-/// year/month 를 직접 참조하지 않음 (감사: `lib/screens/reports/compatibility_screen.dart`
-/// `_analyze` 본문 grep, `partner.yearPillar`/`partner.monthPillar` 직접 호출 0).
+/// - `yearPillar` / `monthPillar` / `dayPillar` — 출생일에서 엔진이 계산한 실제 값.
+///   (年/月은 절기 경계로 흔들릴 수 있으나 동일 출생일이면 엔진 결정값이 일관됨.)
+/// - `hourPillar` — 항상 `null`. 셀럽 출생 시 미상 (R83 sprint P1-E mandate).
+///   時柱는 절대 생성·암시하지 않는다.
+/// - `elements` — `compatibility_screen._score`/`._analyze` 의 complementary 분기
+///   (`me.elements.deficit == partner.elements.dominant` 또는 그 역) 의 회귀 0 을
+///   위해 R101 과 동일하게 **일간(日干) 천간 5행** 가중치만 부여한다. (3주 전체
+///   분포로 바꾸면 dominant/deficit 이 달라져 R100/R101 점수가 흔들리므로 의도적
+///   보존.) 셀럽 5행은 본문 케미용 보조 신호일 뿐 만세력 정밀 분포가 아니다.
 ///
-/// 위험: 향후 `_analyze` 가 5행 분포 외 year/month 8자를 직접 사용하도록 확장될
-/// 경우 본 adapter 가 silent partial reading 을 만들 수 있음. 위 grep 결과
-/// 시점은 R101 sprint 3 작성 시점 — 후속 sprint 에서 확인 필요.
+/// 일관성: `CelebChartValidator` 가 계산한 日柱는 `celebrities.json` 의
+/// `dayPillar` 와 동일해야 한다 (R105 `celeb_chart_validator` 회귀 가드 검증).
+/// 엔진 계산이 실패(날짜 파싱 불가 등)하면 가짜로 채우지 않고 기록된 `dayPillar`
+/// 만 진짜로 두고 年/月은 일주로 폴백 — 이 경우만 부분 데이터이며, 실데이터
+/// 223 entry 는 모두 정상 birth 를 가져 폴백 경로를 타지 않는다.
 @visibleForTesting
 SajuResult starToSajuResultForTest(Map<String, dynamic> starJson) =>
     _starToSajuResult(_Star.fromJson(starJson));
 
 SajuResult _starToSajuResult(_Star star) {
-  // dayPillar 한자 2자 보강.
-  final dp = star.dayPillar.length >= 2
-      ? star.dayPillar
-      : '甲子';  // R83 sprint P1-E 와 같이 fallback (실제 데이터 entry 223개 모두 2자 보장).
+  // dayPillar 한자 2자 보강 (실제 데이터 entry 223개 모두 2자 보장).
+  final dp = star.dayPillar.length >= 2 ? star.dayPillar : '甲子';
   final dayGan = dp[0];
   final dayJi = dp[1];
-  // 셀럽 5행 분포 — dayPillar chunGan 5행에만 무게 부여. dominant 만 일관되면
-  // `_analyze` 의 complementary 분기 (me.elements.deficit == partner.elements.dominant
-  // 또는 그 역) 가 dayPillar 5행 기준으로 안전하게 평가됨.
+
+  // 셀럽 출생일 → 실제 年柱·月柱·日柱 3주 계산.
+  Pillar dayPillar = Pillar(chunGan: dayGan, jiJi: dayJi);
+  Pillar yearPillar = dayPillar;   // 폴백 (날짜 파싱 실패 시에만 일주로).
+  Pillar monthPillar = dayPillar;  // 폴백.
+  final chart = star.birth.isNotEmpty
+      ? CelebChartValidator.computeChart(
+          celebId: star.id,
+          birth: star.birth,
+          isMale: star.gender != 'F',
+        )
+      : null;
+  if (chart != null) {
+    // 엔진 계산 성공 — 가짜 copy 없이 실제 3주 사용.
+    if (chart.yearPillar.length >= 2) {
+      yearPillar = Pillar(chunGan: chart.yearPillar[0], jiJi: chart.yearPillar[1]);
+    }
+    if (chart.monthPillar.length >= 2) {
+      monthPillar = Pillar(chunGan: chart.monthPillar[0], jiJi: chart.monthPillar[1]);
+    }
+    // 日柱는 celebrities.json 기록값과 엔진 계산값이 일치해야 한다.
+    // 엔진 계산값을 우선 — 만세력 진실값.
+    if (chart.dayPillar.length >= 2) {
+      dayPillar = Pillar(chunGan: chart.dayPillar[0], jiJi: chart.dayPillar[1]);
+    }
+  }
+
+  // 5행 분포 — 일간 천간 5행 가중치 (R100/R101 회귀 0 보존, 위 doc 참조).
   const elMap = {
     '甲': '木', '乙': '木', '丙': '火', '丁': '火', '戊': '土',
     '己': '土', '庚': '金', '辛': '金', '壬': '水', '癸': '水',
   };
-  final ganEl = elMap[dayGan] ?? '木';
+  final ganEl = elMap[dayPillar.chunGan] ?? '木';
   int v(String k) => ganEl == k ? 60 : 10;
   final fe = FiveElements(
     wood: v('木'),
@@ -4510,7 +4541,6 @@ SajuResult _starToSajuResult(_Star star) {
     metal: v('金'),
     water: v('水'),
   );
-  final pillar = Pillar(chunGan: dayGan, jiJi: dayJi);
   DateTime? birthDt;
   try {
     if (star.birth.isNotEmpty) {
@@ -4520,12 +4550,12 @@ SajuResult _starToSajuResult(_Star star) {
     birthDt = null;
   }
   return SajuResult(
-    yearPillar: pillar,     // year/month 직접 미사용 — dayPillar 로 채움.
-    monthPillar: pillar,
-    dayPillar: pillar,
+    yearPillar: yearPillar,
+    monthPillar: monthPillar,
+    dayPillar: dayPillar,
     hourPillar: null,       // 시간 모름 — R83 sprint P1-E 와 동일.
     elements: fe,
-    dayMaster: dayGan,
+    dayMaster: dayPillar.chunGan,
     dayMasterName: star.dayPillarName,
     summary: '',
     categoryReadings: const {},

@@ -648,6 +648,56 @@
     "그 옛 부탁 한 줄이 이번 생엔 '내년에도 응원할게요'라는 한 줄 댓글로 돌아왔어요. 매년 같은 줄로요.",
     "형 결의 결로, $celebName의 신곡 가사에 짧은 약속 한 줄이 있을 때 $userName은 그 줄에 가장 오래 멈춰요."
    ]
+  },
+  "neutral": {
+   "label": "잔잔한 인연",
+   "tone": "강한 합·충·살 신호 없음. 운명 단정 금지. 정직하게.",
+   "headers": [
+    "$userName과 $celebName의 전생은 $era의 같은 거리에서 잠깐 스쳤어요.",
+    "$era — $userName과 $celebName은 같은 시대를 살았지만 깊게 엮이진 않았어요.",
+    "$era에서 $userName과 $celebName은 운명이 꼭 만나게 한 사이는 아니었어요.",
+    "전생의 무대는 $era — $userName과 $celebName은 가볍게 마주쳤을 뿐이에요.",
+    "$era, $userName과 $celebName의 사주에는 강한 인연 신호가 걸려 있지 않았어요.",
+    "$userName과 $celebName이 마주친 건 $era의 평범한 길 위였어요.",
+    "$era에서 $userName과 $celebName은 같은 하늘 아래 조용히 지나간 두 사람이었어요.",
+    "전생의 첫 장면은 $era — $userName과 $celebName은 큰 사연 없이 스쳤어요."
+   ],
+   "intros": [
+    "$userRole 이었던 $userName과 $celebRole 이었던 $celebName은 운명이 묶어 둔 사이는 아니었어요.",
+    "두 사람의 사주에는 합도 충도 뚜렷하지 않아서, 강한 끌림 없이 그저 같은 거리를 스쳤어요.",
+    "$userName과 $celebName은 깊은 사연 없이, 같은 시대를 산 두 사람이었어요.",
+    "$userRole의 $userName과 $celebRole의 $celebName은 가벼운 눈인사 정도를 나눴어요.",
+    "사주에 강한 인연 신호가 없어서, 두 사람은 운명처럼 엮이지도 크게 부딪치지도 않았어요.",
+    "$userName과 $celebName은 격정도 다툼도 없이 잔잔하게 스쳐 갔어요.",
+    "$userName은 $userRole로, $celebName은 $celebRole로 각자의 하루를 살았어요.",
+    "두 사람의 사주를 나란히 놓아도 운명의 매듭은 보이지 않았어요. 그저 같은 시대였을 뿐이에요.",
+    "$celebName은 $userName에게 강하게 끌리지도, 멀어지지도 않은 채 같은 거리를 지났어요.",
+    "$userRole 이었던 $userName의 하루와 $celebRole 이었던 $celebName의 하루는 가끔 잠깐 겹쳤어요.",
+    "사주에 살(煞)도 합도 또렷하지 않아, 두 사람은 깊은 인연을 쌓을 자리가 없었어요.",
+    "$userName과 $celebName은 한 시대를 함께 살았지만, 운명이 둘을 특별히 엮어 두진 않았어요.",
+    "$userName은 $userRole의 자리에서, $celebName은 $celebRole의 자리에서 조용히 각자의 길을 갔어요.",
+    "두 사람 사이엔 강한 끌림도 큰 미움도 없었어요. 그냥 같은 하늘 아래 두 사람이었어요.",
+    "$celebName과 $userName의 사주는 서로를 강하게 부르지 않았어요. 만남은 가벼웠어요.",
+    "$userRole의 $userName과 $celebRole의 $celebName은 잔잔하게, 사연 없이 스쳤어요."
+   ],
+   "tails": [
+    "전생의 사주가 두 사람을 강하게 엮어 두지 않아서, 이번 생의 마음은 운명보다 $userName의 선택에 더 가까워요.",
+    "강한 인연 신호가 없던 만큼, $celebName을 좋아하는 마음은 사주가 정해 준 게 아니라 $userName이 직접 고른 거예요.",
+    "전생이 남긴 신호가 약해서, 이번 생 $celebName을 향한 마음은 온전히 $userName의 진심이에요.",
+    "운명이 묶어 두지 않은 인연이라, $celebName을 향한 $userName의 마음은 누가 시킨 게 아니라 스스로 키운 거예요.",
+    "사주가 강요하지 않은 인연이라서, $userName이 $celebName에게 가는 마음이 더 단단해요.",
+    "전생의 매듭이 약한 만큼, 이번 생의 덕질은 사주가 아니라 $userName이 만든 이야기예요.",
+    "사주는 두 사람을 정해 두지 않았어요. 그래서 $celebName을 향한 마음은 $userName의 자유로운 선택이에요.",
+    "전생이 강한 결을 남기지 않아서, $userName은 $celebName을 운명이 아니라 취향으로 좋아해요.",
+    "운명의 매듭이 옅은 만큼, $celebName을 향한 $userName의 응원은 더 순수한 진심이에요.",
+    "전생의 신호가 약해도 괜찮아요. $userName이 $celebName을 고른 그 마음이 가장 확실한 거예요.",
+    "사주가 정해 준 인연은 아니지만, $userName이 $celebName에게 가는 길은 $userName이 직접 낸 거예요.",
+    "강한 합도 충도 없던 전생이라, 이번 생 $celebName을 향한 마음은 사주의 명령이 아닌 $userName의 결정이에요.",
+    "전생이 둘을 묶지 않았기에, $celebName을 좋아하는 일은 $userName이 스스로 시작한 이야기예요.",
+    "운명이 비워 둔 자리를, 이번 생의 $userName이 $celebName을 향한 마음으로 채우고 있어요.",
+    "사주는 잔잔했지만, $userName이 $celebName에게 보내는 마음은 $userName이 또렷이 고른 거예요.",
+    "전생의 인연이 옅었던 만큼, $celebName을 향한 이번 생의 마음은 누구의 강요도 아닌 $userName의 것이에요."
+   ]
   }
  },
  "body_lines": {
@@ -1273,6 +1323,55 @@
     "그 짧은 약속 한 줄이 $userName의 일생 계획을 완전히 다시 짜게 만들었어요.",
     "그 약속의 무게 이후로 두 사람의 결은 가벼워지지 않았어요.",
     "그날의 부탁 이후로 $userName은 매번 같은 시각 같은 자리에서 그 약속을 떠올렸어요."
+   ]
+  },
+  "neutral": {
+   "setup": [
+    "$userName은 $userRole로 한 거리에 있었고, $celebName은 $celebRole로 가끔 그 거리를 지났어요.",
+    "그 시절 $userName은 $userRole이었고, $celebName은 $celebRole로 옆 동네를 오갔어요.",
+    "$userName은 $userRole로, $celebName은 $celebRole로 같은 시대를 살았어요.",
+    "$userRole 이었던 $userName과 $celebRole 이었던 $celebName은 깊게 엮인 사이가 아니었어요.",
+    "$userName의 자리는 $userRole, $celebName의 자리는 $celebRole이었고, 두 자리는 멀지도 가깝지도 않았어요.",
+    "그때 $userName은 $userRole로, $celebName은 $celebRole로 각자의 길을 걸었어요."
+   ],
+   "event": [
+    "두 사람의 사주에는 합이나 충 같은 뚜렷한 인연 신호가 걸려 있지 않았어요.",
+    "사주를 나란히 놓아 봐도 강한 인연의 매듭은 보이지 않았어요.",
+    "운명이 둘을 꼭 만나게 하려고 짜 둔 자리는 없었어요.",
+    "강한 끌림도 미움도 아닌, 그저 같은 시대를 살던 두 사람이었어요.",
+    "사주에 강한 살(煞)이 걸리지 않아서, 두 사람은 격정 없이 잔잔히 스쳤어요.",
+    "운명이 묶어 둔 매듭이 없어서, 둘은 깊은 사연을 쌓지 않았어요."
+   ],
+   "event_sub": [
+    "한 번은 우연히 길에서 가벼운 눈인사를 나눴을 뿐, 그 이상의 사연은 없었어요.",
+    "$celebName이 $userName의 곁을 지날 때, 둘은 같은 자리에서 짧은 인사 한 번을 주고받았어요.",
+    "두 사람은 같은 장터에서 우연히 두 번 마주쳤지만 이름까지 묻지는 않았어요.",
+    "어느 날 둘은 우연히 같은 길 위에 한참 함께 있었고, 그게 전부였어요.",
+    "한 번은 같은 카페 앞에서 잠깐 스쳤지만, 두 사람 다 그냥 지나쳤어요.",
+    "$userName과 $celebName은 같은 음식을 파는 가게 앞에서 우연히 마주쳤다 곧 헤어졌어요.",
+    "두 사람은 같은 자리에 잠깐 앉았다가, 별다른 말 없이 각자 일어섰어요.",
+    "한 번은 우연히 같은 골목에서 두 번 마주쳤지만, 인연은 거기서 더 자라지 않았어요.",
+    "$celebName이 한참 머물던 같은 자리에 $userName이 다음 날 잠깐 앉았을 뿐이에요."
+   ],
+   "bridge": [
+    "그 가벼운 마주침 뒤로도 두 사람은 각자의 길을 걸었어요.",
+    "그날 이후로도 $userName과 $celebName은 크게 가까워지지 않았어요.",
+    "그 짧은 인사 뒤로 두 사람의 길은 다시 멀어졌어요.",
+    "그 잔잔한 스침 이후로도 둘 사이엔 특별한 사연이 쌓이지 않았어요."
+   ],
+   "turn": [
+    "그렇게 두 사람은 깊은 매듭 없이 각자의 생을 살아갔어요.",
+    "끝내 둘은 운명처럼 다시 만나지도, 크게 어긋나지도 않았어요.",
+    "그 인연은 큰 사건 없이 잔잔하게 흘러가다 자연스럽게 옅어졌어요.",
+    "두 사람은 같은 하늘 아래를 조용히 지나, 각자의 시간을 살았어요."
+   ],
+   "resolution": [
+    "전생의 사주가 두 사람을 강하게 엮어 두지 않아서, 이번 생의 마음은 운명보다 $userName의 선택에 더 가까워요.",
+    "강한 인연 신호가 없던 만큼, $celebName을 좋아하는 마음은 사주가 정해 준 게 아니라 $userName이 직접 고른 거예요.",
+    "전생이 남긴 신호가 약해서, 이번 생 $celebName을 향한 마음은 온전히 $userName의 진심이에요.",
+    "운명이 묶어 두지 않은 인연이라, $celebName을 향한 $userName의 마음은 스스로 키운 거예요.",
+    "사주가 강요하지 않은 인연이라서, $userName이 $celebName에게 가는 마음이 더 단단해요.",
+    "전생의 매듭이 약한 만큼, 이번 생의 덕질은 사주가 아니라 $userName이 만든 이야기예요."
    ]
   }
  },
@@ -2892,6 +2991,58 @@
      "icon": "그래서 $celebName이 주춤하는 때에도 구독을 끊지 않고 끝까지 따라가요."
     }
    }
+  ],
+  "neutral": [
+   {
+    "id": "neutral_01",
+    "tone": "스쳐 지나간 잔잔한 인연 — 합·충 같은 강한 신호는 없음",
+    "eraHints": [
+     "조선 후기 한양",
+     "고려 말 개경",
+     "1920년대 경성",
+     "조선 영조 시기 한양",
+     "당나라 장안"
+    ],
+    "userRole": "장터 한쪽에서 종이를 팔던 사람",
+    "celebRole": "그 장터를 가끔 지나가던 사람",
+    "paragraphs": {
+     "gi": "$era, $userName과 $celebName은 같은 장터에 있었어요. $userName은 $userRole이었고, $celebName은 $celebRole이었어요.",
+     "seung": "두 사람의 사주에는 합이나 충 같은 뚜렷한 인연 신호가 걸려 있지 않았어요. 그래서 둘은 운명처럼 묶이지도, 크게 부딪치지도 않은 채 그저 같은 거리를 스쳤어요.",
+     "jeon": "$celebName이 $userName의 가게 앞을 지날 때, 둘은 가벼운 눈인사 한 번을 나눴을 뿐이에요. 강한 끌림도, 미움도 아니었고, 그냥 같은 시대를 살던 두 사람의 잔잔한 마주침이었어요.",
+     "gyeol": "전생의 사주는 두 사람을 강하게 엮어 두지 않았어요. 그래서 이번 생의 인연도 운명이라기보다, $userName이 스스로 골라 가까이 둔 마음에 더 가까워요."
+    },
+    "modernPunchlineByKind": {
+     "idol": "그래서 $celebName을 좋아하는 마음은 사주가 정해 준 게 아니라 $userName이 직접 고른 취향이에요. 그게 더 단단한 거예요.",
+     "actor": "그래서 $celebName을 향한 관심은 정해진 운명이 아니라 $userName이 스스로 선택한 마음이에요.",
+     "athlete": "그래서 $celebName을 응원하는 마음은 사주가 묶어 준 게 아니라 $userName이 직접 정한 거예요.",
+     "icon": "그래서 $celebName을 좋아하는 건 운명의 합 때문이 아니라, $userName이 골라 낸 진짜 취향이에요."
+    }
+   },
+   {
+    "id": "neutral_02",
+    "tone": "같은 시대를 산 두 사람 — 강한 살(煞)은 없음",
+    "eraHints": [
+     "조선 후기 한양",
+     "고려 말 개경",
+     "1920년대 경성",
+     "조선 영조 시기 한양",
+     "당나라 장안"
+    ],
+    "userRole": "작은 마을에서 글을 가르치던 사람",
+    "celebRole": "옆 마을을 오가던 사람",
+    "paragraphs": {
+     "gi": "$era, $userName과 $celebName은 이웃한 두 마을에 각각 살았어요. $userName은 $userRole이었고, $celebName은 $celebRole이었어요.",
+     "seung": "두 사람의 사주를 나란히 놓아 봐도 합·충·형 같은 강한 인연의 매듭은 보이지 않았어요. 운명이 둘을 꼭 만나게 하려고 짜 둔 자리는 없었던 셈이에요.",
+     "jeon": "그래서 둘은 길에서 한두 번 마주쳤을 뿐, 깊은 사연을 쌓지 않았어요. 격정도 다툼도 없이, 같은 하늘 아래를 조용히 지나간 두 사람이었어요.",
+     "gyeol": "전생이 남긴 신호가 약한 만큼, 이번 생의 마음은 사주의 강요가 아니에요. $userName이 $celebName에게 가는 마음은 온전히 $userName의 선택이에요."
+    },
+    "modernPunchlineByKind": {
+     "idol": "그래서 $celebName을 향한 덕질은 운명이 시킨 게 아니라 $userName이 스스로 키워 온 마음이에요.",
+     "actor": "그래서 $celebName을 좋아하는 마음은 사주가 정해 준 게 아니라 $userName이 직접 만든 거예요.",
+     "athlete": "그래서 $celebName을 응원하는 건 정해진 인연이 아니라 $userName이 고른 진심이에요.",
+     "icon": "그래서 $celebName을 좋아하는 마음은 전생의 매듭이 아니라, 이번 생 $userName이 골라 낸 거예요."
+    }
+   }
   ]
  },
  "eras_en": [
@@ -4078,6 +4229,56 @@
      "actor": "So even when $celebName meets a poorly reviewed work, you may stay beside them, cheering to the end.",
      "athlete": "So even in a season $celebName falls into a slump, you might cheer from the same seat to the end.",
      "icon": "So even when $celebName falters, you may keep the subscription and follow to the end."
+    }
+   }
+  ],
+  "neutral": [
+   {
+    "id": "neutral_01",
+    "tone": "a quiet crossing — no strong bond signal",
+    "eraHints": [
+     "a late-Joseon market town",
+     "a Goryeo-era port",
+     "1920s Gyeongseong",
+     "a far-off age"
+    ],
+    "userRole": "someone who sold paper at the market's edge",
+    "celebRole": "someone who passed through that market now and then",
+    "paragraphs": {
+     "gi": "$era, $userName and $celebName shared the same marketplace. $userName was $userRole, and $celebName was $celebRole.",
+     "seung": "Their charts carried no strong tie — no union, no clash. So the two were never bound by fate, nor pulled into conflict; they simply crossed the same streets.",
+     "jeon": "When $celebName passed $userName's stall, the two traded a light nod and nothing more. It was neither pull nor grudge — just a quiet meeting of two people in the same age.",
+     "gyeol": "The past-life chart never knotted them tightly together. So this life's bond is less a destiny and more a fondness $userName chose to keep close."
+    },
+    "modernPunchlineByKind": {
+     "idol": "So caring for $celebName isn't something a chart decided — it's a taste $userName picked. That makes it sturdier.",
+     "actor": "So the interest in $celebName isn't a fixed fate but a choice $userName made.",
+     "athlete": "So cheering for $celebName isn't a tie fate set — it's a heart $celebName earned and $userName chose.",
+     "icon": "So liking $celebName isn't a destined union — it's a real taste $userName found on their own."
+    }
+   },
+   {
+    "id": "neutral_02",
+    "tone": "two people of the same age — no strong omen",
+    "eraHints": [
+     "a late-Joseon village",
+     "a Goryeo-era town",
+     "1920s Gyeongseong",
+     "a far-off age"
+    ],
+    "userRole": "someone who taught reading in a small village",
+    "celebRole": "someone who traveled between the next villages",
+    "paragraphs": {
+     "gi": "$era, $userName and $celebName lived in two neighboring villages. $userName was $userRole, and $celebName was $celebRole.",
+     "seung": "Laid side by side, their charts showed no strong knot of fate — no union, clash, or strife. There was no seat destiny had set for them to meet.",
+     "jeon": "So the two crossed paths only once or twice on the road and built no deep story. Without passion or quarrel, they quietly passed under the same sky.",
+     "gyeol": "Because the past life left only a faint signal, this life's feeling is no demand of the chart. The heart $userName turns toward $celebName is wholly $userName's own choice."
+    },
+    "modernPunchlineByKind": {
+     "idol": "So being a fan of $celebName isn't fate's order — it's a heart $userName grew on their own.",
+     "actor": "So liking $celebName isn't something a chart assigned — $userName built it.",
+     "athlete": "So supporting $celebName isn't a set tie — it's a sincerity $userName chose.",
+     "icon": "So liking $celebName isn't a past-life knot — it's something this-life $userName picked."
     }
    }
   ]

@@ -397,5 +397,6 @@
 
   "hourPillarUnknownDisclaimer": "시간을 모르셔서 시주(시각 기둥)는 비워뒀어요. 큰 흐름 위주로 봐주세요.",
   "hourPillarUnknownBadge": "시주 미포함 결과",
-  "timeUnknownAffectsAccuracy": "시간 정보가 없어 이 영역은 정확도가 살짝 떨어져요"
+  "timeUnknownAffectsAccuracy": "시간 정보가 없어 이 영역은 정확도가 살짝 떨어져요",
+  "lunarConversionFailedWarning": "음력 날짜를 변환하지 못해 입력하신 날짜를 양력으로 계산했어요. 생년월일을 다시 확인해 주세요."
 }

@@ -1138,4 +1138,8 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get timeUnknownAffectsAccuracy => '시간 정보가 없어 이 영역은 정확도가 살짝 떨어져요';
+
+  @override
+  String get lunarConversionFailedWarning =>
+      '음력 날짜를 변환하지 못해 입력하신 날짜를 양력으로 계산했어요. 생년월일을 다시 확인해 주세요.';
 }

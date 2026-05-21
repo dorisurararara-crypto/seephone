@@ -1193,4 +1193,8 @@ class AppL10nEn extends AppL10n {
   @override
   String get timeUnknownAffectsAccuracy =>
       'Without a birth time, this section reads a little less sharp';
+
+  @override
+  String get lunarConversionFailedWarning =>
+      'We could not convert that lunar date, so the chart was calculated using your input as a solar date. Please double-check your birth date.';
 }

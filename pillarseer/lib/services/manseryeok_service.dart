@@ -293,6 +293,7 @@ class ManseryeokService {
     int solarMonth,
     int solarDay,
     DateTime adjustedBirth,
+    bool lunarConversionFailed,
   }) calculate({
     required int year,
     required int month,
@@ -307,17 +308,53 @@ class ManseryeokService {
     bool useLateNightZasi = false,
   }) {
     // 1. 음력 → 양력 (필요 시)
+    //
+    // R107 #9-2 — 음력 변환 실패 surface.
+    //   klc.setLunarDate 는 throw 하지 않고 bool 을 반환한다 (klc 0.1.0):
+    //   유효하지 않은 음력 날짜(범위 밖·없는 윤달 등) 면 false 를 돌려주고
+    //   solarYear/Month/Day 전역 상태는 직전 값(혹은 초기값) 그대로 남는다.
+    //   종전 코드는 이 bool 을 무시하고 stale 값을 그대로 사용 = silent fail
+    //   → 사용자가 음력 입력했는데 엉뚱한 사주가 나갈 수 있었다.
+    //
+    //   이제 변환 성공 여부를 [lunarConversionFailed] 로 호출측에 노출한다.
+    //   변환 실패 시 sYear/sMonth/sDay 는 입력 양력 값으로 두되(앱이 깨지지
+    //   않도록), flag 가 true 이므로 호출측이 사용자에게 알릴 수 있다.
+    //   정상 음력 변환·정상 양력 입력 경로의 출력값은 1 bit 도 안 바뀐다.
     int sYear = year;
     int sMonth = month;
     int sDay = day;
+    bool lunarConversionFailed = false;
     if (isLunar) {
+      bool ok = false;
       try {
-        klc.setLunarDate(year, month, day, false);
-        sYear = klc.getSolarYear();
-        sMonth = klc.getSolarMonth();
-        sDay = klc.getSolarDay();
+        ok = klc.setLunarDate(year, month, day, false);
+        if (ok) {
+          final cy = klc.getSolarYear();
+          final cm = klc.getSolarMonth();
+          final cd = klc.getSolarDay();
+          // 변환 결과 sanity check — klc 가 비정상 값을 돌려주면 stale 로 간주.
+          if (cy > 0 && cm >= 1 && cm <= 12 && cd >= 1 && cd <= 31) {
+            sYear = cy;
+            sMonth = cm;
+            sDay = cd;
+          } else {
+            ok = false;
+          }
+        }
       } catch (_) {
-        // out-of-range / invalid → fallback (solar 그대로)
+        // 예기치 못한 throw — 변환 실패로 처리.
+        ok = false;
+      }
+      if (!ok) {
+        // 음력 변환 실패 — 조용히 넘기지 않고 flag 로 surface.
+        lunarConversionFailed = true;
+        if (kDebugMode) {
+          // ignore: avoid_print
+          print(
+              'manseryeok: lunar→solar conversion failed for '
+              '$year-$month-$day (lunar). Falling back to solar input; '
+              'caller should surface this to the user.');
+        }
       }
     }
 
@@ -431,6 +468,10 @@ class ManseryeokService {
       solarDay: sDay,
       // DST·진태양시 보정 모두 적용된 KST datetime — daewoon 절기 거리 계산에서 사용.
       adjustedBirth: DateTime(adjY, adjM, adjD, adjHour, adjMin),
+      // R107 #9-2 — 음력→양력 변환 실패 여부. true 면 호출측이 사용자에게
+      // "음력 날짜를 변환하지 못해 입력값을 양력으로 계산했다" 고 알려야 함.
+      // 양력 입력(isLunar=false) 또는 정상 음력 변환 시 항상 false.
+      lunarConversionFailed: lunarConversionFailed,
     );
   }
 

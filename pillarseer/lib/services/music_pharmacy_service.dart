@@ -241,12 +241,16 @@ class MusicPharmacyService {
     final songTitleEn = _songTitleEn(song.titleKo);
     final songArtistEn = _artistEn(song.artistKo);
 
+    // R107 #7 — 부족 5행 외 다른 근거 한 줄 (셀럽 일주 천간 = 그 5행).
+    // 부족 오행 하나만 보고 단정하던 본문에 셀럽이 그 기운을 타고났다는
+    // 사주 근거를 한 줄 더해, 처방 문구가 "왜 이 곡인지" 를 함께 말하게 한다.
     final body = StringBuffer()
-      ..writeln("오늘 $whoKo의 사주에 '$elementKo' 기운이 부족합니다.")
+      ..writeln("오늘 $whoKo의 사주를 보면 '$elementKo' 기운이 한 박자 비어 있어요.")
       ..writeln(
-          "'${_elementBareKo(element)}'의 기운을 타고난 [$shortName]${josa.withObj(shortName)} 데려왔어요.")
+          "'${_elementBareKo(element)}'의 기운을 일주에 타고난 [$shortName]${josa.withObj(shortName)} 데려왔어요.")
       ..writeln("처방곡은 [${song.titleKo}] (${song.artistKo}).")
-      ..writeln("이 곡을 들으면 부족한 기운이 100% 충전됩니다.")
+      ..writeln(
+          "이 곡을 가만히 들으면 비어 있던 '${_elementBareKo(element)}' 기운을 채우는 데 도움이 돼요.")
       ..writeln('[효능: $effect]')
       ..writeln('[부작용: $side]')
       ..write('[복용법: $dosage]');
@@ -258,7 +262,8 @@ class MusicPharmacyService {
       ..writeln(
           "[$shortNameEn] carries a strong ${_elementBareEn(element)} streak in their day pillar, so they make a good companion for it.")
       ..writeln("The prescription track is [$songTitleEn] ($songArtistEn).")
-      ..writeln("Give it a listen and it can help that missing energy fill back up.")
+      ..writeln(
+          "Give it a quiet listen and it can help top that ${_elementBareEn(element)} energy back up.")
       ..writeln('[Effect: $effectEn]')
       ..writeln('[Side effect: $sideEn]')
       ..write('[Dosage: $dosageEn]');
