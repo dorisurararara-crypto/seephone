@@ -28,8 +28,13 @@ codex 전수 audit **6.4 → 9.94/10 PASS** (3차 재검수). 9개 기능 전부
 ## codex goalpost 주의
 R106 과 달리 R107 은 정확도/중복 audit(codex 강점) — goalpost 없이 3차에 9.94 수렴. 신규 test: r107_life_paragraph_dedup / r107_kpop_celeb_pillar / r107_notification / r107_today_v5 / r107_compat_full_pillar / r107_newyear_music / r107_past_life_fallback / r107_lunar_fail_surface / r107_celeb_chart_validation.
 
+## R107 영어 갭 보강 (2026-05-21, 사용자 "영어도해")
+- 영어 My Saju: `kLifeCategoryBodyEn` 17 generic → `kLifeCategoryBodyEnByStem` 일간 10×17=170 개인화 본문. service `categoryBodyEnFor(saju)` 일간 lookup.
+- 영어 today_v5: `today_v5_pool.json` 영어 변주(`*En` 키) + `TodayV5Service.build(useKo)` + 위젯 useKo 분기. today_v5 가 영어 모드에도 동작.
+- 1484/1484 test PASS. commit `11ed260`.
+
 ## 현재 working tree
-main HEAD `3e525a7`, pubspec `1.0.0+71`(미bump). **미배포** — 사용자 "출시" 시 ship: 1.0.0+72, round82 version pin +72 동기화 필수, `submit_b72.rb` 작성, deploy_testflight.sh 72.
+main HEAD `11ed260`, pubspec `1.0.0+71`(미bump). **미배포** — 사용자 "출시" 시 ship: 1.0.0+72, round82 version pin +72 동기화 필수, `submit_b72.rb` 작성, deploy_testflight.sh 72.
 
 ## 차기 후보
 최애의 사주 셀럽 출생일 외부 1차 출처(공식 프로필/소속사) 다양화 — web research 데이터 라운드.
