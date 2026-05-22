@@ -67,6 +67,18 @@ void main() {
     return arcs is List && arcs.isNotEmpty;
   }
 
+  // R108 ② — 장편(longform) keyword 판정. 장편 관계는 인터넷소설 완결 장편
+  // 서사라 slot 기준 문장 수(8~10) 가드가 적용되지 않는다. 장편 분량 가드
+  // (총 글자 ≥ floor / 챕터 5~7)는 r108_past_life_longform_test.dart 가 전담.
+  bool isLongformKeyword(String keywordId) {
+    final sa = pool['story_arcs'];
+    if (sa is! Map) return false;
+    final arcs = sa[keywordId];
+    if (arcs is! List || arcs.isEmpty) return false;
+    final first = arcs.first;
+    return first is Map && first['format'] == 'longform';
+  }
+
   int sentenceCount(String s) =>
       s.split(RegExp(r'[.!?]\s*')).where((e) => e.trim().isNotEmpty).length;
 
@@ -87,6 +99,7 @@ void main() {
       final celebs = <String>['솔라', '카리나', '뷔', '아이유', '이찬원'];
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        if (isLongformKeyword(label)) continue; // 장편은 slot 문장 수 대상 아님.
         // story_arcs 가 있으면 R104 mandate 8~10, 없으면 R103 fallback 10~14.
         final arcMode = hasStoryArcs(label);
         final lo = arcMode ? 8 : 10;
@@ -127,6 +140,7 @@ void main() {
         final celebs = <String>['솔라', '카리나', '뷔', '아이유', '이찬원'];
         for (final cd in cases) {
           final (label, mkU, mkC) = cd;
+          if (isLongformKeyword(label)) continue; // 장편은 slot 문장 수 대상 아님.
           for (final celeb in celebs) {
             for (var seed = 0; seed < 4; seed++) {
               final s = PastLifeService.generateScenario(

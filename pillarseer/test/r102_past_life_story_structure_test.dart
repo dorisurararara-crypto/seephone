@@ -59,6 +59,19 @@ void main() {
     return arcs is List && arcs.isNotEmpty;
   }
 
+  // R108 ② — 장편(longform) keyword 판정. 장편 관계는 의도된 완결 장편
+  // 서사라 slot 기준 문장 수(8~10/7~14)·사주 용어 등장 가드가 적용되지
+  // 않는다(design doc: "사주 해석 단정 불필요"). 장편 본문 구조 가드는
+  // r108_past_life_longform_test.dart 가 전담한다.
+  bool isLongformKeyword(String keywordId) {
+    final sa = pool['story_arcs'];
+    if (sa is! Map) return false;
+    final arcs = sa[keywordId];
+    if (arcs is! List || arcs.isEmpty) return false;
+    final first = arcs.first;
+    return first is Map && first['format'] == 'longform';
+  }
+
   int sentenceCount(String s) =>
       s.split(RegExp(r'[.!?]\s*')).where((e) => e.trim().isNotEmpty).length;
 
@@ -128,6 +141,7 @@ void main() {
     test('시나리오 문장 수 (arc 8~10 / fallback 7~14) + 사주 용어 1회 이상', () {
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        if (isLongformKeyword(label)) continue; // 장편은 slot 문장 수 대상 아님.
         // R104 arc mode 면 8~10, fallback 이면 R103 호환 7~14 허용.
         final arcMode = hasStoryArcs(label);
         final lo = arcMode ? 8 : 7;
@@ -171,9 +185,13 @@ void main() {
 
     test('기승전결 흐름 — 배경/사건/여운 모두 등장', () {
       // 배경 = 이름 inject 등장. 사건 = "사주" 단어. 여운 = "이번 생" / "지금 생"류.
+      // R108 ② — 이 가드는 slot fallback 의 기승전결 구조를 검증한다. wonjin 이
+      // 장편으로 전환되어 더 이상 slot 사주-용어 단정을 안 하므로(design doc),
+      // slot keyword 인 chung(子-午) 쌍으로 검사한다. 장편 wonjin 구조 가드는
+      // r108_past_life_longform_test.dart 가 전담.
       final scenario = PastLifeService.generateScenario(
         user: mk('子'),
-        celeb: mk('未'),
+        celeb: mk('午'),
         celebName: '솔라',
         userName: '당신',
         seed: 7,

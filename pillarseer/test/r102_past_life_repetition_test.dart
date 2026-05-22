@@ -71,6 +71,18 @@ void main() {
     return n;
   }
 
+  // R108 ② — 장편(longform) keyword 판정. 장편 관계는 의도된 완결 서사라
+  // slot 기준 어휘 cap(셔플 반복 억제)이 적용되지 않는다. 장편 본문 가드는
+  // r108_past_life_longform_test.dart 가 전담한다.
+  bool isLongformKeyword(String keywordId) {
+    final sa = pool['story_arcs'];
+    if (sa is! Map) return false;
+    final arcs = sa[keywordId];
+    if (arcs is! List || arcs.isEmpty) return false;
+    final first = arcs.first;
+    return first is Map && first['format'] == 'longform';
+  }
+
   group('R102 — 반복 어휘 cap', () {
     final cases = <(String, SajuResult Function(), SajuResult Function())>[
       ('wonjin', () => mk('子'), () => mk('未')),
@@ -82,6 +94,7 @@ void main() {
     test('30 시나리오 — cap 통과', () {
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        if (isLongformKeyword(label)) continue; // 장편은 slot cap 대상 아님.
         for (var seed = 0; seed < 8; seed++) {
           final scenario = PastLifeService.generateScenario(
             user: mkU(),

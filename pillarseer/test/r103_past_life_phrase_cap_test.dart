@@ -56,6 +56,18 @@ void main() {
     return n;
   }
 
+  // R108 ② — 장편(longform) keyword 판정. 장편 관계는 인터넷소설 완결 서사라
+  // slot 기준 phrase cap(셔플 어구 반복 억제)이 적용되지 않는다. 장편 본문
+  // 가드는 r108_past_life_longform_test.dart 가 전담한다.
+  bool isLongformKeyword(String keywordId) {
+    final sa = pool['story_arcs'];
+    if (sa is! Map) return false;
+    final arcs = sa[keywordId];
+    if (arcs is! List || arcs.isEmpty) return false;
+    final first = arcs.first;
+    return first is Map && first['format'] == 'longform';
+  }
+
   group('R103 — phrase cap 강화', () {
     final cases = <(String, SajuResult Function(), SajuResult Function())>[
       ('wonjin', () => mk('子'), () => mk('未')),
@@ -68,6 +80,7 @@ void main() {
       final celebs = <String>['솔라', '카리나', '뷔', '아이유', '이찬원'];
       for (final cd in cases) {
         final (label, mkU, mkC) = cd;
+        if (isLongformKeyword(label)) continue; // 장편은 slot phrase cap 대상 아님.
         for (final celeb in celebs) {
           for (var seed = 0; seed < 3; seed++) {
             final s = PastLifeService.generateScenario(

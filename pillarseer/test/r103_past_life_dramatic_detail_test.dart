@@ -90,6 +90,19 @@ void main() {
     return score;
   }
 
+  // R108 ② — 장편(longform) keyword 판정. 장편 관계는 인터넷소설 완결 서사라
+  // slot 기준 드라마 디테일·사주살 jargon 가드가 적용되지 않는다(design doc:
+  // "사주 해석 단정 불필요 — 사주 관계를 이야기 결로만"). 장편 본문 가드는
+  // r108_past_life_longform_test.dart 가 전담한다.
+  bool isLongformKeyword(String keywordId) {
+    final sa = pool['story_arcs'];
+    if (sa is! Map) return false;
+    final arcs = sa[keywordId];
+    if (arcs is! List || arcs.isEmpty) return false;
+    final first = arcs.first;
+    return first is Map && first['format'] == 'longform';
+  }
+
   group('R103 — dramatic detail ≥ 2 per scenario', () {
     final cases = <(String, SajuResult Function(), SajuResult Function())>[
       ('wonjin', () => mk('子'), () => mk('未')),
@@ -111,6 +124,7 @@ void main() {
         final (label, mkU, mkC) = cd;
         // R107 #9-1: neutral 은 의도적으로 저드라마(잔잔한 인연) — drama 가드 제외.
         if (label == 'neutral') continue;
+        if (isLongformKeyword(label)) continue; // 장편은 slot 드라마 가드 대상 아님.
         for (final celeb in celebs) {
           for (var seed = 0; seed < 2; seed++) {
             final scenario = PastLifeService.generateScenario(
@@ -141,6 +155,7 @@ void main() {
         // R107 #9-1: neutral 은 살(煞) 신호 0 인 케이스 — 살 명시 0 이 정답.
         //   거짓 살을 넣으면 거짓말이므로 sal 가드에서 의도적 제외.
         if (label == 'neutral') continue;
+        if (isLongformKeyword(label)) continue; // 장편은 slot 사주살 가드 대상 아님.
         for (final celeb in celebs) {
           for (var seed = 0; seed < 2; seed++) {
             final scenario = PastLifeService.generateScenario(
