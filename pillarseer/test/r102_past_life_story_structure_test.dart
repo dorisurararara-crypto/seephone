@@ -185,14 +185,15 @@ void main() {
 
     test('기승전결 흐름 — 배경/사건/여운 모두 등장', () {
       // 배경 = 이름 inject 등장. 사건 = "사주" 단어. 여운 = "이번 생" / "지금 생"류.
-      // R108 ② — 이 가드는 slot fallback 의 기승전결 구조를 검증한다. wonjin/
-      // dohwa/hap/chung 이 장편으로 전환되어 더 이상 slot 사주-용어 단정을 안
-      // 하므로(design doc), 아직 slot 인 keyword 로 검사한다. Sprint 4 에서
-      // chung 이 장편화되어 yeokma(子-寅) 쌍으로 교체. 장편 구조 가드는
+      // R108 ② — 이 가드는 slot fallback 의 기승전결 구조를 검증한다. 장편화된
+      // 관계는 더 이상 slot 사주-용어 단정을 안 하므로(design doc), 아직 slot 인
+      // keyword 로 검사한다. Sprint 4 에서 chung 장편화로 yeokma(子-寅) 쌍으로
+      // 교체했으나, Sprint 7 에서 yeokma 도 장편화 — 아직 slot 인 neutral
+      // (戊子+戊戌, 합·충·공망 매칭 0) 쌍으로 재교체. 장편 구조 가드는
       // r108_past_life_longform_test.dart 가 전담.
       final scenario = PastLifeService.generateScenario(
         user: mk('子'),
-        celeb: mk('寅'),
+        celeb: mk('戌'),
         celebName: '솔라',
         userName: '당신',
         seed: 7,
