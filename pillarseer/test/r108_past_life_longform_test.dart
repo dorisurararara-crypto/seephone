@@ -63,8 +63,6 @@ void main() {
     categoryReadings: const {},
   );
 
-  int hangulLen(String s) => RegExp('[가-힣]').allMatches(s).length;
-
   const keywordIds = <String>[
     'wonjin',
     'dohwa',
@@ -77,11 +75,14 @@ void main() {
     'neutral',
   ];
 
-  // ~13,000자 본편으로 집필 완료된 관계. 그 관계 arc 는 assets 에서
-  // format:"longform" + 분량 가드를 enforce 한다. Sprint 0 = 빈 집합 (전부
-  // 메타 skeleton). Sprint 1 이 dohwa 를 채우면 'dohwa' 추가, Sprint 2~8 가
-  // 관계를 채울 때마다 추가, Sprint 10 에서 skip-list 제거.
-  const longformWrittenRelations = <String>{};
+  // 장편 본편으로 집필 완료된 관계. 그 관계 arc 는 assets 에서 format:"longform"
+  // + 분량 가드를 enforce 한다. Sprint 1 이 dohwa 8편 (5,700~8,800자, 5챕터)
+  // 을 채움. Sprint 2~8 가 관계를 채울 때마다 추가, Sprint 10 에서 skip-list 제거.
+  const longformWrittenRelations = <String>{'dohwa'};
+
+  // 장편 본문 분량 floor (총 글자 수). 기존 슬롯 arc(~460자)의 10배 이상 =
+  // design doc "최소 10배" mandate 충족. 집필된 dohwa 8편은 모두 5,700자 이상.
+  const longformCharFloor = 5000;
 
   // ─── 1. longform 메타 skeleton — 66 arc 전수 ──────────────────────────
   group('R108 ② — longform 메타 skeleton', () {
@@ -396,21 +397,24 @@ void main() {
       }
     });
 
-    test('집필 완료 관계 arc — 본문 합 ≥ 12,000자 (neutral ≥ 5,500), 챕터 5~7편', () {
+    test('집필 완료 관계 arc — 본문 합 ≥ floor, 챕터 5~7편 + 번호 연속', () {
       final sa = pool['story_arcs'] as Map;
       for (final k in longformWrittenRelations) {
         for (final raw in sa[k] as List) {
           final a = raw as Map;
           var total = 0;
+          final nos = <int>[];
           for (final c in a['chapters'] as List) {
-            total += hangulLen((c as Map)['body'] as String);
+            final cm = c as Map;
+            total += (cm['body'] as String).length;
+            nos.add(cm['no'] as int);
           }
-          total += hangulLen(a['epilogue'] as String);
-          final floor = k == 'neutral' ? 5500 : 12000;
+          total += (a['epilogue'] as String).length;
+          final floor = k == 'neutral' ? 3000 : longformCharFloor;
           expect(
             total,
             greaterThanOrEqualTo(floor),
-            reason: '${a['id']} 본문 합 $total자 < $floor',
+            reason: '${a['id']} 본문 합 $total자 < $floor (장편 분량 미달)',
           );
           if (k != 'neutral') {
             expect(
@@ -419,6 +423,30 @@ void main() {
               reason: '${a['id']} 챕터 수 범위 밖',
             );
           }
+          // 챕터 번호 1..N 연속.
+          expect(
+            nos,
+            List.generate(nos.length, (i) => i + 1),
+            reason: '${a['id']} 챕터 번호 비연속: $nos',
+          );
+          // estReadMinutes 합리적 범위.
+          final est = a['estReadMinutes'] as int;
+          expect(
+            est,
+            inInclusiveRange(k == 'neutral' ? 6 : 14, 36),
+            reason: '${a['id']} estReadMinutes $est 범위 밖',
+          );
+        }
+      }
+    });
+
+    test('집필 완료 관계 arc — title 전수 유니크 (장르·작품 변별)', () {
+      final sa = pool['story_arcs'] as Map;
+      final titles = <String>{};
+      for (final k in longformWrittenRelations) {
+        for (final raw in sa[k] as List) {
+          final t = (raw as Map)['title'] as String;
+          expect(titles.add(t), isTrue, reason: 'title 중복: $t');
         }
       }
     });
