@@ -77,9 +77,10 @@ void main() {
 
   // 장편 본편으로 집필 완료된 관계. 그 관계 arc 는 assets 에서 format:"longform"
   // + 분량 가드를 enforce 한다. Sprint 1 이 dohwa 8편 (5,700~8,800자, 5챕터)
-  // 을, Sprint 2 가 wonjin 8편 (7,100~8,400자, 5챕터) 을 채움. Sprint 3~8 가
-  // 관계를 채울 때마다 추가, Sprint 10 에서 skip-list 제거.
-  const longformWrittenRelations = <String>{'dohwa', 'wonjin'};
+  // 을, Sprint 2 가 wonjin 8편 (7,100~8,400자, 5챕터) 을, Sprint 3 이 hap
+  // 8편 (7,100~8,300자, 5챕터) 을 채움. Sprint 4~8 가 관계를 채울 때마다
+  // 추가, Sprint 10 에서 skip-list 제거.
+  const longformWrittenRelations = <String>{'dohwa', 'wonjin', 'hap'};
 
   // 장편 본문 분량 floor (총 글자 수). 기존 슬롯 arc(~460자)의 10배 이상 =
   // design doc "최소 10배" mandate 충족. 집필된 dohwa 8편은 모두 5,700자 이상.
