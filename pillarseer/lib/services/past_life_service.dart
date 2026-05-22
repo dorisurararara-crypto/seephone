@@ -147,12 +147,33 @@ extension PastLifeKeywordKey on PastLifeKeyword {
   }
 }
 
+/// R108 ② — 장편 전생 스토리의 챕터 1편.
+///
+/// [body] 는 placeholder 치환이 끝난 한국어 본문. 화면이 [heading] 소제목 +
+/// [body] 단락으로 렌더한다.
+class PastLifeChapter {
+  /// 챕터 번호 (1부터).
+  final int no;
+
+  /// 챕터 소제목.
+  final String heading;
+
+  /// 챕터 본문 ($userName/$celebName 치환 완료).
+  final String body;
+
+  const PastLifeChapter({
+    required this.no,
+    required this.heading,
+    required this.body,
+  });
+}
+
 /// 전생 시나리오 1편 결과.
 class PastLifeScenario {
   /// 추출된 keyword Set (1개 이상).
   final Set<PastLifeKeyword> keywords;
 
-  /// 시나리오 본문 (KO, 5~8 문장).
+  /// 시나리오 본문 (KO). 장편이면 챕터+epilogue 를 이은 평문, 단편이면 조립 결과.
   final String scenarioKo;
 
   /// 시나리오 머리줄 (keyword 대표 한 줄).
@@ -172,6 +193,28 @@ class PastLifeScenario {
   final String userRole;
   final String celebRole;
 
+  /// R108 ② — 장편 메타. 장편 arc 면 채워지고, 단편 fallback 이면 빈 값.
+  /// [chapters] 가 비어 있지 않으면 화면은 장편 리더 UI 로 분기한다.
+  final bool isLongform;
+
+  /// 장르 (UI 메타칩). 장편이 아니면 빈 문자열.
+  final String genre;
+
+  /// 작품 제목 (UI 헤드라인). 장편이 아니면 빈 문자열.
+  final String title;
+
+  /// 1줄 시놉시스 (UI 부제). 장편이 아니면 빈 문자열.
+  final String logline;
+
+  /// 예상 읽기 분 (UI 표시). 장편이 아니면 0.
+  final int estReadMinutes;
+
+  /// 챕터 배열 (치환 완료). 장편이 아니면 빈 리스트.
+  final List<PastLifeChapter> chapters;
+
+  /// 전생→현생 연결 한 문단 (치환 완료). 장편이 아니면 빈 문자열.
+  final String epilogue;
+
   const PastLifeScenario({
     required this.keywords,
     required this.scenarioKo,
@@ -183,6 +226,13 @@ class PastLifeScenario {
     required this.era,
     required this.userRole,
     required this.celebRole,
+    this.isLongform = false,
+    this.genre = '',
+    this.title = '',
+    this.logline = '',
+    this.estReadMinutes = 0,
+    this.chapters = const [],
+    this.epilogue = '',
   });
 }
 
@@ -536,6 +586,14 @@ class PastLifeService {
       era: base.era,
       userRole: base.userRole,
       celebRole: base.celebRole,
+      // R108 ② — 장편 메타는 KO base 에서 그대로 carry (EN longform 은 Sprint 9).
+      isLongform: base.isLongform,
+      genre: base.genre,
+      title: base.title,
+      logline: base.logline,
+      estReadMinutes: base.estReadMinutes,
+      chapters: base.chapters,
+      epilogue: base.epilogue,
     );
   }
 
@@ -589,14 +647,39 @@ class PastLifeService {
     return valid[idx];
   }
 
-  /// arc shape 검증 — paragraphs gi/seung/jeon/gyeol 4 string 필수.
+  /// arc shape 검증.
+  ///
+  /// R108 ②: `format == "longform"` 이면 장편 검증 — chapters 가 비어 있지 않고
+  /// 각 원소가 `{no, heading, body}` 를 가지며 body 가 non-empty, epilogue 가
+  /// non-empty 면 valid. 그 외(구 schema)는 기존 paragraphs gi/seung/jeon/gyeol
+  /// 4 string 검증을 유지 — 마이그레이션 중간 상태 호환.
   static bool _isValidArc(Map arc) {
+    if (arc['format'] == 'longform') {
+      return _isValidLongformArc(arc);
+    }
     final p = arc['paragraphs'];
     if (p is! Map) return false;
     for (final k in const ['gi', 'seung', 'jeon', 'gyeol']) {
       final v = p[k];
       if (v is! String || v.trim().isEmpty) return false;
     }
+    return true;
+  }
+
+  /// 장편 arc shape 검증 — chapters[{no,heading,body}] + epilogue.
+  static bool _isValidLongformArc(Map arc) {
+    final chapters = arc['chapters'];
+    if (chapters is! List || chapters.isEmpty) return false;
+    for (final c in chapters) {
+      if (c is! Map) return false;
+      if (c['no'] is! int) return false;
+      final h = c['heading'];
+      if (h is! String || h.trim().isEmpty) return false;
+      final b = c['body'];
+      if (b is! String || b.trim().isEmpty) return false;
+    }
+    final ep = arc['epilogue'];
+    if (ep is! String || ep.trim().isEmpty) return false;
     return true;
   }
 
@@ -620,6 +703,17 @@ class PastLifeService {
     required int seed,
     required String kind,
   }) {
+    // R108 ② — 장편 arc 면 챕터 합성 경로로 분기. era/role 주입·cap/diversify
+    // 는 장편에 부적합하므로 bypass (긴 의도적 반복을 깨지 않음).
+    if (arc['format'] == 'longform') {
+      return _composeLongform(
+        arc: arc,
+        keywords: keywords,
+        primary: primary,
+        celebName: celebName,
+        userName: userName,
+      );
+    }
     final rng = Random(seed);
 
     // $era — arc 의 eraHints 중 seed deterministic 선택, 없으면 전역 eras fallback.
@@ -696,6 +790,72 @@ class PastLifeService {
       era: era,
       userRole: userRole,
       celebRole: celebRole,
+    );
+  }
+
+  // ─── 내부: 장편 합성 (R108 ②) ─────────────────────────────────────────
+  //
+  // longform arc = 챕터 배열 + epilogue. era/userRole/celebRole 주입은 prose 에
+  // 고정돼 있어 불필요 — 본문 변수는 $userName / $celebName 2종만 치환한다.
+  // cap/diversify 는 장편의 의도적 반복(여운·후렴)을 깨므로 적용하지 않는다.
+  static PastLifeScenario _composeLongform({
+    required Map<String, dynamic> arc,
+    required Set<PastLifeKeyword> keywords,
+    required PastLifeKeyword primary,
+    required String celebName,
+    required String userName,
+  }) {
+    // 장편은 $userName/$celebName 2종만. era/role 은 빈 값으로 둬 collision 회피.
+    final injector = _PlaceholderInjector(
+      userName: userName,
+      celebName: celebName,
+      userRole: '',
+      celebRole: '',
+      era: '',
+    );
+
+    final rawChapters = (arc['chapters'] is List)
+        ? (arc['chapters'] as List)
+        : const <dynamic>[];
+    final chapters = <PastLifeChapter>[];
+    for (final c in rawChapters) {
+      if (c is! Map) continue;
+      final no = c['no'] is int ? c['no'] as int : chapters.length + 1;
+      final heading = injector.inject((c['heading'] as String?) ?? '');
+      final body = injector.inject((c['body'] as String?) ?? '');
+      chapters.add(PastLifeChapter(no: no, heading: heading, body: body));
+    }
+    final epilogue = injector.inject((arc['epilogue'] as String?) ?? '');
+
+    // scenarioKo — 챕터 본문 + epilogue 평문 join (하위호환: 기존 test/screen 이
+    // scenarioKo 를 참조). 챕터 사이는 빈 줄로 구분.
+    final parts = <String>[
+      for (final ch in chapters)
+        if (ch.body.trim().isNotEmpty) ch.body.trim(),
+      if (epilogue.trim().isNotEmpty) epilogue.trim(),
+    ];
+    final scenarioKo = parts.join('\n\n');
+
+    final headline = _headlineFor(primary, userName, celebName);
+
+    return PastLifeScenario(
+      keywords: keywords,
+      scenarioKo: scenarioKo,
+      headlineKo: headline,
+      celebName: celebName,
+      userName: userName,
+      era: (arc['era'] as String?) ?? '',
+      userRole: '',
+      celebRole: '',
+      isLongform: true,
+      genre: (arc['genre'] as String?) ?? '',
+      title: injector.inject((arc['title'] as String?) ?? ''),
+      logline: injector.inject((arc['logline'] as String?) ?? ''),
+      estReadMinutes: arc['estReadMinutes'] is int
+          ? arc['estReadMinutes'] as int
+          : 0,
+      chapters: chapters,
+      epilogue: epilogue,
     );
   }
 

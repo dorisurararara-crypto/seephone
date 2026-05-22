@@ -1,10 +1,11 @@
 {
  "_meta": {
-  "version": "r106-p5",
+  "version": "r108-longform",
   "purpose": "팬심 1순위 — 전생 시나리오 데이터 풀. R103 사용자 mandate '소설 내용 별로 / 몇개 반복 / 좀 더 길어야 돼 / 처음 예시 느낌' 직발. 8 keyword × 5 phase (header/intro/setup/event/turn/resolution) 동적 풀 + headers/event_sub 신규.",
   "tone_mandate": "사용자 verbatim: '1800년대 프랑스 / 몰락한 귀족 + 스파이 / 원진살이 껴있는 걸 보니 / 이번 생에서도 돈(앨범/굿즈) 뺏기지만 행복할 운명'. 막장 / 로판 / 사극 / 미스터리 / 코미디 톤 다양. 사주살 명시 + dramatic detail (신분/갈등/도망/재회) 최소 2개 + 어두운 농담 마침.",
   "rule": "한국어만. 영어 단어 / 그룹명 영문 시작 0. 4막 흐름: 1막 header(시대+신분) → 2막 intro+setup(배경+갈등 시작) → 3막 event+event_sub+turn(사주살 사건+서브사건+미해결) → 4막 resolution+ending+tail(이번 생 punchline). 셀럽 비하 / 성적 / 범죄 과장 금지. 사주살 결과 '돈 뺏긴다' 류 유머는 OK, 착취/범죄로 안 보이게.",
-  "rule_en": "English path uses story_arcs_en + eras_en. v5 voice: conditional (tends to / can / if / might), no meta, natural conversational English. Korean keys untouched. Placeholders $userName/$celebName/$userRole/$celebRole/$era injected as plain string replace (no josa)."
+  "rule_en": "English path uses story_arcs_en + eras_en. v5 voice: conditional (tends to / can / if / might), no meta, natural conversational English. Korean keys untouched. Placeholders $userName/$celebName/$userRole/$celebRole/$era injected as plain string replace (no josa).",
+  "longform_note": "R108 ② 전생 장편화. story_arcs 의 각 arc 는 longform 메타 (relation/genre/era/title/logline/estReadMinutes) 를 가진다. 집필이 끝난 관계의 arc 에는 추가로 format:\"longform\" + chapters[] + epilogue 가 붙어 service 가 장편 경로로 라우팅한다. 본문 변수는 $userName/$celebName 2종만. 기존 paragraphs/modernPunchlineByKind 와 eras/relations/endings/templates/body_lines 슬롯 풀은 66편 전환 완료까지 fallback 으로 보존 (Sprint 10 제거)."
  },
  "eras": [
   "1800년대 프랑스 파리의 골목길",
@@ -1400,7 +1401,13 @@
      "actor": "그래서 $celebName이 나온 드라마 굿즈를 풀세트로 사 놓고 영수증은 슬쩍 접어 버려요.",
      "athlete": "그래서 $celebName의 직관 유니폼을 사고 통장을 보며 분한데, 다음 경기 표도 이미 끊었어요.",
      "icon": "그래서 $celebName의 전시 도록을 또 사 모으면서 \"욕하면서도 결제 완료\"를 반복해요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "애증 다크로맨스",
+    "era": "1929 경성",
+    "title": "적과의 동침, 경성",
+    "logline": "빚 문서를 손에 쥔 채권자가 빚진 자와 한 지붕 아래 살게 되며 미움이 집착으로 뒤집힌다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_02",
@@ -1425,7 +1432,13 @@
      "actor": "그래서 $celebName 드라마가 끝나면 OST부터 대본집까지 결제하고 지갑을 멍하니 봐요.",
      "athlete": "그래서 $celebName의 사인볼을 손에 넣으려 또 응모하고, 떨어지면 분하면서도 다음 걸 노려요.",
      "icon": "그래서 $celebName이 추천한 책을 전부 사 두고 읽지도 못한 채 또 한 권을 담아요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "복수 스릴러",
+    "era": "1980년대 서울 강남",
+    "title": "네가 무너뜨린 것",
+    "logline": "회사를 빼앗긴 내가 나를 짓밟은 그에게 복수하려다 그가 남긴 마지막 편지를 발견한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_03",
@@ -1450,7 +1463,13 @@
      "actor": "그래서 $celebName 작품은 안 본다 해 놓고 결국 첫 회부터 정주행하고 있어요.",
      "athlete": "그래서 $celebName 경기는 그만 본다 다짐하고도 중계 시간만 되면 또 채널을 맞춰요.",
      "icon": "그래서 $celebName의 새 영상을 안 누른다 해 놓고 알림이 뜨면 손가락이 먼저 움직여요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "무협 (정파 vs 사파)",
+    "era": "명나라 강호",
+    "title": "검을 겨눈 정인",
+    "logline": "멸문의 원수로 만난 두 검객, 칼끝이 닿을 때마다 죽이지 못하는 자신을 미워한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_04",
@@ -1475,7 +1494,13 @@
      "actor": "그래서 $celebName 연기를 평하다가도 다음 작품 첫 방송을 제일 먼저 챙겨 봐요.",
      "athlete": "그래서 $celebName 플레이에 한숨 쉬다가도 다음 직관 좌석을 벌써 골라 두었어요.",
      "icon": "그래서 $celebName한테 잔소리를 늘어놓다가도 굿즈가 뜨면 제일 먼저 장바구니에 담아요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "아이돌 RPF 다크",
+    "era": "현대 K-POP 같은 소속사",
+    "title": "데뷔조 마지막 한 자리",
+    "logline": "같은 데뷔조 라이벌 때문에 탈락한 내가 데뷔한 그를 증오하다 진실을 알게 된다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_05",
@@ -1500,7 +1525,13 @@
      "actor": "그래서 $celebName 작품 결말에 화를 내고도 감독판 블루레이를 또 예약해요.",
      "athlete": "그래서 $celebName의 이적설에 속상해하면서도 새 시즌 유니폼을 가장 먼저 주문해요.",
      "icon": "그래서 $celebName 근황에 한마디 하면서도 신상 굿즈는 알림 받고 바로 결제해요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "궁중 사극 (후궁 암투)",
+    "era": "조선 중기 궁궐",
+    "title": "같은 임금을 두고",
+    "logline": "한 임금을 사이에 둔 두 후궁, 서로를 끌어내리려다 마지막 밤 진심을 마주한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_06",
@@ -1525,7 +1556,13 @@
      "actor": "그래서 $celebName 시사회 표값에 투덜대면서도 다음 작품 무대인사까지 예매해 둬요.",
      "athlete": "그래서 $celebName 원정 경기 비용에 한숨 쉬면서도 숙소부터 잡고 있어요.",
      "icon": "그래서 $celebName 전시 입장료에 비싸다고 하면서도 도록까지 사서 나와요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "SF 윤회 디스토피아",
+    "era": "22세기 기억이식 도시",
+    "title": "세 번째 삭제",
+    "logline": "기억을 지우는 도시에서 나는 매 생애 나를 배신하는 그를 또 만난다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_07",
@@ -1550,7 +1587,13 @@
      "actor": "그래서 $celebName한테 토라진 척하면서도 신작 예고편을 열 번씩 돌려 봐요.",
      "athlete": "그래서 $celebName한테 화났다 해 놓고 경기 날엔 응원 유니폼을 제일 먼저 챙겨 입어요.",
      "icon": "그래서 $celebName한테 서운하다 해 놓고 새 콘텐츠 알림은 끄지도 못해요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "느와르 (조직 배신극)",
+    "era": "1960년대 홍콩",
+    "title": "형제였던 총구",
+    "logline": "한솥밥 먹던 조직의 두 사람, 한쪽이 다른 쪽을 팔아넘기고도 끝내 방아쇠를 못 당긴다.",
+    "estReadMinutes": 24
    },
    {
     "id": "wonjin_08",
@@ -1575,7 +1618,13 @@
      "actor": "그래서 $celebName 캐스팅 소식에 투덜대다가 결국 첫 회 본방을 사수해요.",
      "athlete": "그래서 $celebName 경기력에 잔소리를 하다가도 시즌권을 또 끊고 있어요.",
      "icon": "그래서 $celebName 근황에 한숨 쉬다가도 새 굿즈는 알림 받고 바로 사요."
-    }
+    },
+    "relation": "wonjin",
+    "genre": "빅토리안 고딕",
+    "era": "1880년대 런던 저택",
+    "title": "유산을 둘러싼 두 사람",
+    "logline": "같은 유산의 상속인으로 만난 두 사람, 서로를 의심하며 저택에 갇힌다.",
+    "estReadMinutes": 24
    }
   ],
   "dohwa": [
@@ -1602,7 +1651,13 @@
      "actor": "그래서 $celebName이 스쳐 지나가는 단역으로 나와도 그 장면을 바로 알아봐요.",
      "athlete": "그래서 경기장 멀리 벤치에 앉은 $celebName도 한눈에 골라내요.",
      "icon": "그래서 짧은 영상 속 군중에서도 $celebName의 뒷모습을 먼저 짚어요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "경성 모던 로맨스",
+    "era": "1929 경성, 그해 겨울",
+    "title": "경성 1929 — 그해 겨울의 모던보이",
+    "logline": "진눈깨비 날리던 경성역, 모든 시선을 끄는 모던보이를 카페 창가에서 다시 만난다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_02",
@@ -1627,7 +1682,13 @@
      "actor": "그래서 $celebName이 화면에서 입꼬리만 올려도 같이 숨을 멈춰요.",
      "athlete": "그래서 $celebName이 골 넣고 짓는 표정 하나에 하루치 기분이 정해져요.",
      "icon": "그래서 $celebName이 영상에서 무심히 웃는 순간에 마음이 다 녹아요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "현대 아이돌 RPF",
+    "era": "현대 서울, 덕질 입덕기",
+    "title": "최애가 나를 알아봤다",
+    "logline": "콘서트 맨 앞줄의 나를 무대 위 그가 알아보며, 팬과 스타의 선을 넘는 끌림이 시작된다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_03",
@@ -1652,7 +1713,13 @@
      "actor": "그래서 $celebName 사인회에 가면 긴장해서 평소보다 두 배로 웃고 있어요.",
      "athlete": "그래서 $celebName을 직관에서 보면 응원하다 말고 혼자 실실 웃어요.",
      "icon": "그래서 $celebName 라이브를 보면 화면 앞에서 혼자 환하게 웃고 있어요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "하이판타지 로맨스",
+    "era": "정령과 마탑의 마법 왕국",
+    "title": "달을 부르는 사람",
+    "logline": "정령이 모여드는 체질의 나에게 마탑의 천재가 끌리고, 둘은 금지된 의식을 함께한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_04",
@@ -1677,7 +1744,13 @@
      "actor": "그래서 $celebName의 작품을 보면 그 눈빛이 화면 밖 나를 보는 것만 같아요.",
      "athlete": "그래서 $celebName이 관중석을 둘러볼 때 내 자리에서 눈이 멈춘 듯해요.",
      "icon": "그래서 $celebName이 영상에서 카메라를 볼 때 나랑 눈이 맞은 기분이에요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "무협 (기방·악사)",
+    "era": "청나라 강남 수향",
+    "title": "강남의 거문고",
+    "logline": "강남 제일 미색이라 불리던 악사의 가락에 떠돌이 협객의 발이 묶인다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_05",
@@ -1702,7 +1775,13 @@
      "actor": "그래서 $celebName이 인터뷰에서 한 짧은 대답을 몇 번이고 다시 들어요.",
      "athlete": "그래서 $celebName이 경기 후 남긴 한 줄 소감을 외울 만큼 읽어요.",
      "icon": "그래서 $celebName이 영상 끝에 흘리듯 한 말을 캡처해서 저장해 둬요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "1950년대 할리우드",
+    "era": "1955 LA 영화 스튜디오",
+    "title": "스크린 너머의 너",
+    "logline": "신인 배우인 나와 대스타인 그, 스캔들과 카메라 플래시 속에서 진짜 마음을 숨긴다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_06",
@@ -1727,7 +1806,13 @@
      "actor": "그래서 $celebName의 말투가 다른 배우 사이에서 들려도 단번에 알아들어요.",
      "athlete": "그래서 $celebName의 등번호가 화면을 스쳐도 0.5초 만에 알아봐요.",
      "icon": "그래서 $celebName의 웃음소리가 영상에 잠깐 들어가도 귀가 먼저 반응해요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "사극 (궁중 화원)",
+    "era": "조선 영조 시기 한양",
+    "title": "초상화 속 그 얼굴",
+    "logline": "어진을 그리던 화원인 내가 매번 모델로 지목되는 그의 얼굴에서 헤어나오지 못한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_07",
@@ -1752,7 +1837,13 @@
      "actor": "그래서 $celebName 작품 굿즈에 돈을 다 써도 통장 잔고가 안 아까워요.",
      "athlete": "그래서 $celebName 직관에 원정비를 다 쏟고도 돌아오는 길이 즐겁기만 해요.",
      "icon": "그래서 $celebName 전시에 입장료를 두 번 내고도 아깝다는 생각이 안 들어요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "이세계 환생 로맨스",
+    "era": "현대인이 떨어진 검과마법 세계",
+    "title": "두 번째 세계의 첫 만남",
+    "logline": "이세계로 떨어진 내가 그 세계의 영웅을 만나, 원래 세계의 기억과 새 감정 사이에서 흔들린다.",
+    "estReadMinutes": 24
    },
    {
     "id": "dohwa_08",
@@ -1777,7 +1868,13 @@
      "actor": "그래서 $celebName이 등장하는 그 첫 컷을 보려고 영화관 불 꺼지는 순간을 기다려요.",
      "athlete": "그래서 $celebName이 코트에 들어서는 입장 장면 하나에 손에 땀이 나요.",
      "icon": "그래서 $celebName이 화면에 등장하는 그 0.5초를 위해 영상을 처음부터 켜요."
-    }
+    },
+    "relation": "dohwa",
+    "genre": "1990년대 캠퍼스 청춘",
+    "era": "1995 서울 대학가",
+    "title": "학교 앞 레코드점",
+    "logline": "레코드점 알바인 나와 같은 테이프만 사 가던 그, 믹스테이프를 주고받으며 가까워진다.",
+    "estReadMinutes": 24
    }
   ],
   "yeokma": [
@@ -1804,7 +1901,13 @@
      "actor": "그래서 $celebName 무대인사라면 지방 상영관까지 KTX를 타고 찾아가요.",
      "athlete": "그래서 $celebName 원정 경기라면 새벽 첫차를 타고서라도 직관을 가요.",
      "icon": "그래서 $celebName 전시라면 도시 한쪽 끝이어도 표를 끊어 보러 가요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "대항해 로드무비",
+    "era": "17세기 대항해 시대",
+    "title": "항구마다 너였다",
+    "logline": "배를 갈아타며 떠도는 항해사인 내가 들르는 항구마다 부두 인부인 그를 다시 만난다.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_02",
@@ -1829,7 +1932,13 @@
      "actor": "그래서 $celebName이 다녀간 촬영지라면 일부러 여행 코스에 넣어요.",
      "athlete": "그래서 $celebName이 다닌 훈련장 근처까지 굳이 들러 보고 와요.",
      "icon": "그래서 $celebName이 좋아한다던 거리라면 멀어도 한번 걸어 보러 가요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "비단길 카라반",
+    "era": "8세기 실크로드 사막",
+    "title": "모래바람 속 길동무",
+    "logline": "대상의 길잡이인 나와 오아시스 장사꾼인 그가 사막을 횡단하며 만나고 또 헤어진다.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_03",
@@ -1854,7 +1963,13 @@
      "actor": "그래서 $celebName이 무대인사에 온다면 그 극장 가는 길이 하나도 안 멀어요.",
      "athlete": "그래서 $celebName이 뛰는 경기장이라면 원정길도 소풍처럼 설레요.",
      "icon": "그래서 $celebName의 전시가 열린다면 그 도시행 자체가 즐거운 여행이 돼요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "미국 66번 국도 로드무비",
+    "era": "1960년대 미국 루트66",
+    "title": "다음 마을에서 봐",
+    "logline": "떠돌이 밴드맨인 나와 모텔마다 마주치는 그, 도로 위에서만 이어지는 인연을 산다.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_04",
@@ -1879,7 +1994,13 @@
      "actor": "그래서 $celebName 드라마가 한 회 남으면 자던 시간도 미루고 끝까지 봐요.",
      "athlete": "그래서 $celebName 경기가 연장에 가면 다음 일정을 통째로 밀어 버려요.",
      "icon": "그래서 $celebName의 새 영상이 길어도 끄지 못하고 할 일을 자꾸 미뤄요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "우주 항해 SF",
+    "era": "24세기 항성 간 무역선",
+    "title": "정거장 7에서",
+    "logline": "화물선 항해사인 내가 들르는 우주 정거장마다 정비공인 그와 스쳐 지나간다.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_05",
@@ -1904,7 +2025,13 @@
      "actor": "그래서 $celebName 시사회라면 차로 몇 시간이 걸려도 그날 다녀와요.",
      "athlete": "그래서 $celebName 원정 경기라면 낯선 도시 숙소부터 미리 잡아요.",
      "icon": "그래서 $celebName 전시라면 멀어도 당일치기로 표를 끊어 다녀와요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "근현대 기차 멜로",
+    "era": "1970년대 한국 완행열차",
+    "title": "완행열차의 동행",
+    "logline": "공연을 따라 도시를 옮기던 악사인 나와 매번 같은 칸에 탄 그, 종착역마다 작별한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_06",
@@ -1929,7 +2056,13 @@
      "actor": "그래서 $celebName의 다음 작품 촬영지를 미리 알아보며 설레어해요.",
      "athlete": "그래서 $celebName의 다음 원정지가 발표되면 그 도시부터 찾아봐요.",
      "icon": "그래서 $celebName의 다음 전시가 어느 도시일지 미리 기대하며 기다려요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "유랑극단 시대극",
+    "era": "1930년대 조선 팔도",
+    "title": "천막을 걷는 밤",
+    "logline": "마을을 옮겨 다니는 유랑 배우인 나와 무대를 세워 주던 목수인 그의 떠도는 사랑.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_07",
@@ -1954,7 +2087,13 @@
      "actor": "그래서 $celebName이 좋아한다는 작품이라면 끝까지 찾아 챙겨 봐요.",
      "athlete": "그래서 $celebName이 신는다는 운동화를 굳이 알아보고 따라 신어요.",
      "icon": "그래서 $celebName이 쓴다는 물건이라면 멀리서라도 구해 와요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "역참 파발 사극",
+    "era": "고려 말 개경에서 변방까지",
+    "title": "소식을 나르는 사람",
+    "logline": "변방으로 소식을 나르는 전령인 나와 역참마다 봇짐을 꾸려 주던 그의 길 위의 정.",
+    "estReadMinutes": 24
    },
    {
     "id": "yeokma_08",
@@ -1979,7 +2118,13 @@
      "actor": "그래서 여행을 가도 $celebName이 촬영한 장소를 먼저 찾게 돼요.",
      "athlete": "그래서 낯선 도시에 가면 $celebName이 뛴 경기장부터 가 보고 싶어요.",
      "icon": "그래서 어디를 가든 $celebName의 전시가 열렸던 곳에 마음이 먼저 가요."
-    }
+    },
+    "relation": "yeokma",
+    "genre": "현대 배낭여행 로맨스",
+    "era": "2010년대 유럽 일주",
+    "title": "유레일패스의 끝",
+    "logline": "유럽을 떠돌던 내가 도시마다 우연히 마주치는 그와 패스 만료일까지의 동행을 한다.",
+    "estReadMinutes": 24
    }
   ],
   "cheoneul": [
@@ -2006,7 +2151,13 @@
      "actor": "그래서 마음이 바닥일 때면 $celebName이 나온 작품을 다시 켜고 위로를 받아요.",
      "athlete": "그래서 다 포기하고 싶은 날이면 $celebName의 경기 영상을 보며 다시 일어서요.",
      "icon": "그래서 막막한 밤이면 $celebName이 남긴 영상 한 편을 붙들고 마음을 다잡아요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "사극 도피 구원극",
+    "era": "조선 후기 한양",
+    "title": "숨겨 준 사람",
+    "logline": "누명을 쓰고 쫓기던 선비인 나를 객줏집 주인인 그가 위험을 무릅쓰고 숨겨 준다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_02",
@@ -2031,7 +2182,13 @@
      "actor": "그래서 외로운 밤이면 $celebName이 나온 작품 한 편이 곁에 있어 줘요.",
      "athlete": "그래서 의욕이 식은 날이면 $celebName이 뛰는 모습에 다시 가슴이 뜨거워져요.",
      "icon": "그래서 추운 마음일 때면 $celebName이 남긴 말 한마디에 온기가 돌아와요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "전란 피난 감동극",
+    "era": "한국전쟁 1951 피난길",
+    "title": "흥남부두의 손",
+    "logline": "피난 인파에 가족을 잃은 나의 손을 낯선 그가 끝까지 놓지 않는다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_03",
@@ -2056,7 +2213,13 @@
      "actor": "그래서 답답한 밤이면 $celebName의 인터뷰 영상을 틀어 놓고 마음을 가라앉혀요.",
      "athlete": "그래서 무너질 것 같을 때 $celebName의 경기 한 장면이 응원처럼 다가와요.",
      "icon": "그래서 막막할 때면 $celebName이 남긴 말 한 줄이 손을 잡아 주는 것 같아요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "의료 휴먼드라마",
+    "era": "현대 대학병원",
+    "title": "응급실 새벽 3시",
+    "logline": "무너지기 직전의 나를 야간 당직인 그가 매번 붙잡아 일으켜 세운다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_04",
@@ -2081,7 +2244,13 @@
      "actor": "그래서 쓸쓸한 날이면 $celebName이 나온 드라마가 함께 있어 줘요.",
      "athlete": "그래서 기운 없는 날이면 $celebName의 경기가 곁에서 응원해 주는 듯해요.",
      "icon": "그래서 외로운 시간이면 $celebName이 남긴 영상이 든든한 동행이 돼요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "판타지 치유사",
+    "era": "마법 세계 변경 마을",
+    "title": "숲의 약초사",
+    "logline": "저주에 걸려 죽어가던 나를 숲의 약초사인 그가 거두어 살려낸다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_05",
@@ -2106,7 +2275,13 @@
      "actor": "그래서 마음이 주저앉을 때면 $celebName이 나온 작품 속 대사에 힘을 얻어요.",
      "athlete": "그래서 포기하고 싶을 때면 $celebName이 끝까지 뛰는 모습에 다시 발을 떼요.",
      "icon": "그래서 다 그만두고 싶을 때 $celebName이 남긴 한마디가 자리를 다시 잡아 줘요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "1930년대 다실 위로극",
+    "era": "1935 경성 다방",
+    "title": "따뜻한 차 한 잔",
+    "logline": "파산해 거리에 나앉은 나에게 다방 주인인 그가 매일 말없이 차를 내어 준다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_06",
@@ -2131,7 +2306,13 @@
      "actor": "그래서 메마른 하루 끝에 $celebName이 나온 장면 하나가 마음을 적셔 줘요.",
      "athlete": "그래서 지친 날이면 $celebName이 끝까지 달리는 모습에 다시 숨이 트여요.",
      "icon": "그래서 막막한 날이면 $celebName이 남긴 영상 한 편이 길을 다시 보여 줘요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "설산 조난 생존극",
+    "era": "20세기 초 히말라야",
+    "title": "눈보라가 멈출 때까지",
+    "logline": "등반 중 조난당한 나를 셰르파인 그가 자기 목숨을 걸고 끌어내린다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_07",
@@ -2156,7 +2337,13 @@
      "actor": "그래서 힘든 시기마다 $celebName이 나온 작품 속 대사에 마음을 기대요.",
      "athlete": "그래서 다 포기하고 싶을 때 $celebName이 역전하는 장면에 가슴이 다시 뛰어요.",
      "icon": "그래서 캄캄한 날이면 $celebName이 남긴 한 줄이 등불처럼 마음을 밝혀요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "우주 조난 SF 휴먼",
+    "era": "근미래 궤도 정거장",
+    "title": "산소가 절반 남았을 때",
+    "logline": "사고로 표류하던 나를 구조정 조종사인 그가 규정을 어기고 구하러 온다.",
+    "estReadMinutes": 24
    },
    {
     "id": "cheoneul_08",
@@ -2181,7 +2368,13 @@
      "actor": "그래서 지친 밤이면 $celebName이 건넨 작품 속 위로에 마음을 맡겨요.",
      "athlete": "그래서 무릎이 꺾일 것 같을 때 $celebName이 다시 일어서는 모습에 힘을 얻어요.",
      "icon": "그래서 흔들리는 날이면 $celebName이 남긴 다정한 말 한마디를 다시 들어요."
-    }
+    },
+    "relation": "cheoneul",
+    "genre": "현대 재난 휴먼드라마",
+    "era": "2020년대 대지진 도시",
+    "title": "잔해 속 목소리",
+    "logline": "무너진 건물에 갇힌 나에게 구조대원인 그의 목소리가 닿아 끝까지 버티게 한다.",
+    "estReadMinutes": 24
    }
   ],
   "gongmang": [
@@ -2208,7 +2401,13 @@
      "actor": "그래서 적적한 저녁이면 $celebName이 나온 드라마가 옆자리에 가만히 함께해 줘요.",
      "athlete": "그래서 쓸쓸한 시간이면 $celebName의 경기 영상이 빈 시간 곁에 켜져 있어 줘요.",
      "icon": "그래서 허전한 날이면 $celebName이 남긴 영상 한 편이 마음 한 칸에 온기를 놓아 줘요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "1960년대 다방 잔잔멜로",
+    "era": "1962 서울 음악다방",
+    "title": "늘 비워 둔 그 자리",
+    "logline": "다방 한 자리를 늘 비워 두던 손님인 나, 그 자리를 모른 척 둔 종업원인 그만이 이유를 안다.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_02",
@@ -2233,7 +2432,13 @@
      "actor": "그래서 적막한 밤이면 $celebName이 나온 드라마가 빈 방을 채워 줘요.",
      "athlete": "그래서 혼자인 새벽이면 $celebName의 경기 다시보기가 시간을 같이 보내 줘요.",
      "icon": "그래서 고요한 밤이면 $celebName이 남긴 영상이 빈자리에 소리를 놓아 줘요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "현대 심야 라디오 멜로",
+    "era": "2010년대 심야 방송국",
+    "title": "새벽 2시의 청취자",
+    "logline": "아무도 안 듣는 새벽 방송을 하던 DJ인 나에게 단 한 명의 청취자인 그의 사연만 매일 도착한다.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_03",
@@ -2258,7 +2463,13 @@
      "actor": "그래서 적적한 저녁이면 $celebName이 나온 작품이 식어 가던 마음을 다시 데워 줘요.",
      "athlete": "그래서 쓸쓸한 시간이면 $celebName의 경기 한 장면이 차게 식은 기분을 데워 줘요.",
      "icon": "그래서 헛헛한 밤이면 $celebName이 남긴 영상 한 편이 빈방의 온기가 돼 줘요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "빈 미술관 잔잔극",
+    "era": "1970년대 작은 화랑",
+    "title": "관객 없는 전시",
+    "logline": "손님 끊긴 화랑을 지키던 화가인 나의 그림 앞에 매일 단 한 사람인 그만 선다.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_04",
@@ -2283,7 +2494,13 @@
      "actor": "그래서 외로운 밤이면 $celebName이 나온 작품이 객석을 함께 채워 줘요.",
      "athlete": "그래서 혼자인 시간이면 $celebName의 경기 함성이 빈자리를 메워 줘요.",
      "icon": "그래서 적적한 밤이면 $celebName이 남긴 한마디가 박수처럼 마음에 닿아요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "우주 등대 SF 멜로",
+    "era": "먼 미래 항로 표지 스테이션",
+    "title": "마지막 통신만 남은",
+    "logline": "폐쇄 직전 우주 등대를 홀로 지키던 나에게 닿는 유일한 신호는 그의 것뿐이다.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_05",
@@ -2308,7 +2525,13 @@
      "actor": "그래서 쓸쓸한 저녁이면 $celebName이 나온 작품이 마중 나온 듯 반겨 줘요.",
      "athlete": "그래서 지친 하루 끝에 $celebName의 경기 영상이 기다려 준 것처럼 켜져요.",
      "icon": "그래서 외로운 밤이면 $celebName이 남긴 영상이 불 켜진 창처럼 느껴져요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "등대지기 시대 멜로",
+    "era": "1900년대 초 외딴 섬 등대",
+    "title": "불을 끄지 않는 사람",
+    "logline": "아무도 마중 나오지 않던 뱃사람인 나를 위해 등대지기인 그만이 늘 불을 켜 둔다.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_06",
@@ -2333,7 +2556,13 @@
      "actor": "그래서 허전한 저녁이면 $celebName이 나온 작품이 빈 벽에 걸린 그림처럼 곁에 있어 줘요.",
      "athlete": "그래서 공허한 시간이면 $celebName의 경기 영상이 비어 있던 하루에 온기를 놓아 줘요.",
      "icon": "그래서 헛헛한 밤이면 $celebName이 남긴 영상 한 편이 빈 마음에 가만히 자리를 잡아요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "현대 빈집 잔잔극",
+    "era": "2020년대 재개발 동네",
+    "title": "떠난 동네에 남은 둘",
+    "logline": "다들 떠난 재개발 동네에 남은 나와 빈집을 매일 들여다보던 그의 마지막 계절.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_07",
@@ -2358,7 +2587,13 @@
      "actor": "그래서 적적한 밤이면 $celebName이 나온 드라마가 빈자리를 지켜 줘요.",
      "athlete": "그래서 혼자인 시간이면 $celebName의 경기 영상이 곁방처럼 켜져 있어요.",
      "icon": "그래서 헛헛한 새벽이면 $celebName이 남긴 영상이 빈방의 불빛이 돼 줘요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "사극 텅 빈 객줏집 멜로",
+    "era": "조선 후기 외딴 주막",
+    "title": "매일 같은 방을 찾던 나그네",
+    "logline": "손님 없는 객줏집을 지키던 주인인 나, 매일 같은 빈 방을 찾던 나그네인 그만 남는다.",
+    "estReadMinutes": 24
    },
    {
     "id": "gongmang_08",
@@ -2383,7 +2618,13 @@
      "actor": "그래서 쓸쓸한 저녁이면 $celebName이 나온 작품이 옆자리에 함께 앉아 있어 줘요.",
      "athlete": "그래서 공허한 시간이면 $celebName의 경기 영상이 그 시간에 잔잔히 함께해 줘요.",
      "icon": "그래서 적막한 밤이면 $celebName이 남긴 영상 한 편이 곁을 지켜 줘요."
-    }
+    },
+    "relation": "gongmang",
+    "genre": "폐역 무대 잔잔극",
+    "era": "1980년대 폐선 직전 간이역",
+    "title": "마지막 열차가 서던 역",
+    "logline": "곧 사라질 간이역을 지키던 역무원인 나와 마지막까지 그 역에 내리던 그.",
+    "estReadMinutes": 24
    }
   ],
   "hap": [
@@ -2410,7 +2651,13 @@
      "actor": "그래서 $celebName이 추천한 작품은 보기도 전에 내 취향일 걸 알아요.",
      "athlete": "그래서 $celebName이 좋아한다던 경기 스타일이 신기하게 내가 즐겨 보던 그것이에요.",
      "icon": "그래서 $celebName이 만든 영상은 편집 리듬부터 내가 늘 좋아하던 호흡이에요."
-    }
+    },
+    "relation": "hap",
+    "genre": "사극 우정 소울메이트",
+    "era": "당나라 장안 서점 거리",
+    "title": "같은 책을 고른 사이",
+    "logline": "필사 서생인 나와 같은 책만 골라 가던 단골인 그, 글로 통하는 평생의 벗이 된다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_02",
@@ -2435,7 +2682,13 @@
      "actor": "그래서 $celebName이 인생작이라 꼽은 작품이 신기하게 내 인생작과 같아요.",
      "athlete": "그래서 $celebName이 명승부라 부르는 경기가 내가 다시 보던 그 경기였어요.",
      "icon": "그래서 $celebName이 영감받는다는 작품들이 내 취향 목록과 거의 겹쳐요."
-    }
+    },
+    "relation": "hap",
+    "genre": "현대 밴드 결성 청춘극",
+    "era": "2000년대 홍대 합주실",
+    "title": "우리 밴드의 시작",
+    "logline": "합주실에서 처음 합을 맞춘 나와 그, 첫 박자에 평생 갈 음악 파트너임을 안다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_03",
@@ -2460,7 +2713,13 @@
      "actor": "그래서 $celebName이 다음에 맡을 역할을 상상하면 내 바람과 신기하게 겹쳐요.",
      "athlete": "그래서 $celebName이 다음 경기에서 시도할 플레이가 내 예감과 자주 맞아떨어져요.",
      "icon": "그래서 $celebName이 다음에 만들 콘텐츠를 예상하면 내 기대와 거의 일치해요."
-    }
+    },
+    "relation": "hap",
+    "genre": "우주 탐사 버디 SF",
+    "era": "근미래 행성 탐사대",
+    "title": "같은 별을 보던 두 사람",
+    "logline": "외행성 탐사 파트너로 배정된 나와 그, 미지의 우주에서 완벽한 호흡을 이룬다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_04",
@@ -2485,7 +2744,13 @@
      "actor": "그래서 $celebName이 고른 차기작이 내가 보고 싶던 장르와 딱 맞아요.",
      "athlete": "그래서 $celebName이 짜는 경기 운영 방식이 내가 좋아하는 흐름과 들어맞아요.",
      "icon": "그래서 $celebName이 기획한 콘텐츠 구성이 내 취향 순서와 그대로 겹쳐요."
-    }
+    },
+    "relation": "hap",
+    "genre": "무협 의기투합",
+    "era": "송나라 강호 객잔",
+    "title": "같은 가락의 두 협객",
+    "logline": "우연히 합공을 맞춘 떠돌이 협객인 나와 그, 강호를 함께 누비는 짝이 된다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_05",
@@ -2510,7 +2775,13 @@
      "actor": "그래서 $celebName이 명장면이라 꼽는 대목이 신기하게 내가 돌려 보던 그 장면이에요.",
      "athlete": "그래서 $celebName이 최고로 치는 명승부가 내가 명경기로 꼽던 바로 그것이에요.",
      "icon": "그래서 $celebName이 가장 아낀다는 작업물이 내가 제일 좋아하던 그 영상이에요."
-    }
+    },
+    "relation": "hap",
+    "genre": "1920년대 파리 예술가",
+    "era": "1925 파리 몽파르나스",
+    "title": "같은 카페 구석",
+    "logline": "같은 카페 구석을 쓰던 화가인 나와 시인인 그, 가난 속에서 서로의 뮤즈가 된다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_06",
@@ -2535,7 +2806,13 @@
      "actor": "그래서 $celebName이 요즘 본다는 작품이 내 정주행 목록과 똑같아요.",
      "athlete": "그래서 $celebName이 즐겨 본다는 종목이 내가 챙겨 보던 바로 그 종목이에요.",
      "icon": "그래서 $celebName이 요즘 관심 둔 분야가 내가 파고들던 그 주제와 겹쳐요."
-    }
+    },
+    "relation": "hap",
+    "genre": "판타지 마법 콤비",
+    "era": "마법 학원 세계",
+    "title": "짝이 맞는 마법",
+    "logline": "마법의 성질이 정확히 맞물리는 나와 그, 둘이어야만 완성되는 주문을 함께 익힌다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_07",
@@ -2560,7 +2837,13 @@
      "actor": "그래서 $celebName이 다시 보고 싶다는 작품이 내가 또 보던 그 작품이에요.",
      "athlete": "그래서 $celebName이 좋아하는 경기 운영이 내가 늘 응원하던 그 스타일이에요.",
      "icon": "그래서 $celebName이 즐겨 본다는 영상이 내 시청 기록과 거의 겹쳐요."
-    }
+    },
+    "relation": "hap",
+    "genre": "현대 요리 버디극",
+    "era": "2010년대 작은 식당",
+    "title": "한 상을 차리던 사이",
+    "logline": "주방의 나와 홀의 그, 말 없이도 손발이 맞아 작은 식당을 명소로 만든다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hap_08",
@@ -2585,7 +2868,13 @@
      "actor": "그래서 $celebName이 작품에서 아끼는 장면이 내가 캡처해 둔 바로 그 장면이에요.",
      "athlete": "그래서 $celebName이 명장면으로 꼽는 순간이 내가 다시 돌려 보던 그 순간이에요.",
      "icon": "그래서 $celebName이 영상에서 공들인 대목이 내 마음을 늘 먼저 사로잡아요."
-    }
+    },
+    "relation": "hap",
+    "genre": "1960년대 우주개발 동료극",
+    "era": "1969 발사 관제소",
+    "title": "같은 카운트다운",
+    "logline": "관제소에서 한 팀이 된 나와 그, 카운트다운을 함께 세며 평생의 동료가 된다.",
+    "estReadMinutes": 24
    }
   ],
   "chung": [
@@ -2612,7 +2901,13 @@
      "actor": "그래서 $celebName의 파격 변신에 낯설어하다가 끝내 그 작품을 제일 아끼게 돼요.",
      "athlete": "그래서 $celebName의 새 포지션에 의심하다가도 결국 가장 굳게 믿고 응원해요.",
      "icon": "그래서 $celebName의 새 시도에 갸우뚱하다가 끝내 더 깊이 빠져들어요."
-    }
+    },
+    "relation": "chung",
+    "genre": "무협 검객 라이벌",
+    "era": "명나라 강호 비무대회",
+    "title": "맞붙은 두 검",
+    "logline": "비무대회에서 만난 두 검객인 나와 그, 서로를 꺾으려다 서로 때문에 강해진다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_02",
@@ -2637,7 +2932,13 @@
      "actor": "그래서 $celebName의 작품 선택에 토를 달다가도 끝내 그 작품을 가장 좋아하게 돼요.",
      "athlete": "그래서 $celebName의 경기 운영에 답답해하다가도 결국 더 굳게 응원해요.",
      "icon": "그래서 $celebName의 콘텐츠 변화에 의견이 갈려도 끝내 더 깊이 빠져들어요."
-    }
+    },
+    "relation": "chung",
+    "genre": "현대 아이돌 경연 RPF",
+    "era": "현대 K-POP 서바이벌 무대",
+    "title": "1위 자리를 두고",
+    "logline": "같은 경연에서 1위를 다투던 나와 그, 무대 위 라이벌이자 유일한 이해자가 된다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_03",
@@ -2662,7 +2963,13 @@
      "actor": "그래서 $celebName의 캐스팅 소식에 갸웃하다가 본방을 보고 푹 빠져들어요.",
      "athlete": "그래서 $celebName의 전술 변화에 불안해하다가 경기 결과를 보고 인정하게 돼요.",
      "icon": "그래서 $celebName의 새 기획에 회의적이다가 결과물을 보고 생각을 고쳐먹어요."
-    }
+    },
+    "relation": "chung",
+    "genre": "사극 화원 경합",
+    "era": "조선 도화서",
+    "title": "같은 어진을 그린 두 화원",
+    "logline": "어진 화원 자리를 두고 겨루던 나와 그, 붓끝의 경쟁이 존경으로 바뀐다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_04",
@@ -2687,7 +2994,13 @@
      "actor": "그래서 $celebName의 까칠한 인터뷰 한마디가 곱씹을수록 깊은 조언이 돼요.",
      "athlete": "그래서 $celebName의 날카로운 경기 평가가 들을수록 나를 더 단단하게 해요.",
      "icon": "그래서 $celebName의 직설적인 한마디가 처음엔 따끔해도 결국 나를 키워 줘요."
-    }
+    },
+    "relation": "chung",
+    "genre": "레이싱 스포츠 드라마",
+    "era": "1980년대 F1 서킷",
+    "title": "마지막 코너의 두 사람",
+    "logline": "트랙 위 숙명의 라이벌인 나와 그, 우승보다 서로를 이기는 데 인생을 건다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_05",
@@ -2712,7 +3025,13 @@
      "actor": "그래서 $celebName의 작품 선택에 다른 의견이다가도 결국 함께 응원하게 돼요.",
      "athlete": "그래서 $celebName의 경기 전략에 의견이 갈려도 끝내 같은 결과를 바라요.",
      "icon": "그래서 $celebName의 콘텐츠 노선에 토를 달다가도 결국 같은 편에 서요."
-    }
+    },
+    "relation": "chung",
+    "genre": "판타지 검술 토너먼트",
+    "era": "검과마법 왕국 무투대회",
+    "title": "왕국 최강을 가리는 밤",
+    "logline": "왕국 최강 자리를 두고 맞선 나와 그, 검을 겨눌수록 서로만이 적수임을 안다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_06",
@@ -2737,7 +3056,13 @@
      "actor": "그래서 $celebName의 연기 해석을 두고 입씨름하다가 끝내 그 작품에 더 빠져요.",
      "athlete": "그래서 $celebName의 플레이를 두고 논쟁하다가도 결국 더 깊이 응원해요.",
      "icon": "그래서 $celebName의 작업물을 두고 의견이 갈려도 끝내 더 좋아하게 돼요."
-    }
+    },
+    "relation": "chung",
+    "genre": "1930년대 권투 드라마",
+    "era": "1936 뉴욕 복싱 체육관",
+    "title": "링 위의 두 주먹",
+    "logline": "같은 체급 라이벌 복서인 나와 그, 링 안에서 부딪치고 링 밖에서 닮아간다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_07",
@@ -2762,7 +3087,13 @@
      "actor": "그래서 $celebName의 시상식 경쟁에 조마조마하다가 결국 더 깊이 응원해요.",
      "athlete": "그래서 $celebName의 순위 다툼에 가슴 졸이다가도 끝내 더 굳게 응원해요.",
      "icon": "그래서 $celebName의 조회수 경쟁에 마음 쓰다가도 결국 더 즐겁게 챙겨 봐요."
-    }
+    },
+    "relation": "chung",
+    "genre": "우주 파일럿 경쟁 SF",
+    "era": "근미래 전투기 비행단",
+    "title": "에이스 자리를 두고",
+    "logline": "비행단 에이스 자리를 다투던 파일럿인 나와 그, 실전에서 서로의 등을 맡긴다.",
+    "estReadMinutes": 24
    },
    {
     "id": "chung_08",
@@ -2787,7 +3118,13 @@
      "actor": "그래서 $celebName의 작품 해석으로 다투던 사람과 끝내 같은 팬이 돼요.",
      "athlete": "그래서 $celebName의 경기를 두고 언쟁하던 사람과도 결국 같은 자리에서 응원해요.",
      "icon": "그래서 $celebName을 두고 입씨름하던 사람과 끝내 같이 콘텐츠를 챙겨 봐요."
-    }
+    },
+    "relation": "chung",
+    "genre": "현대 e스포츠 라이벌",
+    "era": "2020년대 프로게임 무대",
+    "title": "결승에서 다시 만난",
+    "logline": "매 시즌 결승에서 마주치는 프로게이머인 나와 그, 서로 없으면 정상도 의미 없다.",
+    "estReadMinutes": 24
    }
   ],
   "hyeong": [
@@ -2814,7 +3151,13 @@
      "actor": "그래서 $celebName의 신작 개봉일이라면 그 주 약속을 미리 다 빼 놔요.",
      "athlete": "그래서 $celebName의 경기 날이라면 무슨 일이 있어도 그 시간을 지켜요.",
      "icon": "그래서 $celebName의 새 작업 공개일이라면 그날만큼은 다른 일을 안 잡아요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "독립운동 결사 느와르",
+    "era": "1920년대 만주와 경성",
+    "title": "같은 맹세를 한 밤",
+    "logline": "비밀 결사에서 같은 맹세를 한 나와 그, 한 사람이 다른 사람을 위해 모든 걸 진다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_02",
@@ -2839,7 +3182,13 @@
      "actor": "그래서 $celebName이 한동안 작품이 없어도 팬심이 식는 일 없이 한결같아요.",
      "athlete": "그래서 $celebName이 부진한 시기에도 응원하는 마음이 한 칸도 줄지 않아요.",
      "icon": "그래서 $celebName이 한참 잠잠해도 알림 설정은 늘 켜 둔 채로 기다려요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "무협 의형제극",
+    "era": "원나라 강호",
+    "title": "피로 맺은 형제",
+    "logline": "같은 주군을 지키기로 한 두 무사인 나와 그, 의리와 죽음 사이에서 약속을 끝까지 지킨다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_03",
@@ -2864,7 +3213,13 @@
      "actor": "그래서 $celebName이 나온 작품은 1화부터 마지막 회까지 한 편도 안 건너뛰어요.",
      "athlete": "그래서 $celebName의 경기는 전반만이 아니라 끝나는 휘슬까지 다 챙겨 봐요.",
      "icon": "그래서 $celebName의 영상은 짧든 길든 마지막 장면까지 끝까지 다 봐요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "전쟁 전우애 드라마",
+    "era": "1944 유럽 전선 참호",
+    "title": "참호 속의 약속",
+    "logline": "같은 소대에 배치된 나와 그, 살아 돌아가자는 맹세 하나로 전장을 버틴다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_04",
@@ -2889,7 +3244,13 @@
      "actor": "그래서 $celebName의 새 작품이 나올 때면 챙겨 보는 흐름이 계절처럼 반복돼요.",
      "athlete": "그래서 $celebName의 시즌이 열리면 경기 보는 일과가 매년 똑같이 자리 잡아요.",
      "icon": "그래서 $celebName의 정기 콘텐츠 요일이면 그 시간이 일주일 루틴으로 박혀 있어요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "거리 소년 의형제극",
+    "era": "1950년대 전후 서울",
+    "title": "한 처마 밑 형제",
+    "logline": "전쟁고아인 나와 그, 한 처마 밑에서 의형제를 맺고 서로를 끝까지 책임진다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_05",
@@ -2914,7 +3275,13 @@
      "actor": "그래서 $celebName이 나온 작품의 명장면을 캡처해 따로 보관해 둬요.",
      "athlete": "그래서 $celebName의 명경기 기록과 하이라이트를 빠짐없이 저장해 둬요.",
      "icon": "그래서 $celebName이 올린 영상은 혹시 몰라 즐겨찾기와 백업으로 챙겨 둬요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "SF 군단 전우극",
+    "era": "먼 미래 행성 방위군",
+    "title": "같은 분대 마지막 둘",
+    "logline": "행성 방위 분대의 나와 그, 전멸한 분대에서 둘만 남아 약속을 지키러 돌아간다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_06",
@@ -2939,7 +3306,13 @@
      "actor": "그래서 $celebName의 신작 공개일이면 디데이를 세며 그날을 손꼽아 기다려요.",
      "athlete": "그래서 $celebName의 경기 일정이 뜨면 그 시각을 미리 알람으로 맞춰 둬요.",
      "icon": "그래서 $celebName의 새 영상 예고가 뜨면 공개 시각만 기다리며 새로고침해요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "해적선 의형제 느와르",
+    "era": "18세기 카리브해",
+    "title": "같은 깃발 아래",
+    "logline": "같은 해적선에 오른 나와 그, 배신이 난무하는 바다에서 단 하나 서로만 믿는다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_07",
@@ -2964,7 +3337,13 @@
      "actor": "그래서 $celebName의 연기를 볼 때면 한 장면도 허투루 넘기지 않게 돼요.",
      "athlete": "그래서 $celebName의 경기를 볼 때면 한 플레이도 무게 있게 새겨 봐요.",
      "icon": "그래서 $celebName의 작업물을 볼 때면 그 안에 담긴 공을 진중하게 들여다봐요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "현대 소방 전우극",
+    "era": "2020년대 소방서",
+    "title": "불 속으로 함께 들어간",
+    "logline": "같은 구조대의 나와 그, 화재 현장마다 서로의 생명줄을 쥐고 약속을 지킨다.",
+    "estReadMinutes": 24
    },
    {
     "id": "hyeong_08",
@@ -2989,7 +3368,13 @@
      "actor": "그래서 $celebName이 혹평받는 작품을 만나도 끝까지 옆에 남아 응원해요.",
      "athlete": "그래서 $celebName이 슬럼프에 빠진 시즌에도 끝까지 같은 자리에서 응원해요.",
      "icon": "그래서 $celebName이 주춤하는 때에도 구독을 끊지 않고 끝까지 따라가요."
-    }
+    },
+    "relation": "hyeong",
+    "genre": "판타지 기사단 맹세극",
+    "era": "검과마법 왕국 기사단",
+    "title": "검을 맞댄 맹세",
+    "logline": "기사 서임식에서 같은 맹세를 한 나와 그, 왕국이 무너지는 날에도 맹세를 저버리지 않는다.",
+    "estReadMinutes": 24
    }
   ],
   "neutral": [
@@ -3016,7 +3401,13 @@
      "actor": "그래서 $celebName을 향한 관심은 정해진 운명이 아니라 $userName이 스스로 선택한 마음이에요.",
      "athlete": "그래서 $celebName을 응원하는 마음은 사주가 묶어 준 게 아니라 $userName이 직접 정한 거예요.",
      "icon": "그래서 $celebName을 좋아하는 건 운명의 합 때문이 아니라, $userName이 골라 낸 진짜 취향이에요."
-    }
+    },
+    "relation": "neutral",
+    "genre": "시장 단편 (잔잔한 여운)",
+    "era": "조선 후기 장터",
+    "title": "장터에서 스친 사람",
+    "logline": "종이를 팔던 나와 그 장터를 가끔 지나가던 그, 이름도 모른 채 몇 번을 스쳐 지나간다.",
+    "estReadMinutes": 10
    },
    {
     "id": "neutral_02",
@@ -3041,7 +3432,13 @@
      "actor": "그래서 $celebName을 좋아하는 마음은 사주가 정해 준 게 아니라 $userName이 직접 만든 거예요.",
      "athlete": "그래서 $celebName을 응원하는 건 정해진 인연이 아니라 $userName이 고른 진심이에요.",
      "icon": "그래서 $celebName을 좋아하는 마음은 전생의 매듭이 아니라, 이번 생 $userName이 골라 낸 거예요."
-    }
+    },
+    "relation": "neutral",
+    "genre": "현대 단편 (잔잔한 여운)",
+    "era": "2020년대 같은 동네",
+    "title": "같은 버스를 타던 사람",
+    "logline": "매일 같은 버스를 타던 나와 그, 한 번도 말 섞은 적 없지만 서로의 얼굴만은 기억한다.",
+    "estReadMinutes": 10
    }
   ]
  },

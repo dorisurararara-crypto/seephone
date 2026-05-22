@@ -609,11 +609,14 @@ class _ResultCard extends StatelessWidget {
     final keywords = scenario.keywords
         .map((k) => useKo ? k.labelKo : k.labelEn)
         .toList();
-    final headline = useKo
-        ? scenario.headlineKo
-        : (scenario.headlineEn.isNotEmpty
-              ? scenario.headlineEn
-              : scenario.headlineKo);
+    // R108 ② — 장편이면 작품 제목을 헤드라인으로, 아니면 기존 keyword 헤드라인.
+    final headline = scenario.isLongform && scenario.title.trim().isNotEmpty
+        ? scenario.title
+        : (useKo
+              ? scenario.headlineKo
+              : (scenario.headlineEn.isNotEmpty
+                    ? scenario.headlineEn
+                    : scenario.headlineKo));
     final body = useKo
         ? scenario.scenarioKo
         : (scenario.scenarioEn.isNotEmpty
@@ -669,62 +672,215 @@ class _ResultCard extends StatelessWidget {
                             height: 1.3,
                           ),
                   ),
+                  // R108 ② — 장편이면 제목 아래 1줄 시놉시스.
+                  if (scenario.isLongform &&
+                      scenario.logline.trim().isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      scenario.logline,
+                      style: useKo
+                          ? GoogleFonts.notoSansKr(
+                              fontSize: 12.5,
+                              color: AppColors.inkLight,
+                              height: 1.55,
+                            )
+                          : GoogleFonts.inter(
+                              fontSize: 12.5,
+                              color: AppColors.inkLight,
+                              height: 1.55,
+                            ),
+                    ),
+                  ],
                   const SizedBox(height: 14),
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
                     children: [
-                      for (final k in keywords)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                      // R108 ② — 장편이면 장르 / 시대 / 읽기 시간 메타칩을
+                      // keyword 칩 앞에 노출 (인터넷소설 작품 메타 연출).
+                      if (scenario.isLongform) ...[
+                        if (scenario.genre.isNotEmpty)
+                          _MetaChip(label: scenario.genre, accent: true),
+                        if (scenario.era.isNotEmpty)
+                          _MetaChip(label: scenario.era, accent: true),
+                        if (scenario.estReadMinutes > 0)
+                          _MetaChip(
+                            label: useKo
+                                ? '약 ${scenario.estReadMinutes}분 읽기'
+                                : '~${scenario.estReadMinutes} min read',
+                            accent: true,
                           ),
-                          decoration: BoxDecoration(
-                            color: AppColors.bg,
-                            border: Border.all(color: AppColors.line, width: 1),
-                          ),
-                          child: Text(
-                            k,
-                            style: useKo
-                                ? GoogleFonts.notoSansKr(
-                                    fontSize: 11,
-                                    color: AppColors.inkLight,
-                                    letterSpacing: 0.2,
-                                  )
-                                : GoogleFonts.inter(
-                                    fontSize: 11,
-                                    color: AppColors.inkLight,
-                                    letterSpacing: 0.2,
-                                  ),
-                          ),
-                        ),
+                      ],
+                      for (final k in keywords) _MetaChip(label: k),
                     ],
                   ),
                   const SizedBox(height: 18),
                   Container(height: 1, color: AppColors.line),
                   const SizedBox(height: 18),
-                  Text(
-                    body,
-                    key: const Key('past_life_result_body'),
-                    style: useKo
-                        ? GoogleFonts.notoSansKr(
-                            fontSize: 14.5,
-                            color: AppColors.ink,
-                            height: 1.85,
-                          )
-                        : GoogleFonts.inter(
-                            fontSize: 14,
-                            color: AppColors.ink,
-                            height: 1.8,
-                          ),
-                  ),
+                  // R108 ② — 장편이면 챕터 헤더 + 본문 + epilogue, 아니면 단일 본문.
+                  if (scenario.isLongform && scenario.chapters.isNotEmpty)
+                    _LongformBody(scenario: scenario, useKo: useKo)
+                  else
+                    Text(
+                      body,
+                      key: const Key('past_life_result_body'),
+                      style: useKo
+                          ? GoogleFonts.notoSansKr(
+                              fontSize: 14.5,
+                              color: AppColors.ink,
+                              height: 1.85,
+                            )
+                          : GoogleFonts.inter(
+                              fontSize: 14,
+                              color: AppColors.ink,
+                              height: 1.8,
+                            ),
+                    ),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// R108 ② — 결과 카드 메타칩 (장르 / 시대 / 읽기 시간 / keyword).
+class _MetaChip extends StatelessWidget {
+  final String label;
+  final bool accent;
+  const _MetaChip({required this.label, this.accent = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: accent ? AppColors.accent.withValues(alpha: 0.08) : AppColors.bg,
+        border: Border.all(
+          color: accent ? AppColors.accent : AppColors.line,
+          width: 1,
+        ),
+      ),
+      child: Text(
+        label,
+        style: useKo
+            ? GoogleFonts.notoSansKr(
+                fontSize: 11,
+                color: accent ? AppColors.accent : AppColors.inkLight,
+                letterSpacing: 0.2,
+              )
+            : GoogleFonts.inter(
+                fontSize: 11,
+                color: accent ? AppColors.accent : AppColors.inkLight,
+                letterSpacing: 0.2,
+              ),
+      ),
+    );
+  }
+}
+
+/// R108 ② — 장편 본문: 챕터 소제목 + 단락 + epilogue 여운 연출.
+/// 한 ListView 안의 연속 스크롤 — `past_life_result_body` 키는 첫 챕터 본문에
+/// 부여해 기존 스모크 가드를 유지한다.
+class _LongformBody extends StatelessWidget {
+  final PastLifeScenario scenario;
+  final bool useKo;
+  const _LongformBody({required this.scenario, required this.useKo});
+
+  @override
+  Widget build(BuildContext context) {
+    final chapters = scenario.chapters;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < chapters.length; i++) ...[
+          if (i > 0) const SizedBox(height: 26),
+          // 챕터 소제목 — 번호 + heading.
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                '${chapters[i].no}',
+                style: GoogleFonts.cormorantGaramond(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.accent,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  chapters[i].heading,
+                  style: useKo
+                      ? GoogleFonts.notoSerifKr(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.ink,
+                        )
+                      : GoogleFonts.cormorantGaramond(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.ink,
+                        ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            chapters[i].body,
+            key: i == 0 ? const Key('past_life_result_body') : null,
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 14.5,
+                    color: AppColors.ink,
+                    height: 1.9,
+                  )
+                : GoogleFonts.inter(
+                    fontSize: 14,
+                    color: AppColors.ink,
+                    height: 1.85,
+                  ),
+          ),
+        ],
+        if (scenario.epilogue.trim().isNotEmpty) ...[
+          const SizedBox(height: 24),
+          Container(height: 1, color: AppColors.line),
+          const SizedBox(height: 18),
+          Text(
+            useKo ? '그리고, 지금' : 'And now',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w600,
+              color: AppColors.accent,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            scenario.epilogue,
+            key: const Key('past_life_epilogue'),
+            style: useKo
+                ? GoogleFonts.notoSerifKr(
+                    fontSize: 14.5,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.ink,
+                    height: 1.9,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.ink,
+                    height: 1.85,
+                  ),
+          ),
+        ],
+      ],
     );
   }
 }
