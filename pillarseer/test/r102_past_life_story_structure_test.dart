@@ -52,25 +52,9 @@ void main() {
     categoryReadings: const {},
   );
 
-  bool hasStoryArcs(String keywordId) {
-    final sa = pool['story_arcs'];
-    if (sa is! Map) return false;
-    final arcs = sa[keywordId];
-    return arcs is List && arcs.isNotEmpty;
-  }
-
-  // R108 ② — 장편(longform) keyword 판정. 장편 관계는 의도된 완결 장편
-  // 서사라 slot 기준 문장 수(8~10/7~14)·사주 용어 등장 가드가 적용되지
-  // 않는다(design doc: "사주 해석 단정 불필요"). 장편 본문 구조 가드는
-  // r108_past_life_longform_test.dart 가 전담한다.
-  bool isLongformKeyword(String keywordId) {
-    final sa = pool['story_arcs'];
-    if (sa is! Map) return false;
-    final arcs = sa[keywordId];
-    if (arcs is! List || arcs.isEmpty) return false;
-    final first = arcs.first;
-    return first is Map && first['format'] == 'longform';
-  }
+  // R108 ② sprint 8 — 66 arc 전수 longform 완결로 hasStoryArcs/isLongformKeyword
+  // 분기가 더는 필요 없어졌다(모든 관계 arc 가 longform). slot arc 기승전결
+  // 구조 가드는 아래 'slot arc 기승전결 흐름' group 이 합성 fixture 로 전담.
 
   int sentenceCount(String s) =>
       s.split(RegExp(r'[.!?]\s*')).where((e) => e.trim().isNotEmpty).length;
@@ -106,7 +90,15 @@ void main() {
     });
   });
 
-  group('R104 — scenario 흐름 / 사주 용어 등장', () {
+  // R108 ② sprint 8 — 한국어 66 arc 전수 longform 완결. assets 의 모든 관계
+  // arc 가 format:"longform" 이 되어, slot 비-longform(_composeFromStoryArc 의
+  // paragraphs 경로 / _composeFromPool) 을 trigger 하는 실관계 arc 가 0이 됐다.
+  // 그러나 slot-fallback 경로 자체는 코드에 남아 있고(중간 상태·미집필 arc 안전망),
+  // 그 기승전결 구조 가드의 설계 의도는 보존해야 한다. 따라서 아래 group 은
+  // assets 실관계 대신, in-memory 합성(synthetic) 비-longform story_arc 를
+  // seed 해 slot arc 경로(_composeFromStoryArc paragraphs)를 직접 검증한다.
+  // (R104 sprint 3 의 의도 = arc 하나가 4문단 기/승/전/결 완결 단편.)
+  group('R104 — slot arc 기승전결 흐름 (synthetic 비-longform fixture)', () {
     // 사주 용어 stopword pool — 본문이 이 중 하나를 포함해야 함.
     const sajuTerms = <String>[
       '원진살',
@@ -127,73 +119,109 @@ void main() {
       '사주에',
     ];
 
-    final cases = <(String, SajuResult Function(), SajuResult Function())>[
-      ('wonjin', () => mk('子'), () => mk('未')),
-      ('hap', () => mk('子'), () => mk('丑')),
-      ('chung', () => mk('子'), () => mk('午')),
-      // R107 #9-1: 戊子+戊戌 은 합·충·공망 어느 것도 매칭 0 → neutral fallback.
-      //   종전엔 거짓 hap fallback ("합 결") 으로 우연히 통과했었음.
-      //   이제 정직하게 neutral keyword 로 분류된다. neutral 시나리오는
-      //   거짓 살(煞) 단정을 안 하므로 saju-jargon 가 아닌 "사주" 단어로 가드.
-      ('neutral', () => mk('子'), () => mk('戌')),
-    ];
+    // 비-longform(구 schema) story_arc — paragraphs 4문단(기/승/전/결) +
+    // modernPunchlineByKind 4종. format 키 없음 → _composeFromStoryArc 의
+    // paragraphs 경로를 탄다. 본문에 사주 용어 + 결(여운) 표식을 심어, slot
+    // arc 기승전결 구조 가드를 그대로 enforce 한다.
+    Map<String, dynamic> slotArc(String id) => {
+      'id': id,
+      'userRole': '몰락한 귀족',
+      'celebRole': '떠돌이 악사',
+      'eraHints': ['조선 후기 한양'],
+      'paragraphs': {
+        'gi': r'$era, $userName은 $userRole였고 $celebName은 $celebRole였어요. '
+            r'두 사람의 사주에 원진살이 박혀 있었어요.',
+        'seung': r'사주상 원진살이 둘을 묶었어요. $userName은 어느 새벽 '
+            r'$celebName에게 쪽지 한 장을 건넸어요.',
+        'jeon': r'$celebName이 먼 길을 떠나야 했고 $userName은 끝내 못 '
+            r'붙잡았어요. 그날의 발길이 오래 마음에 남았어요.',
+        'gyeol': r'그 원진살의 결이 이번 생까지 흘러왔어요. $userName은 '
+            r'$celebName을 한눈에 알아봤어요.',
+      },
+      'modernPunchlineByKind': {
+        'idol': r'그래서 $userName은 $celebName 무대를 또 챙겨 봐요.',
+        'actor': r'그래서 $userName은 $celebName 작품을 다 챙겨 봐요.',
+        'athlete': r'그래서 $userName은 $celebName 경기를 다 챙겨 봐요.',
+        'icon': r'그래서 $userName은 $celebName을 응원하게 된 거예요.',
+      },
+    };
 
-    test('시나리오 문장 수 (arc 8~10 / fallback 7~14) + 사주 용어 1회 이상', () {
-      for (final cd in cases) {
-        final (label, mkU, mkC) = cd;
-        if (isLongformKeyword(label)) continue; // 장편은 slot 문장 수 대상 아님.
-        // R104 arc mode 면 8~10, fallback 이면 R103 호환 7~14 허용.
-        final arcMode = hasStoryArcs(label);
-        final lo = arcMode ? 8 : 7;
-        final hi = arcMode ? 10 : 14;
-        for (var seed = 0; seed < 5; seed++) {
-          final scenario = PastLifeService.generateScenario(
-            user: mkU(),
-            celeb: mkC(),
-            celebName: '솔라',
-            userName: '당신',
-            seed: seed,
-          );
-          final n = sentenceCount(scenario);
-          expect(
-            n,
-            inInclusiveRange(lo, hi),
-            reason:
-                '[$label seed=$seed mode=${arcMode ? "arc" : "slot"}] '
-                '문장 수 $n 범위 밖. body=$scenario',
-          );
-          // 사주 용어는 arc/fallback 양쪽에서 1회 이상이어야 함 (회귀 가드).
-          // R107 #9-1: neutral 은 거짓 살(煞) 단정을 안 하는 정직한 keyword 라
-          //   jargon 대신 "사주" 단어 포함만 확인 (거짓말 0 보장).
-          if (label == 'neutral') {
-            expect(
-              scenario.contains('사주'),
-              isTrue,
-              reason: '[$label seed=$seed] "사주" 단어 없음: $scenario',
-            );
-          } else {
-            final hasTerm = sajuTerms.any((t) => scenario.contains(t));
-            expect(
-              hasTerm,
-              isTrue,
-              reason: '[$label seed=$seed] 사주 용어 없음: $scenario',
-            );
-          }
-        }
+    // slot arc fixture pool — story_arcs 에 wonjin 만 비-longform 으로 둔다.
+    // 子-未 쌍이 wonjin primary 로 매핑돼, 이 합성 arc 경로를 탄다.
+    Map<String, dynamic> slotFixturePool() {
+      final raw = <String, dynamic>{
+        '_meta': {'version': 'r108-test'},
+        'eras': ['먼 옛날'],
+        'relations': [
+          {'user': '나그네', 'celeb': '벗'},
+        ],
+        'endings': ['그 흐름이 닿아 있어요.'],
+        'templates': {
+          'wonjin': {
+            'intros': ['그렇게 시작됐어요.'],
+            'tails': ['그래서 그래요.'],
+            'headers': [r'$userName과 $celebName이 $era에서 만났어요.'],
+          },
+        },
+        'body_lines': {
+          'wonjin': {
+            'setup': [r'$userName과 $celebName의 전생.'],
+            'event': ['깊은 결이 흘렀어요.'],
+            'turn': ['갈라놓았어요.'],
+            'resolution': ['여운이 따라왔어요.'],
+          },
+        },
+        'story_arcs': {
+          'wonjin': [slotArc('wonjin_01')],
+        },
+      };
+      return json.decode(json.encode(raw)) as Map<String, dynamic>;
+    }
+
+    setUp(() {
+      PastLifeService.resetCacheForTest();
+      PastLifeService.seedForTest(slotFixturePool());
+    });
+
+    tearDown(() {
+      // 다른 group 이 실 assets pool 을 쓰도록 복원.
+      PastLifeService.resetCacheForTest();
+      PastLifeService.seedForTest(pool);
+    });
+
+    test('slot arc — 4문단 8~10문장 + 사주 용어 1회 이상', () {
+      for (var seed = 0; seed < 5; seed++) {
+        final scenario = PastLifeService.generateScenario(
+          user: mk('子'),
+          celeb: mk('未'),
+          celebName: '솔라',
+          userName: '당신',
+          seed: seed,
+        );
+        final n = sentenceCount(scenario);
+        expect(
+          n,
+          inInclusiveRange(8, 10),
+          reason: '[slot arc seed=$seed] 문장 수 $n 범위 밖. body=$scenario',
+        );
+        final hasTerm = sajuTerms.any((t) => scenario.contains(t));
+        expect(
+          hasTerm,
+          isTrue,
+          reason: '[slot arc seed=$seed] 사주 용어 없음: $scenario',
+        );
       }
     });
 
     test('기승전결 흐름 — 배경/사건/여운 모두 등장', () {
       // 배경 = 이름 inject 등장. 사건 = "사주" 단어. 여운 = "이번 생" / "지금 생"류.
-      // R108 ② — 이 가드는 slot fallback 의 기승전결 구조를 검증한다. 장편화된
-      // 관계는 더 이상 slot 사주-용어 단정을 안 하므로(design doc), 아직 slot 인
-      // keyword 로 검사한다. Sprint 4 에서 chung 장편화로 yeokma(子-寅) 쌍으로
-      // 교체했으나, Sprint 7 에서 yeokma 도 장편화 — 아직 slot 인 neutral
-      // (戊子+戊戌, 합·충·공망 매칭 0) 쌍으로 재교체. 장편 구조 가드는
-      // r108_past_life_longform_test.dart 가 전담.
+      // R108 ② sprint 8 — 66 arc 전수 longform 화로 slot 실관계 표본이 0이 돼,
+      // 이 가드를 합성 비-longform story_arc fixture 로 마이그레이션했다.
+      // 검증 의도(slot arc 의 기승전결 4문단 구조)는 그대로 보존된다. 장편
+      // 구조 가드는 r108_past_life_longform_test.dart 가 전담.
       final scenario = PastLifeService.generateScenario(
         user: mk('子'),
-        celeb: mk('戌'),
+        celeb: mk('未'),
         celebName: '솔라',
         userName: '당신',
         seed: 7,
