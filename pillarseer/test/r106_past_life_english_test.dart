@@ -177,8 +177,15 @@ void main() {
       );
       expect(r.scenarioEn.contains('Wonyoung'), isTrue);
       expect(r.scenarioEn.contains('Jamie'), isTrue);
-      expect(r.headlineEn.contains('Wonyoung'), isTrue);
-      expect(r.headlineEn.contains('Jamie'), isTrue);
+      // R108 ② Sprint 9 — EN longform 이면 headlineEn 은 작품 제목(이름 없음).
+      // 단편 fallback 이면 "Jamie & Wonyoung's past life ..." 처럼 이름 포함.
+      if (r.isLongformEn) {
+        expect(r.headlineEn.trim(), isNotEmpty);
+        expect(r.headlineEn.contains(r'$'), isFalse);
+      } else {
+        expect(r.headlineEn.contains('Wonyoung'), isTrue);
+        expect(r.headlineEn.contains('Jamie'), isTrue);
+      }
     });
 
     test('영어 본문 — 단정 voice (조건형 어휘 존재, 절대 단정 회피)', () async {
@@ -358,6 +365,136 @@ void main() {
       expect(src.contains('scenario.scenarioEn'), isTrue);
       expect(src.contains('scenario.headlineEn'), isTrue);
       expect(src.contains('k.labelEn'), isTrue);
+    });
+
+    test('영어 모드 — EN longform 챕터/epilogue 분기', () {
+      // R108 ② Sprint 9 — useKo=false + isLongformEn 이면 EN 챕터를 노출.
+      expect(src.contains('isLongformEn'), isTrue);
+      expect(src.contains('chaptersEn'), isTrue);
+      expect(src.contains('epilogueEn'), isTrue);
+    });
+  });
+
+  // ─── 6. R108 ② Sprint 9 — story_arcs_en longform 가드 ────────────────
+  // 영어판 장편 집필이 끝난 관계는 EN arc 도 format:"longform" + chapters[] +
+  // epilogue 를 갖는다. 한글/한자 leak 0, $era/$userRole/$celebRole 0,
+  // $userName/$celebName 만 허용.
+  group('R108 ② Sprint 9 — story_arcs_en longform', () {
+    // 영어판 장편 집필 완료 관계. Sprint 9 가 채울 때마다 추가.
+    const enLongformWritten = <String>{'wonjin'};
+    // 영어 본문은 한국어보다 글자 수가 길다 — floor 를 KO(5000)와 동일하게 둔다.
+    const enCharFloor = 5000;
+    final hangulOrHanzi = RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ一-鿿]');
+
+    test('집필 완료 관계 EN arc — format:"longform" + chapters + epilogue', () {
+      final en = pool['story_arcs_en'] as Map;
+      for (final k in enLongformWritten) {
+        for (final raw in en[k] as List) {
+          final a = raw as Map;
+          final id = a['id'];
+          expect(a['format'], 'longform', reason: '$id EN format 누락');
+          expect(a['chapters'], isA<List>(), reason: '$id EN chapters 누락');
+          expect((a['chapters'] as List), isNotEmpty);
+          for (final c in a['chapters'] as List) {
+            final cm = c as Map;
+            expect(cm['no'], isA<int>(), reason: '$id EN chapter no');
+            expect((cm['heading'] as String).trim(), isNotEmpty);
+            expect((cm['body'] as String).trim(), isNotEmpty);
+          }
+          expect((a['epilogue'] as String).trim(), isNotEmpty);
+          expect((a['genre'] as String).trim(), isNotEmpty);
+          expect((a['title'] as String).trim(), isNotEmpty);
+          expect((a['logline'] as String).trim(), isNotEmpty);
+          expect(a['estReadMinutes'], isA<int>());
+        }
+      }
+    });
+
+    test('집필 완료 관계 EN arc — 본문 합 ≥ floor + 챕터 번호 연속', () {
+      final en = pool['story_arcs_en'] as Map;
+      for (final k in enLongformWritten) {
+        for (final raw in en[k] as List) {
+          final a = raw as Map;
+          var total = 0;
+          final nos = <int>[];
+          for (final c in a['chapters'] as List) {
+            final cm = c as Map;
+            total += (cm['body'] as String).length;
+            nos.add(cm['no'] as int);
+          }
+          total += (a['epilogue'] as String).length;
+          expect(
+            total,
+            greaterThanOrEqualTo(enCharFloor),
+            reason: '${a['id']} EN 본문 합 $total < $enCharFloor',
+          );
+          expect(
+            nos,
+            List.generate(nos.length, (i) => i + 1),
+            reason: '${a['id']} EN 챕터 번호 비연속: $nos',
+          );
+        }
+      }
+    });
+
+    test('집필 완료 관계 EN 본문 — 한글/한자 leak 0 + 폐기 변수 0', () {
+      final en = pool['story_arcs_en'] as Map;
+      const banned = [r'$era', r'$userRole', r'$celebRole'];
+      for (final k in enLongformWritten) {
+        for (final raw in en[k] as List) {
+          final a = raw as Map;
+          final blob = <String>[
+            a['title'] as String,
+            a['logline'] as String,
+            a['epilogue'] as String,
+            for (final c in a['chapters'] as List)
+              ...[(c as Map)['heading'] as String, c['body'] as String],
+          ].join(' ');
+          expect(
+            hangulOrHanzi.hasMatch(blob),
+            isFalse,
+            reason: '${a['id']} EN 본문 한글/한자 leak',
+          );
+          for (final b in banned) {
+            expect(blob.contains(b), isFalse, reason: '${a['id']} 폐기 변수 "$b"');
+          }
+        }
+      }
+    });
+
+    test('집필 완료 관계 EN arc — title 전수 유니크', () {
+      final en = pool['story_arcs_en'] as Map;
+      final titles = <String>{};
+      for (final k in enLongformWritten) {
+        for (final raw in en[k] as List) {
+          final t = (raw as Map)['title'] as String;
+          expect(titles.add(t), isTrue, reason: 'EN title 중복: $t');
+        }
+      }
+    });
+
+    test('EN longform 라우팅 — generate() 가 EN 챕터/epilogue 채움', () async {
+      // 子-未 원진 → primary wonjin (EN longform 집필 완료).
+      final r = await PastLifeService.generate(
+        user: mk('戊', '子'),
+        celeb: mk('丁', '未'),
+        celebName: 'IU',
+        userName: 'Alex',
+        seed: 7,
+        kind: 'idol',
+      );
+      expect(r.isLongformEn, isTrue, reason: 'EN longform 라우팅 실패');
+      expect(r.chaptersEn, isNotEmpty);
+      expect(r.epilogueEn.trim(), isNotEmpty);
+      expect(r.titleEn.trim(), isNotEmpty);
+      for (final c in r.chaptersEn) {
+        expect(c.body.contains('Alex'), isTrue);
+        expect(c.body.contains(r'$'), isFalse);
+      }
+      expect(r.epilogueEn.contains('IU'), isTrue);
+      // KO longform 필드는 그대로 carry — KO/EN 분리 보관.
+      expect(r.isLongform, isTrue);
+      expect(r.chapters, isNotEmpty);
     });
   });
 }

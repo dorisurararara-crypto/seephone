@@ -609,9 +609,23 @@ class _ResultCard extends StatelessWidget {
     final keywords = scenario.keywords
         .map((k) => useKo ? k.labelKo : k.labelEn)
         .toList();
-    // R108 ② — 장편이면 작품 제목을 헤드라인으로, 아니면 기존 keyword 헤드라인.
-    final headline = scenario.isLongform && scenario.title.trim().isNotEmpty
-        ? scenario.title
+    // R108 ② Sprint 9 — 장편 메타는 언어별로 분기. 영어 모드 + EN longform 풀이
+    // 있으면 EN 챕터/제목/메타, 아니면 KO longform 으로 fallback.
+    final useEnLong = !useKo && scenario.isLongformEn;
+    final showLongform = useKo
+        ? (scenario.isLongform && scenario.chapters.isNotEmpty)
+        : (useEnLong ? scenario.chaptersEn.isNotEmpty : false);
+    final longTitle = useEnLong ? scenario.titleEn : scenario.title;
+    final longGenre = useEnLong ? scenario.genreEn : scenario.genre;
+    final longEra = useEnLong ? scenario.eraEn : scenario.era;
+    final longLogline = useEnLong ? scenario.loglineEn : scenario.logline;
+    final longEst = useEnLong
+        ? scenario.estReadMinutesEn
+        : scenario.estReadMinutes;
+    final isLongformActive = useKo ? scenario.isLongform : useEnLong;
+    // 작품 제목을 헤드라인으로, 아니면 기존 keyword 헤드라인.
+    final headline = isLongformActive && longTitle.trim().isNotEmpty
+        ? longTitle
         : (useKo
               ? scenario.headlineKo
               : (scenario.headlineEn.isNotEmpty
@@ -673,11 +687,10 @@ class _ResultCard extends StatelessWidget {
                           ),
                   ),
                   // R108 ② — 장편이면 제목 아래 1줄 시놉시스.
-                  if (scenario.isLongform &&
-                      scenario.logline.trim().isNotEmpty) ...[
+                  if (isLongformActive && longLogline.trim().isNotEmpty) ...[
                     const SizedBox(height: 8),
                     Text(
-                      scenario.logline,
+                      longLogline,
                       style: useKo
                           ? GoogleFonts.notoSansKr(
                               fontSize: 12.5,
@@ -698,16 +711,16 @@ class _ResultCard extends StatelessWidget {
                     children: [
                       // R108 ② — 장편이면 장르 / 시대 / 읽기 시간 메타칩을
                       // keyword 칩 앞에 노출 (인터넷소설 작품 메타 연출).
-                      if (scenario.isLongform) ...[
-                        if (scenario.genre.isNotEmpty)
-                          _MetaChip(label: scenario.genre, accent: true),
-                        if (scenario.era.isNotEmpty)
-                          _MetaChip(label: scenario.era, accent: true),
-                        if (scenario.estReadMinutes > 0)
+                      if (isLongformActive) ...[
+                        if (longGenre.isNotEmpty)
+                          _MetaChip(label: longGenre, accent: true),
+                        if (longEra.isNotEmpty)
+                          _MetaChip(label: longEra, accent: true),
+                        if (longEst > 0)
                           _MetaChip(
                             label: useKo
-                                ? '약 ${scenario.estReadMinutes}분 읽기'
-                                : '~${scenario.estReadMinutes} min read',
+                                ? '약 $longEst분 읽기'
+                                : '~$longEst min read',
                             accent: true,
                           ),
                       ],
@@ -718,7 +731,7 @@ class _ResultCard extends StatelessWidget {
                   Container(height: 1, color: AppColors.line),
                   const SizedBox(height: 18),
                   // R108 ② — 장편이면 챕터 헤더 + 본문 + epilogue, 아니면 단일 본문.
-                  if (scenario.isLongform && scenario.chapters.isNotEmpty)
+                  if (showLongform)
                     _LongformBody(scenario: scenario, useKo: useKo)
                   else
                     Text(
@@ -793,7 +806,11 @@ class _LongformBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chapters = scenario.chapters;
+    // R108 ② Sprint 9 — 영어 모드 + EN longform 풀이 있으면 EN 챕터,
+    // 아니면 KO 챕터.
+    final useEnLong = !useKo && scenario.isLongformEn;
+    final chapters = useEnLong ? scenario.chaptersEn : scenario.chapters;
+    final epilogue = useEnLong ? scenario.epilogueEn : scenario.epilogue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -848,7 +865,7 @@ class _LongformBody extends StatelessWidget {
                   ),
           ),
         ],
-        if (scenario.epilogue.trim().isNotEmpty) ...[
+        if (epilogue.trim().isNotEmpty) ...[
           const SizedBox(height: 24),
           Container(height: 1, color: AppColors.line),
           const SizedBox(height: 18),
@@ -863,7 +880,7 @@ class _LongformBody extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            scenario.epilogue,
+            epilogue,
             key: const Key('past_life_epilogue'),
             style: useKo
                 ? GoogleFonts.notoSerifKr(

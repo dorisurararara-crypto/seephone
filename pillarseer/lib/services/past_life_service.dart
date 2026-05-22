@@ -215,6 +215,36 @@ class PastLifeScenario {
   /// 전생→현생 연결 한 문단 (치환 완료). 장편이 아니면 빈 문자열.
   final String epilogue;
 
+  // ─── R108 ② Sprint 9 — 영어판 장편 메타 ──────────────────────────────
+  // 화면은 세션당 scenario 1개만 생성하고 useKo 로 분기 렌더한다. 따라서
+  // KO/EN longform 필드를 분리 보관해 EN 모드에서 EN 챕터를 노출한다.
+  // story_arcs_en 의 longform arc 가 있을 때만 채워지고, 없으면 빈 값
+  // (화면이 KO longform 으로 fallback 해 앱은 깨지지 않음).
+
+  /// 영어판 장편 여부. story_arcs_en 의 longform arc 매칭 시 true.
+  final bool isLongformEn;
+
+  /// 영어 장르 (UI 메타칩).
+  final String genreEn;
+
+  /// 영어 작품 제목 (UI 헤드라인). [headlineEn] 보다 우선.
+  final String titleEn;
+
+  /// 영어 1줄 시놉시스.
+  final String loglineEn;
+
+  /// 영어 시대 (UI 메타칩).
+  final String eraEn;
+
+  /// 영어 예상 읽기 분.
+  final int estReadMinutesEn;
+
+  /// 영어 챕터 배열 (치환 완료).
+  final List<PastLifeChapter> chaptersEn;
+
+  /// 영어 전생→현생 epilogue (치환 완료).
+  final String epilogueEn;
+
   const PastLifeScenario({
     required this.keywords,
     required this.scenarioKo,
@@ -233,6 +263,14 @@ class PastLifeScenario {
     this.estReadMinutes = 0,
     this.chapters = const [],
     this.epilogue = '',
+    this.isLongformEn = false,
+    this.genreEn = '',
+    this.titleEn = '',
+    this.loglineEn = '',
+    this.eraEn = '',
+    this.estReadMinutesEn = 0,
+    this.chaptersEn = const [],
+    this.epilogueEn = '',
   });
 }
 
@@ -531,6 +569,16 @@ class PastLifeService {
     if (arcEn == null) {
       return base; // 영어 풀 없음 → scenarioEn/headlineEn 빈 채로.
     }
+    // R108 ② Sprint 9 — 영어 arc 가 longform 이면 챕터 합성 경로로 분기.
+    if (arcEn['format'] == 'longform') {
+      return _attachEnglishLongform(
+        base: base,
+        arcEn: arcEn,
+        primary: primary,
+        celebName: celebName,
+        userName: userName,
+      );
+    }
     final rng = Random(seed);
 
     // $era — arc 의 eraHints(EN) 우선, 없으면 전역 eras_en fallback.
@@ -586,7 +634,8 @@ class PastLifeService {
       era: base.era,
       userRole: base.userRole,
       celebRole: base.celebRole,
-      // R108 ② — 장편 메타는 KO base 에서 그대로 carry (EN longform 은 Sprint 9).
+      // 장편 메타는 KO base 에서 그대로 carry (EN arc 가 구 paragraphs 스키마면
+      // EN longform 필드는 빈 채 — 화면이 KO longform 으로 fallback).
       isLongform: base.isLongform,
       genre: base.genre,
       title: base.title,
@@ -594,6 +643,82 @@ class PastLifeService {
       estReadMinutes: base.estReadMinutes,
       chapters: base.chapters,
       epilogue: base.epilogue,
+    );
+  }
+
+  // ─── 내부: 영어 장편 합성 (R108 ② Sprint 9) ───────────────────────────
+  //
+  // story_arcs_en 의 longform arc → 영어 챕터 + epilogue 합성. 본문 변수는
+  // $userName / $celebName 2종만 plain string replace (josa 보정 불필요).
+  // KO longform 필드(base.chapters 등)는 그대로 carry — 화면이 useKo 로
+  // KO/EN 분기 렌더한다.
+  static PastLifeScenario _attachEnglishLongform({
+    required PastLifeScenario base,
+    required Map<String, dynamic> arcEn,
+    required PastLifeKeyword primary,
+    required String celebName,
+    required String userName,
+  }) {
+    String inject(String src) => src
+        .replaceAll(r'$userName', userName)
+        .replaceAll(r'$celebName', celebName);
+
+    final rawChapters = (arcEn['chapters'] is List)
+        ? (arcEn['chapters'] as List)
+        : const <dynamic>[];
+    final chaptersEn = <PastLifeChapter>[];
+    for (final c in rawChapters) {
+      if (c is! Map) continue;
+      final no = c['no'] is int ? c['no'] as int : chaptersEn.length + 1;
+      final heading = inject((c['heading'] as String?) ?? '');
+      final body = inject((c['body'] as String?) ?? '');
+      chaptersEn.add(PastLifeChapter(no: no, heading: heading, body: body));
+    }
+    final epilogueEn = inject((arcEn['epilogue'] as String?) ?? '');
+
+    // scenarioEn — 챕터 본문 + epilogue 평문 join (하위호환: 단편 경로와 동일하게
+    // scenarioEn 을 참조하는 화면/테스트 보존).
+    final parts = <String>[
+      for (final ch in chaptersEn)
+        if (ch.body.trim().isNotEmpty) ch.body.trim(),
+      if (epilogueEn.trim().isNotEmpty) epilogueEn.trim(),
+    ];
+    final scenarioEn = parts.join('\n\n');
+    final titleEn = inject((arcEn['title'] as String?) ?? '');
+    final headlineEn = titleEn.trim().isNotEmpty
+        ? titleEn
+        : "$userName & $celebName's past life — a ${primary.labelEn}";
+
+    return PastLifeScenario(
+      keywords: base.keywords,
+      scenarioKo: base.scenarioKo,
+      headlineKo: base.headlineKo,
+      scenarioEn: scenarioEn,
+      headlineEn: headlineEn,
+      celebName: base.celebName,
+      userName: base.userName,
+      era: base.era,
+      userRole: base.userRole,
+      celebRole: base.celebRole,
+      // KO 장편 메타 carry — 화면이 useKo 로 분기.
+      isLongform: base.isLongform,
+      genre: base.genre,
+      title: base.title,
+      logline: base.logline,
+      estReadMinutes: base.estReadMinutes,
+      chapters: base.chapters,
+      epilogue: base.epilogue,
+      // EN 장편 메타.
+      isLongformEn: chaptersEn.isNotEmpty,
+      genreEn: (arcEn['genre'] as String?) ?? '',
+      titleEn: titleEn,
+      loglineEn: inject((arcEn['logline'] as String?) ?? ''),
+      eraEn: (arcEn['era'] as String?) ?? '',
+      estReadMinutesEn: arcEn['estReadMinutes'] is int
+          ? arcEn['estReadMinutes'] as int
+          : 0,
+      chaptersEn: chaptersEn,
+      epilogueEn: epilogueEn,
     );
   }
 
