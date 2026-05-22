@@ -79,14 +79,16 @@ void main() {
   // + 분량 가드를 enforce 한다. Sprint 1 이 dohwa 8편 (5,700~8,800자, 5챕터)
   // 을, Sprint 2 가 wonjin 8편 (7,100~8,400자, 5챕터) 을, Sprint 3 이 hap
   // 8편 (7,100~8,300자, 5챕터) 을, Sprint 4 가 chung 8편 (7,900~8,700자,
-  // 7챕터) 을, Sprint 5 가 cheoneul 8편 (7,000~7,900자, 6챕터) 을 채움.
-  // Sprint 6~8 가 관계를 채울 때마다 추가, Sprint 10 에서 skip-list 제거.
+  // 7챕터) 을, Sprint 5 가 cheoneul 8편 (7,000~7,900자, 6챕터) 을, Sprint 6
+  // 이 hyeong 8편 (7,000~7,700자, 6챕터, 의형제·전우애) 을 채움.
+  // Sprint 7~8 가 관계를 채울 때마다 추가, Sprint 10 에서 skip-list 제거.
   const longformWrittenRelations = <String>{
     'dohwa',
     'wonjin',
     'hap',
     'chung',
     'cheoneul',
+    'hyeong',
   };
 
   // 장편 본문 분량 floor (총 글자 수). 기존 슬롯 arc(~460자)의 10배 이상 =
