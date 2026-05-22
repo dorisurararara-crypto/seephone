@@ -28,13 +28,21 @@ metadata:
 - ✅ Sprint 5 — 1.0.0+75 빌드·altool 업로드·ASC build #75 VALID·App Store version attach 완료 (commit 2b68dad). App Review 미제출.
 - flutter test 1638/1638 pass / analyze 0 (info만)
 
-## ASC 상태 (Sprint 4 완료분 — 2026-05-23 새벽)
+## ASC 상태 (2026-05-23 새벽 — 자율 작업 완료분)
 - App Store version 1.0.0 id `2084f5bc-9577-427d-b6d7-0420cb750b31` PREPARE_FOR_SUBMISSION.
-- 버전 로컬: ko + en-US — 설명/키워드/프로모/지원URL 모두 PATCH 완료.
-- 앱정보 로컬: ko "필러시어 - 사주 운세 풀이" / en "Pillar Seer - Saju Fortune" + 부제 + privacyPolicyUrl.
-- 카테고리 LIFESTYLE/ENTERTAINMENT. 연령등급 선언 4+ (콘텐츠 전부 NONE/false).
-- **IAP id `6772283210`** com.ganziman.pillarseer.premium_pack NON_CONSUMABLE. 로컬 ko/en + 가격(USA $4.99/KOR ₩5,900, 175 territory) + availability 완료. state=MISSING_METADATA (심사 스크린샷만 남음).
-- 법무 사이트 GitHub Pages 라이브: `https://dorisurararara-crypto.github.io/pillarseer-legal/` (privacy/support/terms .html).
+- 빌드 **1.0.0+75** (build id `edea57e3-d624-4250-bdb7-6ec28e8487b1`) VALID, version 에 attach 완료. usesNonExemptEncryption=false (export compliance 자동).
+- 버전 로컬 ko+en-US (설명/키워드/프로모/지원URL). 앱정보 로컬 ko "필러시어 - 사주 운세 풀이" / en "Pillar Seer - Saju Fortune" + 부제 + privacyPolicyUrl.
+- copyright "2026 dorisurararara". releaseType AFTER_APPROVAL. App Review 연락처(Seunghyeon Lee/+821000000000/dorisurararara@gmail.com)+노트 설정.
+- 카테고리 LIFESTYLE/ENTERTAINMENT. 연령등급 4+.
+- **IAP id `6772283210`** com.ganziman.pillarseer.premium_pack NON_CONSUMABLE. 로컬 ko/en + 가격(USA $4.99/KOR ₩5,900) + availability 175 territory 완료. state=MISSING_METADATA (심사 스크린샷만 남음).
+- 법무 사이트 라이브: `https://dorisurararara-crypto.github.io/pillarseer-legal/`.
+
+## codex 최종 검수 — 사용자 깬 뒤 Claude 가 할 endpoint 순서
+- IAP 심사 스크린샷: GET appStoreReviewScreenshot → POST /v1/inAppPurchaseAppStoreReviewScreenshots → uploadOperations PUT → PATCH uploaded:true+checksum → IAP state READY_TO_SUBMIT 확인.
+- App Store 스크린샷: appStoreVersionLocalizations 별 appScreenshotSets GET/POST → POST /v1/appScreenshots → uploadOperations PUT → PATCH uploaded:true+checksum.
+- 최종 제출: POST /v1/reviewSubmissions → POST /v1/reviewSubmissionItems(appStoreVersion) → PATCH item READY_FOR_REVIEW → PATCH submission READY_FOR_REVIEW. (첫 IAP 는 앱 버전과 함께 제출됨.)
+- ⚠️ 제출 직전 Business/Agreements 의 Paid Apps Agreement Active 재확인 (미완 시 IAP PENDING_CONTRACT).
+- ⚠️ 스크린샷은 1.0.0+75 화면 기준 (paywall 은 +75 신규). 사용자가 +75 미설치면 TestFlight 배포 필요 여부 사용자 결정.
 
 ## ⚠️ 사용자 아침 큐 (진짜 사용자만 가능 — 검색으로 확정)
 1. **App Privacy**: ASC 웹 > Pillar Seer > App Privacy > Get Started > "No, we do not collect data" > Save > Publish. (API 미지원 확인됨, 웹 전용, 2분)
