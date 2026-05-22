@@ -21,7 +21,6 @@
 
 import '../models/saju_result.dart';
 import 'gyeokguk_service.dart';
-import 'life_category_fragment_service.dart';
 import 'life_paragraph_service.dart';
 import 'natural_prose_joiner.dart';
 import 'ten_gods_service.dart';
@@ -66,105 +65,100 @@ class LifeOverviewService {
     '丑': '겨울',
   };
 
-  /// Anchor 1 — 일간 형용 (10천간 → 자연 형용 한 줄).
-  /// "신묘 일주는 ~" prefix 금지. 첫 문장은 본인 + 일간 형용으로 시작.
-  /// R90 sprint 6 round 2 — "결" 남발 회피.
+  /// Anchor 1 — 일간 형용 (10천간 → my_saju_v5 메타포 톤).
+  /// R108 ③ — 추상어 제거, 구체적 비유 + 강점 한 문장. 한자 노출 X (한글만).
+  /// "<일주> 일주는 ~" prefix 금지. 첫 문장은 "당신은 <비유> 같은 사람이에요".
   static const Map<String, String> _stemPersona = {
-    '갑': '본인은 곧게 뻗어가는 큰 나무 같은 사람이에요',
-    '을': '본인은 부드럽게 휘어지면서도 끈질긴 풀 같은 사람이에요',
-    '병': '본인은 한낮 햇볕처럼 환하게 비추는 사람이에요',
-    '정': '본인은 따뜻한 촛불처럼 섬세하게 챙기는 사람이에요',
-    '무': '본인은 든든하게 자리 잡은 큰 산 같은 사람이에요',
-    '기': '본인은 편안하게 받쳐주는 비옥한 땅 같은 사람이에요',
-    '경': '본인은 단단한 쇠처럼 결단이 빠른 사람이에요',
-    '신': '본인은 예리한 보석처럼 세련된 감각을 가진 사람이에요',
-    '임': '본인은 넓게 흐르는 큰 강처럼 시야가 트인 사람이에요',
-    '계': '본인은 깊게 스며드는 옹달샘 같은 사람이에요',
+    '갑': '당신은 곧게 위로 자라는 큰 나무 같은 사람이에요. 휘청거리는 어린 나무가 아니라 줄기가 굵게 잡힌 나무라, 한번 \'이쪽이다\' 정하면 그 길로 쭉 밀고 가는 힘이 있어요',
+    '을': '당신은 바위틈에서도 길을 찾아 휘어 자라는 풀이나 덩굴 같은 사람이에요. 한 방향으로 우직하진 않아도, 어떤 자리에 놓여도 살아남을 길을 기어이 찾아내는 적응력이 무기예요',
+    '병': '당신은 한낮의 해처럼 있는 자리를 환하게 밝히는 사람이에요. 표현이 시원시원하고 숨기는 게 없어서, 당신이 들어서면 그 자리 분위기가 금세 밝아져요',
+    '정': '당신은 어두운 데를 비추는 촛불이나 등불 같은 사람이에요. 크게 떠들진 않지만 곁에 있는 사람이 뭘 필요로 하는지 빨리 알아채고 조용히 챙겨주는 따뜻함이 있어요',
+    '무': '당신은 자리를 묵직하게 잡은 큰 산 같은 사람이에요. 어지간한 일에는 흔들리지 않아서, 주변 사람들이 위기일수록 당신을 \'믿고 기댈 자리\'로 여겨요',
+    '기': '당신은 무엇이든 길러내는 비옥한 밭흙 같은 사람이에요. 앞에서 끌기보다 옆에서 받쳐주며 사람과 일을 부드럽게 키워서, 당신 곁에 있으면 사람이 편하다고 느껴요',
+    '경': '당신은 아직 다듬지 않은 무쇠나 큰 쇳덩이 같은 사람이에요. 재고 따지기보다 \'할지 말지\'를 빠르게 정하고 바로 움직여서, 결정이 필요한 자리에서 진가가 나와요',
+    '신': '당신은 잘 벼려진 칼이나 보석 같은 사람이에요. 무른 쇳덩이가 아니라 이미 모양이 잡힌 금속이라, 기준이 뚜렷하고 어지간한 압력엔 잘 안 휘어요',
+    '임': '당신은 넓게 흐르는 큰 강이나 바다 같은 사람이에요. 한 군데 갇혀 있지 않고 넓게 보니까 시야가 트여 있고, 성향이 다른 사람도 큰 물처럼 다 품어내요',
+    '계': '당신은 땅속으로 조용히 스며드는 이슬이나 옹달샘 같은 사람이에요. 요란하지 않게 한 분야를 깊게 파고들어서, 남들이 못 보는 결을 먼저 알아채는 눈이 있어요',
   };
 
-  /// Anchor 2 — 월령 계절 (4).
-  /// R90 sprint 6 round 2 — "본인 안에" 반복 회피.
+  /// Anchor 2 — 월령 계절 (4 → my_saju_v5 톤).
   static const Map<String, String> _seasonFlavor = {
-    '봄': '봄 기운을 받고 태어나서 새 시작이나 변화 자리에서 에너지가 빠르게 살아나요',
-    '여름': '여름 화력을 받고 태어나서 사람 모이는 자리에서 매력이 한층 더 진해져요',
-    '가을': '가을 정리력을 받고 태어나서 흩어진 걸 한 데 모으는 자리에서 진가가 나와요',
-    '겨울': '겨울 안정을 받고 태어나서 깊이 있는 분야에서 오래 가는 편이에요',
+    '봄': '거기에 봄 기운을 받고 태어나서, 새로 시작하거나 판을 바꾸는 자리에서 에너지가 빠르게 살아나요',
+    '여름': '거기에 여름 화력을 받고 태어나서, 사람이 모이는 자리에 서면 매력이 한층 더 진해져요',
+    '가을': '거기에 가을 기운을 받고 태어나서, 흐트러진 걸 한자리에 모으고 매듭짓는 일에서 진가가 나와요',
+    '겨울': '거기에 겨울의 차분함을 받고 태어나서, 깊이 들어가야 하는 분야에서 남보다 오래 버텨요',
   };
 
-  /// Anchor 3 — 5행 압도 + 공허 대조 (5×5 = 25 조합 — 동적 생성).
-  /// R90 sprint 6 round 2 — "본인 안에서 가장 강한 결" → "사주에서 가장 진한 색".
+  /// Anchor 3 — 5행 압도 + 공허 대조 (5×5 = 25 조합 — 동적 생성, my_saju_v5 톤).
   static String _domDefContrast(String dominant, String deficit) {
     final domKo = _elKo[dominant] ?? dominant;
     final defKo = _elKo[deficit] ?? deficit;
-    final domTone = _dominantTone[dominant] ?? '본인 색이 또렷한 매력이 있어요';
-    final defTone = _deficitTone[deficit] ?? '한 박자 천천히 챙기면 좋아요';
-    return '사주에서 가장 진한 색은 $domKo이고 $domTone. 반대로 가장 옅은 색은 $defKo이라 $defTone';
+    final domTone = _dominantTone[dominant] ?? '\'자기 색이 또렷하다\'는 인상이 따라와요';
+    final defTone = _deficitTone[deficit] ?? '한 박자 천천히 챙기면 부드럽게 풀려요';
+    return '여덟 글자 중에서는 $domKo 기운이 제일 진해서 $domTone. 대신 $defKo 기운이 제일 옅어서, $defTone';
   }
 
   static const Map<String, String> _dominantTone = {
-    '木': '추진력이 강해서 새 도전을 잘 잡아요',
-    '火': '주변 분위기를 빠르게 풀어주는 매력이 진해요',
-    '土': '듬직한 분위기가 자연스러워서 친구들이 본인 옆을 편하게 느껴요',
-    '金': '결단이 빠르고 정리하는 자리에서 빛이 나요',
-    '水': '변화 많은 환경에서도 적응이 자연스러워요',
+    '木': '\'뭔가를 시작하고 키워내는 힘\'이 당신을 설명하는 큰 색이에요',
+    '火': '\'환하고 표현이 분명한 사람\'이라는 인상이 늘 따라다녀요',
+    '土': '\'듬직하다, 옆에 있으면 안심된다\'는 말을 자주 들었을 거예요',
+    '金': '\'쟤는 줏대 있다, 자기 색이 분명하다\'는 인상이 자연스럽게 따라와요',
+    '水': '\'생각이 깊고 상황을 넓게 본다\'는 게 당신의 큰 색이에요',
   };
 
   static const Map<String, String> _deficitTone = {
-    '木': '새로 시작하는 추진력은 한 박자 모아두면 좋아요',
-    '火': '확 펼치는 표현은 의식해서 한 번 더 보태주면 좋아요',
-    '土': '뿌리 내리는 안정감은 매일 작은 습관으로 보완하면 좋아요',
-    '金': '딱 잘라 결정 내리는 힘은 마감을 미리 적어두면 자연스러워져요',
-    '水': '낯선 환경 적응력은 한 박자 쉬고 들어가면 부드러워져요',
+    '木': '새로 시작하는 추진력은 한 박자 모았다가 터뜨리면 더 잘 풀려요',
+    '火': '확 펼치는 표현은 가끔 의식해서 한 번 더 보태주면 좋아요',
+    '土': '한자리에 뿌리내리는 안정감은 작은 습관으로 천천히 채워가면 좋아요',
+    '金': '딱 잘라 끊어내는 결단은 마감을 미리 적어두면 한결 수월해져요',
+    '水': '낯선 자리엔 곧장 뛰어들기보다 한 박자 멈췄다 들어갈 때 부드럽게 풀려요',
   };
 
-  /// Anchor 4 — 십성 주력 (10).
-  /// R90 sprint 6 round 2 — "본인 페이스" 반복 회피, MZ 톤 강화.
+  /// Anchor 4 — 십성 주력 (10 → my_saju_v5 톤, 강점 + 그림자 한 쌍).
   static const Map<String, String> _sipsinFlavor = {
-    '비견': '주관이 단단해서 누가 흔들어도 본인 중심이 잘 안 무너져요',
-    '겁재': '경쟁심이 또렷해서 자극받는 환경에서 본인 매력이 더 살아나요',
-    '식신': '만들어내는 감각이 강해서 글이나 영상, 음악 쪽에서 빛이 잘 나요',
-    '상관': '표현이 또렷해서 좋아하는 분야에서는 또래보다 한 박자 빠른 편이에요',
-    '편재': '기회 잘 보는 감각이 또렷해서 변동 많은 자리에서도 본인 자리를 빠르게 잡아요',
-    '정재': '신용 잘 쌓는 분위기가 진해서 본인 약속은 친구들 사이에서 신뢰가 두꺼워요',
-    '편관': '압박 큰 자리에서 오히려 단단해지는 편이라 도전 자리가 본인한테 잘 맞아요',
-    '정관': '원칙 지키는 자리에서 진가가 나와서 신뢰 받는 역할이 본인한테 잘 맞아요',
-    '편인': '혼자 파고드는 힘이 강해서 깊이 있는 분야에서 본인 색이 또렷하게 나와요',
-    '정인': '배움과 안목이 단단해서 새 분야 익히는 속도가 또래보다 빠른 편이에요',
+    '비견': '속을 보면 누가 흔들어도 본인 중심이 잘 안 무너지는 비견 기운이 두드러져요. 다만 그 단단함이 셀 땐, 도움받아도 될 자리에서까지 혼자 다 짊어지려 해요',
+    '겁재': '속을 보면 경쟁하고 자극이 있는 자리에서 오히려 더 살아나는 겁재 기운이 두드러져요. 다만 그 승부욕이 가까운 사람한테까지 향하면 관계가 피곤해질 수 있어요',
+    '식신': '속을 보면 무언가를 만들어내고 베푸는 식신 기운이 두드러져요. 다만 베푸는 게 익숙해서, 정작 본인이 받아야 할 몫은 자주 놓쳐요',
+    '상관': '속을 보면 표현이 또렷하고 남이 못 보는 걸 먼저 짚어내는 상관 기운이 두드러져요. 다만 보이는 게 많으니 말이 그대로 나가서 \'날카롭다\'는 인상을 줄 때가 있어요',
+    '편재': '속을 보면 기회와 흐름을 빨리 읽는 편재 기운이 두드러져요. 다만 눈에 보이는 기회가 많다 보니, 한 가지에 진득하게 머무는 게 늘 숙제예요',
+    '정재': '속을 보면 신용을 차곡차곡 쌓는 정재 기운이 두드러져요. 다만 안정을 워낙 중히 여겨서, 한 번쯤 걸어볼 기회 앞에서도 너무 재다 타이밍을 놓쳐요',
+    '편관': '속을 보면 압박이 큰 자리에서 오히려 단단해지는 편관 기운이 두드러져요. 다만 늘 본인을 긴장 상태에 두는 게 익숙해서, 쉬어도 될 때조차 스스로를 몰아세워요',
+    '정관': '속을 보면 \'해야 하는 일\'을 눈앞에 두고 모른 척을 못 하는 정관 기운이 두드러져요. 다만 그 책임감이 빤히 보여서, 일을 자꾸 당신한테 미루는 사람이 생겨요',
+    '편인': '속을 보면 혼자 깊게 파고드는 직관, 편인 기운이 두드러져요. 다만 혼자가 편하다 보니 사람들과 자연스럽게 섞이는 자리에서는 한 발 물러나 있게 돼요',
+    '정인': '속을 보면 배우고 받아들이는 안목, 정인 기운이 두드러져요. 다만 받쳐주고 품는 게 익숙해서, 정작 본인이 도움을 청해야 할 때 입을 잘 못 떼요',
   };
 
-  /// Anchor 5 — 격국 (8 정격 + 건록/양인 + 불명 fallback).
-  /// R90 sprint 6 round 2 — "결" / "본인 페이스" 반복 회피.
+  /// Anchor 5 — 격국 (8 정격 + 건록/양인 + 불명 fallback, my_saju_v5 톤).
   static const Map<String, String> _gyeokgukFlavor = {
-    '정관격': '책임 의식이 또렷해서 한 번 한 약속은 끝까지 지키는 편이에요',
-    '편관격': '큰 결정이 필요한 자리에서 본인 판단이 한 박자 빠른 편이에요',
-    '정인격': '기댈 수 있는 어른 분위기가 자연스러워서 후배들이 본인을 많이 따라요',
-    '편인격': '직관이 빠른 편이라 남들이 못 보는 본인 시선이 무기예요',
-    '정재격': '꾸준한 적립이 잘 맞아서 매달 조금씩 모으는 흐름이 본인한테 자연스러워요',
-    '편재격': '사람 잘 만나는 분위기가 진해서 새 친구한테 호감을 빨리 얻는 편이에요',
-    '식신격': '여유 있게 베푸는 분위기가 자연스러워서 사람들이 본인 곁에서 편안함을 자주 느껴요',
-    '상관격': '창의성이 강해서 좋아하는 분야에서 본인 색이 또렷하게 나와요',
-    '건록격': '독립심이 강해서 혼자 하는 작업에서도 결과가 잘 나오는 편이에요',
-    '양인격': '강한 결단이 무기라 큰 일이 닥쳐도 본인 중심이 잘 안 무너져요',
-    '불명': '본인 색이 한 가지로 묶이지 않아서 여러 분야를 두루 경험할수록 매력이 살아나요',
+    '정관격': '사람들 사이에서는 책임을 회피하지 않는 사람이라, 신뢰가 필요한 역할이 자연스럽게 당신한테 와요',
+    '편관격': '큰 결정이 필요한 자리일수록 판단이 빨라져서, 도전적인 자리가 당신한테 잘 맞아요',
+    '정인격': '기대도 되는 어른 같은 분위기가 자연스러워서, 후배나 동생들이 곧잘 당신을 따라요',
+    '편인격': '남들이 못 보는 각도를 먼저 보는 직관이 빨라서, 그 시선 자체가 당신의 무기예요',
+    '정재격': '한 걸음씩 꾸준히 쌓는 흐름이 잘 맞아서, 매달 조금씩 모으는 방식이 당신한텐 자연스러워요',
+    '편재격': '사람을 두루 만나는 데 거리낌이 없어서, 처음 만난 사이에서도 호감을 빨리 얻어요',
+    '식신격': '여유 있게 베푸는 분위기가 몸에 배어 있어서, 사람들이 당신 곁에서 편안함을 자주 느껴요',
+    '상관격': '좋아하는 분야에 들어서면 또래보다 한 박자 빨라서, 거기서 당신 색이 또렷하게 나와요',
+    '건록격': '혼자서도 결과를 내는 독립심이 강해서, 누가 안 봐도 본인 몫은 끝까지 해내요',
+    '양인격': '큰일이 닥쳐도 본인 중심이 잘 안 무너지는 강한 결단이, 위기에서 진가를 보여요',
+    '불명': '한 가지 색으로만 묶이지 않는 사람이라, 여러 분야를 두루 겪을수록 매력이 살아나요',
   };
 
-  /// Anchor 6 — 인생 phase 마무리.
-  /// R90 sprint 6 round 2 — "인생 흐름을 한 줄로 보면" → "큰 그림으로 보면". MZ 톤 강화.
+  /// Anchor 6 — 인생 phase 마무리 (my_saju_v5 톤).
   static String _lifePhaseClosing(SajuResult saju) {
     final el = saju.elements;
     final wf = el.wood + el.fire;
     final eg = el.earth + el.metal;
     final w = el.water;
     if (wf >= eg && wf >= w * 2) {
-      return '큰 그림으로 보면 어릴 때부터 본인 색이 빠르게 자리 잡는 편이에요. 좋아하는 분야를 일찍 정하고 그 안에서 본인답게 가면 어른이 됐을 때 자연스럽게 단단해져요.';
+      return '큰 그림으로 보면 어릴 때부터 본인 색이 빠르게 자리 잡는 흐름이에요. 좋아하는 분야를 일찍 정하고 그 안에서 당신답게 가면, 나이가 들수록 자연스럽게 단단해져요.';
     }
     if (eg >= wf && eg >= w * 2) {
-      return '큰 그림으로 보면 시간이 지날수록 자리가 단단해지는 편이에요. 빠른 결과보다 천천히 쌓이는 모습이 더 어울리니까 본인 속도를 믿고 가도 괜찮아요.';
+      return '큰 그림으로 보면 빠르게 터지는 타입이 아니라, 시간이 지날수록 자리가 단단해지는 흐름이에요. 빠른 결과보다 천천히 쌓이는 모습이 더 어울리니, 조급해 말고 본인 속도를 믿어도 괜찮아요.';
     }
     if (w * 2 > wf && w * 2 > eg) {
-      return '큰 그림으로 보면 한 자리에 묶이지 않을 때 본인 매력이 더 살아나요. 변화 자체가 무기라서 새 환경, 새 사람, 새 분야에 본인을 두면 본인 색이 더 또렷해져요.';
+      return '큰 그림으로 보면 한자리에 묶여 있을 때보다, 자리를 옮기고 바꿀 때 매력이 더 살아나는 흐름이에요. 변화 자체가 무기라서 새 환경, 새 사람, 새 분야에 당신을 두면 색이 더 또렷해져요.';
     }
-    return '큰 그림으로 보면 어느 시기든 본인답게 가면 안정감이 좋은 편이에요. 한쪽으로 치우치지 않는 점이 본인 강점이에요.';
+    return '큰 그림으로 보면 어느 시기든 당신답게만 가면 안정감이 좋은 흐름이에요. 한쪽으로 치우치지 않는다는 점이 당신의 강점이에요.';
   }
 
   /// TenGod → 한글 키.
@@ -233,11 +227,15 @@ class LifeOverviewService {
 
     // Anchor 7 — gender-aware 마무리 (R88 B8 회귀 가드: 같은 사주 M/F essay 달라야 함).
     final a7 = isMale
-        ? '남자 본인은 든든하면서도 따뜻한 분위기가 자연스러워서 가까운 친구나 가족이 본인을 자주 의지해요.'
-        : '여자 본인은 섬세하고 또렷한 감각이 강해서 본인이 챙기는 사람들이 본인 옆에서 안정감을 자주 느껴요.';
+        ? '남자인 당신은 듬직하면서 속이 따뜻해서, 가까운 친구나 가족이 힘들 때 가장 먼저 당신을 찾아요.'
+        : '여자인 당신은 섬세하면서 감이 또렷해서, 당신이 챙기는 사람들이 곁에서 안정감을 자주 느껴요.';
+
+    // Anchor 8 — '바탕' 마무리 (R108 ③ — my_saju_v5 closing 톤).
+    const a8 = '이건 오늘 하루치 운세가 아니라, 평생 잘 안 바뀌는 당신의 \'바탕\'이에요. '
+        '바탕은 못 바꿔도, 그 위에서 오늘 어떻게 움직일지는 매일 당신이 새로 고를 수 있어요.';
 
     // essay 조립 — 마침표로 끝나는 sentence join.
-    final parts = [a1, a2, a3, a4, a5, a6, a7]
+    final parts = [a1, a2, a3, a4, a5, a6, a7, a8]
         .where((s) => s.trim().isNotEmpty)
         .map((s) {
           var t = s.trim();
@@ -249,39 +247,12 @@ class LifeOverviewService {
         .toList();
     var essay = NaturalProseJoiner.join(parts);
 
-    // 600자 미만이면 fragment 보강 (anchor 추가 — innateTendency + lateLife).
-    // 중복 방지: essay 안에 이미 있는 fragment 는 추가 X.
-    if (essay.length < 600) {
-      final fragsTen = await LifeCategoryFragmentService.fragmentsFor(
-        saju: saju,
-        category: LifeCategory.innateTendency,
-        gender: isMale ? 'M' : 'F',
-      );
-      final fragsLate = await LifeCategoryFragmentService.fragmentsFor(
-        saju: saju,
-        category: LifeCategory.lateLife,
-        gender: isMale ? 'M' : 'F',
-      );
-      final seen = <String>{};
-      for (final f in [...fragsTen, ...fragsLate]) {
-        if (essay.length >= 700) break;
-        final t = f.trim();
-        if (t.isEmpty || seen.contains(t)) continue;
-        // essay 본문에 이미 동일 fragment 들어있으면 skip.
-        if (essay.contains(t)) {
-          seen.add(t);
-          continue;
-        }
-        seen.add(t);
-        essay = NaturalProseJoiner.append(essay, [t]);
-      }
-    }
-
-    // 여전히 600 미만이면 padding sentence.
+    // 600자 미만이면 padding sentence (my_saju_v5 톤 — R108 ③ 에서 '결' jargon
+    // 유발하던 fragment 보강 block 제거. anchor 8 합산만으로 통상 ≥700자).
     const padSentences = [
-      '한 가지 색으로만 본인을 묶지 말고 여러 면을 다 살리면 본인답게 자연스러워요.',
-      '서두르지 않고 한 영역씩 챙기면 본인 사주 큰 그림이 더 또렷해져요.',
-      '본인 속도를 믿고 가면 또래 사이에서 자연스럽게 본인 자리가 정해져요.',
+      '한 가지 면만 보고 당신을 묶지 말고, 강점도 그림자도 같이 데리고 가면 훨씬 당신다워요.',
+      '오늘 하루는 못 바꿔도, 그 하루가 어느 쪽으로 쌓일지는 당신이 정할 수 있어요.',
+      '서두르지 말고 한 영역씩 챙기면, 당신의 큰 그림이 한결 또렷해져요.',
     ];
     var padIdx = 0;
     while (essay.length < 600) {
@@ -319,81 +290,81 @@ class LifeOverviewService {
     '水': 'water',
   };
 
-  /// Anchor 1 (En) — 일간 형용.
+  /// Anchor 1 (En) — 일간 형용 (R108 ③ — my_saju_v5 메타포 톤).
   static const Map<String, String> _stemPersonaEn = {
-    '갑': 'You tend to move like a tall, upright tree — you set a direction and grow toward it steadily',
-    '을': 'You tend to bend without breaking, like a supple plant that keeps its grip through any weather',
-    '병': 'You tend to light up a room the way midday sun does — warm, open, and easy to be around',
-    '정': 'You tend to look after people with a quiet, candle-like warmth, noticing the small things',
-    '무': 'You tend to feel grounded and dependable, like a wide mountain that does not get rattled easily',
-    '기': 'You tend to support the people near you the way rich soil holds a garden — calm and giving',
-    '경': 'You tend to decide fast and cleanly, with a clear edge once you have made up your mind',
-    '신': 'You tend to have a refined, precise eye, picking up on details others move straight past',
-    '임': 'You tend to read situations from a wide angle, like a broad river that sees the whole landscape',
-    '계': 'You tend to take things in deeply and quietly, the way a spring seeps into everything around it',
+    '갑': 'You tend to grow like a tall, upright tree — not a swaying sapling but one with a thick, settled trunk, so once you decide "this is the way," you can push down that path without wavering',
+    '을': 'You tend to grow like a vine that finds a way through any crack in the rock — not stubbornly fixed to one direction, but able to find a way to survive wherever life sets you down, and that adaptability is a real strength',
+    '병': 'You tend to light up a room the way the midday sun does — your expression is open and you hide little, so the mood often lifts the moment you walk in',
+    '정': 'You tend to look after people the way a candle lights a dark corner — you make no noise, but you quickly catch what the person beside you needs and quietly take care of it',
+    '무': 'You tend to hold your ground like a wide mountain — most things do not rattle you, so the people around you often treat you as a place to lean on, especially in a crisis',
+    '기': 'You tend to nurture people and work the way rich soil grows a garden — you support from beside rather than pull from the front, so people often feel at ease near you',
+    '경': 'You tend to move like raw, unworked iron — rather than weighing things endlessly, you decide "yes or no" fast and act, so you show your real worth wherever a decision is needed',
+    '신': 'You tend to be like a well-honed blade or a cut jewel — not soft metal but already a shaped one, so your standards are clear and you rarely bend under ordinary pressure',
+    '임': 'You tend to flow like a wide river or the open sea — you are not boxed into one spot, so your view stays broad and you can take in people quite different from yourself',
+    '계': 'You tend to seep in quietly like dew or a spring soaking into the ground — without any fuss you can dig deep into one field, and you often notice a texture that others miss',
   };
 
   /// Anchor 2 (En) — 월령 계절.
   static const Map<String, String> _seasonFlavorEn = {
-    '봄': 'Born under spring energy, you often come alive fastest where something is just beginning or changing',
-    '여름': 'Born under summer warmth, your charm tends to deepen in lively places where people gather',
-    '가을': 'Born under autumn\'s sense of order, you tend to shine wherever scattered things need pulling together',
-    '겨울': 'Born under winter\'s steadiness, you can stay with a deep subject far longer than most people',
+    '봄': 'Born under spring energy, you often come most alive where something is just starting or where the board is being reshaped',
+    '여름': 'Born under summer warmth, your charm tends to deepen further whenever you stand in a lively, crowded place',
+    '가을': 'Born under autumn\'s sense of order, you tend to show your real worth wherever scattered things need gathering and tying off',
+    '겨울': 'Born under winter\'s calm, you can stay with a deep subject far longer than most people',
   };
 
   /// Anchor 3 (En) — 5행 압도/공허 대조.
   static String _domDefContrastEn(String dominant, String deficit) {
     final domEn = _elEn[dominant] ?? dominant;
     final defEn = _elEn[deficit] ?? deficit;
-    final domTone = _dominantToneEn[dominant] ?? 'a clear personal signature comes through';
-    final defTone = _deficitToneEn[deficit] ?? 'it can help to slow down a half-step there';
-    return 'The strongest colour running through you is $domEn, so $domTone. '
-        'The lightest one is $defEn, so $defTone';
+    final domTone = _dominantToneEn[dominant] ?? 'a clear personal colour tends to come through';
+    final defTone = _deficitToneEn[deficit] ?? 'it can help to slow a half-step there';
+    return 'Of your eight characters, the strongest current is $domEn, so $domTone. '
+        'The lightest is $defEn, so $defTone';
   }
 
   static const Map<String, String> _dominantToneEn = {
-    '木': 'you tend to have real drive and pick up new challenges easily',
-    '火': 'you can warm up the mood around you faster than most',
-    '土': 'a steady, reassuring presence comes naturally and people feel at ease beside you',
-    '金': 'you tend to decide quickly and do well wherever things need tidying up',
-    '水': 'you tend to adapt comfortably even when the environment keeps shifting',
+    '木': 'a knack for starting things and growing them is the big colour that explains you',
+    '火': 'an impression of being bright and openly expressive tends to follow you around',
+    '土': 'people have often told you that you feel steady and reassuring to be near',
+    '金': 'an impression of having a clear backbone and a defined character comes naturally',
+    '水': 'thinking deeply and reading the wider situation tends to be your big colour',
   };
 
   static const Map<String, String> _deficitToneEn = {
-    '木': 'the drive to start something brand new can use a little gathering first',
+    '木': 'the drive to start something brand new tends to land better when you gather it first, then release',
     '火': 'open self-expression is worth adding on purpose now and then',
-    '土': 'a sense of being rooted can grow through small daily habits',
-    '金': 'sharp, clean decisions come easier when deadlines are noted in advance',
-    '水': 'adapting to unfamiliar settings feels smoother after a short pause',
+    '土': 'a rooted, settled feeling tends to grow best through small daily habits',
+    '金': 'a clean, decisive cut comes easier when you note your deadlines in advance',
+    '水': 'rather than diving straight into unfamiliar places, you often settle in more smoothly after a short pause',
   };
 
-  /// Anchor 4 (En) — 십성 주력.
+  /// Anchor 4 (En) — 십성 주력 (강점 + 그림자 한 쌍).
   static const Map<String, String> _sipsinFlavorEn = {
-    '비견': 'Your sense of self runs firm, so you tend not to wobble even when others push',
-    '겁재': 'A clear competitive streak means your spark can show more in lively, challenging settings',
-    '식신': 'You have a strong making instinct, so writing, video, or music can be where you shine',
-    '상관': 'Your expression is vivid, so in a field you love you can move a beat faster than your peers',
-    '편재': 'You read opportunity well, so you tend to find your footing fast even where things keep changing',
-    '정재': 'You build trust steadily, so a promise from you tends to carry real weight with friends',
-    '편관': 'You can grow steadier under pressure, so demanding situations often suit you',
-    '정관': 'You shine where principles are kept, so a role built on trust tends to fit you well',
-    '편인': 'You have a strong instinct for digging in alone, so deep subjects can really suit you',
-    '정인': 'Learning and good judgement run deep, so you can pick up new fields faster than most',
+    '비견': 'Inside, a firm-centre quality stands out — you tend not to wobble even when others push. The shadow comes with it: when that firmness runs strong, you can try to carry everything alone even where help is offered',
+    '겁재': 'Inside, a quality that comes alive in competitive, stimulating places stands out. The shadow comes with it: when that drive turns toward people close to you, the relationship can grow tiring',
+    '식신': 'Inside, an instinct for making things and for giving stands out. The shadow comes with it: giving is so familiar that you can often miss the share you yourself should receive',
+    '상관': 'Inside, a quality of vivid expression — catching what others miss — stands out. The shadow comes with it: because you see so much, your words can come out plainly and leave an impression of being sharp',
+    '편재': 'Inside, a quick read of opportunity and flow stands out. The shadow comes with it: with so many visible chances, staying put with one thing can be a constant piece of homework',
+    '정재': 'Inside, a quality of building trust steadily stands out. The shadow comes with it: you value stability so much that you can over-weigh a worthwhile chance and miss the timing',
+    '편관': 'Inside, a quality that grows steadier under heavy pressure stands out. The shadow comes with it: keeping yourself on alert is so familiar that you can drive yourself even when it is fine to rest',
+    '정관': 'Inside, a quality that cannot look away from "what needs doing" stands out. The shadow comes with it: that sense of responsibility is so visible that some people keep handing their work to you',
+    '편인': 'Inside, an intuition for digging in alone stands out. The shadow comes with it: because solitude feels comfortable, you can step back where people mix naturally',
+    '정인': 'Inside, an eye for learning and taking things in stands out. The shadow comes with it: supporting and holding others is so familiar that you can struggle to ask for help when you need it',
   };
 
   /// Anchor 5 (En) — 격국 (격국 한국어 key → 영어 carrier).
   static const Map<String, String> _gyeokgukFlavorEn = {
-    '정관격': 'A clear sense of responsibility means a promise once made tends to be kept to the end',
-    '편관격': 'Where a big call is needed, your judgement can land a beat ahead of others',
-    '정인격': 'You can carry a steady, mentor-like presence, so people often look up to you',
-    '편인격': 'Your intuition tends to be quick, and a way of seeing things others miss is a real strength',
-    '정재격': 'Steady saving suits you, so setting a little aside each month feels natural',
-    '편재격': 'You meet people easily, so new acquaintances tend to warm to you quickly',
-    '식신격': 'A generous, easygoing warmth comes naturally, and people feel relaxed around you',
-    '상관격': 'Creativity runs strong, so your personal colour shows clearly in a field you love',
-    '건록격': 'A strong independent streak means solo work can still turn out well for you',
-    '양인격': 'A firm, decisive nature is a real strength, so you tend to hold your centre even in big moments',
-    '불명': 'Your character does not fold into one type, so the more varied your experience, the more your charm shows',
+    '정관격': 'Among people, you tend to be someone who does not dodge responsibility, so roles that need trust come to you naturally',
+    '편관격': 'The bigger the call that is needed, the faster your judgement tends to get, so demanding settings can suit you well',
+    '정인격': 'A dependable, grown-up presence comes naturally, so juniors and younger friends often look up to you',
+    '편인격': 'Your intuition for seeing an angle others miss tends to be quick, and that way of seeing is itself a strength',
+    '정재격': 'A steady, step-by-step build suits you, so setting a little aside each month tends to feel natural',
+    '편재격': 'You meet people easily with no hesitation, so even at a first meeting you tend to win warmth fast',
+    '식신격': 'An easy, generous warmth is part of you, so people often feel relaxed beside you',
+    '상관격': 'In a field you love you tend to move a beat ahead of your peers, and your colour shows clearly there',
+    '건록격': 'A strong independent streak means you tend to finish your share even when no one is watching',
+    '양인격': 'A firm decisiveness that holds its centre even in big moments tends to show its worth in a crisis',
+    '불명': 'You do not fold into one single colour, so the more varied the fields you experience, the more your charm comes alive',
   };
 
   /// Anchor 6 (En) — 인생 phase 마무리.
@@ -408,11 +379,11 @@ class LifeOverviewService {
           'you can grow naturally solid as the years go on.';
     }
     if (eg >= wf && eg >= w * 2) {
-      return 'Looking at the big picture, your footing tends to grow firmer over time. '
-          'A slow, accumulating arc suits you more than fast results, so it is fine to trust your own pace.';
+      return 'Looking at the big picture, you are not the type to flare up fast — your footing tends to grow firmer over time. '
+          'A slow, accumulating arc suits you more than quick results, so it is fine not to rush and to trust your own pace.';
     }
     if (w * 2 > wf && w * 2 > eg) {
-      return 'Looking at the big picture, your charm tends to come alive when you are not tied to one spot. '
+      return 'Looking at the big picture, your charm tends to come alive more when you move and change place than when you stay fixed. '
           'Change itself is a strength for you, so new settings, new people, and new fields bring out your colour.';
     }
     return 'Looking at the big picture, you can feel steady in any season as long as you stay true to yourself. '
@@ -460,12 +431,17 @@ class LifeOverviewService {
     final a5 = _gyeokgukFlavorEn[gyeKey] ?? _gyeokgukFlavorEn['불명']!;
     final a6 = _lifePhaseClosingEn(saju);
     final a7 = isMale
-        ? 'As a man, a steady and warm presence comes naturally to you, so close friends and family '
-            'often find themselves leaning on you.'
-        : 'As a woman, a sharp and caring instinct runs strong, so the people you look after tend to '
-            'feel safe beside you.';
+        ? 'As a man, you tend to be dependable yet warm inside, so when things get hard your close '
+            'friends and family often turn to you first.'
+        : 'As a woman, you tend to be delicate yet clear in your read, so the people you look after '
+            'often feel steady beside you.';
 
-    final parts = [a1, a2, a3, a4, a5, a6, a7]
+    // Anchor 8 (En) — '바탕' 마무리 (R108 ③).
+    const a8 = 'This is not about a single day — it is your base, the part of you that barely shifts '
+        'across a lifetime. The base does not change, but how you move on top of it is yours to '
+        'choose, fresh, every day.';
+
+    final parts = [a1, a2, a3, a4, a5, a6, a7, a8]
         .where((s) => s.trim().isNotEmpty)
         .map((s) {
           var t = s.trim();

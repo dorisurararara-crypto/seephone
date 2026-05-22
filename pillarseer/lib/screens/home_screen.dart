@@ -163,7 +163,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               : fortune.quoteKo)
                         : fortune.quoteEn,
                   ),
-                  if (chips != null) _LuckyChipsCard(chips: chips),
+                  if (chips != null)
+                    _LuckyChipsCard(chips: chips, useKo: useKo),
                   _StreakLine(),
                   _CategorySection(fortune: fortune),
                   _LuckySection(fortune: fortune),
@@ -670,7 +671,7 @@ class _ScoreBlock extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '$score점',
+                useKo ? '$score점' : '$score',
                 style: GoogleFonts.notoSerifKr(
                   fontSize: 32,
                   fontWeight: FontWeight.w300,
@@ -2131,7 +2132,8 @@ class _FiveDayTrendCard extends StatelessWidget {
 
 class _LuckyChipsCard extends StatelessWidget {
   final List<LuckyChip> chips;
-  const _LuckyChipsCard({required this.chips});
+  final bool useKo;
+  const _LuckyChipsCard({required this.chips, required this.useKo});
 
   @override
   Widget build(BuildContext context) {
@@ -2146,7 +2148,7 @@ class _LuckyChipsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '오늘의 행운',
+            useKo ? '오늘의 행운' : "Today's Lucky Picks",
             style: GoogleFonts.notoSerifKr(
               fontSize: 15,
               fontWeight: FontWeight.w500,
@@ -2156,7 +2158,9 @@ class _LuckyChipsCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '하나 눌러 봐 — 왜 너한테 행운인지 알려줄게',
+            useKo
+                ? '하나 눌러 봐 — 왜 너한테 행운인지 알려줄게'
+                : "Tap one — I'll tell you why it's lucky for you",
             style: GoogleFonts.notoSansKr(
               fontSize: 12,
               fontWeight: FontWeight.w400,
@@ -2168,7 +2172,7 @@ class _LuckyChipsCard extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: chips
-                .map((c) => _LuckyChipButton(chip: c))
+                .map((c) => _LuckyChipButton(chip: c, useKo: useKo))
                 .toList(growable: false),
           ),
         ],
@@ -2191,7 +2195,12 @@ Color? _luckyColorBg(String value) {
 
 class _LuckyChipButton extends StatelessWidget {
   final LuckyChip chip;
-  const _LuckyChipButton({required this.chip});
+  final bool useKo;
+  const _LuckyChipButton({required this.chip, required this.useKo});
+
+  String get _label => useKo
+      ? '${chip.category} · ${chip.value}'
+      : '${chip.categoryEn} · ${chip.valueEn}';
 
   @override
   Widget build(BuildContext context) {
@@ -2227,7 +2236,7 @@ class _LuckyChipButton extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             Text(
-              '${chip.category} · ${chip.value}',
+              _label,
               style: GoogleFonts.notoSansKr(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -2260,7 +2269,7 @@ class _LuckyChipButton extends StatelessWidget {
                     Text(chip.icon, style: const TextStyle(fontSize: 22)),
                     const SizedBox(width: 10),
                     Text(
-                      '${chip.category} · ${chip.value}',
+                      _label,
                       style: GoogleFonts.notoSerifKr(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -2273,7 +2282,7 @@ class _LuckyChipButton extends StatelessWidget {
                 Container(width: 36, height: 1, color: AppColors.line),
                 const SizedBox(height: 14),
                 Text(
-                  '이게 왜 행운이야?',
+                  useKo ? '이게 왜 행운이야?' : 'Why is this lucky?',
                   style: GoogleFonts.notoSansKr(
                     fontSize: 11,
                     letterSpacing: 0.5,
@@ -2283,7 +2292,7 @@ class _LuckyChipButton extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  chip.reasonKo,
+                  useKo ? chip.reasonKo : chip.reasonEn,
                   style: GoogleFonts.notoSansKr(
                     fontSize: 14,
                     color: AppColors.ink,
@@ -2297,7 +2306,7 @@ class _LuckyChipButton extends StatelessWidget {
                     onPressed: () => Navigator.of(ctx).pop(),
                     style: TextButton.styleFrom(foregroundColor: AppColors.ink),
                     child: Text(
-                      '닫기',
+                      useKo ? '닫기' : 'Close',
                       style: GoogleFonts.notoSansKr(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,

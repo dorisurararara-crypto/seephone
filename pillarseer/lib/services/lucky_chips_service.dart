@@ -8,6 +8,9 @@
 // - "당신은 X 같은 사람" 직설
 // - 한자 jargon X, 직장인 jargon X
 // - K-POP 중학생 페르소나도 한 번에 이해
+//
+// R108 ①: 영어 모드 carrier (categoryEn / valueEn / reasonEn) 추가.
+// 음식명은 한국어 로마자 X — 영어 의역 (사용자 mandate "음식명은 영어로").
 
 import '../models/saju_result.dart';
 import 'ziwei_service.dart';
@@ -16,23 +19,36 @@ class LuckyChip {
   /// 카테고리 라벨 (색·숫자·방향·음식·사람띠·물건).
   final String category;
 
+  /// 카테고리 라벨 — 영어 (Color·Number·Direction·Food·People·Object).
+  final String categoryEn;
+
   /// 한 글자 아이콘 (이모지).
   final String icon;
 
-  /// 값 (예: '황금색', '9', '서쪽', '도가니탕').
+  /// 값 — 한국어 (예: '황금색', '9', '서쪽', '도가니탕').
+  /// `_luckyColorBg` / `isColorChip` 가 이 필드를 ground truth 로 사용.
   final String value;
 
-  /// 왜 행운인지 — popup 본문 (직설 친근 톤, 2~4문장).
+  /// 값 — 영어 (예: 'Gold', '9', 'West', 'ox-knee soup').
+  final String valueEn;
+
+  /// 왜 행운인지 — popup 본문, 한국어 (직설 친근 톤, 2~4문장).
   final String reasonKo;
+
+  /// 왜 행운인지 — popup 본문, 영어.
+  final String reasonEn;
 
   /// 어떤 5 행 기반인지 (debug/test).
   final String basisEl;
 
   const LuckyChip({
     required this.category,
+    required this.categoryEn,
     required this.icon,
     required this.value,
+    required this.valueEn,
     required this.reasonKo,
+    required this.reasonEn,
     required this.basisEl,
   });
 }
@@ -81,17 +97,31 @@ class LuckyChipsService {
       '木': '초록색', '火': '빨강색', '土': '황금색',
       '金': '흰색', '水': '검정색',
     }[el] ?? '황금색';
+    final vEn = const {
+      '木': 'Green', '火': 'Red', '土': 'Gold',
+      '金': 'White', '水': 'Black',
+    }[el] ?? 'Gold';
     final stemKo = _stemKo[dayStem] ?? '본인 페이스의';
+    final stemEn = _stemEn[dayStem] ?? 'a steady-paced kind of';
     final elKo = _elKo[el] ?? el;
+    final elEn = _elEn[el] ?? el;
     final subj = _subjMark(v);
     final reason =
         '본인은 $stemKo 사람이라 $elKo 기운이 살짝 부족해요. $v$subj 그걸 채워줘요. '
         '옷, 폰케이스, 액세서리 한 가지만 $v 톤으로 바꿔도 흐름이 달라져요.';
+    final reasonEn =
+        "You're $stemEn person, so your $elEn energy runs a little low. "
+        "$vEn is what fills that in. Switch just one thing — a shirt, "
+        "a phone case, an accessory — to a ${vEn.toLowerCase()} tone, "
+        "and the day moves differently.";
     return LuckyChip(
       category: '색',
+      categoryEn: 'Color',
       icon: '🎨',
       value: v,
+      valueEn: vEn,
       reasonKo: reason,
+      reasonEn: reasonEn,
       basisEl: el,
     );
   }
@@ -102,15 +132,23 @@ class LuckyChipsService {
   static LuckyChip _chipNumber(SajuResult saju, String el) {
     final v = const {'木': 3, '火': 9, '土': 5, '金': 7, '水': 1}[el] ?? 5;
     final elKo = _elKo[el] ?? el;
+    final elEn = _elEn[el] ?? el;
     // 1·3·5·7·9 — 모두 받침 없음.
     final reason =
         '$elKo 기운이랑 짝이 잘 맞는 숫자예요. 비밀번호 끝자리, 좌석 번호, 가게 줄 번호처럼 '
         '오늘 우연히 "$v"이 보이면 그 흐름을 잡으세요.';
+    final reasonEn =
+        "It's the number that pairs well with $elEn energy. A password's "
+        "last digit, a seat number, a number in a store queue — if \"$v\" "
+        "turns up by chance today, catch that flow.";
     return LuckyChip(
       category: '숫자',
+      categoryEn: 'Number',
       icon: '🔢',
       value: '$v',
+      valueEn: '$v',
       reasonKo: reason,
+      reasonEn: reasonEn,
       basisEl: el,
     );
   }
@@ -123,21 +161,34 @@ class LuckyChipsService {
       '木': '동쪽', '火': '남쪽', '土': '북동쪽',
       '金': '서쪽', '水': '북쪽',
     }[el] ?? '북동쪽';
+    final vEn = const {
+      '木': 'East', '火': 'South', '土': 'Northeast',
+      '金': 'West', '水': 'North',
+    }[el] ?? 'Northeast';
     final elKo = _elKo[el] ?? el;
+    final elEn = _elEn[el] ?? el;
     final reason =
         '집·방·책상에서 $elKo 기운을 받기 좋은 자리예요. 공부할 때 책상을 $v 방향으로 두고, '
         '잠시 멍 때릴 때 그쪽 창문이나 벽을 보세요. 작은 방향 한 번이 하루 흐름을 바꿔요.';
+    final reasonEn =
+        "It's the best spot to take in $elEn energy at home, in your room, "
+        "at your desk. Point your desk toward the ${vEn.toLowerCase()} when "
+        "you study, and when you zone out for a moment, look at the window "
+        "or wall on that side. One small turn can shift the whole day.";
     return LuckyChip(
       category: '방향',
+      categoryEn: 'Direction',
       icon: '🧭',
       value: v,
+      valueEn: vEn,
       reasonKo: reason,
+      reasonEn: reasonEn,
       basisEl: el,
     );
   }
 
   // ─────────────────────────────────────────────
-  // 음식 (한국 음식 위주)
+  // 음식 (한국 음식 위주 — 영어는 의역)
   // ─────────────────────────────────────────────
   static LuckyChip _chipFood(
       SajuResult saju, String el, String dayEl, String dominant) {
@@ -148,17 +199,34 @@ class LuckyChipsService {
       '金': '맑은 콩나물국',
       '水': '생선 미역국',
     }[el] ?? '도가니탕';
+    final vEn = const {
+      '木': 'spinach soybean-paste soup',
+      '火': 'spicy stir-fried chicken',
+      '土': 'ox-knee soup',
+      '金': 'clear bean-sprout soup',
+      '水': 'fish seaweed soup',
+    }[el] ?? 'ox-knee soup';
     final elKo = _elKo[el] ?? el;
+    final elEn = _elEn[el] ?? el;
     final domKo = _elKo[dominant] ?? dominant;
+    final domEn = _elEn[dominant] ?? dominant;
     final topic = _topicMark(v);
     final reason =
         '$domKo 기운이 강한 편이라 속을 부드럽게 풀어주는 게 잘 맞아요. $v$topic $elKo 기운을 '
         '보충해서 부족한 부분을 채워줘요. 점심이나 저녁 메뉴 고민될 때 한 번 가보세요.';
+    final reasonEn =
+        "Your $domEn energy runs strong, so something that settles the "
+        "stomach gently suits you well. ${_cap(vEn)} tops up your $elEn "
+        "side and fills the gap. Next time you're stuck on what to eat "
+        "for lunch or dinner, give it a try.";
     return LuckyChip(
       category: '음식',
+      categoryEn: 'Food',
       icon: '🍲',
       value: v,
+      valueEn: vEn,
       reasonKo: reason,
+      reasonEn: reasonEn,
       basisEl: el,
     );
   }
@@ -175,18 +243,37 @@ class LuckyChipsService {
       '金': ('닭띠', '박씨'),
       '水': ('돼지띠', '최씨'),
     }[el] ?? ('소띠', '주씨');
+    final pairEn = const {
+      '木': ('Rabbit-year', 'Kim'),
+      '火': ('Horse-year', 'Lee'),
+      '土': ('Ox-year', 'Joo'),
+      '金': ('Rooster-year', 'Park'),
+      '水': ('Pig-year', 'Choi'),
+    }[el] ?? ('Ox-year', 'Joo');
     final v = '${pair.$1} 또는 ${pair.$2}';
+    final vEn = '${pairEn.$1} or surname ${pairEn.$2}';
     final elKo = _elKo[el] ?? el;
+    final elEn = _elEn[el] ?? el;
     final stemKo = _stemKo[dayStem] ?? '본인 페이스의';
+    final stemEn = _stemEn[dayStem] ?? 'a steady-paced kind of';
     final reason =
         '본인은 $stemKo 사람이라 $elKo 쪽이 강한 사람과 오늘 잘 통해요. '
         '${pair.$1} 친구나 ${pair.$2} 성을 가진 사람이랑 대화하면 평소보다 답답한 게 풀려요. '
         '특히 고민 상담은 그쪽이 잘 받아줘요.';
+    final reasonEn =
+        "You're $stemEn person, so today you click with people whose "
+        "$elEn side runs strong. Talk with a ${pairEn.$1} friend, or "
+        "someone with the surname ${pairEn.$2}, and whatever's felt stuck "
+        "loosens up more than usual. They're especially good at hearing "
+        "you out when something's on your mind.";
     return LuckyChip(
       category: '사람띠',
+      categoryEn: 'People',
       icon: '👥',
       value: v,
+      valueEn: vEn,
       reasonKo: reason,
+      reasonEn: reasonEn,
       basisEl: el,
     );
   }
@@ -202,16 +289,32 @@ class LuckyChipsService {
       '金': '금속 액세서리',
       '水': '물병',
     }[el] ?? '방향제';
+    final vEn = const {
+      '木': 'small plant',
+      '火': 'scented candle',
+      '土': 'room diffuser',
+      '金': 'metal accessory',
+      '水': 'water bottle',
+    }[el] ?? 'room diffuser';
     final elKo = _elKo[el] ?? el;
+    final elEn = _elEn[el] ?? el;
     final topic = _topicMark(v);
     final reason =
         '$v$topic $elKo 기운을 옆에 두는 가장 가벼운 방법이에요. 책상 한쪽이나 가방 안에 '
         '하나 두면 공간 분위기가 바뀌고, 마음도 조금 차분해져요. 큰 게 아니라도 효과 있어요.';
+    final reasonEn =
+        "A $vEn is the lightest way to keep $elEn energy beside you. "
+        "Tuck one on a corner of your desk or inside your bag, and the "
+        "mood of the space shifts — and you feel a little calmer too. "
+        "It doesn't have to be big to work.";
     return LuckyChip(
       category: '물건',
+      categoryEn: 'Object',
       icon: '💼',
       value: v,
+      valueEn: vEn,
       reasonKo: reason,
+      reasonEn: reasonEn,
       basisEl: el,
     );
   }
@@ -224,9 +327,25 @@ class LuckyChipsService {
     '壬': '큰 강 같은', '癸': '이슬비 같은',
   };
 
+  static const Map<String, String> _stemEn = {
+    '甲': 'a tall-tree kind of', '乙': 'a soft-sapling kind of',
+    '丙': 'a sunlight kind of', '丁': 'a candle-flame kind of',
+    '戊': 'a great-mountain kind of', '己': 'a tilled-field kind of',
+    '庚': 'a sharp-blade kind of', '辛': 'a fine-metal kind of',
+    '壬': 'a wide-river kind of', '癸': 'a fine-rain kind of',
+  };
+
   static const Map<String, String> _elKo = {
     '木': '나무', '火': '불', '土': '흙', '金': '쇠', '水': '물',
   };
+
+  static const Map<String, String> _elEn = {
+    '木': 'wood', '火': 'fire', '土': 'earth', '金': 'metal', '水': 'water',
+  };
+
+  /// 영어 문장 첫 글자 대문자.
+  static String _cap(String s) =>
+      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
   /// 한국어 조사 — 받침 유무로 '이'/'가' 선택. value 마지막 문자가 한글일 때만.
   static String _subjMark(String v) {
