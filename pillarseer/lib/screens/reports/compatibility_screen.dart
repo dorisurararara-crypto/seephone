@@ -13,6 +13,7 @@ import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../services/saju_service.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 
 class CompatibilityScreen extends ConsumerStatefulWidget {
   const CompatibilityScreen({super.key});
@@ -281,6 +282,7 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

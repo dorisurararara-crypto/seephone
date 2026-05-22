@@ -10,6 +10,7 @@ import '../../providers/locale_provider.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/saju_service.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 import '../../widgets/saju_required_empty.dart';
 
 class DatePickingScreen extends ConsumerWidget {
@@ -37,6 +38,7 @@ class DatePickingScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

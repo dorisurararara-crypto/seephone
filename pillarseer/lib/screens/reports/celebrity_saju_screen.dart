@@ -39,6 +39,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 
 class CelebritySajuScreen extends ConsumerStatefulWidget {
   const CelebritySajuScreen({super.key});
@@ -160,6 +161,7 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
     final useKo = Localizations.localeOf(context).languageCode == 'ko';
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

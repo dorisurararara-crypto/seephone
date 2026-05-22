@@ -16,6 +16,7 @@ import '../../services/seun_service.dart';
 import '../../services/strength_service.dart';
 import '../../services/yongsin_service.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 import '../../widgets/saju_required_empty.dart';
 
 /// 2026 신년운세 screen — 사주 원국과 병오년 세운을 매칭하여 1년 운기 풀이.
@@ -121,6 +122,7 @@ class NewYear2026Screen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

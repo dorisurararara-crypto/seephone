@@ -253,8 +253,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       // appBar title.
       expect(find.text('전생 · 緣'), findsOneWidget);
-      // R109 FIX 2 — 리포트 상세는 push 된 full-screen. 하단 탭(shell) 없음.
-      expect(find.text('더 보기'), findsNothing);
+      // R109 후속 — 리포트 상세는 push full-screen 이지만 정적 하단 탭
+      // (PillarBottomNavStatic) 을 단다. '더 보기'(리포트 탭 라벨) 노출.
+      expect(find.text('더 보기'), findsOneWidget);
       // me 가 있을 때 NeedSaju 는 노출되면 안 됨.
       expect(find.textContaining('사주를 입력'), findsNothing);
     });

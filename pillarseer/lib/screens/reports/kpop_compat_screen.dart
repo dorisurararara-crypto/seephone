@@ -17,6 +17,7 @@ import '../../services/celeb_chart_validator.dart';
 import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 import 'compatibility_screen.dart' show CompatDetailSection;
 
 class KpopCompatScreen extends ConsumerStatefulWidget {
@@ -75,6 +76,7 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

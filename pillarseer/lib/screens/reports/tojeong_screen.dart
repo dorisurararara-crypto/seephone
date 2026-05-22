@@ -10,6 +10,7 @@ import '../../models/saju_result.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/saju_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 import '../../widgets/saju_required_empty.dart';
 
 class TojeongScreen extends ConsumerWidget {
@@ -35,6 +36,7 @@ class TojeongScreen extends ConsumerWidget {
     final year = DateTime.now().year;
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

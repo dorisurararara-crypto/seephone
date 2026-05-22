@@ -97,9 +97,13 @@ void main() {
           reason: 'active 표시 = currentIndex');
     });
 
-    test('구 activeIdx / context.go 라우트 교체 잔존 0', () {
-      expect(navSrc.contains('activeIdx'), isFalse,
-          reason: 'R109 — activeIdx(라우트 교체 모델) 제거됨');
+    test('PillarBottomNavStatic — shell 밖 화면용 정적 탭 (context.go)', () {
+      // R109 후속 — 리포트 상세 등 shell 밖 화면은 PillarBottomNavStatic 을 쓴다.
+      // 이건 의도적으로 activeIdx + context.go 모델 (shell 이 아래 살아 있어 보존됨).
+      expect(navSrc.contains('class PillarBottomNavStatic'), isTrue,
+          reason: 'shell 밖 화면용 정적 하단 탭 존재');
+      expect(navSrc.contains('context.go(_routes[i])'), isTrue,
+          reason: 'PillarBottomNavStatic 은 context.go 로 탭 route 이동');
     });
   });
 

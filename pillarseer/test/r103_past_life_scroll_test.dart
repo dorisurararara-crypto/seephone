@@ -194,8 +194,9 @@ void main() {
         findsOneWidget,
         reason: 'R103 변경 후 appBar mount 실패 → 화면 crash 회귀',
       );
-      // R109 FIX 2 — 리포트 상세는 push 된 full-screen. 하단 탭(shell) 없음.
-      expect(find.text('더 보기'), findsNothing);
+      // R109 후속 — 리포트 상세는 push full-screen 이지만 정적 하단 탭
+      // (PillarBottomNavStatic) 을 단다. '더 보기'(리포트 탭 라벨) 노출.
+      expect(find.text('더 보기'), findsOneWidget);
     });
 
     testWidgets('me 없을 때 NeedSaju + 사주 입력 CTA — R103 변경이 NeedSaju 회귀 X', (

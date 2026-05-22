@@ -37,6 +37,7 @@ import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/past_life_service.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 
 class PastLifeScreen extends ConsumerStatefulWidget {
   const PastLifeScreen({super.key});
@@ -148,6 +149,7 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
     final useKo = _useKo(context);
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

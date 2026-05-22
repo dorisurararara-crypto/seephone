@@ -88,3 +88,82 @@ class PillarBottomNav extends StatelessWidget {
     );
   }
 }
+
+/// R109 — shell 밖(top-level push) 화면용 정적 하단 탭. 리포트 상세 9화면 +
+/// discover 처럼 StatefulShellRoute branch 가 아닌 화면이 사용한다.
+/// onTap = context.go(탭 route) — shell 은 이 화면 아래에 살아 있으므로,
+/// 탭을 누르면 그 탭(branch)으로 가며 branch State(스크롤)는 그대로 보존된다.
+class PillarBottomNavStatic extends StatelessWidget {
+  /// 활성 탭 index — 리포트 상세·discover 는 모두 2(리포트).
+  final int activeIdx;
+
+  const PillarBottomNavStatic({super.key, required this.activeIdx});
+
+  static const _routes = <String>['/home', '/result', '/reports', '/profile'];
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
+    final items = <String>[
+      l.navHome,
+      l.navReading,
+      l.navReports,
+      l.navProfile,
+    ];
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(top: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 56,
+          child: Row(
+            children: items.asMap().entries.map((entry) {
+              final i = entry.key;
+              final label = entry.value;
+              final isActive = i == activeIdx;
+              return Expanded(
+                child: Semantics(
+                  button: true,
+                  selected: isActive,
+                  label: label,
+                  child: InkWell(
+                    onTap: () {
+                      if (i == activeIdx) return;
+                      context.go(_routes[i]);
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          label,
+                          style: GoogleFonts.notoSansKr(
+                            fontSize: 13,
+                            fontWeight: isActive
+                                ? FontWeight.w500
+                                : FontWeight.w400,
+                            letterSpacing: 0.3,
+                            color: isActive ? AppColors.ink : AppColors.taupe,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 220),
+                          width: isActive ? 22 : 0,
+                          height: 1,
+                          color: AppColors.ink,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}

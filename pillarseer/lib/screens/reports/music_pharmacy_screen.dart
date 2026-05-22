@@ -28,6 +28,7 @@ import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/music_pharmacy_service.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 
 class MusicPharmacyScreen extends ConsumerStatefulWidget {
   const MusicPharmacyScreen({super.key});
@@ -140,6 +141,7 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,

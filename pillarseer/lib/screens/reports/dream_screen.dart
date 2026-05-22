@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/locale_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/bottom_nav.dart';
 
 class DreamScreen extends ConsumerStatefulWidget {
   const DreamScreen({super.key});
@@ -72,6 +73,7 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.bg,
+      bottomNavigationBar: const PillarBottomNavStatic(activeIdx: 2),
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         elevation: 0,
