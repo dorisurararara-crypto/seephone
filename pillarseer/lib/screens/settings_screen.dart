@@ -17,6 +17,7 @@ import '../providers/saju_settings_provider.dart';
 import '../providers/streak_provider.dart';
 import '../services/app_version_service.dart';
 import '../services/notification_service.dart';
+import '../services/purchase_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/premium_gate.dart';
 
@@ -189,6 +190,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final l = AppL10n.of(context);
     final currentLocale = ref.watch(localeProvider);
     final isPro = ref.watch(devUnlockProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -272,6 +275,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               onTap: () => _confirmDeleteAll(context, ref, l),
             ),
           ]),
+          // R110 Sprint 3 — 프리미엄팩 / 구매 복원 진입점 (restore 2/2).
+          _SettingsGroup(
+            label: useKo ? '프리미엄팩' : 'Premium Pack',
+            children: [
+              _PremiumPackRow(),
+            ],
+          ),
           if (isPro)
             _SettingsGroup(label: 'STATUS', children: [
               _InfoRow(
@@ -301,15 +311,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             _LinkRow(
               label: l.settingsPrivacy,
-              value: 'github.io/pillarseer/privacy',
+              value: 'github.io/pillarseer-legal/privacy',
               url:
-                  'https://dorisurararara-crypto.github.io/pillarseer/privacy.html',
+                  'https://dorisurararara-crypto.github.io/pillarseer-legal/privacy.html',
             ),
             _LinkRow(
               label: l.settingsTerms,
-              value: 'github.io/pillarseer/terms',
+              value: 'github.io/pillarseer-legal/terms',
               url:
-                  'https://dorisurararara-crypto.github.io/pillarseer/terms.html',
+                  'https://dorisurararara-crypto.github.io/pillarseer-legal/terms.html',
             ),
             _LinkRow(
               label: l.settingsContact,
@@ -1120,6 +1130,142 @@ class _AesopSwitch extends StatelessWidget {
             onChanged: onChanged,
           ),
         ],
+      ),
+    );
+  }
+}
+
+// R110 Sprint 3 — 설정의 프리미엄팩 / 구매 복원 행 (restore 진입점 2/2).
+//
+// monetization_playbook.md §"결제의 영구성" — Apple 심사가 non-consumable 에
+// restore 진입점을 의무 요구. paywall 하단(1/2) 외에 설정에도 둔다.
+//
+// 보유 상태면 "프리미엄팩 사용 중", 미보유면 "구매 복원" 행을 표시한다.
+// 복원은 premiumProvider.notifier.restorePurchases() — paywall 과 동일한
+// 흐름. 결과는 lastResult listen → toast 1회 → consumeResult.
+class _PremiumPackRow extends ConsumerWidget {
+  void _handleResult(BuildContext context, WidgetRef ref,
+      PurchaseOutcome outcome, bool useKo) {
+    String? msg;
+    switch (outcome) {
+      case PurchaseOutcome.purchased:
+      case PurchaseOutcome.restored:
+        msg = useKo ? '프리미엄팩이 열렸습니다.' : 'Premium Pack unlocked.';
+        break;
+      case PurchaseOutcome.nothingToRestore:
+        msg = useKo
+            ? '복원할 구매 내역을 찾지 못했어요.'
+            : "We couldn't find a purchase to restore.";
+        break;
+      case PurchaseOutcome.error:
+        msg = useKo
+            ? '잠시 후 다시 시도해 주세요.'
+            : 'Please try again later.';
+        break;
+      case PurchaseOutcome.unavailable:
+        msg = useKo
+            ? '지금은 스토어에 연결할 수 없어요.'
+            : "The store isn't reachable right now.";
+        break;
+      case PurchaseOutcome.canceled:
+      case PurchaseOutcome.alreadyOwned:
+      case PurchaseOutcome.pending:
+        msg = null;
+        break;
+    }
+    ref.read(premiumProvider.notifier).consumeResult();
+    if (msg != null && context.mounted) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: AppColors.ink,
+          content: Text(msg),
+        ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final premium = ref.watch(premiumProvider);
+    final owned = premium.entitled;
+    final busy = premium.busy;
+
+    // 복원 결과 1회 처리 — toast.
+    ref.listen<PremiumState>(premiumProvider, (prev, next) {
+      final outcome = next.lastResult;
+      if (outcome != null && prev?.lastResult != outcome) {
+        _handleResult(context, ref, outcome, useKo);
+      }
+    });
+
+    final title = owned
+        ? (useKo ? '프리미엄팩 사용 중' : 'Premium Pack active')
+        : (useKo ? '구매 복원' : 'Restore purchase');
+    final subtitle = owned
+        ? (useKo
+            ? '내 사주 심층 해석과 추가 리포트가 모두 열려 있어요.'
+            : 'Deeper saju readings and extra reports are all open.')
+        : (useKo
+            ? '이미 구매하셨나요? 같은 Apple ID 의 구매를 다시 불러와요.'
+            : 'Already purchased? Bring back a purchase made with the same Apple ID.');
+
+    return InkWell(
+      key: const Key('settings_premium_pack_row'),
+      onTap: (owned || busy)
+          ? null
+          : () => ref.read(premiumProvider.notifier).restorePurchases(),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+        decoration: const BoxDecoration(
+          border:
+              Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title.toUpperCase(),
+                    style: GoogleFonts.inter(
+                      fontSize: 10,
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.w500,
+                      color: owned ? AppColors.accent : AppColors.ink,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.notoSansKr(
+                      fontSize: 12.5,
+                      color: AppColors.taupe,
+                      height: 1.65,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            if (busy)
+              const SizedBox(
+                width: 15,
+                height: 15,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppColors.taupe),
+                ),
+              )
+            else if (!owned)
+              const Text('→', style: TextStyle(color: AppColors.taupe)),
+          ],
+        ),
       ),
     );
   }

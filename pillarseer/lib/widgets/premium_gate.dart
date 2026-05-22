@@ -10,14 +10,14 @@
 //   - premium 게이트 진입점(`PremiumGate`)과, 잠긴 섹션이 정상적으로 보이는
 //     placeholder UI(`PremiumLockedSection`) 를 마련한다.
 //   - 잠긴 항목 탭을 단일 hook(`onPremiumLockedTap`)으로 모은다.
-//   - Sprint 3 의 실제 paywall route 는 *아직 추가하지 않는다*. 이번 임시
-//     구현은 SnackBar 안내 + 콜백 호출까지만 한다.
+//   - R110 Sprint 3 — 잠긴 항목 탭 hook 이 실제 paywall bottom sheet
+//     (`premium_paywall.dart` 의 `showPremiumPaywall`) 를 띄운다.
 //
-// Sprint 3 연결 방식:
+// 연결 방식:
 //   - paywall 은 `PremiumLockContext`(feature id + 사람이 읽는 라벨 + 원본
 //     BuildContext) 를 받는 콜백으로 호출된다. ProviderScope 어디서든
-//     `kPremiumLockedTapOverride` 를 교체하면 Sprint 3 가 실제 route push 로
-//     이 hook 을 대체할 수 있다(테스트도 이 override 로 tap 을 가로챈다).
+//     `kPremiumLockedTapOverride` 를 교체할 수 있어, 테스트는 이 override 로
+//     tap 을 가로채 paywall 표시 없이 검증한다.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,6 +25,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../providers/premium_provider.dart';
 import '../theme/app_theme.dart';
+import 'premium_paywall.dart';
 
 /// 프리미엄 게이트가 걸린 기능 식별자. Sprint 3 paywall 이 진입 맥락별로
 /// 업셀 문구/스크린샷을 고를 수 있도록 9개 기능 + 세부 섹션을 구분한다.
@@ -79,35 +80,21 @@ class PremiumLockContext {
   final BuildContext? context;
 }
 
-/// 잠긴 항목 탭 hook. 기본 구현은 SnackBar 안내만 — Sprint 3 가 실제
-/// paywall route push 로 교체할 수 있도록 교체 가능한 전역 함수로 둔다.
+/// 잠긴 항목 탭 hook. 기본 구현은 실제 paywall bottom sheet 표시.
+/// 교체 가능한 전역 함수로 두어 테스트가 tap 을 가로챌 수 있게 한다.
 typedef PremiumLockedTap = void Function(PremiumLockContext lock);
 
-/// 기본 hook — Sprint 3 전까지 SnackBar 안내 + (있으면) debugPrint.
-/// 실제 paywall route 는 추가하지 않는다(Sprint 3 범위).
+/// 기본 hook — 잠긴 항목 탭 시 프리미엄팩 paywall bottom sheet 를 띄운다.
+///
+/// `lock.context` 가 null 이거나 unmounted 면 `showPremiumPaywall` 이
+/// 크래시 없이 no-op 한다(debugPrint 만).
 void _defaultPremiumLockedTap(PremiumLockContext lock) {
-  final ctx = lock.context;
-  if (ctx != null && ctx.mounted) {
-    final useKo =
-        (Localizations.maybeLocaleOf(ctx)?.languageCode ?? 'en') == 'ko';
-    ScaffoldMessenger.of(ctx)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.ink,
-        content: Text(
-          useKo
-              ? '프리미엄팩에서 ${lock.label}을(를) 더 깊게 볼 수 있어요.'
-              : 'The Premium Pack opens a deeper look at ${lock.label}.',
-          style: GoogleFonts.notoSansKr(fontSize: 13, color: AppColors.bg),
-        ),
-      ));
-  }
+  showPremiumPaywall(lock.context, lock);
   debugPrint('[PremiumGate] locked tap → ${lock.feature.name} (${lock.label})');
 }
 
-/// 잠긴 항목 탭 hook. Sprint 3 paywall 이 `kPremiumLockedTapOverride =` 로
-/// 실제 route push 구현을 주입한다. 테스트도 이 변수로 tap 을 가로챈다.
+/// 잠긴 항목 탭 hook. 기본값은 [_defaultPremiumLockedTap] (paywall 표시).
+/// 테스트는 이 변수를 교체해 tap 을 가로챈다.
 PremiumLockedTap kPremiumLockedTapOverride = _defaultPremiumLockedTap;
 
 /// 어디서든 잠긴 항목 탭을 발생시키는 단일 진입점.
