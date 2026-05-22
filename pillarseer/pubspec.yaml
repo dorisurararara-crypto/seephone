@@ -55,6 +55,9 @@ dependencies:
   ziwei_core: ^0.13.0
   package_info_plus: ^10.1.0
 
+  # R110 — 인앱결제 (StoreKit non-consumable 단건 프리미엄팩). 자동갱신·광고 없음.
+  in_app_purchase: ^3.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
