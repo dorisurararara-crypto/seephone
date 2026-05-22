@@ -97,9 +97,9 @@ void main() {
       // pubspec version 자체 — ship target. ⚠️ 매 ship 마다 갱신 필요한 핀(트랩).
       // R96 '1.0.0+57' → ... → R107 '1.0.0+72' → R108 '1.0.0+73'. version bump 시 이 핀도 같이 수정.
       expect(
-        pubspecSrc.contains('version: 1.0.0+73'),
+        pubspecSrc.contains('version: 1.0.0+74'),
         isTrue,
-        reason: 'pubspec version (1.0.0+73) 자체 변경 — R108 ship delivery 불일치',
+        reason: 'pubspec version (1.0.0+74) 자체 변경 — R108 ship delivery 불일치',
       );
     });
 
