@@ -53,7 +53,13 @@ metadata:
 ## 배포 완료 — 1.0.0+73 (2026-05-22)
 사용자 "출시" → ship 완료. ①+③-1 commit `b5b23b5`, release commit `5745535`(pubspec 1.0.0+73 + round82 pin). `scripts/deploy_testflight.sh 73` → IPA 25M altool UPLOAD SUCCEEDED → build #73 ASC **VALID** → `scripts/submit_b73.rb`: whatsNew ko/en PATCH 200 → 외부 그룹 ganzitester 할당 HTTP 204 → Beta Review 제출 완료. Public link `testflight.apple.com/join/kRs36R3b`.
 
+## R109 — 사용자 버그픽스 2건 (2026-05-22, 1.0.0+73 ship 후)
+1.0.0+73 배포 후 사용자 지정 2건. **커밋 완료, 미배포 (다음 ship 시 1.0.0+74).**
+- **FIX 1 알림 톤 제거** (commit `aca6145`): 설정의 "어른/중·고생 톤"(`NotificationTone` adult/mz)은 R106 미스터리 알림 도입 후 死기능 — settings UI·`notification_provider` tone state·`setTone`·`_kPrefsTone`·`notification_service`/`notification_pool_service` tone 분기·`_koPoolMz`/`_enPoolMz` 100 entry·l10n 4키 전수 제거.
+- **FIX 2 탭 스크롤 보존** (commit `7f9bd8b` + 후속 `052c609`): 하단 4탭(홈/내사주/리포트/프로필) `context.go` 라우트 교체 → 탭 복귀 시 스크롤 리셋. `router.dart` 를 `StatefulShellRoute.indexedStack` 4 branch 로 전환 — IndexedStack 이 branch State 살려둬 탭 전환·복귀 시 스크롤·상태 보존. `bottom_nav.dart` `PillarBottomNav` 는 `StatefulNavigationShell`/`goBranch` 모델. 후속 052c609 = shell 밖 push 화면(리포트 상세 9 + discover)이 하단 탭 잃은 것 → `PillarBottomNavStatic`(context.go 기반 정적 탭) 추가해 복원.
+- 1552/1552 test PASS, analyze 0. test `r109_tab_scroll_preserve_test.dart` 신규.
+
 ## 다음 세션 protocol
-**R108 ①②③④ 전 항목 완료 + 1.0.0+73 배포 완료.** "이어서" → 새 작업 대기.
+**R108 ①②③④ + 1.0.0+73 배포 완료. R109 버그픽스 2건 커밋 완료(미배포).** "이어서" → 새 작업 대기 또는 "출시"(R109 반영 1.0.0+74 빌드).
 - ⚠️ round82 version pin: `test/round82_version_display_test.dart` 가 pubspec version(현 +73) 하드코딩 핀 — 다음 ship 마다 같이 수정.
 - pillarseer ASC App ID `6768096855` / 외부 그룹 ganzitester `3217ce1c-29ca-4946-a26a-0c55529172a3` / submit 패턴 `scripts/submit_b<N>.rb`.
