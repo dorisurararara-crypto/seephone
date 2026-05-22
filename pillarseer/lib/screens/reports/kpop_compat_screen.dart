@@ -17,7 +17,6 @@ import '../../services/celeb_chart_validator.dart';
 import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 import 'compatibility_screen.dart' show CompatDetailSection;
 
 class KpopCompatScreen extends ConsumerStatefulWidget {
@@ -82,7 +81,9 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? 'K-POP 궁합 · 緣' : 'K-POP COMPATIBILITY · 緣',
@@ -103,7 +104,6 @@ class _KpopCompatScreenState extends ConsumerState<KpopCompatScreen> {
             ? _KpopEmptyState(useKo: useKo)
             : _buildLoadedBody(context, me, userInfo, useKo),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 

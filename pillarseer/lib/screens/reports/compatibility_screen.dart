@@ -13,7 +13,6 @@ import '../../services/compat_v5_service.dart';
 import '../../services/korean_josa.dart';
 import '../../services/saju_service.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 
 class CompatibilityScreen extends ConsumerStatefulWidget {
   const CompatibilityScreen({super.key});
@@ -288,7 +287,9 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '궁합 · 宮 合' : 'COMPATIBILITY · 宮 合',
@@ -406,7 +407,6 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 

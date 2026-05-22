@@ -150,7 +150,8 @@ class MySajuV5Section extends StatelessWidget {
 
   Widget _buildTodayCta(BuildContext context, String cta) {
     return InkWell(
-      onTap: () => context.go('/today'),
+      // R109 FIX 2 — /today 는 shell 밖 상세. push 로 띄워 복귀 시 탭 보존.
+      onTap: () => context.push('/today'),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),

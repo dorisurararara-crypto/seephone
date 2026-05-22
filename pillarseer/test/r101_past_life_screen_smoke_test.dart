@@ -3,7 +3,7 @@
 // 검증 (test 환경 rootBundle 한계 회피):
 //   1) Source string grep — hero / 라벨 / route / RepaintBoundary / "다시 뽑기" /
 //      userName 기본값 "당신" / KO 안내 문구.
-//   2) Widget test — me==null → NeedSaju CTA. me!=null → appBar/bottom nav 마운트.
+//   2) Widget test — me==null → NeedSaju CTA. me!=null → appBar 마운트.
 //   3) PastLifeService 단위 — userName="당신" 정상 inject / 다른 seed → 다른 시나리오.
 //   4) reports_home 메뉴 최종 순서: past-life(hero) / music-pharmacy / kpop-compat /
 //      compatibility / new-year-2026 / dream.
@@ -247,14 +247,14 @@ void main() {
       expect(find.text('사주 입력하기'), findsOneWidget);
     });
 
-    testWidgets('사주 있으면 appBar / bottom nav 마운트', (tester) async {
+    testWidgets('사주 있으면 appBar 마운트', (tester) async {
       await tester.pumpWidget(hostWith(me: _makeSaju()));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
       // appBar title.
       expect(find.text('전생 · 緣'), findsOneWidget);
-      // bottom nav 가 mount.
-      expect(find.text('더 보기'), findsOneWidget);
+      // R109 FIX 2 — 리포트 상세는 push 된 full-screen. 하단 탭(shell) 없음.
+      expect(find.text('더 보기'), findsNothing);
       // me 가 있을 때 NeedSaju 는 노출되면 안 됨.
       expect(find.textContaining('사주를 입력'), findsNothing);
     });

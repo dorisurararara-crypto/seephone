@@ -39,7 +39,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 
 class CelebritySajuScreen extends ConsumerStatefulWidget {
   const CelebritySajuScreen({super.key});
@@ -167,7 +166,9 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '최애의 사주' : 'BIAS SAJU',
@@ -183,7 +184,6 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
         ),
       ),
       body: SafeArea(top: false, child: _buildState(context, useKo)),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 

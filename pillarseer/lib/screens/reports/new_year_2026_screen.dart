@@ -16,7 +16,6 @@ import '../../services/seun_service.dart';
 import '../../services/strength_service.dart';
 import '../../services/yongsin_service.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 import '../../widgets/saju_required_empty.dart';
 
 /// 2026 신년운세 screen — 사주 원국과 병오년 세운을 매칭하여 1년 운기 풀이.
@@ -128,7 +127,9 @@ class NewYear2026Screen extends ConsumerWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '2026 신년운세 · 歲 運' : 'NEW YEAR 2026 · 歲 運',
@@ -167,7 +168,6 @@ class NewYear2026Screen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 }

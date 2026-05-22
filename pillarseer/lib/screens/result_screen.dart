@@ -42,7 +42,6 @@ import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
-import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
 import '../widgets/my_saju_v5_section.dart';
 import '../widgets/saju_required_empty.dart';
@@ -274,7 +273,6 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 1),
     );
   }
 }
@@ -3345,13 +3343,13 @@ class _ProHooksSection extends StatelessWidget {
         l.resultProHookCompatTitle,
         l.resultProHookCompatTeaser,
         '緣',
-        () => context.go('/reports/compatibility'),
+        () => context.push('/reports/compatibility'),
       ),
       (
         l.resultProHookDatesTitle,
         l.resultProHookDatesTeaser,
         '日',
-        () => context.go('/reports/date-picking'),
+        () => context.push('/reports/date-picking'),
       ),
     ];
     return _SectionFrame(

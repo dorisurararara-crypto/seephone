@@ -22,7 +22,6 @@ import '../services/ziwei_service.dart';
 import '../providers/notification_provider.dart';
 import '../providers/saju_provider.dart';
 import '../providers/streak_provider.dart';
-import '../widgets/bottom_nav.dart';
 import '../widgets/coming_soon_modal.dart';
 import '../widgets/five_day_trend_chart.dart';
 import '../widgets/saju_required_empty.dart';
@@ -55,7 +54,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return const Scaffold(
         backgroundColor: AppColors.bg,
         body: SajuRequiredEmpty(showAppBar: false),
-        bottomNavigationBar: PillarBottomNav(activeIdx: 0),
       );
     }
     final saju = sajuOrNull;
@@ -175,7 +173,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 0),
     );
   }
 }
@@ -2383,14 +2380,16 @@ class _DeepDiveSectionState extends State<_DeepDiveSection> {
   }
 }
 
-/// "내 사주 풀이 전체 보기" → /result 이동 CTA.
+/// "내 사주 풀이 전체 보기" → /result 탭 이동 CTA.
 class _FullSajuCTA extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed('/result'),
+      // R109 FIX 2 — /result 는 shell branch. go 로 해당 탭으로 전환
+      // (IndexedStack 이라 홈 탭 State 는 살아 있어 보존된다).
+      onTap: () => context.go('/result'),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),

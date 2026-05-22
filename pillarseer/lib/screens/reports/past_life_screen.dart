@@ -37,7 +37,6 @@ import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/past_life_service.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 
 class PastLifeScreen extends ConsumerStatefulWidget {
   const PastLifeScreen({super.key});
@@ -155,7 +154,9 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '전생 · 緣' : 'PAST LIFE · 緣',
@@ -186,7 +187,6 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
               )
             : _buildBody(context, useKo),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 

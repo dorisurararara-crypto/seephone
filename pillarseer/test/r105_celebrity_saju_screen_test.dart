@@ -6,7 +6,7 @@
 //   3) reports_home 에 팬심 4순위 카드가 kpop-compat 카드 바로 아래.
 //   4) 화면 source — hero / 검색 / picker / "다른 최애 고르기" / reroll 없음 /
 //      영문 라벨 leak 0.
-//   5) widget smoke — 사주 없어도 접근 가능 (NeedSaju 없음), appBar/bottom nav mount.
+//   5) widget smoke — 사주 없어도 접근 가능 (NeedSaju 없음), appBar mount.
 //   6) Sprint 4 — 결과 카드 7섹션 라벨 / 사주 차트(時 칸 "—") / RepaintBoundary /
 //      loading·error·empty state / curated-only.
 
@@ -221,7 +221,7 @@ void main() {
   }
 
   group('CelebritySajuScreen — widget smoke', () {
-    testWidgets('사주 없어도 appBar / bottom nav mount + NeedSaju 없음', (
+    testWidgets('사주 없어도 appBar mount + NeedSaju 없음', (
       tester,
     ) async {
       await tester.pumpWidget(host());
@@ -229,8 +229,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       // appBar title.
       expect(find.text('최애의 사주'), findsWidgets);
-      // bottom nav mount.
-      expect(find.text('더 보기'), findsOneWidget);
+      // R109 FIX 2 — 리포트 상세는 push 된 full-screen. 하단 탭(shell) 없음.
+      expect(find.text('더 보기'), findsNothing);
       // 사주 입력 강제 CTA 가 없어야 한다 (사용자 사주 불필요).
       expect(find.textContaining('사주를 입력'), findsNothing);
     });

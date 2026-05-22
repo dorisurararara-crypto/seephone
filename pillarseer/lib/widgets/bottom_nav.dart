@@ -6,19 +6,24 @@ import '../theme/app_theme.dart';
 
 /// Aesop Luxury bottom nav — 4탭, hairline top border, letter-spacing UPPERCASE label.
 /// Active = ink text + 1px underline. Inactive = taupe.
+///
+/// R109 FIX 2 — StatefulShellRoute 의 shell 이 주입하는 [StatefulNavigationShell]
+/// 로 동작한다. 탭 onTap = navigationShell.goBranch(idx) — branch 를 IndexedStack
+/// 으로 살려둬 탭 전환·복귀 시 스크롤·State 가 보존된다. active = currentIndex.
 class PillarBottomNav extends StatelessWidget {
-  final int activeIdx;
+  final StatefulNavigationShell navigationShell;
 
-  const PillarBottomNav({super.key, required this.activeIdx});
+  const PillarBottomNav({super.key, required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
     final l = AppL10n.of(context);
-    final items = <_NavItem>[
-      _NavItem(label: l.navHome, route: '/home'),
-      _NavItem(label: l.navReading, route: '/result'),
-      _NavItem(label: l.navReports, route: '/reports'),
-      _NavItem(label: l.navProfile, route: '/profile'),
+    final currentBranch = navigationShell.currentIndex;
+    final items = <String>[
+      l.navHome,
+      l.navReading,
+      l.navReports,
+      l.navProfile,
     ];
     return Container(
       decoration: const BoxDecoration(
@@ -32,27 +37,29 @@ class PillarBottomNav extends StatelessWidget {
           child: Row(
             children: items.asMap().entries.map((entry) {
               final i = entry.key;
-              final item = entry.value;
-              final isActive = i == activeIdx;
+              final label = entry.value;
+              final isActive = i == currentBranch;
               return Expanded(
                 child: Semantics(
                   button: true,
                   selected: isActive,
-                  label: item.label,
+                  label: label,
                   child: InkWell(
                     onTap: () {
-                      // codex nav fix: 같은 탭이라도 sub-route 에 있을 때는
-                      // 탭 루트로 가야 함 (예: /discover 에서 리포트 탭 → /reports).
-                      final loc = GoRouterState.of(context).matchedLocation;
-                      if (loc == item.route) return;
-                      context.go(item.route);
+                      // goBranch — 같은 branch 면 그 branch 의 초기 location 으로
+                      // (initialLocation: true), 다른 branch 면 그 branch 로 전환.
+                      // IndexedStack 이라 이전 branch State 는 dispose 안 됨.
+                      navigationShell.goBranch(
+                        i,
+                        initialLocation: i == navigationShell.currentIndex,
+                      );
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // 한국어 메인 (큼, 명확)
                         Text(
-                          item.label,
+                          label,
                           style: GoogleFonts.notoSansKr(
                             fontSize: 13,
                             fontWeight: isActive
@@ -80,10 +87,4 @@ class PillarBottomNav extends StatelessWidget {
       ),
     );
   }
-}
-
-class _NavItem {
-  final String label;
-  final String route;
-  const _NavItem({required this.label, required this.route});
 }

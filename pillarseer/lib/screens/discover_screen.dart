@@ -10,7 +10,6 @@ import '../models/saju_result.dart';
 import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
 import '../theme/app_theme.dart';
-import '../widgets/bottom_nav.dart';
 
 class DiscoverScreen extends ConsumerStatefulWidget {
   const DiscoverScreen({super.key});
@@ -74,7 +73,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         // Round 77 sprint 7 — sub-route 헤더: "리포트 · 디스커버" 로 위치 인식.
         title: Row(
@@ -343,7 +344,6 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 }

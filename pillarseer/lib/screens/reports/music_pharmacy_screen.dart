@@ -28,7 +28,6 @@ import '../../models/saju_result.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/music_pharmacy_service.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 
 class MusicPharmacyScreen extends ConsumerStatefulWidget {
   const MusicPharmacyScreen({super.key});
@@ -147,7 +146,9 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '디지털 기운 처방전 · 藥' : 'ENERGY PRESCRIPTION · 藥',
@@ -176,7 +177,6 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
                       )
                     : _body(_prescription!, useKo),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 

@@ -10,7 +10,6 @@ import '../../models/saju_result.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/saju_provider.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 import '../../widgets/saju_required_empty.dart';
 
 class TojeongScreen extends ConsumerWidget {
@@ -42,7 +41,9 @@ class TojeongScreen extends ConsumerWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '토정비결 · 土 亭' : 'TOJEONG · 土 亭',
@@ -91,7 +92,6 @@ class TojeongScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 

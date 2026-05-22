@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 
 class ReportsHomeScreen extends StatelessWidget {
   const ReportsHomeScreen({super.key});
@@ -181,7 +180,6 @@ class ReportsHomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 }
@@ -220,7 +218,9 @@ class _CardRow extends StatelessWidget {
     final padV = isHero ? 34.0 : (isLarge ? 28.0 : 22.0);
     final titleSize = isHero ? 26.0 : (isLarge ? 22.0 : 17.0);
     return InkWell(
-      onTap: () => context.go(card.route),
+      // R109 FIX 2 — 리포트 상세는 push. shell(4 branch)이 살아 있어 상세에서
+      // 돌아오면 리포트 탭 스크롤·State 가 보존된다.
+      onTap: () => context.push(card.route),
       child: Container(
         key: Key('reports_home_card_${card.route}'),
         padding: EdgeInsets.fromLTRB(24, padV, 24, padV),

@@ -8,7 +8,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../l10n/app_localizations.dart';
 import '../../providers/locale_provider.dart';
 import '../../theme/app_theme.dart';
-import '../../widgets/bottom_nav.dart';
 
 class DreamScreen extends ConsumerStatefulWidget {
   const DreamScreen({super.key});
@@ -79,7 +78,9 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.ink),
-          onPressed: () => context.go('/reports'),
+          onPressed: () => context.canPop()
+              ? context.pop()
+              : context.go('/reports'),
         ),
         title: Text(
           useKo ? '해몽 · 解 夢' : 'DREAM · 解 夢',
@@ -222,7 +223,6 @@ class _DreamScreenState extends ConsumerState<DreamScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 2),
     );
   }
 }

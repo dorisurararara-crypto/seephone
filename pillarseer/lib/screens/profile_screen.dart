@@ -15,7 +15,6 @@ import '../models/saju_result.dart';
 import '../providers/dev_unlock_provider.dart';
 import '../providers/saju_provider.dart';
 import '../theme/app_theme.dart';
-import '../widgets/bottom_nav.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -178,7 +177,6 @@ class ProfileScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const PillarBottomNav(activeIdx: 3),
     );
   }
 }
