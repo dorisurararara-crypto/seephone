@@ -15,9 +15,9 @@ Last updated: 2026-05-12 (Round 9)
 - [x] Secondary category: Entertainment
 - [x] Keywords (100 chars): 사주,운세,오늘의운세,신년운세,궁합,연애운,일일운세,무료운세,생년월일운세,오행,십신,대운,세운,타로,점성술
 - [x] Description (ko/en) ready in `app_store_metadata.md`
-- [x] Privacy policy URL: https://dorisurararara-crypto.github.io/pillarseer/privacy.html
-- [x] Terms URL: https://dorisurararara-crypto.github.io/pillarseer/terms.html
-- [x] Support URL: https://dorisurararara-crypto.github.io/pillarseer/support.html
+- [x] Privacy policy URL: https://dorisurararara-crypto.github.io/pillarseer-legal/privacy.html
+- [x] Terms URL: https://dorisurararara-crypto.github.io/pillarseer-legal/terms.html
+- [x] Support URL: https://dorisurararara-crypto.github.io/pillarseer-legal/support.html
 - [x] Marketing URL: (optional — same as support)
 - [x] Copyright: dorisurararara 2026
 - [x] Age rating: 4+ (no IAP, no ads, no objectionable content)
