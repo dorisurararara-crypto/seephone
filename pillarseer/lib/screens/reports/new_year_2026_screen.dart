@@ -17,6 +17,7 @@ import '../../services/strength_service.dart';
 import '../../services/yongsin_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/premium_gate.dart';
 import '../../widgets/saju_required_empty.dart';
 
 /// 2026 신년운세 screen — 사주 원국과 병오년 세운을 매칭하여 1년 운기 풀이.
@@ -160,11 +161,38 @@ class NewYear2026Screen extends ConsumerWidget {
             // R93 sprint 5 — 사용자 mandate verbatim: "한해 어떨지 쭉 매우 길게 총평이
             // 있어야지 너무 짧아". 사주 anchor (일간 5행 vs 2026 화 / 격국 / 용신
             // / 십신 / 신강·신약) 기반 1000~1500자 총평 새 섹션.
+            // R110 Sprint 2 — 연간 총평은 무료(playbook ④ "연간 총평 + 3개월").
             _AnnualSummary(saju: saju, yongsin: yongsin.yongsin, useKo: useKo),
-            // R86 — 사용자 mandate: 신년운세 화면에서 12절기 카드 섹션 제거.
-            // moodFor static API 는 R78 sprint 7 test 가 의존 → class 유지.
-            // _MonthlyFlow(saju: saju, year: year, useKo: useKo),
-            _TwelveAreas(theme: theme, saju: saju, useKo: useKo),
+            // R110 Sprint 2 REWORK — playbook ④: 무료 = "연간 총평 + 3개월".
+            // 입춘 이후 첫 3개월(寅·卯·辰 절기)만 compact 로 무료 노출. 새 데이터
+            // 없이 _MonthlyFlow.moodFor + JolCalendar2026.displayOrder 재사용.
+            _FreeMonthlyPreview(saju: saju, year: year, useKo: useKo),
+            // R110 Sprint 2 REWORK — 프리미엄 = "12개월 전체 + 12영역 상세".
+            // unlocked child 안에 _MonthlyFlow(12개월 전체) + _TwelveAreas(12영역)
+            // 를 함께 둔다. locked 는 섹션 묶음 단위 placeholder (본문 truncate/blur X).
+            PremiumGate(
+              feature: PremiumFeature.newYearAreas,
+              label: useKo
+                  ? '2026 신년운세 · 12개월 흐름과 열두 영역'
+                  : 'New Year 2026 · Full Monthly Flow & Twelve Areas',
+              unlocked: (_) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _MonthlyFlow(saju: saju, year: year, useKo: useKo),
+                  _TwelveAreas(theme: theme, saju: saju, useKo: useKo),
+                ],
+              ),
+              locked: (_) => PremiumLockedSection(
+                feature: PremiumFeature.newYearAreas,
+                title: useKo
+                    ? '4월 이후 월별 흐름 · 열두 영역 상세'
+                    : 'Monthly Flow After April · Twelve Areas',
+                description: useKo
+                    ? '입하부터 대설까지 남은 아홉 달의 월별 흐름과, 연애·일·재물 등 열두 영역을 테마별로 짚어주는 상세 풀이는 프리미엄팩에서 열려요.'
+                    : 'The remaining nine months of monthly flow and theme-by-theme '
+                        'readings across twelve areas open with the Premium Pack.',
+              ),
+            ),
             _Counsel(useKo: useKo),
             _Footer(),
           ],
@@ -713,6 +741,156 @@ class _AnnualSummary extends StatelessWidget {
       default: // none
         return 'Money: wealth stars are scarce in your chart, so the flow tends to arrive through people and opportunity more than fixed income — tending your relationships tends to double as tending your finances.';
     }
+  }
+}
+
+/// R110 Sprint 2 REWORK — playbook ④ 무료 "3개월" 섹션.
+///
+/// 입춘 이후 첫 3개월(寅·卯·辰 절기) 흐름만 compact 로 무료 노출한다. 새
+/// 데이터/문구를 만들지 않고 `_MonthlyFlow.moodFor` 의 절기 mood + 격국
+/// anchor + 용신 suffix 합성과 `JolCalendar2026.displayOrder` 를 그대로
+/// 재사용한다. 4월 이후 9개월·12영역은 PremiumGate 로 따로 잠긴다.
+///
+/// ⚠️ displayOrder[0] 은 소한(丑) — 입춘이 아니다. 무료 3개월은 명리학
+/// 새해(입춘) 이후라야 하므로 displayOrder 를 `skip(1)` 해 寅·卯·辰 을 쓴다.
+/// moodFor 의 index 도 displayOrder index(寅=1·卯=2·辰=3)를 그대로 넘겨
+/// 절기 mood 가 슬롯과 어긋나지 않게 한다.
+class _FreeMonthlyPreview extends StatelessWidget {
+  final SajuResult saju;
+  final int year;
+  final bool useKo;
+  const _FreeMonthlyPreview({
+    required this.saju,
+    required this.year,
+    required this.useKo,
+  });
+
+  /// 무료 노출 개월 수 — playbook ④ "연간 총평 + 3개월".
+  static const int freeMonths = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    final ctx = SajuContext.from(saju, today: DateTime(year, 1, 1));
+    // displayOrder[0] = 소한(丑). 무료 3개월은 입춘 이후라야 하므로 첫 칸
+    // (소한)을 건너뛰고 寅·卯·辰 세 칸을 쓴다. moodFor index 도 displayOrder
+    // index(寅=1·卯=2·辰=3)와 맞춰야 절기 mood 가 어긋나지 않는다.
+    const firstFreeOrderIndex = 1; // 입춘(寅) = displayOrder index 1.
+    final slots = JolCalendar2026.displayOrder
+        .skip(firstFreeOrderIndex)
+        .take(freeMonths)
+        .toList();
+    return Container(
+      key: const Key('new_year_free_monthly_preview'),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 36, 24, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.bg,
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            useKo ? 'FIRST  THREE  MONTHS · 三 月' : 'FIRST  THREE  MONTHS · 三 月',
+            style: GoogleFonts.inter(
+              fontSize: 9,
+              letterSpacing: 5,
+              fontWeight: FontWeight.w500,
+              color: AppColors.taupe,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            useKo
+                ? '입춘으로 새해가 열린 뒤 첫 세 달의 흐름이에요. 절기 기준 월건이라 양력 달력과는 경계가 달라요.'
+                : 'The flow of the first three months after Ipchun opens the year. '
+                      'Months follow solar terms, not the Gregorian calendar.',
+            style: useKo
+                ? GoogleFonts.notoSansKr(
+                    fontSize: 12.5,
+                    color: AppColors.inkLight,
+                    height: 1.65,
+                  )
+                : GoogleFonts.cormorantGaramond(
+                    fontSize: 13,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.inkLight,
+                    height: 1.6,
+                  ),
+          ),
+          const SizedBox(height: 18),
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(top: BorderSide(color: AppColors.line)),
+            ),
+            child: Column(
+              children: List.generate(freeMonths, (i) {
+                final slot = slots[i];
+                // slots 는 이미 소한을 skip 한 寅·卯·辰. moodFor index 는
+                // displayOrder index 라야 절기 mood 가 슬롯과 맞으므로
+                // skip 한 만큼(firstFreeOrderIndex) 더한다.
+                final moodIndex = i + firstFreeOrderIndex;
+                final ganji = '${slot.monthStem}${slot.monthBranch}';
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: AppColors.line, width: 0.6),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 56,
+                        child: Text(
+                          ganji,
+                          style: GoogleFonts.notoSerifKr(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w300,
+                            color: AppColors.accent,
+                            height: 1.1,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              useKo ? slot.displayKo : slot.displayEn,
+                              style: GoogleFonts.inter(
+                                fontSize: 9,
+                                letterSpacing: 3,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.taupe,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              NewYear2026Screen.moodFor(
+                                ctx: ctx,
+                                index: moodIndex,
+                                useKo: useKo,
+                              ),
+                              style: GoogleFonts.notoSansKr(
+                                fontSize: 13,
+                                color: AppColors.ink,
+                                height: 1.7,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

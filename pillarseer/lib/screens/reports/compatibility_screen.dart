@@ -14,6 +14,7 @@ import '../../services/korean_josa.dart';
 import '../../services/saju_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/premium_gate.dart';
 
 class CompatibilityScreen extends ConsumerStatefulWidget {
   const CompatibilityScreen({super.key});
@@ -393,15 +394,37 @@ class _CompatibilityScreenState extends ConsumerState<CompatibilityScreen> {
               submitLabel: l.compatCalculate,
             ),
             if (_score != null) ...[
+              // R110 Sprint 2 — 점수·요약·공명은 무료(playbook ③ "기본 궁합 1개").
               _ScoreSection(score: _score!, verdict: _verdict ?? ''),
               if (_partner != null && me != null) ...[
                 _ResonanceSection(me: me, partner: _partner!),
-                _DetailSection(
-                  me: me,
-                  partner: _partner!,
-                  partnerName: _partnerNameCtrl.text.trim().isEmpty
-                      ? _prefilledFromCeleb
-                      : _partnerNameCtrl.text.trim(),
+                // 끌림·마찰·연애/결혼/자녀·실천 상세 케미는 프리미엄.
+                PremiumGate(
+                  feature: PremiumFeature.compatibilityDetail,
+                  label: l.compatTitle,
+                  unlocked: (_) => _DetailSection(
+                    me: me,
+                    partner: _partner!,
+                    partnerName: _partnerNameCtrl.text.trim().isEmpty
+                        ? _prefilledFromCeleb
+                        : _partnerNameCtrl.text.trim(),
+                  ),
+                  locked: (ctx) {
+                    final useKo = (Localizations.maybeLocaleOf(ctx)
+                                ?.languageCode ??
+                            'en') ==
+                        'ko';
+                    return PremiumLockedSection(
+                      feature: PremiumFeature.compatibilityDetail,
+                      background: AppColors.bg,
+                      title: useKo
+                          ? '관계의 무게 · 상세 케미'
+                          : 'Relationship Texture · Deep Chemistry',
+                      description: useKo
+                          ? '끌리는 지점·부딪히는 지점·연애·결혼·자녀·실천 가이드는 프리미엄팩에서 열려요.'
+                          : 'Attraction, friction, love · marriage · children, and action guides open with the Premium Pack.',
+                    );
+                  },
                 ),
               ],
             ],

@@ -149,21 +149,27 @@ void main() {
           reason: '17 카테고리가 결론 card 보다 먼저 mount');
     });
 
-    test('B6 — build 안에서 deep myeongli widget mount 0 (8 종 + 부속)', () {
+    test('B6 — build 안에서 deep myeongli widget mount 0 (R110 무료 모듈 제외)', () {
       final scope = buildScope();
       // 사용자 mandate "원래 우리 앱에 있던 나머지 것들은 전부 없애줘".
       // result_screen build 안에서 mount 0 검증.
+      //
+      // R110 Sprint 2 REWORK — playbook 무료 핵심 5("나는 어떤 사람인가 +
+      // 오행 균형 + 십신 성향 + 강점/주의점 + 오늘 조언")를 화면 상단 무료
+      // 모듈이 함께 충족하도록 `_ChartAttributesSection`(오행/강약/용신 보조
+      // 정보)·`_ForYouTodaySection`(강점·주의·오늘 조언) 두 widget 을 무료
+      // 영역(PremiumGate 밖)에 다시 mount 한다. 따라서 이 둘은 더 이상 mount
+      // 0 대상이 아니다 — B1b(r110_premium_gate_test) 가 두 widget 의 무료
+      // mount 와 게이트 앞 위치를 별도로 가드한다.
       for (final widget in const [
         '_DayMasterHero(',
         '_SipsinPersonaSection(',
         '_LifeStageSection(',
         '_AdditionalLifeSection(',
-        '_ChartAttributesSection(',
         '_ThreeStrokesSection(',
         '_ReadingSection(',
         '_CareerSection(',
         '_WealthStrategySection(',
-        '_ForYouTodaySection(',
         '_CrossmatchSection(',
         '_ZiweiPalaceGroup(',
         '_GroupSection(',

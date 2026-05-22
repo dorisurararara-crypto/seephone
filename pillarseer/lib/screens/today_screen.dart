@@ -18,6 +18,7 @@ import '../services/daily_service.dart';
 import '../services/saju_context.dart';
 import '../services/today_deep_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/premium_gate.dart';
 import '../widgets/today_event_detail_section.dart';
 import '../widgets/today_v5_loader.dart';
 import 'home_screen.dart' show TodayDeepReadingSection;
@@ -80,23 +81,42 @@ class TodayScreen extends ConsumerWidget {
             children: [
               // R106 P2a — 오늘의 사주 v5 (오늘의 주제 중심 + 근거 3칩 + 자기검증)
               // 가 primary 섹션. TopicSelector 신호 0 시 v5 자체가 총평형 fallback.
+              // R110 Sprint 2 — v5 핵심 요약/행동은 무료(playbook ②).
               TodayV5Loader(saju: result, date: now),
               const SizedBox(height: 24),
-              // 기존 오늘 사주 총평 (TodayDeepService) — 보조 deep reading 으로 보존.
-              TodayDeepReadingSection(
-                reading: TodayDeepService.build(
-                  userDayStem: result.dayPillar.chunGan,
-                  userDayBranch: result.dayPillar.jiJi,
-                  userMonthBranch: result.monthPillar.jiJi,
-                  userDominantEl: result.elements.dominant,
-                  userDeficitEl: result.elements.deficit,
-                  todayPillar: fortune.dayPillar,
-                  todayScore: fortune.totalScore,
-                  ctx: ctx,
+              // R110 Sprint 2 — 오늘 사주 총평(심층) + 오늘 사건 상세는 프리미엄.
+              // TodayDeepService 기반 심층 본문·추가 확장은 PremiumGate 로 잠근다.
+              PremiumGate(
+                feature: PremiumFeature.todayDeep,
+                label: useKo ? '오늘의 사주 심층' : "Today's Deep Reading",
+                unlocked: (_) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // 기존 오늘 사주 총평 (TodayDeepService) — 심층 deep reading.
+                    TodayDeepReadingSection(
+                      reading: TodayDeepService.build(
+                        userDayStem: result.dayPillar.chunGan,
+                        userDayBranch: result.dayPillar.jiJi,
+                        userMonthBranch: result.monthPillar.jiJi,
+                        userDominantEl: result.elements.dominant,
+                        userDeficitEl: result.elements.deficit,
+                        todayPillar: fortune.dayPillar,
+                        todayScore: fortune.totalScore,
+                        ctx: ctx,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    TodayEventDetailSection(result: result, useKo: useKo),
+                  ],
+                ),
+                locked: (_) => PremiumLockedSection(
+                  feature: PremiumFeature.todayDeep,
+                  title: useKo ? '오늘 사주 심층 해석' : "Today's Deep Reading",
+                  description: useKo
+                      ? '오늘 일진을 더 깊게 풀어낸 총평과 오늘 일어날 수 있는 일 상세는 프리미엄팩에서 열려요.'
+                      : 'A deeper read of today and what may unfold opens with the Premium Pack.',
                 ),
               ),
-              const SizedBox(height: 24),
-              TodayEventDetailSection(result: result, useKo: useKo),
             ],
           ),
         ),

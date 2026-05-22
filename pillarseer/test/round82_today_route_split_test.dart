@@ -16,6 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pillarseer/l10n/app_localizations.dart';
 import 'package:pillarseer/models/saju_result.dart';
+import 'package:pillarseer/providers/premium_provider.dart';
 import 'package:pillarseer/providers/saju_provider.dart';
 import 'package:pillarseer/screens/today_screen.dart';
 import 'package:pillarseer/widgets/today_event_detail_section.dart';
@@ -102,6 +103,9 @@ void main() {
         ProviderScope(
           overrides: [
             sajuResultProvider.overrideWith(_DummySajuNotifier.new),
+            // R110 Sprint 2 — TodayEventDetailSection 은 프리미엄 게이트 뒤.
+            // 분리 회귀를 보려면 unlocked 상태에서 검증한다.
+            isPremiumUnlockedProvider.overrideWithValue(true),
           ],
           child: MaterialApp.router(
             routerConfig: router,

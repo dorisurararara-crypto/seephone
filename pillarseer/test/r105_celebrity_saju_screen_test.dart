@@ -118,8 +118,14 @@ void main() {
 
     test('영문 라벨 leak 0 (사용자 노출 문구)', () {
       const forbidden = ["'Bias Saju'", "'My Bias", "Text('Past Life"];
+      // R110 Sprint 2 — `useKo ? '한글' : '영문'` 처럼 로케일 분기된 줄은 leak
+      // 이 아니다(KO 모드에서 영문이 노출되지 않음). 분기 안 된 영문만 잡는다.
+      final lines = src
+          .split('\n')
+          .where((l) => !l.contains('useKo ?') && !l.contains('useKo?'))
+          .join('\n');
       for (final f in forbidden) {
-        expect(src.contains(f), isFalse, reason: '화면 라벨에 "$f" 영문 leak');
+        expect(lines.contains(f), isFalse, reason: '화면 라벨에 "$f" 영문 leak');
       }
     });
 

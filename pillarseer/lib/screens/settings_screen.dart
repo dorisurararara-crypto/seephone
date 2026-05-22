@@ -11,12 +11,14 @@ import '../l10n/app_localizations.dart';
 import '../providers/dev_unlock_provider.dart';
 import '../providers/locale_provider.dart';
 import '../providers/notification_provider.dart';
+import '../providers/premium_provider.dart';
 import '../providers/saju_provider.dart';
 import '../providers/saju_settings_provider.dart';
 import '../providers/streak_provider.dart';
 import '../services/app_version_service.dart';
 import '../services/notification_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/premium_gate.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -899,6 +901,27 @@ class _NotifSlotRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final toggle = ref.watch(notificationProvider);
+    // R110 Sprint 2 — playbook ⑨: 아침 슬롯 1개 기본 알림은 무료,
+    // 오후/저녁 시간대별 슬롯은 프리미엄. 미보유 시 행 단위 잠금 placeholder.
+    final unlocked = ref.watch(isPremiumUnlockedProvider);
+    if (slot != NotificationSlot.morning && !unlocked) {
+      final useKo =
+          (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: PremiumLockedSection(
+          feature: PremiumFeature.notificationSlots,
+          background: AppColors.bg,
+          bottomBorder: false,
+          compact: true,
+          padding: EdgeInsets.zero,
+          title: '${_emoji()}  ${_name(l)}',
+          description: useKo
+              ? '오후·저녁 시간대 알림과 주제별 개인화 알림은 프리미엄팩에서 열려요.'
+              : 'Afternoon and evening alerts and topic-personalized reminders open with the Premium Pack.',
+        ),
+      );
+    }
     final slotCfg = toggle.slots[slot] ??
         SlotConfig(
           enabled: slot.defaultEnabled,

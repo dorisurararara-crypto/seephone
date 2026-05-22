@@ -34,10 +34,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../models/saju_result.dart';
+import '../../providers/premium_provider.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/past_life_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/premium_gate.dart';
 
 class PastLifeScreen extends ConsumerStatefulWidget {
   const PastLifeScreen({super.key});
@@ -56,6 +58,10 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
 
   PastLifeScenario? _scenario;
   bool _composing = false;
+
+  // R110 Sprint 2 — playbook ⑥: 첫 1편 전체 무료. "다른 최애 고르기"로
+  // 추가 전생 생성은 프리미엄. 첫 시나리오가 완성되면 true.
+  bool _viewedFreeStory = false;
 
   @override
   void initState() {
@@ -136,6 +142,8 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
       setState(() {
         _scenario = scenario;
         _composing = false;
+        // 첫 전생 1편이 완성됨 — 이후 추가 생성은 프리미엄.
+        _viewedFreeStory = true;
       });
     } catch (_) {
       if (!mounted) return;
@@ -228,6 +236,17 @@ class _PastLifeScreenState extends ConsumerState<PastLifeScreen> {
             selectedId: _selected?.id,
             useKo: useKo,
             onPick: (s) {
+              // R110 Sprint 2 — 첫 1편은 무료. 이미 한 편을 본 뒤의 추가
+              // 전생 생성은 프리미엄(미보유 시 paywall hook 만 호출).
+              final unlocked = ref.read(isPremiumUnlockedProvider);
+              if (_viewedFreeStory && !unlocked) {
+                onPremiumLockedTap(PremiumLockContext(
+                  feature: PremiumFeature.pastLifeMore,
+                  label: useKo ? '전생 이야기' : 'Past Life',
+                  context: context,
+                ));
+                return;
+              }
               setState(() {
                 _selected = s;
                 _scenario = null;

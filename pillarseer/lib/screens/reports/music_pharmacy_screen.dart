@@ -25,10 +25,12 @@ import 'package:share_plus/share_plus.dart';
 import 'dart:io' show File;
 
 import '../../models/saju_result.dart';
+import '../../providers/premium_provider.dart';
 import '../../providers/saju_provider.dart';
 import '../../services/music_pharmacy_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/premium_gate.dart';
 
 class MusicPharmacyScreen extends ConsumerStatefulWidget {
   const MusicPharmacyScreen({super.key});
@@ -209,12 +211,15 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
   }
 
   Widget _body(MusicPrescription p, bool useKo) {
+    // R110 Sprint 2 — playbook ⑦: 곡/아티스트 기본 추천은 무료,
+    // 효능/부작용/복용법/본문·다시 처방은 프리미엄.
+    final unlocked = ref.watch(isPremiumUnlockedProvider);
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       children: [
         RepaintBoundary(
           key: _cardKey,
-          child: _PrescriptionCard(p: p, useKo: useKo),
+          child: _PrescriptionCard(p: p, useKo: useKo, showDetail: unlocked),
         ),
         const SizedBox(height: 22),
         Row(
@@ -231,6 +236,15 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
                   ),
                 ),
                 onPressed: () {
+                  // 다시 처방 받기 = 프리미엄. 미보유 시 paywall hook 만.
+                  if (!unlocked) {
+                    onPremiumLockedTap(PremiumLockContext(
+                      feature: PremiumFeature.musicDetail,
+                      label: useKo ? '음악 처방' : 'Music Pharmacy',
+                      context: context,
+                    ));
+                    return;
+                  }
                   setState(() {
                     _loading = true;
                     _seedTick += 1;
@@ -281,7 +295,15 @@ class _MusicPharmacyScreenState extends ConsumerState<MusicPharmacyScreen> {
 class _PrescriptionCard extends StatelessWidget {
   final MusicPrescription p;
   final bool useKo;
-  const _PrescriptionCard({required this.p, required this.useKo});
+
+  /// R110 Sprint 2 — 효능/부작용/복용법/처방 본문 상세 노출 여부.
+  /// false 면 프리미엄 잠금 placeholder 로 대체(곡/아티스트는 항상 노출).
+  final bool showDetail;
+  const _PrescriptionCard({
+    required this.p,
+    required this.useKo,
+    this.showDetail = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -382,63 +404,79 @@ class _PrescriptionCard extends StatelessWidget {
             ),
           ),
 
-          _Section(
-            label: useKo ? '효능' : 'EFFECT',
-            child: Text(
-              useKo ? p.effectKo : p.effectEn,
-              key: const Key('music_pharmacy_effect'),
-              style: GoogleFonts.notoSerifKr(
-                fontSize: 14,
-                color: AppColors.ink,
-                height: 1.6,
+          // R110 Sprint 2 — 효능/부작용/복용법/본문 상세는 프리미엄.
+          // 미보유 시 카드 안에서 섹션 단위 잠금 placeholder 로 대체한다
+          // (본문 truncate/blur 금지 — playbook §3).
+          if (showDetail) ...[
+            _Section(
+              label: useKo ? '효능' : 'EFFECT',
+              child: Text(
+                useKo ? p.effectKo : p.effectEn,
+                key: const Key('music_pharmacy_effect'),
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 14,
+                  color: AppColors.ink,
+                  height: 1.6,
+                ),
               ),
             ),
-          ),
-
-          _Section(
-            label: useKo ? '부작용' : 'SIDE EFFECT',
-            child: Text(
-              useKo ? p.sideEffectKo : p.sideEffectEn,
-              key: const Key('music_pharmacy_side'),
-              style: GoogleFonts.notoSerifKr(
-                fontSize: 14,
-                color: AppColors.ink,
-                height: 1.6,
+            _Section(
+              label: useKo ? '부작용' : 'SIDE EFFECT',
+              child: Text(
+                useKo ? p.sideEffectKo : p.sideEffectEn,
+                key: const Key('music_pharmacy_side'),
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 14,
+                  color: AppColors.ink,
+                  height: 1.6,
+                ),
               ),
             ),
-          ),
-
-          _Section(
-            label: useKo ? '복용법' : 'DOSAGE',
-            child: Text(
-              useKo ? p.dosageKo : p.dosageEn,
-              key: const Key('music_pharmacy_dosage'),
-              style: GoogleFonts.notoSerifKr(
-                fontSize: 14,
-                color: AppColors.ink,
-                height: 1.6,
+            _Section(
+              label: useKo ? '복용법' : 'DOSAGE',
+              child: Text(
+                useKo ? p.dosageKo : p.dosageEn,
+                key: const Key('music_pharmacy_dosage'),
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 14,
+                  color: AppColors.ink,
+                  height: 1.6,
+                ),
               ),
             ),
-          ),
-
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(color: AppColors.line, width: 1),
+            const SizedBox(height: 6),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: AppColors.line, width: 1),
+                ),
+              ),
+              child: Text(
+                useKo ? p.prescriptionText : p.prescriptionTextEn,
+                key: const Key('music_pharmacy_body'),
+                style: GoogleFonts.notoSerifKr(
+                  fontSize: 13,
+                  color: AppColors.inkLight,
+                  height: 1.7,
+                ),
               ),
             ),
-            child: Text(
-              useKo ? p.prescriptionText : p.prescriptionTextEn,
-              key: const Key('music_pharmacy_body'),
-              style: GoogleFonts.notoSerifKr(
-                fontSize: 13,
-                color: AppColors.inkLight,
-                height: 1.7,
+          ] else
+            Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: PremiumLockedSection(
+                feature: PremiumFeature.musicDetail,
+                background: const Color(0xFFF8F1E5),
+                bottomBorder: false,
+                compact: true,
+                padding: EdgeInsets.zero,
+                title: useKo ? '효능 · 부작용 · 복용법' : 'Effect · Side · Dosage',
+                description: useKo
+                    ? '이 곡의 효능·부작용·복용법과 처방 본문, 다시 처방 받기는 프리미엄팩에서 열려요.'
+                    : 'Effect, side effect, dosage, the full note, and re-prescribing open with the Premium Pack.',
               ),
             ),
-          ),
         ],
       ),
     );

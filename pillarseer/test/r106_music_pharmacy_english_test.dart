@@ -22,6 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pillarseer/l10n/app_localizations.dart';
 import 'package:pillarseer/models/saju_result.dart';
+import 'package:pillarseer/providers/premium_provider.dart';
 import 'package:pillarseer/providers/saju_provider.dart';
 import 'package:pillarseer/screens/reports/music_pharmacy_screen.dart';
 import 'package:pillarseer/services/music_pharmacy_service.dart';
@@ -283,7 +284,11 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
-      final container = ProviderContainer();
+      // R110 Sprint 2 — 효능/부작용/복용법/다시 처방은 프리미엄 게이트 뒤.
+      // 영어/한글 라벨 회귀를 보려면 unlocked 상태에서 검증한다.
+      final container = ProviderContainer(
+        overrides: [isPremiumUnlockedProvider.overrideWithValue(true)],
+      );
       container.read(sajuResultProvider.notifier).set(_buildSaju());
       await tester.pumpWidget(
         UncontrolledProviderScope(

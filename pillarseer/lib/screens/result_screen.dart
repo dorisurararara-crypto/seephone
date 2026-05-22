@@ -42,8 +42,10 @@ import '../theme/app_theme.dart';
 import '../models/saju_result.dart';
 import '../providers/locale_provider.dart';
 import '../providers/saju_provider.dart';
+import '../services/premium_gate_policy.dart';
 import '../widgets/coming_soon_modal.dart';
 import '../widgets/my_saju_v5_section.dart';
+import '../widgets/premium_gate.dart';
 import '../widgets/saju_required_empty.dart';
 
 /// Round 70 mandate 명시: 자미두수 별 이름/궁 이름 UI 노출 0.
@@ -253,21 +255,63 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
             if (useKo) _MySajuV5HeroLoader(result: result),
             // 4. LIFE OVERVIEW — "내 사주 큰 그림" (R88 sprint 8 LifeOverviewService wire).
             _LifeOverviewHero(result: result, isMale: birth?.isMale ?? true),
+            // 4-b. R110 Sprint 2 REWORK — playbook 무료 핵심 5("나는 어떤
+            //      사람인가")를 화면 상단 무료 모듈이 함께 충족한다. 오행 균형은
+            //      _FiveElementsSection(위), 오행/강약/용신 보조 정보는
+            //      _ChartAttributesSection, 강점/주의점·오늘 바로 써먹는 조언은
+            //      _ForYouTodaySection 이 PremiumGate *밖*(무료)에서 받는다.
+            _ChartAttributesSection(result: result, useKo: useKo),
+            _ForYouTodaySection(result: result, useKo: useKo),
             // 5. 17 카테고리 — R88 sprint 9 에서 LifeParagraphService wire.
             //    conclusion_self 는 17 카테고리 안 마지막 entry 가 아니라 별도 결론 card 로 분리.
+            //    R110 Sprint 2 — 무료 5 정체성/성향 카테고리는 그대로, 프리미엄
+            //    12 인생 영역 카테고리는 PremiumGate 로 감싼다(경계 = premium_gate_policy).
             ...kR88LifeCategories
                 .where((cat) => cat.key != 'conclusion_self')
-                .map((cat) => _CategorySectionCard(
-                      anchorKey: _anchors[cat.key],
-                      categoryKey: cat.key,
-                      titleKo: cat.titleKo,
-                      previewKo: cat.previewKo,
-                      saju: result,
-                      isMale: birth?.isMale ?? true,
-                      useKo: useKo,
-                    )),
+                .map((cat) {
+              final card = _CategorySectionCard(
+                anchorKey: _anchors[cat.key],
+                categoryKey: cat.key,
+                titleKo: cat.titleKo,
+                previewKo: cat.previewKo,
+                saju: result,
+                isMale: birth?.isMale ?? true,
+                useKo: useKo,
+              );
+              if (isFreeMySajuCategory(cat.key)) return card;
+              final titleEn = lifeCategoryTitleEn(cat.key);
+              return PremiumGate(
+                feature: PremiumFeature.mySajuCategory,
+                label: useKo ? cat.titleKo : titleEn,
+                unlocked: (_) => card,
+                locked: (_) => Container(
+                  key: _anchors[cat.key],
+                  child: PremiumLockedSection(
+                    feature: PremiumFeature.mySajuCategory,
+                    background: AppColors.bg,
+                    title: useKo ? cat.titleKo : titleEn,
+                    description: useKo
+                        ? '${cat.titleKo}을(를) 포함한 12개 인생 영역 풀이는 프리미엄팩에서 깊게 열려요.'
+                        : 'This life area and 11 more open in full with the Premium Pack.',
+                  ),
+                ),
+              );
+            }),
             // 6. SELF CONCLUSION — "나는 어떤 사람?" (R88 sprint 9 SelfConclusionService wire).
-            _SelfConclusionCard(result: result, isMale: birth?.isMale ?? true),
+            //    R110 Sprint 2 — "깊은 종합 결론" = 프리미엄(playbook §①).
+            PremiumGate(
+              feature: PremiumFeature.mySajuConclusion,
+              label: useKo ? '깊은 종합 결론' : 'Deep Conclusion',
+              unlocked: (_) =>
+                  _SelfConclusionCard(result: result, isMale: birth?.isMale ?? true),
+              locked: (_) => PremiumLockedSection(
+                feature: PremiumFeature.mySajuConclusion,
+                title: useKo ? '나는 어떤 사람? · 깊은 종합 결론' : 'Who Am I · Deep Conclusion',
+                description: useKo
+                    ? '17개 풀이를 종합한 한 단락 결론은 프리미엄팩에서 열려요.'
+                    : 'A one-paragraph conclusion drawing on all 17 readings opens with the Premium Pack.',
+              ),
+            ),
             // 7. Footer — KASI source.
             _AesopFooter(),
           ],

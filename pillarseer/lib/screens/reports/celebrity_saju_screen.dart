@@ -40,6 +40,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
 import '../../widgets/bottom_nav.dart';
+import '../../widgets/premium_gate.dart';
 
 class CelebritySajuScreen extends ConsumerStatefulWidget {
   const CelebritySajuScreen({super.key});
@@ -59,6 +60,12 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
   final TextEditingController _searchCtl = TextEditingController();
   final ScrollController _scrollCtl = ScrollController();
   String _query = '';
+
+  // R110 Sprint 2 REWORK — playbook ⑤: 셀럽 Top 30 *전체* 기본 공개.
+  // 무료 사용자도 curated 셀럽을 계속 선택할 수 있고, 결과 카드의 기본
+  // 정보(이름·생년월일/일주·기본 요약)는 무료. 심층 7섹션 풀이만 프리미엄
+  // (`_SectionBody` 를 PremiumGate 로 감싼다). 준비 중 셀럽은 picker 자체에
+  // 없으므로(curated only) lock 혜택으로 노출되지 않는다.
 
   @override
   void initState() {
@@ -126,6 +133,9 @@ class _CelebritySajuScreenState extends ConsumerState<CelebritySajuScreen> {
   }
 
   void _selectStar(_CelebReading r) {
+    // R110 Sprint 2 REWORK — 셀럽 선택 자체는 무료. 어떤 셀럽이든 횟수
+    // 제한 없이 고를 수 있고, 기본 정보까지 무료. 프리미엄 경계는 결과
+    // 카드 안 심층 7섹션 풀이(`_SectionBody`)에만 PremiumGate 로 걸린다.
     setState(() {
       _selected = r;
       _query = '';
@@ -619,7 +629,36 @@ class _ResultCard extends StatelessWidget {
                   const SizedBox(height: 18),
                   Container(height: 1, color: AppColors.line),
                   const SizedBox(height: 18),
-                  _SectionBody(reading: reading, useKo: useKo),
+                  // R110 Sprint 2 REWORK — playbook ⑤: 기본 정보(이름·차트·
+                  // 첫인상 lead)는 무료. 심층 7섹션 풀이만 PremiumGate.
+                  // 무료 lead = 첫 섹션(opening) 한 단락.
+                  _SectionBody(reading: reading, useKo: useKo, leadOnly: true),
+                  // 심층 풀이(나머지 섹션 전체)는 프리미엄. 본문을 자르거나
+                  // 흐리지 않고 섹션 묶음 단위로 잠근다(playbook §3).
+                  if (reading.sections.length > 1) ...[
+                    const SizedBox(height: 22),
+                    PremiumGate(
+                      feature: PremiumFeature.celebrityMore,
+                      label: useKo
+                          ? '${reading.displayName(useKo)} 심층 풀이'
+                          : '${reading.displayName(useKo)} · deep reading',
+                      unlocked: (_) =>
+                          _SectionBody(reading: reading, useKo: useKo),
+                      locked: (_) => PremiumLockedSection(
+                        feature: PremiumFeature.celebrityMore,
+                        background: AppColors.paper,
+                        bottomBorder: false,
+                        padding: EdgeInsets.zero,
+                        title: useKo
+                            ? '최애의 사주 심층 풀이'
+                            : 'Bias Saju · Deep Reading',
+                        description: useKo
+                            ? '일주의 핵심·십신의 흐름·팬에게 한마디까지, 최애를 더 깊게 풀어낸 본문은 프리미엄팩에서 열려요.'
+                            : 'The deep reading — day-pillar core, ten-gods flow, '
+                                'and a word for fans — opens with the Premium Pack.',
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -746,10 +785,20 @@ class _PillarChip extends StatelessWidget {
 }
 
 /// 결과 카드 본문 — 7섹션(opening … closing)을 섹션 라벨과 함께 표시.
+///
+/// R110 Sprint 2 REWORK — [leadOnly] true 면 첫 섹션(opening) 한 단락만
+/// 무료 lead 로 렌더한다. false 면 전체 7섹션 심층 풀이(프리미엄 영역).
 class _SectionBody extends StatelessWidget {
   final _CelebReading reading;
   final bool useKo;
-  const _SectionBody({required this.reading, required this.useKo});
+
+  /// true = 첫 섹션만(무료 lead). false = 전체 심층 본문.
+  final bool leadOnly;
+  const _SectionBody({
+    required this.reading,
+    required this.useKo,
+    this.leadOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -768,12 +817,17 @@ class _SectionBody extends StatelessWidget {
         ),
       );
     }
+    // 무료 lead 는 첫 섹션만, 심층 영역은 두 번째 섹션부터.
+    final start = leadOnly ? 0 : 1;
+    final end = leadOnly ? 1 : reading.sections.length;
     return Column(
-      key: const Key('celebrity_saju_result_body'),
+      key: Key(leadOnly
+          ? 'celebrity_saju_result_lead'
+          : 'celebrity_saju_result_body'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (var i = 0; i < reading.sections.length; i++) ...[
-          if (i > 0) const SizedBox(height: 20),
+        for (var i = start; i < end; i++) ...[
+          if (i > start) const SizedBox(height: 20),
           Text(
             _sectionLabel(reading.sections[i].id, useKo),
             style: GoogleFonts.inter(
