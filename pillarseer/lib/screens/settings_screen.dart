@@ -243,8 +243,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ]),
           _SettingsGroup(label: l.settingsNotifications, children: [
             _NotifSwitch(),
-            // Round 76 — 사용자 알림 시간 picker.
-            _NotifTimePicker(),
+            // R108 ④ — 아침/오후/저녁 3 슬롯 시간대 섹션 (R76 단일 picker 대체).
+            _NotifSlotsSection(),
             // Round 77 sprint 7 — 알림 톤 (어른 / 중고생) toggle.
             _NotifToneToggle(),
           ]),
@@ -771,11 +771,13 @@ class _NotifSwitch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final toggle = ref.watch(notificationProvider);
-    final hh = toggle.notifyHour.toString().padLeft(2, '0');
-    final mm = toggle.notifyMinute.toString().padLeft(2, '0');
+    // R108 ④ — 마스터 ON 이면 켜진 시간대 개수를 보여준다.
+    final subtitle = toggle.enabled
+        ? l.homeNotifOnSlots(toggle.activeSlotCount)
+        : l.homeNotifSubtitle;
     return _AesopSwitch(
       title: l.homeNotifTitle,
-      subtitle: toggle.enabled ? l.homeNotifOnAt(hh, mm) : l.homeNotifSubtitle,
+      subtitle: subtitle,
       value: toggle.enabled,
       onChanged: (v) async {
         final notifier = ref.read(notificationProvider.notifier);
@@ -815,87 +817,214 @@ class _NotifSwitch extends ConsumerWidget {
   }
 }
 
-// Round 76 — 사용자 알림 시간 picker. iOS = CupertinoDatePicker(time),
-// Android = showTimePicker. 토글 OFF 상태에서도 시간 미리 설정 가능 (영속만).
-class _NotifTimePicker extends ConsumerWidget {
+// R108 ④ — 알림 받을 시간대 (아침/오후/저녁) 3 슬롯 섹션.
+// 섹션 헤더(라벨 + 힌트) 아래 3 슬롯 행. 각 행 = 이모지 + 슬롯 이름 + 한 줄
+// 설명 + 시간(tap 변경) + 슬롯 토글. 마스터 토글 OFF 상태에서도 미리 설정 가능
+// (영속만 — 다음 ON 때 반영). Round 76 단일 picker 를 대체.
+class _NotifSlotsSection extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppL10n.of(context);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(24, 18, 24, 8),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.settingsNotifSlotsLabel.toUpperCase(),
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              letterSpacing: 4,
+              fontWeight: FontWeight.w500,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            l.settingsNotifSlotsHint,
+            style: GoogleFonts.notoSansKr(
+              fontSize: 12.5,
+              color: AppColors.taupe,
+              height: 1.6,
+            ),
+          ),
+          const SizedBox(height: 6),
+          for (final s in NotificationSlot.values) _NotifSlotRow(slot: s),
+        ],
+      ),
+    );
+  }
+}
+
+/// 한 슬롯 행 — 이모지 + 이름 + 설명 + 시간(tap) + 슬롯 토글.
+class _NotifSlotRow extends ConsumerWidget {
+  final NotificationSlot slot;
+  const _NotifSlotRow({required this.slot});
+
+  String _emoji() {
+    switch (slot) {
+      case NotificationSlot.morning:
+        return '🌅';
+      case NotificationSlot.afternoon:
+        return '☀️';
+      case NotificationSlot.evening:
+        return '🌙';
+    }
+  }
+
+  String _name(AppL10n l) {
+    switch (slot) {
+      case NotificationSlot.morning:
+        return l.settingsNotifSlotMorning;
+      case NotificationSlot.afternoon:
+        return l.settingsNotifSlotAfternoon;
+      case NotificationSlot.evening:
+        return l.settingsNotifSlotEvening;
+    }
+  }
+
+  String _desc(AppL10n l) {
+    switch (slot) {
+      case NotificationSlot.morning:
+        return l.settingsNotifSlotMorningDesc;
+      case NotificationSlot.afternoon:
+        return l.settingsNotifSlotAfternoonDesc;
+      case NotificationSlot.evening:
+        return l.settingsNotifSlotEveningDesc;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppL10n.of(context);
     final toggle = ref.watch(notificationProvider);
-    final hh = toggle.notifyHour.toString().padLeft(2, '0');
-    final mm = toggle.notifyMinute.toString().padLeft(2, '0');
-    return InkWell(
-      onTap: () => _pick(context, ref),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.line, width: 1)),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l.settingsNotifTimeLabel.toUpperCase(),
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      letterSpacing: 4,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.ink,
-                    ),
+    final slotCfg = toggle.slots[slot] ??
+        SlotConfig(
+          enabled: slot.defaultEnabled,
+          hour: slot.defaultTime.hour,
+          minute: slot.defaultTime.minute,
+        );
+    final hh = slotCfg.hour.toString().padLeft(2, '0');
+    final mm = slotCfg.minute.toString().padLeft(2, '0');
+    final on = slotCfg.enabled;
+    // 슬롯 OFF 면 시간은 흐리게 — 토글로 켜야 활성 의미.
+    final timeColor = on ? AppColors.ink : AppColors.taupe;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          Text(_emoji(), style: const TextStyle(fontSize: 20)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _name(l),
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.ink,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    l.settingsNotifTimeHint,
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      color: AppColors.taupe,
-                    ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  _desc(l),
+                  style: GoogleFonts.notoSansKr(
+                    fontSize: 11.5,
+                    color: AppColors.taupe,
+                    height: 1.5,
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // 시간 — tap 으로 변경. 슬롯 OFF 여도 미리 설정 가능.
+          InkWell(
+            onTap: () => _pickTime(context, ref, slotCfg),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Text(
+                '$hh:$mm',
+                style: GoogleFonts.inter(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  color: timeColor,
+                  letterSpacing: 1,
+                ),
               ),
             ),
-            Text(
-              '$hh:$mm',
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: AppColors.ink,
-                letterSpacing: 1,
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 4),
+          Switch(
+            value: on,
+            activeThumbColor: AppColors.bg,
+            activeTrackColor: AppColors.ink,
+            inactiveThumbColor: AppColors.taupe,
+            inactiveTrackColor: AppColors.line,
+            trackOutlineColor: WidgetStatePropertyAll(AppColors.line),
+            onChanged: (v) => _toggleSlot(context, ref, v),
+          ),
+        ],
       ),
     );
   }
 
-  Future<void> _pick(BuildContext context, WidgetRef ref) async {
+  Future<void> _toggleSlot(
+      BuildContext context, WidgetRef ref, bool enabled) async {
     final l = AppL10n.of(context);
-    final notifier = ref.read(notificationProvider.notifier);
-    final state = ref.read(notificationProvider);
+    final saju = ref.read(sajuResultProvider);
+    final useKo =
+        (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
+    final messenger = ScaffoldMessenger.of(context);
+    await ref.read(notificationProvider.notifier).setSlot(
+          slot: slot,
+          enabled: enabled,
+          pushTitle: l.homeNotifSampleTitle,
+          pushBody: l.homeNotifSampleBody,
+          day60ji: saju?.day60ji,
+          useKo: useKo,
+          saju: saju,
+        );
+    if (!context.mounted) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.ink,
+        content: Text(enabled
+            ? l.settingsNotifSlotOnSnack(_name(l))
+            : l.settingsNotifSlotOffSnack(_name(l))),
+      ));
+  }
+
+  Future<void> _pickTime(
+      BuildContext context, WidgetRef ref, SlotConfig slotCfg) async {
+    final l = AppL10n.of(context);
     final saju = ref.read(sajuResultProvider);
     final useKo =
         (Localizations.maybeLocaleOf(context)?.languageCode ?? 'en') == 'ko';
     final picked = await showTimePicker(
       context: context,
-      initialTime:
-          TimeOfDay(hour: state.notifyHour, minute: state.notifyMinute),
-      helpText: l.settingsNotifTimePickerTitle,
+      initialTime: TimeOfDay(hour: slotCfg.hour, minute: slotCfg.minute),
+      helpText: l.settingsNotifSlotPickerTitle(_name(l)),
     );
     if (picked == null || !context.mounted) return;
-    await notifier.setTime(
-      hour: picked.hour,
-      minute: picked.minute,
-      pushTitle: l.homeNotifSampleTitle,
-      pushBody: l.homeNotifSampleBody,
-      day60ji: saju?.day60ji,
-      useKo: useKo,
-      saju: saju,
-    );
+    await ref.read(notificationProvider.notifier).setSlot(
+          slot: slot,
+          hour: picked.hour,
+          minute: picked.minute,
+          pushTitle: l.homeNotifSampleTitle,
+          pushBody: l.homeNotifSampleBody,
+          day60ji: saju?.day60ji,
+          useKo: useKo,
+          saju: saju,
+        );
     if (!context.mounted) return;
     final hh = picked.hour.toString().padLeft(2, '0');
     final mm = picked.minute.toString().padLeft(2, '0');
@@ -904,7 +1033,7 @@ class _NotifTimePicker extends ConsumerWidget {
       ..showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.ink,
-        content: Text(l.settingsNotifTimeDoneSnack(hh, mm)),
+        content: Text(l.settingsNotifSlotDoneSnack(_name(l), hh, mm)),
       ));
   }
 }

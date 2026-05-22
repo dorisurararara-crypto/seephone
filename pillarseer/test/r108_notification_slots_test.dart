@@ -261,7 +261,7 @@ void main() {
       expect(bodies.length, 3, reason: '슬롯별 카피 프레임이 동일');
       // body 행동 줄에 슬롯 anchor 가 박힌다.
       expect(m.bodyLine2.contains('하루를 펼치기 전'), isTrue);
-      expect(a.bodyLine2.contains('오후부터 결이'), isTrue);
+      expect(a.bodyLine2.contains('오후부터 한 번 달라지는'), isTrue);
       expect(e.bodyLine2.contains('내일을 살짝 여는'), isTrue);
     });
 
@@ -300,7 +300,8 @@ void main() {
       expect(picks[NotificationSlot.morning]!.titleEn.startsWith('Morning — '),
           isTrue);
       // 본문에 슬롯 anchor (KO + EN).
-      expect(picks[NotificationSlot.afternoon]!.ko.contains('오후부터 결이'),
+      expect(
+          picks[NotificationSlot.afternoon]!.ko.contains('오후부터 한 번 달라지는'),
           isTrue);
       expect(picks[NotificationSlot.evening]!.en.contains('crack tomorrow'),
           isTrue);
@@ -412,6 +413,117 @@ void main() {
         title: 't', body: 'b', useKo: true, hour: 9, minute: 30,
       );
       expect(diff, isTrue);
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // ⑧ settings UI — 3 슬롯 행 (sprint 2). source-grep + l10n 키 가드.
+  // ─────────────────────────────────────────────────────────────────
+  group('⑧ settings UI — 3 슬롯 행', () {
+    final src = File('lib/screens/settings_screen.dart').readAsStringSync();
+
+    test('R76 단일 picker(_NotifTimePicker) 제거 + 3 슬롯 섹션으로 교체', () {
+      expect(src.contains('_NotifTimePicker'), isFalse,
+          reason: 'R76 단일 알림 picker 가 남아 있음');
+      expect(src.contains('class _NotifSlotsSection'), isTrue,
+          reason: '3 슬롯 섹션 위젯 누락');
+      expect(src.contains('class _NotifSlotRow'), isTrue,
+          reason: '슬롯 행 위젯 누락');
+    });
+
+    test('마스터 토글(_NotifSwitch) 은 슬롯 섹션 위에 유지', () {
+      final iSwitch = src.indexOf('_NotifSwitch()');
+      final iSlots = src.indexOf('_NotifSlotsSection()');
+      expect(iSwitch, greaterThan(0), reason: '마스터 토글 누락');
+      expect(iSlots, greaterThan(iSwitch),
+          reason: '슬롯 섹션이 마스터 토글보다 위');
+    });
+
+    test('슬롯 행 — 3 슬롯 전부 순회 + 시간 tap + 슬롯 토글 wire', () {
+      // 3 슬롯 NotificationSlot.values 순회.
+      expect(src.contains('for (final s in NotificationSlot.values)'), isTrue);
+      // 슬롯 토글 → setSlot(enabled:).
+      expect(src.contains('setSlot('), isTrue);
+      expect(src.contains('enabled: enabled'), isTrue);
+      // 시간 tap → showTimePicker + setSlot(hour/minute).
+      expect(src.contains('showTimePicker'), isTrue);
+      expect(src.contains('hour: picked.hour'), isTrue);
+      // 슬롯 이모지 (🌅 아침 / ☀️ 오후 / 🌙 저녁).
+      expect(src.contains('🌅'), isTrue);
+      expect(src.contains('☀️'), isTrue);
+      expect(src.contains('🌙'), isTrue);
+    });
+
+    test('l10n 슬롯 키 — KO + EN 둘 다 존재 + 한글/영문 leak 0', () {
+      final ko = File('lib/l10n/app_ko.arb').readAsStringSync();
+      final en = File('lib/l10n/app_en.arb').readAsStringSync();
+      const slotKeys = [
+        'settingsNotifSlotsLabel',
+        'settingsNotifSlotsHint',
+        'settingsNotifSlotMorning',
+        'settingsNotifSlotAfternoon',
+        'settingsNotifSlotEvening',
+        'settingsNotifSlotMorningDesc',
+        'settingsNotifSlotAfternoonDesc',
+        'settingsNotifSlotEveningDesc',
+        'settingsNotifSlotDoneSnack',
+        'settingsNotifSlotOnSnack',
+        'settingsNotifSlotOffSnack',
+        'settingsNotifSlotPickerTitle',
+        'homeNotifOnSlots',
+      ];
+      for (final k in slotKeys) {
+        expect(ko.contains('"$k"'), isTrue, reason: 'KO arb 에 $k 누락');
+        expect(en.contains('"$k"'), isTrue, reason: 'EN arb 에 $k 누락');
+      }
+      // EN 슬롯 라벨/설명에 한글 leak 0.
+      final hangul = RegExp(r'[가-힣]');
+      for (final k in const [
+        'settingsNotifSlotMorning',
+        'settingsNotifSlotAfternoon',
+        'settingsNotifSlotEvening',
+        'settingsNotifSlotMorningDesc',
+        'settingsNotifSlotEveningDesc',
+      ]) {
+        final m = RegExp('"$k":\\s*"([^"]*)"').firstMatch(en);
+        expect(m, isNotNull);
+        expect(hangul.hasMatch(m!.group(1)!), isFalse,
+            reason: 'EN $k 한글 leak: ${m.group(1)}');
+      }
+    });
+
+    test('마스터 토글 subtitle — 켜진 시간대 개수 (homeNotifOnSlots)', () {
+      expect(src.contains('homeNotifOnSlots'), isTrue,
+          reason: '마스터 subtitle 이 슬롯 개수 미반영');
+      expect(src.contains('activeSlotCount'), isTrue);
+    });
+
+    test('슬롯 카피 — AI 슬롭 어휘("결이"/"흐름이") 0 (l10n + SlotFrame)', () {
+      // codex audit: "결이"/"흐름이" 는 AI 슬롭 패턴. 슬롯 카피 전수 가드.
+      final ko = File('lib/l10n/app_ko.arb').readAsStringSync();
+      final pool =
+          File('lib/services/notification_pool_service.dart').readAsStringSync();
+      for (final slop in const ['결이', '흐름이', '센터처럼', '본인의 결']) {
+        // l10n 슬롯 키 본문 + SlotFrame anchor/prefix 에 slop 어휘 0.
+        final slotLines = RegExp(
+                r'"settingsNotifSlot[^"]*":\s*"([^"]*)"')
+            .allMatches(ko)
+            .map((m) => m.group(1)!)
+            .toList();
+        for (final s in slotLines) {
+          expect(s.contains(slop), isFalse,
+              reason: 'l10n 슬롯 카피 AI 슬롭 "$slop": "$s"');
+        }
+        // SlotFrame actionAnchorKo / titlePrefixKo 전수.
+        final anchors = RegExp(r"actionAnchorKo:\s*'([^']*)'")
+            .allMatches(pool)
+            .map((m) => m.group(1)!)
+            .toList();
+        for (final s in anchors) {
+          expect(s.contains(slop), isFalse,
+              reason: 'SlotFrame anchor AI 슬롭 "$slop": "$s"');
+        }
+      }
     });
   });
 }

@@ -24,10 +24,10 @@ import 'today_event_service.dart';
 /// 알림 톤 — 어른 (기본) / MZ 중고생.
 enum NotificationTone { adult, mz }
 
-/// R108 ④ — 슬롯별 사주 풀이 프레임. 같은 날이라도 슬롯마다 카피 결이 다르다.
-///  - 아침 = "오늘 하루 미리보기" — 하루를 앞에 두고 미리 짚어주는 결.
-///  - 오후 = "오후부터 결이 바뀜" — 오전과 오후의 결이 갈리는 지점을 짚는 결.
-///  - 저녁 = "하루 마무리 + 내일 살짝" — 오늘을 닫고 내일을 살짝 여는 결.
+/// R108 ④ — 슬롯별 사주 풀이 프레임. 같은 날이라도 슬롯마다 카피 톤이 다르다.
+///  - 아침 = "오늘 하루 미리보기" — 하루를 앞에 두고 미리 짚어주는 톤.
+///  - 오후 = "오후부터 달라지는 부분" — 오전과 오후가 갈리는 지점을 짚는 톤.
+///  - 저녁 = "하루 마무리 + 내일 살짝" — 오늘을 닫고 내일을 살짝 여는 톤.
 /// vivid v5 voice — 사건·감정 단정 0, 헤드라인체 0, 발동조건형, 메타 노출 0.
 ///
 /// 슬롯 프레임은 알림 카피의 일부로 직접 노출된다(title 의 슬롯 접두 + body
@@ -72,8 +72,8 @@ class SlotFrame {
         return const SlotFrame(
           titlePrefixKo: '오후 — ',
           titlePrefixEn: 'Afternoon — ',
-          actionAnchorKo: '오후부터 결이 한 번 바뀌어요. 안에서 확인해요.',
-          actionAnchorEn: 'The grain shifts from here — check inside.',
+          actionAnchorKo: '오후부터 한 번 달라지는 부분, 안에서 확인해요.',
+          actionAnchorEn: 'Things shift a notch from here — check inside.',
           seedSalt: 211,
         );
       case NotificationSlot.evening:

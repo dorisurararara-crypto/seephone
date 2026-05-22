@@ -742,7 +742,7 @@ abstract class AppL10n {
   /// No description provided for @settingsNotifSlotsHint.
   ///
   /// In en, this message translates to:
-  /// **'Pick the times of day you want — morning, afternoon, evening. Each one reads with a different grain'**
+  /// **'Pick the times of day you want — morning, afternoon, evening. Each one reads a little differently'**
   String get settingsNotifSlotsHint;
 
   /// No description provided for @settingsNotifSlotMorning.
@@ -772,7 +772,7 @@ abstract class AppL10n {
   /// No description provided for @settingsNotifSlotAfternoonDesc.
   ///
   /// In en, this message translates to:
-  /// **'Where the grain shifts after noon'**
+  /// **'What changes after noon'**
   String get settingsNotifSlotAfternoonDesc;
 
   /// No description provided for @settingsNotifSlotEveningDesc.

@@ -339,7 +339,7 @@ class AppL10nKo extends AppL10n {
 
   @override
   String get settingsNotifSlotsHint =>
-      '아침·오후·저녁 중 받고 싶은 시간대만 골라요. 시간대마다 풀이 결이 달라요';
+      '아침·오후·저녁 중 받고 싶은 시간대만 골라요. 시간대마다 다른 풀이가 와요';
 
   @override
   String get settingsNotifSlotMorning => '아침';
@@ -354,7 +354,7 @@ class AppL10nKo extends AppL10n {
   String get settingsNotifSlotMorningDesc => '하루를 시작하기 전 미리보기';
 
   @override
-  String get settingsNotifSlotAfternoonDesc => '오후부터 결이 바뀌는 지점';
+  String get settingsNotifSlotAfternoonDesc => '오후부터 달라지는 부분 짚기';
 
   @override
   String get settingsNotifSlotEveningDesc => '하루 마무리 + 내일 살짝';

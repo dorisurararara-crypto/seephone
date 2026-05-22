@@ -357,7 +357,7 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get settingsNotifSlotsHint =>
-      'Pick the times of day you want — morning, afternoon, evening. Each one reads with a different grain';
+      'Pick the times of day you want — morning, afternoon, evening. Each one reads a little differently';
 
   @override
   String get settingsNotifSlotMorning => 'Morning';
@@ -373,8 +373,7 @@ class AppL10nEn extends AppL10n {
       'A preview before the day gets going';
 
   @override
-  String get settingsNotifSlotAfternoonDesc =>
-      'Where the grain shifts after noon';
+  String get settingsNotifSlotAfternoonDesc => 'What changes after noon';
 
   @override
   String get settingsNotifSlotEveningDesc =>
