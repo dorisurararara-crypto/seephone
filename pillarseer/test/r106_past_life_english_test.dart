@@ -381,7 +381,7 @@ void main() {
   // $userName/$celebName 만 허용.
   group('R108 ② Sprint 9 — story_arcs_en longform', () {
     // 영어판 장편 집필 완료 관계. Sprint 9 가 채울 때마다 추가.
-    const enLongformWritten = <String>{'wonjin', 'dohwa'};
+    const enLongformWritten = <String>{'wonjin', 'dohwa', 'yeokma'};
     // 영어 본문은 한국어보다 글자 수가 길다 — floor 를 KO(5000)와 동일하게 둔다.
     const enCharFloor = 5000;
     final hangulOrHanzi = RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ一-鿿]');
