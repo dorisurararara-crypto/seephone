@@ -1,16 +1,12 @@
 // Pillar Seer — 일일 알림 토글 상태 provider.
 // Round 76 — 사용자 알림 시간 (hour, minute) state + SharedPreferences 영속.
-// Round 77 sprint 7 — 알림 톤 (adult/mz) state + SharedPreferences 영속.
 // R108 ④ — 하루 1회 → 3 고정 슬롯(아침/오후/저녁). 마스터 토글 + 슬롯별 설정.
 //   notifyHour/notifyMinute 는 아침 슬롯 시간으로 derive (caller 하위호환).
+// R109 — 알림 톤(어른/중·고생) state·setTone 제거 (死기능).
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/saju_result.dart';
-import '../services/notification_pool_service.dart';
 import '../services/notification_service.dart';
-
-const _kPrefsTone = 'app.notif.tone';
 
 class NotificationToggle {
   /// 마스터 토글 — 권한 + 전체 on/off. OFF 면 어떤 슬롯도 안 울린다.
@@ -19,13 +15,11 @@ class NotificationToggle {
 
   /// R108 — 3 고정 슬롯 설정. 항상 3 entry (아침/오후/저녁).
   final Map<NotificationSlot, SlotConfig> slots;
-  final NotificationTone tone;
 
   const NotificationToggle({
     required this.enabled,
     required this.permissionGranted,
     required this.slots,
-    this.tone = NotificationTone.adult,
   });
 
   /// 디폴트 — 마스터 OFF, 슬롯 디폴트(아침 ON 08:00 / 오후 OFF / 저녁 OFF).
@@ -63,13 +57,11 @@ class NotificationToggle {
     bool? enabled,
     bool? permissionGranted,
     Map<NotificationSlot, SlotConfig>? slots,
-    NotificationTone? tone,
   }) {
     return NotificationToggle(
       enabled: enabled ?? this.enabled,
       permissionGranted: permissionGranted ?? this.permissionGranted,
       slots: slots ?? this.slots,
-      tone: tone ?? this.tone,
     );
   }
 }
@@ -86,38 +78,7 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
     final enabled = await NotificationService.isMasterEnabled();
     // R108 — 슬롯 로드(내부에서 기존 단일 알림 사용자 1회 마이그레이션).
     final slots = await NotificationService.loadSlots();
-    // Round 77 sprint 7 — 알림 톤 영속 로드.
-    final prefs = await SharedPreferences.getInstance();
-    final toneRaw = prefs.getString(_kPrefsTone) ?? 'adult';
-    final tone =
-        toneRaw == 'mz' ? NotificationTone.mz : NotificationTone.adult;
-    state = state.copyWith(enabled: enabled, slots: slots, tone: tone);
-  }
-
-  /// Round 77 sprint 7 — 알림 톤 설정 (adult/mz). 즉시 reschedule (enabled 시).
-  Future<void> setTone({
-    required NotificationTone tone,
-    required String pushTitle,
-    required String pushBody,
-    String? day60ji,
-    bool useKo = false,
-    SajuResult? saju,
-  }) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        _kPrefsTone, tone == NotificationTone.mz ? 'mz' : 'adult');
-    state = state.copyWith(tone: tone);
-    if (state.enabled) {
-      await NotificationService.scheduleSlots(
-        title: pushTitle,
-        body: pushBody,
-        slots: state.slots,
-        day60ji: day60ji,
-        useKo: useKo,
-        saju: saju,
-        tone: tone,
-      );
-    }
+    state = state.copyWith(enabled: enabled, slots: slots);
   }
 
   /// 마스터 토글 ON — 권한 요청 후 enabled 슬롯 전부 schedule.
@@ -140,7 +101,6 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
       day60ji: day60ji,
       useKo: useKo,
       saju: saju,
-      tone: state.tone,
     );
     await NotificationService.setMasterEnabled(true);
     state = state.copyWith(enabled: true, permissionGranted: true);
@@ -192,7 +152,6 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
         day60ji: day60ji,
         useKo: useKo,
         saju: saju,
-        tone: state.tone,
       );
     }
   }
@@ -243,7 +202,6 @@ class NotificationNotifier extends Notifier<NotificationToggle> {
       day60ji: day60ji,
       useKo: useKo,
       saju: saju,
-      tone: state.tone,
     );
   }
 }

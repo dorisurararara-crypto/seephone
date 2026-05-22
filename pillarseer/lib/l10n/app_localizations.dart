@@ -2149,30 +2149,6 @@ abstract class AppL10n {
   /// **'Share again'**
   String get resultShareAgain;
 
-  /// No description provided for @settingsNotificationTone.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification tone'**
-  String get settingsNotificationTone;
-
-  /// No description provided for @settingsNotificationToneHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Adult tone vs. teen tone — daily vocabulary'**
-  String get settingsNotificationToneHint;
-
-  /// No description provided for @settingsNotificationToneAdult.
-  ///
-  /// In en, this message translates to:
-  /// **'Adult'**
-  String get settingsNotificationToneAdult;
-
-  /// No description provided for @settingsNotificationToneMz.
-  ///
-  /// In en, this message translates to:
-  /// **'Teen'**
-  String get settingsNotificationToneMz;
-
   /// No description provided for @profileShareCard.
   ///
   /// In en, this message translates to:

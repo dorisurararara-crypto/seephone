@@ -2,16 +2,18 @@
 //
 // codex audit ground truth:
 //  - 기본 알림 풀(pickFor)은 사주 계산 없이 날짜+일주 seed 로 문구만 픽.
-//    _koPool/_enPool/_koPoolMz/_enPoolMz 에 사건·결과 단정 문구 잔존 위험.
+//    _koPool/_enPool 에 사건·결과 단정 문구 잔존 위험.
 //  - 미스터리 알림(pickMystery, R106 P2b)은 실제 hapChungType 계산 기반.
 //
 // R107 #3 fix:
 //  ① deep/mystery 가 기본 경로 — 사주가 있으면 notification_service 의
 //     scheduleDaily 가 항상 pickMystery(한국어) / pickDeep(영문, 계산 기반)를
 //     쓰고, pickFor 기본 풀은 saju == null 일 때만 last-resort fallback.
-//  ② 기본 풀 4종(_koPool/_enPool/_koPoolMz/_enPoolMz) — 사건·결과 단정 0.
+//  ② 기본 풀 2종(_koPool/_enPool) — 사건·결과 단정 0.
 //     v5 voice = 조건형("~하면"), 경향형("~기 쉬워요/tends to/can/may").
 //  ③ 회귀 — R76 pickDeep / R106 pickMystery 동작 보존.
+//
+// R109 — 알림 톤(어른/중·고생) 死기능 제거. fallback 풀은 단일(어른) 풀만.
 
 import 'dart:io';
 
@@ -138,20 +140,17 @@ void main() {
       '丙子', '丁丑', '戊寅', '己卯', '庚辰', '辛巳',
     ];
 
-    // 한국어 기본 풀 50 entry 를 전수 추출 (adult + mz).
+    // 한국어/영문 기본 풀 50 entry 를 전수 추출 (R109 — 단일 풀).
     Set<String> collectAll() {
       final out = <String>{};
-      for (final tone in NotificationTone.values) {
-        for (final d in sampleDay60ji) {
-          for (var off = 0; off < 60; off++) {
-            final p = NotificationPoolService.pickFor(
-              date.add(Duration(days: off)),
-              d,
-              tone: tone,
-            );
-            out.add(p.ko);
-            out.add(p.en);
-          }
+      for (final d in sampleDay60ji) {
+        for (var off = 0; off < 60; off++) {
+          final p = NotificationPoolService.pickFor(
+            date.add(Duration(days: off)),
+            d,
+          );
+          out.add(p.ko);
+          out.add(p.en);
         }
       }
       return out;
@@ -281,21 +280,19 @@ void main() {
       }
     });
 
-    test('pickFor 결정성 — 같은 입력 100회 동일 (adult/mz)', () {
-      for (final tone in NotificationTone.values) {
-        String? pk;
-        String? pe;
-        for (var i = 0; i < 100; i++) {
-          final p = NotificationPoolService.pickFor(date, '丙戌', tone: tone);
-          pk ??= p.ko;
-          pe ??= p.en;
-          expect(p.ko, pk);
-          expect(p.en, pe);
-        }
+    test('pickFor 결정성 — 같은 입력 100회 동일', () {
+      String? pk;
+      String? pe;
+      for (var i = 0; i < 100; i++) {
+        final p = NotificationPoolService.pickFor(date, '丙戌');
+        pk ??= p.ko;
+        pe ??= p.en;
+        expect(p.ko, pk);
+        expect(p.en, pe);
       }
     });
 
-    test('pickFor — adult/mz 풀 모두 50 entry, 비어있지 않음', () {
+    test('pickFor — 풀 50 entry, 비어있지 않음', () {
       // pickFor idx 가 0~49 전부 도달하면 풀 50 entry 모두 검사됨.
       final koSeen = <String>{};
       final enSeen = <String>{};

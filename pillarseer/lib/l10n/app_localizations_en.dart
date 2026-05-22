@@ -1121,19 +1121,6 @@ class AppL10nEn extends AppL10n {
   String get resultShareAgain => 'Share again';
 
   @override
-  String get settingsNotificationTone => 'Notification tone';
-
-  @override
-  String get settingsNotificationToneHint =>
-      'Adult tone vs. teen tone — daily vocabulary';
-
-  @override
-  String get settingsNotificationToneAdult => 'Adult';
-
-  @override
-  String get settingsNotificationToneMz => 'Teen';
-
-  @override
   String get profileShareCard => 'Share my saju card';
 
   @override

@@ -1068,18 +1068,6 @@ class AppL10nKo extends AppL10n {
   String get resultShareAgain => '다시 공유';
 
   @override
-  String get settingsNotificationTone => '알림 톤';
-
-  @override
-  String get settingsNotificationToneHint => '어른 톤 / 중고생 톤 — 일상 단어 선택';
-
-  @override
-  String get settingsNotificationToneAdult => '어른';
-
-  @override
-  String get settingsNotificationToneMz => '중고생';
-
-  @override
   String get profileShareCard => '내 사주 카드 공유';
 
   @override

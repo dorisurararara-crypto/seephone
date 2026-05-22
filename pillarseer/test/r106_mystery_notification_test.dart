@@ -385,10 +385,6 @@ void main() {
       final p = NotificationPoolService.pickFor(date, '丙戌');
       expect(p.ko.isNotEmpty, isTrue);
       expect(p.en.isNotEmpty, isTrue);
-      final mz = NotificationPoolService.pickFor(
-        date, '丙戌', tone: NotificationTone.mz,
-      );
-      expect(mz.ko.isNotEmpty, isTrue);
     });
   });
 

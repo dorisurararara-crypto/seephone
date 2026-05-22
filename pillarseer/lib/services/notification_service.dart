@@ -234,7 +234,6 @@ class NotificationService {
     bool useKo = false,
     int daysAhead = 30,
     SajuResult? saju, // 있으면 미스터리/deep 계산 본문.
-    NotificationTone tone = NotificationTone.adult,
   }) async {
     await ensureInitialized();
     // 전체 슬롯 ID 공간 전수 cancel (0..95) — 슬롯 OFF→ON / 시간 변경 모두 커버.
@@ -286,7 +285,6 @@ class NotificationService {
         useKo: useKo,
         daysAhead: daysAhead,
         saju: saju,
-        tone: tone,
         useMystery: useMystery,
         daily: daily,
         now: now,
@@ -320,7 +318,6 @@ class NotificationService {
     required bool useKo,
     required int daysAhead,
     required SajuResult? saju,
-    required NotificationTone tone,
     required bool useMystery,
     required DailyService daily,
     required tz.TZDateTime now,
@@ -394,7 +391,6 @@ class NotificationService {
         final picked = NotificationPoolService.pickFor(
           DateTime(target.year, target.month, target.day),
           day60ji,
-          tone: tone,
           slot: slot,
         );
         pickedTitle = useKo ? picked.titleKo : picked.titleEn;

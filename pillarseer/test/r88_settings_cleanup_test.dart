@@ -8,9 +8,10 @@
 //   B1 — settings_screen 안에서 두 l10n key 참조 0 + router push 호출 0
 //   B2 — router 의 `/settings/saju-calc-basis` route + InfoSajuCalcScreen import 0
 //   B3 — info_saju_calc_screen.dart 파일은 dead code 로 보존 (sprint 10 까지 유지)
-//   B4 — 다른 설정 항목 변경 0 (_NotifSwitch / _NotifSlotsSection / _NotifToneToggle /
+//   B4 — 다른 설정 항목 변경 0 (_NotifSwitch / _NotifSlotsSection /
 //        _TrueSunSwitch / _LateNightZasiSwitch / _LinkRow / 약관 / 개인정보 / 연락 보존)
 //        — R108 ④ 에서 _NotifTimePicker → _NotifSlotsSection (3 슬롯) 교체.
+//        — R109 에서 _NotifToneToggle(어른/중·고생) 死기능 제거.
 //   B5 — settingsTrust 그룹 안 _InfoRow 가 3 개 (Data / Offline / DeleteAll) 로 남음
 
 import 'dart:io';
@@ -54,16 +55,20 @@ void main() {
     });
 
     test('B4 — 다른 설정 항목 변경 0', () {
-      // 알림 그룹 (_NotifSwitch / _NotifToneToggle).
+      // 알림 그룹 (_NotifSwitch / _NotifSlotsSection).
       // R108 ④ — _NotifTimePicker(단일 알림 picker)는 _NotifSlotsSection
       // (아침/오후/저녁 3 슬롯)으로 교체됨. 알림 그룹 자체는 보존.
       for (final widget in const [
         '_NotifSwitch',
         '_NotifSlotsSection',
-        '_NotifToneToggle',
       ]) {
         expect(settings.contains(widget), isTrue, reason: '$widget 보존');
       }
+      // R109 — 알림 톤(어른/중·고생) toggle 死기능 제거. 잔존 0.
+      expect(settings.contains('_NotifToneToggle'), isFalse,
+          reason: 'R109 — _NotifToneToggle 제거됨');
+      expect(settings.contains('NotificationTone'), isFalse,
+          reason: 'R109 — NotificationTone 참조 제거됨');
       // 사주 옵션 그룹 (R83 P1-B 자시 / 진태양시 switch).
       for (final widget in const [
         '_TrueSunSwitch',

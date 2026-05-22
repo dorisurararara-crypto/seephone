@@ -1,8 +1,7 @@
 // Pillar Seer — 일일 알림 문구 풀 (50+ 변주).
 // 매일 8시 푸시가 같은 문구면 끄게 됨. 50개 풀에서 일자별 deterministic 선택.
 // Round 76 sprint 6 — pickDeep 신규: 사용자 사주 + 오늘 일진 기반 calibrate.
-// Round 77 sprint 7 — MZ 톤 50 ko/en 풀 추가 + tone selector.
-//   기본 'adult' = 기존 50 ko/en. 'mz' = 신규 50 ko/en (단톡/야자/시험/최애/굿즈/짝꿍/엄마).
+// R109 — 알림 톤(어른/중·고생) 死기능 제거. fallback 풀은 단일(어른) 풀만 유지.
 // Round 106 P2b — pickMystery 신규: 사주 미스터리형 알림 (design doc §6).
 //   오늘 일진 글자를 신비하게 던지는 title + body 2줄(글자×차트 관계 + 행동).
 //   topic-aware (P1 TopicSelector 가 고른 주제 반영). 7회 중 1회 기능 발견 훅.
@@ -20,9 +19,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../models/saju_result.dart';
 import 'notification_service.dart' show NotificationSlot;
 import 'today_event_service.dart';
-
-/// 알림 톤 — 어른 (기본) / MZ 중고생.
-enum NotificationTone { adult, mz }
 
 /// R108 ④ — 슬롯별 사주 풀이 프레임. 같은 날이라도 슬롯마다 카피 톤이 다르다.
 ///  - 아침 = "오늘 하루 미리보기" — 하루를 앞에 두고 미리 짚어주는 톤.
@@ -283,130 +279,21 @@ class NotificationPoolService {
     '오늘 밤 잠이 내일의 답을 얼마나 또렷하게 할지 좌우할 수 있어요.',
   ];
 
-  // Round 77 sprint 7 — MZ 중고생 톤 50개 풀 (단톡/야자/시험/최애/굿즈/짝꿍/엄마/학원).
-  // 50개 중 ≥35개에 MZ mandate 단어 1개 이상 포함.
-  static const _koPoolMz = [
-    '단톡에서 한 마디만 더 적게 하면 오늘 하루가 가벼워질 수 있어요.',
-    '야자 끝나고 한 곡만 듣고 자기. 그게 내일 컨디션을 바꿀 수 있어요.',
-    '오늘은 시험 점수보다 오답 한 문제 짚는 게 더 남기 쉬워요.',
-    '최애 컴백 영상 하나는 오늘 봐도 OK. 두 개부터는 시간을 갉아먹기 쉬워요.',
-    '굿즈 충동구매는 패스. 다음 주에도 그 굿즈는 있을 가능성이 커요.',
-    '짝꿍한테 미안하다는 말이 있다면, 해 지기 전에.',
-    '학원 가는 길에 햇빛 5분. 그게 오늘 뇌의 충전이 될 수 있어요.',
-    '엄마 잔소리는 오늘 한 박자 늦게 받아도 돼요. 24시간 미루기.',
-    '콘서트 티켓팅 알람 다시 확인. 캡쳐 떠놓기.',
-    '단톡 답장 30초 쉬고. 그 침묵이 오늘 승부수가 될 수 있어요.',
-    '오늘은 친구 한 명한테 먼저 물어봐주세요. 단답이어도 OK.',
-    '야자 시작 전 물 한 잔. 졸음 한 줄이 빠질 수 있어요.',
-    '시험 직전 새 인강은 패스. 오답노트 한 번 더가 더 맞기 쉬워요.',
-    '최애 직캠 한 영상 보고 5분 스트레칭. 손이 가벼워질 수 있어요.',
-    '굿즈 정리 10분만. 책상이 풀리면 머리도 풀리기 쉬워요.',
-    '짝꿍이 오늘 좀 조용해도 캐묻지 마세요. 내일 먼저 말해줄 수 있어요.',
-    '학원 끝나고 단톡 끄고 10분만 누워요. 회복에 도움이 될 수 있어요.',
-    '엄마한테 잘 자고 한 마디. 분위기가 풀릴 수 있어요.',
-    '시험 범위 한 페이지 더 욕심내지 말기. 한 단원 정확이 더 멀리 가기 쉬워요.',
-    '오늘 단톡 음소거해도 OK. 진짜 친구는 음소거여도 챙겨주는 편이에요.',
-    '학원 셔틀에서 음악 한 곡. 그 하루치 BGM이 오늘의 배경이 될 수 있어요.',
-    '최애 신곡 첫 소절 5번 반복은 패스. 한 번 들으면 더 박히기 쉬워요.',
-    '굿즈 사진 친구한테 자랑 한 번. 자랑할 줄 아는 게 덕질의 기본.',
-    '짝꿍이 오늘 노트 빌려달라 하면 OK. 다음 주엔 네가 빌릴 수 있어요.',
-    '엄마가 오늘 야식 사주면 한 마디 고맙다고. 그게 오늘의 동전이 될 수 있어요.',
-    '단톡에 답장 안 한 사람 한 명. 오늘 안에 가볍게 한 줄.',
-    '시험 망친 친구 위로는 길게 안 해도 돼요. "괜찮아" 한 줄이 가장 따뜻하기 쉬워요.',
-    '야자 30분만 진지하게. 나머지는 흘려도 OK.',
-    '최애 멤버 생일 D-Day. 메모에 한 줄 적어두기.',
-    '굿즈 박스 정리하면서 사진 한 장. 인스타 스토리 1초.',
-    '짝꿍이랑 한 끼는 같이 먹기. 매점 빵 한 개여도 OK.',
-    '학원 빠지고 싶은 날엔, 한 강의만 듣고 가도 그게 너의 승리예요.',
-    '엄마가 시험 점수 물어보면 정직하게 한 번. 그 뒤가 더 편해지기 쉬워요.',
-    '오늘 단톡 안 읽음 3개. 자기 전에 한 줄씩만 답해도 충분해요.',
-    '시험 직전 1시간은 새 문제 패스. 풀었던 문제 다시 보는 게 더 맞기 쉬워요.',
-    '최애 컴백 무대 직캠 한 번. 그 다음은 공부.',
-    '굿즈 알림 어플 알람 끄고 30분. 너의 시간이 돌아올 수 있어요.',
-    '짝꿍한테 오늘 한 번만 더 웃어줘요. 분위기가 풀릴 수 있어요.',
-    '엄마 잔소리 한 번은 그냥 듣기. 그 다음 한 번은 짧게 답해도 OK.',
-    '학원 가방에서 안 쓰는 책 한 권 빼기. 어깨가 가벼워질 수 있어요.',
-    '단톡에서 누군가 욕하면 너는 한 줄 침묵. 그 침묵이 너의 자리.',
-    '야자 마지막 10분에 내일 시간표 한 번. 내일 아침이 가벼워질 수 있어요.',
-    '오늘 최애 노래로 알람 바꿔보기. 내일 아침이 살아날 수 있어요.',
-    '굿즈 친구한테 빌려달라면 OK. 그 친구도 네 굿즈 빌려줄 수 있어요.',
-    '시험 끝나고 짝꿍한테 한 마디. "수고했어" 그 한 줄로 충분하기 쉬워요.',
-    '학원 가는 길 6분 일찍. 그 6분이 오늘의 여유가 될 수 있어요.',
-    '엄마한테 오늘 한 마디. "오늘 잘 잤어?" 그게 분위기를 풀 수 있어요.',
-    '단톡에서 답장 늦은 친구한테 답 재촉은 패스. 내일 한 줄로 올 수 있어요.',
-    '시험 직전 단톡 알람 끄기. 5분만이라도.',
-    '최애 직캠 본 후 한 줄 메모. 그 곡이 너의 색으로 자리잡을 수 있어요.',
-  ];
-
-  static const _enPoolMz = [
-    'One fewer reply in the groupchat can keep today lighter.',
-    "After school night, one song then sleep. That can shift tomorrow's condition.",
-    'A wrong answer reviewed tends to beat one more test point today.',
-    "One fancam of your bias is fine. Two can start eating your time.",
-    'Skip the impulse merch buy. That photocard will likely be there next week.',
-    'If you owe your seatmate a sorry, say it before sunset.',
-    'Five minutes of sunlight on the way to cram class can charge your brain.',
-    "Taking mom's nagging one beat late today is OK. Defer 24h.",
-    'Recheck your concert ticket alarm. Screenshot it.',
-    "Wait 30s before replying in the groupchat. That silence can be today's win.",
-    'Ask one friend something first today. A short reply is OK.',
-    'Glass of water before school night session can mean one yawn fewer.',
-    "Before the test, skip the new lecture. Another pass at your notes tends to win.",
-    'One bias fancam then a five-minute stretch can leave your hands lighter.',
-    'Ten minutes to tidy the merch shelf — desk loose, head tends to loosen too.',
-    "If your seatmate is quiet today, don't push. They may speak first tomorrow.",
-    'After cram class, mute the groupchat and lie down 10 min. It can help recovery.',
-    "Tell mom good night. The mood can soften.",
-    "Don't push for one extra chapter before the exam. One clean chapter tends to win.",
-    'Muting the groupchat today is OK. Real friends still tend to find you.',
-    'One song on the cram-class shuttle can be your background today.',
-    "Don't loop the first line of the new bias track 5x. Once tends to land deeper.",
-    'Brag your merch photo to one friend. Bragging is core to stanning.',
-    "If seatmate borrows your notebook today, OK. You may borrow next week.",
-    "If mom buys a late-night snack, say thanks once. That can be today's coin.",
-    'One person you ghosted in the groupchat — a short line today.',
-    "Don't long-comfort a friend who failed an exam. 'It's okay' tends to be warmest.",
-    'Thirty minutes of focused school-night study. The rest can drift.',
-    "Bias member's birthday today. Note one line.",
-    'One snap of your merch box while tidying. One-second IG story.',
-    'Share one meal with your seatmate. A bakery bun is fine.',
-    'On days you want to skip cram class, attending one lecture is still your win.',
-    'If mom asks about your test score, be honest once. After that tends to get lighter.',
-    'Three unread in the groupchat. One line each before bed is enough.',
-    'In the hour before the exam, skip new problems. Re-read what you solved.',
-    'One bias comeback stage fancam. Then back to study.',
-    "Mute merch-app alarms for 30 min — your time can return.",
-    'Smile at your seatmate one more time today. The mood can soften.',
-    "Listen to mom's nag once today. The next one you can reply short.",
-    'Pull one unused book from your school bag. Shoulders can feel lighter.',
-    "If someone trash-talks in the groupchat, your one line of silence is your seat.",
-    "Last 10 min of school night, check tomorrow's schedule. Morning can feel lighter.",
-    'Switch your alarm to a bias track. Tomorrow morning can feel more alive.',
-    "If a friend asks to borrow your merch, OK. They may lend you theirs too.",
-    'After the test, one line to your seatmate. "Good job" tends to carry it all.',
-    'Six minutes early to cram class. That six can be your slack today.',
-    "Ask mom one thing today: 'Did you sleep well?' The mood can open.",
-    "Don't chase a slow groupchat replier. Their line may come tomorrow.",
-    'Mute the groupchat right before the test. Even five minutes.',
-    "Note one line after the bias fancam. That track can become your signature.",
-  ];
-
   /// 사용자 사주 (dayPillar) + 날짜 seed → deterministic 풀 선택.
   /// 같은 사용자 같은 날 → 항상 같은 문구 (알림 일관성).
-  /// Round 77 sprint 7 — tone 파라미터 추가 (기본 adult, mz 선택 시 MZ 풀).
   ///
   /// R107 #3 — 이 풀은 **사주 미상 last-resort fallback 전용**.
   /// 사용자 사주가 있으면 notification_service 가 항상 pickDeep(영문) /
   /// pickMystery(한국어) — 실제 일진 계산 기반 — 을 쓴다. 그래도 이 풀의
   /// 모든 문구는 v5 voice(조건형·경향형 — 사건/결과 단정 0)로 유지한다.
   /// R108 ④ — fallback 알림 기본 title (슬롯 접두가 앞에 붙는다).
+  /// R109 — 알림 톤(어른/중·고생) 제거. 단일(어른) 풀만 사용.
   static const String _fallbackTitleKo = 'Pillar Seer · 오늘의 한 줄';
   static const String _fallbackTitleEn = 'Pillar Seer · Your day, in one line';
 
   static ({String en, String ko, String titleKo, String titleEn}) pickFor(
     DateTime date,
     String day60ji, {
-    NotificationTone tone = NotificationTone.adult,
     NotificationSlot slot = NotificationSlot.morning,
   }) {
     final frame = SlotFrame.of(slot);
@@ -414,8 +301,8 @@ class NotificationPoolService {
     final seed = (date.year * 366 + date.month * 31 + date.day) ^
         day60ji.codeUnits.fold<int>(0, (a, b) => a + b) ^
         frame.seedSalt;
-    final koPool = tone == NotificationTone.mz ? _koPoolMz : _koPool;
-    final enPool = tone == NotificationTone.mz ? _enPoolMz : _enPool;
+    final koPool = _koPool;
+    final enPool = _enPool;
     final idx = (seed % enPool.length).abs();
     return (
       en: enPool[idx],
