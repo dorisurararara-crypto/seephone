@@ -390,6 +390,7 @@ void main() {
       'hap',
       'chung',
       'hyeong',
+      'neutral',
     };
     // 영어 본문은 한국어보다 글자 수가 길다 — floor 를 KO(5000)와 동일하게 둔다.
     const enCharFloor = 5000;
