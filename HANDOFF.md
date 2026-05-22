@@ -68,6 +68,27 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-05-23 새벽 (Mac 자율 밤샘 → 사용자) — pillarseer R110 수익화 B안 + App Store 정식 출시 준비 완료 🌙
+
+사용자 mandate: "알아서 앱스토어에 출시까지 해놔줘. 나만 할 수 있는 일은 검색 검증 후 큐로."
+
+**자율로 끝낸 것 (Sprint 0~5, codex 검수 전부 GO):**
+- 프리미엄팩 IAP 수익화 — non-consumable 단건 `com.ganziman.pillarseer.premium_pack` ₩5,900/$4.99. 무료 5카테고리·전생1편·오늘운세·궁합·신년총평·셀럽Top30 ↔ 프리미엄 12카테고리·전생66편·신년12개월·궁합심화. 본문 절단 없이 카테고리 단위 잠금 + paywall bottom sheet.
+- ASC: 메타데이터 ko/en(설명·키워드·부제·이름) / 카테고리 라이프스타일+엔터테인먼트 / 연령등급 4+ / IAP(id 6772283210, 로컬·가격·175 territory).
+- 빌드 **1.0.0+75** ASC VALID, App Store version 1.0.0 에 attach 완료.
+- 법무 사이트 GitHub Pages 라이브 (pillarseer-legal: privacy/support/terms).
+- flutter test 1638/1638, analyze 0. App Review **미제출** (사용자 큐 대기).
+
+**⚠️ 사용자 아침 큐 (진짜 사용자만 가능 — 검색으로 확정):**
+1. App Privacy: ASC 웹 > Pillar Seer > App Privacy > "데이터 미수집" > Publish (API 미지원, 2분)
+2. App Store 스크린샷: 실기기 캡처 (시뮬 금지 + 목업 거절리스크 → 실기기가 정답)
+3. IAP 심사 스크린샷 1장(paywall 화면) — 캡처만 주면 Claude 가 API 업로드
+4. 위 완료 후 최종 Submit for Review
+
+상세 = 메모리 `project_pillarseer_round_110.md`. "이어서" 한마디면 복원.
+
+---
+
 ### 2026-05-20 (Mac → 다음 세션) — pillarseer R105 완료 + **1.0.0+66 외부 베타 APPROVED** ✅
 
 **현재 빌드**: 1.0.0+66 (R105) — ASC VALID + Beta Review APPROVED, ganzitester 외부 베타 라이브
