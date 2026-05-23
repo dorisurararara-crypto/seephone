@@ -28,6 +28,14 @@ metadata:
 - ✅ Sprint 5 — 1.0.0+75 빌드·altool 업로드·ASC build #75 VALID·App Store version attach 완료 (commit 2b68dad). App Review 미제출.
 - flutter test 1638/1638 pass / analyze 0 (info만)
 
+## ✅ 2026-05-23 오전 — App Store 정식 제출 완료
+- 시뮬 iPhone 17 Pro Max(1320×2868) 7장 + iPad Pro 13" 시도(좌표 안 맞아 포기) → iPhone-only 재빌드 결정
+- 1.0.0+76 = TARGETED_DEVICE_FAMILY "1,2" → "1" rebuild + altool 업로드 + VALID
+- ASC 작업 모두 자동: app screenshots 7×ko+7×en-US 업로드 / IAP review screenshot(paywall) 업로드 / 앱 가격 Free 설정
+- **최종 Submit for Review 통과 — appStoreState=WAITING_FOR_REVIEW (submission id=34f8f7fe-98a4-4126-abab-198267a880e3)**. 24-48h 후 Apple 결과 통보.
+- 사용자 직접 작업 완료: App Privacy "데이터 미수집" 공개, 콘텐츠 권한 "아니요"
+- 시뮬 좌표 매핑 공식 (cliclick): x_mac = sim.x + (px/dev_w)*sim_w / y_mac = sim.y + ~28 + (py/dev_h)*(sim_h-28). Pro Max 매핑 OK / iPad 매핑 어긋남 → 재빌드 우회
+
 ## ASC 상태 (2026-05-23 새벽 — 자율 작업 완료분)
 - App Store version 1.0.0 id `2084f5bc-9577-427d-b6d7-0420cb750b31` PREPARE_FOR_SUBMISSION.
 - 빌드 **1.0.0+75** (build id `edea57e3-d624-4250-bdb7-6ec28e8487b1`) VALID, version 에 attach 완료. usesNonExemptEncryption=false (export compliance 자동).
