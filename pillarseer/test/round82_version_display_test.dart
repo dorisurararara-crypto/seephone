@@ -95,11 +95,11 @@ void main() {
         reason: 'pubspec dependency 누락',
       );
       // pubspec version 자체 — ship target. ⚠️ 매 ship 마다 갱신 필요한 핀(트랩).
-      // R96 '1.0.0+57' → ... → R108 '1.0.0+73' → R110 '1.0.0+75'. version bump 시 이 핀도 같이 수정.
+      // R96 '1.0.0+57' → ... → R108 '1.0.0+73' → R110 '1.0.0+75' → R110 +76 iPhone-only rebuild. version bump 시 이 핀도 같이 수정.
       expect(
-        pubspecSrc.contains('version: 1.0.0+75'),
+        pubspecSrc.contains('version: 1.0.0+76'),
         isTrue,
-        reason: 'pubspec version (1.0.0+75) 자체 변경 — R110 ship delivery 불일치',
+        reason: 'pubspec version (1.0.0+76) 자체 변경 — R110 iPhone-only rebuild 불일치',
       );
     });
 
