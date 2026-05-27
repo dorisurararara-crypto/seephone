@@ -46,3 +46,4 @@ app.*.map.json
 
 # R90 backup of life_paragraphs.json (R89 baseline 1180 prefix)
 assets/data/life_paragraphs.json.bak.*
+android/key.properties
