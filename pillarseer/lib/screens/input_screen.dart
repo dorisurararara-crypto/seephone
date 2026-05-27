@@ -725,7 +725,10 @@ class _InputScreenState extends ConsumerState<InputScreen> {
           ));
 
       if (mounted) {
-        context.go('/result');
+        // R111 — 입력 직후 첫 화면을 "더 보기"(K-pop 셀럽 사주·전생·음악처방·최애궁합)
+        // 탭으로 보낸다. Apple 4.3(a) 포화 카테고리 거절 회피용 차별화 surface
+        // 노출 + 사용자 mandate ("입력하면 더보기탭이 켜지게").
+        context.go('/reports');
       }
     } catch (e, st) {
       debugPrint('calculateSaju failed: $e\n$st');
