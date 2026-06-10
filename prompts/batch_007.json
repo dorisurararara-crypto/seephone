@@ -1,0 +1,90 @@
+{
+  "batch_id": "007",
+  "requested_by": "Mac-buddha",
+  "requested_at": "2026-06-10T18:10:00+09:00",
+  "target_app": "buddha-app (~/devapp/buddha-app)",
+  "purpose": "불경 앱 그래픽: (1) 염주 비즈 스프라이트 6종(투명배경 — '염주가 진짜 모인다' 연출용) (2) 수행 길(플랜) 카드 배경 4종 (3) 명상/공유 배경 2종. 디자인 컨셉 = 감지금니(紺紙金泥): 깊은 남빛 종이 #0E1118 + 금니 라인. 과장·키치 금지, 절제된 고급감.",
+  "model_suggestion": "sdxl 또는 flux — 투명배경 항목은 생성 후 배경 제거(rembg) 포함 부탁",
+  "size_default": "1024x1024",
+  "negative_prompt_default": "text, letters, watermark, signature, photo, photorealistic human, face, low quality, blurry, kawaii, cartoon, cute, sticker, neon, oversaturated",
+  "items": [
+    {
+      "id": "jeomju_bead_bodhi",
+      "category": "jeomju_bead_sprite",
+      "size": "512x512",
+      "transparent": true,
+      "prompt": "single bodhi seed prayer bead, warm brown wood texture with natural mottled pattern, soft top-down studio light, subtle gold rim light, centered, isolated object, clean alpha background, painterly illustration, elegant, muted tones"
+    },
+    {
+      "id": "jeomju_bead_ebony",
+      "category": "jeomju_bead_sprite",
+      "size": "512x512",
+      "transparent": true,
+      "prompt": "single ebony wood prayer bead, deep near-black brown with silky sheen, soft top-down light, subtle gold rim light, centered, isolated object, clean alpha background, painterly illustration, elegant"
+    },
+    {
+      "id": "jeomju_bead_crystal",
+      "category": "jeomju_bead_sprite",
+      "size": "512x512",
+      "transparent": true,
+      "prompt": "single clear quartz crystal prayer bead, translucent with soft inner glow, faint gold reflection, centered, isolated object, clean alpha background, painterly illustration, serene, muted"
+    },
+    {
+      "id": "jeomju_bead_lotus",
+      "category": "jeomju_bead_sprite",
+      "size": "512x512",
+      "transparent": true,
+      "prompt": "single lotus seed prayer bead, pale ivory with fine speckles, soft light, subtle warm rim, centered, isolated object, clean alpha background, painterly illustration, calm and humble"
+    },
+    {
+      "id": "jeomju_guru_bead",
+      "category": "jeomju_bead_sprite",
+      "size": "512x512",
+      "transparent": true,
+      "prompt": "guru bead of a buddhist mala with small gold cap and short dark red tassel, elegant, centered, isolated object, clean alpha background, painterly illustration, understated luxury"
+    },
+    {
+      "id": "jeomju_knot",
+      "category": "jeomju_bead_sprite",
+      "size": "512x512",
+      "transparent": true,
+      "prompt": "small traditional korean decorative knot (maedeup) in deep red silk thread with tiny gold accent, centered, isolated object, clean alpha background, painterly illustration"
+    },
+    {
+      "id": "plan_card_30d",
+      "category": "plan_card_bg",
+      "size": "1440x810",
+      "prompt": "horizontal banner background: deep indigo-navy handmade paper texture (#0E1118 tone), single elegant thin gold ink brush stroke of a crescent moon arc upper right, vast empty space for text, goryeo buddhist manuscript aesthetic, gold leaf on indigo paper, minimal, quiet, no text"
+    },
+    {
+      "id": "plan_card_180d",
+      "category": "plan_card_bg",
+      "size": "1440x810",
+      "prompt": "horizontal banner background: deep indigo-navy handmade paper texture, delicate thin gold ink line drawing of a mountain ridge silhouette along bottom edge, vast empty space, goryeo manuscript gold-on-indigo aesthetic, minimal, serene, no text"
+    },
+    {
+      "id": "plan_card_365d",
+      "category": "plan_card_bg",
+      "size": "1440x810",
+      "prompt": "horizontal banner background: deep indigo-navy handmade paper texture, single thin gold ink enso circle slightly off-center left, vast empty space, goryeo manuscript gold-on-indigo aesthetic, minimal, profound, no text"
+    },
+    {
+      "id": "plan_card_7d",
+      "category": "plan_card_bg",
+      "size": "1440x810",
+      "prompt": "horizontal banner background: deep indigo-navy handmade paper texture, seven tiny gold ink dots in a gentle ascending arc lower left, vast empty space, goryeo manuscript gold-on-indigo aesthetic, minimal, hopeful, no text"
+    },
+    {
+      "id": "bg_meditation_lotus",
+      "category": "scene_bg",
+      "size": "1080x1920",
+      "prompt": "vertical background: deep indigo-navy paper texture, faint gold ink line drawing of a single lotus flower rising from still water at bottom, enormous quiet empty space above, goryeo buddhist manuscript gold-on-indigo, extremely minimal, meditative, no text"
+    },
+    {
+      "id": "bg_share_bodhileaf",
+      "category": "share_card_bg",
+      "size": "1080x1920",
+      "prompt": "vertical background: deep indigo-navy handmade paper texture, one delicate gold ink bodhi leaf outline drifting upper third, vast empty space, goryeo manuscript gold-on-indigo aesthetic, minimal, contemplative, no text"
+    }
+  ]
+}
