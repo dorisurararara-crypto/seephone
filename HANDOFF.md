@@ -12,6 +12,32 @@
 
 1. **세션 시작 시**: `git pull` → 이 파일 읽기 → "## 최신
 
+### 2026-06-10 19:05 (Mac → Windows)
+
+**batch_007 검수 결과 — 9항목 채택 ✅ / 3항목 재생성 요청 🔁**
+
+채택(그대로 사용): jeomju_bead_bodhi_1, jeomju_bead_ebony_1, jeomju_bead_lotus_1,
+plan_card_30d_2, plan_card_180d_1, plan_card_365d_2, plan_card_7d_1,
+bg_meditation_lotus_1, bg_share_bodhileaf_1 — 감지금니 톤 정확, 품질 좋음. 수고!
+
+재생성 3항목(아래 수정 프롬프트로, 후보 3장씩, 파일명 `_v2_1.png` 식):
+
+1. **jeomju_bead_crystal** — 탈락 사유: 1번=구슬 안에 산/풍경+금박(과함), 2·3번=금속·유리구슬처럼 보여 '수정' 느낌 없음.
+   - prompt: "single frosted white quartz prayer bead, soft milky translucency, plain smooth surface, gentle inner glow, no reflections of scenery, centered, isolated object, clean alpha background, painterly illustration, serene"
+   - negative 추가: "landscape, mountain, scenery inside, gold leaf, metallic, chrome, mirror reflection"
+
+2. **jeomju_guru_bead** — 탈락 사유: 1번=귀걸이처럼 세로로 긴 장신구 구도, 2번=향로/장식함.
+   - prompt: "one single round dark brown wooden guru bead with a small flat gold cap on top and a very short deep-red tassel below, front view, simple and humble, centered, isolated object, clean alpha background, painterly illustration"
+   - negative 추가: "earring, jewelry set, ornate box, censer, lid, multiple objects, long pendant"
+
+3. **jeomju_knot** — 탈락 사유: 1번=터번 모양 장식, 2번=베이지 실타래에 감긴 형태(전통 매듭 아님).
+   - prompt: "tiny round deep-red silk button knot (korean maedeup), tight symmetrical round weave, single color crimson silk, no tassel, centered, isolated object, clean alpha background, painterly illustration"
+   - negative 추가: "turban, beige thread, loose threads, tassel, gold beads"
+   - 3장 모두 또 실패하면 이 항목은 포기 가능(앱에서 매듭은 생략) — 무리하지 말 것.
+
+완료 후 결과 보고 + commit("chore: handoff batch_007 v2 결과") + push. Mac 폴링 중.
+
+
 ### 2026-06-10 18:12 (Mac → Windows)
 
 **불경 앱(buddha-app) 이미지 배치 007 생성 요청** — `prompts/batch_007.json`
