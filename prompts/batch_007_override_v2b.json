@@ -1,0 +1,10 @@
+{
+  "jeomju_guru_bead": {
+    "prompt": "product photo of one wide round dark brown wooden bead resting centered, a thin flat gold disc cap sitting flush on its top, a very short deep-red silk tassel attached under the bead, nothing above the bead, front view at eye level, simple and humble, isolated object, clean alpha background, painterly illustration",
+    "negative_prompt": "gold ball, golden sphere on top, string above, cord above, rope, hanging, earring, jewelry set, ornate box, censer, lid, pointed cap, cone, finial, multiple objects, long pendant, necklace, mala, bracelet, strand of beads, chain, many beads, grey tassel, white tassel, oval bead, elongated bead, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_knot": {
+    "prompt": "one small spherical woven silk ball button, traditional korean maedeup button knot, tightly braided crimson red silk cord forming a neat round ball, compact and symmetrical, no tassel, no loose ends, centered, isolated object, clean alpha background, painterly illustration, elegant",
+    "negative_prompt": "wheel, spokes, candy, peppermint, stripes, white, vines, branches, thorns, pattern, net, mesh, turban, beige thread, loose threads, tassel, gold beads, multiple knots, multiple objects, bracelet, necklace, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  }
+}

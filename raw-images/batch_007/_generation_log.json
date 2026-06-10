@@ -9,17 +9,37 @@
     "offload": false,
     "negative": true
   },
-  "candidates": 1,
+  "candidates": 3,
   "items": [
     {
-      "id": "bg_share_bodhileaf",
+      "id": "jeomju_guru_bead",
       "candidate": 1,
-      "file": "raw-images/batch_007/bg_share_bodhileaf_1.png",
-      "size": "1080x1920",
-      "gen_size": "1088x1920",
-      "seed": 61101,
-      "transparent": false,
-      "seconds": 22.4
+      "file": "raw-images/batch_007/jeomju_guru_bead_v2_1.png",
+      "size": "512x512",
+      "gen_size": "1024x1024",
+      "seed": 90101,
+      "transparent": true,
+      "seconds": 7.8
+    },
+    {
+      "id": "jeomju_guru_bead",
+      "candidate": 2,
+      "file": "raw-images/batch_007/jeomju_guru_bead_v2_2.png",
+      "size": "512x512",
+      "gen_size": "1024x1024",
+      "seed": 90102,
+      "transparent": true,
+      "seconds": 7.4
+    },
+    {
+      "id": "jeomju_guru_bead",
+      "candidate": 3,
+      "file": "raw-images/batch_007/jeomju_guru_bead_v2_3.png",
+      "size": "512x512",
+      "gen_size": "1024x1024",
+      "seed": 90103,
+      "transparent": true,
+      "seconds": 7.4
     }
   ]
 }

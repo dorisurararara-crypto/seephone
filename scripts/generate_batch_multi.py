@@ -64,6 +64,7 @@ def main():
     ap.add_argument("--candidates", type=int, default=3)
     ap.add_argument("--only", default="", help="comma-separated item ids to generate")
     ap.add_argument("--suffix", default="", help="appended after candidate number, e.g. _v2 -> id_1_v2.png")
+    ap.add_argument("--version-tag", default="", help="inserted before candidate number, e.g. v2 -> id_v2_1.png")
     ap.add_argument("--seed-base", type=int, default=42)
     ap.add_argument("--prompt-override", default="", help="JSON file {id: {prompt, negative_prompt}} overrides for regen rounds")
     args = ap.parse_args()
@@ -107,8 +108,9 @@ def main():
         scale = 2 if max(w, h) <= 512 else 1
         gw, gh = round16(w * scale), round16(h * scale)
 
+        vtag = f"_{args.version_tag}" if args.version_tag else ""
         for c in range(1, args.candidates + 1):
-            out_path = out_dir / f"{iid}_{c}{args.suffix}.png"
+            out_path = out_dir / f"{iid}{vtag}_{c}{args.suffix}.png"
             seed = args.seed_base + i * 100 + c
             print(f"[{i}/{len(items)}] {iid} cand {c}/{args.candidates}  gen={gw}x{gh} -> {w}x{h}  seed={seed}", flush=True)
             t1 = time.time()

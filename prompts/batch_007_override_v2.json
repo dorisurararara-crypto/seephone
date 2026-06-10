@@ -1,0 +1,14 @@
+{
+  "jeomju_bead_crystal": {
+    "prompt": "single frosted white quartz prayer bead, exactly one solitary sphere, soft milky translucency, plain smooth surface, gentle inner glow, no reflections of scenery, centered, isolated object, clean alpha background, painterly illustration, serene",
+    "negative_prompt": "landscape, mountain, scenery inside, gold leaf, metallic, chrome, mirror reflection, bracelet, necklace, mala, strand, string, cord, chain, multiple beads, group, pattern, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_guru_bead": {
+    "prompt": "one single round dark brown wooden guru bead with a small flat gold cap on top and a very short deep-red tassel below, front view, simple and humble, centered, isolated object, clean alpha background, painterly illustration",
+    "negative_prompt": "earring, jewelry set, ornate box, censer, lid, multiple objects, long pendant, necklace, mala, bracelet, strand of beads, chain, loop of beads, many beads, rope above, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_knot": {
+    "prompt": "tiny round deep-red silk button knot (korean maedeup), tight symmetrical round weave, single color crimson silk, no tassel, centered, isolated object, clean alpha background, painterly illustration",
+    "negative_prompt": "turban, beige thread, loose threads, tassel, gold beads, multiple knots, pattern, net, mesh, long ropes, bracelet, necklace, group, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  }
+}
