@@ -80,6 +80,29 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-10 21:00 (Windows → Mac)
+
+**batch_007 1차 결과 — `raw-images/batch_007/` 33장 push 완료, 검수 요청** 🔍
+
+모델: SDXL base 1.0 (steps 30, cfg 7, negative prompt 적용). 비즈는 1024 생성 → 512 다운스케일, 투명화는 rembg(isnet-general-use) + 알파 검증(테두리 alpha=0 확인) 완료. 스크립트 `scripts/generate_batch_multi.py` 신규 (후보 N장·negative·rembg·--only·--prompt-override 지원), 사용한 보정 프롬프트는 `prompts/batch_007_override_*.json` 3개로 커밋해둠.
+
+**항목별 후보 현황 (총 33장):**
+
+| 항목 | 후보 | 비고 |
+|---|---|---|
+| jeomju_bead_bodhi/ebony/crystal/lotus | 각 3장 | 단일 비즈 OK. 원 프롬프트는 SDXL이 전부 팔찌/염주 전체로 그려서 "exactly one solitary sphere" + negative(bracelet/mala/strand)로 재작성해 통과시킴 |
+| jeomju_guru_bead | 2장 | 최난항목. "guru bead/mala" 단어가 염주 전체를 끌고 와서 "jewelry component" 식으로 우회. _1이 최선(금캡+홍색 태슬 단일), _2는 태슬이 갈색 |
+| jeomju_knot | 3장 | 단일 매듭 OK. 다만 전통 매듭(국화매듭류)보다 서양식 장식매듭에 가까움 — 탈락 시 참고 |
+| plan_card_30d / 180d | 각 3장 | 남빛+금니 톤 안정적. 30d_2,3 / 180d_2 추천 |
+| plan_card_365d | 3장 | "가는 선 엔소"가 어려움: _1 이중루프, _2 동심원 원반(두꺼움), _3 엔소형이나 하단 안개. 전부 보정 프롬프트 결과물 |
+| plan_card_7d | 2장 | ⚠️ "정확히 점 7개 호 배열"은 SDXL로 4회 시도 모두 실패(점 필드/부채꼴/문자패널 출현). 현재 후보는 근사치(곡선 스트로크+점 소수). 7개 점이 필수면 깨끗한 남지 배경 위에 점만 후처리(PIL)로 박는 방식 제안 — 회신 주면 바로 처리 |
+| bg_meditation_lotus | 3장 | _1,_2 신규(금니 연꽃 선화, 톤 우수), _3은 1차 생성분 중 합격작 |
+| bg_share_bodhileaf | 2장 | ⚠️ "잎 1장만"이 계속 금/남 반전되거나 잎이 커짐(4회 시도). _1은 잎 여러 장(우아하나 스펙과 다름), _2는 잎 테두리 프레임+중앙 여백(공유카드 텍스트 영역으로는 오히려 적합할 수도). 단일 잎이 필수면 365d처럼 후처리 합성 제안 |
+
+**스타일 노트**: 카드/배경의 남빛이 #0E1118보다 약간 밝은 네이비(#1a2238 부근)로 나오는 경향. 확정 후 앱 삽입 시 레벨 보정으로 어둡게 내리는 것도 방법. 재생성 요청 시 항목 id + 탈락 사유만 적어주면 negative/프롬프트에 반영해 _v2로 올림. (Windows는 폴링 루프 대기 중)
+
+---
+
 ### 2026-05-23 새벽 (Mac 자율 밤샘 → 사용자) — pillarseer R110 수익화 B안 + App Store 정식 출시 준비 완료 🌙
 
 사용자 mandate: "알아서 앱스토어에 출시까지 해놔줘. 나만 할 수 있는 일은 검색 검증 후 큐로."

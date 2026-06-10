@@ -1,0 +1,18 @@
+{
+  "plan_card_365d": {
+    "prompt": "horizontal banner background: deep dark indigo-navy handmade paper texture (#0E1118 tone), one single hairline-thin gold ink enso circle drawn in a single delicate brush stroke, slightly off-center left, the circle is an unfilled thin outline only, vast empty dark space everywhere else, goryeo buddhist manuscript gold-on-indigo aesthetic, extremely minimal, profound, no text",
+    "negative_prompt": "thick stroke, solid disc, filled circle, gold disc, multiple circles, concentric rings, gold field, bright background, beige, light colors, busy, ornate, text, letters, watermark, signature, photo, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "plan_card_7d": {
+    "prompt": "horizontal banner background: deep dark indigo-navy handmade paper texture (#0E1118 tone), exactly seven small round gold leaf dots arranged in one gentle ascending arc in the lower left area, nothing else, vast empty dark space, goryeo buddhist manuscript gold-on-indigo aesthetic, extremely minimal, hopeful, no text",
+    "negative_prompt": "field of dots, scattered dots everywhere, hundreds of dots, sparkling texture, border, frame, vignette, beige sky, light background, gold hill, landscape, busy, text, letters, watermark, signature, photo, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "bg_meditation_lotus": {
+    "prompt": "vertical background: deep dark indigo-navy handmade paper texture (#0E1118 tone), faint hairline-thin gold ink line drawing of one single lotus flower rising from still water at the very bottom edge, enormous quiet empty dark space above, goryeo buddhist manuscript gold-on-indigo, extremely minimal, meditative, no text",
+    "negative_prompt": "calligraphy, seal, stamp, red seal, signature, text, letters, clouds, beige, cream, light background, pale, washed out, fog, many leaves, busy, photo, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "bg_share_bodhileaf": {
+    "prompt": "vertical background: deep dark indigo-navy handmade paper texture (#0E1118 tone), one single delicate thin gold ink bodhi leaf outline drifting in the upper third, nothing else, vast empty dark space, goryeo buddhist manuscript gold-on-indigo aesthetic, minimal, contemplative, no text",
+    "negative_prompt": "many leaves, branch, plant, vines, ornate border, frame, gold background, inverted colors, beige, light background, busy pattern, text, letters, watermark, signature, photo, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  }
+}

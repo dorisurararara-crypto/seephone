@@ -1,0 +1,10 @@
+{
+  "plan_card_7d": {
+    "prompt": "dark indigo-navy handmade paper texture filling the entire frame edge to edge (#0E1118 tone), horizontal banner, a short gentle ascending arc of seven small round gold leaf dots in the lower left quadrant, nothing else on the dark paper, vast empty dark space, goryeo buddhist manuscript gold-on-indigo aesthetic, extremely minimal, no text",
+    "negative_prompt": "beige, cream, white background, light background, gold background, fan shape, rainbow, arch, field of dots, scattered dots everywhere, sparkling texture, border, frame, vignette, landscape, busy, text, letters, watermark, signature, photo, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "bg_share_bodhileaf": {
+    "prompt": "dark indigo-navy handmade paper texture filling the entire frame edge to edge (#0E1118 tone), vertical background, one small delicate bodhi leaf drawn in thin gold ink outline floating in the upper third of the dark paper, nothing else, vast empty dark navy space, goryeo buddhist manuscript gold ink on indigo paper, minimal, contemplative, no text",
+    "negative_prompt": "gold background, beige background, light background, inverted colors, large leaf filling frame, dark leaf silhouette, navy leaf on gold, many leaves, branch, vines, border, frame, busy pattern, text, letters, watermark, signature, photo, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "batch_id": "007",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false,
+    "negative": true
+  },
+  "candidates": 1,
+  "items": [
+    {
+      "id": "bg_share_bodhileaf",
+      "candidate": 1,
+      "file": "raw-images/batch_007/bg_share_bodhileaf_1.png",
+      "size": "1080x1920",
+      "gen_size": "1088x1920",
+      "seed": 61101,
+      "transparent": false,
+      "seconds": 22.4
+    }
+  ]
+}

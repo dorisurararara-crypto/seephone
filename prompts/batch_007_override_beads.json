@@ -1,0 +1,26 @@
+{
+  "jeomju_bead_bodhi": {
+    "prompt": "macro product shot of one single round bodhi seed bead, exactly one solitary sphere, warm brown wood texture with natural mottled pattern, tiny thread hole, soft top-down studio light, subtle gold rim light, centered, isolated on plain uniform light grey studio background, painterly illustration, elegant, muted tones",
+    "negative_prompt": "bracelet, necklace, mala, strand, string, cord, rope, thread, chain, multiple beads, two beads, group, many, pattern, scattered, repeated objects, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_bead_ebony": {
+    "prompt": "macro product shot of one single round ebony wood bead, exactly one solitary sphere, deep near-black brown with silky sheen, tiny thread hole, soft top-down light, subtle gold rim light, centered, isolated on plain uniform light grey studio background, painterly illustration, elegant",
+    "negative_prompt": "bracelet, necklace, mala, strand, string, cord, rope, thread, chain, multiple beads, two beads, group, many, pattern, scattered, repeated objects, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_bead_crystal": {
+    "prompt": "macro product shot of one single round clear quartz crystal bead, exactly one solitary sphere, translucent with soft inner glow, faint gold reflection, centered, isolated on plain uniform light grey studio background, painterly illustration, serene, muted",
+    "negative_prompt": "bracelet, necklace, mala, strand, string, cord, rope, thread, chain, hanging, pendant, multiple beads, two beads, group, many, pattern, scattered, ornament cap, metal frame, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_bead_lotus": {
+    "prompt": "macro product shot of one single round lotus seed bead, exactly one solitary sphere, pale ivory surface with fine speckles, tiny thread hole, soft light, subtle warm rim light, centered, isolated on plain uniform light grey studio background, painterly illustration, calm and humble",
+    "negative_prompt": "bracelet, necklace, mala, strand, string, cord, rope, thread, chain, multiple beads, two beads, group, many, pattern, scattered, flower, petals, repeated objects, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_guru_bead": {
+    "prompt": "macro product shot of one single guru bead of a buddhist mala, exactly one dark wooden bead with a small ornate gold cap on top and one short dark red silk tassel hanging directly below it, no string above, centered, isolated on plain uniform light grey studio background, painterly illustration, understated luxury",
+    "negative_prompt": "necklace, bracelet, mala strand, long string, cord above, chain, multiple beads, many beads, loop, circle of beads, group, pattern, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  },
+  "jeomju_knot": {
+    "prompt": "macro product shot of one single traditional korean decorative knot (maedeup), exactly one compact ornamental knot tied from deep red silk thread with a tiny gold accent bead, centered, isolated on plain uniform light grey studio background, painterly illustration, elegant",
+    "negative_prompt": "multiple knots, several knots, pattern, net, mesh, rope tangle, long ropes, strands crossing frame, bracelet, necklace, group, repeated objects, text, watermark, kawaii, cartoon, cute, sticker, neon, oversaturated, low quality, blurry"
+  }
+}
