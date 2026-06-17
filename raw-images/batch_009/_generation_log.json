@@ -1,0 +1,165 @@
+{
+  "batch_id": "009",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false,
+    "negative": true
+  },
+  "candidates": 3,
+  "items": [
+    {
+      "id": "companion_seed",
+      "candidate": 1,
+      "file": "raw-images/batch_009/companion_seed_v2_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9601,
+      "transparent": false,
+      "seconds": 7.4
+    },
+    {
+      "id": "companion_seed",
+      "candidate": 2,
+      "file": "raw-images/batch_009/companion_seed_v2_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9602,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_seed",
+      "candidate": 3,
+      "file": "raw-images/batch_009/companion_seed_v2_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9603,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_sprout",
+      "candidate": 1,
+      "file": "raw-images/batch_009/companion_sprout_v2_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9701,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_sprout",
+      "candidate": 2,
+      "file": "raw-images/batch_009/companion_sprout_v2_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9702,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_sprout",
+      "candidate": 3,
+      "file": "raw-images/batch_009/companion_sprout_v2_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9703,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_monk",
+      "candidate": 1,
+      "file": "raw-images/batch_009/companion_monk_v2_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9801,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_monk",
+      "candidate": 2,
+      "file": "raw-images/batch_009/companion_monk_v2_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9802,
+      "transparent": false,
+      "seconds": 7.1
+    },
+    {
+      "id": "companion_monk",
+      "candidate": 3,
+      "file": "raw-images/batch_009/companion_monk_v2_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9803,
+      "transparent": false,
+      "seconds": 7.1
+    },
+    {
+      "id": "companion_bloom",
+      "candidate": 1,
+      "file": "raw-images/batch_009/companion_bloom_v2_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9901,
+      "transparent": false,
+      "seconds": 7.1
+    },
+    {
+      "id": "companion_bloom",
+      "candidate": 2,
+      "file": "raw-images/batch_009/companion_bloom_v2_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9902,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "companion_bloom",
+      "candidate": 3,
+      "file": "raw-images/batch_009/companion_bloom_v2_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9903,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "badge_complete",
+      "candidate": 1,
+      "file": "raw-images/batch_009/badge_complete_v2_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 10001,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "badge_complete",
+      "candidate": 2,
+      "file": "raw-images/batch_009/badge_complete_v2_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 10002,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "badge_complete",
+      "candidate": 3,
+      "file": "raw-images/batch_009/badge_complete_v2_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 10003,
+      "transparent": false,
+      "seconds": 7.0
+    }
+  ]
+}

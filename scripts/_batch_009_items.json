@@ -1,0 +1,101 @@
+{
+  "batch_id": "009",
+  "items": [
+    {
+      "id": "course_node_done",
+      "prompt": "single completed lesson node icon, a perfect circle fully filled with warm gold-leaf ink (#C9A24B to #E7C873), a clean minimal check mark inside rendered as gentle sumi-e brush stroke in silver ink (#9AA3B8), centered on deep indigo ground #0E1118, korean sagyeong gold-leaf painterly texture, soft inner glow only, generous negative space around the circle, matte ink wash, flat icon composition, 1:1 square, vector-clean silhouette with hand-painted gold-leaf fill",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, cluttered, busy, text, watermark, blurry, lowres, deformed, harsh shadow, rainbow, partial fill, half empty circle, progress arc",
+      "size": "1024x1024"
+    },
+    {
+      "id": "course_node_current",
+      "prompt": "current active lesson node icon, a circle outlined in luminous gold ink (#E7C873) with a soft pulsing golden halo radiating outward as a separate glow layer, hollow center on deep indigo ground #0E1118, sumi-e ink wash painterly, gentle breathing aura, korean geumbak gold-leaf accents, glow rendered soft and diffuse so it can sit on its own layer, generous negative space, matte not glossy, 1:1 square, calm meditative beacon",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, cluttered, busy, text, watermark, blurry, lowres, deformed, harsh shadow, rainbow, hard rim light, filled center, check mark",
+      "size": "1024x1024"
+    },
+    {
+      "id": "course_node_locked",
+      "prompt": "locked lesson node icon, a circle drawn only with a thin muted navy-indigo outline (#1a2030 over #0E1118) with subtle silver ink (#9AA3B8) edge, a small simple padlock symbol centered, dim and quiet, no gold fill, sumi-e minimal brush, korean ink-wash painterly, very restrained, generous negative space, matte, dormant feeling, 1:1 square",
+      "negative_prompt": "neon, fluorescent, gold fill, bright gold, glow, halo, pure metallic, chrome, glossy, photoreal, 3d render, buddha face, human face, cluttered, busy, text, watermark, blurry, lowres, deformed, rainbow, check mark, glowing",
+      "size": "1024x1024"
+    },
+    {
+      "id": "course_trophy",
+      "prompt": "course completion reward illustration, a serene golden stupa (sari-tap reliquary tower) standing upon an open lotus blossom, rendered in gold-leaf ink (#C9A24B to #E7C873) with silver ink (#9AA3B8) detail lines, on deep indigo ground #0E1118, korean sagyeong x sumi-e x geumbak painterly, soft ambient gold glow, symbolic and minimal not ornate, generous negative space, matte ink wash, balanced centered composition, 1:1 square, sense of arrival and peace",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, realistic temple photo, cluttered, busy, text, watermark, blurry, lowres, deformed, harsh shadow, rainbow, ornate clutter, gemstones, jewels",
+      "size": "1024x1024"
+    },
+    {
+      "id": "companion_seed",
+      "prompt": "tiny meditation companion creature stage 1, a small sprouting seed with a single tender green-tinged sprout, drawn as a rounded baby-schema form with the simplest hint of a sleepy little monk-child face suggested only by two soft dots and a calm curve (no detailed face), warm gold-leaf ink (#C9A24B to #E7C873) outline with silver ink (#9AA3B8) accents, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly, extremely restrained and cute-minimal, generous negative space, matte ink wash, 1:1 square. CHARACTER CONSISTENCY: this is stage 1 of a 4-stage growing companion (seed to sprout to little monk to bloom) — keep identical art style, same gold/silver ink palette, same rounded baby-schema proportions, same minimal two-dot expression so all four stages read as the SAME character growing",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, detailed human face, realistic eyes, cluttered, busy, text, watermark, blurry, lowres, deformed, extra limbs, harsh shadow, rainbow, scary, overdetailed face, mature features",
+      "size": "1024x1024"
+    },
+    {
+      "id": "companion_sprout",
+      "prompt": "tiny meditation companion creature stage 2, a young curled lotus leaf and a small closed bud emerging, rounded baby-schema form with the simplest sleepy little monk-child hint (two soft dots, calm curve, no detailed face), warm gold-leaf ink (#C9A24B to #E7C873) outline with silver ink (#9AA3B8) accents, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly, restrained cute-minimal, slightly larger and a touch more open than the seed stage, generous negative space, matte ink wash, 1:1 square. CHARACTER CONSISTENCY: this is stage 2 of the same 4-stage growing companion (seed, SPROUT, little monk, bloom) — identical art style, same gold/silver ink palette, same rounded baby-schema proportions, same minimal two-dot expression as stage 1 so it reads as the SAME character grown a little",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, detailed human face, realistic eyes, cluttered, busy, text, watermark, blurry, lowres, deformed, extra limbs, harsh shadow, rainbow, scary, overdetailed face, mature features, fully bloomed flower",
+      "size": "1024x1024"
+    },
+    {
+      "id": "companion_monk",
+      "prompt": "tiny meditation companion creature stage 3, a small seated baby monk-child (dongja) with hands together in gentle gassho prayer, rounded baby-schema body, bald little head, the simplest serene expression (two soft dots and a calm curve, no detailed realistic face), warm gold-leaf ink (#C9A24B to #E7C873) robe outline with silver ink (#9AA3B8) accents, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly, restrained cute-minimal, generous negative space, matte ink wash, 1:1 square. CHARACTER CONSISTENCY: this is stage 3 of the same 4-stage growing companion (seed, sprout, LITTLE MONK, bloom) — identical art style, same gold/silver ink palette, same rounded baby-schema proportions and minimal two-dot expression as stages 1-2 so it reads as the SAME character now grown into a little monk",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, detailed human face, realistic eyes, adult monk, cluttered, busy, text, watermark, blurry, lowres, deformed, extra limbs, harsh shadow, rainbow, scary, overdetailed face, mature features, hair",
+      "size": "1024x1024"
+    },
+    {
+      "id": "companion_bloom",
+      "prompt": "tiny meditation companion creature stage 4 final, a small seated baby monk-child (dongja) in gentle gassho prayer resting at the heart of a fully open radiant lotus blossom, soft golden bloom-glow petals around, rounded baby-schema, simplest serene two-dot expression (no detailed face), warm gold-leaf ink (#C9A24B to #E7C873) with silver ink (#9AA3B8) accents, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly, restrained but joyful, generous negative space, matte ink wash, soft particle motes of light, 1:1 square. CHARACTER CONSISTENCY: this is stage 4 final of the same 4-stage growing companion (seed, sprout, little monk, BLOOM) — identical art style, same gold/silver ink palette, same rounded baby-schema proportions and minimal two-dot expression as stages 1-3 so it reads as the SAME character at full bloom",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, detailed human face, realistic eyes, adult monk, cluttered, busy, text, watermark, blurry, lowres, deformed, extra limbs, harsh shadow, rainbow, scary, overdetailed face, mature features, hair, garish petals",
+      "size": "1024x1024"
+    },
+    {
+      "id": "breathing_orb",
+      "prompt": "breathing exercise focus orb, a perfectly round luminous golden lotus-moon disc with a soft expanding aura, suggesting both a full moon and an open lotus, warm gold-leaf ink (#C9A24B to #E7C873) with silver ink (#9AA3B8) halo rim, soft diffuse glow layer for inhale-expansion animation, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly, perfectly centered, very calm and symmetrical, generous negative space, matte ink wash, breathing meditation aid, 1:1 square",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, cluttered, busy, text, watermark, blurry, lowres, deformed, harsh shadow, rainbow, hard rim light, off-center, asymmetric, jagged glow",
+      "size": "1024x1024"
+    },
+    {
+      "id": "lotus_bloom",
+      "prompt": "celebration lotus in full bloom, a fully open golden lotus flower viewed from slightly above, petals rendered in gold-leaf ink (#C9A24B to #E7C873) with silver ink (#9AA3B8) vein detail, soft rising golden light particles and motes around it, on deep indigo ground #0E1118, korean sagyeong x sumi-e x geumbak painterly, joyful but elegant and restrained, soft ambient glow, generous negative space, matte ink wash, centered composition, 1:1 square, sense of accomplishment and gentle festivity",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, realistic flower photo, cluttered, busy, text, watermark, blurry, lowres, deformed, harsh shadow, rainbow, garish, confetti, plastic flower",
+      "size": "1024x1024"
+    },
+    {
+      "id": "emotion_card_anxiety",
+      "prompt": "emotion situation chip cover for anxiety, a minimal abstract symbol of rippling concentric water waves rendered as a few delicate gold-ink (#C9A24B to #E7C873) line strokes, very thin and restrained, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly line art, lots of empty calm space, matte ink wash, horizontal card composition 4:3 aspect ratio, symbol set slightly off-center with room for a label, quiet and contemplative",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy, photoreal, 3d render, buddha face, human face, literal anxious person, cluttered, busy, text, watermark, blurry, lowres, deformed, rainbow, thick heavy lines, filled shapes, square aspect",
+      "size": "1152x864"
+    },
+    {
+      "id": "emotion_card_anger",
+      "prompt": "emotion situation chip cover for anger, a minimal abstract symbol of a single contained flame rendered as a few delicate gold-ink (#C9A24B to #E7C873) brush line strokes, calm and stylized not aggressive, thin and restrained, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly line art, lots of empty calm space, matte ink wash, horizontal card composition 4:3 aspect ratio, symbol slightly off-center with room for a label, quiet contemplative tone",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy, photoreal, 3d render, buddha face, human face, literal angry person, fire photo, cluttered, busy, text, watermark, blurry, lowres, deformed, rainbow, thick heavy lines, filled shapes, square aspect, aggressive",
+      "size": "1152x864"
+    },
+    {
+      "id": "emotion_card_attachment",
+      "prompt": "emotion situation chip cover for attachment, a minimal abstract symbol of an endless knot motif rendered as a few delicate interlaced gold-ink (#C9A24B to #E7C873) line strokes, thin and restrained, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly line art, lots of empty calm space, matte ink wash, horizontal card composition 4:3 aspect ratio, symbol slightly off-center with room for a label, quiet contemplative tone",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy, photoreal, 3d render, buddha face, human face, literal clinging person, rope photo, cluttered, busy, text, watermark, blurry, lowres, deformed, rainbow, thick heavy lines, filled shapes, square aspect",
+      "size": "1152x864"
+    },
+    {
+      "id": "emotion_card_impermanence",
+      "prompt": "emotion situation chip cover for impermanence, a minimal abstract symbol of a crescent moon with a few fading dots suggesting waxing-and-waning, rendered as delicate gold-ink (#C9A24B to #E7C873) line strokes, thin and restrained, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly line art, lots of empty calm space, matte ink wash, horizontal card composition 4:3 aspect ratio, symbol slightly off-center with room for a label, quiet contemplative tone",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy, photoreal, 3d render, buddha face, human face, realistic moon photo, cluttered, busy, text, watermark, blurry, lowres, deformed, rainbow, thick heavy lines, filled shapes, square aspect",
+      "size": "1152x864"
+    },
+    {
+      "id": "streak_flame",
+      "prompt": "daily streak icon, a single softly glowing votive candle flame entwined with a strand of prayer beads (yeomju mala), rendered in warm gold-leaf ink (#C9A24B to #E7C873) with silver ink (#9AA3B8) bead highlights, gentle golden ignition glow, on deep indigo ground #0E1118, korean sumi-e x geumbak painterly, restrained and warm, generous negative space, matte ink wash, centered composition, 1:1 square, sense of kept devotion and continuity",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, realistic fire photo, cluttered, busy, text, watermark, blurry, lowres, deformed, harsh shadow, rainbow, aggressive flame, big bonfire",
+      "size": "1024x1024"
+    },
+    {
+      "id": "badge_complete",
+      "prompt": "introductory course completion medal badge, a circular medallion of hammered gold-leaf (geumbak) ink (#C9A24B to #E7C873) with a single engraved (eumgak intaglio) hanja character at center, a soft ribbon ribbon-tail below in silver ink (#9AA3B8) and muted gold, on deep indigo ground #0E1118, korean sagyeong x sumi-e x geumbak painterly, the hanja shown as a clean carved relief impression not glowing, generous negative space, matte ink wash, centered composition, 1:1 square, dignified achievement token",
+      "negative_prompt": "neon, fluorescent, pure 24k metallic, chrome, glossy plastic, photoreal, 3d render, buddha face, human face, gemstones, jewels, cluttered, busy, watermark, garbled fake hanja, scrambled characters, latin text, blurry, lowres, deformed, harsh shadow, rainbow, embossed glow, plastic medal",
+      "size": "1024x1024"
+    }
+  ]
+}

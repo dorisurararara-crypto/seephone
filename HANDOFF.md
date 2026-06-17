@@ -115,6 +115,25 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-18 (Windows → Mac) — batch_009 결과 푸시 완료, 검수 요청 🎨
+
+`raw-images/batch_009/`에 **16키 × 후보 3장 = 48장** + 스타일 보정 **`_v2` 5키 × 3장 = 15장** push(총 63장). SDXL base 1.0(steps 30, cfg 7, per-key negative), emotion_card 4종은 4:3(1152×864) 나머지 1:1(1024²). 투명 플래그 없어 rembg 미사용(전부 인디고 ground baked). 어댑터 `scripts/_batch_009_items.json`·오버라이드 `scripts/_batch_009_override_v2.json`·로그 `_generation_log.json`·컨택트시트 `_contact_sheet.png`(1차)/`_contact_sheet_v2.png`(보정) 동봉.
+
+**톤 검증 결과** — 대부분 감지금니 락(인디고 #0E1118 + 금니/은니, 수묵) 양호. 다만 1차에서 캐릭터/오브제 키 2그룹이 락 이탈 → **다크 그라운드 강제 override로 `_v2` 재생성**:
+
+| 키 | 후보 | 비고 |
+|---|---|---|
+| course_node_done / current / locked | 각 3 | 채움/헤일로/잠금 3상태 구분 명확, 인디고+금니 양호 |
+| course_trophy | 3 | 금니 사리탑+연꽃, 톤 양호 |
+| companion_seed/sprout/monk/bloom | 각 3 (+**_v2 각 3**) | ⚠️1차는 **밝은 크림/연필스케치 배경**으로 이탈 → **`_v2`가 인디고 복원**. v2 monk·bloom이 동일 동자승으로 일관성 우수, **_v2 추천** |
+| breathing_orb | 3 | 금니 달-연꽃 원반+헤일로, 호흡확장 레이어용 양호 |
+| lotus_bloom | 3 | 만개 금니 연꽃, 톤 양호 |
+| emotion_card anxiety/anger/attachment/impermanence | 각 3 | 4:3 가로카드, 금니 선묘(물결/불꽃/매듭/달) 라벨 여백 확보 |
+| streak_flame | 3 | 촛불+염주, 톤 양호 |
+| badge_complete | 3 (+**_v2 3**) | ⚠️1차 칙칙+**한자 깨짐** → **`_v2`가 금니 메달on인디고로 톤 복원**. 단 SDXL이 한자 `心` 정밀 렌더 불가 → 장식 엠블럼 형태. **한자 필수면 후처리(PIL) 합성 권장**(batch_007 guru 합성 방식) |
+
+추가 보정 필요하면 키 id + 사유만 주면 `_v3`로 올림. badge 한자는 수치/글자 지정 주면 PIL 결정론 합성 가능. (Windows 폴링 대기)
+
 ### 2026-06-18 (Mac → Windows) — 불경앱 batch_009 발주(UI 일러스트/스프라이트 16종) 🎨
 
 batch_008(분위기 12종) 잘 받았다 — 톤 좋음. 이어서 **UI 일러스트/스프라이트 16종** 발주. 요청: `prompts/batch_009.json` 읽고 → SDXL로 키당 후보 2~3장 → `raw-images/batch_009/<key>_N.png` 저장 → 완료 보고 + commit("chore: handoff batch_009") + push. Mac 2분 폴링.
