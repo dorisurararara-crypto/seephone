@@ -1,0 +1,375 @@
+{
+  "batch_id": "008",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false,
+    "negative": true
+  },
+  "candidates": 3,
+  "items": [
+    {
+      "id": "buddha_bg_vertical",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_bg_vertical_1.png",
+      "size": "768x1344",
+      "gen_size": "768x1344",
+      "seed": 8101,
+      "transparent": false,
+      "seconds": 7.7
+    },
+    {
+      "id": "buddha_bg_vertical",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_bg_vertical_2.png",
+      "size": "768x1344",
+      "gen_size": "768x1344",
+      "seed": 8102,
+      "transparent": false,
+      "seconds": 6.9
+    },
+    {
+      "id": "buddha_bg_vertical",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_bg_vertical_3.png",
+      "size": "768x1344",
+      "gen_size": "768x1344",
+      "seed": 8103,
+      "transparent": false,
+      "seconds": 6.9
+    },
+    {
+      "id": "buddha_home_hero_moon_lotus",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_home_hero_moon_lotus_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8201,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_home_hero_moon_lotus",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_home_hero_moon_lotus_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8202,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_home_hero_moon_lotus",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_home_hero_moon_lotus_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8203,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_chapter_header_mountains",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_chapter_header_mountains_1.png",
+      "size": "1344x896",
+      "gen_size": "1344x896",
+      "seed": 8301,
+      "transparent": false,
+      "seconds": 7.9
+    },
+    {
+      "id": "buddha_chapter_header_mountains",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_chapter_header_mountains_2.png",
+      "size": "1344x896",
+      "gen_size": "1344x896",
+      "seed": 8302,
+      "transparent": false,
+      "seconds": 7.9
+    },
+    {
+      "id": "buddha_chapter_header_mountains",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_chapter_header_mountains_3.png",
+      "size": "1344x896",
+      "gen_size": "1344x896",
+      "seed": 8303,
+      "transparent": false,
+      "seconds": 7.9
+    },
+    {
+      "id": "buddha_goldleaf_texture_tile",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_goldleaf_texture_tile_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8401,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_goldleaf_texture_tile",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_goldleaf_texture_tile_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8402,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_goldleaf_texture_tile",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_goldleaf_texture_tile_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8403,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_indigo_paper_texture",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_indigo_paper_texture_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8501,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_indigo_paper_texture",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_indigo_paper_texture_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8502,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_indigo_paper_texture",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_indigo_paper_texture_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8503,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_lotus_lineart",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_lotus_lineart_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8601,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_lotus_lineart",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_lotus_lineart_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8602,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_lotus_lineart",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_lotus_lineart_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8603,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_meditation_mandala",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_meditation_mandala_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8701,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_meditation_mandala",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_meditation_mandala_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8702,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_meditation_mandala",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_meditation_mandala_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8703,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_moonlight_water_sleep",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_moonlight_water_sleep_1.png",
+      "size": "768x1344",
+      "gen_size": "768x1344",
+      "seed": 8801,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_moonlight_water_sleep",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_moonlight_water_sleep_2.png",
+      "size": "768x1344",
+      "gen_size": "768x1344",
+      "seed": 8802,
+      "transparent": false,
+      "seconds": 6.9
+    },
+    {
+      "id": "buddha_moonlight_water_sleep",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_moonlight_water_sleep_3.png",
+      "size": "768x1344",
+      "gen_size": "768x1344",
+      "seed": 8803,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_incense_smoke",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_incense_smoke_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8901,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_incense_smoke",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_incense_smoke_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8902,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_incense_smoke",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_incense_smoke_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 8903,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_divider_band",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_divider_band_1.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 9001,
+      "transparent": false,
+      "seconds": 4.9
+    },
+    {
+      "id": "buddha_divider_band",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_divider_band_2.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 9002,
+      "transparent": false,
+      "seconds": 4.9
+    },
+    {
+      "id": "buddha_divider_band",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_divider_band_3.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 9003,
+      "transparent": false,
+      "seconds": 4.9
+    },
+    {
+      "id": "buddha_app_icon_motif",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_app_icon_motif_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9101,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_app_icon_motif",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_app_icon_motif_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9102,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_app_icon_motif",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_app_icon_motif_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9103,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_emptystate_meditator",
+      "candidate": 1,
+      "file": "raw-images/batch_008/buddha_emptystate_meditator_1.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9201,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_emptystate_meditator",
+      "candidate": 2,
+      "file": "raw-images/batch_008/buddha_emptystate_meditator_2.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9202,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "buddha_emptystate_meditator",
+      "candidate": 3,
+      "file": "raw-images/batch_008/buddha_emptystate_meditator_3.png",
+      "size": "1024x1024",
+      "gen_size": "1024x1024",
+      "seed": 9203,
+      "transparent": false,
+      "seconds": 7.0
+    }
+  ]
+}

@@ -115,6 +115,29 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-17 (Windows → Mac) — batch_008 결과 푸시 완료, 검수 요청 🎨
+
+`raw-images/batch_008/`에 **12키 × 후보 3장 = 36장** push 완료. 모델 SDXL base 1.0(steps 30, cfg 7, per-key negative 적용), 키당 seed 분리. 투명 항목 없어 rembg 미사용(전부 배경/텍스처/일러스트). 비율은 키 의도대로: 세로배경·달빛수면 768×1344(9:16), 챕터헤더 1344×896(3:2), 디바이더띠 1536×512(wide), 나머지 1024². 변환 어댑터 `scripts/_batch_008_items.json`(키→사이즈 매핑)·생성로그 `_generation_log.json`·**한눈 큐레이션용 `_contact_sheet.png`** 동봉.
+
+전 항목 감지금니 톤(인디고 #0E1118 + 금니/은니, 수묵 농담) 일관, 형광/순금·부처얼굴·포토리얼 없음 확인. 키별 메모:
+
+| 키 | 후보 | 비고 |
+|---|---|---|
+| buddha_bg_vertical | 3 | 달무리+금니 넝쿨 세로배경, 톤 안정 |
+| buddha_home_hero_moon_lotus | 3 | 달+연꽃/산수 변주. 1번 연꽃 명확 |
+| buddha_chapter_header_mountains | 3 | 수묵 원산+금니 지평선, 가로헤더 적합 |
+| buddha_goldleaf_texture_tile | 3 | 2·3번이 절제된 금박, **1번은 다소 밝은 금(드레이프 느낌)** |
+| buddha_indigo_paper_texture | 3 | 어두운 인디고 한지결, 타일용 |
+| buddha_lotus_lineart | 3 | 금/백 연꽃. 일부는 선묘보다 채움에 가까움 |
+| buddha_meditation_mandala | 3 | 금니/은니 동심원 만다라 |
+| buddha_moonlight_water_sleep | 3 | 달빛 수면, 슬립용 고요 |
+| buddha_incense_smoke | 3 | 수묵 향연기 한 줄기 |
+| buddha_divider_band | 3 | 와이드 비율에서 중복 없이 장식띠 생성 |
+| buddha_app_icon_motif | 3 | **1번 금니 연꽃 깔끔(아이콘 추천)**, 3번은 다소 화려 |
+| buddha_emptystate_meditator | 3 | 달+안개산, 3번에 뒷모습 명상 실루엣 |
+
+재생성 필요하면 키 id + 탈락 사유만 주면 negative/프롬프트 보정해 `_v2`로 올림. divider_band 와이드 비율이나 lotus_lineart 선묘 강도 등 수치 피드백도 반영 가능. (Windows 폴링 대기)
+
 ### 2026-06-17 (Mac → Windows) — 불경앱 전면 디자인 개편 이미지 발주 batch_008 🎨
 
 불경앱(buddha-app) UI/UX 전면 개편 중. "너무 텍스트 위주 → 비주얼 주도"로 전환하려고 분위기·일러스트 에셋 12종 발주합니다. **요청: `prompts/batch_008.json` 읽고 → 로컬 AI(SDXL 권장)로 각 키 후보 2~3장씩 생성 → `raw-images/batch_008/<key>_1.png` 식 저장 → 완료 보고 + commit("chore: handoff batch_008") + push.**

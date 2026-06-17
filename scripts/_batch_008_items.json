@@ -1,0 +1,77 @@
+{
+  "batch_id": "008",
+  "items": [
+    {
+      "id": "buddha_bg_vertical",
+      "prompt": "traditional Korean Buddhist sutra illumination aesthetic, deep indigo dyed paper background hex 0E1118, faint luminous moon glow upper area, sparse gold-leaf vine filaments drifting, subtle silver ink mist, ink wash gradient, vast negative space, painterly, serene, premium dark luxury, soft glow not harsh, vertical 9:16",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, bright background, people, faces",
+      "size": "768x1344"
+    },
+    {
+      "id": "buddha_home_hero_moon_lotus",
+      "prompt": "single luminous full moon over deep indigo void, one stylized lotus rendered in fine gold-leaf line art, silver ink reflection, sumi-e ink wash, geumbak gold texture, minimalist meditative sacred, soft gold glow on indigo 0E1118, ample empty space, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, multiple objects, busy, photoreal",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_chapter_header_mountains",
+      "prompt": "distant misty mountains in monochrome ink wash, sumuk style, deep indigo tonal background, faint gold-leaf horizon line, silver mist valleys, vast emptiness, calm spiritual landscape, painterly brush, no color except subtle gold accent, horizontal 3:2",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, vivid colors, buildings, modern, people",
+      "size": "1344x896"
+    },
+    {
+      "id": "buddha_goldleaf_texture_tile",
+      "prompt": "extreme close-up of hand-applied gold leaf geumbak texture, fine crinkled metallic gold foil flakes, warm muted gold C9A24B, over dark indigo silk weave, subtle light reflection, organic irregular edges, tactile premium material, painterly, seamless tile, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, shiny plastic, perfect smooth, object",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_indigo_paper_texture",
+      "prompt": "seamless deep indigo dyed mulberry hanji paper texture, fiber grain, subtle silver ink speckles, very dark 0E1118 to 1B2030, matte soft, premium handmade paper, low contrast, tileable, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, bright, pattern, gold heavy, glossy",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_lotus_lineart",
+      "prompt": "single elegant lotus flower, fine gold-leaf line illustration, byeonsangdo Buddhist manuscript style, thin precise gold strokes on plain deep indigo, silver vine accents, symmetrical sacred minimal, painterly ink line, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, filled color, realistic flower, photo, heavy shadow",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_meditation_mandala",
+      "prompt": "abstract circular meditation mandala, concentric gold-leaf and silver ink rings on deep indigo, ink wash softness, faint glow, breathing rhythm feeling, minimal sacred geometry, dark luxury, sumi-e brush, centered, negative space, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, busy detail, faces, ornate clutter",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_moonlight_water_sleep",
+      "prompt": "calm dark indigo water surface under a pale moon, soft silver ink ripples, faint gold reflection, ink wash, nocturnal serene, minimal vast still water, painterly, deep 0E1118, gentle glow, vertical 9:16",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, bright, daytime, vivid blue, people",
+      "size": "768x1344"
+    },
+    {
+      "id": "buddha_incense_smoke",
+      "prompt": "single wisp of incense smoke as flowing ink wash, monochrome with faint gold edge, drifting upward, deep indigo void background, sumuk brush diffusion, ethereal calm minimal soft, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, fire, color, busy, object",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_divider_band",
+      "prompt": "horizontal decorative border band, fine gold-leaf vine and lotus scroll motif on deep indigo, silver ink filler vines, Goryeo sutra cover style, symmetrical thin elegant lines, premium painterly, wide banner",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, thick, vivid, 3d, cluttered",
+      "size": "1536x512"
+    },
+    {
+      "id": "buddha_app_icon_motif",
+      "prompt": "app icon, single gold-leaf lotus and crescent moon emblem centered on deep indigo gradient 0E1118 to 1B2030, geumbak texture, luminous soft gold glow, minimal sacred mark, dark luxury painterly, clean composition, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, text, busy, multiple elements, flat boring",
+      "size": "1024x1024"
+    },
+    {
+      "id": "buddha_emptystate_meditator",
+      "prompt": "lone meditating figure as a single ink wash brush silhouette seen from far behind, facing a pale moon over indigo mist mountains, sumuk minimal, faint gold horizon, vast emptiness peaceful, no facial detail, painterly, 1:1",
+      "negative_prompt": "worst quality, low quality, lowres, jpeg artifacts, watermark, signature, text, logo, username, oversaturated, neon, garish gold, fluorescent gold, plastic, photorealistic photo, stock photo, deformed, ugly, cartoon, 3d render, cluttered, busy background, buddha face close-up, face close-up, color, crowd, buddha statue front, busy",
+      "size": "1024x1024"
+    }
+  ]
+}
