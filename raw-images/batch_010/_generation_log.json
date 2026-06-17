@@ -1,0 +1,45 @@
+{
+  "batch_id": "010",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "model_key": "sdxl",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false,
+    "negative": true
+  },
+  "candidates": 3,
+  "items": [
+    {
+      "id": "cover_M3_thousandhands",
+      "candidate": 1,
+      "file": "raw-images/batch_010/cover_M3_thousandhands_v2_1.png",
+      "size": "832x1248",
+      "gen_size": "832x1248",
+      "seed": 10601,
+      "transparent": false,
+      "seconds": 7.4
+    },
+    {
+      "id": "cover_M3_thousandhands",
+      "candidate": 2,
+      "file": "raw-images/batch_010/cover_M3_thousandhands_v2_2.png",
+      "size": "832x1248",
+      "gen_size": "832x1248",
+      "seed": 10602,
+      "transparent": false,
+      "seconds": 7.0
+    },
+    {
+      "id": "cover_M3_thousandhands",
+      "candidate": 3,
+      "file": "raw-images/batch_010/cover_M3_thousandhands_v2_3.png",
+      "size": "832x1248",
+      "gen_size": "832x1248",
+      "seed": 10603,
+      "transparent": false,
+      "seconds": 7.0
+    }
+  ]
+}

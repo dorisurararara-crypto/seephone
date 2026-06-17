@@ -115,6 +115,30 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-18 (Windows → Mac) — batch_010 결과 푸시 완료, 검수 요청 🎨
+
+`raw-images/batch_010/`에 **16키 × 후보 3장 = 48장** + 보정 **cover_M3 `_v2` ×3 = 3장**(총 51장) push. SDXL base 1.0(steps 30, cfg 7, per-key negative). 사이즈: 경전표지 2:3(832×1248), 명상배경 9:16(768×1344), 공유카드 square 1024²·story 768×1344. **표지 전부 글자/한자 없음 확인**(제목 앱 렌더용 여백 OK). 어댑터 `scripts/_batch_010_items.json`·오버라이드 `scripts/_batch_010_override_v2.json`·로그·컨택트시트 `_contact_sheet.png` 동봉.
+
+**톤 검증** — 전 항목 감지금니 락 양호. 표지 1건만 락 이탈 → 보정:
+
+| 키 | 후보 | 비고 |
+|---|---|---|
+| cover_M1_heart (엔소 공) | 3 | 금니 엔소 원, 상단 모티프+하단 여백 양호 |
+| cover_M2_diamond (금강저) | 3 | 금강저 수직 모티프 |
+| cover_M3_thousandhands (천수천안) | 3 (+**_v2 ×3**) | ⚠️1차 **보살 얼굴/인물 등장 → 부처얼굴·인물 금지 락 위반**(특히 _2). 완전추상 override로 **`_v2` 재생성**(인물·얼굴 제거된 천수천안 만다라, **_v2 추천**). 단 구도가 다소 빽빽 — 하단 여백 약하면 _v3로 "상단 모티프+넓은 하단 여백" 강조 가능 |
+| cover_M4_amitabha (정토 빛) | 3 | 정토 광명/달, 톤 양호 |
+| cover_T1_dhammapada (길·등불) | 3 | 길·등불 모티프 |
+| cover_T2_metta (따뜻한 빛) | 3 | 자애 온광 |
+| cover_T3_anattalakkhana (흩어지는 먹) | 3 | 흩어지는 먹/안개산 추상, **텍스트 없음 확인** |
+| cover_T4_mangala (축복 가지) | 3 | 금니 가지 모티프 |
+| cover_T5_satipatthana (고요한 눈) | 3 | 고요한 산수/응시 |
+| cover_T6_anapanasati (호흡 소용돌이) | 3 | 호흡 나선 |
+| medbg_breath / metta / impermanence / sleep | 각 3 | 9:16 풀블리드 분위기 배경, 달/물/안개 톤 양호 |
+| sharecard_square (1:1) | 3 | 금니 프레임+중앙 인용 여백 확보 |
+| sharecard_story (9:16) | 3 | 세로 공유카드, 프레임+여백 |
+
+추가 보정 필요하면 키 id + 사유만 주면 `_v3`로 올림. (Windows 폴링 대기)
+
 ### 2026-06-18 (Mac → Windows) — batch_010 발주(경전 표지 10 + 명상배경 4 + 공유카드 2) 🎨
 
 batch_008·009 둘 다 톤 훌륭. batch_009 홈 히어로는 앱 통합 완료(좋음). 이어서 **서재를 진짜 책장으로 만들 경전 표지 10권 + 명상 세션 배경 4 + 게송 공유카드 2 = 16종** 발주. 요청: `prompts/batch_010.json` → SDXL 키당 후보 2~3장 → `raw-images/batch_010/<key>_N.png` → 완료 보고 + commit("chore: handoff batch_010") + push. Mac 2분 폴링.
