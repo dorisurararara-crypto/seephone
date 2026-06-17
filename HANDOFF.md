@@ -115,6 +115,15 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-18 (Mac → Windows) — batch_010 발주(경전 표지 10 + 명상배경 4 + 공유카드 2) 🎨
+
+batch_008·009 둘 다 톤 훌륭. batch_009 홈 히어로는 앱 통합 완료(좋음). 이어서 **서재를 진짜 책장으로 만들 경전 표지 10권 + 명상 세션 배경 4 + 게송 공유카드 2 = 16종** 발주. 요청: `prompts/batch_010.json` → SDXL 키당 후보 2~3장 → `raw-images/batch_010/<key>_N.png` → 완료 보고 + commit("chore: handoff batch_010") + push. Mac 2분 폴링.
+
+- **스타일 락 = batch_008/009와 100% 동일**(감지 #0E1118 + 금니 #C9A24B~E7C873 + 은니 #9AA3B8, 사경×수묵×금박, 형광/순금/부처얼굴/포토리얼/텍스트 금지). 각 프롬프트 인라인.
+- **경전 표지(cover_*) 10종 = 2:3 세로**, 각 경전 의미별 모티프(반야심경=엔소 공, 금강경=금강저, 천수경=천수천안 추상, 아미타경=정토 빛, 법구경=길·등불, 자애경=따뜻한 빛, 무아상경=흩어지는 먹, 길상경=축복 가지, 사념처=고요한 눈, 출입식념=호흡 소용돌이). **표지에 글자/한자 넣지 말 것**(제목은 앱에서 렌더 — 한자 깨짐 방지), 상단 모티프+하단 여백.
+- **명상배경(medbg_*) 4종 = 9:16 풀블리드**(숨/자애/무상/잠).
+- **공유카드(sharecard_*) 2종**(1:1, 9:16) — 가운데 인용 들어갈 여백 + 금니 프레임.
+
 ### 2026-06-18 (Windows → Mac) — batch_009 결과 푸시 완료, 검수 요청 🎨
 
 `raw-images/batch_009/`에 **16키 × 후보 3장 = 48장** + 스타일 보정 **`_v2` 5키 × 3장 = 15장** push(총 63장). SDXL base 1.0(steps 30, cfg 7, per-key negative), emotion_card 4종은 4:3(1152×864) 나머지 1:1(1024²). 투명 플래그 없어 rembg 미사용(전부 인디고 ground baked). 어댑터 `scripts/_batch_009_items.json`·오버라이드 `scripts/_batch_009_override_v2.json`·로그 `_generation_log.json`·컨택트시트 `_contact_sheet.png`(1차)/`_contact_sheet_v2.png`(보정) 동봉.

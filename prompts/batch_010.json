@@ -1,0 +1,66 @@
+{
+  "cover_M1_heart": {
+    "prompt": "book cover art, 2:3 vertical, a single empty zen circle (enso) suggesting emptiness and the Heart Sutra's void, faint lotus, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_M2_diamond": {
+    "prompt": "book cover art, 2:3 vertical, a stylized vajra diamond-thunderbolt cutting through mist, the Diamond Sutra's cutting wisdom, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_M3_thousandhands": {
+    "prompt": "book cover art, 2:3 vertical, many gold rays and small open hands with eyes radiating in a fan, abstract Avalokitesvara compassion, no face, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_M4_amitabha": {
+    "prompt": "book cover art, 2:3 vertical, a radiant pure-land of light over a lotus pond, gentle western paradise glow, the Amitabha Sutra, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_T1_dhammapada": {
+    "prompt": "book cover art, 2:3 vertical, a quiet path of stepping stones with a small lamp, the way of the Dhammapada verses, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_T2_metta": {
+    "prompt": "book cover art, 2:3 vertical, a warm glowing heart-light radiating gentle concentric waves of loving-kindness, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_T3_anattalakkhana": {
+    "prompt": "book cover art, 2:3 vertical, mist and form dissolving into emptiness, the not-self teaching, dispersing ink, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_T4_mangala": {
+    "prompt": "book cover art, 2:3 vertical, auspicious blessing symbols and a blossoming branch, the Mangala blessings, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_T5_satipatthana": {
+    "prompt": "book cover art, 2:3 vertical, a single calm watchful eye over a still body silhouette, the four foundations of mindfulness, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "cover_T6_anapanasati": {
+    "prompt": "book cover art, 2:3 vertical, flowing wind and breath spirals in and out, mindfulness of breathing, rendered in gold-leaf ink (#C9A24B to #E7C873) and silver ink (#9AA3B8) on deep indigo ground #0E1118, korean sutra-copying (sagyeong) x sumi-e ink wash x geumbak gold-leaf painterly, a thin elegant gold frame border, symbol set in upper portion with calm empty lower space for a title, minimal sacred, generous negative space, matte ink wash, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words, photo of book"
+  },
+  "medbg_breath": {
+    "prompt": "meditation session background, 9:16 vertical full-bleed, slow concentric breathing rings over indigo, soft gold orb pulsing, deep indigo #0E1118 base, soft gold-leaf and silver ink accents, sumi-e ink wash, very calm and immersive, vast negative space, faint glow, matte, painterly, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo"
+  },
+  "medbg_metta": {
+    "prompt": "meditation session background, 9:16 vertical full-bleed, warm golden glow spreading softly across deep indigo, tender radiance, deep indigo #0E1118 base, soft gold-leaf and silver ink accents, sumi-e ink wash, very calm and immersive, vast negative space, faint glow, matte, painterly, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo"
+  },
+  "medbg_impermanence": {
+    "prompt": "meditation session background, 9:16 vertical full-bleed, clouds and a waning moon slowly drifting and changing over indigo, deep indigo #0E1118 base, soft gold-leaf and silver ink accents, sumi-e ink wash, very calm and immersive, vast negative space, faint glow, matte, painterly, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo"
+  },
+  "medbg_sleep": {
+    "prompt": "meditation session background, 9:16 vertical full-bleed, calm dark night water under a pale crescent moon, silver ripples, drowsy stillness, deep indigo #0E1118 base, soft gold-leaf and silver ink accents, sumi-e ink wash, very calm and immersive, vast negative space, faint glow, matte, painterly, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo"
+  },
+  "sharecard_square": {
+    "prompt": "social share card background, 1:1 square, deep indigo #0E1118 with a faint gold-leaf lotus watermark in a corner and a thin gold frame, large calm empty center for a quote, sumi-e geumbak painterly, elegant, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words"
+  },
+  "sharecard_story": {
+    "prompt": "social share card background, 9:16 vertical story, deep indigo #0E1118 with faint gold moon glow at top and a thin gold border, large calm empty center for a quote, sumi-e geumbak painterly, elegant, no text",
+    "negative_prompt": "neon, fluorescent, pure 24k metallic gold, chrome, glossy plastic, photoreal, photorealistic, 3d render, buddha face, depicted face of buddha, human realistic face, text, letters, hanja characters, watermark, signature, cluttered, busy, low contrast mud, blurry, lowres, deformed, rainbow, stock photo, title text, words"
+  }
+}
