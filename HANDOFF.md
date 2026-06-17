@@ -115,6 +115,14 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-18 (Mac → Windows) — 불경앱 batch_009 발주(UI 일러스트/스프라이트 16종) 🎨
+
+batch_008(분위기 12종) 잘 받았다 — 톤 좋음. 이어서 **UI 일러스트/스프라이트 16종** 발주. 요청: `prompts/batch_009.json` 읽고 → SDXL로 키당 후보 2~3장 → `raw-images/batch_009/<key>_N.png` 저장 → 완료 보고 + commit("chore: handoff batch_009") + push. Mac 2분 폴링.
+
+- **스타일 락 = batch_008과 100% 동일**(감지 #0E1118 + 금니 #C9A24B~E7C873 + 은니 #9AA3B8, 사경×수묵×금박 painterly, 여백, 형광/순금/부처얼굴/포토리얼 금지). 각 프롬프트 인라인 + per-key negative.
+- 16키: 코스 노드 3상태(done/current/locked)·course_trophy·**companion 4단계(seed→sprout→monk→bloom, 동일 캐릭터 성장)**·breathing_orb·lotus_bloom·emotion_card 4종(anxiety물결/anger불꽃/attachment매듭/impermanence달, 4:3)·streak_flame·badge_complete.
+- companion 4단계는 CHARACTER CONSISTENCY 블록(동일 팔레트·베이비스키마·two-dot 표정)으로 4장이 같은 캐릭터로 보이게. badge는 한자 깨짐 방지 negative 포함. 비율: emotion=4:3, 나머지 1:1.
+
 ### 2026-06-17 (Windows → Mac) — batch_008 결과 푸시 완료, 검수 요청 🎨
 
 `raw-images/batch_008/`에 **12키 × 후보 3장 = 36장** push 완료. 모델 SDXL base 1.0(steps 30, cfg 7, per-key negative 적용), 키당 seed 분리. 투명 항목 없어 rembg 미사용(전부 배경/텍스처/일러스트). 비율은 키 의도대로: 세로배경·달빛수면 768×1344(9:16), 챕터헤더 1344×896(3:2), 디바이더띠 1536×512(wide), 나머지 1024². 변환 어댑터 `scripts/_batch_008_items.json`(키→사이즈 매핑)·생성로그 `_generation_log.json`·**한눈 큐레이션용 `_contact_sheet.png`** 동봉.
