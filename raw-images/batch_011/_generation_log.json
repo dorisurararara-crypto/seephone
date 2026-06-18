@@ -1,0 +1,609 @@
+{
+  "batch_id": "011",
+  "model": "stabilityai/stable-diffusion-xl-base-1.0 + procedural PIL for screenshot_bg after SDXL firstpass reject",
+  "model_key": "sdxl/procedural",
+  "config": {
+    "steps": 30,
+    "guidance": 7.0,
+    "max_seq": null,
+    "offload": false,
+    "negative": true
+  },
+  "candidates_requested": {
+    "medstrip_breath": 3,
+    "medstrip_metta": 3,
+    "medstrip_impermanence": 3,
+    "medstrip_sleep": 3,
+    "ten_day_hero": 4,
+    "practice_hero": 3,
+    "screenshot_bg": 3
+  },
+  "items": [
+    {
+      "id": "medstrip_breath",
+      "candidate": 1,
+      "file": "raw-images/batch_011/medstrip_breath_1.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13101,
+      "transparent": false,
+      "seconds": 5.3,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 129.3,
+      "overlay_luma_std": 47.3,
+      "overlay_busy_score": 0.0998,
+      "overall_luma_mean": 147.8,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "medstrip_breath",
+      "candidate": 2,
+      "file": "raw-images/batch_011/medstrip_breath_2.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13102,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 145.0,
+      "overlay_luma_std": 52.8,
+      "overlay_busy_score": 0.1189,
+      "overall_luma_mean": 135.8,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "medstrip_breath",
+      "candidate": 3,
+      "file": "raw-images/batch_011/medstrip_breath_3.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13103,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 126.3,
+      "overlay_luma_std": 66.6,
+      "overlay_busy_score": 0.2083,
+      "overall_luma_mean": 136.9,
+      "curation_status": "reject/too busy",
+      "curation_notes": [
+        "water and ridge detail are dense for card text overlay"
+      ]
+    },
+    {
+      "id": "medstrip_metta",
+      "candidate": 1,
+      "file": "raw-images/batch_011/medstrip_metta_1.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13201,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 155.6,
+      "overlay_luma_std": 48.3,
+      "overlay_busy_score": 0.1175,
+      "overall_luma_mean": 126.8,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "medstrip_metta",
+      "candidate": 2,
+      "file": "raw-images/batch_011/medstrip_metta_2.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13202,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 159.8,
+      "overlay_luma_std": 58.9,
+      "overlay_busy_score": 0.1392,
+      "overall_luma_mean": 153.9,
+      "curation_status": "reject/too busy",
+      "curation_notes": [
+        "vertical panel artifact interrupts overlay area"
+      ]
+    },
+    {
+      "id": "medstrip_metta",
+      "candidate": 3,
+      "file": "raw-images/batch_011/medstrip_metta_3.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13203,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 158.9,
+      "overlay_luma_std": 45.9,
+      "overlay_busy_score": 0.1106,
+      "overall_luma_mean": 148.9,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "medstrip_impermanence",
+      "candidate": 1,
+      "file": "raw-images/batch_011/medstrip_impermanence_1.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13301,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 139.9,
+      "overlay_luma_std": 49.9,
+      "overlay_busy_score": 0.1274,
+      "overall_luma_mean": 138.4,
+      "curation_status": "reject/too busy",
+      "curation_notes": [
+        "vertical divider artifact; use only if heavily cropped"
+      ]
+    },
+    {
+      "id": "medstrip_impermanence",
+      "candidate": 2,
+      "file": "raw-images/batch_011/medstrip_impermanence_2.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13302,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 132.1,
+      "overlay_luma_std": 47.6,
+      "overlay_busy_score": 0.1346,
+      "overall_luma_mean": 145.3,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "medstrip_impermanence",
+      "candidate": 3,
+      "file": "raw-images/batch_011/medstrip_impermanence_3.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13303,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 136.9,
+      "overlay_luma_std": 52.5,
+      "overlay_busy_score": 0.125,
+      "overall_luma_mean": 150.0,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "medstrip_sleep",
+      "candidate": 1,
+      "file": "raw-images/batch_011/medstrip_sleep_1.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13401,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 127.2,
+      "overlay_luma_std": 53.6,
+      "overlay_busy_score": 0.1677,
+      "overall_luma_mean": 142.7,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "medstrip_sleep",
+      "candidate": 2,
+      "file": "raw-images/batch_011/medstrip_sleep_2.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13402,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 153.6,
+      "overlay_luma_std": 30.1,
+      "overlay_busy_score": 0.1482,
+      "overall_luma_mean": 139.8,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "medstrip_sleep",
+      "candidate": 3,
+      "file": "raw-images/batch_011/medstrip_sleep_3.png",
+      "size": "1536x512",
+      "gen_size": "1536x512",
+      "seed": 13403,
+      "transparent": false,
+      "seconds": 4.9,
+      "model_source": "sdxl",
+      "actual_size": "1536x512",
+      "overlay_roi": [
+        184,
+        215,
+        1351,
+        460
+      ],
+      "overlay_luma_mean": 124.4,
+      "overlay_luma_std": 51.3,
+      "overlay_busy_score": 0.1777,
+      "overall_luma_mean": 136.3,
+      "curation_status": "reject/too busy",
+      "curation_notes": [
+        "large central moon competes with overlay text"
+      ]
+    },
+    {
+      "id": "ten_day_hero",
+      "candidate": 1,
+      "file": "raw-images/batch_011/ten_day_hero_1.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 14101,
+      "transparent": false,
+      "seconds": 10.2,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 156.8,
+      "overlay_luma_std": 63.5,
+      "overlay_busy_score": 0.1267,
+      "overall_luma_mean": 147.6,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "ten_day_hero",
+      "candidate": 2,
+      "file": "raw-images/batch_011/ten_day_hero_2.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 14102,
+      "transparent": false,
+      "seconds": 9.9,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 161.9,
+      "overlay_luma_std": 62.4,
+      "overlay_busy_score": 0.1421,
+      "overall_luma_mean": 151.0,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "ten_day_hero",
+      "candidate": 3,
+      "file": "raw-images/batch_011/ten_day_hero_3.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 14103,
+      "transparent": false,
+      "seconds": 9.9,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 147.2,
+      "overlay_luma_std": 51.9,
+      "overlay_busy_score": 0.1228,
+      "overall_luma_mean": 152.1,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "ten_day_hero",
+      "candidate": 4,
+      "file": "raw-images/batch_011/ten_day_hero_4.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 14104,
+      "transparent": false,
+      "seconds": 9.9,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 173.0,
+      "overlay_luma_std": 64.4,
+      "overlay_busy_score": 0.155,
+      "overall_luma_mean": 156.9,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "practice_hero",
+      "candidate": 1,
+      "file": "raw-images/batch_011/practice_hero_1.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 11501,
+      "transparent": false,
+      "seconds": 9.9,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 70.2,
+      "overlay_luma_std": 32.9,
+      "overlay_busy_score": 0.1107,
+      "overall_luma_mean": 103.9,
+      "curation_status": "review/dark",
+      "curation_notes": [
+        "large dark lower-left shape may need text scrim"
+      ]
+    },
+    {
+      "id": "practice_hero",
+      "candidate": 2,
+      "file": "raw-images/batch_011/practice_hero_2.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 11502,
+      "transparent": false,
+      "seconds": 10.0,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 143.8,
+      "overlay_luma_std": 66.7,
+      "overlay_busy_score": 0.1064,
+      "overall_luma_mean": 165.1,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "practice_hero",
+      "candidate": 3,
+      "file": "raw-images/batch_011/practice_hero_3.png",
+      "size": "1600x900",
+      "gen_size": "1600x896",
+      "seed": 11503,
+      "transparent": false,
+      "seconds": 9.9,
+      "model_source": "sdxl",
+      "actual_size": "1600x900",
+      "overlay_roi": [
+        352,
+        486,
+        1248,
+        810
+      ],
+      "overlay_luma_mean": 110.0,
+      "overlay_luma_std": 47.3,
+      "overlay_busy_score": 0.0924,
+      "overall_luma_mean": 130.6,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "screenshot_bg",
+      "candidate": 1,
+      "file": "raw-images/batch_011/screenshot_bg_1.png",
+      "size": "1800x2400",
+      "gen_size": "procedural 1800x2400",
+      "seed": 5101,
+      "transparent": false,
+      "seconds": null,
+      "model_source": "procedural_pil_texture_after_sdxl_firstpass_reject",
+      "actual_size": "1800x2400",
+      "overlay_roi": [
+        324,
+        384,
+        1476,
+        2016
+      ],
+      "overlay_luma_mean": 28.3,
+      "overlay_luma_std": 4.2,
+      "overlay_busy_score": 0.0082,
+      "overall_luma_mean": 28.5,
+      "curation_status": "ok",
+      "curation_notes": []
+    },
+    {
+      "id": "screenshot_bg",
+      "candidate": 2,
+      "file": "raw-images/batch_011/screenshot_bg_2.png",
+      "size": "1800x2400",
+      "gen_size": "procedural 1800x2400",
+      "seed": 5102,
+      "transparent": false,
+      "seconds": null,
+      "model_source": "procedural_pil_texture_after_sdxl_firstpass_reject",
+      "actual_size": "1800x2400",
+      "overlay_roi": [
+        324,
+        384,
+        1476,
+        2016
+      ],
+      "overlay_luma_mean": 40.0,
+      "overlay_luma_std": 4.1,
+      "overlay_busy_score": 0.0094,
+      "overall_luma_mean": 40.4,
+      "curation_status": "ok",
+      "curation_notes": [],
+      "best_pick": true
+    },
+    {
+      "id": "screenshot_bg",
+      "candidate": 3,
+      "file": "raw-images/batch_011/screenshot_bg_3.png",
+      "size": "1800x2400",
+      "gen_size": "procedural 1800x2400",
+      "seed": 5103,
+      "transparent": false,
+      "seconds": null,
+      "model_source": "procedural_pil_texture_after_sdxl_firstpass_reject",
+      "actual_size": "1800x2400",
+      "overlay_roi": [
+        324,
+        384,
+        1476,
+        2016
+      ],
+      "overlay_luma_mean": 29.7,
+      "overlay_luma_std": 4.1,
+      "overlay_busy_score": 0.0082,
+      "overall_luma_mean": 28.6,
+      "curation_status": "ok",
+      "curation_notes": []
+    }
+  ],
+  "curation": {
+    "method": "visual contact-sheet review plus overlay-region luma/busy metrics",
+    "firstpass_rejected_to": "raw-images/batch_011/.rejected/firstpass_ai/",
+    "firstpass_reject_reason": "SDXL first pass had text/seal-like marks, pink/panel artifacts, tiny human figures, and screenshot_bg portraits; replaced with v2 or procedural texture final filenames.",
+    "best_picks": {
+      "medstrip_breath": "medstrip_breath_2.png",
+      "medstrip_metta": "medstrip_metta_1.png",
+      "medstrip_impermanence": "medstrip_impermanence_3.png",
+      "medstrip_sleep": "medstrip_sleep_1.png",
+      "ten_day_hero": "ten_day_hero_1.png",
+      "practice_hero": "practice_hero_3.png",
+      "screenshot_bg": "screenshot_bg_2.png"
+    },
+    "rejects": [
+      {
+        "file": "raw-images/batch_011/medstrip_breath_3.png",
+        "status": "reject/too busy",
+        "reason": "water and ridge detail are dense for card text overlay"
+      },
+      {
+        "file": "raw-images/batch_011/medstrip_metta_2.png",
+        "status": "reject/too busy",
+        "reason": "vertical panel artifact interrupts overlay area"
+      },
+      {
+        "file": "raw-images/batch_011/medstrip_impermanence_1.png",
+        "status": "reject/too busy",
+        "reason": "vertical divider artifact; use only if heavily cropped"
+      },
+      {
+        "file": "raw-images/batch_011/medstrip_sleep_3.png",
+        "status": "reject/too busy",
+        "reason": "large central moon competes with overlay text"
+      },
+      {
+        "file": "raw-images/batch_011/practice_hero_1.png",
+        "status": "review/dark",
+        "reason": "large dark lower-left shape may need text scrim"
+      }
+    ]
+  }
+}

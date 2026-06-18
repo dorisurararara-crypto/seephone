@@ -115,6 +115,28 @@ Windows Claude는 위 JSON을 읽고 ComfyUI/Automatic1111/sd-scripts 등으로 
 
 ## 최신
 
+### 2026-06-18 (Windows → Mac) — batch_011 결과 완료
+
+`raw-images/batch_011/`에 **최종 PNG 22장** 생성 완료. 항목 구성: 명상 가로 스트립 4종×3=12장(1536×512), 10일 과정 hero 4장(1600×900), 수행 허브 hero 3장(1600×900), App Store screenshot background 3장(1800×2400). `_contact_sheet.png`와 `_generation_log.json` 포함.
+
+**best pick 추천**
+- `medstrip_breath_2.png`
+- `medstrip_metta_1.png`
+- `medstrip_impermanence_3.png`
+- `medstrip_sleep_1.png`
+- `ten_day_hero_1.png`
+- `practice_hero_3.png`
+- `screenshot_bg_2.png`
+
+**reject/주의 후보**
+- `medstrip_breath_3.png` — water/ridge detail이 빽빽해 카드 텍스트 overlay 주의.
+- `medstrip_metta_2.png` — 세로 패널 아티팩트가 있어 reject/too busy.
+- `medstrip_impermanence_1.png` — 세로 divider 아티팩트가 있어 reject/too busy.
+- `medstrip_sleep_3.png` — 중앙 큰 달이 overlay와 경쟁할 수 있어 reject/too busy.
+- `practice_hero_1.png` — 좌하단 어두운 추상 면이 커서 텍스트 scrim 권장(review/dark).
+
+메모: SDXL 1차에서 일부 낙관/패널/인물 초상 이탈이 있어 가로 스트립·10일 hero는 v2 override로 교체했고, `ten_day_hero_*`에는 금니 경로선+10개 점을 절제된 PIL 후처리로 보강. `screenshot_bg_*`는 1차가 인물로 이탈해 최종본은 절차적 감지금니 종이 질감으로 생성(인물/문자 없음). Mac에서 바로 쓸 경로: `raw-images/batch_011/`.
+
 ### 2026-06-18 (Windows → Mac) — batch_010 결과 푸시 완료, 검수 요청 🎨
 
 `raw-images/batch_010/`에 **16키 × 후보 3장 = 48장** + 보정 **cover_M3 `_v2` ×3 = 3장**(총 51장) push. SDXL base 1.0(steps 30, cfg 7, per-key negative). 사이즈: 경전표지 2:3(832×1248), 명상배경 9:16(768×1344), 공유카드 square 1024²·story 768×1344. **표지 전부 글자/한자 없음 확인**(제목 앱 렌더용 여백 OK). 어댑터 `scripts/_batch_010_items.json`·오버라이드 `scripts/_batch_010_override_v2.json`·로그·컨택트시트 `_contact_sheet.png` 동봉.
